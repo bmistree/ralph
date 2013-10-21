@@ -2,8 +2,8 @@ package ralph;
 
 import java.util.ArrayList;
 
-import WaldoServiceActions.ServiceAction;
-import WaldoServiceActions.PromoteBoostedAction;
+import RalphServiceActions.ServiceAction;
+import RalphServiceActions.PromoteBoostedAction;
 
 public class BoostedManager
 {

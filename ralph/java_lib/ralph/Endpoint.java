@@ -322,8 +322,8 @@ public class Endpoint
     public void _receive_request_backout(
         String uuid,Endpoint requesting_endpoint)
     {
-        WaldoServiceActions.ServiceAction req_backout_action = 
-            new WaldoServiceActions.ReceiveRequestBackoutAction(
+        RalphServiceActions.ServiceAction req_backout_action = 
+            new RalphServiceActions.ReceiveRequestBackoutAction(
                 this,uuid,requesting_endpoint);
         _thread_pool.add_service_action(req_backout_action);
     }
@@ -349,8 +349,8 @@ public class Endpoint
     */
     public void _receive_request_commit(String uuid,Endpoint requesting_endpoint)
     {
-        WaldoServiceActions.ServiceAction endpoint_request_commit_action = 
-            new WaldoServiceActions.ReceiveRequestCommitAction(this,uuid,false);
+        RalphServiceActions.ServiceAction endpoint_request_commit_action = 
+            new RalphServiceActions.ReceiveRequestCommitAction(this,uuid,false);
         _thread_pool.add_service_action(endpoint_request_commit_action);
     }
 
@@ -368,8 +368,8 @@ public class Endpoint
     */
     public void _receive_request_complete_commit(String event_uuid)
     {
-        WaldoServiceActions.ServiceAction req_complete_commit_action = 
-            new WaldoServiceActions.ReceiveRequestCompleteCommitAction(
+        RalphServiceActions.ServiceAction req_complete_commit_action = 
+            new RalphServiceActions.ReceiveRequestCompleteCommitAction(
                 this,event_uuid,false);
         _thread_pool.add_service_action(req_complete_commit_action);
     }
@@ -457,8 +457,8 @@ public class Endpoint
         }
         else if (general_msg.hasRequestSequenceBlock())
         {
-            WaldoServiceActions.ServiceAction service_action =  
-                new WaldoServiceActions.ReceivePartnerMessageRequestSequenceBlockAction(
+            RalphServiceActions.ServiceAction service_action =  
+                new RalphServiceActions.ReceivePartnerMessageRequestSequenceBlockAction(
                     this,general_msg.getRequestSequenceBlock());
             _thread_pool.add_service_action(service_action);
         }
@@ -511,8 +511,8 @@ public class Endpoint
         }
         else if (general_msg.hasCompleteCommitRequest())
         {
-            WaldoServiceActions.ServiceAction service_action = 
-                new WaldoServiceActions.ReceiveRequestCompleteCommitAction(
+            RalphServiceActions.ServiceAction service_action = 
+                new RalphServiceActions.ReceiveRequestCompleteCommitAction(
                     this,general_msg.getCompleteCommitRequest().getEventUuid().getData(),
                     true);
             _thread_pool.add_service_action(service_action);
@@ -520,8 +520,8 @@ public class Endpoint
         else if (general_msg.hasCommitRequest())
         {
             String event_uuid = general_msg.getCommitRequest().getEventUuid().getData();
-            WaldoServiceActions.ServiceAction service_action = 
-                new WaldoServiceActions.ReceiveRequestCommitAction(
+            RalphServiceActions.ServiceAction service_action = 
+                new RalphServiceActions.ReceiveRequestCommitAction(
                     this,event_uuid,true);
             _thread_pool.add_service_action(service_action);
         }
@@ -546,8 +546,8 @@ public class Endpoint
 	
     public void _receive_promotion(String event_uuid, String new_priority)
     {
-        WaldoServiceActions.ServiceAction promotion_action = 
-            new WaldoServiceActions.ReceivePromotionAction(
+        RalphServiceActions.ServiceAction promotion_action = 
+            new RalphServiceActions.ReceivePromotionAction(
                 this,event_uuid,new_priority);
         _thread_pool.add_service_action(promotion_action);
     }
@@ -559,8 +559,8 @@ public class Endpoint
     public void _receive_partner_ready(String partner_uuid)
     {
         _set_partner_uuid(partner_uuid);
-        WaldoServiceActions.ServiceAction service_action =
-            new WaldoServiceActions.ReceivePartnerReadyAction(this);
+        RalphServiceActions.ServiceAction service_action =
+            new RalphServiceActions.ReceivePartnerReadyAction(this);
         _thread_pool.add_service_action(service_action);        
     }
 	
@@ -813,8 +813,8 @@ public class Endpoint
         
         _stop_unlock();
         
-        WaldoServiceActions.ServiceAction endpt_call_action =
-            new WaldoServiceActions.ReceiveEndpointCallAction(
+        RalphServiceActions.ServiceAction endpt_call_action =
+            new RalphServiceActions.ReceiveEndpointCallAction(
                 this,endpoint_making_call,event_uuid,priority,
                 func_name,result_queue,args);
         
@@ -851,8 +851,8 @@ public class Endpoint
         ArrayList<String> children_event_endpoint_uuids)
     {
       
-        WaldoServiceActions.ServiceAction service_action = 
-            new WaldoServiceActions.ReceiveFirstPhaseCommitMessage(
+        RalphServiceActions.ServiceAction service_action = 
+            new RalphServiceActions.ReceiveFirstPhaseCommitMessage(
                 this,event_uuid,endpoint_uuid,true,children_event_endpoint_uuids);
         
         _thread_pool.add_service_action(service_action);
@@ -871,8 +871,8 @@ public class Endpoint
     public void _receive_first_phase_commit_unsuccessful(
         String event_uuid,String endpoint_uuid)
     {
-    	WaldoServiceActions.ServiceAction service_action = 
-            new WaldoServiceActions.ReceiveFirstPhaseCommitMessage(
+    	RalphServiceActions.ServiceAction service_action = 
+            new RalphServiceActions.ReceiveFirstPhaseCommitMessage(
                 this, event_uuid,endpoint_uuid,false,null);
                 
         _thread_pool.add_service_action(service_action);

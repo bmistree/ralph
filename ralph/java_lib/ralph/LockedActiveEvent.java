@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoServiceActions.ServiceAction;
+import RalphServiceActions.ServiceAction;
 
 import waldo_protobuffs.PartnerErrorProto.PartnerError;
 import waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
@@ -503,7 +503,7 @@ public class LockedActiveEvent
         //# backout.  These two together can cause deadlock.  Using a
         //# separate thread instead.
         ServiceAction service_action =
-            new WaldoServiceActions.EventBackoutTouchedObjs(this);
+            new RalphServiceActions.EventBackoutTouchedObjs(this);
         event_parent.local_endpoint._thread_pool.add_service_action(
             service_action);
             

@@ -96,6 +96,4 @@ public class AllEndpoints extends Thread
     {
         _remove_endpoint_if_exists(which_endpoint_excepted);
     }
-	
-	
 }
