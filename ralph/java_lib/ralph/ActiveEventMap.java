@@ -231,7 +231,7 @@ public class ActiveEventMap
 	
     public LockedActiveEvent get_or_create_endpoint_called_event(
         Endpoint endpoint_calling, String event_uuid, String priority,
-        ArrayBlockingQueue<WaldoCallResults.EndpointCallResultObject>result_queue)
+        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue)
         throws StoppedException 
     {
         _lock();

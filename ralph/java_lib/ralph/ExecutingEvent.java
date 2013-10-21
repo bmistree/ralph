@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoCallResults.EndpointCompleteCallResult;
-import WaldoCallResults.EndpointCallResultObject
+import RalphCallResults.EndpointCompleteCallResult;
+import RalphCallResults.EndpointCallResultObject
 
 public class ExecutingEvent 
 {
@@ -134,7 +134,7 @@ public class ExecutingEvent
         if (! completed)
         {
             result_queue.add(
-                new WaldoCallResults.BackoutBeforeEndpointCallResult());
+                new RalphCallResults.BackoutBeforeEndpointCallResult());
         }
         else
         {

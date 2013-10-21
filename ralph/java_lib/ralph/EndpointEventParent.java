@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoCallResults.MessageCallResultObject;
-import WaldoCallResults.EndpointCallResultObject;
-import WaldoCallResults.NetworkFailureEndpointCallResult;
+import RalphCallResults.MessageCallResultObject;
+import RalphCallResults.EndpointCallResultObject;
+import RalphCallResults.NetworkFailureEndpointCallResult;
 
-import WaldoCallResults.ApplicationExceptionEndpointCallResult;
+import RalphCallResults.ApplicationExceptionEndpointCallResult;
 
 public class EndpointEventParent extends EventParent
 {

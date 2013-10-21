@@ -798,7 +798,7 @@ public class Endpoint
     public void _receive_endpoint_call(
         Endpoint endpoint_making_call,String event_uuid,
         String priority,String func_name,
-        ArrayBlockingQueue<WaldoCallResults.EndpointCallResultObject>result_queue,
+        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue,
         Object...args)
     {
         _stop_lock();
@@ -806,7 +806,7 @@ public class Endpoint
         if (_stop_called)
         {
             result_queue.add(
-                new WaldoCallResults.StopAlreadyCalledEndpointCallResult());
+                new RalphCallResults.StopAlreadyCalledEndpointCallResult());
             _stop_unlock();
             return;
         }

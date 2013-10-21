@@ -2,7 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
-import WaldoCallResults.EndpointCallResultObject;
+import RalphCallResults.EndpointCallResultObject;
 
 public class EventSubscribedTo 
 {

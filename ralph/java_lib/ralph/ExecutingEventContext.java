@@ -16,15 +16,15 @@ import LockedVariables.SingleThreadedLockedNumberVariable;
 import LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import LockedVariables.SingleThreadedLockedMapVariable;
 
-import WaldoCallResults.MessageCallResultObject;
-import WaldoCallResults.BackoutBeforeReceiveMessageResult;
-import WaldoCallResults.NetworkFailureCallResult;
-import WaldoCallResults.ApplicationExceptionCallResult;
-import WaldoCallResults.SequenceMessageCallResult;
-import WaldoCallResults.EndpointCallResultObject;
-import WaldoCallResults.ApplicationExceptionEndpointCallResult;
-import WaldoCallResults.NetworkFailureEndpointCallResult;
-import WaldoCallResults.EndpointCompleteCallResult;
+import RalphCallResults.MessageCallResultObject;
+import RalphCallResults.BackoutBeforeReceiveMessageResult;
+import RalphCallResults.NetworkFailureCallResult;
+import RalphCallResults.ApplicationExceptionCallResult;
+import RalphCallResults.SequenceMessageCallResult;
+import RalphCallResults.EndpointCallResultObject;
+import RalphCallResults.ApplicationExceptionEndpointCallResult;
+import RalphCallResults.NetworkFailureEndpointCallResult;
+import RalphCallResults.EndpointCompleteCallResult;
 
 public class ExecutingEventContext
 {

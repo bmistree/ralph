@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoCallResults.RootCallResultObject;
+import RalphCallResults.RootCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
-import WaldoCallResults.MessageCallResultObject;
-import WaldoCallResults.NetworkFailureCallResult;
+import RalphCallResults.MessageCallResultObject;
+import RalphCallResults.NetworkFailureCallResult;
 
 public class RootEventParent extends EventParent {
 
@@ -69,7 +69,7 @@ public class RootEventParent extends EventParent {
         boolean partner_contacted)
     {
     	event_complete_queue.add(
-            new WaldoCallResults.CompleteRootCallResult());
+            new RalphCallResults.CompleteRootCallResult());
     	super.second_phase_transition_success(
             same_host_endpoints_contacted_dict, partner_contacted);
     }
@@ -163,11 +163,11 @@ public class RootEventParent extends EventParent {
         //# put val to read into event_complete_queue so can know
         //# whether or not to retry event.
         
-        WaldoCallResults.RootCallResultObject queue_feeder = null;
+        RalphCallResults.RootCallResultObject queue_feeder = null;
         if (stop_request)
-            queue_feeder = new WaldoCallResults.StopRootCallResult();
+            queue_feeder = new RalphCallResults.StopRootCallResult();
         else
-            queue_feeder = new WaldoCallResults.RescheduleRootCallResult();
+            queue_feeder = new RalphCallResults.RescheduleRootCallResult();
         
         event_complete_queue.add(queue_feeder);
     }

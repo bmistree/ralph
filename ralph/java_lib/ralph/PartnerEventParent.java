@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoCallResults.MessageCallResultObject;
+import RalphCallResults.MessageCallResultObject;
 
 public class PartnerEventParent extends EventParent {
 

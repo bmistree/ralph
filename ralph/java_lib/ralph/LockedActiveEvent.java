@@ -9,12 +9,12 @@ import RalphServiceActions.ServiceAction;
 import waldo_protobuffs.PartnerErrorProto.PartnerError;
 import waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import WaldoCallResults.MessageCallResultObject;
+import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
-import WaldoCallResults.StopAlreadyCalledMessageCallResult;
-import WaldoCallResults.BackoutBeforeReceiveMessageResult;
-import WaldoCallResults.EndpointCallResultObject;
+import RalphCallResults.StopAlreadyCalledMessageCallResult;
+import RalphCallResults.BackoutBeforeReceiveMessageResult;
+import RalphCallResults.EndpointCallResultObject;
 
 public class LockedActiveEvent
 {
@@ -1040,7 +1040,7 @@ public class LockedActiveEvent
         String reply_with_uuid = msg.getReplyWithUuid().getData();
         //# unblock waiting listening queue.
         message_listening_queues_map.get(reply_to_uuid).add(
-            new WaldoCallResults.SequenceMessageCallResult(
+            new RalphCallResults.SequenceMessageCallResult(
                 reply_with_uuid,name_of_block_to_exec_next,
                 //# as soon as read from the listening message
                 //# queue, populate sequence local data from context
