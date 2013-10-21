@@ -8,7 +8,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AllEndpoints extends Thread
 {
     private ReentrantLock _mutex = new ReentrantLock();
-    private HashMap<String,Endpoint> endpoint_map = new HashMap<String,Endpoint>();
+    private HashMap<String,Endpoint> endpoint_map =
+        new HashMap<String,Endpoint>();
 
     /**
        each element will be a map of endpoints.  send_clock_update
