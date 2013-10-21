@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class WaldoGlobals {
-    public Clock clock;
+    public LamportClock clock;
     public AllEndpoints all_endpoints;
     public ThreadPool thread_pool;
 	

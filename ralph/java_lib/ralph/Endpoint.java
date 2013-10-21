@@ -440,13 +440,12 @@ public class Endpoint
        execute a sequence block, request to commit a change to a
        peered variable, request to backout an event, etc.  In this
        function, we dispatch depending on message we receive.
-
     */
     public void _receive_msg_from_partner(GeneralMessage general_msg)
     {
         long tstamp = general_msg.getTimestamp();
         _clock.check_update_timestamp(tstamp);
-		
+
         if (general_msg.hasNotifyReady())
         {
             String endpoint_uuid = general_msg.getNotifyReady().getEndpointUuid().getData();
@@ -454,8 +453,7 @@ public class Endpoint
         }
         else if (general_msg.hasTimestampUpdated())
         {	
-            String clock_timestamp = general_msg.getTimestampUpdated().getData();
-            _clock.got_partner_timestamp(clock_timestamp);
+            // ignore: already updated timestamp
         }
         else if (general_msg.hasRequestSequenceBlock())
         {
@@ -1192,8 +1190,5 @@ public class Endpoint
     {
     	return _uuid;
     }
-
-        
-    
     
 }

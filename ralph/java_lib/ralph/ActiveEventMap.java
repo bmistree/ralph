@@ -18,7 +18,7 @@ public class ActiveEventMap
     private StopCallback stop_callback = null;
     private BoostedManager boosted_manager = null;
     
-    public ActiveEventMap(Endpoint _local_endpoint, Clock clock)
+    public ActiveEventMap(Endpoint _local_endpoint, LamportClock clock)
     {
         local_endpoint = _local_endpoint;
         boosted_manager = new BoostedManager(this, clock);    	

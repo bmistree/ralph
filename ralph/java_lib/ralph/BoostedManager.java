@@ -7,7 +7,7 @@ import WaldoServiceActions.PromoteBoostedAction;
 
 public class BoostedManager
 {
-    private Clock clock = null;
+    private LamportClock clock = null;
     private String last_boosted_complete = null;
     private ActiveEventMap act_event_map = null;
     /**
@@ -23,7 +23,7 @@ public class BoostedManager
      * @param _act_event_map
      * @param _clock --- Host's global clock.
      */
-    public BoostedManager(ActiveEventMap _act_event_map, Clock _clock)
+    public BoostedManager(ActiveEventMap _act_event_map, LamportClock _clock)
     {
         act_event_map = _act_event_map;
         clock = _clock;
