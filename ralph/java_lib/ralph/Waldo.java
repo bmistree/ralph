@@ -3,7 +3,7 @@ package ralph;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoConnObj.TCPConnectionObj.TCPAcceptThread;
+import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 
 public class Waldo {
@@ -27,7 +27,7 @@ public class Waldo {
     {
         return constructor.construct(
             all_globals,host_uuid,
-            new WaldoConnObj.SingleSideConnection());
+            new RalphConnObj.SingleSideConnection());
     }
         
 	
@@ -58,8 +58,8 @@ public class Waldo {
         EndpointConstructorObj constructor_obj, String host, int port)
         throws IOException
     {
-        WaldoConnObj.TCPConnectionObj tcp_connection_obj = 
-            new WaldoConnObj.TCPConnectionObj(host,port);
+        RalphConnObj.TCPConnectionObj tcp_connection_obj = 
+            new RalphConnObj.TCPConnectionObj(host,port);
         return constructor_obj.construct(all_globals,host_uuid,tcp_connection_obj);
     }
 

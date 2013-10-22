@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-import WaldoConnObj.SingleSideConnection;
+import RalphConnObj.SingleSideConnection;
 
 import com.google.protobuf.ByteString;
 
@@ -43,7 +43,7 @@ public class Endpoint
 	
     private Clock _clock = null;
 	
-    private WaldoConnObj.ConnectionObj _conn_obj = null;
+    private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
 	
     public VariableStore _global_var_store = null;
@@ -119,7 +119,7 @@ public class Endpoint
     */
     public Endpoint (
         WaldoGlobals waldo_classes,String host_uuid,
-        WaldoConnObj.ConnectionObj conn_obj,
+        RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
         _clock = waldo_classes.clock;
