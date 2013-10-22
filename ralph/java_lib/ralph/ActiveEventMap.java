@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoExceptions.StoppedException;
+import RalphExceptions.StoppedException;
 
 
 public class ActiveEventMap
@@ -81,13 +81,13 @@ public class ActiveEventMap
      this endpoint and returns it.        
      * @return
      */
-    public LockedActiveEvent create_root_event() throws WaldoExceptions.StoppedException
+    public LockedActiveEvent create_root_event() throws RalphExceptions.StoppedException
     {
         _lock();
         if (in_stop_phase)
         {
             _unlock();
-            throw new WaldoExceptions.StoppedException();
+            throw new RalphExceptions.StoppedException();
         }
 
         LockedActiveEvent root_event = boosted_manager.create_root_event();
@@ -197,7 +197,7 @@ public class ActiveEventMap
             if (in_stop_phase)
             {
                 _unlock();
-                throw new WaldoExceptions.StoppedException();
+                throw new RalphExceptions.StoppedException();
             }
             else 
             {
@@ -240,7 +240,7 @@ public class ActiveEventMap
             if (in_stop_phase)
             {
                 _unlock();
-                throw new WaldoExceptions.StoppedException();
+                throw new RalphExceptions.StoppedException();
             }
 			
             EndpointEventParent eep =

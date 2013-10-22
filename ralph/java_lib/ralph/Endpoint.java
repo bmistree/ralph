@@ -413,12 +413,12 @@ public class Endpoint
         error.setEventUuid(msg_evt_uuid);
         error.setHostUuid(msg_host_uuid);
 		
-        if (WaldoExceptions.NetworkException.class.isInstance(exception))
+        if (RalphExceptions.NetworkException.class.isInstance(exception))
         {
             error.setType(PartnerError.ErrorType.NETWORK);
             error.setTrace("Incorrect trace for now");
         }
-        else if (WaldoExceptions.ApplicationException.class.isInstance(exception))
+        else if (RalphExceptions.ApplicationException.class.isInstance(exception))
         {
             error.setType(PartnerError.ErrorType.APPLICATION);
             error.setTrace("Incorrect trace for now");

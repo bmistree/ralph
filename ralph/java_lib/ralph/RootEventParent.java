@@ -84,7 +84,7 @@ public class RootEventParent extends EventParent {
         Exception error, 
         HashMap<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
     {
-    	if (WaldoExceptions.NetworkException.class.isInstance(error))
+    	if (RalphExceptions.NetworkException.class.isInstance(error))
     	{
             //# Send a NetworkFailureCallResult to each listening queue
             for (String reply_with_uuid : message_listening_queues_map.keySet())

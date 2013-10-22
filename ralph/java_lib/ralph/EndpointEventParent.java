@@ -78,12 +78,12 @@ public class EndpointEventParent extends EventParent
         Exception error,
         HashMap<String, ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map) 
     {
-        if (WaldoExceptions.NetworkException.class.isInstance(error))
+        if (RalphExceptions.NetworkException.class.isInstance(error))
         {
             result_queue.add(
                 new NetworkFailureEndpointCallResult(error.toString()));
         }
-        else if (WaldoExceptions.ApplicationException.class.isInstance(error))
+        else if (RalphExceptions.ApplicationException.class.isInstance(error))
         {
             result_queue.add(
                 new ApplicationExceptionEndpointCallResult(error.toString()));

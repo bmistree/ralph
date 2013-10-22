@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import WaldoExceptions.BackoutException;
+import RalphExceptions.BackoutException;
 
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
@@ -155,7 +155,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         if (! insert_in_touched_objs(active_event))
         {
             _unlock();
-            throw new WaldoExceptions.BackoutException();
+            throw new RalphExceptions.BackoutException();
         }
 
         //# check 0 above
@@ -183,7 +183,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         if (! insert_in_touched_objs(active_event))
         {
             _unlock();
-            throw new WaldoExceptions.BackoutException();
+            throw new RalphExceptions.BackoutException();
         }
 
         //# Check 2 from above
@@ -282,7 +282,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         if (! insert_in_touched_objs(active_event))
         {
             _unlock();
-            throw new WaldoExceptions.BackoutException();
+            throw new RalphExceptions.BackoutException();
         }
 
 

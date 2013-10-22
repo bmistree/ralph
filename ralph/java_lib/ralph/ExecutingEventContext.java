@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import WaldoExceptions.ApplicationException;
-import WaldoExceptions.BackoutException;
-import WaldoExceptions.NetworkException;
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
 import LockedVariables.LockedTextVariable;
 import LockedVariables.LockedNumberVariable;
 import LockedVariables.LockedTrueFalseVariable;

@@ -1,6 +1,6 @@
 package ralph;
 
-import WaldoExceptions.BackoutException;
+import RalphExceptions.BackoutException;
 
 /**
  * @param <T> --- Type of internal data holding

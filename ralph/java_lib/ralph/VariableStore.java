@@ -3,7 +3,7 @@ package ralph;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import WaldoExceptions.BackoutException;
+import RalphExceptions.BackoutException;
 
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
@@ -12,7 +12,7 @@ import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
 import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
 
 /**
- * '''
+ * 
 _VariableStore keeps track of peered data, sequence local data (which
 also has its peered bit marked in its WaldoReferenceBase), and a
 single endpoint's global data.  Events can query the variable store
@@ -54,9 +54,7 @@ Three challenges:
      _ExecutionEventContext, that holds on to a copy of a separate
      variable store for sequence local data.
      
-     
-     
-         '''
+
     Each executing event has two, separate stores:
 
        * global_store --- Keeps track of endpoint globals as well as
@@ -69,11 +67,6 @@ Three challenges:
 
     Can query the variable store with the unique name of a variable to
     get the variable back for use.
-    '''
-
-'''
-
- * @author bmistree
  *
  */
 

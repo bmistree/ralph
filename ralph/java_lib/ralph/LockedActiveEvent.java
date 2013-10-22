@@ -548,7 +548,7 @@ public class LockedActiveEvent
      */
     public void put_exception(Exception error)
     {
-        if (WaldoExceptions.BackoutException.class.isInstance(error))
+        if (RalphExceptions.BackoutException.class.isInstance(error))
             backout(null,false);
         else
             event_parent.put_exception(error,message_listening_queues_map);

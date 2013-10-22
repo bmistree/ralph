@@ -2,7 +2,7 @@ package ralph;
 
 import java.util.HashMap;
 
-import WaldoExceptions.BackoutException;
+import RalphExceptions.BackoutException;
 
 public class SingleThreadedLockedInternalMapVariable<K,V,D>
     extends SingleThreadedLockedContainer<K,V,D>
