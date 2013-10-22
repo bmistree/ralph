@@ -1,0 +1,50 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PartnerFirstPhaseResultMessageProto";
+
+
+message PartnerFirstPhaseResultMessage
+{
+    /*
+    We use a two-phase commit process when committing events.  A root
+    event initiates the first phase of the commit.  When the
+    corresponding _ActiveEvents running on hosts throughout the
+    network attempt to perform the first phase of the commit, we must
+    send their results back to the root.  (So that the root can
+    determine when to backout or move on to the second phase of the
+    commit.)  
+
+    This message type is used to send the results of attempting the
+    first phase of the commit back to a partner.  The partner will
+    forward the message to its subscriber, which forwards to its
+    subscriber, etc., up until it gets all the way back to the root.
+
+    The first phase was either successful or not successful.
+    
+    If it was successful, we also pass back a list of endpoint uuids.
+    Each of these correspond to endpoints that the root must wait on
+    before transitioning to second phase of commit.
+    */
+
+
+    
+    required UUID event_uuid = 1;
+    /*
+      The uuid of the endpoint that originated the response message.
+     */
+    required UUID sending_endpoint_uuid = 2;
+
+    /*
+      True if the message was successful, False otherwise.
+    */
+    required bool successful = 3;
+
+    /*
+      (Note: when not successful, there will be no elements in this
+      list.  There may also be no elements in this list if the
+      respondent did not issue a partner or endpoint call.)
+     */
+    repeated UUID children_event_endpoint_uuids = 4;
+
+}

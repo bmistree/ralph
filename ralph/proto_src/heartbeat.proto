@@ -1,0 +1,15 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "HeartbeatProto";
+
+
+message Heartbeat
+{
+    /**
+       Regularly by one endpoint to it's partner to show that the
+       connection is still connected.
+     */
+    
+    required string msg = 1;
+}

@@ -1,0 +1,19 @@
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "UtilProto";
+
+
+message UUID
+{
+    required string data = 1;
+}
+
+message Priority
+{
+    required string data = 1;
+}
+
+message Timestamp
+{
+    required string data = 1;
+}

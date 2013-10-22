@@ -1,0 +1,197 @@
+import "util.proto";
+
+// FIXME: for all numeric types, add [packed = true];
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "VarStoreDeltasProto";
+
+
+message VarStoreDeltas
+{
+    enum ParentType{
+        VAR_STORE_DELTA = 1;
+        MAP_CONTAINER = 2;
+        LIST_CONTAINER = 3;
+        INTERNAL_LIST_CONTAINER = 4;
+        INTERNAL_MAP_CONTAINER = 5;
+
+        CONTAINER_ADDED = 6;
+        CONTAINER_WRITTEN = 7;
+
+        SUB_ELEMENT_ACTION= 8;
+
+        STRUCT_CONTAINER = 9;
+    }
+    
+    message SingleNumberDelta
+    {
+        required string var_name = 1;
+        required double var_data = 2;
+
+        // only globally peered variables need to send their
+        // version objects as well.  Otherwise, we can just send
+        // the sequence variable by itself.
+        optional string version_obj = 3;
+    }
+
+    message SingleTextDelta
+    {
+        required string var_name = 1;
+        required string var_data = 2;
+        optional string version_obj = 3;
+    }
+
+    message SingleTrueFalseDelta
+    {
+        required string var_name = 1;
+        required bool var_data = 2;
+        required string version_obj = 3;            
+    }
+
+    message ContainerAction
+    {
+        enum ContainerActionType {
+            WRITE_VALUE = 4;
+            ADD_KEY = 5;
+            DELETE_KEY = 6;
+        }
+
+        message ContainerDeletedKey
+        {
+            // NOTE: have three values for each to handle string,
+            // number, and tf indices.  One of these must be here
+            // these are the indices
+
+            // NOTE 2: For a list, key should always be a number
+            optional string deleted_key_text = 1;
+            optional double deleted_key_num = 2;
+            optional bool deleted_key_tf = 3;
+        }
+
+        message ContainerWriteKey
+        {
+            required ParentType parent_type = 1;
+            
+            optional string write_key_text = 2;
+            optional double write_key_num = 3;
+            optional bool write_key_tf = 4;
+
+            optional string what_written_text = 5;
+            optional double what_written_num = 6;
+            optional bool what_written_tf = 7;
+
+            optional SingleMapDelta what_written_map = 8;
+            optional SingleListDelta what_written_list = 9;
+            optional SingleMapDelta what_written_struct = 10;            
+        }
+
+        message ContainerAddedKey
+        {
+            required ParentType parent_type = 1;
+            
+            optional string added_key_text = 2;
+            optional double added_key_num = 3;
+            optional bool added_key_tf = 4;
+
+            // what was actually added
+            optional string added_what_text = 5;
+            optional double added_what_num = 6;
+            optional bool added_what_tf = 7;
+            
+            optional SingleMapDelta added_what_map = 8;
+            optional SingleListDelta added_what_list = 9;
+            optional SingleMapDelta added_what_struct = 10;
+        }
+
+        // used to distinguish len/keys
+        required ContainerActionType container_action = 1;
+        optional ContainerWriteKey write_key = 2;
+        optional ContainerAddedKey added_key = 3;
+        optional ContainerDeletedKey deleted_key = 4;
+    }
+  
+    message SingleListDelta
+    {
+        required ParentType parent_type = 1;
+        required string var_name = 2;
+
+        required bool has_been_written = 3;
+        required SingleInternalListDelta internal_list_delta = 4;
+    }
+
+    message SingleMapDelta
+    {
+        required ParentType parent_type = 1;
+        required string var_name = 2;
+
+        required bool has_been_written = 3;
+        required SingleInternalMapDelta internal_map_delta = 4;
+    }
+        
+
+    message SingleInternalListDelta
+    {
+        // FIXME: likely do not need parent_type
+        required ParentType parent_type = 1;
+        repeated ContainerAction list_actions = 2;
+
+        // for nested maps, lists, structs, etc., may have been a
+        // change in one of the sub structures.  We need to have a
+        // path to the change.  Use these.
+        repeated SubElementUpdateActions sub_element_update_actions = 3;
+    }
+
+    message SingleInternalMapDelta
+    {
+        // FIXME: likely do not need parent_type
+        required ParentType parent_type = 1;
+        repeated ContainerAction map_actions = 2;
+        // for nested maps, lists, structs, etc., may have been a
+        // change in one of the sub structures.  We need to have a
+        // path to the change.  Use these.        
+        repeated SubElementUpdateActions sub_element_update_actions = 3;
+    }
+
+    message SubElementUpdateActions
+    {
+        // A sub element update takes care of the case where a deep
+        // element in nested map, nested list, or nested struct is
+        // modified, but none of the immediate values in the map or
+        // list are.  The SubElementUpdate provides a connection all
+        // the way to the actual element that was modified.
+
+        // Sub element updates can only be on maps or lists.  This is
+        // because if the update were on an immediate value, we would
+        // just see this change directly on the message.
+        required ParentType parent_type = 1;
+
+        // do not actually need var name.  including it to simplify
+        // code which deals with this subtype as well as container
+        // added/written actions, which do have var_names.
+        optional string var_name = 2;
+        
+        optional string key_text = 3;
+        optional double key_num = 4;
+        optional bool key_tf = 5;
+        
+        optional SingleMapDelta map_delta = 6;
+        optional SingleListDelta list_delta = 7;
+        optional SingleMapDelta struct_delta = 8;
+    }
+    
+    
+    required ParentType parent_type = 1;
+    repeated SingleNumberDelta num_deltas = 2;
+    repeated SingleTextDelta text_deltas = 3;
+    repeated SingleTrueFalseDelta true_false_deltas = 4;
+    repeated SingleMapDelta map_deltas = 5;
+    repeated SingleListDelta list_deltas = 6;
+    repeated SingleMapDelta struct_deltas = 7;
+    
+    // cannot access internal map or internal list from base of
+    // varStoreDelta because can only reach these through lists and
+    // maps.
+    
+}
+
+

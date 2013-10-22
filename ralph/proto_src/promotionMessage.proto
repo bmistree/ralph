@@ -1,0 +1,10 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PromotionProto";
+
+message Promotion
+{
+    required UUID event_uuid = 1;
+    required Priority new_priority = 2;
+}

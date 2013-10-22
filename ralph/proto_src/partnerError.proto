@@ -1,0 +1,22 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PartnerErrorProto";
+
+
+message PartnerError {
+    /**
+       When an exception occurs on a partner endpoint during a sequence
+       we want to propagate that error back to the root of the event.
+    */
+
+    enum ErrorType {
+        APPLICATION = 1;
+        NETWORK = 2;
+    }
+
+    required UUID event_uuid = 1;
+    required UUID host_uuid = 2;
+    required ErrorType type = 3;
+    optional string trace = 4;
+}

@@ -1,0 +1,30 @@
+import "partnerNotifyReady.proto";
+import "partnerRequestSequenceBlock.proto";
+import "partnerFirstPhaseResultMessage.proto";
+import "partnerBackoutCommitRequest.proto";
+import "partnerCompleteCommitRequest.proto";
+import "partnerCommitRequest.proto";
+import "partnerStop.proto";
+import "partnerError.proto";
+import "heartbeat.proto";
+import "promotionMessage.proto";
+import "util.proto";
+
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "GeneralMessageProto";
+
+message GeneralMessage
+{
+    optional PartnerNotifyReady notify_ready = 1;
+    optional PartnerRequestSequenceBlock request_sequence_block = 2;
+    optional PartnerFirstPhaseResultMessage first_phase_result = 3;
+    optional PartnerBackoutCommitRequest backout_commit_request = 4;
+    optional PartnerCompleteCommitRequest complete_commit_request = 5;
+    optional PartnerCommitRequest commit_request = 6;
+    optional PartnerStop stop = 7;
+    optional PartnerError error = 8;
+    optional Heartbeat heartbeat = 9;
+    optional Promotion promotion = 10;
+    
+    required uint64 timestamp = 11;
+}

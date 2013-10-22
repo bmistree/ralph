@@ -1,0 +1,14 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PartnerCommitRequestProto";
+
+
+/*
+  Sent by root endpoint (and forwarded by subsequent endpoints) to
+  begin first phase of transaction.
+ */
+message PartnerCommitRequest
+{
+    required UUID event_uuid = 1;
+}

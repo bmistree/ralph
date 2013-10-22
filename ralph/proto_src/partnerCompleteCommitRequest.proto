@@ -1,0 +1,14 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PartnerCompleteCommitRequestProto";
+
+
+/*
+  Sent by root endpoint (and forwarded by subsequent endpoints) to
+  finish second phase of commit.
+ */
+message PartnerCompleteCommitRequest
+{
+    required UUID event_uuid = 1;
+}

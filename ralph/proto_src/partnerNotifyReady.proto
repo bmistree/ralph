@@ -1,0 +1,10 @@
+import "util.proto";
+
+option java_package = "waldo_protobuffs";
+option java_outer_classname = "PartnerNotifyReadyProto";
+
+
+message PartnerNotifyReady
+{
+    required UUID endpoint_uuid = 1;
+}
