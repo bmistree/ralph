@@ -9,31 +9,30 @@ import RalphConnObj.SingleSideConnection;
 
 import com.google.protobuf.ByteString;
 
-import waldo_protobuffs.PromotionProto.Promotion;
-import waldo_protobuffs.UtilProto;
-import waldo_protobuffs.GeneralMessageProto.GeneralMessage;
-import waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest;
-import waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest;
-import waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest;
-import waldo_protobuffs.PartnerErrorProto.PartnerError;
-import waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage;
-import waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady;
-import waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import waldo_protobuffs.PartnerStopProto.PartnerStop;
-import waldo_protobuffs.UtilProto.Timestamp;
-import waldo_protobuffs.UtilProto.UUID;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.PromotionProto.Promotion;
+import ralph_protobuffs.UtilProto;
+import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest;
+import ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest;
+import ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest;
+import ralph_protobuffs.PartnerErrorProto.PartnerError;
+import ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage;
+import ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.PartnerStopProto.PartnerStop;
+import ralph_protobuffs.UtilProto.Timestamp;
+import ralph_protobuffs.UtilProto.UUID;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 
 
 /**
- *     '''
+ *
  All methods that begin with _receive, are called by other
  endpoints or from connection object's receiving a message from
  partner endpoint.
 
  All methods that begin with _forward or _send are called from
  active events on this endpoint.
- '''
  *
  */
 public class Endpoint 
@@ -211,9 +210,6 @@ public class Endpoint
     {
         String current_clock_timestamp = _clock.get_timestamp();
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(
-            GeneralMessage.MessageType.TIMESTAMP_UPDATE);
-		
         Timestamp.Builder timestamp_updated = Timestamp.newBuilder();
         timestamp_updated.setData(current_clock_timestamp);
         general_message.setTimestampUpdated(timestamp_updated);
@@ -401,8 +397,6 @@ public class Endpoint
         String event_uuid,String priority,Exception exception)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_ERROR);
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerError.Builder error = PartnerError.newBuilder();
         UUID.Builder msg_evt_uuid = UUID.newBuilder();
@@ -570,8 +564,6 @@ public class Endpoint
     public void _notify_partner_ready()
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_NOTIFY_READY);
         general_message.setTimestamp(_clock.get_int_timestamp());
 		
         PartnerNotifyReady.Builder partner_notify_ready =
@@ -597,7 +589,6 @@ public class Endpoint
     public void _forward_promotion_message(String uuid,String new_priority)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(GeneralMessage.MessageType.PROMOTION);
         general_message.setTimestamp(_clock.get_int_timestamp());
         Promotion.Builder promotion_message = Promotion.newBuilder();
 		
@@ -647,8 +638,6 @@ public class Endpoint
         String event_uuid, String endpoint_uuid)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_FIRST_PHASE_RESULT);
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerFirstPhaseResultMessage.Builder first_phase_result =
             PartnerFirstPhaseResultMessage.newBuilder();
@@ -690,8 +679,6 @@ public class Endpoint
         ArrayList<String> children_event_endpoint_uuids)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_FIRST_PHASE_RESULT);
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerFirstPhaseResultMessage.Builder first_phase_result_msg =
             PartnerFirstPhaseResultMessage.newBuilder();
@@ -930,8 +917,6 @@ public class Endpoint
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
-    	general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_REQUEST_SEQUENCE_BLOCK);
     	general_message.setTimestamp(_clock.get_int_timestamp());
 
     	PartnerRequestSequenceBlock.Builder request_sequence_block_msg =
@@ -996,8 +981,6 @@ public class Endpoint
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-    	general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_COMMIT_REQUEST);
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerCommitRequest.Builder commit_request_msg =
             PartnerCommitRequest.newBuilder();
@@ -1042,8 +1025,6 @@ public class Endpoint
         String active_event_uuid)
     {
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-    	general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_COMPLETE_COMMIT_REQUEST);
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerCompleteCommitRequest.Builder complete_commit_request_msg =
             PartnerCompleteCommitRequest.newBuilder();
@@ -1066,8 +1047,6 @@ public class Endpoint
         String active_event_uuid)
     {
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-    	general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_BACKOUT_COMMIT_REQUEST);
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerBackoutCommitRequest.Builder backout_commit_request =
             PartnerBackoutCommitRequest.newBuilder();
@@ -1081,8 +1060,6 @@ public class Endpoint
     public void _notify_partner_stop()
     {
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-    	general_message.setMessageType(
-            GeneralMessage.MessageType.PARTNER_STOP);
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerStop.Builder partner_stop_message = PartnerStop.newBuilder();
     	partner_stop_message.setDummy(false);

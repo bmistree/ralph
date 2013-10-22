@@ -2,13 +2,13 @@ package ralph;
 
 
 import RalphExceptions.BackoutException;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.Builder;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.Builder;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
 
 
 /**

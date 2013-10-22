@@ -1,7 +1,7 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 
 
 /**

@@ -1,16 +1,16 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleNumberDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleNumberDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
 
 /**
  * 

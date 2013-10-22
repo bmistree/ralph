@@ -5,11 +5,11 @@ import java.util.Map.Entry;
 
 import WaldoExceptions.BackoutException;
 
-import waldo_protobuffs.VarStoreDeltasProto;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleNumberDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
+import ralph_protobuffs.VarStoreDeltasProto;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleNumberDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
 
 public class LockedVariables {
     final static ValueTypeDataWrapperConstructor<Double,Double>
@@ -141,7 +141,7 @@ public class LockedVariables {
 		
         @Override
         protected boolean value_variable_py_val_serialize(
-            waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.Builder parent_delta,
+            ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.Builder parent_delta,
             Double var_data, String var_name) 
         {
             // can only add a pure number to var store a holder or to

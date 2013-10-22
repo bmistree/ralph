@@ -6,9 +6,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphServiceActions.ServiceAction;
 
-import waldo_protobuffs.PartnerErrorProto.PartnerError;
-import waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.PartnerErrorProto.PartnerError;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 

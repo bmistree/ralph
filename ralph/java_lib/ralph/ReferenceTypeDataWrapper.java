@@ -9,14 +9,14 @@ import java.util.Set;
 import RalphExceptions.BackoutException;
 
 
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerDeletedKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ParentType;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalMapDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerDeletedKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ParentType;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalMapDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
 
 /**
  * 

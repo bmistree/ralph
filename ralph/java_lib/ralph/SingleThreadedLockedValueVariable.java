@@ -1,13 +1,13 @@
 package ralph;
 
 
-import waldo_protobuffs.VarStoreDeltasProto;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
+import ralph_protobuffs.VarStoreDeltasProto;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
 
 public abstract class SingleThreadedLockedValueVariable<T,D> extends SingleThreadedLockedObject<T,D>
 {

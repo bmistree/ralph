@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 import RalphExceptions.BackoutException;
 
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalListDelta;
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalMapDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalListDelta;
+import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalMapDelta;
 
 
 /**
