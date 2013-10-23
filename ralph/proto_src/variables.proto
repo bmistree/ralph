@@ -3,7 +3,7 @@ import "util.proto";
 // FIXME: for all numeric types, add [packed = true];
 
 option java_package = "ralph_protobuffs";
-option java_outer_classname = "VarStoreDeltasProto";
+option java_outer_classname = "VariablesProto";
 
 
 message Variables

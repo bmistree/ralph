@@ -3,8 +3,8 @@
 
 package ralph_protobuffs;
 
-public final class VarStoreDeltasProto {
-  private VarStoreDeltasProto() {}
+public final class VariablesProto {
+  private VariablesProto() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
@@ -12,13 +12,13 @@ public final class VarStoreDeltasProto {
       extends com.google.protobuf.MessageOrBuilder {
     
     // repeated .Variables.Any vars = 1;
-    java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> 
+    java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
         getVarsList();
-    ralph_protobuffs.VarStoreDeltasProto.Variables.Any getVars(int index);
+    ralph_protobuffs.VariablesProto.Variables.Any getVars(int index);
     int getVarsCount();
-    java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+    java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
         getVarsOrBuilderList();
-    ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getVarsOrBuilder(
+    ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
         int index);
   }
   public static final class Variables extends
@@ -41,25 +41,25 @@ public final class VarStoreDeltasProto {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_descriptor;
+      return ralph_protobuffs.VariablesProto.internal_static_Variables_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_fieldAccessorTable;
+      return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable;
     }
     
     public interface ListOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
       
       // repeated .Variables.Any list_values = 1;
-      java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> 
+      java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getListValuesList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.Any getListValues(int index);
+      ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index);
       int getListValuesCount();
-      java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getListValuesOrBuilderList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getListValuesOrBuilder(
+      ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
           int index);
     }
     public static final class List extends
@@ -82,31 +82,31 @@ public final class VarStoreDeltasProto {
       
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_List_descriptor;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_List_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_List_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable;
       }
       
       // repeated .Variables.Any list_values = 1;
       public static final int LIST_VALUES_FIELD_NUMBER = 1;
-      private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> listValues_;
-      public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getListValuesList() {
+      private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> listValues_;
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getListValuesList() {
         return listValues_;
       }
-      public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getListValuesOrBuilderList() {
         return listValues_;
       }
       public int getListValuesCount() {
         return listValues_.size();
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getListValues(int index) {
+      public ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index) {
         return listValues_.get(index);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getListValuesOrBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
           int index) {
         return listValues_.get(index);
       }
@@ -160,41 +160,41 @@ public final class VarStoreDeltasProto {
         return super.writeReplace();
       }
       
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(byte[] data)
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseDelimitedFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.List parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         Builder builder = newBuilder();
         if (builder.mergeDelimitedFrom(input)) {
@@ -203,7 +203,7 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseDelimitedFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -214,12 +214,12 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.List parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -229,7 +229,7 @@ public final class VarStoreDeltasProto {
       
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(ralph_protobuffs.VarStoreDeltasProto.Variables.List prototype) {
+      public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.List prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
@@ -242,18 +242,18 @@ public final class VarStoreDeltasProto {
       }
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder {
+         implements ralph_protobuffs.VariablesProto.Variables.ListOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_List_descriptor;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_List_descriptor;
         }
         
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_List_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable;
         }
         
-        // Construct using ralph_protobuffs.VarStoreDeltasProto.Variables.List.newBuilder()
+        // Construct using ralph_protobuffs.VariablesProto.Variables.List.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -288,24 +288,24 @@ public final class VarStoreDeltasProto {
         
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDescriptor();
+          return ralph_protobuffs.VariablesProto.Variables.List.getDescriptor();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.List getDefaultInstanceForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance();
+        public ralph_protobuffs.VariablesProto.Variables.List getDefaultInstanceForType() {
+          return ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.List build() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.List result = buildPartial();
+        public ralph_protobuffs.VariablesProto.Variables.List build() {
+          ralph_protobuffs.VariablesProto.Variables.List result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
         
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.List buildParsed()
+        private ralph_protobuffs.VariablesProto.Variables.List buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.List result = buildPartial();
+          ralph_protobuffs.VariablesProto.Variables.List result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(
               result).asInvalidProtocolBufferException();
@@ -313,8 +313,8 @@ public final class VarStoreDeltasProto {
           return result;
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.List buildPartial() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.List result = new ralph_protobuffs.VarStoreDeltasProto.Variables.List(this);
+        public ralph_protobuffs.VariablesProto.Variables.List buildPartial() {
+          ralph_protobuffs.VariablesProto.Variables.List result = new ralph_protobuffs.VariablesProto.Variables.List(this);
           int from_bitField0_ = bitField0_;
           if (listValuesBuilder_ == null) {
             if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -330,16 +330,16 @@ public final class VarStoreDeltasProto {
         }
         
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof ralph_protobuffs.VarStoreDeltasProto.Variables.List) {
-            return mergeFrom((ralph_protobuffs.VarStoreDeltasProto.Variables.List)other);
+          if (other instanceof ralph_protobuffs.VariablesProto.Variables.List) {
+            return mergeFrom((ralph_protobuffs.VariablesProto.Variables.List)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
         
-        public Builder mergeFrom(ralph_protobuffs.VarStoreDeltasProto.Variables.List other) {
-          if (other == ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance()) return this;
+        public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.List other) {
+          if (other == ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance()) return this;
           if (listValuesBuilder_ == null) {
             if (!other.listValues_.isEmpty()) {
               if (listValues_.isEmpty()) {
@@ -404,7 +404,7 @@ public final class VarStoreDeltasProto {
                 break;
               }
               case 10: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Any.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
                 input.readMessage(subBuilder, extensionRegistry);
                 addListValues(subBuilder.buildPartial());
                 break;
@@ -416,19 +416,19 @@ public final class VarStoreDeltasProto {
         private int bitField0_;
         
         // repeated .Variables.Any list_values = 1;
-        private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> listValues_ =
+        private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> listValues_ =
           java.util.Collections.emptyList();
         private void ensureListValuesIsMutable() {
           if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-            listValues_ = new java.util.ArrayList<ralph_protobuffs.VarStoreDeltasProto.Variables.Any>(listValues_);
+            listValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>(listValues_);
             bitField0_ |= 0x00000001;
            }
         }
         
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> listValuesBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> listValuesBuilder_;
         
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getListValuesList() {
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getListValuesList() {
           if (listValuesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(listValues_);
           } else {
@@ -442,7 +442,7 @@ public final class VarStoreDeltasProto {
             return listValuesBuilder_.getCount();
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getListValues(int index) {
+        public ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index) {
           if (listValuesBuilder_ == null) {
             return listValues_.get(index);
           } else {
@@ -450,7 +450,7 @@ public final class VarStoreDeltasProto {
           }
         }
         public Builder setListValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -464,7 +464,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setListValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
             ensureListValuesIsMutable();
             listValues_.set(index, builderForValue.build());
@@ -474,7 +474,7 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public Builder addListValues(ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+        public Builder addListValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -488,7 +488,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addListValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -502,7 +502,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addListValues(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
             ensureListValuesIsMutable();
             listValues_.add(builderForValue.build());
@@ -513,7 +513,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addListValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
             ensureListValuesIsMutable();
             listValues_.add(index, builderForValue.build());
@@ -524,7 +524,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addAllListValues(
-            java.lang.Iterable<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.Any> values) {
+            java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (listValuesBuilder_ == null) {
             ensureListValuesIsMutable();
             super.addAll(values, listValues_);
@@ -554,18 +554,18 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder getListValuesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder getListValuesBuilder(
             int index) {
           return getListValuesFieldBuilder().getBuilder(index);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getListValuesOrBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
             int index) {
           if (listValuesBuilder_ == null) {
             return listValues_.get(index);  } else {
             return listValuesBuilder_.getMessageOrBuilder(index);
           }
         }
-        public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+        public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getListValuesOrBuilderList() {
           if (listValuesBuilder_ != null) {
             return listValuesBuilder_.getMessageOrBuilderList();
@@ -573,25 +573,25 @@ public final class VarStoreDeltasProto {
             return java.util.Collections.unmodifiableList(listValues_);
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addListValuesBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addListValuesBuilder() {
           return getListValuesFieldBuilder().addBuilder(
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addListValuesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addListValuesBuilder(
             int index) {
           return getListValuesFieldBuilder().addBuilder(
-              index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder> 
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getListValuesBuilderList() {
           return getListValuesFieldBuilder().getBuilderList();
         }
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
             getListValuesFieldBuilder() {
           if (listValuesBuilder_ == null) {
             listValuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder>(
                     listValues_,
                     ((bitField0_ & 0x00000001) == 0x00000001),
                     getParentForChildren(),
@@ -616,23 +616,23 @@ public final class VarStoreDeltasProto {
         extends com.google.protobuf.MessageOrBuilder {
       
       // repeated .Variables.Any map_indices = 1;
-      java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> 
+      java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getMapIndicesList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapIndices(int index);
+      ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index);
       int getMapIndicesCount();
-      java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapIndicesOrBuilderList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
+      ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
           int index);
       
       // repeated .Variables.Any map_values = 2;
-      java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> 
+      java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getMapValuesList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapValues(int index);
+      ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index);
       int getMapValuesCount();
-      java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapValuesOrBuilderList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
+      ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
           int index);
     }
     public static final class Map extends
@@ -655,52 +655,52 @@ public final class VarStoreDeltasProto {
       
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Map_descriptor;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Map_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable;
       }
       
       // repeated .Variables.Any map_indices = 1;
       public static final int MAP_INDICES_FIELD_NUMBER = 1;
-      private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> mapIndices_;
-      public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getMapIndicesList() {
+      private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapIndices_;
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapIndicesList() {
         return mapIndices_;
       }
-      public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapIndicesOrBuilderList() {
         return mapIndices_;
       }
       public int getMapIndicesCount() {
         return mapIndices_.size();
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapIndices(int index) {
+      public ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index) {
         return mapIndices_.get(index);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
           int index) {
         return mapIndices_.get(index);
       }
       
       // repeated .Variables.Any map_values = 2;
       public static final int MAP_VALUES_FIELD_NUMBER = 2;
-      private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> mapValues_;
-      public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getMapValuesList() {
+      private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapValues_;
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapValuesList() {
         return mapValues_;
       }
-      public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapValuesOrBuilderList() {
         return mapValues_;
       }
       public int getMapValuesCount() {
         return mapValues_.size();
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapValues(int index) {
+      public ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index) {
         return mapValues_.get(index);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
           int index) {
         return mapValues_.get(index);
       }
@@ -768,41 +768,41 @@ public final class VarStoreDeltasProto {
         return super.writeReplace();
       }
       
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(byte[] data)
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseDelimitedFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         Builder builder = newBuilder();
         if (builder.mergeDelimitedFrom(input)) {
@@ -811,7 +811,7 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseDelimitedFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -822,12 +822,12 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Map parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -837,7 +837,7 @@ public final class VarStoreDeltasProto {
       
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(ralph_protobuffs.VarStoreDeltasProto.Variables.Map prototype) {
+      public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.Map prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
@@ -850,18 +850,18 @@ public final class VarStoreDeltasProto {
       }
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder {
+         implements ralph_protobuffs.VariablesProto.Variables.MapOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Map_descriptor;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_descriptor;
         }
         
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Map_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable;
         }
         
-        // Construct using ralph_protobuffs.VarStoreDeltasProto.Variables.Map.newBuilder()
+        // Construct using ralph_protobuffs.VariablesProto.Variables.Map.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -903,24 +903,24 @@ public final class VarStoreDeltasProto {
         
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDescriptor();
+          return ralph_protobuffs.VariablesProto.Variables.Map.getDescriptor();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map getDefaultInstanceForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+        public ralph_protobuffs.VariablesProto.Variables.Map getDefaultInstanceForType() {
+          return ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map build() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Map result = buildPartial();
+        public ralph_protobuffs.VariablesProto.Variables.Map build() {
+          ralph_protobuffs.VariablesProto.Variables.Map result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
         
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.Map buildParsed()
+        private ralph_protobuffs.VariablesProto.Variables.Map buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Map result = buildPartial();
+          ralph_protobuffs.VariablesProto.Variables.Map result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(
               result).asInvalidProtocolBufferException();
@@ -928,8 +928,8 @@ public final class VarStoreDeltasProto {
           return result;
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map buildPartial() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Map result = new ralph_protobuffs.VarStoreDeltasProto.Variables.Map(this);
+        public ralph_protobuffs.VariablesProto.Variables.Map buildPartial() {
+          ralph_protobuffs.VariablesProto.Variables.Map result = new ralph_protobuffs.VariablesProto.Variables.Map(this);
           int from_bitField0_ = bitField0_;
           if (mapIndicesBuilder_ == null) {
             if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -954,16 +954,16 @@ public final class VarStoreDeltasProto {
         }
         
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof ralph_protobuffs.VarStoreDeltasProto.Variables.Map) {
-            return mergeFrom((ralph_protobuffs.VarStoreDeltasProto.Variables.Map)other);
+          if (other instanceof ralph_protobuffs.VariablesProto.Variables.Map) {
+            return mergeFrom((ralph_protobuffs.VariablesProto.Variables.Map)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
         
-        public Builder mergeFrom(ralph_protobuffs.VarStoreDeltasProto.Variables.Map other) {
-          if (other == ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance()) return this;
+        public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.Map other) {
+          if (other == ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) return this;
           if (mapIndicesBuilder_ == null) {
             if (!other.mapIndices_.isEmpty()) {
               if (mapIndices_.isEmpty()) {
@@ -1060,13 +1060,13 @@ public final class VarStoreDeltasProto {
                 break;
               }
               case 10: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Any.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
                 input.readMessage(subBuilder, extensionRegistry);
                 addMapIndices(subBuilder.buildPartial());
                 break;
               }
               case 18: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Any.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
                 input.readMessage(subBuilder, extensionRegistry);
                 addMapValues(subBuilder.buildPartial());
                 break;
@@ -1078,19 +1078,19 @@ public final class VarStoreDeltasProto {
         private int bitField0_;
         
         // repeated .Variables.Any map_indices = 1;
-        private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> mapIndices_ =
+        private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapIndices_ =
           java.util.Collections.emptyList();
         private void ensureMapIndicesIsMutable() {
           if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-            mapIndices_ = new java.util.ArrayList<ralph_protobuffs.VarStoreDeltasProto.Variables.Any>(mapIndices_);
+            mapIndices_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>(mapIndices_);
             bitField0_ |= 0x00000001;
            }
         }
         
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> mapIndicesBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> mapIndicesBuilder_;
         
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getMapIndicesList() {
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapIndicesList() {
           if (mapIndicesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(mapIndices_);
           } else {
@@ -1104,7 +1104,7 @@ public final class VarStoreDeltasProto {
             return mapIndicesBuilder_.getCount();
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapIndices(int index) {
+        public ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index) {
           if (mapIndicesBuilder_ == null) {
             return mapIndices_.get(index);
           } else {
@@ -1112,7 +1112,7 @@ public final class VarStoreDeltasProto {
           }
         }
         public Builder setMapIndices(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1126,7 +1126,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setMapIndices(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
             ensureMapIndicesIsMutable();
             mapIndices_.set(index, builderForValue.build());
@@ -1136,7 +1136,7 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public Builder addMapIndices(ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+        public Builder addMapIndices(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1150,7 +1150,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapIndices(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1164,7 +1164,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapIndices(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
             ensureMapIndicesIsMutable();
             mapIndices_.add(builderForValue.build());
@@ -1175,7 +1175,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapIndices(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
             ensureMapIndicesIsMutable();
             mapIndices_.add(index, builderForValue.build());
@@ -1186,7 +1186,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addAllMapIndices(
-            java.lang.Iterable<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.Any> values) {
+            java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (mapIndicesBuilder_ == null) {
             ensureMapIndicesIsMutable();
             super.addAll(values, mapIndices_);
@@ -1216,18 +1216,18 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder getMapIndicesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder getMapIndicesBuilder(
             int index) {
           return getMapIndicesFieldBuilder().getBuilder(index);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
             int index) {
           if (mapIndicesBuilder_ == null) {
             return mapIndices_.get(index);  } else {
             return mapIndicesBuilder_.getMessageOrBuilder(index);
           }
         }
-        public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+        public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getMapIndicesOrBuilderList() {
           if (mapIndicesBuilder_ != null) {
             return mapIndicesBuilder_.getMessageOrBuilderList();
@@ -1235,25 +1235,25 @@ public final class VarStoreDeltasProto {
             return java.util.Collections.unmodifiableList(mapIndices_);
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addMapIndicesBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapIndicesBuilder() {
           return getMapIndicesFieldBuilder().addBuilder(
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addMapIndicesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapIndicesBuilder(
             int index) {
           return getMapIndicesFieldBuilder().addBuilder(
-              index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder> 
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getMapIndicesBuilderList() {
           return getMapIndicesFieldBuilder().getBuilderList();
         }
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
             getMapIndicesFieldBuilder() {
           if (mapIndicesBuilder_ == null) {
             mapIndicesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder>(
                     mapIndices_,
                     ((bitField0_ & 0x00000001) == 0x00000001),
                     getParentForChildren(),
@@ -1264,19 +1264,19 @@ public final class VarStoreDeltasProto {
         }
         
         // repeated .Variables.Any map_values = 2;
-        private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> mapValues_ =
+        private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapValues_ =
           java.util.Collections.emptyList();
         private void ensureMapValuesIsMutable() {
           if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-            mapValues_ = new java.util.ArrayList<ralph_protobuffs.VarStoreDeltasProto.Variables.Any>(mapValues_);
+            mapValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>(mapValues_);
             bitField0_ |= 0x00000002;
            }
         }
         
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> mapValuesBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> mapValuesBuilder_;
         
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getMapValuesList() {
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapValuesList() {
           if (mapValuesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(mapValues_);
           } else {
@@ -1290,7 +1290,7 @@ public final class VarStoreDeltasProto {
             return mapValuesBuilder_.getCount();
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getMapValues(int index) {
+        public ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index) {
           if (mapValuesBuilder_ == null) {
             return mapValues_.get(index);
           } else {
@@ -1298,7 +1298,7 @@ public final class VarStoreDeltasProto {
           }
         }
         public Builder setMapValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1312,7 +1312,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setMapValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
             ensureMapValuesIsMutable();
             mapValues_.set(index, builderForValue.build());
@@ -1322,7 +1322,7 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public Builder addMapValues(ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+        public Builder addMapValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1336,7 +1336,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -1350,7 +1350,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapValues(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
             ensureMapValuesIsMutable();
             mapValues_.add(builderForValue.build());
@@ -1361,7 +1361,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addMapValues(
-            int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
             ensureMapValuesIsMutable();
             mapValues_.add(index, builderForValue.build());
@@ -1372,7 +1372,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder addAllMapValues(
-            java.lang.Iterable<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.Any> values) {
+            java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (mapValuesBuilder_ == null) {
             ensureMapValuesIsMutable();
             super.addAll(values, mapValues_);
@@ -1402,18 +1402,18 @@ public final class VarStoreDeltasProto {
           }
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder getMapValuesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder getMapValuesBuilder(
             int index) {
           return getMapValuesFieldBuilder().getBuilder(index);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
             int index) {
           if (mapValuesBuilder_ == null) {
             return mapValues_.get(index);  } else {
             return mapValuesBuilder_.getMessageOrBuilder(index);
           }
         }
-        public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+        public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getMapValuesOrBuilderList() {
           if (mapValuesBuilder_ != null) {
             return mapValuesBuilder_.getMessageOrBuilderList();
@@ -1421,25 +1421,25 @@ public final class VarStoreDeltasProto {
             return java.util.Collections.unmodifiableList(mapValues_);
           }
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addMapValuesBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapValuesBuilder() {
           return getMapValuesFieldBuilder().addBuilder(
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addMapValuesBuilder(
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapValuesBuilder(
             int index) {
           return getMapValuesFieldBuilder().addBuilder(
-              index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+              index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
-        public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder> 
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getMapValuesBuilderList() {
           return getMapValuesFieldBuilder().getBuilderList();
         }
         private com.google.protobuf.RepeatedFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
             getMapValuesFieldBuilder() {
           if (mapValuesBuilder_ == null) {
             mapValuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder>(
                     mapValues_,
                     ((bitField0_ & 0x00000002) == 0x00000002),
                     getParentForChildren(),
@@ -1481,18 +1481,18 @@ public final class VarStoreDeltasProto {
       
       // optional .Variables.List list = 5;
       boolean hasList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.List getList();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder getListOrBuilder();
+      ralph_protobuffs.VariablesProto.Variables.List getList();
+      ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder();
       
       // optional .Variables.Map map = 6;
       boolean hasMap();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.Map getMap();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getMapOrBuilder();
+      ralph_protobuffs.VariablesProto.Variables.Map getMap();
+      ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder();
       
       // optional .Variables.Map struct = 7;
       boolean hasStruct();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.Map getStruct();
-      ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getStructOrBuilder();
+      ralph_protobuffs.VariablesProto.Variables.Map getStruct();
+      ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructOrBuilder();
     }
     public static final class Any extends
         com.google.protobuf.GeneratedMessage
@@ -1514,12 +1514,12 @@ public final class VarStoreDeltasProto {
       
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Any_descriptor;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Any_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable;
       }
       
       private int bitField0_;
@@ -1609,40 +1609,40 @@ public final class VarStoreDeltasProto {
       
       // optional .Variables.List list = 5;
       public static final int LIST_FIELD_NUMBER = 5;
-      private ralph_protobuffs.VarStoreDeltasProto.Variables.List list_;
+      private ralph_protobuffs.VariablesProto.Variables.List list_;
       public boolean hasList() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.List getList() {
+      public ralph_protobuffs.VariablesProto.Variables.List getList() {
         return list_;
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder getListOrBuilder() {
+      public ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder() {
         return list_;
       }
       
       // optional .Variables.Map map = 6;
       public static final int MAP_FIELD_NUMBER = 6;
-      private ralph_protobuffs.VarStoreDeltasProto.Variables.Map map_;
+      private ralph_protobuffs.VariablesProto.Variables.Map map_;
       public boolean hasMap() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Map getMap() {
+      public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
         return map_;
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getMapOrBuilder() {
+      public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder() {
         return map_;
       }
       
       // optional .Variables.Map struct = 7;
       public static final int STRUCT_FIELD_NUMBER = 7;
-      private ralph_protobuffs.VarStoreDeltasProto.Variables.Map struct_;
+      private ralph_protobuffs.VariablesProto.Variables.Map struct_;
       public boolean hasStruct() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Map getStruct() {
+      public ralph_protobuffs.VariablesProto.Variables.Map getStruct() {
         return struct_;
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getStructOrBuilder() {
+      public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructOrBuilder() {
         return struct_;
       }
       
@@ -1651,9 +1651,9 @@ public final class VarStoreDeltasProto {
         num_ = 0D;
         text_ = "";
         trueFalse_ = false;
-        list_ = ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance();
-        map_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
-        struct_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+        list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
+        map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
+        struct_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1759,41 +1759,41 @@ public final class VarStoreDeltasProto {
         return super.writeReplace();
       }
       
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(byte[] data)
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input, extensionRegistry)
                  .buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseDelimitedFrom(java.io.InputStream input)
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         Builder builder = newBuilder();
         if (builder.mergeDelimitedFrom(input)) {
@@ -1802,7 +1802,7 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseDelimitedFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -1813,12 +1813,12 @@ public final class VarStoreDeltasProto {
           return null;
         }
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
-      public static ralph_protobuffs.VarStoreDeltasProto.Variables.Any parseFrom(
+      public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -1828,7 +1828,7 @@ public final class VarStoreDeltasProto {
       
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(ralph_protobuffs.VarStoreDeltasProto.Variables.Any prototype) {
+      public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.Any prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
@@ -1841,18 +1841,18 @@ public final class VarStoreDeltasProto {
       }
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder {
+         implements ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Any_descriptor;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_descriptor;
         }
         
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_Any_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable;
         }
         
-        // Construct using ralph_protobuffs.VarStoreDeltasProto.Variables.Any.newBuilder()
+        // Construct using ralph_protobuffs.VariablesProto.Variables.Any.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -1883,19 +1883,19 @@ public final class VarStoreDeltasProto {
           trueFalse_ = false;
           bitField0_ = (bitField0_ & ~0x00000008);
           if (listBuilder_ == null) {
-            list_ = ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance();
+            list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
           } else {
             listBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000010);
           if (mapBuilder_ == null) {
-            map_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+            map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
           } else {
             mapBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000020);
           if (structBuilder_ == null) {
-            struct_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+            struct_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
           } else {
             structBuilder_.clear();
           }
@@ -1909,24 +1909,24 @@ public final class VarStoreDeltasProto {
         
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDescriptor();
+          return ralph_protobuffs.VariablesProto.Variables.Any.getDescriptor();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getDefaultInstanceForType() {
-          return ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance();
+        public ralph_protobuffs.VariablesProto.Variables.Any getDefaultInstanceForType() {
+          return ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance();
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any build() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any result = buildPartial();
+        public ralph_protobuffs.VariablesProto.Variables.Any build() {
+          ralph_protobuffs.VariablesProto.Variables.Any result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
         
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.Any buildParsed()
+        private ralph_protobuffs.VariablesProto.Variables.Any buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any result = buildPartial();
+          ralph_protobuffs.VariablesProto.Variables.Any result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(
               result).asInvalidProtocolBufferException();
@@ -1934,8 +1934,8 @@ public final class VarStoreDeltasProto {
           return result;
         }
         
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Any buildPartial() {
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any result = new ralph_protobuffs.VarStoreDeltasProto.Variables.Any(this);
+        public ralph_protobuffs.VariablesProto.Variables.Any buildPartial() {
+          ralph_protobuffs.VariablesProto.Variables.Any result = new ralph_protobuffs.VariablesProto.Variables.Any(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1984,16 +1984,16 @@ public final class VarStoreDeltasProto {
         }
         
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof ralph_protobuffs.VarStoreDeltasProto.Variables.Any) {
-            return mergeFrom((ralph_protobuffs.VarStoreDeltasProto.Variables.Any)other);
+          if (other instanceof ralph_protobuffs.VariablesProto.Variables.Any) {
+            return mergeFrom((ralph_protobuffs.VariablesProto.Variables.Any)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
         
-        public Builder mergeFrom(ralph_protobuffs.VarStoreDeltasProto.Variables.Any other) {
-          if (other == ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance()) return this;
+        public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.Any other) {
+          if (other == ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance()) return this;
           if (other.hasVarName()) {
             setVarName(other.getVarName());
           }
@@ -2089,7 +2089,7 @@ public final class VarStoreDeltasProto {
                 break;
               }
               case 42: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.List.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.List.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.List.newBuilder();
                 if (hasList()) {
                   subBuilder.mergeFrom(getList());
                 }
@@ -2098,7 +2098,7 @@ public final class VarStoreDeltasProto {
                 break;
               }
               case 50: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Map.newBuilder();
                 if (hasMap()) {
                   subBuilder.mergeFrom(getMap());
                 }
@@ -2107,7 +2107,7 @@ public final class VarStoreDeltasProto {
                 break;
               }
               case 58: {
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.newBuilder();
+                ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Map.newBuilder();
                 if (hasStruct()) {
                   subBuilder.mergeFrom(getStruct());
                 }
@@ -2236,20 +2236,20 @@ public final class VarStoreDeltasProto {
         }
         
         // optional .Variables.List list = 5;
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.List list_ = ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance();
+        private ralph_protobuffs.VariablesProto.Variables.List list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.List, ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder> listBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder> listBuilder_;
         public boolean hasList() {
           return ((bitField0_ & 0x00000010) == 0x00000010);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.List getList() {
+        public ralph_protobuffs.VariablesProto.Variables.List getList() {
           if (listBuilder_ == null) {
             return list_;
           } else {
             return listBuilder_.getMessage();
           }
         }
-        public Builder setList(ralph_protobuffs.VarStoreDeltasProto.Variables.List value) {
+        public Builder setList(ralph_protobuffs.VariablesProto.Variables.List value) {
           if (listBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -2263,7 +2263,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setList(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.List.Builder builderForValue) {
           if (listBuilder_ == null) {
             list_ = builderForValue.build();
             onChanged();
@@ -2273,12 +2273,12 @@ public final class VarStoreDeltasProto {
           bitField0_ |= 0x00000010;
           return this;
         }
-        public Builder mergeList(ralph_protobuffs.VarStoreDeltasProto.Variables.List value) {
+        public Builder mergeList(ralph_protobuffs.VariablesProto.Variables.List value) {
           if (listBuilder_ == null) {
             if (((bitField0_ & 0x00000010) == 0x00000010) &&
-                list_ != ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance()) {
+                list_ != ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance()) {
               list_ =
-                ralph_protobuffs.VarStoreDeltasProto.Variables.List.newBuilder(list_).mergeFrom(value).buildPartial();
+                ralph_protobuffs.VariablesProto.Variables.List.newBuilder(list_).mergeFrom(value).buildPartial();
             } else {
               list_ = value;
             }
@@ -2291,7 +2291,7 @@ public final class VarStoreDeltasProto {
         }
         public Builder clearList() {
           if (listBuilder_ == null) {
-            list_ = ralph_protobuffs.VarStoreDeltasProto.Variables.List.getDefaultInstance();
+            list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
             onChanged();
           } else {
             listBuilder_.clear();
@@ -2299,12 +2299,12 @@ public final class VarStoreDeltasProto {
           bitField0_ = (bitField0_ & ~0x00000010);
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder getListBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.List.Builder getListBuilder() {
           bitField0_ |= 0x00000010;
           onChanged();
           return getListFieldBuilder().getBuilder();
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder getListOrBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder() {
           if (listBuilder_ != null) {
             return listBuilder_.getMessageOrBuilder();
           } else {
@@ -2312,11 +2312,11 @@ public final class VarStoreDeltasProto {
           }
         }
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.List, ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder> 
             getListFieldBuilder() {
           if (listBuilder_ == null) {
             listBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.List, ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.ListOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder>(
                     list_,
                     getParentForChildren(),
                     isClean());
@@ -2326,20 +2326,20 @@ public final class VarStoreDeltasProto {
         }
         
         // optional .Variables.Map map = 6;
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.Map map_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+        private ralph_protobuffs.VariablesProto.Variables.Map map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder> mapBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> mapBuilder_;
         public boolean hasMap() {
           return ((bitField0_ & 0x00000020) == 0x00000020);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map getMap() {
+        public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
           if (mapBuilder_ == null) {
             return map_;
           } else {
             return mapBuilder_.getMessage();
           }
         }
-        public Builder setMap(ralph_protobuffs.VarStoreDeltasProto.Variables.Map value) {
+        public Builder setMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (mapBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -2353,7 +2353,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setMap(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.Map.Builder builderForValue) {
           if (mapBuilder_ == null) {
             map_ = builderForValue.build();
             onChanged();
@@ -2363,12 +2363,12 @@ public final class VarStoreDeltasProto {
           bitField0_ |= 0x00000020;
           return this;
         }
-        public Builder mergeMap(ralph_protobuffs.VarStoreDeltasProto.Variables.Map value) {
+        public Builder mergeMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (mapBuilder_ == null) {
             if (((bitField0_ & 0x00000020) == 0x00000020) &&
-                map_ != ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance()) {
+                map_ != ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) {
               map_ =
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map.newBuilder(map_).mergeFrom(value).buildPartial();
+                ralph_protobuffs.VariablesProto.Variables.Map.newBuilder(map_).mergeFrom(value).buildPartial();
             } else {
               map_ = value;
             }
@@ -2381,7 +2381,7 @@ public final class VarStoreDeltasProto {
         }
         public Builder clearMap() {
           if (mapBuilder_ == null) {
-            map_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+            map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
             onChanged();
           } else {
             mapBuilder_.clear();
@@ -2389,12 +2389,12 @@ public final class VarStoreDeltasProto {
           bitField0_ = (bitField0_ & ~0x00000020);
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder getMapBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.Map.Builder getMapBuilder() {
           bitField0_ |= 0x00000020;
           onChanged();
           return getMapFieldBuilder().getBuilder();
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getMapOrBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder() {
           if (mapBuilder_ != null) {
             return mapBuilder_.getMessageOrBuilder();
           } else {
@@ -2402,11 +2402,11 @@ public final class VarStoreDeltasProto {
           }
         }
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> 
             getMapFieldBuilder() {
           if (mapBuilder_ == null) {
             mapBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder>(
                     map_,
                     getParentForChildren(),
                     isClean());
@@ -2416,20 +2416,20 @@ public final class VarStoreDeltasProto {
         }
         
         // optional .Variables.Map struct = 7;
-        private ralph_protobuffs.VarStoreDeltasProto.Variables.Map struct_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+        private ralph_protobuffs.VariablesProto.Variables.Map struct_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder> structBuilder_;
+            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> structBuilder_;
         public boolean hasStruct() {
           return ((bitField0_ & 0x00000040) == 0x00000040);
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map getStruct() {
+        public ralph_protobuffs.VariablesProto.Variables.Map getStruct() {
           if (structBuilder_ == null) {
             return struct_;
           } else {
             return structBuilder_.getMessage();
           }
         }
-        public Builder setStruct(ralph_protobuffs.VarStoreDeltasProto.Variables.Map value) {
+        public Builder setStruct(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (structBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
@@ -2443,7 +2443,7 @@ public final class VarStoreDeltasProto {
           return this;
         }
         public Builder setStruct(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder builderForValue) {
+            ralph_protobuffs.VariablesProto.Variables.Map.Builder builderForValue) {
           if (structBuilder_ == null) {
             struct_ = builderForValue.build();
             onChanged();
@@ -2453,12 +2453,12 @@ public final class VarStoreDeltasProto {
           bitField0_ |= 0x00000040;
           return this;
         }
-        public Builder mergeStruct(ralph_protobuffs.VarStoreDeltasProto.Variables.Map value) {
+        public Builder mergeStruct(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (structBuilder_ == null) {
             if (((bitField0_ & 0x00000040) == 0x00000040) &&
-                struct_ != ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance()) {
+                struct_ != ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) {
               struct_ =
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map.newBuilder(struct_).mergeFrom(value).buildPartial();
+                ralph_protobuffs.VariablesProto.Variables.Map.newBuilder(struct_).mergeFrom(value).buildPartial();
             } else {
               struct_ = value;
             }
@@ -2471,7 +2471,7 @@ public final class VarStoreDeltasProto {
         }
         public Builder clearStruct() {
           if (structBuilder_ == null) {
-            struct_ = ralph_protobuffs.VarStoreDeltasProto.Variables.Map.getDefaultInstance();
+            struct_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
             onChanged();
           } else {
             structBuilder_.clear();
@@ -2479,12 +2479,12 @@ public final class VarStoreDeltasProto {
           bitField0_ = (bitField0_ & ~0x00000040);
           return this;
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder getStructBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.Map.Builder getStructBuilder() {
           bitField0_ |= 0x00000040;
           onChanged();
           return getStructFieldBuilder().getBuilder();
         }
-        public ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder getStructOrBuilder() {
+        public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructOrBuilder() {
           if (structBuilder_ != null) {
             return structBuilder_.getMessageOrBuilder();
           } else {
@@ -2492,11 +2492,11 @@ public final class VarStoreDeltasProto {
           }
         }
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder> 
+            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> 
             getStructFieldBuilder() {
           if (structBuilder_ == null) {
             structBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-                ralph_protobuffs.VarStoreDeltasProto.Variables.Map, ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.MapOrBuilder>(
+                ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder>(
                     struct_,
                     getParentForChildren(),
                     isClean());
@@ -2518,21 +2518,21 @@ public final class VarStoreDeltasProto {
     
     // repeated .Variables.Any vars = 1;
     public static final int VARS_FIELD_NUMBER = 1;
-    private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> vars_;
-    public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getVarsList() {
+    private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> vars_;
+    public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getVarsList() {
       return vars_;
     }
-    public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+    public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
         getVarsOrBuilderList() {
       return vars_;
     }
     public int getVarsCount() {
       return vars_.size();
     }
-    public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getVars(int index) {
+    public ralph_protobuffs.VariablesProto.Variables.Any getVars(int index) {
       return vars_.get(index);
     }
-    public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getVarsOrBuilder(
+    public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
         int index) {
       return vars_.get(index);
     }
@@ -2586,41 +2586,41 @@ public final class VarStoreDeltasProto {
       return super.writeReplace();
     }
     
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(byte[] data)
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(java.io.InputStream input)
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseDelimitedFrom(java.io.InputStream input)
+    public static ralph_protobuffs.VariablesProto.Variables parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -2629,7 +2629,7 @@ public final class VarStoreDeltasProto {
         return null;
       }
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseDelimitedFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2640,12 +2640,12 @@ public final class VarStoreDeltasProto {
         return null;
       }
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static ralph_protobuffs.VarStoreDeltasProto.Variables parseFrom(
+    public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2655,7 +2655,7 @@ public final class VarStoreDeltasProto {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(ralph_protobuffs.VarStoreDeltasProto.Variables prototype) {
+    public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -2668,18 +2668,18 @@ public final class VarStoreDeltasProto {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder {
+       implements ralph_protobuffs.VariablesProto.VariablesOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_descriptor;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VarStoreDeltasProto.internal_static_Variables_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable;
       }
       
-      // Construct using ralph_protobuffs.VarStoreDeltasProto.Variables.newBuilder()
+      // Construct using ralph_protobuffs.VariablesProto.Variables.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2714,24 +2714,24 @@ public final class VarStoreDeltasProto {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.VarStoreDeltasProto.Variables.getDescriptor();
+        return ralph_protobuffs.VariablesProto.Variables.getDescriptor();
       }
       
-      public ralph_protobuffs.VarStoreDeltasProto.Variables getDefaultInstanceForType() {
-        return ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
+      public ralph_protobuffs.VariablesProto.Variables getDefaultInstanceForType() {
+        return ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
       }
       
-      public ralph_protobuffs.VarStoreDeltasProto.Variables build() {
-        ralph_protobuffs.VarStoreDeltasProto.Variables result = buildPartial();
+      public ralph_protobuffs.VariablesProto.Variables build() {
+        ralph_protobuffs.VariablesProto.Variables result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private ralph_protobuffs.VarStoreDeltasProto.Variables buildParsed()
+      private ralph_protobuffs.VariablesProto.Variables buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.VarStoreDeltasProto.Variables result = buildPartial();
+        ralph_protobuffs.VariablesProto.Variables result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -2739,8 +2739,8 @@ public final class VarStoreDeltasProto {
         return result;
       }
       
-      public ralph_protobuffs.VarStoreDeltasProto.Variables buildPartial() {
-        ralph_protobuffs.VarStoreDeltasProto.Variables result = new ralph_protobuffs.VarStoreDeltasProto.Variables(this);
+      public ralph_protobuffs.VariablesProto.Variables buildPartial() {
+        ralph_protobuffs.VariablesProto.Variables result = new ralph_protobuffs.VariablesProto.Variables(this);
         int from_bitField0_ = bitField0_;
         if (varsBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -2756,16 +2756,16 @@ public final class VarStoreDeltasProto {
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ralph_protobuffs.VarStoreDeltasProto.Variables) {
-          return mergeFrom((ralph_protobuffs.VarStoreDeltasProto.Variables)other);
+        if (other instanceof ralph_protobuffs.VariablesProto.Variables) {
+          return mergeFrom((ralph_protobuffs.VariablesProto.Variables)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(ralph_protobuffs.VarStoreDeltasProto.Variables other) {
-        if (other == ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance()) return this;
+      public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables other) {
+        if (other == ralph_protobuffs.VariablesProto.Variables.getDefaultInstance()) return this;
         if (varsBuilder_ == null) {
           if (!other.vars_.isEmpty()) {
             if (vars_.isEmpty()) {
@@ -2830,7 +2830,7 @@ public final class VarStoreDeltasProto {
               break;
             }
             case 10: {
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.Any.newBuilder();
+              ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addVars(subBuilder.buildPartial());
               break;
@@ -2842,19 +2842,19 @@ public final class VarStoreDeltasProto {
       private int bitField0_;
       
       // repeated .Variables.Any vars = 1;
-      private java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> vars_ =
+      private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> vars_ =
         java.util.Collections.emptyList();
       private void ensureVarsIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          vars_ = new java.util.ArrayList<ralph_protobuffs.VarStoreDeltasProto.Variables.Any>(vars_);
+          vars_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>(vars_);
           bitField0_ |= 0x00000001;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> varsBuilder_;
+          ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> varsBuilder_;
       
-      public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any> getVarsList() {
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getVarsList() {
         if (varsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(vars_);
         } else {
@@ -2868,7 +2868,7 @@ public final class VarStoreDeltasProto {
           return varsBuilder_.getCount();
         }
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any getVars(int index) {
+      public ralph_protobuffs.VariablesProto.Variables.Any getVars(int index) {
         if (varsBuilder_ == null) {
           return vars_.get(index);
         } else {
@@ -2876,7 +2876,7 @@ public final class VarStoreDeltasProto {
         }
       }
       public Builder setVars(
-          int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+          int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2890,7 +2890,7 @@ public final class VarStoreDeltasProto {
         return this;
       }
       public Builder setVars(
-          int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+          int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
           ensureVarsIsMutable();
           vars_.set(index, builderForValue.build());
@@ -2900,7 +2900,7 @@ public final class VarStoreDeltasProto {
         }
         return this;
       }
-      public Builder addVars(ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+      public Builder addVars(ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2914,7 +2914,7 @@ public final class VarStoreDeltasProto {
         return this;
       }
       public Builder addVars(
-          int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any value) {
+          int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2928,7 +2928,7 @@ public final class VarStoreDeltasProto {
         return this;
       }
       public Builder addVars(
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+          ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
           ensureVarsIsMutable();
           vars_.add(builderForValue.build());
@@ -2939,7 +2939,7 @@ public final class VarStoreDeltasProto {
         return this;
       }
       public Builder addVars(
-          int index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder builderForValue) {
+          int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
           ensureVarsIsMutable();
           vars_.add(index, builderForValue.build());
@@ -2950,7 +2950,7 @@ public final class VarStoreDeltasProto {
         return this;
       }
       public Builder addAllVars(
-          java.lang.Iterable<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.Any> values) {
+          java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
         if (varsBuilder_ == null) {
           ensureVarsIsMutable();
           super.addAll(values, vars_);
@@ -2980,18 +2980,18 @@ public final class VarStoreDeltasProto {
         }
         return this;
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder getVarsBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.Any.Builder getVarsBuilder(
           int index) {
         return getVarsFieldBuilder().getBuilder(index);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder getVarsOrBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
           int index) {
         if (varsBuilder_ == null) {
           return vars_.get(index);  } else {
           return varsBuilder_.getMessageOrBuilder(index);
         }
       }
-      public java.util.List<? extends ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
            getVarsOrBuilderList() {
         if (varsBuilder_ != null) {
           return varsBuilder_.getMessageOrBuilderList();
@@ -2999,25 +2999,25 @@ public final class VarStoreDeltasProto {
           return java.util.Collections.unmodifiableList(vars_);
         }
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addVarsBuilder() {
+      public ralph_protobuffs.VariablesProto.Variables.Any.Builder addVarsBuilder() {
         return getVarsFieldBuilder().addBuilder(
-            ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+            ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder addVarsBuilder(
+      public ralph_protobuffs.VariablesProto.Variables.Any.Builder addVarsBuilder(
           int index) {
         return getVarsFieldBuilder().addBuilder(
-            index, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.getDefaultInstance());
+            index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
       }
-      public java.util.List<ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder> 
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
            getVarsBuilderList() {
         return getVarsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder> 
+          ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getVarsFieldBuilder() {
         if (varsBuilder_ == null) {
           varsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any, ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder, ralph_protobuffs.VarStoreDeltasProto.Variables.AnyOrBuilder>(
+              ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder>(
                   vars_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -3076,8 +3076,7 @@ public final class VarStoreDeltasProto {
       "\004text\030\003 \001(\t\022\022\n\ntrue_false\030\004 \001(\010\022\035\n\004list\030" +
       "\005 \001(\0132\017.Variables.List\022\033\n\003map\030\006 \001(\0132\016.Va" +
       "riables.Map\022\036\n\006struct\030\007 \001(\0132\016.Variables." +
-      "MapB\'\n\020ralph_protobuffsB\023VarStoreDeltasP",
-      "roto"
+      "MapB\"\n\020ralph_protobuffsB\016VariablesProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3090,32 +3089,32 @@ public final class VarStoreDeltasProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_descriptor,
               new java.lang.String[] { "Vars", },
-              ralph_protobuffs.VarStoreDeltasProto.Variables.class,
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Builder.class);
+              ralph_protobuffs.VariablesProto.Variables.class,
+              ralph_protobuffs.VariablesProto.Variables.Builder.class);
           internal_static_Variables_List_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(0);
           internal_static_Variables_List_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_List_descriptor,
               new java.lang.String[] { "ListValues", },
-              ralph_protobuffs.VarStoreDeltasProto.Variables.List.class,
-              ralph_protobuffs.VarStoreDeltasProto.Variables.List.Builder.class);
+              ralph_protobuffs.VariablesProto.Variables.List.class,
+              ralph_protobuffs.VariablesProto.Variables.List.Builder.class);
           internal_static_Variables_Map_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(1);
           internal_static_Variables_Map_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Map_descriptor,
               new java.lang.String[] { "MapIndices", "MapValues", },
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Map.class,
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Map.Builder.class);
+              ralph_protobuffs.VariablesProto.Variables.Map.class,
+              ralph_protobuffs.VariablesProto.Variables.Map.Builder.class);
           internal_static_Variables_Any_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(2);
           internal_static_Variables_Any_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Any_descriptor,
               new java.lang.String[] { "VarName", "Num", "Text", "TrueFalse", "List", "Map", "Struct", },
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.class,
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Any.Builder.class);
+              ralph_protobuffs.VariablesProto.Variables.Any.class,
+              ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
           return null;
         }
       };
