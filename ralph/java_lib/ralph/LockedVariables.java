@@ -5,12 +5,6 @@ import java.util.Map.Entry;
 
 import WaldoExceptions.BackoutException;
 
-import ralph_protobuffs.VarStoreDeltasProto;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleNumberDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTextDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleTrueFalseDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction;
-
 public class LockedVariables {
     final static ValueTypeDataWrapperConstructor<Double,Double>
         number_value_type_data_wrapper_constructor =
@@ -138,42 +132,6 @@ public class LockedVariables {
                 _host_uuid,_peered,default_number,default_number,
                 number_value_type_data_wrapper_constructor);			
         }
-		
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.Builder parent_delta,
-            Double var_data, String var_name) 
-        {
-            // can only add a pure number to var store a holder or to
-            // an added key
-            SingleNumberDelta.Builder delta = SingleNumberDelta.newBuilder();
-            delta.setVarName(var_name);
-            delta.setVarData(var_data.doubleValue());
-            parent_delta.addNumDeltas(delta);			
-            return true;
-        }
-
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerAddedKey.Builder parent_delta,
-            Double var_data, String var_name) 
-        {
-            //parent_delta.added_what_num = var_data
-            parent_delta.setAddedWhatNum(var_data.doubleValue());
-            return true;
-        }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerWriteKey.Builder parent_delta,
-            Double var_data, String var_name) 
-        {
-            // parent.what_written_num = var_data
-            parent_delta.setWhatWrittenNum(var_data.doubleValue());
-            return true;
-        }
-		
     }
 
     public static class SingleThreadedLockedTextVariable
@@ -194,39 +152,6 @@ public class LockedVariables {
                 _host_uuid,_peered,default_text,default_text,
                 text_value_type_data_wrapper_constructor);
         }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            VarStoreDeltas.Builder parent_delta,
-            String var_data, String var_name) 
-        {
-            // can only add a pure number to var store a holder or to
-            // an added key
-            SingleTextDelta.Builder delta = SingleTextDelta.newBuilder();
-            delta.setVarName(var_name);
-            delta.setVarData(var_data);
-            parent_delta.addTextDeltas(delta);			
-            return true;
-        }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerAddedKey.Builder parent_delta,
-            String var_data, String var_name) 
-        {
-            parent_delta.setAddedWhatText(var_data);
-            return true;
-        }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerWriteKey.Builder parent_delta,
-            String var_data, String var_name) 
-        {
-            parent_delta.setWhatWrittenText(var_data);
-            return true;
-        }
-		
     }
 
     public static class SingleThreadedLockedTrueFalseVariable
@@ -247,40 +172,6 @@ public class LockedVariables {
                 _host_uuid,_peered,default_tf,default_tf,
                 true_false_value_type_data_wrapper_constructor);
         }
-
-		
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            VarStoreDeltas.Builder parent_delta,
-            Boolean var_data, String var_name) 
-        {
-            // can only add a pure number to var store a holder or to
-            // an added key
-            SingleTrueFalseDelta.Builder delta = SingleTrueFalseDelta.newBuilder();
-            delta.setVarName(var_name);
-            delta.setVarData(var_data);
-            parent_delta.addTrueFalseDeltas(delta);			
-            return true;
-        }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerAddedKey.Builder parent_delta,
-            Boolean var_data, String var_name) 
-        {
-            parent_delta.setAddedWhatTf(var_data);
-            return true;
-        }
-
-        @Override
-        protected boolean value_variable_py_val_serialize(
-            ContainerWriteKey.Builder parent_delta,
-            Boolean var_data, String var_name) 
-        {
-            parent_delta.setWhatWrittenTf(var_data);
-            return true;
-        }
-		
     }
 
 	

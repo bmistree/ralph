@@ -22,7 +22,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VariablesProto.Variables;
 
 
 /**
@@ -913,7 +913,7 @@ public class Endpoint
     public void _send_partner_message_sequence_block_request(
         String block_name,String event_uuid,String priority,String reply_with_uuid,
         String reply_to_uuid, LockedActiveEvent active_event,
-        VariableStore sequence_local_store, boolean first_msg)
+        Variables.Builder rpc_variables, boolean first_msg)
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
@@ -953,20 +953,8 @@ public class Endpoint
             reply_to_uuid_msg.setData(reply_to_uuid);
             request_sequence_block_msg.setReplyToUuid(reply_to_uuid_msg);
     	}
-    	
-
-    	VarStoreDeltas.Builder sequence_local_var_store_deltas_msg = 
-            sequence_local_store.generate_deltas(active_event, first_msg);
-
-    	VarStoreDeltas.Builder glob_var_store_deltas_msg = 
-            _global_var_store.generate_deltas(active_event, false);
-    	
-    	request_sequence_block_msg.setSequenceLocalVarStoreDeltas(
-            sequence_local_var_store_deltas_msg);
-    	request_sequence_block_msg.setPeeredVarStoreDeltas(
-            glob_var_store_deltas_msg);
-    	
-
+        
+        request_sequence_block_msg.setArguments(rpc_variables);
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
     	
     	_conn_obj.write(general_message.build(),this);

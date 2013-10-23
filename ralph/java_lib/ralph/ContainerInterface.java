@@ -5,9 +5,6 @@ import java.util.HashMap;
 
 import RalphExceptions.BackoutException;
 
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalListDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleInternalMapDelta;
-
 
 /**
  * @param <K>  ---- The keys used for indexing
@@ -63,22 +60,4 @@ public interface ContainerInterface <K,V,D>
      */
     public DataWrapper<HashMap<K,V>, HashMap<K,D>>
         get_dirty_wrapped_val(LockedActiveEvent active_event);
-
-    /**
-     *@param {SingleListDelta or SingleMapDelta} delta_to_incorporate
-
-     @param {SingleInternalListDelta or SingleInternalMapDelta}
-     delta_to_incorporate
-		
-     When a peered or sequence peered container (ie, map, list, or
-     struct) is modified by one endpoint, those changes must be
-     reflected on the other endpoint.  This method takes the
-     changes that one endpoint has made on a container, represented
-     by delta_to_incorporate, and applies them (if we can).
-    */
-    public void incorporate_deltas(
-        SingleInternalListDelta delta_to_incorporate, LockedActiveEvent active_event);
-    public void incorporate_deltas(
-        SingleInternalMapDelta delta_to_incorporate, LockedActiveEvent active_event);
-	    		
 }

@@ -1,7 +1,6 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 
 
 /**
@@ -107,35 +106,4 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     {
         return val.de_waldoify(active_event);
     }
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-        VarStoreDeltas.Builder parent_delta,
-        String var_name, LockedActiveEvent active_event, boolean force);
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-        SingleListDelta.Builder parent_delta,
-        String var_name, LockedActiveEvent active_event, boolean force);
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-         SingleMapDelta.Builder parent_delta,
-         String var_name, LockedActiveEvent active_event, boolean force);
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-        ContainerAddedKey.Builder parent_delta,
-        String var_name, LockedActiveEvent active_event, boolean force);
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-        SubElementUpdateActions.Builder parent_delta,
-        String var_name, LockedActiveEvent active_event, boolean force);
-
-    @Override
-    public abstract boolean serializable_var_tuple_for_network(
-        ContainerWriteKey.Builder parent_delta,
-        String var_name, LockedActiveEvent active_event, boolean force);
-
 }

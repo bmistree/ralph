@@ -7,13 +7,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import RalphExceptions.BackoutException;
-
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleListDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SingleMapDelta;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.SubElementUpdateActions;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerAddedKey;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas.ContainerAction.ContainerWriteKey;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -982,67 +975,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     	
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
-    }
-
-    public boolean serializable_var_tuple_for_network(
-        VarStoreDeltas.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;    	
-    }
-    public boolean serializable_var_tuple_for_network(
-        SingleListDelta.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;
-    }
-    public boolean serializable_var_tuple_for_network(
-        SingleMapDelta.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;
-    }
-    public boolean serializable_var_tuple_for_network(
-        ContainerAddedKey.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;
-    }
-    public boolean serializable_var_tuple_for_network(
-        SubElementUpdateActions.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;
-    }
-    public boolean serializable_var_tuple_for_network(
-        ContainerWriteKey.Builder parent_delta,String var_name,
-        LockedActiveEvent active_event,boolean force)
-    {
-        Util.logger_assert(
-            "Serializable var tuple for network is pure virtual " +
-            "in waldoLockedObj.");
-              
-    	return false;
     }
 
     private class CachedPriorityComparator

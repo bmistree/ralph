@@ -933,38 +933,14 @@ public class LockedActiveEvent
                 name_of_block_to_exec_next);
 
         //### SET UP CONTEXT FOR EXECUTING
-        //# FIXME: re-arrange code to avoid this import
         VariableStore seq_local_var_store = new VariableStore(
             event_parent.local_endpoint._host_uuid);
 
-        VarStoreDeltas seq_local_deltas = msg.getSequenceLocalVarStoreDeltas();
+        // FIXME
+        Util.logger_assert(
+            "FIXME: must enable handling rpc call from partner");
         
-        //# FIXME: eventually, want to remove pickle-ing here
-        seq_local_var_store.incorporate_deltas(
-            this, seq_local_deltas);
-        
-        ExecutingEventContext evt_ctx =  new ExecutingEventContext(
-            //# already incorporated deltas for global_var_store
-            //# above.
-            event_parent.local_endpoint._global_var_store,
-            seq_local_var_store);
-
-        evt_ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
-
-        
-        //# used to actually start execution of context thread at end
-        //# of loop.  must start event outside of locks.  That way,
-        //# if the exec event leads to and endpoint call, etc., we
-        //# don't block waiting on its return.
-        ExecutingEvent exec_event = new ExecutingEvent(
-            block_to_exec_internal_name,this,evt_ctx,
-            null, //# using None here means that we do not need to
-            //# bother with waiting for modified peered-s to
-            //# update.
-            false
-            );
-
-        return exec_event;
+        return null;
     }
 
 	
@@ -1037,20 +1013,9 @@ public class LockedActiveEvent
         }
         //#### END DEBUG
 
-        String reply_with_uuid = msg.getReplyWithUuid().getData();
-        //# unblock waiting listening queue.
-        message_listening_queues_map.get(reply_to_uuid).add(
-            new RalphCallResults.SequenceMessageCallResult(
-                reply_with_uuid,name_of_block_to_exec_next,
-                //# as soon as read from the listening message
-                //# queue, populate sequence local data from context
-                //# using sequence_local_var_store_deltas.						
-                msg.getSequenceLocalVarStoreDeltas()));
-						
-
-        //# no need holding onto queue waiting on a message response.
-        message_listening_queues_map.remove(reply_to_uuid);
-
+        // FIXME
+        Util.logger_assert(
+            "Must handle receiving rpc from partner.");
     }	
 
     /**
