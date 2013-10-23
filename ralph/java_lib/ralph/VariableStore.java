@@ -8,21 +8,18 @@ import ralph_protobuffs.VariablesProto.Variables;
 
 public class VariableStore 
 {
-    private String host_uuid;
     private HashMap<String,LockedObject> name_to_var_map = 
         new HashMap<String, LockedObject>();
 
-    public VariableStore(String _host_uuid)
-    {
-        host_uuid = _host_uuid;
-    }
+    public VariableStore()
+    {}
 
     /**
      * @param {String} unique_name ---
 
-     @param {_WaldoVariable} waldo_variable 
+     @param {LockedObject} ralph_variable 
     */
-    public void add_var(String unique_name,LockedObject waldo_variable)
+    public void add_var(String unique_name,LockedObject ralph_variable)
     {
         // DEBUG
         if (get_var_if_exists(unique_name) != null)
@@ -33,14 +30,14 @@ public class VariableStore
         }
         //#### END DEBUG
           
-        name_to_var_map.put(unique_name, waldo_variable); 
+        name_to_var_map.put(unique_name, ralph_variable); 
     }
 
     /**
      *
      @param {String} unique_name --- 
-     @returns {_WaldoVariable or None} --- None if variable does
-     not exist, _WaldoVariable otherwise.
+     @returns {LockedObject or null} --- None if variable does
+     not exist, LockedObject otherwise.
     */
     public LockedObject get_var_if_exists(String unique_name) 
     {
