@@ -1,0 +1,38 @@
+import "util.proto";
+
+// FIXME: for all numeric types, add [packed = true];
+
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "VarStoreDeltasProto";
+
+
+message Variables
+{
+    message List
+    {
+        repeated Any list_values = 1;
+    }
+
+    message Map
+    {
+        repeated Any map_indices = 1;
+        repeated Any map_values = 2;
+    }
+
+    message Any
+    {
+        // for case of data internal to a map/list/struct, use a
+        // garbage var name.
+        required string var_name = 1;
+        optional double num = 2;
+        optional string text = 3;
+        optional bool true_false = 4;
+        optional List list = 5;
+        optional Map map = 6;
+        optional Map struct = 7;
+    }
+
+    repeated Any vars = 1;
+}
+
+
