@@ -37,7 +37,6 @@ message PartnerRequestSequenceBlock
         said as part of this sequence in.
         */      
         optional UUID reply_to_uuid = 5;
-
-        required Variables sequence_local_var_store_deltas = 6;
-        required Variables peered_var_store_deltas = 7;
+    
+        required Variables arguments = 6;
 }

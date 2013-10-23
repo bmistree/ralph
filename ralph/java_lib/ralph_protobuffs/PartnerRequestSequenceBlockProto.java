@@ -35,15 +35,10 @@ public final class PartnerRequestSequenceBlockProto {
     ralph_protobuffs.UtilProto.UUID getReplyToUuid();
     ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyToUuidOrBuilder();
     
-    // required .Variables sequence_local_var_store_deltas = 6;
-    boolean hasSequenceLocalVarStoreDeltas();
-    ralph_protobuffs.VarStoreDeltasProto.Variables getSequenceLocalVarStoreDeltas();
-    ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getSequenceLocalVarStoreDeltasOrBuilder();
-    
-    // required .Variables peered_var_store_deltas = 7;
-    boolean hasPeeredVarStoreDeltas();
-    ralph_protobuffs.VarStoreDeltasProto.Variables getPeeredVarStoreDeltas();
-    ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getPeeredVarStoreDeltasOrBuilder();
+    // required .Variables arguments = 6;
+    boolean hasArguments();
+    ralph_protobuffs.VariablesProto.Variables getArguments();
+    ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder();
   }
   public static final class PartnerRequestSequenceBlock extends
       com.google.protobuf.GeneratedMessage
@@ -158,30 +153,17 @@ public final class PartnerRequestSequenceBlockProto {
       return replyToUuid_;
     }
     
-    // required .Variables sequence_local_var_store_deltas = 6;
-    public static final int SEQUENCE_LOCAL_VAR_STORE_DELTAS_FIELD_NUMBER = 6;
-    private ralph_protobuffs.VarStoreDeltasProto.Variables sequenceLocalVarStoreDeltas_;
-    public boolean hasSequenceLocalVarStoreDeltas() {
+    // required .Variables arguments = 6;
+    public static final int ARGUMENTS_FIELD_NUMBER = 6;
+    private ralph_protobuffs.VariablesProto.Variables arguments_;
+    public boolean hasArguments() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
-    public ralph_protobuffs.VarStoreDeltasProto.Variables getSequenceLocalVarStoreDeltas() {
-      return sequenceLocalVarStoreDeltas_;
+    public ralph_protobuffs.VariablesProto.Variables getArguments() {
+      return arguments_;
     }
-    public ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getSequenceLocalVarStoreDeltasOrBuilder() {
-      return sequenceLocalVarStoreDeltas_;
-    }
-    
-    // required .Variables peered_var_store_deltas = 7;
-    public static final int PEERED_VAR_STORE_DELTAS_FIELD_NUMBER = 7;
-    private ralph_protobuffs.VarStoreDeltasProto.Variables peeredVarStoreDeltas_;
-    public boolean hasPeeredVarStoreDeltas() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    public ralph_protobuffs.VarStoreDeltasProto.Variables getPeeredVarStoreDeltas() {
-      return peeredVarStoreDeltas_;
-    }
-    public ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getPeeredVarStoreDeltasOrBuilder() {
-      return peeredVarStoreDeltas_;
+    public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
+      return arguments_;
     }
     
     private void initFields() {
@@ -190,8 +172,7 @@ public final class PartnerRequestSequenceBlockProto {
       nameOfBlockRequesting_ = "";
       replyWithUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       replyToUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
-      sequenceLocalVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
-      peeredVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
+      arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -210,11 +191,7 @@ public final class PartnerRequestSequenceBlockProto {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSequenceLocalVarStoreDeltas()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPeeredVarStoreDeltas()) {
+      if (!hasArguments()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -236,11 +213,7 @@ public final class PartnerRequestSequenceBlockProto {
           return false;
         }
       }
-      if (!getSequenceLocalVarStoreDeltas().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!getPeeredVarStoreDeltas().isInitialized()) {
+      if (!getArguments().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -267,10 +240,7 @@ public final class PartnerRequestSequenceBlockProto {
         output.writeMessage(5, replyToUuid_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeMessage(6, sequenceLocalVarStoreDeltas_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeMessage(7, peeredVarStoreDeltas_);
+        output.writeMessage(6, arguments_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -303,11 +273,7 @@ public final class PartnerRequestSequenceBlockProto {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, sequenceLocalVarStoreDeltas_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, peeredVarStoreDeltas_);
+          .computeMessageSize(6, arguments_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -429,8 +395,7 @@ public final class PartnerRequestSequenceBlockProto {
           getPriorityFieldBuilder();
           getReplyWithUuidFieldBuilder();
           getReplyToUuidFieldBuilder();
-          getSequenceLocalVarStoreDeltasFieldBuilder();
-          getPeeredVarStoreDeltasFieldBuilder();
+          getArgumentsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -465,18 +430,12 @@ public final class PartnerRequestSequenceBlockProto {
           replyToUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          sequenceLocalVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
+        if (argumentsBuilder_ == null) {
+          arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
         } else {
-          sequenceLocalVarStoreDeltasBuilder_.clear();
+          argumentsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          peeredVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
-        } else {
-          peeredVarStoreDeltasBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       
@@ -554,18 +513,10 @@ public final class PartnerRequestSequenceBlockProto {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          result.sequenceLocalVarStoreDeltas_ = sequenceLocalVarStoreDeltas_;
+        if (argumentsBuilder_ == null) {
+          result.arguments_ = arguments_;
         } else {
-          result.sequenceLocalVarStoreDeltas_ = sequenceLocalVarStoreDeltasBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          result.peeredVarStoreDeltas_ = peeredVarStoreDeltas_;
-        } else {
-          result.peeredVarStoreDeltas_ = peeredVarStoreDeltasBuilder_.build();
+          result.arguments_ = argumentsBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -598,11 +549,8 @@ public final class PartnerRequestSequenceBlockProto {
         if (other.hasReplyToUuid()) {
           mergeReplyToUuid(other.getReplyToUuid());
         }
-        if (other.hasSequenceLocalVarStoreDeltas()) {
-          mergeSequenceLocalVarStoreDeltas(other.getSequenceLocalVarStoreDeltas());
-        }
-        if (other.hasPeeredVarStoreDeltas()) {
-          mergePeeredVarStoreDeltas(other.getPeeredVarStoreDeltas());
+        if (other.hasArguments()) {
+          mergeArguments(other.getArguments());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -621,11 +569,7 @@ public final class PartnerRequestSequenceBlockProto {
           
           return false;
         }
-        if (!hasSequenceLocalVarStoreDeltas()) {
-          
-          return false;
-        }
-        if (!hasPeeredVarStoreDeltas()) {
+        if (!hasArguments()) {
           
           return false;
         }
@@ -647,11 +591,7 @@ public final class PartnerRequestSequenceBlockProto {
             return false;
           }
         }
-        if (!getSequenceLocalVarStoreDeltas().isInitialized()) {
-          
-          return false;
-        }
-        if (!getPeeredVarStoreDeltas().isInitialized()) {
+        if (!getArguments().isInitialized()) {
           
           return false;
         }
@@ -723,21 +663,12 @@ public final class PartnerRequestSequenceBlockProto {
               break;
             }
             case 50: {
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.newBuilder();
-              if (hasSequenceLocalVarStoreDeltas()) {
-                subBuilder.mergeFrom(getSequenceLocalVarStoreDeltas());
+              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.newBuilder();
+              if (hasArguments()) {
+                subBuilder.mergeFrom(getArguments());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setSequenceLocalVarStoreDeltas(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              ralph_protobuffs.VarStoreDeltasProto.Variables.Builder subBuilder = ralph_protobuffs.VarStoreDeltasProto.Variables.newBuilder();
-              if (hasPeeredVarStoreDeltas()) {
-                subBuilder.mergeFrom(getPeeredVarStoreDeltas());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setPeeredVarStoreDeltas(subBuilder.buildPartial());
+              setArguments(subBuilder.buildPartial());
               break;
             }
           }
@@ -1142,184 +1073,94 @@ public final class PartnerRequestSequenceBlockProto {
         return replyToUuidBuilder_;
       }
       
-      // required .Variables sequence_local_var_store_deltas = 6;
-      private ralph_protobuffs.VarStoreDeltasProto.Variables sequenceLocalVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
+      // required .Variables arguments = 6;
+      private ralph_protobuffs.VariablesProto.Variables arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder> sequenceLocalVarStoreDeltasBuilder_;
-      public boolean hasSequenceLocalVarStoreDeltas() {
+          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> argumentsBuilder_;
+      public boolean hasArguments() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables getSequenceLocalVarStoreDeltas() {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          return sequenceLocalVarStoreDeltas_;
+      public ralph_protobuffs.VariablesProto.Variables getArguments() {
+        if (argumentsBuilder_ == null) {
+          return arguments_;
         } else {
-          return sequenceLocalVarStoreDeltasBuilder_.getMessage();
+          return argumentsBuilder_.getMessage();
         }
       }
-      public Builder setSequenceLocalVarStoreDeltas(ralph_protobuffs.VarStoreDeltasProto.Variables value) {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
+      public Builder setArguments(ralph_protobuffs.VariablesProto.Variables value) {
+        if (argumentsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          sequenceLocalVarStoreDeltas_ = value;
+          arguments_ = value;
           onChanged();
         } else {
-          sequenceLocalVarStoreDeltasBuilder_.setMessage(value);
+          argumentsBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder setSequenceLocalVarStoreDeltas(
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Builder builderForValue) {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          sequenceLocalVarStoreDeltas_ = builderForValue.build();
+      public Builder setArguments(
+          ralph_protobuffs.VariablesProto.Variables.Builder builderForValue) {
+        if (argumentsBuilder_ == null) {
+          arguments_ = builderForValue.build();
           onChanged();
         } else {
-          sequenceLocalVarStoreDeltasBuilder_.setMessage(builderForValue.build());
+          argumentsBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder mergeSequenceLocalVarStoreDeltas(ralph_protobuffs.VarStoreDeltasProto.Variables value) {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
+      public Builder mergeArguments(ralph_protobuffs.VariablesProto.Variables value) {
+        if (argumentsBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020) &&
-              sequenceLocalVarStoreDeltas_ != ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance()) {
-            sequenceLocalVarStoreDeltas_ =
-              ralph_protobuffs.VarStoreDeltasProto.Variables.newBuilder(sequenceLocalVarStoreDeltas_).mergeFrom(value).buildPartial();
+              arguments_ != ralph_protobuffs.VariablesProto.Variables.getDefaultInstance()) {
+            arguments_ =
+              ralph_protobuffs.VariablesProto.Variables.newBuilder(arguments_).mergeFrom(value).buildPartial();
           } else {
-            sequenceLocalVarStoreDeltas_ = value;
+            arguments_ = value;
           }
           onChanged();
         } else {
-          sequenceLocalVarStoreDeltasBuilder_.mergeFrom(value);
+          argumentsBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder clearSequenceLocalVarStoreDeltas() {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          sequenceLocalVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
+      public Builder clearArguments() {
+        if (argumentsBuilder_ == null) {
+          arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
           onChanged();
         } else {
-          sequenceLocalVarStoreDeltasBuilder_.clear();
+          argumentsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Builder getSequenceLocalVarStoreDeltasBuilder() {
+      public ralph_protobuffs.VariablesProto.Variables.Builder getArgumentsBuilder() {
         bitField0_ |= 0x00000020;
         onChanged();
-        return getSequenceLocalVarStoreDeltasFieldBuilder().getBuilder();
+        return getArgumentsFieldBuilder().getBuilder();
       }
-      public ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getSequenceLocalVarStoreDeltasOrBuilder() {
-        if (sequenceLocalVarStoreDeltasBuilder_ != null) {
-          return sequenceLocalVarStoreDeltasBuilder_.getMessageOrBuilder();
+      public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
+        if (argumentsBuilder_ != null) {
+          return argumentsBuilder_.getMessageOrBuilder();
         } else {
-          return sequenceLocalVarStoreDeltas_;
+          return arguments_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder> 
-          getSequenceLocalVarStoreDeltasFieldBuilder() {
-        if (sequenceLocalVarStoreDeltasBuilder_ == null) {
-          sequenceLocalVarStoreDeltasBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder>(
-                  sequenceLocalVarStoreDeltas_,
+          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> 
+          getArgumentsFieldBuilder() {
+        if (argumentsBuilder_ == null) {
+          argumentsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder>(
+                  arguments_,
                   getParentForChildren(),
                   isClean());
-          sequenceLocalVarStoreDeltas_ = null;
+          arguments_ = null;
         }
-        return sequenceLocalVarStoreDeltasBuilder_;
-      }
-      
-      // required .Variables peered_var_store_deltas = 7;
-      private ralph_protobuffs.VarStoreDeltasProto.Variables peeredVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder> peeredVarStoreDeltasBuilder_;
-      public boolean hasPeeredVarStoreDeltas() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables getPeeredVarStoreDeltas() {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          return peeredVarStoreDeltas_;
-        } else {
-          return peeredVarStoreDeltasBuilder_.getMessage();
-        }
-      }
-      public Builder setPeeredVarStoreDeltas(ralph_protobuffs.VarStoreDeltasProto.Variables value) {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          peeredVarStoreDeltas_ = value;
-          onChanged();
-        } else {
-          peeredVarStoreDeltasBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      public Builder setPeeredVarStoreDeltas(
-          ralph_protobuffs.VarStoreDeltasProto.Variables.Builder builderForValue) {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          peeredVarStoreDeltas_ = builderForValue.build();
-          onChanged();
-        } else {
-          peeredVarStoreDeltasBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      public Builder mergePeeredVarStoreDeltas(ralph_protobuffs.VarStoreDeltasProto.Variables value) {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040) &&
-              peeredVarStoreDeltas_ != ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance()) {
-            peeredVarStoreDeltas_ =
-              ralph_protobuffs.VarStoreDeltasProto.Variables.newBuilder(peeredVarStoreDeltas_).mergeFrom(value).buildPartial();
-          } else {
-            peeredVarStoreDeltas_ = value;
-          }
-          onChanged();
-        } else {
-          peeredVarStoreDeltasBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      public Builder clearPeeredVarStoreDeltas() {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          peeredVarStoreDeltas_ = ralph_protobuffs.VarStoreDeltasProto.Variables.getDefaultInstance();
-          onChanged();
-        } else {
-          peeredVarStoreDeltasBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000040);
-        return this;
-      }
-      public ralph_protobuffs.VarStoreDeltasProto.Variables.Builder getPeeredVarStoreDeltasBuilder() {
-        bitField0_ |= 0x00000040;
-        onChanged();
-        return getPeeredVarStoreDeltasFieldBuilder().getBuilder();
-      }
-      public ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder getPeeredVarStoreDeltasOrBuilder() {
-        if (peeredVarStoreDeltasBuilder_ != null) {
-          return peeredVarStoreDeltasBuilder_.getMessageOrBuilder();
-        } else {
-          return peeredVarStoreDeltas_;
-        }
-      }
-      private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder> 
-          getPeeredVarStoreDeltasFieldBuilder() {
-        if (peeredVarStoreDeltasBuilder_ == null) {
-          peeredVarStoreDeltasBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ralph_protobuffs.VarStoreDeltasProto.Variables, ralph_protobuffs.VarStoreDeltasProto.Variables.Builder, ralph_protobuffs.VarStoreDeltasProto.VariablesOrBuilder>(
-                  peeredVarStoreDeltas_,
-                  getParentForChildren(),
-                  isClean());
-          peeredVarStoreDeltas_ = null;
-        }
-        return peeredVarStoreDeltasBuilder_;
+        return argumentsBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock)
@@ -1348,15 +1189,14 @@ public final class PartnerRequestSequenceBlockProto {
   static {
     java.lang.String[] descriptorData = {
       "\n!partnerRequestSequenceBlock.proto\032\nuti" +
-      "l.proto\032\017variables.proto\"\227\002\n\033PartnerRequ" +
+      "l.proto\032\017variables.proto\"\324\001\n\033PartnerRequ" +
       "estSequenceBlock\022\031\n\nevent_uuid\030\001 \002(\0132\005.U" +
       "UID\022\033\n\010priority\030\002 \002(\0132\t.Priority\022 \n\030name" +
       "_of_block_requesting\030\003 \001(\t\022\036\n\017reply_with" +
       "_uuid\030\004 \002(\0132\005.UUID\022\034\n\rreply_to_uuid\030\005 \001(" +
-      "\0132\005.UUID\0223\n\037sequence_local_var_store_del" +
-      "tas\030\006 \002(\0132\n.Variables\022+\n\027peered_var_stor" +
-      "e_deltas\030\007 \002(\0132\n.VariablesB4\n\020ralph_prot" +
-      "obuffsB PartnerRequestSequenceBlockProto"
+      "\0132\005.UUID\022\035\n\targuments\030\006 \002(\0132\n.VariablesB" +
+      "4\n\020ralph_protobuffsB PartnerRequestSeque" +
+      "nceBlockProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1368,7 +1208,7 @@ public final class PartnerRequestSequenceBlockProto {
           internal_static_PartnerRequestSequenceBlock_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_descriptor,
-              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "SequenceLocalVarStoreDeltas", "PeeredVarStoreDeltas", },
+              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", },
               ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.class,
               ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder.class);
           return null;
@@ -1378,7 +1218,7 @@ public final class PartnerRequestSequenceBlockProto {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           ralph_protobuffs.UtilProto.getDescriptor(),
-          ralph_protobuffs.VarStoreDeltasProto.getDescriptor(),
+          ralph_protobuffs.VariablesProto.getDescriptor(),
         }, assigner);
   }
   
