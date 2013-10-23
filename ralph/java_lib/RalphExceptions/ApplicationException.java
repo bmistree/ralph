@@ -1,7 +1,7 @@
 package RalphExceptions;
 
 
-public class ApplicationException extends WaldoHandleableException {
+public class ApplicationException extends RalphHandleableException {
     public ApplicationException (String trace)
     {
         super(trace);
