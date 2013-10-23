@@ -13,53 +13,53 @@ public final class GeneralMessageProto {
     
     // optional .PartnerNotifyReady notify_ready = 1;
     boolean hasNotifyReady();
-    waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady();
-    waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder();
+    ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady();
+    ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder();
     
     // optional .PartnerRequestSequenceBlock request_sequence_block = 2;
     boolean hasRequestSequenceBlock();
-    waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock();
-    waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder();
     
     // optional .PartnerFirstPhaseResultMessage first_phase_result = 3;
     boolean hasFirstPhaseResult();
-    waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult();
-    waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder();
+    ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult();
+    ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder();
     
     // optional .PartnerBackoutCommitRequest backout_commit_request = 4;
     boolean hasBackoutCommitRequest();
-    waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest();
-    waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder();
+    ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest();
+    ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder();
     
     // optional .PartnerCompleteCommitRequest complete_commit_request = 5;
     boolean hasCompleteCommitRequest();
-    waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest();
-    waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder();
+    ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest();
+    ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder();
     
     // optional .PartnerCommitRequest commit_request = 6;
     boolean hasCommitRequest();
-    waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest();
-    waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder();
+    ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest();
+    ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder();
     
     // optional .PartnerStop stop = 7;
     boolean hasStop();
-    waldo_protobuffs.PartnerStopProto.PartnerStop getStop();
-    waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder();
+    ralph_protobuffs.PartnerStopProto.PartnerStop getStop();
+    ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder();
     
     // optional .PartnerError error = 8;
     boolean hasError();
-    waldo_protobuffs.PartnerErrorProto.PartnerError getError();
-    waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder();
+    ralph_protobuffs.PartnerErrorProto.PartnerError getError();
+    ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder();
     
     // optional .Heartbeat heartbeat = 9;
     boolean hasHeartbeat();
-    waldo_protobuffs.HeartbeatProto.Heartbeat getHeartbeat();
-    waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder();
+    ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat();
+    ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder();
     
     // optional .Promotion promotion = 10;
     boolean hasPromotion();
-    waldo_protobuffs.PromotionProto.Promotion getPromotion();
-    waldo_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder();
+    ralph_protobuffs.PromotionProto.Promotion getPromotion();
+    ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder();
     
     // required uint64 timestamp = 11;
     boolean hasTimestamp();
@@ -96,131 +96,131 @@ public final class GeneralMessageProto {
     private int bitField0_;
     // optional .PartnerNotifyReady notify_ready = 1;
     public static final int NOTIFY_READY_FIELD_NUMBER = 1;
-    private waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady notifyReady_;
+    private ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady notifyReady_;
     public boolean hasNotifyReady() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady() {
+    public ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady() {
       return notifyReady_;
     }
-    public waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder() {
+    public ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder() {
       return notifyReady_;
     }
     
     // optional .PartnerRequestSequenceBlock request_sequence_block = 2;
     public static final int REQUEST_SEQUENCE_BLOCK_FIELD_NUMBER = 2;
-    private waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock requestSequenceBlock_;
+    private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock requestSequenceBlock_;
     public boolean hasRequestSequenceBlock() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock() {
       return requestSequenceBlock_;
     }
-    public waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder() {
       return requestSequenceBlock_;
     }
     
     // optional .PartnerFirstPhaseResultMessage first_phase_result = 3;
     public static final int FIRST_PHASE_RESULT_FIELD_NUMBER = 3;
-    private waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage firstPhaseResult_;
+    private ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage firstPhaseResult_;
     public boolean hasFirstPhaseResult() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult() {
+    public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult() {
       return firstPhaseResult_;
     }
-    public waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder() {
+    public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder() {
       return firstPhaseResult_;
     }
     
     // optional .PartnerBackoutCommitRequest backout_commit_request = 4;
     public static final int BACKOUT_COMMIT_REQUEST_FIELD_NUMBER = 4;
-    private waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest backoutCommitRequest_;
+    private ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest backoutCommitRequest_;
     public boolean hasBackoutCommitRequest() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest() {
+    public ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest() {
       return backoutCommitRequest_;
     }
-    public waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder() {
+    public ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder() {
       return backoutCommitRequest_;
     }
     
     // optional .PartnerCompleteCommitRequest complete_commit_request = 5;
     public static final int COMPLETE_COMMIT_REQUEST_FIELD_NUMBER = 5;
-    private waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest completeCommitRequest_;
+    private ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest completeCommitRequest_;
     public boolean hasCompleteCommitRequest() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    public waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest() {
+    public ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest() {
       return completeCommitRequest_;
     }
-    public waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder() {
+    public ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder() {
       return completeCommitRequest_;
     }
     
     // optional .PartnerCommitRequest commit_request = 6;
     public static final int COMMIT_REQUEST_FIELD_NUMBER = 6;
-    private waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest commitRequest_;
+    private ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest commitRequest_;
     public boolean hasCommitRequest() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
-    public waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest() {
+    public ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest() {
       return commitRequest_;
     }
-    public waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder() {
+    public ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder() {
       return commitRequest_;
     }
     
     // optional .PartnerStop stop = 7;
     public static final int STOP_FIELD_NUMBER = 7;
-    private waldo_protobuffs.PartnerStopProto.PartnerStop stop_;
+    private ralph_protobuffs.PartnerStopProto.PartnerStop stop_;
     public boolean hasStop() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
-    public waldo_protobuffs.PartnerStopProto.PartnerStop getStop() {
+    public ralph_protobuffs.PartnerStopProto.PartnerStop getStop() {
       return stop_;
     }
-    public waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
+    public ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
       return stop_;
     }
     
     // optional .PartnerError error = 8;
     public static final int ERROR_FIELD_NUMBER = 8;
-    private waldo_protobuffs.PartnerErrorProto.PartnerError error_;
+    private ralph_protobuffs.PartnerErrorProto.PartnerError error_;
     public boolean hasError() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
-    public waldo_protobuffs.PartnerErrorProto.PartnerError getError() {
+    public ralph_protobuffs.PartnerErrorProto.PartnerError getError() {
       return error_;
     }
-    public waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
+    public ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
       return error_;
     }
     
     // optional .Heartbeat heartbeat = 9;
     public static final int HEARTBEAT_FIELD_NUMBER = 9;
-    private waldo_protobuffs.HeartbeatProto.Heartbeat heartbeat_;
+    private ralph_protobuffs.HeartbeatProto.Heartbeat heartbeat_;
     public boolean hasHeartbeat() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
-    public waldo_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
+    public ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
       return heartbeat_;
     }
-    public waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
+    public ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
       return heartbeat_;
     }
     
     // optional .Promotion promotion = 10;
     public static final int PROMOTION_FIELD_NUMBER = 10;
-    private waldo_protobuffs.PromotionProto.Promotion promotion_;
+    private ralph_protobuffs.PromotionProto.Promotion promotion_;
     public boolean hasPromotion() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
-    public waldo_protobuffs.PromotionProto.Promotion getPromotion() {
+    public ralph_protobuffs.PromotionProto.Promotion getPromotion() {
       return promotion_;
     }
-    public waldo_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
+    public ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
       return promotion_;
     }
     
@@ -235,16 +235,16 @@ public final class GeneralMessageProto {
     }
     
     private void initFields() {
-      notifyReady_ = waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
-      requestSequenceBlock_ = waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
-      firstPhaseResult_ = waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
-      backoutCommitRequest_ = waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
-      completeCommitRequest_ = waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
-      commitRequest_ = waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
-      stop_ = waldo_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
-      error_ = waldo_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
-      heartbeat_ = waldo_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
-      promotion_ = waldo_protobuffs.PromotionProto.Promotion.getDefaultInstance();
+      notifyReady_ = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
+      requestSequenceBlock_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+      firstPhaseResult_ = ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
+      backoutCommitRequest_ = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
+      completeCommitRequest_ = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
+      commitRequest_ = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
+      stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
+      error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
+      heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
+      promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
       timestamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
@@ -544,61 +544,61 @@ public final class GeneralMessageProto {
       public Builder clear() {
         super.clear();
         if (notifyReadyBuilder_ == null) {
-          notifyReady_ = waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
+          notifyReady_ = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
         } else {
           notifyReadyBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         if (requestSequenceBlockBuilder_ == null) {
-          requestSequenceBlock_ = waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+          requestSequenceBlock_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
         } else {
           requestSequenceBlockBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         if (firstPhaseResultBuilder_ == null) {
-          firstPhaseResult_ = waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
+          firstPhaseResult_ = ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
         } else {
           firstPhaseResultBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
         if (backoutCommitRequestBuilder_ == null) {
-          backoutCommitRequest_ = waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
+          backoutCommitRequest_ = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
         } else {
           backoutCommitRequestBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         if (completeCommitRequestBuilder_ == null) {
-          completeCommitRequest_ = waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
+          completeCommitRequest_ = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
         } else {
           completeCommitRequestBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
         if (commitRequestBuilder_ == null) {
-          commitRequest_ = waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
+          commitRequest_ = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
         } else {
           commitRequestBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
         if (stopBuilder_ == null) {
-          stop_ = waldo_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
+          stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
         } else {
           stopBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000040);
         if (errorBuilder_ == null) {
-          error_ = waldo_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
+          error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
         } else {
           errorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000080);
         if (heartbeatBuilder_ == null) {
-          heartbeat_ = waldo_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
+          heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
         } else {
           heartbeatBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
         if (promotionBuilder_ == null) {
-          promotion_ = waldo_protobuffs.PromotionProto.Promotion.getDefaultInstance();
+          promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
         } else {
           promotionBuilder_.clear();
         }
@@ -872,7 +872,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 10: {
-              waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder subBuilder = waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.newBuilder();
+              ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder subBuilder = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.newBuilder();
               if (hasNotifyReady()) {
                 subBuilder.mergeFrom(getNotifyReady());
               }
@@ -881,7 +881,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 18: {
-              waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder subBuilder = waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder();
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder subBuilder = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder();
               if (hasRequestSequenceBlock()) {
                 subBuilder.mergeFrom(getRequestSequenceBlock());
               }
@@ -890,7 +890,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 26: {
-              waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder subBuilder = waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.newBuilder();
+              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder subBuilder = ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.newBuilder();
               if (hasFirstPhaseResult()) {
                 subBuilder.mergeFrom(getFirstPhaseResult());
               }
@@ -899,7 +899,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 34: {
-              waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder subBuilder = waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.newBuilder();
+              ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder subBuilder = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.newBuilder();
               if (hasBackoutCommitRequest()) {
                 subBuilder.mergeFrom(getBackoutCommitRequest());
               }
@@ -908,7 +908,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 42: {
-              waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder subBuilder = waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.newBuilder();
+              ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder subBuilder = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.newBuilder();
               if (hasCompleteCommitRequest()) {
                 subBuilder.mergeFrom(getCompleteCommitRequest());
               }
@@ -917,7 +917,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 50: {
-              waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder subBuilder = waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.newBuilder();
+              ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder subBuilder = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.newBuilder();
               if (hasCommitRequest()) {
                 subBuilder.mergeFrom(getCommitRequest());
               }
@@ -926,7 +926,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 58: {
-              waldo_protobuffs.PartnerStopProto.PartnerStop.Builder subBuilder = waldo_protobuffs.PartnerStopProto.PartnerStop.newBuilder();
+              ralph_protobuffs.PartnerStopProto.PartnerStop.Builder subBuilder = ralph_protobuffs.PartnerStopProto.PartnerStop.newBuilder();
               if (hasStop()) {
                 subBuilder.mergeFrom(getStop());
               }
@@ -935,7 +935,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 66: {
-              waldo_protobuffs.PartnerErrorProto.PartnerError.Builder subBuilder = waldo_protobuffs.PartnerErrorProto.PartnerError.newBuilder();
+              ralph_protobuffs.PartnerErrorProto.PartnerError.Builder subBuilder = ralph_protobuffs.PartnerErrorProto.PartnerError.newBuilder();
               if (hasError()) {
                 subBuilder.mergeFrom(getError());
               }
@@ -944,7 +944,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 74: {
-              waldo_protobuffs.HeartbeatProto.Heartbeat.Builder subBuilder = waldo_protobuffs.HeartbeatProto.Heartbeat.newBuilder();
+              ralph_protobuffs.HeartbeatProto.Heartbeat.Builder subBuilder = ralph_protobuffs.HeartbeatProto.Heartbeat.newBuilder();
               if (hasHeartbeat()) {
                 subBuilder.mergeFrom(getHeartbeat());
               }
@@ -953,7 +953,7 @@ public final class GeneralMessageProto {
               break;
             }
             case 82: {
-              waldo_protobuffs.PromotionProto.Promotion.Builder subBuilder = waldo_protobuffs.PromotionProto.Promotion.newBuilder();
+              ralph_protobuffs.PromotionProto.Promotion.Builder subBuilder = ralph_protobuffs.PromotionProto.Promotion.newBuilder();
               if (hasPromotion()) {
                 subBuilder.mergeFrom(getPromotion());
               }
@@ -973,20 +973,20 @@ public final class GeneralMessageProto {
       private int bitField0_;
       
       // optional .PartnerNotifyReady notify_ready = 1;
-      private waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady notifyReady_ = waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
+      private ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady notifyReady_ = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder> notifyReadyBuilder_;
+          ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder> notifyReadyBuilder_;
       public boolean hasNotifyReady() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady() {
+      public ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady getNotifyReady() {
         if (notifyReadyBuilder_ == null) {
           return notifyReady_;
         } else {
           return notifyReadyBuilder_.getMessage();
         }
       }
-      public Builder setNotifyReady(waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady value) {
+      public Builder setNotifyReady(ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady value) {
         if (notifyReadyBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1000,7 +1000,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setNotifyReady(
-          waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder builderForValue) {
+          ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder builderForValue) {
         if (notifyReadyBuilder_ == null) {
           notifyReady_ = builderForValue.build();
           onChanged();
@@ -1010,12 +1010,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder mergeNotifyReady(waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady value) {
+      public Builder mergeNotifyReady(ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady value) {
         if (notifyReadyBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              notifyReady_ != waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance()) {
+              notifyReady_ != ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance()) {
             notifyReady_ =
-              waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.newBuilder(notifyReady_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.newBuilder(notifyReady_).mergeFrom(value).buildPartial();
           } else {
             notifyReady_ = value;
           }
@@ -1028,7 +1028,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearNotifyReady() {
         if (notifyReadyBuilder_ == null) {
-          notifyReady_ = waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
+          notifyReady_ = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
           onChanged();
         } else {
           notifyReadyBuilder_.clear();
@@ -1036,12 +1036,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
-      public waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder getNotifyReadyBuilder() {
+      public ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder getNotifyReadyBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getNotifyReadyFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder() {
+      public ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder getNotifyReadyOrBuilder() {
         if (notifyReadyBuilder_ != null) {
           return notifyReadyBuilder_.getMessageOrBuilder();
         } else {
@@ -1049,11 +1049,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder> 
+          ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder> 
           getNotifyReadyFieldBuilder() {
         if (notifyReadyBuilder_ == null) {
           notifyReadyBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, waldo_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder>(
+              ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder, ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReadyOrBuilder>(
                   notifyReady_,
                   getParentForChildren(),
                   isClean());
@@ -1063,20 +1063,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerRequestSequenceBlock request_sequence_block = 2;
-      private waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock requestSequenceBlock_ = waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+      private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock requestSequenceBlock_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> requestSequenceBlockBuilder_;
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> requestSequenceBlockBuilder_;
       public boolean hasRequestSequenceBlock() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRequestSequenceBlock() {
         if (requestSequenceBlockBuilder_ == null) {
           return requestSequenceBlock_;
         } else {
           return requestSequenceBlockBuilder_.getMessage();
         }
       }
-      public Builder setRequestSequenceBlock(waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+      public Builder setRequestSequenceBlock(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
         if (requestSequenceBlockBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1090,7 +1090,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setRequestSequenceBlock(
-          waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
         if (requestSequenceBlockBuilder_ == null) {
           requestSequenceBlock_ = builderForValue.build();
           onChanged();
@@ -1100,12 +1100,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder mergeRequestSequenceBlock(waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+      public Builder mergeRequestSequenceBlock(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
         if (requestSequenceBlockBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              requestSequenceBlock_ != waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance()) {
+              requestSequenceBlock_ != ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance()) {
             requestSequenceBlock_ =
-              waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder(requestSequenceBlock_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder(requestSequenceBlock_).mergeFrom(value).buildPartial();
           } else {
             requestSequenceBlock_ = value;
           }
@@ -1118,7 +1118,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearRequestSequenceBlock() {
         if (requestSequenceBlockBuilder_ == null) {
-          requestSequenceBlock_ = waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+          requestSequenceBlock_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
           onChanged();
         } else {
           requestSequenceBlockBuilder_.clear();
@@ -1126,12 +1126,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      public waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder getRequestSequenceBlockBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder getRequestSequenceBlockBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getRequestSequenceBlockFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRequestSequenceBlockOrBuilder() {
         if (requestSequenceBlockBuilder_ != null) {
           return requestSequenceBlockBuilder_.getMessageOrBuilder();
         } else {
@@ -1139,11 +1139,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
           getRequestSequenceBlockFieldBuilder() {
         if (requestSequenceBlockBuilder_ == null) {
           requestSequenceBlockBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, waldo_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder>(
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder>(
                   requestSequenceBlock_,
                   getParentForChildren(),
                   isClean());
@@ -1153,20 +1153,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerFirstPhaseResultMessage first_phase_result = 3;
-      private waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage firstPhaseResult_ = waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
+      private ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage firstPhaseResult_ = ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder> firstPhaseResultBuilder_;
+          ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder> firstPhaseResultBuilder_;
       public boolean hasFirstPhaseResult() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult() {
+      public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getFirstPhaseResult() {
         if (firstPhaseResultBuilder_ == null) {
           return firstPhaseResult_;
         } else {
           return firstPhaseResultBuilder_.getMessage();
         }
       }
-      public Builder setFirstPhaseResult(waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage value) {
+      public Builder setFirstPhaseResult(ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage value) {
         if (firstPhaseResultBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1180,7 +1180,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setFirstPhaseResult(
-          waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder builderForValue) {
+          ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder builderForValue) {
         if (firstPhaseResultBuilder_ == null) {
           firstPhaseResult_ = builderForValue.build();
           onChanged();
@@ -1190,12 +1190,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000004;
         return this;
       }
-      public Builder mergeFirstPhaseResult(waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage value) {
+      public Builder mergeFirstPhaseResult(ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage value) {
         if (firstPhaseResultBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              firstPhaseResult_ != waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance()) {
+              firstPhaseResult_ != ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance()) {
             firstPhaseResult_ =
-              waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.newBuilder(firstPhaseResult_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.newBuilder(firstPhaseResult_).mergeFrom(value).buildPartial();
           } else {
             firstPhaseResult_ = value;
           }
@@ -1208,7 +1208,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearFirstPhaseResult() {
         if (firstPhaseResultBuilder_ == null) {
-          firstPhaseResult_ = waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
+          firstPhaseResult_ = ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
           onChanged();
         } else {
           firstPhaseResultBuilder_.clear();
@@ -1216,12 +1216,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
-      public waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder getFirstPhaseResultBuilder() {
+      public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder getFirstPhaseResultBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
         return getFirstPhaseResultFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder() {
+      public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder getFirstPhaseResultOrBuilder() {
         if (firstPhaseResultBuilder_ != null) {
           return firstPhaseResultBuilder_.getMessageOrBuilder();
         } else {
@@ -1229,11 +1229,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder> 
+          ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder> 
           getFirstPhaseResultFieldBuilder() {
         if (firstPhaseResultBuilder_ == null) {
           firstPhaseResultBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, waldo_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder>(
+              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder>(
                   firstPhaseResult_,
                   getParentForChildren(),
                   isClean());
@@ -1243,20 +1243,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerBackoutCommitRequest backout_commit_request = 4;
-      private waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest backoutCommitRequest_ = waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
+      private ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest backoutCommitRequest_ = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder> backoutCommitRequestBuilder_;
+          ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder> backoutCommitRequestBuilder_;
       public boolean hasBackoutCommitRequest() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest() {
+      public ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest getBackoutCommitRequest() {
         if (backoutCommitRequestBuilder_ == null) {
           return backoutCommitRequest_;
         } else {
           return backoutCommitRequestBuilder_.getMessage();
         }
       }
-      public Builder setBackoutCommitRequest(waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest value) {
+      public Builder setBackoutCommitRequest(ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest value) {
         if (backoutCommitRequestBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1270,7 +1270,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setBackoutCommitRequest(
-          waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder builderForValue) {
+          ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder builderForValue) {
         if (backoutCommitRequestBuilder_ == null) {
           backoutCommitRequest_ = builderForValue.build();
           onChanged();
@@ -1280,12 +1280,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder mergeBackoutCommitRequest(waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest value) {
+      public Builder mergeBackoutCommitRequest(ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest value) {
         if (backoutCommitRequestBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              backoutCommitRequest_ != waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance()) {
+              backoutCommitRequest_ != ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance()) {
             backoutCommitRequest_ =
-              waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.newBuilder(backoutCommitRequest_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.newBuilder(backoutCommitRequest_).mergeFrom(value).buildPartial();
           } else {
             backoutCommitRequest_ = value;
           }
@@ -1298,7 +1298,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearBackoutCommitRequest() {
         if (backoutCommitRequestBuilder_ == null) {
-          backoutCommitRequest_ = waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
+          backoutCommitRequest_ = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
           onChanged();
         } else {
           backoutCommitRequestBuilder_.clear();
@@ -1306,12 +1306,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
-      public waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder getBackoutCommitRequestBuilder() {
+      public ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder getBackoutCommitRequestBuilder() {
         bitField0_ |= 0x00000008;
         onChanged();
         return getBackoutCommitRequestFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder() {
+      public ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder getBackoutCommitRequestOrBuilder() {
         if (backoutCommitRequestBuilder_ != null) {
           return backoutCommitRequestBuilder_.getMessageOrBuilder();
         } else {
@@ -1319,11 +1319,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder> 
+          ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder> 
           getBackoutCommitRequestFieldBuilder() {
         if (backoutCommitRequestBuilder_ == null) {
           backoutCommitRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, waldo_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder>(
+              ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.Builder, ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequestOrBuilder>(
                   backoutCommitRequest_,
                   getParentForChildren(),
                   isClean());
@@ -1333,20 +1333,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerCompleteCommitRequest complete_commit_request = 5;
-      private waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest completeCommitRequest_ = waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
+      private ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest completeCommitRequest_ = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder> completeCommitRequestBuilder_;
+          ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder> completeCommitRequestBuilder_;
       public boolean hasCompleteCommitRequest() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      public waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest() {
+      public ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest getCompleteCommitRequest() {
         if (completeCommitRequestBuilder_ == null) {
           return completeCommitRequest_;
         } else {
           return completeCommitRequestBuilder_.getMessage();
         }
       }
-      public Builder setCompleteCommitRequest(waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest value) {
+      public Builder setCompleteCommitRequest(ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest value) {
         if (completeCommitRequestBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1360,7 +1360,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setCompleteCommitRequest(
-          waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder builderForValue) {
+          ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder builderForValue) {
         if (completeCommitRequestBuilder_ == null) {
           completeCommitRequest_ = builderForValue.build();
           onChanged();
@@ -1370,12 +1370,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000010;
         return this;
       }
-      public Builder mergeCompleteCommitRequest(waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest value) {
+      public Builder mergeCompleteCommitRequest(ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest value) {
         if (completeCommitRequestBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              completeCommitRequest_ != waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance()) {
+              completeCommitRequest_ != ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance()) {
             completeCommitRequest_ =
-              waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.newBuilder(completeCommitRequest_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.newBuilder(completeCommitRequest_).mergeFrom(value).buildPartial();
           } else {
             completeCommitRequest_ = value;
           }
@@ -1388,7 +1388,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearCompleteCommitRequest() {
         if (completeCommitRequestBuilder_ == null) {
-          completeCommitRequest_ = waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
+          completeCommitRequest_ = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
           onChanged();
         } else {
           completeCommitRequestBuilder_.clear();
@@ -1396,12 +1396,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
-      public waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder getCompleteCommitRequestBuilder() {
+      public ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder getCompleteCommitRequestBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getCompleteCommitRequestFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder() {
+      public ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder getCompleteCommitRequestOrBuilder() {
         if (completeCommitRequestBuilder_ != null) {
           return completeCommitRequestBuilder_.getMessageOrBuilder();
         } else {
@@ -1409,11 +1409,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder> 
+          ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder> 
           getCompleteCommitRequestFieldBuilder() {
         if (completeCommitRequestBuilder_ == null) {
           completeCommitRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, waldo_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder>(
+              ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.Builder, ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequestOrBuilder>(
                   completeCommitRequest_,
                   getParentForChildren(),
                   isClean());
@@ -1423,20 +1423,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerCommitRequest commit_request = 6;
-      private waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest commitRequest_ = waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
+      private ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest commitRequest_ = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder> commitRequestBuilder_;
+          ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder> commitRequestBuilder_;
       public boolean hasCommitRequest() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      public waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest() {
+      public ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest getCommitRequest() {
         if (commitRequestBuilder_ == null) {
           return commitRequest_;
         } else {
           return commitRequestBuilder_.getMessage();
         }
       }
-      public Builder setCommitRequest(waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest value) {
+      public Builder setCommitRequest(ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest value) {
         if (commitRequestBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1450,7 +1450,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setCommitRequest(
-          waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder builderForValue) {
+          ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder builderForValue) {
         if (commitRequestBuilder_ == null) {
           commitRequest_ = builderForValue.build();
           onChanged();
@@ -1460,12 +1460,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder mergeCommitRequest(waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest value) {
+      public Builder mergeCommitRequest(ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest value) {
         if (commitRequestBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020) &&
-              commitRequest_ != waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance()) {
+              commitRequest_ != ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance()) {
             commitRequest_ =
-              waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.newBuilder(commitRequest_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.newBuilder(commitRequest_).mergeFrom(value).buildPartial();
           } else {
             commitRequest_ = value;
           }
@@ -1478,7 +1478,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearCommitRequest() {
         if (commitRequestBuilder_ == null) {
-          commitRequest_ = waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
+          commitRequest_ = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
           onChanged();
         } else {
           commitRequestBuilder_.clear();
@@ -1486,12 +1486,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
-      public waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder getCommitRequestBuilder() {
+      public ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder getCommitRequestBuilder() {
         bitField0_ |= 0x00000020;
         onChanged();
         return getCommitRequestFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder() {
+      public ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder() {
         if (commitRequestBuilder_ != null) {
           return commitRequestBuilder_.getMessageOrBuilder();
         } else {
@@ -1499,11 +1499,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder> 
+          ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder> 
           getCommitRequestFieldBuilder() {
         if (commitRequestBuilder_ == null) {
           commitRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, waldo_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder>(
+              ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder, ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder>(
                   commitRequest_,
                   getParentForChildren(),
                   isClean());
@@ -1513,20 +1513,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerStop stop = 7;
-      private waldo_protobuffs.PartnerStopProto.PartnerStop stop_ = waldo_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
+      private ralph_protobuffs.PartnerStopProto.PartnerStop stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerStopProto.PartnerStop, waldo_protobuffs.PartnerStopProto.PartnerStop.Builder, waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder> stopBuilder_;
+          ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder> stopBuilder_;
       public boolean hasStop() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
-      public waldo_protobuffs.PartnerStopProto.PartnerStop getStop() {
+      public ralph_protobuffs.PartnerStopProto.PartnerStop getStop() {
         if (stopBuilder_ == null) {
           return stop_;
         } else {
           return stopBuilder_.getMessage();
         }
       }
-      public Builder setStop(waldo_protobuffs.PartnerStopProto.PartnerStop value) {
+      public Builder setStop(ralph_protobuffs.PartnerStopProto.PartnerStop value) {
         if (stopBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1540,7 +1540,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setStop(
-          waldo_protobuffs.PartnerStopProto.PartnerStop.Builder builderForValue) {
+          ralph_protobuffs.PartnerStopProto.PartnerStop.Builder builderForValue) {
         if (stopBuilder_ == null) {
           stop_ = builderForValue.build();
           onChanged();
@@ -1550,12 +1550,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000040;
         return this;
       }
-      public Builder mergeStop(waldo_protobuffs.PartnerStopProto.PartnerStop value) {
+      public Builder mergeStop(ralph_protobuffs.PartnerStopProto.PartnerStop value) {
         if (stopBuilder_ == null) {
           if (((bitField0_ & 0x00000040) == 0x00000040) &&
-              stop_ != waldo_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance()) {
+              stop_ != ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance()) {
             stop_ =
-              waldo_protobuffs.PartnerStopProto.PartnerStop.newBuilder(stop_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerStopProto.PartnerStop.newBuilder(stop_).mergeFrom(value).buildPartial();
           } else {
             stop_ = value;
           }
@@ -1568,7 +1568,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearStop() {
         if (stopBuilder_ == null) {
-          stop_ = waldo_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
+          stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
           onChanged();
         } else {
           stopBuilder_.clear();
@@ -1576,12 +1576,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
-      public waldo_protobuffs.PartnerStopProto.PartnerStop.Builder getStopBuilder() {
+      public ralph_protobuffs.PartnerStopProto.PartnerStop.Builder getStopBuilder() {
         bitField0_ |= 0x00000040;
         onChanged();
         return getStopFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
+      public ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
         if (stopBuilder_ != null) {
           return stopBuilder_.getMessageOrBuilder();
         } else {
@@ -1589,11 +1589,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerStopProto.PartnerStop, waldo_protobuffs.PartnerStopProto.PartnerStop.Builder, waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder> 
+          ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder> 
           getStopFieldBuilder() {
         if (stopBuilder_ == null) {
           stopBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerStopProto.PartnerStop, waldo_protobuffs.PartnerStopProto.PartnerStop.Builder, waldo_protobuffs.PartnerStopProto.PartnerStopOrBuilder>(
+              ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder>(
                   stop_,
                   getParentForChildren(),
                   isClean());
@@ -1603,20 +1603,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .PartnerError error = 8;
-      private waldo_protobuffs.PartnerErrorProto.PartnerError error_ = waldo_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
+      private ralph_protobuffs.PartnerErrorProto.PartnerError error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerErrorProto.PartnerError, waldo_protobuffs.PartnerErrorProto.PartnerError.Builder, waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> errorBuilder_;
+          ralph_protobuffs.PartnerErrorProto.PartnerError, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder, ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> errorBuilder_;
       public boolean hasError() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
-      public waldo_protobuffs.PartnerErrorProto.PartnerError getError() {
+      public ralph_protobuffs.PartnerErrorProto.PartnerError getError() {
         if (errorBuilder_ == null) {
           return error_;
         } else {
           return errorBuilder_.getMessage();
         }
       }
-      public Builder setError(waldo_protobuffs.PartnerErrorProto.PartnerError value) {
+      public Builder setError(ralph_protobuffs.PartnerErrorProto.PartnerError value) {
         if (errorBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1630,7 +1630,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setError(
-          waldo_protobuffs.PartnerErrorProto.PartnerError.Builder builderForValue) {
+          ralph_protobuffs.PartnerErrorProto.PartnerError.Builder builderForValue) {
         if (errorBuilder_ == null) {
           error_ = builderForValue.build();
           onChanged();
@@ -1640,12 +1640,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000080;
         return this;
       }
-      public Builder mergeError(waldo_protobuffs.PartnerErrorProto.PartnerError value) {
+      public Builder mergeError(ralph_protobuffs.PartnerErrorProto.PartnerError value) {
         if (errorBuilder_ == null) {
           if (((bitField0_ & 0x00000080) == 0x00000080) &&
-              error_ != waldo_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance()) {
+              error_ != ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance()) {
             error_ =
-              waldo_protobuffs.PartnerErrorProto.PartnerError.newBuilder(error_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerErrorProto.PartnerError.newBuilder(error_).mergeFrom(value).buildPartial();
           } else {
             error_ = value;
           }
@@ -1658,7 +1658,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearError() {
         if (errorBuilder_ == null) {
-          error_ = waldo_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
+          error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
           onChanged();
         } else {
           errorBuilder_.clear();
@@ -1666,12 +1666,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
-      public waldo_protobuffs.PartnerErrorProto.PartnerError.Builder getErrorBuilder() {
+      public ralph_protobuffs.PartnerErrorProto.PartnerError.Builder getErrorBuilder() {
         bitField0_ |= 0x00000080;
         onChanged();
         return getErrorFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
+      public ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
         if (errorBuilder_ != null) {
           return errorBuilder_.getMessageOrBuilder();
         } else {
@@ -1679,11 +1679,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PartnerErrorProto.PartnerError, waldo_protobuffs.PartnerErrorProto.PartnerError.Builder, waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> 
+          ralph_protobuffs.PartnerErrorProto.PartnerError, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder, ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> 
           getErrorFieldBuilder() {
         if (errorBuilder_ == null) {
           errorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PartnerErrorProto.PartnerError, waldo_protobuffs.PartnerErrorProto.PartnerError.Builder, waldo_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder>(
+              ralph_protobuffs.PartnerErrorProto.PartnerError, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder, ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder>(
                   error_,
                   getParentForChildren(),
                   isClean());
@@ -1693,20 +1693,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .Heartbeat heartbeat = 9;
-      private waldo_protobuffs.HeartbeatProto.Heartbeat heartbeat_ = waldo_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
+      private ralph_protobuffs.HeartbeatProto.Heartbeat heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.HeartbeatProto.Heartbeat, waldo_protobuffs.HeartbeatProto.Heartbeat.Builder, waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder> heartbeatBuilder_;
+          ralph_protobuffs.HeartbeatProto.Heartbeat, ralph_protobuffs.HeartbeatProto.Heartbeat.Builder, ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder> heartbeatBuilder_;
       public boolean hasHeartbeat() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
-      public waldo_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
+      public ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
         if (heartbeatBuilder_ == null) {
           return heartbeat_;
         } else {
           return heartbeatBuilder_.getMessage();
         }
       }
-      public Builder setHeartbeat(waldo_protobuffs.HeartbeatProto.Heartbeat value) {
+      public Builder setHeartbeat(ralph_protobuffs.HeartbeatProto.Heartbeat value) {
         if (heartbeatBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1720,7 +1720,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setHeartbeat(
-          waldo_protobuffs.HeartbeatProto.Heartbeat.Builder builderForValue) {
+          ralph_protobuffs.HeartbeatProto.Heartbeat.Builder builderForValue) {
         if (heartbeatBuilder_ == null) {
           heartbeat_ = builderForValue.build();
           onChanged();
@@ -1730,12 +1730,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000100;
         return this;
       }
-      public Builder mergeHeartbeat(waldo_protobuffs.HeartbeatProto.Heartbeat value) {
+      public Builder mergeHeartbeat(ralph_protobuffs.HeartbeatProto.Heartbeat value) {
         if (heartbeatBuilder_ == null) {
           if (((bitField0_ & 0x00000100) == 0x00000100) &&
-              heartbeat_ != waldo_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance()) {
+              heartbeat_ != ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance()) {
             heartbeat_ =
-              waldo_protobuffs.HeartbeatProto.Heartbeat.newBuilder(heartbeat_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.HeartbeatProto.Heartbeat.newBuilder(heartbeat_).mergeFrom(value).buildPartial();
           } else {
             heartbeat_ = value;
           }
@@ -1748,7 +1748,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearHeartbeat() {
         if (heartbeatBuilder_ == null) {
-          heartbeat_ = waldo_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
+          heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
           onChanged();
         } else {
           heartbeatBuilder_.clear();
@@ -1756,12 +1756,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
-      public waldo_protobuffs.HeartbeatProto.Heartbeat.Builder getHeartbeatBuilder() {
+      public ralph_protobuffs.HeartbeatProto.Heartbeat.Builder getHeartbeatBuilder() {
         bitField0_ |= 0x00000100;
         onChanged();
         return getHeartbeatFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
+      public ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
         if (heartbeatBuilder_ != null) {
           return heartbeatBuilder_.getMessageOrBuilder();
         } else {
@@ -1769,11 +1769,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.HeartbeatProto.Heartbeat, waldo_protobuffs.HeartbeatProto.Heartbeat.Builder, waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder> 
+          ralph_protobuffs.HeartbeatProto.Heartbeat, ralph_protobuffs.HeartbeatProto.Heartbeat.Builder, ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder> 
           getHeartbeatFieldBuilder() {
         if (heartbeatBuilder_ == null) {
           heartbeatBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.HeartbeatProto.Heartbeat, waldo_protobuffs.HeartbeatProto.Heartbeat.Builder, waldo_protobuffs.HeartbeatProto.HeartbeatOrBuilder>(
+              ralph_protobuffs.HeartbeatProto.Heartbeat, ralph_protobuffs.HeartbeatProto.Heartbeat.Builder, ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder>(
                   heartbeat_,
                   getParentForChildren(),
                   isClean());
@@ -1783,20 +1783,20 @@ public final class GeneralMessageProto {
       }
       
       // optional .Promotion promotion = 10;
-      private waldo_protobuffs.PromotionProto.Promotion promotion_ = waldo_protobuffs.PromotionProto.Promotion.getDefaultInstance();
+      private ralph_protobuffs.PromotionProto.Promotion promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PromotionProto.Promotion, waldo_protobuffs.PromotionProto.Promotion.Builder, waldo_protobuffs.PromotionProto.PromotionOrBuilder> promotionBuilder_;
+          ralph_protobuffs.PromotionProto.Promotion, ralph_protobuffs.PromotionProto.Promotion.Builder, ralph_protobuffs.PromotionProto.PromotionOrBuilder> promotionBuilder_;
       public boolean hasPromotion() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
-      public waldo_protobuffs.PromotionProto.Promotion getPromotion() {
+      public ralph_protobuffs.PromotionProto.Promotion getPromotion() {
         if (promotionBuilder_ == null) {
           return promotion_;
         } else {
           return promotionBuilder_.getMessage();
         }
       }
-      public Builder setPromotion(waldo_protobuffs.PromotionProto.Promotion value) {
+      public Builder setPromotion(ralph_protobuffs.PromotionProto.Promotion value) {
         if (promotionBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1810,7 +1810,7 @@ public final class GeneralMessageProto {
         return this;
       }
       public Builder setPromotion(
-          waldo_protobuffs.PromotionProto.Promotion.Builder builderForValue) {
+          ralph_protobuffs.PromotionProto.Promotion.Builder builderForValue) {
         if (promotionBuilder_ == null) {
           promotion_ = builderForValue.build();
           onChanged();
@@ -1820,12 +1820,12 @@ public final class GeneralMessageProto {
         bitField0_ |= 0x00000200;
         return this;
       }
-      public Builder mergePromotion(waldo_protobuffs.PromotionProto.Promotion value) {
+      public Builder mergePromotion(ralph_protobuffs.PromotionProto.Promotion value) {
         if (promotionBuilder_ == null) {
           if (((bitField0_ & 0x00000200) == 0x00000200) &&
-              promotion_ != waldo_protobuffs.PromotionProto.Promotion.getDefaultInstance()) {
+              promotion_ != ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance()) {
             promotion_ =
-              waldo_protobuffs.PromotionProto.Promotion.newBuilder(promotion_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PromotionProto.Promotion.newBuilder(promotion_).mergeFrom(value).buildPartial();
           } else {
             promotion_ = value;
           }
@@ -1838,7 +1838,7 @@ public final class GeneralMessageProto {
       }
       public Builder clearPromotion() {
         if (promotionBuilder_ == null) {
-          promotion_ = waldo_protobuffs.PromotionProto.Promotion.getDefaultInstance();
+          promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
           onChanged();
         } else {
           promotionBuilder_.clear();
@@ -1846,12 +1846,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
-      public waldo_protobuffs.PromotionProto.Promotion.Builder getPromotionBuilder() {
+      public ralph_protobuffs.PromotionProto.Promotion.Builder getPromotionBuilder() {
         bitField0_ |= 0x00000200;
         onChanged();
         return getPromotionFieldBuilder().getBuilder();
       }
-      public waldo_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
+      public ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
         if (promotionBuilder_ != null) {
           return promotionBuilder_.getMessageOrBuilder();
         } else {
@@ -1859,11 +1859,11 @@ public final class GeneralMessageProto {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          waldo_protobuffs.PromotionProto.Promotion, waldo_protobuffs.PromotionProto.Promotion.Builder, waldo_protobuffs.PromotionProto.PromotionOrBuilder> 
+          ralph_protobuffs.PromotionProto.Promotion, ralph_protobuffs.PromotionProto.Promotion.Builder, ralph_protobuffs.PromotionProto.PromotionOrBuilder> 
           getPromotionFieldBuilder() {
         if (promotionBuilder_ == null) {
           promotionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              waldo_protobuffs.PromotionProto.Promotion, waldo_protobuffs.PromotionProto.Promotion.Builder, waldo_protobuffs.PromotionProto.PromotionOrBuilder>(
+              ralph_protobuffs.PromotionProto.Promotion, ralph_protobuffs.PromotionProto.Promotion.Builder, ralph_protobuffs.PromotionProto.PromotionOrBuilder>(
                   promotion_,
                   getParentForChildren(),
                   isClean());
@@ -1960,17 +1960,17 @@ public final class GeneralMessageProto {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          waldo_protobuffs.PartnerNotifyReadyProto.getDescriptor(),
-          waldo_protobuffs.PartnerRequestSequenceBlockProto.getDescriptor(),
-          waldo_protobuffs.PartnerFirstPhaseResultMessageProto.getDescriptor(),
-          waldo_protobuffs.PartnerBackoutCommitRequestProto.getDescriptor(),
-          waldo_protobuffs.PartnerCompleteCommitRequestProto.getDescriptor(),
-          waldo_protobuffs.PartnerCommitRequestProto.getDescriptor(),
-          waldo_protobuffs.PartnerStopProto.getDescriptor(),
-          waldo_protobuffs.PartnerErrorProto.getDescriptor(),
-          waldo_protobuffs.HeartbeatProto.getDescriptor(),
-          waldo_protobuffs.PromotionProto.getDescriptor(),
-          waldo_protobuffs.UtilProto.getDescriptor(),
+          ralph_protobuffs.PartnerNotifyReadyProto.getDescriptor(),
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.getDescriptor(),
+          ralph_protobuffs.PartnerFirstPhaseResultMessageProto.getDescriptor(),
+          ralph_protobuffs.PartnerBackoutCommitRequestProto.getDescriptor(),
+          ralph_protobuffs.PartnerCompleteCommitRequestProto.getDescriptor(),
+          ralph_protobuffs.PartnerCommitRequestProto.getDescriptor(),
+          ralph_protobuffs.PartnerStopProto.getDescriptor(),
+          ralph_protobuffs.PartnerErrorProto.getDescriptor(),
+          ralph_protobuffs.HeartbeatProto.getDescriptor(),
+          ralph_protobuffs.PromotionProto.getDescriptor(),
+          ralph_protobuffs.UtilProto.getDescriptor(),
         }, assigner);
   }
   

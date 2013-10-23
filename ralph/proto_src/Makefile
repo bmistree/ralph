@@ -3,7 +3,7 @@ PROTOCOL_FILES := $(wildcard *.proto)
 # GENERATED_FILES := $(PROTOCOL_FILES:.proto=_pb2.py)
 # COMPILE_FOLDER := ../proto_compiled/
 JAVA_GENERATED_FILES := $(PROTOCOL_FILES:.proto=_pb2.java)
-JAVA_COMPILE_FOLDER := ../java_lib/ralph_protobuffs
+JAVA_COMPILE_FOLDER := ../java_lib/
 
 .PHONY : java_proto
 java_proto : $(JAVA_GENERATED_FILES)
