@@ -95,27 +95,28 @@ public class WriteReadVarStack
         vstack.add_var(var_name,higher_a);
 
         /** Check can operate on variables on top of stack. */
-        if (get_number_from_stack(vstack,var_name) ==
+        if (get_number_from_stack(vstack,var_name) !=
             higher_a_init_val)
             return false;
+        
 
         Double new_higher_val = higher_a_init_val + 1;
         set_number_on_stack(vstack,var_name,new_higher_val);
 
-        if (get_number_from_stack(vstack,var_name) ==
+        if (get_number_from_stack(vstack,var_name) !=
             new_higher_val)
             return false;
 
         /** Check can operate on non-shadowed variable in lower layer
          * of stack. */
-        if (get_number_from_stack(vstack,var_name_b) ==
+        if (get_number_from_stack(vstack,var_name_b) !=
             root_b_init_val)
             return false;
 
         Double new_b_val = root_b_init_val + 1;
         set_number_on_stack(vstack,var_name_b,new_b_val);
         
-        if (get_number_from_stack(vstack,var_name_b) ==
+        if (get_number_from_stack(vstack,var_name_b) !=
             new_b_val)
             return false;
 
