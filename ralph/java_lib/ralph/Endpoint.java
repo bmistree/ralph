@@ -42,8 +42,8 @@ public class Endpoint
 	
     private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
-	
-    public VariableStore _global_var_store = null;
+
+    public VariableStack global_var_stack = new VariableStack();
 	
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
@@ -123,11 +123,8 @@ public class Endpoint
         _act_event_map = new ActiveEventMap(this,_clock);
         _conn_obj = conn_obj;
 
-        //# whenever we create a new _ExecutingEvent, we point it at
-        //# this variable store so that it knows where it can retrieve
-        //# variables.
-        _global_var_store = global_var_store;
-
+        global_var_stack.push(global_var_store);
+        
         _thread_pool = waldo_classes.thread_pool;
         _all_endpoints = waldo_classes.all_endpoints;
         _all_endpoints.add_endpoint(this);
@@ -875,11 +872,10 @@ public class Endpoint
      reply_with message field of the last message that the partner
      said as part of this sequence in.
 
-     @param {_InvalidationListener} invalidation_listener --- The
-     invalidation listener that is requesting the message to be
-     sent.
+     @param {LockedActiveEvent} active_event --- The active event that
+     is requesting the message to be sent.
 
-     @param {_VariableStore} sequence_local_store --- We convert
+     @param {VariableStack} sequence_local_var_stack --- We convert
      all changes that we have made to both peered data and sequence
      local data to maps of deltas so that the partner endpoint can
      apply the changes.  We use the sequence_local_store to get

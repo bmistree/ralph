@@ -28,9 +28,14 @@ public class VariableStack
 
     public void push()
     {
-        scope_stack.add(new VariableStore());
+        push(new VariableStore());
     }
 
+    public void push(VariableStore vstore)
+    {
+        scope_stack.add(vstore);
+    }
+    
     public void pop()
     {
         scope_stack.remove(scope_stack.size() - 1);

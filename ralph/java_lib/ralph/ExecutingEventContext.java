@@ -29,16 +29,10 @@ import RalphCallResults.EndpointCompleteCallResult;
 public class ExecutingEventContext
 {
     /**
-       @param {_WaldoVariableStore} global_store --- Keeps track of
-       endpoint globals and peered data.
+       @param {VariableStack} var_stack --- Keeps track of all data
+       used by executing event.
     */
-    public VariableStore global_store = null;
-    /**
-       @param {_WaldoVariableStore} sequence_local_store --- Keeps
-       track of sequence local data.
-    */
-    public VariableStore sequence_local_store = null;
-	
+    public VariableStack var_stack = null;
 
     /**
        # We can be listening to more than one open threadsafe message
@@ -72,11 +66,9 @@ public class ExecutingEventContext
 
     
 	
-    public ExecutingEventContext (
-        VariableStore _global_store, VariableStore _sequence_local_store)
+    public ExecutingEventContext (VariableStack _var_stack)
     {
-        global_store = _global_store;
-        sequence_local_store = _sequence_local_store;
+        var_stack = _var_stack.fork_stack();
     }
 	
     public void set_from_endpoint_true()

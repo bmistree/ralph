@@ -62,12 +62,9 @@ public class ReceiveEndpointCallAction extends ServiceAction
             return;
         }
 
-		
         ExecutingEventContext evt_ctx = new ExecutingEventContext(
-            local_endpoint._global_var_store,
-            //# should not have any sequence local data from an endpoint
-            //# call.
-            new VariableStore() );
+            // will fork the stack in executing event context
+            local_endpoint.global_var_stack);
 
 	    
         //# receiving endpoint must know that this call was an endpoint

@@ -950,9 +950,6 @@ public class LockedActiveEvent
             Util.partner_endpoint_msg_call_func_name(
                 name_of_block_to_exec_next);
 
-        //### SET UP CONTEXT FOR EXECUTING
-        VariableStore seq_local_var_store = new VariableStore();
-
         // FIXME
         Util.logger_assert(
             "FIXME: must enable handling rpc call from partner");
