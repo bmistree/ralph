@@ -1,4 +1,4 @@
-package WaldoCallResults;
+package RalphCallResults;
 
 public abstract class EndpointCallResultObject {
 

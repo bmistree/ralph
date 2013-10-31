@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class WaldoGlobals {
+public class RalphGlobals {
     public LamportClock clock;
     public AllEndpoints all_endpoints;
     public ThreadPool thread_pool;
@@ -13,7 +13,7 @@ public class WaldoGlobals {
     private List<Stoppable> stoppable_list =
         Collections.synchronizedList(new ArrayList<Stoppable>());
 	
-    public WaldoGlobals()
+    public RalphGlobals()
     {
         all_endpoints = new AllEndpoints();
         clock = new LamportClock(all_endpoints);

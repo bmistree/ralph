@@ -12,8 +12,8 @@ import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 import ralph.SignalFunction;
 import ralph.Stoppable;
-import ralph.WaldoGlobals;
-import waldo_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph.RalphGlobals;
+import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 
 public class TCPConnectionObj implements ConnectionObj, Runnable
 {
@@ -127,7 +127,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
 		
         private Stoppable stoppable = null;
         private EndpointConstructorObj endpoint_constructor = null;
-        private WaldoGlobals waldo_globals = null;
+        private RalphGlobals ralph_globals = null;
         private String host_listen_on ;
         private int port_listen_on;
         private SignalFunction cb = null;
@@ -165,13 +165,13 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         */
         public TCPAcceptThread(
             Stoppable _stoppable, ralph.EndpointConstructorObj _endpoint_constructor,
-            ralph.WaldoGlobals _waldo_globals, String _host_listen_on,
+            ralph.RalphGlobals _ralph_globals, String _host_listen_on,
             int _port_listen_on, SignalFunction _cb, String _host_uuid, 
             ArrayBlockingQueue<Boolean> _synchronization_listening_queue)
         {
             stoppable = _stoppable;
             endpoint_constructor = _endpoint_constructor;
-            waldo_globals = _waldo_globals;
+            ralph_globals = _ralph_globals;
             host_listen_on = _host_listen_on;
             port_listen_on = _port_listen_on;
             cb = _cb;
@@ -208,7 +208,9 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 }
                 TCPConnectionObj tcp_conn_obj = new TCPConnectionObj(client_conn);
 				
-                Endpoint created_endpoint = endpoint_constructor.construct(waldo_globals, host_uuid, tcp_conn_obj);
+                Endpoint created_endpoint =
+                    endpoint_constructor.construct(ralph_globals, host_uuid, tcp_conn_obj);
+                
                 if (cb != null)
                     cb.fire(created_endpoint);
 				

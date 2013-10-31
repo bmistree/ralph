@@ -8,7 +8,7 @@ import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 public class Waldo {
 
-    private static WaldoGlobals all_globals = new WaldoGlobals();
+    private static RalphGlobals all_globals = new RalphGlobals();
     private static String host_uuid = Util.generate_uuid();
 	
 

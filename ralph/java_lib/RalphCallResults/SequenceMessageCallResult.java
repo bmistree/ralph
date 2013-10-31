@@ -1,12 +1,12 @@
 package RalphCallResults;
 
-import waldo_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
+import ralph_protobuffs.VariablesProto.Variables;
 
 public class SequenceMessageCallResult extends MessageCallResultObject{
 
     /**
        @see comment above self.message_listening_queues_map in
-       waldoActiveEvent._ActiveEvent.
+       ralphActiveEvent._ActiveEvent.
     */
     public String reply_with_msg_field;
 	
@@ -21,19 +21,19 @@ public class SequenceMessageCallResult extends MessageCallResultObject{
     /**
      * 	Should be able to put this map directly into a _VariableStore object
      to update each of an event's pieces of peered data.  @see
-     waldoVariableStore._VariableStore.incorporate_deltas
+     VariableStore._VariableStore.incorporate_deltas
     */
-    public VarStoreDeltas sequence_local_var_store_deltas = null;
+    public Variables returned_variables = null;
 	
     // We must update the event context with the new
     // reply_with_msg_field when complete.
 
     public SequenceMessageCallResult(
         String _reply_with_msg_field, String _to_exec_next_name_msg_field,
-        VarStoreDeltas _sequence_local_var_store_deltas)
+        Variables _returned_variables)
     {
     	reply_with_msg_field = _reply_with_msg_field;
     	to_exec_next_name_msg_field = _to_exec_next_name_msg_field;
-    	sequence_local_var_store_deltas = _sequence_local_var_store_deltas;
+        returned_variables = _returned_variables;
     }
 }

@@ -1,8 +1,8 @@
 package RalphConnObj;
 
-import waldo.Endpoint;
-import waldo.Util;
-import waldo_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph.Endpoint;
+import ralph.Util;
+import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -13,9 +13,9 @@ public class SameHostConnection implements Runnable, ConnectionObj {
     private class SameHostQueueElement
     {
         public byte[] bytes;
-        public waldo.Endpoint endpoint;
+        public ralph.Endpoint endpoint;
         public SameHostQueueElement(
-            GeneralMessage msg_to_write, waldo.Endpoint _endpoint)
+            GeneralMessage msg_to_write, ralph.Endpoint _endpoint)
         {
             bytes = msg_to_write.toByteArray();
             endpoint = _endpoint;
@@ -35,7 +35,7 @@ public class SameHostConnection implements Runnable, ConnectionObj {
     {}
 	
     @Override
-    public void register_endpoint(waldo.Endpoint endpoint)
+    public void register_endpoint(ralph.Endpoint endpoint)
     {
         endpoint_mutex.lock();
         if (endpoint1 == null)

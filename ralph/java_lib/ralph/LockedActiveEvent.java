@@ -8,13 +8,18 @@ import RalphServiceActions.ServiceAction;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.VarStoreDeltasProto.VarStoreDeltas;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
 import RalphCallResults.StopAlreadyCalledMessageCallResult;
 import RalphCallResults.BackoutBeforeReceiveMessageResult;
 import RalphCallResults.EndpointCallResultObject;
+
+import RalphCallResults.StopAlreadyCalledEndpointCallResult;
+import RalphCallResults.BackoutBeforeEndpointCallResult;
+
+import RalphCallResults.ApplicationExceptionCallResult;
+import RalphCallResults.NetworkFailureCallResult;
 
 public class LockedActiveEvent
 {
@@ -554,6 +559,12 @@ public class LockedActiveEvent
             event_parent.put_exception(error,message_listening_queues_map);
     }
 
+    public void stop(boolean skip_partner)
+    {
+        Util.logger_assert(
+            "\nError: must fill in stop method on event.\n");
+    }
+    
 
     /**
        ASSUMES ALREADY WITHIN _LOCK
@@ -706,20 +717,27 @@ public class LockedActiveEvent
                 //# a response.
                 message_listening_queues_map.put(
                     reply_with_uuid, threadsafe_unblock_queue);
-            }         
-            //# here, the local endpoint uses the connection object to
-            //# actually send the message.
-            event_parent.local_endpoint._send_partner_message_sequence_block_request(
-                func_name, uuid, get_priority(),reply_with_uuid,
-                ctx.to_reply_with_uuid, this,
-                //# sending sequence_local_store so that can determine
-                //# deltas in sequence local state made from this call.
-                //# do not need to add global store, because
-                //# self.local_endpoint already has a copy of it.
-                ctx.sequence_local_store,
-                first_msg);
+            }
+
+            // FIXME: Must produce variables proto buff from context.
+            Util.logger_assert(
+                "\nNot actually sending partner message: " +
+                "require collecting variables.\n");
+            
+            // //# here, the local endpoint uses the connection object to
+            // //# actually send the message.
+            // event_parent.local_endpoint._send_partner_message_sequence_block_request(
+            //     func_name, uuid, get_priority(),reply_with_uuid,
+            //     ctx.to_reply_with_uuid, this,
+            //     //# sending sequence_local_store so that can determine
+            //     //# deltas in sequence local state made from this call.
+            //     //# do not need to add global store, because
+            //     //# self.local_endpoint already has a copy of it.
+            //     ctx.sequence_local_store,
+            //     first_msg);
         }
-                
+
+        
         _unlock();
         return partner_call_requested;
     }
@@ -933,8 +951,7 @@ public class LockedActiveEvent
                 name_of_block_to_exec_next);
 
         //### SET UP CONTEXT FOR EXECUTING
-        VariableStore seq_local_var_store = new VariableStore(
-            event_parent.local_endpoint._host_uuid);
+        VariableStore seq_local_var_store = new VariableStore();
 
         // FIXME
         Util.logger_assert(
@@ -962,10 +979,9 @@ public class LockedActiveEvent
         //# (Note: still must update sequence local data from deltas
         //# below.)
 
-        //# FIXME: pretty sure that do not need to incorporate deltas within
-        //# lock, but should check
-        event_parent.local_endpoint._global_var_store.incorporate_deltas(
-            this,msg.getPeeredVarStoreDeltas());
+        //# FIXME: need to take arguments out of vector.
+        Util.logger_assert(
+            "\nNeed to incorporate arguments into stack.\n");
 
         ExecutingEvent exec_event = null;
 

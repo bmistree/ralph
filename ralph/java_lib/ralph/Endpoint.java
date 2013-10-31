@@ -7,8 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import RalphConnObj.SingleSideConnection;
 
-import com.google.protobuf.ByteString;
-
 import ralph_protobuffs.PromotionProto.Promotion;
 import ralph_protobuffs.UtilProto;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
@@ -40,7 +38,7 @@ public class Endpoint
     public String _uuid = Util.generate_uuid();
     public String _host_uuid = null;
 	
-    private Clock _clock = null;
+    private LamportClock _clock = null;
 	
     private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
@@ -117,7 +115,7 @@ public class Endpoint
        only make calls on them.
     */
     public Endpoint (
-        WaldoGlobals waldo_classes,String host_uuid,
+        RalphGlobals waldo_classes,String host_uuid,
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
@@ -208,11 +206,7 @@ public class Endpoint
      */
     public void _send_clock_update()
     {
-        String current_clock_timestamp = _clock.get_timestamp();
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        Timestamp.Builder timestamp_updated = Timestamp.newBuilder();
-        timestamp_updated.setData(current_clock_timestamp);
-        general_message.setTimestampUpdated(timestamp_updated);
         general_message.setTimestamp(_clock.get_int_timestamp());
         _conn_obj.write(general_message.build(),this);
     }
@@ -445,10 +439,6 @@ public class Endpoint
             String endpoint_uuid = general_msg.getNotifyReady().getEndpointUuid().getData();
             _receive_partner_ready(endpoint_uuid);
         }
-        else if (general_msg.hasTimestampUpdated())
-        {	
-            // ignore: already updated timestamp
-        }
         else if (general_msg.hasRequestSequenceBlock())
         {
             RalphServiceActions.ServiceAction service_action =  
@@ -480,10 +470,6 @@ public class Endpoint
             else
                 _receive_first_phase_commit_unsuccessful(event_uuid,endpoint_uuid);
         }
-        else if (general_msg.hasAdditionalSubscriber())
-        {
-            Util.logger_warn("Ignoring additional subscriber");
-        }
         else if (general_msg.hasPromotion())
         {
             String event_uuid =
@@ -491,10 +477,6 @@ public class Endpoint
             String new_priority =
                 general_msg.getPromotion().getNewPriority().getData();
             _receive_promotion(event_uuid,new_priority);
-        }
-        else if (general_msg.hasRemovedSubscriber())
-        {
-            Util.logger_warn("Ignoring removed subscriber");
         }
         else if (general_msg.hasBackoutCommitRequest())
         {

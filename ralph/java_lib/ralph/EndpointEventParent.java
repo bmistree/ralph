@@ -13,7 +13,7 @@ import RalphCallResults.ApplicationExceptionEndpointCallResult;
 public class EndpointEventParent extends EventParent
 {
 
-    waldo.Endpoint parent_endpoint = null;
+    Endpoint parent_endpoint = null;
     ArrayBlockingQueue<EndpointCallResultObject> result_queue = null;
 	
     public EndpointEventParent(

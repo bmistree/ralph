@@ -37,7 +37,7 @@
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}"
         destdir="${build.dir}"
-        classpath="${build.dir}/ralph_protobuffs/*.class"
+        classpath="${build.dir}/ralph_protobuffs/*.class:../protobuf-java-2.4.1.jar"
         includeantruntime="false" />
   </target>
 

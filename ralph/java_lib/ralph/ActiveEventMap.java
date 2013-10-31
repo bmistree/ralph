@@ -1,4 +1,4 @@
-package ralph
+package ralph;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -53,14 +53,22 @@ public class ActiveEventMap
         // themselves from the map.  To prevent invalidating the map as
         // we iterate over it, we first copy all the elements into a
         // list, then iterate.
-        ArrayList<LockedActiveEvent> evt_list = new ArrayList<LockedActiveEvent>(map.values());
+        ArrayList<LockedActiveEvent> evt_list =
+            new ArrayList<LockedActiveEvent>(map.values());
         
         in_stop_phase = true;
         _unlock();
         
         for (LockedActiveEvent evt : evt_list)
             evt.stop(skip_partner);        
-    }	
+    }
+
+    public void inform_events_of_network_failure()
+    {
+        Util.logger_assert(
+            "\nMust fill in inform_events_of_network_failure " +
+            "in active event map\n");
+    }
     
     public void callback_when_stopped(StopCallback stop_callback_)
     {
@@ -81,7 +89,8 @@ public class ActiveEventMap
      this endpoint and returns it.        
      * @return
      */
-    public LockedActiveEvent create_root_event() throws RalphExceptions.StoppedException
+    public LockedActiveEvent create_root_event()
+        throws RalphExceptions.StoppedException
     {
         _lock();
         if (in_stop_phase)

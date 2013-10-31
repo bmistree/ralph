@@ -4,7 +4,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import ralph.ActiveEventMap;
 import ralph.ExecutingEventContext;
+import ralph.ExecutingEvent;
 import ralph.LockedActiveEvent;
+import ralph.VariableStore;
 
 /**
 Another endpoint has asked us to execute an action on our own
@@ -65,7 +67,7 @@ public class ReceiveEndpointCallAction extends ServiceAction
             local_endpoint._global_var_store,
             //# should not have any sequence local data from an endpoint
             //# call.
-            new ralph.VariableStore(local_endpoint._host_uuid) );
+            new VariableStore() );
 
 	    
         //# receiving endpoint must know that this call was an endpoint
@@ -75,7 +77,7 @@ public class ReceiveEndpointCallAction extends ServiceAction
         evt_ctx.set_from_endpoint_true();
         String to_exec_internal_name = ralph.Util.endpoint_call_func_name(func_name);
 	    		
-        ralph.ExecutingEvent.static_run(
+        ExecutingEvent.static_run(
             to_exec_internal_name, act_event, evt_ctx, result_queue, true, args);
     }
 

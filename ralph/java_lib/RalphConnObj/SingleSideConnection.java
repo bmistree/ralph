@@ -1,7 +1,7 @@
 package RalphConnObj;
 
 import ralph.Endpoint;
-import waldo_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 
 public class SingleSideConnection implements ConnectionObj {
 

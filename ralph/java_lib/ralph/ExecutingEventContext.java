@@ -8,13 +8,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import LockedVariables.LockedTextVariable;
-import LockedVariables.LockedNumberVariable;
-import LockedVariables.LockedTrueFalseVariable;
-import LockedVariables.SingleThreadedLockedTextVariable;
-import LockedVariables.SingleThreadedLockedNumberVariable;
-import LockedVariables.SingleThreadedLockedTrueFalseVariable;
-import LockedVariables.SingleThreadedLockedMapVariable;
+import ralph.LockedVariables.LockedTextVariable;
+import ralph.LockedVariables.LockedNumberVariable;
+import ralph.LockedVariables.LockedTrueFalseVariable;
+import ralph.LockedVariables.SingleThreadedLockedTextVariable;
+import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
+import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
+import ralph.LockedVariables.SingleThreadedLockedMapVariable;
 
 import RalphCallResults.MessageCallResultObject;
 import RalphCallResults.BackoutBeforeReceiveMessageResult;
@@ -193,16 +193,8 @@ public class ExecutingEventContext
     public Object get_val_if_waldo(
         Object val, LockedActiveEvent active_event) throws BackoutException
     {
-        if (ExternalValueVariable.class.isInstance(val))
-        {
-            Object outer_val = ((LockedObject)val).get_val(active_event);
-            Object to_return = ((LockedObject)outer_val).get_val(active_event);
-            return  to_return;
-        }
-        else if (LockedObject.class.isInstance(val))
-        {
+        if (LockedObject.class.isInstance(val))
             return ((LockedObject)val).get_val(active_event);
-        }
 		
         return val;		
     }
@@ -697,7 +689,7 @@ public class ExecutingEventContext
        * @throws BackoutException 
        */
     public void hide_partner_call(
-        waldo.Endpoint endpoint, LockedActiveEvent active_event,
+        Endpoint endpoint, LockedActiveEvent active_event,
         String func_name, boolean first_msg)
         throws NetworkException, ApplicationException, BackoutException
     {
@@ -734,15 +726,18 @@ public class ExecutingEventContext
             throw new ApplicationException("appliaction exception");
     			
     	//means that it must be a sequence message call result
-    	SequenceMessageCallResult casted_queue_elem = (SequenceMessageCallResult) queue_elem;
+    	SequenceMessageCallResult casted_queue_elem =
+            (SequenceMessageCallResult) queue_elem;
     	
     	set_to_reply_with(casted_queue_elem.reply_with_msg_field);
 
         //# apply changes to sequence variables.  Note: that the system
         //# has already applied deltas for global data.
-        sequence_local_store.incorporate_deltas(
-            active_event,casted_queue_elem.sequence_local_var_store_deltas);
-        
+        Util.logger_assert(
+            "\nSkipped incorporating sequence local " +
+            "deltas on hide_partner_call");
+        // sequence_local_store.incorporate_deltas(
+        //     active_event,casted_queue_elem.sequence_local_var_store_deltas);
 
         //# send more messages
         String to_exec_next = casted_queue_elem.to_exec_next_name_msg_field;
