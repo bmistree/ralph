@@ -8,8 +8,9 @@ import RalphExceptions.BackoutException;
  * @author bmistree
  *
  * @param <T> --- The java type of the internal data
- * @param <D> --- The type that gets returned from dewaldoify.  Not entirely true
- * If this is an internal container, then contains what each value in map/list would dewaldoify to.
+ * @param <D> --- The type that gets returned from dewaldoify.  Not
+ * entirely true If this is an internal container, then contains what
+ * each value in map/list would dewaldoify to.
  */
 public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> {
 	
