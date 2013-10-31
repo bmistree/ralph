@@ -1,0 +1,68 @@
+<project name="RalphJavaLibTest" default="compile" basedir=".">
+  
+  <description>
+    Test cases for java libraries.
+  </description>
+
+  <dirname
+    property="lib_test_dir"
+    file="${ant.file.RalphJavaLibTest}"
+  />
+
+  <!-- global properties for this build file -->
+  <property name="build.dir" location="${lib_test_dir}/classes"/>
+  <property name="src.dir" location="${lib_test_dir}/.."/>
+  <property
+      name="lib_build_path"
+      location="${lib_test_dir}/../../../ralph/java_lib/build"/>
+  <property
+      name="lib_class_path" location="${lib_build_path}/classes/"/>
+
+  <!-- set up build directories for test -->
+  <target name="init" description="setup build directories">
+    <echo message="Setting up build directory for tests"/>
+    <mkdir dir="${build.dir}"/>
+  </target>
+
+  <!-- compile java libraries -->
+  <target name="compile_libs" depends="init" description="compile library files">
+    <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
+  </target>
+
+  <!-- compile all library tests -->
+  <target
+      name="compile_all"
+      depends="init,compile_libs"
+      description="compile library and test files">
+
+    <javac
+        srcdir="${src.dir}"
+        destdir="${build.dir}"
+        classpath="${lib_class_path}"
+        includeantruntime="false" />
+  </target>
+
+
+  <!-- Run all tests specified -->
+  <target
+      name="run_all" depends="compile_all">
+    <echo message="Run all tests is not finished yet."/>
+  </target>
+      
+  
+  <!-- Delete the build directory -->
+  <target name="clean" description="get rid of build dir">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target
+      name="clean_all"
+      depends="clean"
+      description="get rid of build dir and all built libs">
+    
+    <ant antfile="${lib_build_path}/build.xml" target="clean" />
+    
+  </target>
+
+  
+</project>
