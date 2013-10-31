@@ -4,15 +4,21 @@
     Build ralph library files
   </description>
 
-  <!-- global properties for this build file -->
-  <property name="build.dir" location="classes"/>
-  <property name="proto.dir" location="../ralph_protobuffs/"/>
-  <property name="exceptions.dir" location="../RalphExceptions/"/>
-  <property name="ralph.dir" location="../ralph/"/>  
-  <property name="connections.dir" location="../RalphConnObj/"/>
-  <property name="ralph_call_results.dir" location="../RalphCallResults/"/>
-  <property name="ralph_service_actions.dir" location="../RalphServiceActions/"/>
+  <dirname
+    property="real_dir"
+    file="${ant.file.RalphLib}"
+  />
   
+  
+  <!-- global properties for this build file -->
+  <property name="build.dir" location="${real_dir}/classes"/>
+  <property name="proto.dir" location="${real_dir}/../ralph_protobuffs/"/>
+  <property name="exceptions.dir" location="${real_dir}/../RalphExceptions/"/>
+  <property name="ralph.dir" location="${real_dir}/../ralph/"/>  
+  <property name="connections.dir" location="${real_dir}/../RalphConnObj/"/>
+  <property name="ralph_call_results.dir" location="${real_dir}/../RalphCallResults/"/>
+  <property name="ralph_service_actions.dir" location="${real_dir}/../RalphServiceActions/"/>
+  <property name="protobuf_path" location="${real_dir}/../protobuf-java-2.4.1.jar"/>
 
   <!-- set up some directories used by this project -->
   <target name="init" description="setup project directories">
@@ -21,7 +27,7 @@
 
   <!-- compile protobuffs into classes -->
   <target name="compile_proto" depends="init" description="compile sources for protos">
-    <javac srcdir="${proto.dir}" destdir="${build.dir}" classpath="../protobuf-java-2.4.1.jar"
+    <javac srcdir="${proto.dir}" destdir="${build.dir}" classpath="${protobuf_path}"
            includeantruntime="false" />
   </target>
 
@@ -37,11 +43,9 @@
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}"
         destdir="${build.dir}"
-        classpath="${build.dir}/ralph_protobuffs/*.class:../protobuf-java-2.4.1.jar"
+        classpath="${build.dir}/ralph_protobuffs/*.class:${protobuf_path}"
         includeantruntime="false" />
   </target>
-
-  
 
   
   <!-- Delete the build directory -->
