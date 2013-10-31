@@ -45,10 +45,21 @@
 
   <!-- Run all tests specified -->
   <target
-      name="run_all" depends="compile_all">
-    <echo message="Run all tests is not finished yet."/>
+      name="run_all" depends="run_WriteReadVarStack">
   </target>
-      
+
+  <!-- List individual tests -->
+  <target
+      name="run_WriteReadVarStack"
+      depends="compile_all"
+      description="Run stack tests.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.WriteReadVarStack" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
+  
   
   <!-- Delete the build directory -->
   <target name="clean" description="get rid of build dir">
