@@ -31,7 +31,22 @@ public class WriteReadTVar
         LockedNumberVariable num_tvar =
             (LockedNumberVariable) endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.NUM_TVAR_NAME);
+
+        // Tests concurrent read of tvar.
+        if (! WriteReadTVar.test_concurrent_read(endpt,num_tvar))
+            return false;
         
+        return true;
+    }
+
+
+    
+    /**
+       @returns {boolean} --- True if test passed; false if test failed.
+     */
+    public static boolean test_concurrent_read(
+        Endpoint endpt, LockedNumberVariable num_tvar)
+    {
         try
         {
             LockedActiveEvent rdr1 = endpt._act_event_map.create_root_event();
@@ -55,9 +70,9 @@ public class WriteReadTVar
             ex.printStackTrace();
             return false;
         }
-        
         return true;
     }
+
     
 }
 
