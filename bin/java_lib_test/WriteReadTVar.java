@@ -36,10 +36,10 @@ public class WriteReadTVar
             LockedActiveEvent rdr1 = endpt._act_event_map.create_root_event();
             LockedActiveEvent rdr2 = endpt._act_event_map.create_root_event();
             
-            if (num_tvar.get_val(rdr1) != TestClassUtil.NUM_TVAR_INIT_VAL)
+            if (! num_tvar.get_val(rdr1).equals(TestClassUtil.NUM_TVAR_INIT_VAL))
                 return false;
 
-            if (num_tvar.get_val(rdr2) != TestClassUtil.NUM_TVAR_INIT_VAL)
+            if (! num_tvar.get_val(rdr2).equals(TestClassUtil.NUM_TVAR_INIT_VAL))
                 return false;
         }
         catch (Exception ex)
