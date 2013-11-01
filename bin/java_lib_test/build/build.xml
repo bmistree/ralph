@@ -45,7 +45,7 @@
 
   <!-- Run all tests specified -->
   <target
-      name="run_all" depends="run_WriteReadVarStack">
+      name="run_all" depends="run_WriteReadVarStack,run_WriteReadTVar">
   </target>
 
   <!-- List individual tests -->
@@ -59,6 +59,18 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+  <target
+      name="run_WriteReadTVar"
+      depends="compile_all"
+      description="Run tvar tests.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.WriteReadTVar" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   
   <!-- Delete the build directory -->
