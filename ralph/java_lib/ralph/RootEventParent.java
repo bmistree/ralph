@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import RalphCallResults.RootCallResultObject;
+import RalphCallResults.RootCallResult;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
 import RalphCallResults.NetworkFailureCallResult;
@@ -23,8 +23,8 @@ public class RootEventParent extends EventParent {
        # when the root tries to commit the event, it blocks while
        # reading the event_complete_queue
     */
-    public ArrayBlockingQueue<RootCallResultObject>event_complete_queue = 
-        new ArrayBlockingQueue<RootCallResultObject>(Util.SMALL_QUEUE_CAPACITIES);
+    public ArrayBlockingQueue<RootCallResult.ResultType>event_complete_queue = 
+        new ArrayBlockingQueue<RootCallResult.ResultType>(Util.SMALL_QUEUE_CAPACITIES);
 
     /**
        # we can add and remove events to waiting on commit lock from
@@ -68,8 +68,8 @@ public class RootEventParent extends EventParent {
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,    		
         boolean partner_contacted)
     {
-    	event_complete_queue.add(
-            new RalphCallResults.CompleteRootCallResult());
+    	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
+
     	super.second_phase_transition_success(
             same_host_endpoints_contacted_dict, partner_contacted);
     }
@@ -162,14 +162,16 @@ public class RootEventParent extends EventParent {
 
         //# put val to read into event_complete_queue so can know
         //# whether or not to retry event.
-        
-        RalphCallResults.RootCallResultObject queue_feeder = null;
         if (stop_request)
-            queue_feeder = new RalphCallResults.StopRootCallResult();
+        {
+            event_complete_queue.add(
+                RootCallResult.ResultType.STOP);
+        }
         else
-            queue_feeder = new RalphCallResults.RescheduleRootCallResult();
-        
-        event_complete_queue.add(queue_feeder);
+        {
+            event_complete_queue.add(
+                RootCallResult.ResultType.RESCHEDULE);
+        }
     }
 
     /**

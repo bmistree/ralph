@@ -6,8 +6,7 @@ import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.LockedActiveEvent;
 import ralph.RootEventParent;
-import RalphCallResults.CompleteRootCallResult;
-import RalphCallResults.RootCallResultObject;
+import RalphCallResults.RootCallResult.ResultType;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -74,21 +73,20 @@ public class WriteReadTVar
 
             RootEventParent reader_event_parent =
                 (RootEventParent)reader.event_parent;
-            RootCallResultObject reader_commit_resp =
+            ResultType reader_commit_resp =
                 reader_event_parent.event_complete_queue.take();
 
             RootEventParent writer_event_parent =
                 (RootEventParent)writer.event_parent;
-            RootCallResultObject writer_commit_resp = 
+            ResultType writer_commit_resp = 
                 writer_event_parent.event_complete_queue.take();
+
             
-
-            if (CompleteRootCallResult.class.isInstance(reader_commit_resp))
+            if (reader_commit_resp == ResultType.COMPLETE)
                 return false;
 
-            if (! CompleteRootCallResult.class.isInstance(writer_commit_resp))
+            if (writer_commit_resp != ResultType.COMPLETE)
                 return false;
-                
         }
         catch (Exception ex)
         {

@@ -134,7 +134,4 @@ public class WriteReadVarStack
         // test passed
         return true;
     }
-
-
-    
 }
