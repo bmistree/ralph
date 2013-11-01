@@ -6,6 +6,8 @@ import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.LockedActiveEvent;
 import ralph.RootEventParent;
+import RalphCallResults.CompleteRootCallResult;
+import RalphCallResults.RootCallResultObject;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -35,14 +37,73 @@ public class WriteReadTVar
         // Tests concurrent read of tvar.
         if (! WriteReadTVar.test_concurrent_read(endpt,num_tvar))
             return false;
+
+        if (! WriteReadTVar.test_preempted_read(endpt,num_tvar))
+            return false;        
+
+        return true;
+    }
+
+    /**
+       @returns {boolean} --- Starts two events.  The second event
+       that is started (the one with lower priority) reads num_tvar.
+       The first event (the event with higher priority) then writes to
+       num_tvar.  Returns true if first event preempts second.
+     */
+    public static boolean test_preempted_read(
+        Endpoint endpt, LockedNumberVariable num_tvar)
+    {
+        try
+        {
+            LockedActiveEvent writer =
+                endpt._act_event_map.create_root_event();
+            LockedActiveEvent reader =
+                endpt._act_event_map.create_root_event();
+
+            if (! num_tvar.get_val(reader).equals(
+                    TestClassUtil.NUM_TVAR_INIT_VAL))
+            {
+                return false;
+            }
+
+            num_tvar.set_val(writer,TestClassUtil.NUM_TVAR_INIT_VAL + 1);
+
+            
+            reader.begin_first_phase_commit();
+            writer.begin_first_phase_commit();
+
+            RootEventParent reader_event_parent =
+                (RootEventParent)reader.event_parent;
+            RootCallResultObject reader_commit_resp =
+                reader_event_parent.event_complete_queue.take();
+
+            RootEventParent writer_event_parent =
+                (RootEventParent)writer.event_parent;
+            RootCallResultObject writer_commit_resp = 
+                writer_event_parent.event_complete_queue.take();
+            
+
+            if (CompleteRootCallResult.class.isInstance(reader_commit_resp))
+                return false;
+
+            if (! CompleteRootCallResult.class.isInstance(writer_commit_resp))
+                return false;
+                
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
         
         return true;
     }
 
-
     
     /**
-       @returns {boolean} --- True if test passed; false if test failed.
+       @returns {boolean} --- True if test passed; false if test
+       failed.  (Test passes if two read events are able to access
+       variable and commit; false otherwise.)
      */
     public static boolean test_concurrent_read(
         Endpoint endpt, LockedNumberVariable num_tvar)
