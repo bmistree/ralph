@@ -5,6 +5,7 @@ import ralph.LockedVariables.LockedNumberVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.LockedActiveEvent;
+import ralph.RootEventParent;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -41,6 +42,13 @@ public class WriteReadTVar
 
             if (! num_tvar.get_val(rdr2).equals(TestClassUtil.NUM_TVAR_INIT_VAL))
                 return false;
+
+            rdr1.begin_first_phase_commit();
+            rdr2.begin_first_phase_commit();
+
+            ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
+            ((RootEventParent)rdr2.event_parent).event_complete_queue.take();
+            
         }
         catch (Exception ex)
         {
