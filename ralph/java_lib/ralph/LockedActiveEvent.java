@@ -11,15 +11,11 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
-import RalphCallResults.StopAlreadyCalledMessageCallResult;
-import RalphCallResults.BackoutBeforeReceiveMessageResult;
 import RalphCallResults.EndpointCallResultObject;
 
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
-import RalphCallResults.ApplicationExceptionCallResult;
-import RalphCallResults.NetworkFailureCallResult;
 
 public class LockedActiveEvent
 {
@@ -584,9 +580,14 @@ public class LockedActiveEvent
         {
             MessageCallResultObject queue_feeder = null;
             if (stop_request)
-                queue_feeder = new StopAlreadyCalledMessageCallResult();
+            {
+                queue_feeder = MessageCallResultObject.stop_already_called();
+            }
             else
-                queue_feeder = new BackoutBeforeReceiveMessageResult();
+            {
+                queue_feeder =
+                    MessageCallResultObject.backout_before_receive_message();
+            }
             msg_queue_to_unblock.add(queue_feeder);
         }
 
@@ -1054,12 +1055,14 @@ public class LockedActiveEvent
             if (error.getType() == PartnerError.ErrorType.APPLICATION)
             {
                 message_listening_queue.add(
-                    new ApplicationExceptionCallResult(error.getTrace()));
+                    MessageCallResultObject.application_exception(
+                        error.getTrace()));
             }
             else if (error.getType() == PartnerError.ErrorType.NETWORK)
             {
                 message_listening_queue.add(
-                    new NetworkFailureCallResult(error.getTrace()));
+                    MessageCallResultObject.network_failure(
+                        error.getTrace()));
             }
         }
         _unlock();

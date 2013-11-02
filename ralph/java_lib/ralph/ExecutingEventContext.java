@@ -17,10 +17,7 @@ import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedLockedMapVariable;
 
 import RalphCallResults.MessageCallResultObject;
-import RalphCallResults.BackoutBeforeReceiveMessageResult;
-import RalphCallResults.NetworkFailureCallResult;
-import RalphCallResults.ApplicationExceptionCallResult;
-import RalphCallResults.SequenceMessageCallResult;
+
 import RalphCallResults.EndpointCallResultObject;
 import RalphCallResults.ApplicationExceptionEndpointCallResult;
 import RalphCallResults.NetworkFailureEndpointCallResult;
@@ -710,18 +707,26 @@ public class ExecutingEventContext
             e.printStackTrace();
         }
 
-    	if (BackoutBeforeReceiveMessageResult.class.isInstance(queue_elem))
+    	if (queue_elem.result_type ==
+            MessageCallResultObject.ResultType.BACKOUT_BEFORE_RECEIVE_MESSAGE)
+        {
             throw new BackoutException();
-    	else if (NetworkFailureCallResult.class.isInstance(queue_elem))
+        }
+    	else if (queue_elem.result_type ==
+                 MessageCallResultObject.ResultType.NETWORK_FAILURE)
+        {
             throw new NetworkException("network failure");
-    	else if (ApplicationExceptionCallResult.class.isInstance(queue_elem))
+        }
+    	else if (queue_elem.result_type ==
+                 MessageCallResultObject.ResultType.APPLICATION_EXCEPTION)
+        {
             throw new ApplicationException("appliaction exception");
-    			
+        }
+
+
     	//means that it must be a sequence message call result
-    	SequenceMessageCallResult casted_queue_elem =
-            (SequenceMessageCallResult) queue_elem;
     	
-    	set_to_reply_with(casted_queue_elem.reply_with_msg_field);
+    	set_to_reply_with(queue_elem.reply_with_msg_field);
 
         //# apply changes to sequence variables.  Note: that the system
         //# has already applied deltas for global data.
@@ -729,10 +734,10 @@ public class ExecutingEventContext
             "\nSkipped incorporating sequence local " +
             "deltas on hide_partner_call");
         // sequence_local_store.incorporate_deltas(
-        //     active_event,casted_queue_elem.sequence_local_var_store_deltas);
+        //     active_event,queue_elem.sequence_local_var_store_deltas);
 
         //# send more messages
-        String to_exec_next = casted_queue_elem.to_exec_next_name_msg_field;
+        String to_exec_next = queue_elem.to_exec_next_name_msg_field;
         
         if (to_exec_next != null)
             ExecutingEvent.static_run(to_exec_next, active_event, this, null,false);        	

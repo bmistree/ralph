@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.RootCallResult;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
-import RalphCallResults.NetworkFailureCallResult;
+
 
 public class RootEventParent extends EventParent {
 
@@ -92,7 +92,7 @@ public class RootEventParent extends EventParent {
                 ArrayBlockingQueue<MessageCallResultObject> message_listening_queue = 
                     message_listening_queues_map.get(reply_with_uuid);
                 message_listening_queue.add(
-                    new NetworkFailureCallResult(error.toString()));
+                    MessageCallResultObject.network_failure(error.toString()));
             }
     	}
     }
