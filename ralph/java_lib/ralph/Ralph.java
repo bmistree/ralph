@@ -6,7 +6,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 
-public class Waldo {
+public class Ralph {
 
     private static RalphGlobals all_globals = new RalphGlobals();
     private static String host_uuid = Util.generate_uuid();
