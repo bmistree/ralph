@@ -39,6 +39,10 @@ public final class PartnerRequestSequenceBlockProto {
     boolean hasArguments();
     ralph_protobuffs.VariablesProto.Variables getArguments();
     ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder();
+    
+    // required bool transaction = 7;
+    boolean hasTransaction();
+    boolean getTransaction();
   }
   public static final class PartnerRequestSequenceBlock extends
       com.google.protobuf.GeneratedMessage
@@ -166,6 +170,16 @@ public final class PartnerRequestSequenceBlockProto {
       return arguments_;
     }
     
+    // required bool transaction = 7;
+    public static final int TRANSACTION_FIELD_NUMBER = 7;
+    private boolean transaction_;
+    public boolean hasTransaction() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public boolean getTransaction() {
+      return transaction_;
+    }
+    
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       priority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -173,6 +187,7 @@ public final class PartnerRequestSequenceBlockProto {
       replyWithUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       replyToUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+      transaction_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -192,6 +207,10 @@ public final class PartnerRequestSequenceBlockProto {
         return false;
       }
       if (!hasArguments()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasTransaction()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -242,6 +261,9 @@ public final class PartnerRequestSequenceBlockProto {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, arguments_);
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBool(7, transaction_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -274,6 +296,10 @@ public final class PartnerRequestSequenceBlockProto {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, arguments_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, transaction_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -436,6 +462,8 @@ public final class PartnerRequestSequenceBlockProto {
           argumentsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
+        transaction_ = false;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       
@@ -518,6 +546,10 @@ public final class PartnerRequestSequenceBlockProto {
         } else {
           result.arguments_ = argumentsBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.transaction_ = transaction_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -552,6 +584,9 @@ public final class PartnerRequestSequenceBlockProto {
         if (other.hasArguments()) {
           mergeArguments(other.getArguments());
         }
+        if (other.hasTransaction()) {
+          setTransaction(other.getTransaction());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -570,6 +605,10 @@ public final class PartnerRequestSequenceBlockProto {
           return false;
         }
         if (!hasArguments()) {
+          
+          return false;
+        }
+        if (!hasTransaction()) {
           
           return false;
         }
@@ -669,6 +708,11 @@ public final class PartnerRequestSequenceBlockProto {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setArguments(subBuilder.buildPartial());
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              transaction_ = input.readBool();
               break;
             }
           }
@@ -1163,6 +1207,27 @@ public final class PartnerRequestSequenceBlockProto {
         return argumentsBuilder_;
       }
       
+      // required bool transaction = 7;
+      private boolean transaction_ ;
+      public boolean hasTransaction() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public boolean getTransaction() {
+        return transaction_;
+      }
+      public Builder setTransaction(boolean value) {
+        bitField0_ |= 0x00000040;
+        transaction_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearTransaction() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        transaction_ = false;
+        onChanged();
+        return this;
+      }
+      
       // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock)
     }
     
@@ -1189,14 +1254,14 @@ public final class PartnerRequestSequenceBlockProto {
   static {
     java.lang.String[] descriptorData = {
       "\n!partnerRequestSequenceBlock.proto\032\nuti" +
-      "l.proto\032\017variables.proto\"\324\001\n\033PartnerRequ" +
+      "l.proto\032\017variables.proto\"\351\001\n\033PartnerRequ" +
       "estSequenceBlock\022\031\n\nevent_uuid\030\001 \002(\0132\005.U" +
       "UID\022\033\n\010priority\030\002 \002(\0132\t.Priority\022 \n\030name" +
       "_of_block_requesting\030\003 \001(\t\022\036\n\017reply_with" +
       "_uuid\030\004 \002(\0132\005.UUID\022\034\n\rreply_to_uuid\030\005 \001(" +
-      "\0132\005.UUID\022\035\n\targuments\030\006 \002(\0132\n.VariablesB" +
-      "4\n\020ralph_protobuffsB PartnerRequestSeque" +
-      "nceBlockProto"
+      "\0132\005.UUID\022\035\n\targuments\030\006 \002(\0132\n.Variables\022" +
+      "\023\n\013transaction\030\007 \002(\010B4\n\020ralph_protobuffs" +
+      "B PartnerRequestSequenceBlockProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1208,7 +1273,7 @@ public final class PartnerRequestSequenceBlockProto {
           internal_static_PartnerRequestSequenceBlock_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_descriptor,
-              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", },
+              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", },
               ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.class,
               ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder.class);
           return null;

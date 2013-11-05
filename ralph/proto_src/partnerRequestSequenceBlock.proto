@@ -7,36 +7,42 @@ option java_outer_classname = "PartnerRequestSequenceBlockProto";
 
 message PartnerRequestSequenceBlock
 {
-        required UUID event_uuid = 1;
-        required Priority priority = 2;
+    required UUID event_uuid = 1;
+    required Priority priority = 2;
     
-        /*
-        {String or empty} block_name --- The name of the
-        sequence block we want to execute on the partner
-        endpoint. (Note: this is how that sequence block is named in
-        the source Waldo file, not how it is translated by the
-        compiler into a function.)  It can also be empty if this is the
-        final message sequence block's execution.
-        */
-        optional string name_of_block_requesting = 3;
+    /*
+      {String or empty} block_name --- The name of the
+      sequence block we want to execute on the partner
+      endpoint. (Note: this is how that sequence block is named in
+      the source Waldo file, not how it is translated by the
+      compiler into a function.)  It can also be empty if this is the
+      final message sequence block's execution.
+    */
+    optional string name_of_block_requesting = 3;
 
-        /*
-        When the partner endpoint                       
-        responds, it should place reply_with_uuid in its reply_to
-        message field.  That way, we can determine which message the
-        partner endpoint was replying to.
-        */
-        required UUID reply_with_uuid = 4;
+    /*
+      When the partner endpoint                       
+      responds, it should place reply_with_uuid in its reply_to
+      message field.  That way, we can determine which message the
+      partner endpoint was replying to.
+    */
+    required UUID reply_with_uuid = 4;
 
-        /*
-        @param {uuid or empty} reply_to_uuid --- If this is the
-        beginning of a sequence of messages, then leave the
-        reply_to_uuid field empty (the message is not a reply to
-        anything that we have seen so far).  Otherwise, put the
-        reply_with message field of the last message that the partner
-        said as part of this sequence in.
-        */      
-        optional UUID reply_to_uuid = 5;
+    /*
+      @param {uuid or empty} reply_to_uuid --- If this is the
+      beginning of a sequence of messages, then leave the
+      reply_to_uuid field empty (the message is not a reply to
+      anything that we have seen so far).  Otherwise, put the
+      reply_with message field of the last message that the partner
+      said as part of this sequence in.
+    */      
+    optional UUID reply_to_uuid = 5;
     
-        required Variables arguments = 6;
+    required Variables arguments = 6;
+
+    /**
+       True if the call should have transactional semantics.  False
+       otherwise.
+     */
+    required bool transaction = 7;
 }
