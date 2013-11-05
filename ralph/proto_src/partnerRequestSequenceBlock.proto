@@ -39,7 +39,7 @@ message PartnerRequestSequenceBlock
     optional UUID reply_to_uuid = 5;
     
     required Variables arguments = 6;
-
+    
     /**
        True if the call should have transactional semantics.  False
        otherwise.
