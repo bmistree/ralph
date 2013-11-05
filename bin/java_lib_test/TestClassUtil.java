@@ -6,6 +6,8 @@ import ralph.LockedVariables.LockedNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
 import RalphConnObj.SingleSideConnection;
+import RalphConnObj.SameHostConnection;
+import RalphConnObj.ConnectionObj;
 
 public class TestClassUtil
 {
@@ -31,6 +33,12 @@ public class TestClassUtil
      */
     public static Endpoint create_default_single_endpoint()
     {
+        return build_default_endpoint(new SingleSideConnection());
+    }
+		
+    private static Endpoint build_default_endpoint(
+        ConnectionObj conn_obj)
+    {
         String dummy_host_uuid = "dummy_host_uuid";
 
         VariableStore vstore = new VariableStore();
@@ -44,11 +52,30 @@ public class TestClassUtil
         Endpoint to_return = new Endpoint(
             new RalphGlobals(),
             dummy_host_uuid,
-            new SingleSideConnection(),
+            conn_obj,
             vstore);
 
-
         return to_return;
+
+    }
+
+    
+    public static class ConnectedEndpointPair
+    {
+        public Endpoint endpta;
+        public Endpoint endptb;
+        public ConnectedEndpointPair(Endpoint _endpta, Endpoint _endptb)
+        {
+            endpta = _endpta;
+            endptb = _endptb;
+        }
+    }
+    public static ConnectedEndpointPair create_connected_endpoints()
+    {
+        SameHostConnection conn_obj = new SameHostConnection();
+        Endpoint endpta = build_default_endpoint(conn_obj);
+        Endpoint endptb = build_default_endpoint(conn_obj);
+        return new ConnectedEndpointPair(endpta,endptb);
     }
     
 }
