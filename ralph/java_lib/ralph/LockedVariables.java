@@ -1,8 +1,9 @@
 package ralph;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map.Entry;
-
+import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 
 public class LockedVariables {
@@ -45,13 +46,6 @@ public class LockedVariables {
                 new LockedVariables.SingleThreadedLockedTextVariable(
                     host_uuid,false,(String) to_write);
         }
-        /*
-          else if (HashMap.class.isInstance(to_write))
-          {
-          Util.logger_warn(
-          "Incorrectly assuming that always incorporating deltas in hash map");
-          return new LockedVariables.SingleThreadedLockedMapVariable(host_uuid,false,(HashMap)to_write,true);
-          }*/
         else if (LockedObject.class.isInstance(to_write))
         {
             return (LockedObject)to_write;
@@ -76,6 +70,16 @@ public class LockedVariables {
                 _host_uuid,_peered,default_number,default_number,
                 number_value_type_data_wrapper_constructor);		
         }
+        
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Double internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setNum(internal_val.doubleValue());
+            any_builder.setReference(is_reference);
+        }
     }
 
     public static class LockedTextVariable extends LockedValueVariable<String,String>
@@ -90,7 +94,16 @@ public class LockedVariables {
         {
             super(
                 _host_uuid,_peered,default_text,default_text,
-                text_value_type_data_wrapper_constructor);		
+                text_value_type_data_wrapper_constructor);            
+        }
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            String internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setText(internal_val);
+            any_builder.setReference(is_reference);
         }
     }
 	
@@ -109,6 +122,16 @@ public class LockedVariables {
             super(
                 _host_uuid,_peered,default_tf,default_tf,
                 true_false_value_type_data_wrapper_constructor);
+        }
+        
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Boolean internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setTrueFalse(internal_val.booleanValue());
+            any_builder.setReference(is_reference);
         }
     }
 	
@@ -132,6 +155,16 @@ public class LockedVariables {
                 _host_uuid,_peered,default_number,default_number,
                 number_value_type_data_wrapper_constructor);			
         }
+        
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            Double internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setNum(internal_val.doubleValue());
+            any_builder.setReference(is_reference);
+        }
     }
 
     public static class SingleThreadedLockedTextVariable
@@ -152,6 +185,17 @@ public class LockedVariables {
                 _host_uuid,_peered,default_text,default_text,
                 text_value_type_data_wrapper_constructor);
         }
+        
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            String internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setText(internal_val);
+            any_builder.setReference(is_reference);
+        }
+        
     }
 
     public static class SingleThreadedLockedTrueFalseVariable
@@ -172,22 +216,28 @@ public class LockedVariables {
                 _host_uuid,_peered,default_tf,default_tf,
                 true_false_value_type_data_wrapper_constructor);
         }
+
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            Boolean internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setTrueFalse(internal_val.booleanValue());
+            any_builder.setReference(is_reference);
+        }
     }
 
-	
     /**
-     * 
-     * @author bmistree
-     *
      * @param <K>  ---- The keys used for indexing
      * @param <V>  ---- The type of each internal value in the internal hash map
      * @param <D>  ---- The type that each value in the internal hash map would dewaldoify into
      * 
-     * An map of numbers to strings:
+     * A map of numbers to strings:
      * 
      * LockedMapVariable<Number,String,HashMap<String,Number>>
      * 
-     * An map of numbers to maps of numbers to strings
+     * A map of numbers to maps of numbers to strings
      * 
      * LockedMapVariable<
      *     Number,
@@ -203,8 +253,7 @@ public class LockedVariables {
             HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas)
         {
             // FIXME: I'm pretty sure that the type signature for the locked object above
-            // is incorrect: it shouldn't be D, right?
-			
+            // is incorrect: it shouldn't be D, right?			
             super(
                 _host_uuid,_peered,
                 // initial value
@@ -212,7 +261,44 @@ public class LockedVariables {
                 // default value
                 new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
                 new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
-			
+
+            load_init_vals(init_val,incorporating_deltas);
+        }
+
+        public void serialize_as_rpc_arg(
+            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            SingleThreadedLockedContainer<K,V,D> internal_val =
+                get_val(active_event);
+            internal_val.serialize_as_rpc_arg(
+                active_event,any_builder,is_reference);
+        }
+        
+        public SingleThreadedLockedMapVariable(
+            String _host_uuid, boolean _peered,
+            HashMap<K,LockedObject<V,D>> init_val)
+        {
+            // FIXME: I'm pretty sure that the type signature for the locked object above
+            // is incorrect: it shouldn't be D, right?			
+            super(
+                _host_uuid,_peered,
+                // initial value
+                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
+                // default value
+                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
+                new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+
+            load_init_vals(init_val,false);
+        }
+    
+
+        public void load_init_vals(
+            HashMap<K,LockedObject<V,D>> init_val, boolean incorporating_deltas)
+        {
+            if (init_val == null)
+                return;
+        
             //FIXME probably inefficient to add each field separately
             for (Entry<K, LockedObject<V,D>> entry : init_val.entrySet())
             {
@@ -227,40 +313,6 @@ public class LockedVariables {
                     e.printStackTrace();
                 }
             }
-        }
-		
-
-        public SingleThreadedLockedMapVariable(
-            String _host_uuid, boolean _peered,
-            SingleThreadedLockedInternalMapVariable<K,V,D> init_val)
-        {
-            super(
-                _host_uuid,_peered,
-                // initial value
-                init_val,
-                // default value
-                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
-                new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
-        }
-        public SingleThreadedLockedMapVariable(String _host_uuid)
-        {
-            super(
-                _host_uuid,false,
-                // initial value
-                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
-                // default value
-                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
-                new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
-        }		
-        public SingleThreadedLockedMapVariable(String _host_uuid,boolean _peered)
-        {
-            super(
-                _host_uuid,_peered, 
-                // initial value
-                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,_peered),
-                // default value
-                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,_peered),
-                new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
         }
     }
 }

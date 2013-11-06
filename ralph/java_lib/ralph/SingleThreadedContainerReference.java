@@ -5,14 +5,11 @@ import RalphExceptions.BackoutException;
 
 
 /**
- * 
- * @author bmistree
- *
  * @param <K> --- Keys of map
  * @param <V> --- Values held in locked objects of map.
  * @param <D> --- What this object will dewaldoify into.
  */
-public class SingleThreadedContainerReference <K,V,D> 
+public abstract class SingleThreadedContainerReference <K,V,D> 
     extends SingleThreadedLockedValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return SingleThreadedLockedContainer.

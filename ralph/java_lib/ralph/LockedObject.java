@@ -1,6 +1,7 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
+import ralph_protobuffs.VariablesProto.Variables;
 
 /**
  * 
@@ -29,7 +30,15 @@ public abstract class LockedObject<T,D>
         return single_threaded_constructor.construct(
             host_uuid,peered,get_val(active_event));
     }
-	
+
+    /**
+       Take internal data and add it as an arg to the
+       Varialbes.Any.Builder.
+     */
+    public abstract void serialize_as_rpc_arg(
+        LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+        boolean is_reference) throws BackoutException;
+
 	
     public abstract void write_if_different(
         LockedActiveEvent active_event, T new_val) throws BackoutException;

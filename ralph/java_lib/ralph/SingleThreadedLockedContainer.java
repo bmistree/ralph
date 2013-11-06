@@ -1,16 +1,12 @@
 package ralph;
 
-import ralph.LockedVariables.SingleThreadedLockedMapVariable;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
-
+import java.util.Map.Entry;
 
 /**
- * 
- * @author bmistree
- *
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
  * Strings).
  * @param <V> --- The Java type of data that the keys should point to.
@@ -26,6 +22,14 @@ public class SingleThreadedLockedContainer<K,V,D>
     >  
     implements ContainerInterface<K,V,D>
 {
+    protected enum IndexType{
+        DOUBLE,STRING,BOOLEAN
+    };
+
+    // Keeps track of the map's index type.  Useful when serializing
+    // and deserializing data.
+    protected IndexType index_type;
+    
     private ReferenceTypeDataWrapperConstructor <K,V,D> reference_data_wrapper_constructor =
         null;
 
@@ -40,6 +44,18 @@ public class SingleThreadedLockedContainer<K,V,D>
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val)
     {
+        // ugly way to populate index type
+        K tmp = null;
+        if (Double.class.isInstance(tmp))
+            index_type = IndexType.DOUBLE;
+        else if (Boolean.class.isInstance(tmp))
+            index_type = IndexType.BOOLEAN;
+        else if (String.class.isInstance(tmp))
+            index_type = IndexType.STRING;
+        else
+            Util.logger_assert("Unknown index type for single threaded map.");
+
+
         host_uuid = _host_uuid;
         peered = _peered;
         reference_data_wrapper_constructor = rtdwc;
@@ -70,12 +86,63 @@ public class SingleThreadedLockedContainer<K,V,D>
                 e.printStackTrace();
             }
             return (V)to_return;
-			
         }
 		
         return (V) internal_key_val;
     }
 
+    /**
+       Runs through all the entries in the map/list/struct and puts
+       them into any_builder.
+     */
+    public void serialize_as_rpc_arg (
+        LockedActiveEvent active_event, Variables.Any.Builder any_builder,
+        boolean is_reference) throws BackoutException
+    {
+        Variables.Map.Builder map_builder = Variables.Map.newBuilder();
+        for (Entry<K,LockedObject<V,D>> map_entry : val.val.entrySet() )
+        {
+            // create any for index
+            Variables.Any.Builder index_builder = Variables.Any.newBuilder();
+            index_builder.setVarName("");
+            if (index_type == IndexType.DOUBLE)
+            {
+                Double index_entry = (Double) map_entry.getKey();
+                index_builder.setNum(index_entry.doubleValue());
+            }
+            else if (index_type == IndexType.STRING)
+            {
+                String index_entry = (String) map_entry.getKey();
+                index_builder.setText(index_entry);
+            }
+            else if (index_type == IndexType.BOOLEAN)
+            {
+                Boolean index_entry = (Boolean) map_entry.getKey();
+                index_builder.setTrueFalse(index_entry.booleanValue());
+            }
+            else
+            {
+                Util.logger_assert(
+                    "Unrecognized index type when serializing matrix");
+            }
+
+            
+            // create any for value
+            Variables.Any.Builder value_builder = Variables.Any.newBuilder();
+            LockedObject<V,D> map_value = map_entry.getValue();
+            
+            map_value.serialize_as_rpc_arg(
+                active_event,value_builder,is_reference);
+            
+            // apply both to map builder
+            map_builder.addMapIndices(index_builder);
+            map_builder.addMapValues(value_builder);
+        }
+        any_builder.setVarName("");
+        any_builder.setMap(map_builder);
+        any_builder.setReference(is_reference);            
+    }
+    
 
     @Override
     public void set_val_on_key(

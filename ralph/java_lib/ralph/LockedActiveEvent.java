@@ -8,11 +8,12 @@ import RalphServiceActions.ServiceAction;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.VariablesProto.Variables;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
 import RalphCallResults.EndpointCallResultObject;
-
+import RalphExceptions.BackoutException;
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
@@ -682,22 +683,26 @@ public class LockedActiveEvent
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {Queue or None} threadsafe_unblock_queue --- None if
+       @param {Queue or null} threadsafe_unblock_queue --- None if
        this was the last message sent in a sequence and we're not
        waiting on a reply.
-    
-       The local endpoint is requesting its partner to call some
-       sequence block.
 
+       @param {ArrayList} args --- The positional arguments inserted
+       into the call as an rpc.  Includes whether the argument is a
+       reference or not (ie, we should update the variable's value on
+       the caller).
+       
+       The local endpoint is requesting its partner to call some
+       method on itself.
     */
     public boolean issue_partner_sequence_block_call(
         ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg)
+        boolean first_msg,ArrayList<RPCArgObject>args)
     {
         boolean partner_call_requested = false;
         _lock();
-
+            
         if (state == State.STATE_RUNNING)
         {
             partner_call_requested = true;
@@ -720,10 +725,27 @@ public class LockedActiveEvent
                     reply_with_uuid, threadsafe_unblock_queue);
             }
 
-            // FIXME: Must produce variables proto buff from context.
+            // construct variables for arg messages
+            Variables.Builder variables = Variables.newBuilder();
+            for (RPCArgObject arg : args)
+            {
+                try{
+                    Variables.Any.Builder any_builder = Variables.Any.newBuilder();
+                    arg.arg_to_pass.serialize_as_rpc_arg(
+                        this,any_builder,arg.is_reference);
+                    variables.addVars(any_builder);
+                } catch (BackoutException excep)
+                {
+                    _unlock();
+                    return false;
+                }
+            }
+            
+            // construct VariablesBuilder from arguments.
             Util.logger_assert(
-                "\nNot actually sending partner message: " +
-                "require collecting variables.\n");
+                "Still must take serialized object and actually " +
+                "issue partner call.");
+
             
             // //# here, the local endpoint uses the connection object to
             // //# actually send the message.

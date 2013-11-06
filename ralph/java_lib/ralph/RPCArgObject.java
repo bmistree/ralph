@@ -1,7 +1,7 @@
 package ralph;
 
 
-public RPCArgObject<T,D>
+public class RPCArgObject<T,D>
 {
     public LockedObject<T,D> arg_to_pass;
     public boolean is_reference;

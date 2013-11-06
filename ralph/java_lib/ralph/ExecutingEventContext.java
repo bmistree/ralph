@@ -14,7 +14,6 @@ import ralph.LockedVariables.LockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
-import ralph.LockedVariables.SingleThreadedLockedMapVariable;
 
 import RalphCallResults.MessageCallResultObject;
 
@@ -294,20 +293,6 @@ public class ExecutingEventContext
             }
             else
             {
-                /**
-                 *  elif isinstance(val,dict):
-                 constructor = LockedMapVariable
-                 elif isinstance(val,list):
-                 constructor = LockedListVariable
-                 elif isinstance(val,EndpointBase):
-                 constructor = LockedEndpointVariable
-                 #### DEBUG
-                 elif hasattr(val,'__call__'):
-                 # checks if is function
-                 util.logger_assert(
-                 'Should use special call func_turn_into_waldo_var for function objects')
-
-                */
                 Util.logger_assert("Still must add constructors for lists, maps, endpoints, etc.");
             }
         }
@@ -330,28 +315,14 @@ public class ExecutingEventContext
             }
             else if (HashMap.class.isInstance(val))
             {
-                return new SingleThreadedLockedMapVariable(
-                    host_uuid,new_peered,(HashMap)val,false);
+                Util.logger_assert(
+                    "Deprecated constructor for map");
             }
             else
             {
                 Util.logger_assert(
                     "Still must add constructors for lists, endpoints, " +
                     "func objects, etc.");
-                //elif isinstance(val,list):
-                //    constructor = SingleThreadedLockedListVariable
-                //elif isinstance(val,EndpointBase):
-                //    constructor = SingleThreadedLockedEndpointVariable
-                //
-                //#### DEBUG
-                //elif hasattr(val,'__call__'):
-                //    # checks if is function
-                //    util.logger_assert(
-                //        'Should use special call func_turn_into_waldo_var for function objects')
-                //else:
-                //    util.logger_assert(
-                //        'Unknown object type to call turn_into_waldo_var on')
-                //#### END DEBUG
             }
         }   
         return null;
@@ -657,7 +628,9 @@ public class ExecutingEventContext
         Endpoint endpoint, LockedActiveEvent active_event)
     {    
         active_event.issue_partner_sequence_block_call(
-            this,null,null,false);
+            this,null,null,false,
+            // no args to pass
+            new ArrayList<RPCArgObject> ());
     }
         
 
@@ -679,7 +652,7 @@ public class ExecutingEventContext
        */
     public void hide_partner_call(
         Endpoint endpoint, LockedActiveEvent active_event,
-        String func_name, boolean first_msg)
+        String func_name, boolean first_msg,ArrayList<RPCArgObject> args)
         throws NetworkException, ApplicationException, BackoutException
     {
     	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
@@ -687,7 +660,7 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                this, func_name, threadsafe_unblock_queue, first_msg);
+                this, func_name, threadsafe_unblock_queue, first_msg,args);
         
     	if (! partner_call_requested)
     	{

@@ -3,7 +3,7 @@ package ralph;
 import RalphExceptions.BackoutException;
 
 
-public class LockedValueVariable<T,D> extends MultiThreadedLockedObject<T,D> 
+public abstract class LockedValueVariable<T,D> extends MultiThreadedLockedObject<T,D> 
 {
     public LockedValueVariable(
         String _host_uuid, boolean _peered, T init_val,T default_value,
@@ -12,7 +12,7 @@ public class LockedValueVariable<T,D> extends MultiThreadedLockedObject<T,D>
         super();
         init(vtdwc,_host_uuid,_peered,init_val);
     }
-
+    
 	
     @Override
     public void write_if_different(
