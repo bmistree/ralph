@@ -5,6 +5,8 @@ import ralph.VariableStore;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
+import ralph.LockedActiveEvent;
+import ralph.ExecutingEventContext;
 import RalphConnObj.SingleSideConnection;
 import RalphConnObj.SameHostConnection;
 import RalphConnObj.ConnectionObj;
@@ -35,8 +37,24 @@ public class TestClassUtil
     {
         return build_default_endpoint(new SingleSideConnection());
     }
-		
-    private static Endpoint build_default_endpoint(
+
+    public static class DefaultEndpoint extends Endpoint
+    {
+        public DefaultEndpoint(
+            RalphGlobals ralph_globals,String host_uuid,
+            ConnectionObj conn_obj,VariableStore vstore)
+        {
+            super(ralph_globals,host_uuid,conn_obj,vstore);
+        }
+
+	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_method(
+            LockedActiveEvent active_event,ExecutingEventContext ctx)
+        {
+            ctx.hide_sequence_completed_call(this, active_event);
+        }
+    }
+    
+    private static DefaultEndpoint build_default_endpoint(
         ConnectionObj conn_obj)
     {
         String dummy_host_uuid = "dummy_host_uuid";
@@ -49,7 +67,7 @@ public class TestClassUtil
             new LockedNumberVariable(
                 dummy_host_uuid,false, NUM_TVAR_INIT_VAL));
 
-        Endpoint to_return = new Endpoint(
+        DefaultEndpoint to_return = new DefaultEndpoint(
             new RalphGlobals(),
             dummy_host_uuid,
             conn_obj,
@@ -62,9 +80,9 @@ public class TestClassUtil
     
     public static class ConnectedEndpointPair
     {
-        public Endpoint endpta;
-        public Endpoint endptb;
-        public ConnectedEndpointPair(Endpoint _endpta, Endpoint _endptb)
+        public DefaultEndpoint endpta;
+        public DefaultEndpoint endptb;
+        public ConnectedEndpointPair(DefaultEndpoint _endpta, DefaultEndpoint _endptb)
         {
             endpta = _endpta;
             endptb = _endptb;
@@ -73,8 +91,8 @@ public class TestClassUtil
     public static ConnectedEndpointPair create_connected_endpoints()
     {
         SameHostConnection conn_obj = new SameHostConnection();
-        Endpoint endpta = build_default_endpoint(conn_obj);
-        Endpoint endptb = build_default_endpoint(conn_obj);
+        DefaultEndpoint endpta = build_default_endpoint(conn_obj);
+        DefaultEndpoint endptb = build_default_endpoint(conn_obj);
         return new ConnectedEndpointPair(endpta,endptb);
     }
     

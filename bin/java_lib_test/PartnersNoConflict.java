@@ -2,7 +2,12 @@
 package java_lib_test;
 
 import java_lib_test.TestClassUtil.ConnectedEndpointPair;
+import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
+import ralph.LockedActiveEvent;
+import ralph.RPCArgObject;
+import ralph.ExecutingEventContext;
+import java.util.ArrayList;
 
 /**
    Create two, connected endpoints.  Run a transaction across both of
@@ -24,8 +29,21 @@ public class PartnersNoConflict
     {
         ConnectedEndpointPair endpoint_pair =
             TestClassUtil.create_connected_endpoints();
-        Endpoint endpta = endpoint_pair.endpta;
-        Endpoint endptb = endpoint_pair.endptb;
+        DefaultEndpoint endpta = endpoint_pair.endpta;
+        DefaultEndpoint endptb = endpoint_pair.endptb;
+
+        try
+        {
+            LockedActiveEvent root_event =
+                endpta._act_event_map.create_root_event();
+            ExecutingEventContext ctx = endpta.create_context();
+
+            ctx.hide_partner_call(
+                endpta, root_event,
+                "test_partner_method",true,new ArrayList<RPCArgObject> ());
+        }
+        catch (Exception ex)
+        {}
         return true;
     }
 }

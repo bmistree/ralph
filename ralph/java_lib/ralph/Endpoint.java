@@ -145,6 +145,10 @@ public class Endpoint
         
     }
 
+    public ExecutingEventContext create_context()
+    {
+        return new ExecutingEventContext(global_var_stack);
+    }
 
     private void _stop_lock()
     {
