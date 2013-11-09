@@ -10,7 +10,7 @@ import ralph.Endpoint;
  */
 public class PartnersNoConflict
 {
-    protected final static String test_name = "PartnersNoConflict";
+    protected static final String test_name = "PartnersNoConflict";
     
     public static void main (String [] args)
     {

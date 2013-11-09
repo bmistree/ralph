@@ -17,7 +17,9 @@
       location="${lib_test_dir}/../../../ralph/java_lib/build"/>
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
-
+  <property
+      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
     <echo message="Setting up build directory for tests"/>
@@ -77,7 +79,9 @@
       description="Run tvar tests.">
     <java
         dir="${build.dir}"
-        classname="java_lib_test.PartnersNoConflict" fork="yes">
+        classname="java_lib_test.PartnersNoConflict"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
