@@ -691,6 +691,9 @@ public class LockedActiveEvent
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
+
+       @param {boolean} transactional --- True if this call should be
+       part of a transaction.  False if it's just a regular rpc.
        
        The local endpoint is requesting its partner to call some
        method on itself.
@@ -698,7 +701,7 @@ public class LockedActiveEvent
     public boolean issue_partner_sequence_block_call(
         ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args)
+        boolean first_msg,ArrayList<RPCArgObject>args, boolean transactional)
     {
         boolean partner_call_requested = false;
         _lock();
@@ -726,40 +729,29 @@ public class LockedActiveEvent
             }
 
             // construct variables for arg messages
-            Variables.Builder variables = Variables.newBuilder();
+            Variables.Builder serialized_arguments = Variables.newBuilder();
             for (RPCArgObject arg : args)
             {
-                try{
+                try
+                {
                     Variables.Any.Builder any_builder = Variables.Any.newBuilder();
                     arg.arg_to_pass.serialize_as_rpc_arg(
                         this,any_builder,arg.is_reference);
-                    variables.addVars(any_builder);
-                } catch (BackoutException excep)
+                    serialized_arguments.addVars(any_builder);
+                }
+                catch (BackoutException excep)
                 {
                     _unlock();
                     return false;
                 }
             }
-            
-            // construct VariablesBuilder from arguments.
-            Util.logger_assert(
-                "Still must take serialized object and actually " +
-                "issue partner call.");
 
-            
-            // //# here, the local endpoint uses the connection object to
-            // //# actually send the message.
-            // event_parent.local_endpoint._send_partner_message_sequence_block_request(
-            //     func_name, uuid, get_priority(),reply_with_uuid,
-            //     ctx.to_reply_with_uuid, this,
-            //     //# sending sequence_local_store so that can determine
-            //     //# deltas in sequence local state made from this call.
-            //     //# do not need to add global store, because
-            //     //# self.local_endpoint already has a copy of it.
-            //     ctx.sequence_local_store,
-            //     first_msg);
+            // request endpoint to send message to partner
+            event_parent.local_endpoint._send_partner_message_sequence_block_request(
+                func_name,uuid,get_priority(),reply_with_uuid,
+                ctx.to_reply_with_uuid,this,serialized_arguments,
+                first_msg,transactional);
         }
-
         
         _unlock();
         return partner_call_requested;

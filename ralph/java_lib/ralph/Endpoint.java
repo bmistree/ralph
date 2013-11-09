@@ -890,12 +890,16 @@ public class Endpoint
      @param {bool} first_msg --- If we are sending the first
      message in a sequence block, then we must force the sequence
      local data to be transmitted whether or not it was modified.
-    
+     
+     @param {boolean} transactional --- True if this call should be
+     part of a transaction.  False if it's just a regular rpc.  Only
+     keeps track if this is not the first message sent.
     */
     public void _send_partner_message_sequence_block_request(
-        String block_name,String event_uuid,String priority,String reply_with_uuid,
-        String reply_to_uuid, LockedActiveEvent active_event,
-        Variables.Builder rpc_variables, boolean first_msg)
+        String block_name,String event_uuid,String priority,
+        String reply_with_uuid, String reply_to_uuid,
+        LockedActiveEvent active_event, Variables.Builder rpc_variables,
+        boolean first_msg,boolean transactional)
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
@@ -903,7 +907,7 @@ public class Endpoint
 
     	PartnerRequestSequenceBlock.Builder request_sequence_block_msg =
             PartnerRequestSequenceBlock.newBuilder();
-    	
+    	request_sequence_block_msg.setTransaction(transactional);
     	
     	// event uuid + priority
     	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();

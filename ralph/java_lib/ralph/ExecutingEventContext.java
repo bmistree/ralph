@@ -630,7 +630,8 @@ public class ExecutingEventContext
         active_event.issue_partner_sequence_block_call(
             this,null,null,false,
             // no args to pass
-            new ArrayList<RPCArgObject> ());
+            new ArrayList<RPCArgObject> (),
+            false);
     }
         
 
@@ -644,6 +645,15 @@ public class ExecutingEventContext
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
+       @param {ArrayList} args --- The positional arguments inserted
+       into the call as an rpc.  Includes whether the argument is a
+       reference or not (ie, we should update the variable's value on
+       the caller).
+
+       @param {boolean} transactional --- True if this call should be
+       part of a transaction.  False if it's just a regular rpc.  Only
+       matters if it's the first message in a sequence.  
+       
        The local endpoint is requesting its partner to call some
        sequence block.
        * @throws NetworkException 
@@ -652,7 +662,8 @@ public class ExecutingEventContext
        */
     public void hide_partner_call(
         Endpoint endpoint, LockedActiveEvent active_event,
-        String func_name, boolean first_msg,ArrayList<RPCArgObject> args)
+        String func_name, boolean first_msg,ArrayList<RPCArgObject> args,
+        boolean transactional)
         throws NetworkException, ApplicationException, BackoutException
     {
     	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
@@ -660,7 +671,8 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                this, func_name, threadsafe_unblock_queue, first_msg,args);
+                this, func_name, threadsafe_unblock_queue, first_msg,args,
+                transactional);
         
     	if (! partner_call_requested)
     	{

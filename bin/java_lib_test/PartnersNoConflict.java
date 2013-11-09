@@ -39,11 +39,15 @@ public class PartnersNoConflict
             ExecutingEventContext ctx = endpta.create_context();
 
             ctx.hide_partner_call(
-                endpta, root_event,
-                "test_partner_method",true,new ArrayList<RPCArgObject> ());
+                endpta, root_event,"test_partner_method",true,
+                new ArrayList<RPCArgObject> (), true);
         }
         catch (Exception ex)
-        {}
+        {
+            ex.printStackTrace();
+            System.out.println("\n\nCaught an exception\n\n");
+            return false;
+        }
         return true;
     }
 }
