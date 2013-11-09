@@ -48,8 +48,18 @@ public class TestClassUtil
         }
 
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_method(
-            LockedActiveEvent active_event,ExecutingEventContext ctx)
+            LockedActiveEvent active_event,ExecutingEventContext ctx) throws Exception
         {
+            try{}
+            catch (Exception _ex)
+            {
+                //# ApplicationExceptions should be backed
+                //# out and the partner should be
+                //# notified
+                active_event.put_exception(_ex);
+                throw _ex;
+            }
+
             ctx.hide_sequence_completed_call(this, active_event);
         }
     }
