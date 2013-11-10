@@ -81,7 +81,6 @@ public class Endpoint
 
 
 	
-	
     /**
      //# When go through first phase of commit, may need to forward
      //# partner's endpoint uuid back to the root, so the endpoint
@@ -919,7 +918,7 @@ public class Endpoint
     	
     	request_sequence_block_msg.setEventUuid(event_uuid_msg);
     	request_sequence_block_msg.setPriority(priority_msg);
-    	
+        
     	//name of block requesting
     	if (block_name != null)
             request_sequence_block_msg.setNameOfBlockRequesting(block_name);

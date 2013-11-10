@@ -705,7 +705,7 @@ public class LockedActiveEvent
     {
         boolean partner_call_requested = false;
         _lock();
-            
+
         if (state == State.STATE_RUNNING)
         {
             partner_call_requested = true;
@@ -950,7 +950,6 @@ public class LockedActiveEvent
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
     {
         //### FIGURE OUT WHAT TO EXECUTE NEXT
-
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
         {
@@ -965,11 +964,22 @@ public class LockedActiveEvent
             Util.partner_endpoint_msg_call_func_name(
                 name_of_block_to_exec_next);
 
-        // FIXME
-        Util.logger_assert(
-            "FIXME: must enable handling rpc call from partner");
-        
-        return null;
+        // create new ExecutingEventContext that copies current stack.
+        ExecutingEventContext ctx =
+            event_parent.local_endpoint.create_context();
+
+        // know how to reply to this message.
+        ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
+
+        ExecutingEvent to_return = new ExecutingEvent (
+            block_to_exec_internal_name,this,ctx,
+            // using null here means that we do not need to bother
+            // with waiting for modified peered-s to update.
+            null,
+            // does not take args
+            false);
+
+        return to_return;
     }
 
 	
@@ -990,10 +1000,6 @@ public class LockedActiveEvent
         //# update peered data based on data contents of message.
         //# (Note: still must update sequence local data from deltas
         //# below.)
-
-        //# FIXME: need to take arguments out of vector.
-        Util.logger_assert(
-            "\nNeed to incorporate arguments into stack.\n");
 
         ExecutingEvent exec_event = null;
 

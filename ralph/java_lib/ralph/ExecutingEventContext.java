@@ -626,14 +626,16 @@ public class ExecutingEventContext
     */    
     public void hide_sequence_completed_call(
         Endpoint endpoint, LockedActiveEvent active_event)
-    {    
-        active_event.issue_partner_sequence_block_call(
-            this,null,null,false,
-            // no args to pass
-            new ArrayList<RPCArgObject> (),
+        throws NetworkException, ApplicationException, BackoutException
+    {
+        hide_partner_call(
+            endpoint,active_event,
+            null,  // no function name
+            false, // not first msg sent
+            new ArrayList<RPCArgObject>(),
             false);
     }
-        
+
 
     /**
        @param {String or None} func_name --- When func_name is None,
@@ -680,10 +682,13 @@ public class ExecutingEventContext
             //# exception
             throw new BackoutException();
     	}
-    	
-    	if (func_name == null)
-            return;
 
+        // do not wait on result of call if it was the final return of
+        // the call.
+    	if (func_name == null)
+            return; 
+
+        // wait on result of call
     	MessageCallResultObject queue_elem = null;
         try {
             queue_elem = threadsafe_unblock_queue.take();
@@ -707,7 +712,6 @@ public class ExecutingEventContext
         {
             throw new ApplicationException("appliaction exception");
         }
-
 
     	//means that it must be a sequence message call result
     	
