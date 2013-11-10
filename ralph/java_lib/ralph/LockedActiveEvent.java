@@ -1046,10 +1046,19 @@ public class LockedActiveEvent
                 "unknown _ActiveEvent message.");
         }
         //#### END DEBUG
+        
+        String reply_with_uuid = msg.getReplyWithUuid().getData();
+        Variables returned_variables = msg.getArguments();
 
-        // FIXME
-        Util.logger_assert(
-            "Must handle receiving rpc from partner.");
+        //# unblock waiting listening queue.
+        message_listening_queues_map.get(reply_to_uuid).add(
+            RalphCallResults.MessageCallResultObject.completed(
+                reply_with_uuid,name_of_block_to_exec_next,
+                // contain returned results.
+                returned_variables));
+
+        //# no need holding onto queue waiting on a message response.
+        message_listening_queues_map.remove(reply_to_uuid);
     }	
 
     /**
