@@ -106,8 +106,30 @@ public class PartnersNoConflict
 
             // check that the methods on partner endpoint updated the
             // values of local variables correctly
+            LockedActiveEvent check_event =
+                endpta._act_event_map.create_root_event();
             
-            
+            double expected_final_double_value =
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL.doubleValue() + 1;
+            boolean expected_final_boolean_value =
+                !init_boolean_value.booleanValue();
+            String expected_final_string_value =
+                init_string_value + init_string_value;
+                
+
+            double recovered_num =
+                ((Double)num_obj.get_val(check_event)).doubleValue();
+            boolean recovered_bool =
+                ((Boolean) bool_var.get_val(check_event)).booleanValue();
+            String recovered_string =
+                (String) string_var.get_val(check_event);
+
+            if (recovered_num != expected_final_double_value)
+                return false;
+            if (recovered_bool != expected_final_boolean_value)
+                return false;
+            if (recovered_string != expected_final_string_value)
+                return false;
         }
         catch (Exception ex)
         {
