@@ -39,10 +39,44 @@ public class PartnersNoConflict
 
 
     /**
-       Test that can call an rpc on remote endpoint with
-       a reference argument
+       Test that can call an rpc on remote endpoint with reference
+       arguments and args passed as references will be updated, while
+       args not passed as references will not.
      */
     public static boolean ref_args_test()
+    {
+        // iterates through all permutations of which rpc arguments
+        // are references and which are not.
+        for (int i = 0; i < 1; ++i)
+        {
+            for (int j =0; j < 1; ++j)
+            {
+                for (int k=0; k < 1; ++k)
+                {
+                    if (! ref_args_combination(i != 0, j != 0, k != 0))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    
+    /**
+       Test that can call an rpc on remote endpoint with
+       a reference argument
+
+       @param {boolean} num_arg_ref --- True if should pass a number
+       to other side as a reference.  False otherwise.
+
+       @param {boolean} bool_arg_ref --- "" boolean ""
+
+       @param {boolean} string_arg_ref --- "" string ""
+       
+     */
+    public static boolean ref_args_combination(
+        boolean num_arg_ref, boolean bool_arg_ref,
+        boolean string_arg_ref)
     {
         ConnectedEndpointPair endpoint_pair =
             TestClassUtil.create_connected_endpoints();
@@ -83,9 +117,9 @@ public class PartnersNoConflict
             // Issue rpc call to partner
             // set up rpc arguments: pass all as references
             ArrayList<RPCArgObject> arg_list = new ArrayList<RPCArgObject>();
-            arg_list.add(new RPCArgObject(num_obj,true));
-            arg_list.add(new RPCArgObject(bool_var,true));
-            arg_list.add(new RPCArgObject(string_var,true));
+            arg_list.add(new RPCArgObject(num_obj,num_arg_ref));
+            arg_list.add(new RPCArgObject(bool_var,bool_arg_ref));
+            arg_list.add(new RPCArgObject(string_var,string_arg_ref));
 
             
             // actually make call with arguments on partner endpoint
@@ -108,13 +142,21 @@ public class PartnersNoConflict
             // values of local variables correctly
             LockedActiveEvent check_event =
                 endpta._act_event_map.create_root_event();
+
             
+            // determine what the lcal values should be
             double expected_final_double_value =
-                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL.doubleValue() + 1;
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL.doubleValue();
             boolean expected_final_boolean_value =
-                !init_boolean_value.booleanValue();
-            String expected_final_string_value =
-                init_string_value + init_string_value;
+                init_boolean_value.booleanValue();
+            String expected_final_string_value =init_string_value;
+
+            if (num_arg_ref)
+                expected_final_double_value += 1;
+            if (bool_arg_ref)
+                expected_final_boolean_value = !expected_final_boolean_value;
+            if (string_arg_ref)
+                expected_final_string_value += expected_final_string_value;
                 
 
             double recovered_num =
@@ -132,6 +174,13 @@ public class PartnersNoConflict
             
             if (!recovered_string.equals(expected_final_string_value))
                 return false;
+
+            // reset number variable to init val (may have been
+            // modified if passed as a reference).
+            num_obj.set_val(
+                check_event,
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL);
+            check_event.begin_first_phase_commit();
         }
         catch (Exception ex)
         {
