@@ -1,6 +1,7 @@
 package java_lib_test;
 
 import ralph.LockedObject;
+import ralph.LockedVariables;
 import ralph.VariableStore;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.RalphGlobals;
@@ -12,10 +13,7 @@ import RalphConnObj.SameHostConnection;
 import RalphConnObj.ConnectionObj;
 
 public class TestClassUtil
-{
-    public static final String NUM_TVAR_NAME = "num_tvar";
-    public static final Double NUM_TVAR_INIT_VAL = new Double (5);
-    
+{    
     public static void print_success(String test_name)
     {
         System.out.println("Test " + test_name + " .....");
@@ -40,6 +38,9 @@ public class TestClassUtil
 
     public static class DefaultEndpoint extends Endpoint
     {
+        public static final String NUM_TVAR_NAME = "num_tvar";
+        public static final Double NUM_TVAR_INIT_VAL = new Double (5);
+        
         public DefaultEndpoint(
             RalphGlobals ralph_globals,String host_uuid,
             ConnectionObj conn_obj,VariableStore vstore)
@@ -62,7 +63,36 @@ public class TestClassUtil
 
             ctx.hide_sequence_completed_call(this, active_event);
         }
-    }
+
+	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_args_method(
+            LockedActiveEvent active_event,ExecutingEventContext ctx,
+            LockedObject<Double,Double> num_obj, LockedObject<Boolean,Boolean> bool_obj,
+            LockedObject<String,String> string_obj) throws Exception
+        {
+            try
+            {
+                Double num = num_obj.get_val(active_event);
+                num_obj.set_val(active_event,new Double(num.doubleValue() + 1));
+
+                Boolean bool = bool_obj.get_val(active_event);
+                bool_obj.set_val(active_event,new Boolean(! bool.booleanValue() ));
+
+                String string = string_obj.get_val(active_event);
+                string_obj.set_val(active_event,string + string);
+            }
+            catch (Exception _ex)
+            {
+                //# ApplicationExceptions should be backed
+                //# out and the partner should be
+                //# notified
+                active_event.put_exception(_ex);
+                throw _ex;
+            }
+
+            ctx.hide_sequence_completed_call(this, active_event);
+        }
+    } // closes default endpoint
+
     
     private static DefaultEndpoint build_default_endpoint(
         ConnectionObj conn_obj)
@@ -73,9 +103,10 @@ public class TestClassUtil
         
         // adding a number tvar
         vstore.add_var(
-            NUM_TVAR_NAME,
+            DefaultEndpoint.NUM_TVAR_NAME,
             new LockedNumberVariable(
-                dummy_host_uuid,false, NUM_TVAR_INIT_VAL));
+                dummy_host_uuid,false,
+                DefaultEndpoint.NUM_TVAR_INIT_VAL));
 
         DefaultEndpoint to_return = new DefaultEndpoint(
             new RalphGlobals(),
@@ -105,5 +136,4 @@ public class TestClassUtil
         DefaultEndpoint endptb = build_default_endpoint(conn_obj);
         return new ConnectedEndpointPair(endpta,endptb);
     }
-    
 }

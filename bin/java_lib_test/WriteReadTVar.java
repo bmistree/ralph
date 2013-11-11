@@ -25,13 +25,12 @@ public class WriteReadTVar
             TestClassUtil.print_failure(test_name);
     }
 
-
     public static boolean run_test()
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
         LockedNumberVariable num_tvar =
             (LockedNumberVariable) endpt.global_var_stack.get_var_if_exists(
-                TestClassUtil.NUM_TVAR_NAME);
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
 
         // Tests concurrent read of tvar.
         if (! WriteReadTVar.test_concurrent_read(endpt,num_tvar))
@@ -60,12 +59,12 @@ public class WriteReadTVar
                 endpt._act_event_map.create_root_event();
 
             if (! num_tvar.get_val(reader).equals(
-                    TestClassUtil.NUM_TVAR_INIT_VAL))
+                    TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
             {
                 return false;
             }
 
-            num_tvar.set_val(writer,TestClassUtil.NUM_TVAR_INIT_VAL + 1);
+            num_tvar.set_val(writer,TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL + 1);
 
             
             reader.begin_first_phase_commit();
@@ -111,10 +110,12 @@ public class WriteReadTVar
             LockedActiveEvent rdr1 = endpt._act_event_map.create_root_event();
             LockedActiveEvent rdr2 = endpt._act_event_map.create_root_event();
             
-            if (! num_tvar.get_val(rdr1).equals(TestClassUtil.NUM_TVAR_INIT_VAL))
+            if (! num_tvar.get_val(rdr1).equals(
+                    TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
                 return false;
 
-            if (! num_tvar.get_val(rdr2).equals(TestClassUtil.NUM_TVAR_INIT_VAL))
+            if (! num_tvar.get_val(rdr2).equals(
+                    TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
                 return false;
 
             rdr1.begin_first_phase_commit();
