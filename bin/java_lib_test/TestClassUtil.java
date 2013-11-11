@@ -66,11 +66,21 @@ public class TestClassUtil
 
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_args_method(
             LockedActiveEvent active_event,ExecutingEventContext ctx,
-            LockedObject<Double,Double> num_obj, LockedObject<Boolean,Boolean> bool_obj,
-            LockedObject<String,String> string_obj) throws Exception
+            Object ... args) throws Exception
+
         {
             try
             {
+                LockedObject<Double,Double> num_obj =
+                    (LockedObject<Double,Double>)args[0];
+                    
+                LockedObject<Boolean,Boolean> bool_obj =
+                    (LockedObject<Boolean,Boolean>) args[1];
+                
+                LockedObject<String,String> string_obj =
+                    (LockedObject<String,String>) args[2];
+
+                
                 Double num = num_obj.get_val(active_event);
                 num_obj.set_val(active_event,new Double(num.doubleValue() + 1));
 

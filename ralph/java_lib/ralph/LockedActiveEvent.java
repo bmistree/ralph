@@ -971,13 +971,22 @@ public class LockedActiveEvent
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
 
+        ArrayList <LockedObject> args =
+            ExecutingEventContext.deserialize_variables_list(
+                msg.getArguments(),false,event_parent.local_endpoint._host_uuid);
+        boolean takes_args = args.size() != 0;
+
+        Util.logger_warn(
+            "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
+        
         ExecutingEvent to_return = new ExecutingEvent (
             block_to_exec_internal_name,this,ctx,
             // using null here means that we do not need to bother
             // with waiting for modified peered-s to update.
             null,
-            // does not take args
-            false);
+            // whether has arguments
+            takes_args,
+            args.toArray(new Object[args.size()]));
 
         return to_return;
     }
