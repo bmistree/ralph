@@ -47,11 +47,11 @@ public class PartnersNoConflict
     {
         // iterates through all permutations of which rpc arguments
         // are references and which are not.
-        for (int i = 0; i < 1; ++i)
+        for (int i = 0; i <= 1; ++i)
         {
-            for (int j =0; j < 1; ++j)
+            for (int j =0; j <= 1; ++j)
             {
-                for (int k=0; k < 1; ++k)
+                for (int k=0; k <= 1; ++k)
                 {
                     if (! ref_args_combination(i != 0, j != 0, k != 0))
                         return false;
@@ -82,7 +82,7 @@ public class PartnersNoConflict
             TestClassUtil.create_connected_endpoints();
         DefaultEndpoint endpta = endpoint_pair.endpta;
         DefaultEndpoint endptb = endpoint_pair.endptb;
-
+        
         try
         {
             LockedActiveEvent root_event =
