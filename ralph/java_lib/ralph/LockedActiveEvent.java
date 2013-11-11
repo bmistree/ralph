@@ -727,16 +727,29 @@ public class LockedActiveEvent
                 message_listening_queues_map.put(
                     reply_with_uuid, threadsafe_unblock_queue);
             }
-            
+
             // construct variables for arg messages
             Variables.Builder serialized_arguments = Variables.newBuilder();
             for (RPCArgObject arg : args)
             {
                 try
                 {
+                    // arg may be null: for instance if sending a
+                    // sequence complete call to an endpoint where the
+                    // passed in argument was not passed in by
+                    // reference.
                     Variables.Any.Builder any_builder = Variables.Any.newBuilder();
-                    arg.arg_to_pass.serialize_as_rpc_arg(
-                        this,any_builder,arg.is_reference);
+
+                    if (arg == null)
+                    {
+                        any_builder.setVarName("");
+                        any_builder.setReference(false);
+                    }
+                    else
+                    {
+                        arg.arg_to_pass.serialize_as_rpc_arg(
+                            this,any_builder,arg.is_reference);
+                    }
                     serialized_arguments.addVars(any_builder);
                 }
                 catch (BackoutException excep)
@@ -751,6 +764,7 @@ public class LockedActiveEvent
                 func_name,uuid,get_priority(),reply_with_uuid,
                 ctx.to_reply_with_uuid,this,serialized_arguments,
                 first_msg,transactional);
+
         }
         
         _unlock();

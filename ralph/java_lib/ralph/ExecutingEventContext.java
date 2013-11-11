@@ -796,6 +796,8 @@ public class ExecutingEventContext
             LockedObject lo = returned_variables.get(i);
             if (lo != null)
             {
+                // will be null for arguments that did not pass as
+                // references.
                 RPCArgObject arg = args.get(i);
                 arg.arg_to_pass.swap_internal_vals(active_event,lo);
             }
@@ -962,6 +964,12 @@ public class ExecutingEventContext
     }
 
     
+    /**
+       @returns {LockedObject or null} --- Returns null if the
+       argument passed in was empty.  This could happen for instance
+       if deserializing any corresponding to result for a
+       non-passed-by-reference argument.
+     */
     public static LockedObject deserialize_any(
         Variables.Any variable, String host_uuid)
     {
@@ -994,14 +1002,6 @@ public class ExecutingEventContext
         {
             Util.logger_assert("Skipping locked structs.");
         }
-        // DEBUG
-        else
-        {
-            Util.logger_assert(
-                "\nError: unknown variable type deserializing.");
-        }
-        // END DEBUG
-            
         return lo;
     }
     
