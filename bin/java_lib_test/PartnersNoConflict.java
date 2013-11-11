@@ -126,9 +126,11 @@ public class PartnersNoConflict
 
             if (recovered_num != expected_final_double_value)
                 return false;
+            
             if (recovered_bool != expected_final_boolean_value)
                 return false;
-            if (recovered_string != expected_final_string_value)
+            
+            if (!recovered_string.equals(expected_final_string_value))
                 return false;
         }
         catch (Exception ex)
