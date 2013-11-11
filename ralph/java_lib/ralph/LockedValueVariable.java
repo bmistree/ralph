@@ -12,8 +12,15 @@ public abstract class LockedValueVariable<T,D> extends MultiThreadedLockedObject
         super();
         init(vtdwc,_host_uuid,_peered,init_val);
     }
+
+    @Override
+    public void swap_internal_vals(
+        LockedActiveEvent active_event,LockedObject to_swap_with)
+        throws BackoutException
+    {
+        this.set_val(active_event,(T)to_swap_with.get_val(active_event));
+    }
     
-	
     @Override
     public void write_if_different(
         LockedActiveEvent active_event,

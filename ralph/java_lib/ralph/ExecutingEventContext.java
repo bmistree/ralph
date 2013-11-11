@@ -14,6 +14,8 @@ import ralph.LockedVariables.LockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
+import ralph_protobuffs.VariablesProto.Variables;
+
 
 import RalphCallResults.MessageCallResultObject;
 
@@ -714,17 +716,37 @@ public class ExecutingEventContext
         }
 
     	//means that it must be a sequence message call result
-    	
     	set_to_reply_with(queue_elem.reply_with_msg_field);
 
-        //# apply changes to sequence variables.  Note: that the system
-        //# has already applied deltas for global data.
-        Util.logger_assert(
-            "\nSkipped incorporating sequence local " +
-            "deltas on hide_partner_call");
-        // sequence_local_store.incorporate_deltas(
-        //     active_event,queue_elem.sequence_local_var_store_deltas);
+        /*
+        overwrite local variables with reference variables that got
+        returned from variables.
 
+        Step 1: grab arguments from message object
+        Step 2: deserialize arguments
+        Step 3: overwrite local arguments passed by reference.
+        */
+
+        // step 1: grab arguments from message object
+        Variables variables = queue_elem.returned_variables;
+
+        // step 2: deserialize message variables
+        ArrayList<LockedObject> returned_variables =
+            ExecutingEventContext.deserialize_variables_list(
+                variables,true,
+                active_event.event_parent.local_endpoint._host_uuid);
+
+        // step 3: actually overwrite local variables
+        for (int i = 0; i < returned_variables.size(); ++i)
+        {
+            LockedObject lo = returned_variables.get(i);
+            if (lo != null)
+            {
+                RPCArgObject arg = args.get(i);
+                arg.arg_to_pass.swap_internal_vals(active_event,lo);
+            }
+        }
+        
         //# send more messages
         String to_exec_next = queue_elem.to_exec_next_name_msg_field;
         
@@ -812,6 +834,102 @@ public class ExecutingEventContext
     	return false;
     }
 
+
+    /**
+       Takes variables and returns their deserialized forms as a map.
+       Index of map is variable name; value of map is object.
+     */
+    public static HashMap<String,LockedObject> deserialize_variables_map(
+        Variables variables,boolean references_only,String host_uuid)
+    {
+        HashMap<String,LockedObject> to_return =
+            new HashMap<String,LockedObject>();
+        
+        
+        // run through variables and turn into map
+        for (Variables.Any variable : variables.getVarsList() )
+        {
+            boolean is_reference = variable.getReference();
+
+            if (references_only && (! is_reference))
+                continue;
+            
+            String var_name = variable.getVarName();
+            LockedObject lo = deserialize_any(variable,host_uuid);
+            to_return.put(var_name,lo);
+        }
+
+        return to_return;
+    }
+
+    /**
+       Takes variables and returns their deserialized forms as a map.
+       Index of map is variable name; value of map is object.
+
+       Returns positional values.  If references_only is true, then
+       put null values in for the non-references.
+     */
+    public static ArrayList<LockedObject> deserialize_variables_list(
+        Variables variables,boolean references_only,String host_uuid)
+    {
+        ArrayList<LockedObject> to_return = new ArrayList<LockedObject>();
+
+        // run through variables and turn into map
+        for (Variables.Any variable : variables.getVarsList())
+        {
+            boolean is_reference = variable.getReference();
+
+            LockedObject lo = null;
+            if (references_only &&  is_reference)
+                lo = deserialize_any(variable,host_uuid);
+            to_return.add(lo);
+        }
+
+        return to_return;
+    }
+
     
-	
+    public static LockedObject deserialize_any(
+        Variables.Any variable, String host_uuid)
+    {
+        LockedObject lo = null;
+
+        if (variable.hasNum())
+        {
+            lo = new SingleThreadedLockedNumberVariable(
+                host_uuid,false,new Double(variable.getNum()));
+        }
+        else if (variable.hasText())
+        {
+            lo = new SingleThreadedLockedTextVariable(
+                host_uuid,false,variable.getText());
+        }
+        else if (variable.hasTrueFalse())
+        {
+            lo = new SingleThreadedLockedTrueFalseVariable(
+                host_uuid,false,new Boolean(variable.getTrueFalse()));
+        }
+        else if (variable.hasList())
+        {
+            Util.logger_assert("Have not added lists back to ralph yet.");
+        }
+        else if (variable.hasMap())
+        {
+            Util.logger_assert("Skipping locked maps");
+        }
+        else if (variable.hasStruct())
+        {
+            Util.logger_assert("Skipping locked structs.");
+        }
+        // DEBUG
+        else
+        {
+            Util.logger_assert(
+                "\nError: unknown variable type deserializing.");
+        }
+        // END DEBUG
+            
+        return lo;
+    }
+    
 }

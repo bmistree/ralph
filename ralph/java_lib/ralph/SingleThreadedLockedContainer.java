@@ -199,6 +199,16 @@ public class SingleThreadedLockedContainer<K,V,D>
     {
         return reference_type_val;
     }
+
+    @Override
+    public void swap_internal_vals(
+        LockedActiveEvent active_event,LockedObject to_swap_with)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "Still must define swap method for SingleThreadedLockedContainer.");
+    }
+
     
     @Override
     public HashMap<K, LockedObject<V,D>> get_val(LockedActiveEvent active_event)

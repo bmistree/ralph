@@ -26,7 +26,8 @@ public class LockedVariables {
 	
 	
 	
-    public static LockedObject ensure_locked_obj(Object to_write,String host_uuid, boolean single_thread)
+    public static LockedObject ensure_locked_obj(
+        Object to_write,String host_uuid, boolean single_thread)
     {
         if (Boolean.class.isInstance(to_write))
         {
@@ -51,7 +52,8 @@ public class LockedVariables {
             return (LockedObject)to_write;
         }
 		
-        Util.logger_assert("Unknown type to ensure locked in SingleThreadedLockedMap");
+        Util.logger_assert(
+            "Unknown type to ensure locked in SingleThreadedLockedMap");
         return null;
     }
 	
@@ -134,7 +136,6 @@ public class LockedVariables {
             any_builder.setReference(is_reference);
         }
     }
-	
 	
 	
     public static class SingleThreadedLockedNumberVariable

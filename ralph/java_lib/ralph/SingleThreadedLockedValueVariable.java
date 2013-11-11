@@ -1,5 +1,5 @@
 package ralph;
-
+import RalphExceptions.BackoutException;
 
 public abstract class SingleThreadedLockedValueVariable<T,D> extends SingleThreadedLockedObject<T,D>
 {
@@ -12,6 +12,14 @@ public abstract class SingleThreadedLockedValueVariable<T,D> extends SingleThrea
         init(vtdwc,_host_uuid,_peered,init_val);
     }
 
+    @Override
+    public void swap_internal_vals(
+        LockedActiveEvent active_event,LockedObject to_swap_with)
+        throws BackoutException
+    {
+        this.set_val(active_event,(T)to_swap_with.get_val(active_event));
+    }
+    
 	
     public void write_if_different(LockedActiveEvent active_event,T data)
     {

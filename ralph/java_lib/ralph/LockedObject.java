@@ -32,6 +32,14 @@ public abstract class LockedObject<T,D>
     }
 
     /**
+       Mostly used when deserializing one locked object (to_swap_with)
+       into another.  this.
+     */
+    public abstract void swap_internal_vals(
+        LockedActiveEvent active_event,LockedObject to_swap_with)
+        throws BackoutException;
+    
+    /**
        Take internal data and add it as an arg to the
        Varialbes.Any.Builder.
      */
