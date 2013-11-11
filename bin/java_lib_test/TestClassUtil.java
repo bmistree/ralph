@@ -80,7 +80,6 @@ public class TestClassUtil
                 LockedObject<String,String> string_obj =
                     (LockedObject<String,String>) args[2];
 
-                
                 Double num = num_obj.get_val(active_event);
                 num_obj.set_val(active_event,new Double(num.doubleValue() + 1));
 
@@ -92,6 +91,10 @@ public class TestClassUtil
             }
             catch (Exception _ex)
             {
+                System.out.println(
+                    "\nSerious error: caught error in partner args.\n\n");
+                _ex.printStackTrace();
+                
                 //# ApplicationExceptions should be backed
                 //# out and the partner should be
                 //# notified

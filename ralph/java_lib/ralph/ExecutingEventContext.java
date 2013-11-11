@@ -878,10 +878,13 @@ public class ExecutingEventContext
         for (Variables.Any variable : variables.getVarsList())
         {
             boolean is_reference = variable.getReference();
-
+            
             LockedObject lo = null;
-            if (references_only &&  is_reference)
+            if ((references_only &&  is_reference) ||
+                (! references_only))
+            {
                 lo = deserialize_any(variable,host_uuid);
+            }
             to_return.add(lo);
         }
 

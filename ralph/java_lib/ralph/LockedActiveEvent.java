@@ -978,7 +978,7 @@ public class LockedActiveEvent
 
         Util.logger_warn(
             "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
-        
+
         ExecutingEvent to_return = new ExecutingEvent (
             block_to_exec_internal_name,this,ctx,
             // using null here means that we do not need to bother
@@ -987,7 +987,7 @@ public class LockedActiveEvent
             // whether has arguments
             takes_args,
             args.toArray(new Object[args.size()]));
-
+        
         return to_return;
     }
 
