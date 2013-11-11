@@ -727,7 +727,7 @@ public class LockedActiveEvent
                 message_listening_queues_map.put(
                     reply_with_uuid, threadsafe_unblock_queue);
             }
-
+            
             // construct variables for arg messages
             Variables.Builder serialized_arguments = Variables.newBuilder();
             for (RPCArgObject arg : args)
@@ -949,7 +949,7 @@ public class LockedActiveEvent
     private ExecutingEvent handle_first_sequence_msg_from_partner(
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
     {
-        //### FIGURE OUT WHAT TO EXECUTE NEXT
+
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
         {
@@ -960,22 +960,33 @@ public class LockedActiveEvent
         }
         //#### END DEBUG
 
+        //FIGURE OUT WHAT TO EXECUTE NEXT
         String block_to_exec_internal_name =
             Util.partner_endpoint_msg_call_func_name(
                 name_of_block_to_exec_next);
 
-        // create new ExecutingEventContext that copies current stack.
+        // grab all arguments from message
+        ArrayList <RPCArgObject> args =
+            ExecutingEventContext.deserialize_rpc_args_list(
+                msg.getArguments(),event_parent.local_endpoint._host_uuid);
+        
+        // create new ExecutingEventContext that copies current stack
+        // and keeps track of which arguments need to be returned as
+        // references.
         ExecutingEventContext ctx =
-            event_parent.local_endpoint.create_context();
-
+            event_parent.local_endpoint.create_context_for_recv_rpc(
+                args,msg.getTransaction());
+        
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
 
-        ArrayList <LockedObject> args =
-            ExecutingEventContext.deserialize_variables_list(
-                msg.getArguments(),false,event_parent.local_endpoint._host_uuid);
+        // convert array list of args to optional array of arg objects.
+        Object [] rpc_call_arg_array = new Object[args.size()];
+        for (int i = 0; i < args.size(); ++i)
+            rpc_call_arg_array[i] = args.get(i).arg_to_pass;
+        
         boolean takes_args = args.size() != 0;
-
+        
         Util.logger_warn(
             "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
 
@@ -986,7 +997,8 @@ public class LockedActiveEvent
             null,
             // whether has arguments
             takes_args,
-            args.toArray(new Object[args.size()]));
+            // what those arguments are.
+            rpc_call_arg_array);
         
         return to_return;
     }

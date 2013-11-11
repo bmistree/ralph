@@ -33,42 +33,74 @@ public class ExecutingEventContext
     public VariableStack var_stack = null;
 
     /**
-       # We can be listening to more than one open threadsafe message
-       # queue.  If endpoint A waits on its partner, and, while
-       # waiting, its partner executes a series of endpoint calls so
-       # that another method on A is invoked, and that method calls
-       # its partner again, we could be waiting on 2 different
-       # message queues, each held by the same active event.  To
-       # ensure that we can correctly demultiplex which queue a
-       # message was intended for, each message that we send has two
-       # fields, reply_with and reply_to.  reply_with tells the
-       # partner endpoint that when it is done, send back a message
-       # with uuid reply_with in the message's reply_to field.  (The
-       # first message sent has a reply_to field of None.)  We use
-       # the reply_to field to index into a map of message listening
-       # queues in waldoActiveEvent._ActiveEvent.
+       We can be listening to more than one open threadsafe message
+       queue.  If endpoint A waits on its partner, and, while
+       waiting, its partner executes a series of endpoint calls so
+       that another method on A is invoked, and that method calls
+       its partner again, we could be waiting on 2 different
+       message queues, each held by the same active event.  To
+       ensure that we can correctly demultiplex which queue a
+       message was intended for, each message that we send has two
+       fields, reply_with and reply_to.  reply_with tells the
+       partner endpoint that when it is done, send back a message
+       with uuid reply_with in the message's reply_to field.  (The
+       first message sent has a reply_to field of None.)  We use
+       the reply_to field to index into a map of message listening
+       queues in waldoActiveEvent._ActiveEvent.
     */
     String to_reply_with_uuid = null;
+
+    /**
+       If this context was created from an rpc call from another
+       endpoint, then we keep track of the LockedObjects that were
+       passed into the RPC as arguments.  We do this because we may
+       have to return one or more of these objects as references when
+       return result of rpc.
+     */
+    private ArrayList<RPCArgObject> args_to_reply_with = null;
+    /**
+       If was begun by rpc and rpc was transactional, this is true.
+     */
+    private boolean part_of_transaction = false;
     
     boolean msg_send_initialized_bit = false;
 
     /**
-       # if this function were called via an endpoint call on another
-       # endpoint, then from_endpoint_call will be true.  We check
-       # whether this function was called from another endpoint so
-       # that we know whether we need to copy in reference
-       # containers.  Pass lists, maps, and user structs by value
-       # type across endpoint calls unless they're declared external.
+       if this function were called via an endpoint call on another
+       endpoint, then from_endpoint_call will be true.  We check
+       whether this function was called from another endpoint so
+       that we know whether we need to copy in reference
+       containers.  Pass lists, maps, and user structs by value
+       type across endpoint calls unless they're declared external.
     */
     boolean from_endpoint_call = false;
 
-    
-	
+
+    /**
+       Use this constructor when creating a new event context not in
+       response to another endpoint's rpc request.
+     */
     public ExecutingEventContext (VariableStack _var_stack)
     {
         var_stack = _var_stack.fork_stack();
     }
-	
+
+
+    /**
+       Use this constructor when creating an event context as a result
+       of an rpc call from another node.  Keeps track of which objects
+       need to return from the rpc call (in array list).
+     */
+    public ExecutingEventContext (
+        VariableStack _var_stack,
+        ArrayList<RPCArgObject> _args_to_reply_with,
+        boolean _part_of_transaction)
+    {
+        var_stack = _var_stack.fork_stack();
+        args_to_reply_with = _args_to_reply_with;
+        part_of_transaction = _part_of_transaction;
+    }
+    
     public void set_from_endpoint_true()
     {
         from_endpoint_call =true;
@@ -630,12 +662,34 @@ public class ExecutingEventContext
         Endpoint endpoint, LockedActiveEvent active_event)
         throws NetworkException, ApplicationException, BackoutException
     {
+        // DEBUG: Should only call sequence completed if context was
+        // begun from an rpc.  If it was begun from an rpc, should
+        // have constructed it while passing in args_to_reply_with.
+        if (args_to_reply_with == null)
+        {
+            Util.logger_assert(
+                "Should not be completing a sequence call from " +
+                "a context that has no remembered rpc arguments. " +
+                "(Or did not use correct constructor.)");
+        }
+        // END DEBUG
+        
+        // when a sequence completes, we have to return all the rpc
+        // arguments that were passed in by reference: filter out
+        // args not passed by reference
+        for (int i = 0; i < args_to_reply_with.size(); ++i)
+        {
+            RPCArgObject arg = args_to_reply_with.get(i);
+            if (! arg.is_reference)
+                args_to_reply_with.set(i,null);
+        }
+
         hide_partner_call(
             endpoint,active_event,
             null,  // no function name
             false, // not first msg sent
-            new ArrayList<RPCArgObject>(),
-            false);
+            args_to_reply_with,
+            part_of_transaction);
     }
 
 
@@ -862,6 +916,22 @@ public class ExecutingEventContext
         return to_return;
     }
 
+    public static ArrayList<RPCArgObject> deserialize_rpc_args_list(
+        Variables variables,String host_uuid)
+    {
+        ArrayList<RPCArgObject> to_return = new ArrayList<RPCArgObject>();
+
+        // run through variables and turn into map
+        for (Variables.Any variable : variables.getVarsList())
+        {
+            LockedObject lo = deserialize_any(variable,host_uuid);
+            boolean is_reference = variable.getReference();
+            to_return.add(new RPCArgObject(lo,is_reference));
+        }
+
+        return to_return;
+    }
+    
     /**
        Takes variables and returns their deserialized forms as a map.
        Index of map is variable name; value of map is object.

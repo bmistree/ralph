@@ -144,10 +144,30 @@ public class Endpoint
         
     }
 
+    /**
+       Used to construct empty contexts from non-rpc calls.
+     */
     public ExecutingEventContext create_context()
     {
         return new ExecutingEventContext(global_var_stack);
     }
+    
+    /**
+       Used to construct a context when receive rpc call from partner.
+       
+       @param {ArrayList<RPCArgObject>} rpc_args --- RPC arguments
+       supplied by caller.
+       
+       @param {boolean} transactional --- Whether or not the rpc
+       requested was transactional.
+     */
+    public ExecutingEventContext create_context_for_recv_rpc(
+        ArrayList<RPCArgObject> rpc_args,boolean transactional)
+    {
+        return new ExecutingEventContext(
+            global_var_stack,rpc_args,transactional);
+    }
+    
 
     private void _stop_lock()
     {
