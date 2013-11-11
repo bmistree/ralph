@@ -64,6 +64,39 @@ public class TestClassUtil
             ctx.hide_sequence_completed_call(this, active_event);
         }
 
+	public void _partner_endpoint_msg_func_call_prefix__waldo__test_increment_local_num(
+            LockedActiveEvent active_event,ExecutingEventContext ctx,Object ... args)
+            throws Exception
+        {
+            try
+            {
+                LockedObject<Double,Double> to_return =
+                    (LockedObject<Double,Double>)args[0];
+                
+                LockedObject<Double,Double> num_obj =
+                    (LockedObject<Double,Double>)ctx.var_stack.get_var_if_exists(
+                        NUM_TVAR_NAME);
+
+                double current_val =
+                    ((Double)num_obj.get_val(active_event)).doubleValue();
+                Double new_val = new Double( current_val + 1);
+                num_obj.set_val(active_event,new_val);
+
+                to_return.set_val(active_event,new_val);
+            }
+            catch (Exception _ex)
+            {
+                //# ApplicationExceptions should be backed
+                //# out and the partner should be
+                //# notified
+                active_event.put_exception(_ex);
+                throw _ex;
+            }
+
+            ctx.hide_sequence_completed_call(this, active_event);
+        }
+
+        
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_args_method(
             LockedActiveEvent active_event,ExecutingEventContext ctx,
             Object ... args) throws Exception

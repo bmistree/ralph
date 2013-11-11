@@ -47,9 +47,11 @@
 
   <!-- Run all tests specified -->
   <target
-      name="run_all" depends="run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict">
+      name="run_all"
+      depends="run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,run_PartnersModifyRemoteState">
   </target>
 
+  
   <!-- List individual tests -->
   <target
       name="run_WriteReadVarStack"
@@ -76,10 +78,25 @@
   <target
       name="run_PartnersNoConflict"
       depends="compile_all"
-      description="Run tvar tests.">
+      description=
+        "Checks that rpcs issued between partners without conflict send and return args.">
     <java
         dir="${build.dir}"
         classname="java_lib_test.PartnersNoConflict"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
+  <target
+      name="run_PartnersModifyRemoteState"
+      depends="compile_all"
+      description="Increments value on remote endpoint.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.PartnersModifyRemoteState"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
