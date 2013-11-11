@@ -8,6 +8,9 @@ import ralph.LockedActiveEvent;
 import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
 import java.util.ArrayList;
+import ralph.RootEventParent;
+import RalphCallResults.RootCallResult.ResultType;
+
 
 /**
    Create two, connected endpoints.  Run a transaction across both of
@@ -41,6 +44,15 @@ public class PartnersNoConflict
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_method",true,
                 new ArrayList<RPCArgObject> (), true);
+
+            root_event.begin_first_phase_commit();
+            RootEventParent root_event_parent =
+                (RootEventParent)root_event.event_parent;
+            ResultType commit_resp =
+                root_event_parent.event_complete_queue.take();
+            
+            if (commit_resp != ResultType.COMPLETE)
+                return false;
         }
         catch (Exception ex)
         {
@@ -49,5 +61,6 @@ public class PartnersNoConflict
             return false;
         }
         return true;
+
     }
 }
