@@ -6,6 +6,7 @@ import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.VariableStack;
 import ralph.DeferBlock;
+import ralph.LockedActiveEvent;
 
 public class BasicDefer
 {
@@ -27,13 +28,25 @@ public class BasicDefer
     public static boolean run_test()
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-
+        
+        LockedActiveEvent active_event = null;
+        try
+        {
+            endpt._act_event_map.create_root_event();
+        }
+        catch (Exception _ex)
+        {
+            _ex.printStackTrace();
+            return false;
+        }
+        
         // push two function frames
         endpt.global_var_stack.push(true);
         endpt.global_var_stack.push(true);
 
         // add a defer to one
-        DeferBlock defer_statement = new DeferBlock(endpt.global_var_stack)
+        DeferBlock defer_statement = new DeferBlock(
+            endpt.global_var_stack,active_event)
         {
             public void run()
             {
@@ -41,9 +54,10 @@ public class BasicDefer
             }
         };
         endpt.global_var_stack.add_defer(defer_statement);
-
+        endpt.global_var_stack.pop();
         endpt.global_var_stack.pop();
 
+        
         // test passed
         return true;
     }
