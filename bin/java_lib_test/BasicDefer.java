@@ -1,12 +1,13 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
+import ralph.LockedVariables.LockedNumberVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.VariableStack;
 import ralph.DeferBlock;
 import ralph.LockedActiveEvent;
+
 
 public class BasicDefer
 {
@@ -32,7 +33,7 @@ public class BasicDefer
         LockedActiveEvent active_event = null;
         try
         {
-            endpt._act_event_map.create_root_event();
+            active_event = endpt._act_event_map.create_root_event();
         }
         catch (Exception _ex)
         {
@@ -50,13 +51,46 @@ public class BasicDefer
         {
             public void run()
             {
-                System.out.println("\n\nI got into runnable\n\n");
+                LockedNumberVariable num_tvar =
+                    (LockedNumberVariable) vstack.get_var_if_exists(
+                        TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
+                try
+                {
+                    Double val = num_tvar.get_val(active_event);
+                    Double incremented_val = new Double(val.doubleValue() + 1);
+                    num_tvar.set_val(active_event,incremented_val);
+                }
+                catch (Exception _ex)
+                {
+                    // NOTE: require try catch here, but 
+                    _ex.printStackTrace();
+                    assert(false);
+                }
             }
         };
         endpt.global_var_stack.add_defer(defer_statement);
         endpt.global_var_stack.pop();
         endpt.global_var_stack.pop();
 
+        // read the num_tvar to ensure that it got incremented
+        
+        LockedNumberVariable num_tvar =
+            (LockedNumberVariable) endpt.global_var_stack.get_var_if_exists(
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
+
+        try
+        {
+            double current_val = num_tvar.get_val(active_event).doubleValue();
+            double expected_val =
+                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL.doubleValue() + 1;
+            if (current_val != expected_val)
+                return false;
+        }
+        catch (Exception _ex)
+        {
+            _ex.printStackTrace();
+            return false;
+        }    
         
         // test passed
         return true;

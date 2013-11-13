@@ -264,9 +264,9 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         //# beginning of acquring write lock, get priority and use that
         //# for majority of time trying to acquire read lock.  If cached
         //# priority ends up in WaitingElement, another thread can later
-        //# update it.
+        //# update it.        
         String cached_priority = active_event.get_priority();
-        
+
         //# must be careful to add obj to active_event's touched_objs.
         //# That way, if active_event needs to backout, we're guaranteed
         //# that the state we've allocated for accounting the
@@ -277,7 +277,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             throw new RalphExceptions.BackoutException();
         }
 
-
         //# case 0 above
         if ((write_lock_holder != null) &&
             (active_event.uuid == write_lock_holder.event.uuid))
@@ -285,7 +284,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             DataWrapper<T,D> to_return = dirty_val;
             _unlock();
             return to_return;
-        }	
+        }
         
         //# case 1 above
         if ((write_lock_holder != null) && 
@@ -305,7 +304,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             return to_return;
         }
 
-        
         if (is_gte_than_lock_holding_events(cached_priority))
         {
             //# Stage 2 from above
@@ -327,7 +325,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
                 return to_return;
             }
         }
-
         
         //# case 3: add to wait queue and wait
         WaitingElement <T,D> write_waiting_event = new WaitingElement<T,D>(
@@ -335,7 +332,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             peered);
         waiting_events.put(active_event.uuid, write_waiting_event);        
         _unlock();
-        
+
         DataWrapper<T,D> to_return = null;
         try {
             to_return = write_waiting_event.queue.take();
