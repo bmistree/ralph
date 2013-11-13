@@ -18,7 +18,7 @@ public class VariableStore
      */
     private boolean function_scope = true;
     // highest indices get run first; lowest indices get run last.
-    private ArrayList<Runnable> defer_stack = null;
+    private ArrayList<DeferBlock> defer_stack = null;
     
     public VariableStore(boolean _function_scope)
     {
@@ -34,7 +34,7 @@ public class VariableStore
        defer statements get executed when the function in which they
        are defined completes.
      */
-    public void add_defer (Runnable defer_statement)
+    public void add_defer (DeferBlock defer_statement)
     {
         // DEBUG
         if (! function_scope)
@@ -45,7 +45,7 @@ public class VariableStore
         // END DEBUG
 
         if (defer_stack == null)
-            defer_stack = new ArrayList<Runnable>();
+            defer_stack = new ArrayList<DeferBlock>();
 
         defer_stack.add(defer_statement);
     }
@@ -61,7 +61,7 @@ public class VariableStore
 
         for (int i = defer_stack.size() - 1; i >= 0; --i)
         {
-            Runnable defer_to_run = defer_stack.get(i);
+            DeferBlock defer_to_run = defer_stack.get(i);
             defer_to_run.run();
         }
     }

@@ -48,7 +48,9 @@
   <!-- Run all tests specified -->
   <target
       name="run_all"
-      depends="run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,run_PartnersModifyRemoteState">
+      depends=
+        "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
+         run_PartnersModifyRemoteState,run_BasicDefer">
   </target>
 
   
@@ -97,6 +99,19 @@
     <java
         dir="${build.dir}"
         classname="java_lib_test.PartnersModifyRemoteState"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+    <target
+      name="run_BasicDefer"
+      depends="compile_all"
+      description="Tries to run a defer statement.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.BasicDefer"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

@@ -50,10 +50,10 @@ public class VariableStack
 
     
     /**
-       @param {Runnable} defer_block --- Runs after the outside
+       @param {DeferBlock} defer_block --- Runs after the outside
        function frame goes out of scope.
     */
-    public void add_defer(Runnable defer_block)
+    public void add_defer(DeferBlock defer_block)
     {
         // find the first function frame and add the defer statement
         // to it.
