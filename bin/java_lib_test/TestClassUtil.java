@@ -145,7 +145,7 @@ public class TestClassUtil
     {
         String dummy_host_uuid = "dummy_host_uuid";
 
-        VariableStore vstore = new VariableStore();
+        VariableStore vstore = new VariableStore(false);
         
         // adding a number tvar
         vstore.add_var(

@@ -26,9 +26,15 @@ public class VariableStack
             (ArrayList<VariableStore>)scope_stack.clone());
     }
 
-    public void push()
+    /**
+       @param {boolean} is_function_scope --- defer statements have
+       different semantics for when a function's frame goes out of
+       scope compared to a block.  When a function frame goes out of
+       scope, execute all pending defer blocks.
+    */
+    public void push(boolean is_function_scope)
     {
-        push(new VariableStore());
+        push(new VariableStore(is_function_scope));
     }
 
     public void push(VariableStore vstore)
@@ -38,9 +44,30 @@ public class VariableStack
     
     public void pop()
     {
-        scope_stack.remove(scope_stack.size() - 1);
+        VariableStore vstore = scope_stack.remove(scope_stack.size() - 1);
+        vstore.out_of_scope();
     }
 
+    
+    /**
+       @param {Runnable} defer_block --- Runs after the outside
+       function frame goes out of scope.
+    */
+    public void add_defer(Runnable defer_block)
+    {
+        // find the first function frame and add the defer statement
+        // to it.
+        for (int i = scope_stack.size() - 1; i >= 0; --i)
+        {
+            VariableStore vstore = scope_stack.get(i);
+            if (vstore.is_func_scope())
+            {
+                vstore.add_defer(defer_block);
+                break;
+            }
+        }
+    }
+    
     /**
      *
      @param {String} unique_name --- 

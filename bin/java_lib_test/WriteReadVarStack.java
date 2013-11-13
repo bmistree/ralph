@@ -88,10 +88,10 @@ public class WriteReadVarStack
         
         /** Push new variables to stack */
         VariableStack vstack = new VariableStack();
-        vstack.push();
+        vstack.push(false);
         vstack.add_var(var_name,root_a);
         vstack.add_var(var_name_b,root_b);
-        vstack.push();
+        vstack.push(false);
         vstack.add_var(var_name,higher_a);
 
         /** Check can operate on variables on top of stack. */

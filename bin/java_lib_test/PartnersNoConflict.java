@@ -96,7 +96,7 @@ public class PartnersNoConflict
 
             // push a new scope onto scope stack and then add boolean
             // and string variables to it.
-            endpta.global_var_stack.push();
+            endpta.global_var_stack.push(false);
             String bool_var_name = "bool_var_name";
             String string_var_name = "str_var_name";
 
