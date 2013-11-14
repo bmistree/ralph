@@ -49,6 +49,7 @@ public class BasicDefer
         DeferBlock defer_statement = new DeferBlock(
             endpt.global_var_stack,active_event)
         {
+            @Override
             public void run()
             {
                 LockedNumberVariable num_tvar =
