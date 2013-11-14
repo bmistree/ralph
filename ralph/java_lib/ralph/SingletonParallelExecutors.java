@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
    Ralph has a parallel keyword that looks like this
 
    parallel(
-       some_list,
+       some_iterable,
        ParallelBlock);
 
    When we execute the parallel block, we're applying the same
