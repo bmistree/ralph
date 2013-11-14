@@ -31,7 +31,7 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
     public final static Integer CALL_BACKOUT_EXCEPTION = new Integer(1);
     public final static Integer CALL_APPLICATION_EXCEPTION = new Integer(2);
     public final static Integer CALL_NETWORK_EXCEPTION = new Integer(3);
-    public final static Integer CALL_STOP_EXCEPTION = new Integer(4);
+    public final static Integer CALL_STOPPED_EXCEPTION = new Integer(4);
     
         
     protected VariableStack vstack = null;
@@ -54,8 +54,37 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
     /**
        Returns one of the return codes defined at top of class.
     */
-    public abstract Integer call();
+    public Integer call()
+    {
+        try
+        {
+            internal_call();
+        }
+        catch (BackoutException _ex)
+        {
+            return CALL_BACKOUT_EXCEPTION;
+        }
+        catch (ApplicationException _ex)
+        {
+            return CALL_APPLICATION_EXCEPTION;
+        }
+        catch (NetworkException _ex)
+        {
+            return CALL_NETWORK_EXCEPTION;
+        }
+        catch (StoppedException _ex)
+        {
+            return CALL_STOPPED_EXCEPTION;
+        }
 
+        return CALL_NO_ERROR;
+    }
+
+    /**
+       Should be overridden in place by each parallel block.
+     */
+    protected abstract void internal_call()
+        throws ApplicationException, BackoutException, NetworkException,StoppedException;
 
     /**
        Blocks until all are complete or there is an uncaught exception
@@ -120,7 +149,7 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
         else if (call_result == CALL_NETWORK_EXCEPTION)
             throw new ApplicationException("From parallel block");
 
-        else if (call_result ==  CALL_STOP_EXCEPTION)
+        else if (call_result ==  CALL_STOPPED_EXCEPTION)
             throw new StoppedException();
 
         // DEBUG
