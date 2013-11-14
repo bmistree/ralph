@@ -11,6 +11,8 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 import java.util.concurrent.ExecutionException;
+import java.lang.CloneNotSupportedException;
+
 
 /**
    Ralph has a parallel keyword:
@@ -48,8 +50,6 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
     {
         to_run_on = _to_run_on;
     }
-
-    public abstract ParallelBlock<E> clone();
 
     /**
        Returns one of the return codes defined at top of class.
@@ -100,9 +100,19 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
         
         for (E arg_to_run_with : to_exec_over)
         {
-            ParallelBlock<E> item_par_block = clone();
+            ParallelBlock<E> item_par_block = null;
+            try
+            {
+                item_par_block = (ParallelBlock<E>)this.clone();
+            }
+            catch (CloneNotSupportedException _ex)
+            {
+                _ex.printStackTrace();
+                Util.logger_assert(
+                    "\nError: declared a parallel block that was " +
+                    "not cloneable.\n");
+            }
             item_par_block.set_to_run_on(arg_to_run_with);
-
             waiting_futures.add(
                 SingletonParallelExecutors.submit(item_par_block));
         }
