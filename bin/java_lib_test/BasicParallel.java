@@ -57,7 +57,8 @@ public class BasicParallel
                     return new ParallelBlock<AtomicInteger>(vstack,active_event)
                     {
                         public void internal_call()
-                            throws ApplicationException, BackoutException, NetworkException,StoppedException
+                            throws ApplicationException, BackoutException,
+                            NetworkException,StoppedException
                         {
                             to_run_on.getAndIncrement();
                         }
