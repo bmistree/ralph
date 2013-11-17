@@ -2,8 +2,9 @@ package ralph;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class WaitingElement <T,D>
+    implements Comparable<WaitingElement<T,D>>
 {
-	
+    
     //	# Each event has a priority associated with it.  This priority
     //	# can change when an event gets promoted to be boosted.  To
     //	# avoid the read/write conflicts this might cause, instead of
@@ -90,6 +91,9 @@ public class WaitingElement <T,D>
                     (T)multi_threaded_obj.val.val,peered);
         }
     }
-	
-	
+    
+    public int compareTo(WaitingElement<T,D> o2) 
+    {
+        return cached_priority.compareTo(o2.cached_priority);
+    }
 }

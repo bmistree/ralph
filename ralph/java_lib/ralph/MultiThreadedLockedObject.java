@@ -904,8 +904,9 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         //# them.
         ArrayList<WaitingElement<T,D>> _waiting_events =
             new ArrayList<WaitingElement<T,D>>(waiting_events.values());
-        in_place_sort_waiting_event_list_by_priority(_waiting_events);
-
+    	Collections.sort(_waiting_events);
+        Util.logger_warn("Check that sort order is correct");
+        
         //# Phase 2 from above
         //# Run through all waiting events.  If the waiting event is a
         //# write, first check that
@@ -1008,8 +1009,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         new CachedPriorityComparator();
     private CachedUUIDComparator event_cached_uuid_comparator = new
         CachedUUIDComparator();
-    private WaitingElementPriorityComparator waiting_element_priority_comparator =
-        new WaitingElementPriorityComparator(); 
     
     /**
      *  @param {list} ---
@@ -1034,12 +1033,4 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     	Collections.sort(list_to_sort,event_cached_uuid_comparator);
     	return list_to_sort;
     }
-    
-    private ArrayList<WaitingElement<T,D>> in_place_sort_waiting_event_list_by_priority(
-        ArrayList<WaitingElement<T,D>> list_to_sort)
-    {
-    	Collections.sort(list_to_sort,waiting_element_priority_comparator);
-    	return list_to_sort;
-    }
-    
 }
