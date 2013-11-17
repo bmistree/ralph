@@ -4,8 +4,14 @@ import ralph.LockedVariables.LockedNumberVariable;
 import ralph.Endpoint;
 import ralph.LockedActiveEvent;
 import ralph.ParallelBlock;
+import ralph.ParallelBlockConstructor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.ArrayList;
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
+
 
 public class BasicParallel
 {
@@ -42,12 +48,20 @@ public class BasicParallel
         try
         {
             active_event = endpt._act_event_map.create_root_event();
-            new ParallelBlock<AtomicInteger>(
+
+            new ParallelBlockConstructor<AtomicInteger>(
                 endpt.global_var_stack,active_event)
             {
-                protected void internal_call()
+                public ParallelBlock<AtomicInteger> produce_par_block ()
                 {
-                    to_run_on.getAndIncrement();
+                    return new ParallelBlock<AtomicInteger>(vstack,active_event)
+                    {
+                        public void internal_call()
+                            throws ApplicationException, BackoutException, NetworkException,StoppedException
+                        {
+                            to_run_on.getAndIncrement();
+                        }
+                    };
                 }
             }.exec_par(atom_int_list);
         }
@@ -56,7 +70,6 @@ public class BasicParallel
             _ex.printStackTrace();
             return false;
         }
-
 
         
         // test passed
