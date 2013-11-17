@@ -25,7 +25,9 @@ reserved = {
     'len': 'LEN',
     'try': 'TRY',
     'catch': 'CATCH',
-    'finally': 'FINALLY'
+    'finally': 'FINALLY',
+    'atomically': 'ATOMICALLY',
+    'parallel': 'PARALLEL'
     };
 
 
