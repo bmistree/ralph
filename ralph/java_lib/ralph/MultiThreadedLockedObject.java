@@ -53,6 +53,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
      * Used by 
      */
     private class EventCachedPriorityObj
+        implements Comparable <EventCachedPriorityObj>
     {
     	String cached_priority = "";
     	LockedActiveEvent event = null;
@@ -62,6 +63,14 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             event = active_event;
             cached_priority = _cached_priority;
     	}
+
+        /**
+           Compares by event priority
+         */
+        public int compareTo(EventCachedPriorityObj ob)
+        {
+            return ob.cached_priority.compareTo(ob.cached_priority);
+        }
     }
 	
 	
@@ -621,9 +630,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
 		
         ArrayList<EventCachedPriorityObj> read_lock_holder_event_cached_priorities =
             new ArrayList<EventCachedPriorityObj>(read_lock_holders.values());
-
-        in_place_sort_event_cached_priority_list_by_uuid(
-            read_lock_holder_event_cached_priorities);
+        Collections.sort(read_lock_holder_event_cached_priorities);
 
         ArrayList<LockedActiveEvent> to_backout_list =
             new ArrayList<LockedActiveEvent>();
@@ -904,8 +911,8 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         //# them.
         ArrayList<WaitingElement<T,D>> _waiting_events =
             new ArrayList<WaitingElement<T,D>>(waiting_events.values());
-        in_place_sort_waiting_event_list_by_priority(_waiting_events);
-
+    	Collections.sort(_waiting_events);
+        
         //# Phase 2 from above
         //# Run through all waiting events.  If the waiting event is a
         //# write, first check that
@@ -972,77 +979,4 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
-
-    private class CachedPriorityComparator
-        implements Comparator<EventCachedPriorityObj>
-    {
-        public int compare(
-            EventCachedPriorityObj o1, EventCachedPriorityObj o2) 
-        {
-            return o1.cached_priority.compareTo(o2.cached_priority);
-        }
-    }
-    private class CachedUUIDComparator
-        implements Comparator<EventCachedPriorityObj>
-    {
-        public int compare(
-            EventCachedPriorityObj o1, EventCachedPriorityObj o2) 
-        {
-            return o1.event.uuid.compareTo(o2.event.uuid);
-        }
-    }
-
-    private class WaitingElementPriorityComparator
-        implements Comparator<WaitingElement<T,D>>
-    {
-        public int compare(
-            WaitingElement<T,D> o1, WaitingElement<T,D> o2) 
-        {
-            return o1.cached_priority.compareTo(o2.cached_priority);
-        }
-    }
-    
-    // FIXME: Should create one instance of comparator class and reuse it instead 
-    // of creating one per multithreaded object
-    private CachedPriorityComparator event_cached_priority_comparator =
-        new CachedPriorityComparator();
-    private CachedUUIDComparator event_cached_uuid_comparator = new
-        CachedUUIDComparator();
-    private WaitingElementPriorityComparator waiting_element_priority_comparator =
-        new WaitingElementPriorityComparator(); 
-    
-    /**
-     *  @param {list} ---
-        
-     Sorts the list in place.  Lower indices will contain higher
-     priorities.
-
-     @returns sorted list
-
-     * @return
-     */    
-    private ArrayList<EventCachedPriorityObj> in_place_sort_event_cached_priority_list_by_priority(
-        ArrayList<EventCachedPriorityObj> list_to_sort)
-    {
-    	Util.logger_warn("Check that sorting order is correct");
-    	Collections.sort(list_to_sort,event_cached_priority_comparator);
-    	return list_to_sort;
-    }
-    
-    private ArrayList<EventCachedPriorityObj> in_place_sort_event_cached_priority_list_by_uuid(
-        ArrayList<EventCachedPriorityObj> list_to_sort)
-    {	
-    	Util.logger_warn("Check that sorting order is correct");
-    	Collections.sort(list_to_sort,event_cached_uuid_comparator);
-    	return list_to_sort;
-    }
-    
-    private ArrayList<WaitingElement<T,D>> in_place_sort_waiting_event_list_by_priority(
-        ArrayList<WaitingElement<T,D>> list_to_sort)
-    {
-    	Util.logger_warn("Check that sorting order is correct");
-    	Collections.sort(list_to_sort,waiting_element_priority_comparator);
-    	return list_to_sort;
-    }
-    
 }

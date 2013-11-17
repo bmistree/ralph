@@ -3,6 +3,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadFactory;
 
 /**
    Ralph has a parallel keyword that looks like this
@@ -22,8 +23,19 @@ public class SingletonParallelExecutors
     // May want to size this larger.
     private static final int NUM_PARALLEL_THREADS = 20;
     private static final ExecutorService executor =
-        Executors.newFixedThreadPool(NUM_PARALLEL_THREADS);
-    
+        Executors.newFixedThreadPool(
+            NUM_PARALLEL_THREADS,
+            new ThreadFactory()
+            {
+                // each thread created is a daemon
+                public Thread newThread(Runnable r)
+                {
+                    Thread t=new Thread(r);
+                    t.setDaemon(true);
+                    return t;
+                }
+            });
+
     public static Future<Integer> submit(Callable<Integer> to_exec)
     {
         return executor.submit(to_exec);
