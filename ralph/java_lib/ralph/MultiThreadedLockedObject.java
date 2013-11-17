@@ -1024,7 +1024,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     private ArrayList<EventCachedPriorityObj> in_place_sort_event_cached_priority_list_by_priority(
         ArrayList<EventCachedPriorityObj> list_to_sort)
     {
-    	Util.logger_warn("Check that sorting order is correct");
     	Collections.sort(list_to_sort,event_cached_priority_comparator);
     	return list_to_sort;
     }
@@ -1032,7 +1031,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     private ArrayList<EventCachedPriorityObj> in_place_sort_event_cached_priority_list_by_uuid(
         ArrayList<EventCachedPriorityObj> list_to_sort)
     {	
-    	Util.logger_warn("Check that sorting order is correct");
     	Collections.sort(list_to_sort,event_cached_uuid_comparator);
     	return list_to_sort;
     }
@@ -1040,7 +1038,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     private ArrayList<WaitingElement<T,D>> in_place_sort_waiting_event_list_by_priority(
         ArrayList<WaitingElement<T,D>> list_to_sort)
     {
-    	Util.logger_warn("Check that sorting order is correct");
     	Collections.sort(list_to_sort,waiting_element_priority_comparator);
     	return list_to_sort;
     }
