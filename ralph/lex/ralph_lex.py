@@ -187,7 +187,7 @@ class LexStateMachine():
             if toke_type == "MULTI_LINE_COMMENT_END":
                 err_msg = "Cannot lex.  multi-line comment "
                 err_msg = "end occurred before multi-line begin."
-                raise WaldoLexException(generate_type_error(err_msg,toke))
+                raise LexException(generate_type_error(err_msg,toke))
 
         if returner.type == SKIP_TOKEN_TYPE:
             return None
@@ -346,7 +346,8 @@ def t_ALL_ELSE(t):
     return lex_state_machine.add_token(t)
 
 def t_error(t):
-    raise WaldoLexException("Unknown text '%s'  at line number '%s'" % (t.value,t.lexer.lineno))
+    raise LexException(
+        "Unknown text '%s'  at line number '%s'" % (t.value,t.lexer.lineno))
 
 
 class LexException(CompilerException):
