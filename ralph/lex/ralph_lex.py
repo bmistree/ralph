@@ -28,7 +28,8 @@ reserved = {
     'finally': 'FINALLY',
     'atomically': 'ATOMICALLY',
     'parallel': 'PARALLEL',
-    'returns': 'RETURNS'
+    'returns': 'RETURNS',
+    'TVar' : 'TVAR'
     };
 
 

@@ -194,6 +194,10 @@ def p_VariableType(p):
     VariableType : BOOL_TYPE
                  | NUMBER_TYPE
                  | STRING_TYPE
+
+                 | TVAR BOOL_TYPE
+                 | TVAR NUMBER_TYPE
+                 | TVAR STRING_TYPE
     '''
 
 def p_Identifier(p):
