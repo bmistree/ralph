@@ -78,6 +78,8 @@ tokens = [
     "RIGHT_BRACKET",
     "CURLY_LEFT",
     "CURLY_RIGHT",
+
+    'DOT',
     
     "NUMBER",
     IDENTIFIER_TOKEN,

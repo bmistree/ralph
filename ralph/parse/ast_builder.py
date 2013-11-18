@@ -28,7 +28,7 @@ def p_EndpointDefinition(p):
 
 def p_EndpointMiddle(p):
     '''
-    EndpointMiddle : VariableDeclaration EndpointMiddle
+    EndpointMiddle : VariableDeclaration SEMI_COLON EndpointMiddle
                    | FunctionDeclaration EndpointMiddle
                    | Empty
     '''
@@ -69,14 +69,49 @@ def p_FunctionDeclarationArg(p):
     FunctionDeclarationArg : VariableType Identifier
     '''
 
+def p_FunctionCall(p):
+    '''
+    FunctionCall : Variable LEFT_PAREN FunctionCallArgs RIGHT_PAREN
+    '''
+    
+def p_FunctionCallArgs(p):
+    '''
+    FunctionCallArgs : Expression
+                     | FunctionCallArgs COMMA Expression
+                     | Empty
+    '''
+    
+    
 def p_Statement(p):
     '''
-    Statement : Identifier
+    Statement : Expression SEMI_COLON
+              | ReturnStatement SEMI_COLON
+              | VariableDeclaration SEMI_COLON
+              | AssignmentStatement SEMI_COLON
+    '''
+
+def p_AssignmentStatement(p):
+    '''
+    AssignmentStatement : Variable EQUALS Expression
+    '''
+
+def p_Variable(p):
+    '''
+    Variable : Identifier
+             | Identifier LEFT_BRACKET Expression RIGHT_BRACKET
+             | Identifier DOT Variable
+    '''
+    
+def p_ReturnStatement(p):
+    '''
+    ReturnStatement : RETURN_OPERATOR
+                    | RETURN_OPERATOR Expression
     '''
     
 def p_Expression(p):
     '''
-    Expression : RETURN_OPERATOR
+    Expression : Variable
+               | FunctionCall
     '''
     
 def p_VariableType(p):
@@ -95,7 +130,6 @@ def p_Empty(p):
     '''
     Empty :
     '''
-
     
     
 def construct_parser(suppress_warnings):
