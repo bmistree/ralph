@@ -87,6 +87,13 @@ def p_Statement(p):
               | ReturnStatement SEMI_COLON
               | DeclarationStatement SEMI_COLON
               | AssignmentStatement SEMI_COLON
+              | ScopeStatement
+    '''
+
+def p_ScopeStatement(p):
+    '''
+    ScopeStatement : CURLY_LEFT Statement CURLY_RIGHT
+                   | CURLY_LEFT CURLY_RIGHT
     '''
     
 def p_AssignmentStatement(p):
