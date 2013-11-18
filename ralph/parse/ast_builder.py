@@ -127,8 +127,14 @@ def p_OrExpression(p):
     
 def p_AndExpression(p):
     '''
-    AndExpression : AndExpression AND EqualsNotEqualsExpression
-                  | EqualsNotEqualsExpression
+    AndExpression : AndExpression AND InNotInExpression
+                  | InNotInExpression
+    '''
+def p_InNotInExpression (p):
+    '''
+    InNotInExpression : InNotInExpression IN EqualsNotEqualsExpression
+                      | InNotInExpression NOT IN EqualsNotEqualsExpression
+                      | EqualsNotEqualsExpression
     '''
     
 def p_EqualsNotEqualsExpression(p):
