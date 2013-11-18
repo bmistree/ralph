@@ -87,11 +87,33 @@ def p_Statement(p):
               | ReturnStatement SEMI_COLON
               | DeclarationStatement SEMI_COLON
               | AssignmentStatement SEMI_COLON
-              | ScopeStatement
               | ForStatement
-              | ConditionStatement                  
+              | ConditionStatement
+              | ParallelStatement
+              | ScopeStatement
+              | AtomicallyStatement
+    '''
+def p_AtomicallyStatement(p):
+    '''
+    AtomicallyStatement : ATOMICALLY ScopeStatement
+    '''
+    
+def p_ParallelStatement(p):
+    '''
+    ParallelStatement : PARALLEL LEFT_PAREN Expression COMMA Expression RIGHT_PAREN 
     '''
 
+def p_LenExpression(p):
+    '''
+    LenExpression : LEN LEFT_PAREN Expression RIGHT_PAREN
+    '''
+    
+def p_RangeExpression(p):
+    '''
+    RangeExpression : RANGE LEFT_PAREN Expression COMMA Expression COMMA Expression RIGHT_PAREN
+                    | RANGE LEFT_PAREN Expression COMMA Expression RIGHT_PAREN
+    '''
+    
 def p_ConditionStatement(p):
     '''
     ConditionStatement : IfStatement ElseIfStatements ElseStatement
@@ -119,7 +141,6 @@ def p_ElseStatement(p):
     '''
     
     
-    
 def p_ForStatement(p):
     '''
     ForStatement : FOR LEFT_PAREN VariableType Identifier IN Expression RIGHT_PAREN Statement
@@ -129,7 +150,7 @@ def p_ForStatement(p):
 def p_ScopeStatement(p):
     '''
     ScopeStatement : CURLY_LEFT Statement CURLY_RIGHT
-                   | CURLY_LEFT CURLY_RIGHT
+                    | CURLY_LEFT CURLY_RIGHT
     '''
     
 def p_AssignmentStatement(p):
@@ -216,6 +237,8 @@ def p_Term(p):
          | String
          | Boolean
          | LEFT_PAREN Expression RIGHT_PAREN
+         | RangeExpression
+         | LenExpression
     '''
 def p_Number(p):
     '''

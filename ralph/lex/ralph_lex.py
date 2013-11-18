@@ -8,7 +8,7 @@ reserved = {
     'in': 'IN',
     'return': 'RETURN_OPERATOR',
     'if': 'IF',
-    'elseIf': 'ELSE_IF',
+    'elif': 'ELSE_IF',
     'else': 'ELSE',
     'not': 'NOT',
     'TrueFalse': 'BOOL_TYPE',
