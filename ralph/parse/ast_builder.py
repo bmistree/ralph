@@ -42,13 +42,13 @@ def p_VariableDeclaration(p):
 def p_FunctionDeclaration(p):
     '''
     FunctionDeclaration : FunctionSignature CURLY_LEFT FunctionBody CURLY_RIGHT
+                        | FunctionSignature CURLY_LEFT CURLY_RIGHT
     '''
 
 def p_FunctionBody(p):
     '''
     FunctionBody : FunctionBody Statement
                  | Statement
-                 | Empty
     '''
     
 def p_FunctionSignature(p):
