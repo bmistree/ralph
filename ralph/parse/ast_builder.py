@@ -97,8 +97,8 @@ def p_AssignmentStatement(p):
 def p_Variable(p):
     '''
     Variable : Identifier
-             | Identifier LEFT_BRACKET Expression RIGHT_BRACKET
-             | Identifier DOT Variable
+             | Variable LEFT_BRACKET Expression RIGHT_BRACKET
+             | Variable DOT Identifier
     '''
     
 def p_ReturnStatement(p):
