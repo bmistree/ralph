@@ -2,25 +2,40 @@
 
 from ralph.lex.ralph_lex import tokens,construct_lexer
 import deps.ply.ply.yacc as yacc
-
+from ralph.parse.ast_node import *
 
 #note: global variable used by yacc.  Without this set, otherwise,
 #starts at first rule.
-start = 'RootExpression';
+start = 'RootStatement'
 #need to have something named lexer for parser to chew into
-lexer = None;
+lexer = None
 
 
-def p_RootExpression(p):
+def p_RootStatement(p):
     '''
-    RootExpression : EndpointList
+    RootStatement : EndpointList
     '''
+    endpoint_list_node = p[1]
+    p[0] = RootStatementNode(endpoint_list_node)
+    
+    
 def p_EndpointList(p):
     '''
     EndpointList : EndpointList EndpointDefinition 
                  | EndpointDefinition
     '''
+    if len(p) == 2:
+        endpoint_definition_node = p[1]
+        endpoint_list_node = EndpointListNode(endpoint_definition_node)
+    else:
+        endpoint_list_node = p[1]
+        endpoint_definition_node = p[2]
+        endpoint_list_node.prepend_endpoint_definition(
+            endpoint_definition_node)
+        
+    p[0] = endpoint_list_node
 
+    
 def p_EndpointDefinition(p):
     '''
     EndpointDefinition : ENDPOINT Identifier CURLY_LEFT EndpointMiddle CURLY_RIGHT
@@ -150,7 +165,7 @@ def p_ForStatement(p):
 def p_ScopeStatement(p):
     '''
     ScopeStatement : CURLY_LEFT Statement CURLY_RIGHT
-                    | CURLY_LEFT CURLY_RIGHT
+                   | CURLY_LEFT CURLY_RIGHT
     '''
     
 def p_AssignmentStatement(p):
