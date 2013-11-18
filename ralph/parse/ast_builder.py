@@ -88,6 +88,42 @@ def p_Statement(p):
               | DeclarationStatement SEMI_COLON
               | AssignmentStatement SEMI_COLON
               | ScopeStatement
+              | ForStatement
+              | ConditionStatement                  
+    '''
+
+def p_ConditionStatement(p):
+    '''
+    ConditionStatement : IfStatement ElseIfStatements ElseStatement
+    '''
+
+def p_IfStatement(p):
+    '''
+    IfStatement : IF LEFT_PAREN Expression RIGHT_PAREN Statement
+    '''
+
+def p_ElseIfStatements(p):
+    '''
+    ElseIfStatements : ElseIfStatements ElseIfStatement
+                     | Empty
+    '''
+def p_ElseIfStatement(p):
+    '''
+    ElseIfStatement : ELSE_IF LEFT_PAREN Expression RIGHT_PAREN Statement
+    '''
+
+def p_ElseStatement(p):
+    '''
+    ElseStatement : ELSE Statement
+                  | Empty
+    '''
+    
+    
+    
+def p_ForStatement(p):
+    '''
+    ForStatement : FOR LEFT_PAREN VariableType Identifier IN Expression RIGHT_PAREN Statement
+                 | FOR LEFT_PAREN Variable IN Expression RIGHT_PAREN Statement
     '''
 
 def p_ScopeStatement(p):
