@@ -106,24 +106,81 @@ def p_ReturnStatement(p):
     ReturnStatement : RETURN_OPERATOR
                     | RETURN_OPERATOR Expression
     '''
-    
+
 def p_Expression(p):
     '''
-    Expression : LEFT_PAREN ParenthesizedExpression RIGHT_PAREN
-               | ParenthesizedExpression
+    Expression : OrExpression
+    '''
+    
+def p_OrExpression(p):
+    '''
+    OrExpression : OrExpression OR AndExpression
+                 | AndExpression
+    '''
+    
+def p_AndExpression(p):
+    '''
+    AndExpression : AndExpression AND EqualsNotEqualsExpression
+                  | EqualsNotEqualsExpression
+    '''
+    
+def p_EqualsNotEqualsExpression(p):
+    '''
+    EqualsNotEqualsExpression : EqualsNotEqualsExpression BOOL_EQUALS GreaterThanLessThanExpression
+                              | EqualsNotEqualsExpression BOOL_NOT_EQUALS GreaterThanLessThanExpression
+                              | GreaterThanLessThanExpression
     '''
 
-def p_ParenthesizedExpression(p):
+def p_GreaterThanLessThanExpression(p):
     '''
-    ParenthesizedExpression : Variable
-                            | FunctionCall
-                            | NotExpression
+    GreaterThanLessThanExpression : GreaterThanLessThanExpression GREATER_THAN PlusMinusExpression
+                                  | GreaterThanLessThanExpression GREATER_THAN_EQ PlusMinusExpression
+                                  | GreaterThanLessThanExpression LESS_THAN PlusMinusExpression
+                                  | GreaterThanLessThanExpression LESS_THAN_EQ PlusMinusExpression
+                                  | PlusMinusExpression
     '''
+
+    
+def p_PlusMinusExpression(p):
+    '''
+    PlusMinusExpression : PlusMinusExpression PLUS MultDivExpression
+                        | PlusMinusExpression MINUS MultDivExpression
+                        | MultDivExpression
+    '''
+def p_MultDivExpression(p):
+    '''
+    MultDivExpression : MultDivExpression MULTIPLY NotExpression
+                      | MultDivExpression DIVIDE NotExpression
+                      | NotExpression
+    '''    
 def p_NotExpression(p):
     '''
-    NotExpression : NOT Expression
+    NotExpression : NOT Term
+                  | Term
     '''
-
+    
+def p_Term(p):
+    '''
+    Term : Variable
+         | FunctionCall
+         | Number
+         | String
+         | Boolean
+         | LEFT_PAREN Expression RIGHT_PAREN
+    '''
+def p_Number(p):
+    '''
+    Number : NUMBER
+    '''
+def p_String(p):
+    '''
+    String : SINGLE_LINE_STRING
+    '''
+def p_Boolean(p):
+    '''
+    Boolean : TRUE
+            | FALSE
+    '''
     
 def p_VariableType(p):
     '''
