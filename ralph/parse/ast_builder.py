@@ -28,15 +28,15 @@ def p_EndpointDefinition(p):
 
 def p_EndpointMiddle(p):
     '''
-    EndpointMiddle : VariableDeclaration SEMI_COLON EndpointMiddle
+    EndpointMiddle : DeclarationStatement SEMI_COLON EndpointMiddle
                    | FunctionDeclaration EndpointMiddle
                    | Empty
     '''
 
-def p_VariableDeclaration(p):
+def p_DeclarationStatement(p):
     '''
-    VariableDeclaration : VariableType Identifier
-                        | VariableType Identifier EQUALS Expression
+    DeclarationStatement : VariableType Identifier
+                         | VariableType Identifier EQUALS Expression
     '''
 
 def p_FunctionDeclaration(p):
@@ -81,15 +81,14 @@ def p_FunctionCallArgs(p):
                      | Empty
     '''
     
-    
 def p_Statement(p):
     '''
     Statement : Expression SEMI_COLON
               | ReturnStatement SEMI_COLON
-              | VariableDeclaration SEMI_COLON
+              | DeclarationStatement SEMI_COLON
               | AssignmentStatement SEMI_COLON
     '''
-
+    
 def p_AssignmentStatement(p):
     '''
     AssignmentStatement : Variable EQUALS Expression
@@ -110,9 +109,21 @@ def p_ReturnStatement(p):
     
 def p_Expression(p):
     '''
-    Expression : Variable
-               | FunctionCall
+    Expression : LEFT_PAREN ParenthesizedExpression RIGHT_PAREN
+               | ParenthesizedExpression
     '''
+
+def p_ParenthesizedExpression(p):
+    '''
+    ParenthesizedExpression : Variable
+                            | FunctionCall
+                            | NotExpression
+    '''
+def p_NotExpression(p):
+    '''
+    NotExpression : NOT Expression
+    '''
+
     
 def p_VariableType(p):
     '''
