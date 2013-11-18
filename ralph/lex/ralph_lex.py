@@ -27,7 +27,8 @@ reserved = {
     'catch': 'CATCH',
     'finally': 'FINALLY',
     'atomically': 'ATOMICALLY',
-    'parallel': 'PARALLEL'
+    'parallel': 'PARALLEL',
+    'returns': 'RETURNS'
     };
 
 
