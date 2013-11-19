@@ -189,6 +189,7 @@ def p_Statement(p):
               | AtomicallyStatement
     '''
     p[0] = p[1]
+
     
 def p_AtomicallyStatement(p):
     '''
@@ -212,6 +213,9 @@ def p_LenExpression(p):
     '''
     LenExpression : LEN LEFT_PAREN Expression RIGHT_PAREN
     '''
+    len_argument_node = p[3]
+    p[0] = LenNode(len_argument_node)
+
     
 def p_RangeExpression(p):
     '''
@@ -264,8 +268,6 @@ def p_ScopeStatement(p):
         scope_body_node = p[2]
     p[0] = ScopeNode(scope_body_node)
         
-
-    
     
 def p_AssignmentStatement(p):
     '''
@@ -332,14 +334,14 @@ def p_OrExpression(p):
     OrExpression : OrExpression OR AndExpression
                  | AndExpression
     '''
-    return production_rule_for_binary_operator(p)
+    production_rule_for_binary_operator(p)
 
 def p_AndExpression(p):
     '''
     AndExpression : AndExpression AND InNotInExpression
                   | InNotInExpression
     '''
-    return production_rule_for_binary_operator(p)
+    production_rule_for_binary_operator(p)
 
 def p_InNotInExpression (p):
     '''
@@ -362,8 +364,7 @@ def p_InNotInExpression (p):
 
         p[0] = create_binary_expression_node(
             operator,lhs_expression_node,rhs_expression_node)
-
-
+        
     
 def p_EqualsNotEqualsExpression(p):
     '''
@@ -371,7 +372,7 @@ def p_EqualsNotEqualsExpression(p):
                               | EqualsNotEqualsExpression BOOL_NOT_EQUALS GreaterThanLessThanExpression
                               | GreaterThanLessThanExpression
     '''
-    return production_rule_for_binary_operator(p)
+    production_rule_for_binary_operator(p)
     
 def p_GreaterThanLessThanExpression(p):
     '''
@@ -381,7 +382,7 @@ def p_GreaterThanLessThanExpression(p):
                                   | GreaterThanLessThanExpression LESS_THAN_EQ PlusMinusExpression
                                   | PlusMinusExpression
     '''
-    return production_rule_for_binary_operator(p)
+    production_rule_for_binary_operator(p)
     
 def p_PlusMinusExpression(p):
     '''
@@ -389,7 +390,8 @@ def p_PlusMinusExpression(p):
                         | PlusMinusExpression MINUS MultDivExpression
                         | MultDivExpression
     '''
-    return production_rule_for_binary_operator(p)
+    production_rule_for_binary_operator(p)
+
     
 def p_MultDivExpression(p):
     '''
@@ -397,9 +399,8 @@ def p_MultDivExpression(p):
                       | MultDivExpression DIVIDE NotExpression
                       | NotExpression
     '''
-
-    return production_rule_for_binary_operator(p)
-
+    production_rule_for_binary_operator(p)
+    
 def production_rule_for_binary_operator(p):
     '''
     Generally has the form
@@ -428,7 +429,6 @@ def p_NotExpression(p):
         term_node = p[2]
         not_node = NotNode(term_node)
         p[0] = not_node
-
         
 def p_Term(p):
     '''

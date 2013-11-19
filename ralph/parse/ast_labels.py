@@ -41,6 +41,7 @@ OR = 'or'
 IN = 'in'
 NOT_IN = 'not_in'
 
+LEN = 'len'
 
 ### intermediate ast nodes that get removed from tree ###
 ENDPOINT_LIST_STATEMENT = 'endpoint_list_statement'

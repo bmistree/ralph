@@ -174,6 +174,14 @@ class NotNode(_AstNode):
         
         self.to_not_node = to_not_node
 
+class LenNode(_AstNode):
+    def __init__(self,len_of_node,line_number):
+        super(LenNode,self).__init__(
+            ast_labels.LEN,line_number)
+        
+        self.len_of_node = len_of_node
+
+        
 class BracketNode(_AstNode):
     def __init__(self,outside_bracket_node,inside_bracket_node):
         '''
