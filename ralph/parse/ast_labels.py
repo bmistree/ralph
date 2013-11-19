@@ -11,6 +11,15 @@ METHOD_SIGNATURE = 'method_signature'
 METHOD_DECLARATION_ARG = 'method_declaration_arg'
 ATOMICALLY = 'atomically'
 SCOPE = 'scope'
+PARALLEL = 'parallel'
+ASSIGNMENT = 'assignment'
+NOT = 'not'
+DOT = 'dot'
+BRACKET = 'bracket'
+
+TEXT_LITERAL = 'text_literal'
+NUMBER_LITERAL = 'number_literal'
+TRUE_FALSE_LITERAL = 'true_false_literal'
 
 
 ### intermediate ast nodes that get removed from tree ###

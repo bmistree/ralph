@@ -1,7 +1,8 @@
 from deps.ply.ply import lex
 from ralph.common.compiler_exceptions import CompilerException
 
-IDENTIFIER_TOKEN = "IDENTIFIER";
+IDENTIFIER_TOKEN = "IDENTIFIER"
+TRUE_TOKEN = 'TRUE'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Method': 'METHOD',
@@ -12,7 +13,7 @@ reserved = {
     'else': 'ELSE',
     'not': 'NOT',
     'TrueFalse': 'BOOL_TYPE',
-    'True': 'TRUE',
+    'True': TRUE_TOKEN,
     'False': 'FALSE',
     'Number': 'NUMBER_TYPE',
     'Text': 'STRING_TYPE',
@@ -30,7 +31,7 @@ reserved = {
     'parallel': 'PARALLEL',
     'returns': 'RETURNS',
     'TVar' : 'TVAR'
-    };
+    }
 
 
 tokens = [
@@ -89,19 +90,19 @@ tokens = [
     "SINGLE_LINE_STRING",
     
     "ALL_ELSE",
-    ] + list(reserved.values());
+    ] + list(reserved.values())
 
 
-SKIP_TOKEN_TYPE = "SPACE";
+SKIP_TOKEN_TYPE = "SPACE"
 
 def generate_token_err_msg(toke):
     '''
     @returns {String} -- An error message based on the
     token value seen when get into ALL_ELSE.
     '''
-    toke_val = repr(toke.value);
-    err_msg = 'Error lexing input.  ';
-    err_msg += '\n' + toke_val + '\n';
+    toke_val = repr(toke.value)
+    err_msg = 'Error lexing input.  '
+    err_msg += '\n' + toke_val + '\n'
     return err_msg
     
 

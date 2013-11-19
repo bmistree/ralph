@@ -1,4 +1,4 @@
-from ralph.lex.ralph_lex import tokens,construct_lexer
+from ralph.lex.ralph_lex import tokens,construct_lexer,TRUE_TOKEN
 import deps.ply.ply.yacc as yacc
 from ralph.parse.ast_node import *
 
@@ -203,6 +203,11 @@ def p_ParallelStatement(p):
     '''
     ParallelStatement : PARALLEL LEFT_PAREN Expression COMMA Expression RIGHT_PAREN 
     '''
+    line_number = p.lineno(1)
+    to_iter_over_node = p[3]
+    lambda_node = p[5]
+    p[0] = ParallelNode(to_iter_over_node,lambda_node,line_number)
+
 
 def p_LenExpression(p):
     '''
@@ -267,13 +272,44 @@ def p_AssignmentStatement(p):
     '''
     AssignmentStatement : Variable EQUALS Expression
     '''
+    lhs_node = p[1]
+    rhs_node = p[3]
+    p[0] = AssignmentNode(lhs_node,rhs_node)
 
+    
 def p_Variable(p):
     '''
     Variable : Identifier
              | Variable LEFT_BRACKET Expression RIGHT_BRACKET
              | Variable DOT Identifier
     '''
+
+    if len(p) == 2:
+        # Identifier
+        identifier_node = p[1]
+        p[0] = identifier_node
+        
+    elif len(p) == 5:
+        # bracket expression
+        
+        # variable_node is either an identifier node, bracket node, or
+        # dot node        
+        variable_node = p[1]
+        inner_bracket_node = p[3]
+        bracket_node = BracketNode(variable_node,inner_bracket_node)
+        p[0] = bracket_node
+        
+    elif len(p) == 4:
+        # dot expression
+        
+        # variable_node is either an identifier node, bracket node, or
+        # dot node
+        variable_node = p[1]
+        identifier_node = p[3]
+        dot_node = DotNode(variable_node,identifier_node)
+        p[0] = dot_node
+
+
     
 def p_ReturnStatement(p):
     '''
@@ -338,6 +374,12 @@ def p_NotExpression(p):
     NotExpression : NOT Term
                   | Term
     '''
+    p[0] = p[1]
+    if len(p) == 3:
+        term_node = p[2]
+        not_node = NotNode(term_node)
+        p[0] = not_node
+
     
 def p_Term(p):
     '''
@@ -350,19 +392,38 @@ def p_Term(p):
          | RangeExpression
          | LenExpression
     '''
+    term_node = p[1]
+    if len(p) == 4:
+        term_node = p[2]
+
+    p[0] = term_node
+    
+    
 def p_Number(p):
     '''
     Number : NUMBER
     '''
+    number_literal = p[1]
+    line_number = p.lineno(1)
+    p[0] = NumberLiteralNode(number_literal,line_number)
+    
 def p_String(p):
     '''
     String : SINGLE_LINE_STRING
     '''
+    text_literal = p[1]
+    line_number = p.lineno(1)
+    p[0] = TextLiteralNode(text_literal,line_number)
+    
 def p_Boolean(p):
     '''
     Boolean : TRUE
             | FALSE
     '''
+    boolean_literal = p[1] == TRUE_TOKEN
+    line_number = p.lineno(1)
+    p[0] = BooleanLiteralNode(boolean_literal,line_number)
+
     
 def p_VariableType(p):
     '''

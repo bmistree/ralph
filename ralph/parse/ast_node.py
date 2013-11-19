@@ -153,7 +153,76 @@ class ScopeNode (_AstNode):
     def get_statement_list(self):
         return list(self.statement_list)
         
+class ParallelNode(_AstNode):
+    def __init__(
+        self,to_iter_over_expression_node,lambda_expression_node,line_number):
+        super(ParallelNode,self).__init__(ast_labels.PARALLEL,line_number)
+        self.to_iter_over_expression_node = to_iter_over_expression_node
+        self.lambda_expression_node = lambda_expression_node
     
+class AssignmentNode(_AstNode):
+    def __init__(self,lhs_node,rhs_node):
+        super(AssignmentNode,self).__init__(
+            ast_labels.ASSIGNMENT,lhs_node.line_number)
+        self.lhs_node = lhs_node
+        self.rhs_node = rhs_node
+
+class NotNode(_AstNode):
+    def __init__(self,to_not_node):
+        super(NotNode,self).__init__(
+            ast_labels.NOT,to_not_node.line_number)
+        
+        self.to_not_node = to_not_node
+
+class BracketNode(_AstNode):
+    def __init__(self,outside_bracket_node,inside_bracket_node):
+        '''
+        @param {_AstNode} outside_bracket_node --- variable_node is
+        either an identifier node, bracket node, or dot node
+        '''
+        super(BracketNode,self).__init__(
+            ast_labels.BRACKET,outside_bracket_node.line_number)
+        
+        self.outside_bracket_node = outside_bracket_node
+        self.inside_bracket_node = inside_bracket_node
+
+class DotNode(_AstNode):
+    def __init__(self,left_of_dot_node, right_of_dot_node):
+        super(DotNode,self).__init__(
+            ast_labels.DOT,left_of_dot_node.line_number)
+        
+        self.left_of_dot_node = left_of_dot_node
+        self.right_of_dot_node = right_of_dot_node
+
+        
+class _LiteralNode(_AstNode):
+    '''
+    Parent class of NumberLiteralNode, TextLiteralNode,
+    TrueFalseLiteralNode
+    '''
+    def __init__(self,label,value,line_number):
+        super(_LiteralNode,self).__init__(label,line_number)
+        self.line_number = line_number
+    
+class NumberLiteralNode(_LiteralNode):
+    def __init__(self,number,line_number):
+        super(NumberLiteralNode,self).__init__(
+            ast_labels.NUMBER_LITERAL,number,line_number)
+        
+class TextLiteralNode(_LiteralNode):
+    def __init__(self,text,line_number):
+        super(TextLiteralNode,self).__init__(
+            ast_labels.TEXT_LITERAL,line_number)
+        self.value = text
+        
+class TrueFalseLiteralNode(_LiteralNode):
+    def __init__(self,true_false,line_number):
+        super(TrueFalseLiteralNode,self).__init__(
+            ast_labels.TRUE_FALSE_LITERAL,line_number)
+        self.value = true_false
+    
+        
+        
 class VariableTypeNode(_AstNode):
     def __init__(self,basic_type,is_tvar,line_number):
         
