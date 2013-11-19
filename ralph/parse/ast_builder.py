@@ -90,13 +90,13 @@ def p_DeclarationStatement(p):
     
 def p_MethodDeclaration(p):
     '''
-    MethodDeclaration : MethodSignature CURLY_LEFT MethodBody CURLY_RIGHT
+    MethodDeclaration : MethodSignature CURLY_LEFT ScopeBody CURLY_RIGHT
                       | MethodSignature CURLY_LEFT CURLY_RIGHT
     '''
     method_signature_node = p[1]
     if len(p) == 4:
         # construct empty method body node
-        method_body_node = MethodBodyNode(method_signature_node.line_number)
+        method_body_node = ScopeBodyNode(method_signature_node.line_number)
     if len(p) == 5:
         method_body_node = p[3]
     
@@ -104,16 +104,16 @@ def p_MethodDeclaration(p):
         method_signature_node,method_body_node)
 
     
-def p_MethodBody(p):
+def p_ScopeBody(p):
     '''
-    MethodBody : MethodBody Statement
-               | Statement
+    ScopeBody : ScopeBody Statement
+              | Statement
     '''
     if len(p) == 2:
         statement_node = p[1]
         # FIXME: use actual line number
-        method_body_node = MethodBodyNode(0)
-        # method_body_node = MethodBodyNode(statement_node.line_number)
+        method_body_node = ScopeBodyNode(0)
+        # method_body_node = ScopeBodyNode(statement_node.line_number)
     else:
         method_body_node = p[1]
         statement_node = p[2]
@@ -252,7 +252,7 @@ def p_ForStatement(p):
 
 def p_ScopeStatement(p):
     '''
-    ScopeStatement : CURLY_LEFT MethodBody CURLY_RIGHT
+    ScopeStatement : CURLY_LEFT ScopeBody CURLY_RIGHT
                    | CURLY_LEFT CURLY_RIGHT
     '''
     # line_number = p.lineno(1)

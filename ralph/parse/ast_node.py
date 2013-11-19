@@ -92,7 +92,7 @@ class DeclarationStatementNode(_AstNode):
 
 class MethodDeclarationNode(_AstNode):
     def __init__(
-        self,method_signature_node,method_body_node = None):
+        self,method_signature_node,scope_body_node ):
 
         super(MethodDeclarationNode,self).__init__(
             ast_labels.METHOD_DECLARATION,
@@ -100,7 +100,7 @@ class MethodDeclarationNode(_AstNode):
             method_signature_node.type)
 
         self.method_name = method_signature_node.get_method_name()
-        self.method_body_node = method_body_node.statement_list()
+        self.method_body_node = scope_body_node.statement_list()
         
 class MethodSignatureNode(_AstNode):
     def __init__(
@@ -193,10 +193,10 @@ class MethodDeclarationArgsNode(_AstNode):
     def to_list(self):
         return list(self.children)
         
-class MethodBodyNode(_AstNode):
+class ScopeBodyNode(_AstNode):
     def __init__(self,line_number):
-        super(MethodBodyNode,self).__init__(
-            ast_labels.METHOD_BODY,line_number)
+        super(ScopeBodyNode,self).__init__(
+            ast_labels.SCOPE_BODY,line_number)
         
     def prepend_statement_node(self,statement_node):
         self._prepend_child(statement_node)
