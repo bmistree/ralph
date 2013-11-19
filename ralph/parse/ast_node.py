@@ -128,7 +128,7 @@ class MethodSignatureNode(_AstNode):
         return self.method_name
 
 
-class MethodDecalrationArgNode(_AstNode):
+class MethodDeclarationArgNode(_AstNode):
     def __init__(self, variable_type_node, name_identifier_node):
         super(MethodDeclarationArgNode,self).__init__(
             ast_labels.METHOD_DECLARATION_ARG,
