@@ -1,6 +1,7 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer,TRUE_TOKEN
 import deps.ply.ply.yacc as yacc
 from ralph.parse.ast_node import *
+from ralph.parse.parse_util import InternalParseException,ParseException
 
 #note: global variable used by yacc.  Without this set, otherwise,
 #starts at first rule.
@@ -109,9 +110,7 @@ def p_ScopeBody(p):
     '''
     if len(p) == 2:
         statement_node = p[1]
-        # FIXME: use actual line number
-        scope_body_node = ScopeBodyNode(0)
-        # scope_body_node = ScopeBodyNode(statement_node.line_number)
+        scope_body_node = ScopeBodyNode(statement_node.line_number)
     else:
         scope_body_node = p[1]
         statement_node = p[2]
@@ -308,6 +307,11 @@ def p_Variable(p):
         identifier_node = p[3]
         dot_node = DotNode(variable_node,identifier_node)
         p[0] = dot_node
+    #### DEBUG
+    else:
+        raise InternalParseException(
+            'Incorrect number of tokens in variable')
+    #### END DEBUG
 
 
     
@@ -321,24 +325,45 @@ def p_Expression(p):
     '''
     Expression : OrExpression
     '''
+    p[0] = p[1]
     
 def p_OrExpression(p):
     '''
     OrExpression : OrExpression OR AndExpression
                  | AndExpression
     '''
-    
+    return production_rule_for_binary_operator(p)
+
 def p_AndExpression(p):
     '''
     AndExpression : AndExpression AND InNotInExpression
                   | InNotInExpression
     '''
+    return production_rule_for_binary_operator(p)
+
 def p_InNotInExpression (p):
     '''
     InNotInExpression : InNotInExpression IN EqualsNotEqualsExpression
                       | InNotInExpression NOT IN EqualsNotEqualsExpression
                       | EqualsNotEqualsExpression
     '''
+    if len(p) == 2:
+        etc_expression = p[1]
+        p[0] = etc_expression
+    else:
+        if len(p) == 4:
+            lhs_expression_node = p[1]
+            rhs_expression_node = p[3]
+            operator = p[2]
+        else:
+            lhs_expression_node = p[1]
+            rhs_expression_node = p[4]
+            operator = 'not in'
+
+        p[0] = create_binary_expression_node(
+            operator,lhs_expression_node,rhs_expression_node)
+
+
     
 def p_EqualsNotEqualsExpression(p):
     '''
@@ -346,7 +371,8 @@ def p_EqualsNotEqualsExpression(p):
                               | EqualsNotEqualsExpression BOOL_NOT_EQUALS GreaterThanLessThanExpression
                               | GreaterThanLessThanExpression
     '''
-
+    return production_rule_for_binary_operator(p)
+    
 def p_GreaterThanLessThanExpression(p):
     '''
     GreaterThanLessThanExpression : GreaterThanLessThanExpression GREATER_THAN PlusMinusExpression
@@ -355,7 +381,7 @@ def p_GreaterThanLessThanExpression(p):
                                   | GreaterThanLessThanExpression LESS_THAN_EQ PlusMinusExpression
                                   | PlusMinusExpression
     '''
-
+    return production_rule_for_binary_operator(p)
     
 def p_PlusMinusExpression(p):
     '''
@@ -363,12 +389,35 @@ def p_PlusMinusExpression(p):
                         | PlusMinusExpression MINUS MultDivExpression
                         | MultDivExpression
     '''
+    return production_rule_for_binary_operator(p)
+    
 def p_MultDivExpression(p):
     '''
     MultDivExpression : MultDivExpression MULTIPLY NotExpression
                       | MultDivExpression DIVIDE NotExpression
                       | NotExpression
-    '''    
+    '''
+
+    return production_rule_for_binary_operator(p)
+
+def production_rule_for_binary_operator(p):
+    '''
+    Generally has the form
+      rule : rule operator etc
+           | etc
+    '''
+    if len(p) == 2:
+        etc_expression = p[1]
+        p[0] = etc_expression
+    else:
+        lhs_expression_node = p[1]
+        rhs_expression_node = p[3]
+        operator = p[2]
+
+        p[0] = create_binary_expression_node(
+            operator,lhs_expression_node,rhs_expression_node)
+
+    
 def p_NotExpression(p):
     '''
     NotExpression : NOT Term
@@ -380,7 +429,7 @@ def p_NotExpression(p):
         not_node = NotNode(term_node)
         p[0] = not_node
 
-    
+        
 def p_Term(p):
     '''
     Term : Variable
@@ -397,7 +446,7 @@ def p_Term(p):
         term_node = p[2]
 
     p[0] = term_node
-    
+
     
 def p_Number(p):
     '''

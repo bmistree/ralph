@@ -234,6 +234,114 @@ class VariableTypeNode(_AstNode):
     def _build_type(self,basic_type,is_tvar):
         return Type(basic_type,is_tvar)
     
+class _BinaryExpressionNode(_AstNode):
+    def __init__(
+        self,label,lhs_expression_node,rhs_expression_node):
+
+        super (_BinaryExpressionNode,self).__init__(
+            label,lhs_expression_node.line_number)
+        self.lhs_expression_node = lhs_expression_node
+        self.rhs_expression_node = rhs_expression_node
+
+class MultiplyExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(MultiplyExpressionNode,self).__init__(
+            ast_labels.MULTIPLY,lhs_expression_node,rhs_expression_node)
+
+        
+class DivideExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(DivideExpressionNode,self).__init__(
+            ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
+
+class AddExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(AddExpressionNode,self).__init__(
+            ast_labels.ADD,lhs_expression_node,rhs_expression_node)
+
+class SubtractExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(SubtractExpressionNode,self).__init__(
+            ast_labels.SUBTRACT,lhs_expression_node,rhs_expression_node)
+class GreaterThanExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(GreaterThanExpressionNode,self).__init__(
+            ast_labels.GREATER_THAN,lhs_expression_node,rhs_expression_node)
+class GreaterThanEqualsExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(GreaterThanEqualsExpressionNode,self).__init__(
+            ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
+class LessThanExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(LessThanExpressionNode,self).__init__(
+            ast_labels.LESS_THAN,lhs_expression_node,rhs_expression_node)
+class LessThanEqualsExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(LessThanEqualsExpressionNode,self).__init__(
+            ast_labels.LESS_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
+class EqualsExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(EqualsExpressionNode,self).__init__(
+            ast_labels.EQUALS,lhs_expression_node,rhs_expression_node)
+class NotEqualsExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(NotEqualsExpressionNode,self).__init__(
+            ast_labels.NOT_EQUALS,lhs_expression_node,rhs_expression_node)
+class AndExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(AndExpressionNode,self).__init__(
+            ast_labels.AND,lhs_expression_node,rhs_expression_node)
+class OrExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(OrExpressionNode,self).__init__(
+            ast_labels.OR,lhs_expression_node,rhs_expression_node)
+class InExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(InExpressionNode,self).__init__(
+            ast_labels.IN,lhs_expression_node,rhs_expression_node)
+class NotInExpressionNode(_BinaryExpressionNode):
+    def __init__(self,lhs_expression_node,rhs_expression_node):
+        super(NotInExpressionNode,self).__init__(
+            ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
+
+        
+        
+def create_binary_expression_node(
+    operator,lhs_expression_node,rhs_expression_node):
+
+    if operator == '*':
+        return MultiplyExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == '/':
+        return DivideExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == '+':
+        return AddExpressionNode(lhs_expression_node,rhs_expression_node)    
+    elif operator == '-':
+        return SubtractExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == '>':
+        return GreaterThanExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == '>=':
+        return GreaterThanEqualsExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == '<':
+        return LessThanExpressionNode(lhs_expression_node,rhs_expression_node)    
+    elif operator == '<=':
+        return LessThanEqualsExpressionNode(lhs_expression_node,rhs_expression_node)    
+    elif operator == '==':
+        return EqualsExpressionNode(lhs_expression_node,rhs_expression_node)    
+    elif operator == '!=':
+        return NotEqualsExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == 'and':
+        return AndExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == 'or':
+        return OrExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == 'in':
+        return InExpressionNode(lhs_expression_node,rhs_expression_node)
+    elif operator == 'not in':
+        return NotInExpressionNode(lhs_expression_node,rhs_expression_node)
+    
+    raise InternalParseException(
+        'Unknown binary operator when creating binary expression')
+
+    
     
 #### Intermediate nodes that get removed from actual AST ####
     
