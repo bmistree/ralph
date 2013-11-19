@@ -232,6 +232,10 @@ def p_IfStatement(p):
     '''
     IfStatement : IF LEFT_PAREN Expression RIGHT_PAREN Statement
     '''
+    predicate_node = p[3]
+    if_body_node = p[5]
+    line_number = p.lineno(1)
+    p[0] = IfNode(predicate_node,if_body_node,line_number)
 
 def p_ElseIfStatements(p):
     '''

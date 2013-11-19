@@ -181,6 +181,13 @@ class LenNode(_AstNode):
         
         self.len_of_node = len_of_node
 
+class IfNode(_AstNode):
+    def __init__(self,predicate_node,if_body_node,line_number):
+        super(IfNode,self).__init__(ast_labels.IF,line_number)
+
+        self.predicate_node = predicate_node
+        self.body_node = if_body_node
+        
         
 class BracketNode(_AstNode):
     def __init__(self,outside_bracket_node,inside_bracket_node):
