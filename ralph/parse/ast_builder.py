@@ -475,8 +475,12 @@ def p_Term(p):
 def p_Number(p):
     '''
     Number : NUMBER
+           | MINUS NUMBER
     '''
-    number_literal = p[1]
+    if len(p) == 2:
+        number_literal = float(p[1])
+    else:
+        number_literal = -float(p[2])
     line_number = p.lineno(1)
     p[0] = NumberLiteralNode(number_literal,line_number)
     
