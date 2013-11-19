@@ -38,22 +38,56 @@ def p_EndpointList(p):
     
 def p_EndpointDefinition(p):
     '''
-    EndpointDefinition : ENDPOINT Identifier CURLY_LEFT EndpointMiddle CURLY_RIGHT
+    EndpointDefinition : ENDPOINT Identifier CURLY_LEFT EndpointBody CURLY_RIGHT
     '''
+    line_number = p.lineno(1)
+    endpoint_name_identifier_node = p[2]
+    endpoint_body_node = p[4]
+    
+    p[0] = EndpointDefinitionNode(
+        endpoint_name_identifier_node,endpoint_body_node,line_number)
 
-def p_EndpointMiddle(p):
+
+def p_EndpointBody(p):
     '''
-    EndpointMiddle : DeclarationStatement SEMI_COLON EndpointMiddle
-                   | FunctionDeclaration EndpointMiddle
-                   | Empty
+    EndpointBody : DeclarationStatement SEMI_COLON EndpointBody
+                 | FunctionDeclaration EndpointBody
+                 | Empty
     '''
+    if len(p) == 4:
+        # variable declaration statement
+        declaration_statement_node = p[1]
+        endpoint_body_node = p[3]
+        endpoint_body_node.prepend_variable_declaration_node(
+            declaration_statement_node)
+    elif len(p) == 3:
+        # function declaration statement
+        function_declaration_node = p[1]
+        endpoint_body_node = p[2]
+        endpoint_body_node.prepend_function_declaration_node(
+            function_declaration_node)
+    else:
+        # empty statement
+        endpoint_body_node = EndpointBodyNode()
+
+    p[0] = endpoint_body_node
 
 def p_DeclarationStatement(p):
     '''
     DeclarationStatement : VariableType Identifier
                          | VariableType Identifier EQUALS Expression
     '''
+    initializer_node = None
+    
+    if len(p) == 5:
+        initializer_node = p[4]
 
+    identifier_node = p[2]
+    variable_type_node = p[1]
+    p[0] = DeclarationStatementNode(
+        identifier_node,variable_type_node,initializer_node)
+
+    
 def p_FunctionDeclaration(p):
     '''
     FunctionDeclaration : FunctionSignature CURLY_LEFT FunctionBody CURLY_RIGHT
@@ -279,11 +313,25 @@ def p_VariableType(p):
                  | TVAR NUMBER_TYPE
                  | TVAR STRING_TYPE
     '''
+    basic_type_index = 1
+    is_tvar = False
+    if len(p) == 3:
+        basic_type_index = 2
+        is_tvar = True
+
+    basic_type = p[basic_type_index]
+    line_number = p.lineno(basic_type_index)
+    p[0] = VariableTypeNode(basic_type,is_tvar,line_number)
+
 
 def p_Identifier(p):
     '''
     Identifier : IDENTIFIER
     '''
+    line_number = p.lineno(1)
+    value = p[1]
+    p[0] = IdentifierNode(value,line_number)
+    
 
 def p_Empty(p):
     '''

@@ -1,7 +1,12 @@
 
 
 ROOT_STATEMENT = 'root_statement'
-ENDPOINT_DEFINITION = 'endpoint_definition'
+ENDPOINT_DEFINITION_STATEMENT = 'endpoint_definition'
+ENDPOINT_BODY = 'endpoint_body'
+IDENTIFIER_EXPRESSION = 'identifier'
+DECLARATION_STATEMENT = 'declaration_statement'
+VARIABLE_TYPE = 'variable_type'
 
 ### intermediate ast nodes that get removed from tree ###
 ENDPOINT_LIST_STATEMENT = 'endpoint_list_statement'
+EMPTY_STATEMENT = 'empty_statement'
