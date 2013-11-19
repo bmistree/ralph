@@ -51,7 +51,7 @@ def p_EndpointDefinition(p):
 def p_EndpointBody(p):
     '''
     EndpointBody : DeclarationStatement SEMI_COLON EndpointBody
-                 | FunctionDeclaration EndpointBody
+                 | MethodDeclaration EndpointBody
                  | Empty
     '''
     if len(p) == 4:
@@ -61,11 +61,11 @@ def p_EndpointBody(p):
         endpoint_body_node.prepend_variable_declaration_node(
             declaration_statement_node)
     elif len(p) == 3:
-        # function declaration statement
-        function_declaration_node = p[1]
+        # method declaration statement
+        method_declaration_node = p[1]
         endpoint_body_node = p[2]
-        endpoint_body_node.prepend_function_declaration_node(
-            function_declaration_node)
+        endpoint_body_node.prepend_method_declaration_node(
+            method_declaration_node)
     else:
         # empty statement
         endpoint_body_node = EndpointBodyNode()
@@ -88,46 +88,95 @@ def p_DeclarationStatement(p):
         identifier_node,variable_type_node,initializer_node)
 
     
-def p_FunctionDeclaration(p):
+def p_MethodDeclaration(p):
     '''
-    FunctionDeclaration : FunctionSignature CURLY_LEFT FunctionBody CURLY_RIGHT
-                        | FunctionSignature CURLY_LEFT CURLY_RIGHT
+    MethodDeclaration : MethodSignature CURLY_LEFT MethodBody CURLY_RIGHT
+                      | MethodSignature CURLY_LEFT CURLY_RIGHT
     '''
+    method_signature_node = p[1]
+    if len(p) == 4:
+        # construct empty method body node
+        method_body_node = MethodBodyNode(method_signature_node.line_number)
+    if len(p) == 5:
+        method_body_node = p[3]
+    
+    p[0] = MethodDeclarationNode(
+        method_signature_node,method_body_node)
 
-def p_FunctionBody(p):
+    
+def p_MethodBody(p):
     '''
-    FunctionBody : FunctionBody Statement
-                 | Statement
+    MethodBody : MethodBody Statement
+               | Statement
+    '''
+    if len(p) == 2:
+        statement_node = p[1]
+        # FIXME: use actual line number
+        method_body_node = MethodBodyNode(0)
+        # method_body_node = MethodBodyNode(statement_node.line_number)
+    else:
+        method_body_node = p[1]
+        statement_node = p[2]
+
+    method_body_node.prepend_statement_node(statement_node)
+    p[0] = method_body_node
+    
+    
+def p_MethodSignature(p):
+    '''
+    MethodSignature : Identifier LEFT_PAREN MethodDeclarationArgs RIGHT_PAREN
+                    | Identifier LEFT_PAREN MethodDeclarationArgs RIGHT_PAREN RETURNS VariableType
+    '''
+    method_name_identifier_node = p[1]
+    method_declaration_args_node = p[3]
+    returns_variable_type_node = None
+    if len(p) == 7:
+        returns_variable_type_node = p[6]
+
+    p[0] = MethodSignatureNode(
+        method_name_identifier_node,method_declaration_args_node,
+        returns_variable_type_node)
+
+    
+def p_MethodDeclarationArgs(p):
+    '''
+    MethodDeclarationArgs : MethodDeclarationArg
+                          | MethodDeclarationArgs COMMA MethodDeclarationArg
+                          | Empty
+    '''
+    if len(p) == 2:
+        method_declaration_args = MethodDeclarationArgsNode()
+        second_arg = p[1]
+        if second_arg is not None:
+            method_declaration_args.prepend_method_declaration_arg(second_arg)
+    else:
+        method_declaration_args = p[1]
+        method_declaration_arg = p[3]
+        method_declaration_args.prepend_method_declaration_arg(
+            method_declaration_arg)
+
+    p[0] = method_declaration_args
+        
+    
+def p_MethodDeclarationArg(p):
+    '''
+    MethodDeclarationArg : VariableType Identifier
+    '''
+    variable_type_node = p[1]
+    identifier_node = p[2]
+    p[0] = MethodDeclarationArgNode(variable_type_node,identifier_node)
+    
+
+def p_MethodCall(p):
+    '''
+    MethodCall : Variable LEFT_PAREN MethodCallArgs RIGHT_PAREN
     '''
     
-def p_FunctionSignature(p):
+def p_MethodCallArgs(p):
     '''
-    FunctionSignature : Identifier LEFT_PAREN FunctionDeclarationArgs RIGHT_PAREN
-                      | Identifier LEFT_PAREN FunctionDeclarationArgs RIGHT_PAREN RETURNS VariableType
-    '''
-    
-def p_FunctionDeclarationArgs(p):
-    '''
-    FunctionDeclarationArgs : FunctionDeclarationArg
-                            | FunctionDeclarationArgs COMMA FunctionDeclarationArg
-                            | Empty
-    '''
-
-def p_FunctionDeclarationArg(p):
-    '''
-    FunctionDeclarationArg : VariableType Identifier
-    '''
-
-def p_FunctionCall(p):
-    '''
-    FunctionCall : Variable LEFT_PAREN FunctionCallArgs RIGHT_PAREN
-    '''
-    
-def p_FunctionCallArgs(p):
-    '''
-    FunctionCallArgs : Expression
-                     | FunctionCallArgs COMMA Expression
-                     | Empty
+    MethodCallArgs : Expression
+                   | MethodCallArgs COMMA Expression
+                   | Empty
     '''
     
 def p_Statement(p):
@@ -142,10 +191,15 @@ def p_Statement(p):
               | ScopeStatement
               | AtomicallyStatement
     '''
+    p[0] = p[1]
+    
 def p_AtomicallyStatement(p):
     '''
     AtomicallyStatement : ATOMICALLY ScopeStatement
     '''
+    scope_node = p[2]
+    p[0] = AtomicallyNode(scope_node)
+    
     
 def p_ParallelStatement(p):
     '''
@@ -201,6 +255,9 @@ def p_ScopeStatement(p):
     ScopeStatement : CURLY_LEFT Statement CURLY_RIGHT
                    | CURLY_LEFT CURLY_RIGHT
     '''
+    # line_number = p.lineno(1)
+    
+    
     
 def p_AssignmentStatement(p):
     '''
@@ -281,7 +338,7 @@ def p_NotExpression(p):
 def p_Term(p):
     '''
     Term : Variable
-         | FunctionCall
+         | MethodCall
          | Number
          | String
          | Boolean
@@ -337,6 +394,7 @@ def p_Empty(p):
     '''
     Empty :
     '''
+    p[0] = None
     
     
 def construct_parser(suppress_warnings):
