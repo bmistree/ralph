@@ -209,6 +209,15 @@ class DotNode(_AstNode):
         self.left_of_dot_node = left_of_dot_node
         self.right_of_dot_node = right_of_dot_node
 
+
+class MethodCallNode(_AstNode):
+    def __init__(self,variable_node,method_call_args_node):
+        super(MethodCallNode,self).__init__(
+            ast_labels.METHOD_CALL,variable_node.line_number)
+        
+        self.method_node = variable_node
+        self.args_list = method_call_args_node.get_args_list()
+
         
 class _LiteralNode(_AstNode):
     '''
@@ -402,3 +411,16 @@ class ScopeBodyNode(_AstNode):
         order that it appears in the method's body.
         '''
         return list(self.children)
+
+class MethodCallArgsNode(_AstNode):
+    def __init__(self,line_number):
+        super(MethodCallArgsNode,self).__init__(
+            ast_labels.METHOD_CALL_ARGS,line_number)
+
+    def prepend_arg(self,expression_node):
+        self._prepend_child(expression_node)
+
+    def get_args_list(self):
+        return list(self.children)
+
+

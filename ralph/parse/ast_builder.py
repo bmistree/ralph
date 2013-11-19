@@ -168,6 +168,9 @@ def p_MethodCall(p):
     '''
     MethodCall : Variable LEFT_PAREN MethodCallArgs RIGHT_PAREN
     '''
+    method_name_node = p[1]
+    method_args_node = p[3]
+    p[0] = MethodCallNode(method_name_node,method_args_node)
     
 def p_MethodCallArgs(p):
     '''
@@ -175,6 +178,23 @@ def p_MethodCallArgs(p):
                    | MethodCallArgs COMMA Expression
                    | Empty
     '''
+    if len(p) == 4:
+        expression_node = p[3]
+        method_call_args_node = p[1]
+        method_call_args_node.prepend_arg(expression_node)
+    else:
+        if is_empty(p[1]):
+            method_call_args_node = MethodCallArgsNode(0)
+        else:
+            expression_node = p[1]
+            method_call_args_node = MethodCallArgsNode(
+                expression_node.line_number)
+            method_call_args_node.prepend_arg(expression_node)
+        
+
+    p[0] = method_call_args_node
+        
+
     
 def p_Statement(p):
     '''
@@ -513,7 +533,9 @@ def p_Empty(p):
     Empty :
     '''
     p[0] = None
-    
+
+def is_empty(to_test):
+    return to_test is None
     
 def construct_parser(suppress_warnings):
     global lexer

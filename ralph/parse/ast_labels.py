@@ -44,8 +44,11 @@ NOT_IN = 'not_in'
 LEN = 'len'
 IF = 'if'
 
+METHOD_CALL = 'method_call'
+
 ### intermediate ast nodes that get removed from tree ###
 ENDPOINT_LIST_STATEMENT = 'endpoint_list_statement'
 EMPTY_STATEMENT = 'empty_statement'
 METHOD_DECLARATION_ARGS = 'method_declaration_args'
 SCOPE_BODY = 'scope_body'
+METHOD_CALL_ARGS = 'method_call_args'
