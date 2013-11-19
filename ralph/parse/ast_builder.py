@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from ralph.lex.ralph_lex import tokens,construct_lexer
 import deps.ply.ply.yacc as yacc
 from ralph.parse.ast_node import *
