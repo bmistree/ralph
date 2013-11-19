@@ -252,11 +252,11 @@ def p_ForStatement(p):
 
 def p_ScopeStatement(p):
     '''
-    ScopeStatement : CURLY_LEFT Statement CURLY_RIGHT
+    ScopeStatement : CURLY_LEFT MethodBody CURLY_RIGHT
                    | CURLY_LEFT CURLY_RIGHT
     '''
     # line_number = p.lineno(1)
-    
+
     
     
 def p_AssignmentStatement(p):
