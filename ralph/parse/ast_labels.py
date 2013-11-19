@@ -10,6 +10,7 @@ METHOD_DECLARATION = 'method_declaration'
 METHOD_SIGNATURE = 'method_signature'
 METHOD_DECLARATION_ARG = 'method_declaration_arg'
 ATOMICALLY = 'atomically'
+SCOPE = 'scope'
 
 
 ### intermediate ast nodes that get removed from tree ###

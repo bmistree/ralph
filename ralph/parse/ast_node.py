@@ -20,7 +20,7 @@ class _AstNode(object):
         self.children = []
 
         
-    def _add_child(self,child_node):
+    def _append_child(self,child_node):
         '''
         Should be protected method, but do not have decorator for it
         '''
@@ -40,7 +40,7 @@ class RootStatementNode(_AstNode):
         #### END DEBUG
         
         for endpoint_node in endpoint_node_list:
-            self._add_child(endpoint_node)
+            self._append_child(endpoint_node)
 
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
@@ -100,7 +100,7 @@ class MethodDeclarationNode(_AstNode):
             method_signature_node.type)
 
         self.method_name = method_signature_node.get_method_name()
-        self.method_body_node = scope_body_node.statement_list()
+        self.method_body_node = scope_body_node.get_statement_list()
         
 class MethodSignatureNode(_AstNode):
     def __init__(
@@ -139,16 +139,19 @@ class MethodDeclarationArgNode(_AstNode):
 class AtomicallyNode(_AstNode):
     def __init__(self,scope_node):
 
-        # super(AtomicallyNode,self).__init__(
-        #     ast_labels.ATOMICALLY,scope_node.line_number)
-        
-        # FIXME: use actual line number
         super(AtomicallyNode,self).__init__(
-            ast_labels.ATOMICALLY,0)
+            ast_labels.ATOMICALLY,scope_node.line_number)
+
+        self.statement_list = scope_node.get_statement_list()
         
-# class ScopeNode (_AstNode):
-#     def __init__(self,line_number):
+class ScopeNode (_AstNode):
+    def __init__(self,scope_body_node):
+        super(ScopeNode,self).__init__(
+            ast_labels.SCOPE,scope_body_node.line_number)
         
+        self.statement_list = scope_body_node.get_statement_list()
+    def get_statement_list(self):
+        return list(self.statement_list)
         
     
 class VariableTypeNode(_AstNode):
@@ -170,7 +173,7 @@ class EndpointListNode(_AstNode):
         super(EndpointListNode,self).__init__(
             ast_labels.ENDPOINT_LIST_STATEMENT,0)
 
-        self._add_child(endpoint_definition_node)
+        self._append_child(endpoint_definition_node)
 
     def prepend_endpoint_definition(self,endpoint_definition_node):
         self._prepend_child(endpoint_definition_node)
@@ -201,7 +204,7 @@ class ScopeBodyNode(_AstNode):
     def prepend_statement_node(self,statement_node):
         self._prepend_child(statement_node)
 
-    def statement_list(self):
+    def get_statement_list(self):
         '''
         @returns{list} --- Each element is an ast node ordered by the
         order that it appears in the method's body.

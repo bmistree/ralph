@@ -112,14 +112,14 @@ def p_ScopeBody(p):
     if len(p) == 2:
         statement_node = p[1]
         # FIXME: use actual line number
-        method_body_node = ScopeBodyNode(0)
-        # method_body_node = ScopeBodyNode(statement_node.line_number)
+        scope_body_node = ScopeBodyNode(0)
+        # scope_body_node = ScopeBodyNode(statement_node.line_number)
     else:
-        method_body_node = p[1]
+        scope_body_node = p[1]
         statement_node = p[2]
 
-    method_body_node.prepend_statement_node(statement_node)
-    p[0] = method_body_node
+    scope_body_node.prepend_statement_node(statement_node)
+    p[0] = scope_body_node
     
     
 def p_MethodSignature(p):
@@ -255,7 +255,13 @@ def p_ScopeStatement(p):
     ScopeStatement : CURLY_LEFT ScopeBody CURLY_RIGHT
                    | CURLY_LEFT CURLY_RIGHT
     '''
-    # line_number = p.lineno(1)
+    line_number = p.lineno(1)
+    if len(p) == 3:
+        scope_body_node = ScopeBodyNode(line_number)
+    else:
+        scope_body_node = p[2]
+    p[0] = ScopeNode(scope_body_node)
+        
 
     
     
