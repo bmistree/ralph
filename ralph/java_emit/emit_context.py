@@ -27,6 +27,22 @@ class EmitContext(object):
     def __init__(self):
         # end of list is more recent scope
         self.scope_stack = []
+
+        # True if emitting expression for left hand side of assignment
+        # statement.  False if emitting a statement that is not an
+        # assign or if emitting the rhs of an assignment statement.
+        self.lhs_of_assign = False
+
+    def set_lhs_of_assign(self,lhs_of_assign):
+        '''
+        @param {boolean} lhs_of_assign --- True if emitting expression for left
+        hand side of assignment statement.  False if emitting a
+        statement that is not an assign or if emitting the rhs of an
+        assignment statement.
+        '''
+        self.lhs_of_assign = lhs_of_assign
+    def get_lhs_of_assign(self):
+        return self.lhs_of_assign
         
     def push_scope(self):
         self.scope_stack.append(Scope())
