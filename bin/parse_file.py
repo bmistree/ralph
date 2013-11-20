@@ -14,7 +14,7 @@ def parse(filename):
     file_fd.close()
 
     parser = construct_parser(False)
-    parser.parse(prog_text)
+    return parser.parse(prog_text)
 
 if __name__ == '__main__':
     filename = sys.argv[1]
