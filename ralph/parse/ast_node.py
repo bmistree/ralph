@@ -100,6 +100,7 @@ class MethodDeclarationNode(_AstNode):
             method_signature_node.type)
 
         self.method_name = method_signature_node.get_method_name()
+        self.method_signature_node = method_signature_node
         self.method_body_node = scope_body_node.get_statement_list()
         
 class MethodSignatureNode(_AstNode):
