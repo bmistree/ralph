@@ -181,12 +181,19 @@ class LenNode(_AstNode):
         
         self.len_of_node = len_of_node
 
-class IfNode(_AstNode):
-    def __init__(self,predicate_node,if_body_node,line_number):
-        super(IfNode,self).__init__(ast_labels.IF,line_number)
+class ConditionNode(_AstNode):
+    def __init__(self,if_node,elifs_node,else_node):
+        '''
+        @param {ElseNode} else_node --- Can have a body of None.
+        '''
+        super(ConditionNode,self).__init__(
+            ast_labels.CONDITION,if_node.line_number)
 
-        self.predicate_node = predicate_node
-        self.body_node = if_body_node
+        self.if_node = if_node
+        self.elifs_list = elifs_node.get_else_if_node_list()
+        # else_none_body may be None
+        self.else_node_body = else_node.body_node
+
         
         
 class BracketNode(_AstNode):
@@ -424,3 +431,33 @@ class MethodCallArgsNode(_AstNode):
         return list(self.children)
 
 
+class IfNode(_AstNode):
+    def __init__(self,predicate_node,if_body_node,line_number):
+        super(IfNode,self).__init__(ast_labels.IF,line_number)
+
+        self.predicate_node = predicate_node
+        self.body_node = if_body_node
+
+class ElseIfNodes(_AstNode):
+    def __init__(self):
+        super(ElseIfNodes,self).__init__(ast_labels.ELSE_IFS,0)
+        # each element of children is an if ndoe
+
+    def prepend_else_if(self,else_if_node):
+        '''
+        @param {IfNode} else_if_node --- Because of similar structure,
+        each else_if_node is an IfNode.
+        '''
+        self._prepend_child(else_if_node)
+        
+    def get_else_if_node_list(self):
+        return list(self.children)
+
+class ElseNode (_AstNode):
+    def __init__(self,line_number):
+        super(ElseNode,self).__init__(ast_labels.ELSE,line_number)
+        self.body_node = None
+    def add_else_body_node (self,body_node):
+        self.body_node = body_node
+        
+    

@@ -42,7 +42,7 @@ IN = 'in'
 NOT_IN = 'not_in'
 
 LEN = 'len'
-IF = 'if'
+CONDITION = 'condition'
 
 METHOD_CALL = 'method_call'
 
@@ -52,3 +52,7 @@ EMPTY_STATEMENT = 'empty_statement'
 METHOD_DECLARATION_ARGS = 'method_declaration_args'
 SCOPE_BODY = 'scope_body'
 METHOD_CALL_ARGS = 'method_call_args'
+
+IF = 'if'
+ELSE_IFS = 'elifs'
+ELSE = 'else'

@@ -247,7 +247,14 @@ def p_ConditionStatement(p):
     '''
     ConditionStatement : IfStatement ElseIfStatements ElseStatement
     '''
-
+    if_node = p[1]
+    elifs_node = p[2]
+    else_node = p[3]
+    
+    condition_statement = ConditionNode(if_node,elifs_node,else_node)
+    p[0] = condition_statement
+    
+    
 def p_IfStatement(p):
     '''
     IfStatement : IF LEFT_PAREN Expression RIGHT_PAREN Statement
@@ -262,16 +269,39 @@ def p_ElseIfStatements(p):
     ElseIfStatements : ElseIfStatements ElseIfStatement
                      | Empty
     '''
+    if len(p) == 2:
+        else_if_nodes = ElseIfNodes()
+    else:
+        else_if_nodes = p[1]
+        else_if_statement = p[2]
+        else_if_nodes.prepend_else_if(else_if_statement)
+    p[0] = else_if_nodes
+
+    
 def p_ElseIfStatement(p):
     '''
     ElseIfStatement : ELSE_IF LEFT_PAREN Expression RIGHT_PAREN Statement
     '''
+    line_number = p.lineno(1)
+    # using if node for else if node
+    predicate_node = p[3]
+    body_node = p[5]
+    else_if_node = IfNode(predicate_node,body_node,line_number)
+    p[0] = else_if_node
 
 def p_ElseStatement(p):
     '''
     ElseStatement : ELSE Statement
                   | Empty
     '''
+    if len(p) == 2:
+        else_node = ElseNode(0)
+    else:
+        line_number = p.lineno(1)
+        body_node = p[1]
+        else_node = ElseNode(line_number)
+        else_node.add_else_body_node(body_node)
+    p[0] = else_node
     
     
 def p_ForStatement(p):
