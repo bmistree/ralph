@@ -31,16 +31,16 @@ class _AstNode(object):
         
 class RootStatementNode(_AstNode):
     def __init__(self,endpoint_node_list):
-        super(RootStatementNode,self).__init__(ast_labels.ROOT_STATEMENT,0,None)
+        super(RootStatementNode,self).__init__(
+            ast_labels.ROOT_STATEMENT,0,None)
         
         #### DEBUG
         if endpoint_node_list.label != ast_labels.ENDPOINT_LIST_STATEMENT:
             raise InternalParseException(
                 'RootStatementNode requires endpoint list statement node')
         #### END DEBUG
-        
-        for endpoint_node in endpoint_node_list:
-            self._append_child(endpoint_node)
+
+        self.endpoint_node_list = list(endpoint_node_list)
 
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
