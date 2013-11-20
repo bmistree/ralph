@@ -65,6 +65,7 @@ def emit_method_declaration_node(method_declaration_node):
     @param {MethodDeclarationNode} method_declaration_node
     '''
     emit_ctx = EmitContext()
+    emit_ctx.push_scope()
     signature = emit_method_signature(
         emit_ctx,
         method_declaration_node.method_signature_node)
@@ -72,6 +73,7 @@ def emit_method_declaration_node(method_declaration_node):
     body = emit_method_body(
         emit_ctx,
         method_declaration_node.method_body_node)
+    emit_ctx.pop_scope()
     return signature + '{\n' + indent_string(body) + '\n}'
 
 def emit_method_signature(emit_ctx,method_signature_node):
@@ -87,12 +89,11 @@ def emit_method_signature(emit_ctx,method_signature_node):
 
     (Note: No '{')
     '''
-
     # 1: update context with loaded arguments
+    for argument_node in method_signature_node.method_declaration_args:
+        arg_name = argument_node.arg_name
+        emit_ctx.add_var_name(arg_name)
 
-    # FIXME: actually load emit_ctx with args
-    print '\nFIXME: must load emit_ctx with args\n'
-    
     # 2: construct signature to return
     return_type = 'void'
     if method_signature_node.type is not None:
