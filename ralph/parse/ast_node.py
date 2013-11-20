@@ -181,6 +181,13 @@ class LenNode(_AstNode):
         
         self.len_of_node = len_of_node
 
+class ReturnNode(_AstNode):
+    def __init__(self,line_number):
+        super(ReturnNode,self).__init__(ast_labels.RETURN,line_number)
+        self.what_to_return_node = None
+    def add_return_expression_node(self,what_to_return_node):
+        self.what_to_return_node = what_to_return_node
+        
 class ConditionNode(_AstNode):
     def __init__(self,if_node,elifs_node,else_node):
         '''

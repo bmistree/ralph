@@ -376,7 +376,13 @@ def p_ReturnStatement(p):
     ReturnStatement : RETURN_OPERATOR
                     | RETURN_OPERATOR Expression
     '''
-
+    line_number = p.lineno(1)
+    return_node = ReturnNode(line_number)
+    if len(p) == 3:
+        what_to_return_node = p[2]
+        return_node.add_return_expression_node(what_to_return_node)
+    p[0] = return_node
+    
 def p_Expression(p):
     '''
     Expression : OrExpression

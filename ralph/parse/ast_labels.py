@@ -43,7 +43,7 @@ NOT_IN = 'not_in'
 
 LEN = 'len'
 CONDITION = 'condition'
-
+RETURN = 'return'
 METHOD_CALL = 'method_call'
 
 ### intermediate ast nodes that get removed from tree ###
