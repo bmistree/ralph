@@ -66,7 +66,7 @@ def emit_method_declaration_node(method_declaration_node):
     '''
     emit_ctx = EmitContext()
     emit_ctx.push_scope()
-    signature = emit_method_signature(
+    signature_plus_head = emit_method_signature_plus_head(
         emit_ctx,
         method_declaration_node.method_signature_node)
 
@@ -75,9 +75,12 @@ def emit_method_declaration_node(method_declaration_node):
         body += emit_statement(emit_ctx,statement)
         body += '\n'
     emit_ctx.pop_scope()
-    return signature + '{\n' + indent_string(body) + '\n}'
+    
+    body += '_ctx.var_stack.pop();'
+    return signature_plus_head + indent_string(body) + '\n}'
 
-def emit_method_signature(emit_ctx,method_signature_node):
+
+def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     '''
     @param {EmitContext} emit_ctx --- Loads arguments to method into
     emit_ctx.
@@ -86,9 +89,12 @@ def emit_method_signature(emit_ctx,method_signature_node):
 
     @returns {String} --- A java signature for method.  Eg.,
 
-    public Double some_method ()
-
-    (Note: No '{')
+    public Double some_method (
+        ExecutingEventContext _ctx, LockedActiveEvent _active_event,
+        SomeType SomeVar)
+    {
+        _ctx.var_stack.push(true); // true because function var scope
+        _ctx.var_stack.add_var('SomeVar',SomeVar);
     '''
     # 1: update context with loaded arguments
     for argument_node in method_signature_node.method_declaration_args:
@@ -101,9 +107,8 @@ def emit_method_signature(emit_ctx,method_signature_node):
         return_type = emit_type(method_signature_node.type)
 
     to_return = (
-        'public %s %s (' % (return_type, method_signature_node.method_name))
+        'public %s %s (' % (return_type, method_signature_node.method_name) )
 
-    
     argument_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
         argument_type_text = emit_type(argument_node.type)
@@ -112,6 +117,18 @@ def emit_method_signature(emit_ctx,method_signature_node):
             argument_type_text + ' ' + argument_name_text)
 
     to_return += ','.join(argument_text_list) + ')'
+
+    # 3: emit head section where add to scope stack and push arguments
+    # on to scope stack.  Must push arguments on to scope stack so
+    # they're available in defer statements
+    to_return += '\n{\n'
+    to_return += indent_string(
+        '\n_ctx.var_stack.push(true);//true because func scope\n');
+    for argument_text in argument_text_list:
+        to_return += indent_string(
+            '\n_ctx.var_stack.add_var("%s",%s);\n' %
+            (argument_text,argument_text))
+
     return to_return
 
 
@@ -182,6 +199,22 @@ def emit_statement(emit_ctx,statement_node):
             '(new Boolean(%s.doubleValue() %s %s.doubleValue()))' %
             (lhs,comparison,rhs))
 
+    elif statement_node.label == ast_labels.SCOPE:
+        to_return = '''
+_ctx.var_stack.push(false);
+'''
+        # Any variable declared in this scope should be removed after
+        # this scope statement: so push on a scope to emit_ctx and
+        # after emitting individual statements (ie, at end of for
+        # loop, pop off of emit_ctx).
+        emit_ctx.push_scope()
+        for individual_statement_node in statement_node.statement_list:
+            to_return += emit_statement(emit_ctx,individual_statement_node)
+        emit_ctx.pop_scope()
+
+        to_return += '''
+_ctx.var_stack.pop();
+'''
     
     return '\n/** FIXME: must fill in emit_method_body*/\n'
 
