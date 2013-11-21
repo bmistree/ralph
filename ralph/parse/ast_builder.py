@@ -239,6 +239,21 @@ def p_RangeExpression(p):
     RangeExpression : RANGE LEFT_PAREN Expression COMMA Expression COMMA Expression RIGHT_PAREN
                     | RANGE LEFT_PAREN Expression COMMA Expression RIGHT_PAREN
     '''
+    start_expression_node = p[3]
+    line_number = p.lineno(1)
+    if len(p) == 9:
+        increment_expression_node = p[5]
+        end_expression_node = p[7]
+    else:
+        increment_expression_node = NumberLiteralNode(1,line_number)
+        end_expression_node = p[5]
+
+    range_expression_node = RangeExpressionNode(
+        start_expression_node,increment_expression_node,end_expression_node,
+        line_number)
+
+    p[0] = range_expression_node
+    
     
 def p_ConditionStatement(p):
     '''

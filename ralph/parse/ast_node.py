@@ -233,6 +233,21 @@ class MethodCallNode(_AstNode):
         self.method_node = variable_node
         self.args_list = method_call_args_node.get_args_list()
 
+class RangeExpressionNode(_AstNode):
+    def __init__(
+        self,start_expression_node,increment_expression_node,
+        end_expression_node,line_number):
+        
+        super(RangeExpressionNode,self).__init__(
+            ast_labels.RANGE,line_number)
+
+        # where range statement starts from
+        self.start_expression_node = start_expression_node
+        # how much to increment for each value
+        self.increment_expression_node = increment_expression_node
+        # where to end range expression
+        self.end_expression_node = end_expression_node
+        
         
 class _LiteralNode(_AstNode):
     '''
