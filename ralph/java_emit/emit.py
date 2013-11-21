@@ -1,4 +1,4 @@
-
+import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 
@@ -70,9 +70,10 @@ def emit_method_declaration_node(method_declaration_node):
         emit_ctx,
         method_declaration_node.method_signature_node)
 
-    body = emit_method_body(
-        emit_ctx,
-        method_declaration_node.method_body_node)
+    body = ''
+    for statement in method_declaration_node.method_body_statement_list:
+        body += emit_statement(emit_ctx,statement)
+        body += '\n'
     emit_ctx.pop_scope()
     return signature + '{\n' + indent_string(body) + '\n}'
 
@@ -129,14 +130,24 @@ def emit_type(type_object):
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_type method.*/'
 
-    
-def emit_method_body(emit_ctx,scope_body_node):
+
+def emit_statement(emit_ctx,statement_node):
     '''
     @param {EmitContext} emit_ctx --- Already loaded with previous
     scopes' variables, including method arguments.
 
-    @param {ScopeBodyNode} scope_body_node --- 
+    @param {AstNode} statement_node --- Can be any ast node that is
+    classified as a statement in the parsing rules
     '''
-    # FIXME: must implement method
+    if statement_node.label == ast_labels.ADD:
+        lhs_add = emit_statement(emit_ctx,statement_node.lhs_expression_node)
+        rhs_add = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+        return (
+            '(new Double(%s.doubleValue() + %s.doublevalue() ) )' %
+            (lhs_add, rhs_add))
+    
+    elif statement_node.label == ast_labels.NUMBER_LITERAL:
+        return '(new Double(%f))' % statement_node.value
+    
     return '\n/** FIXME: must fill in emit_method_body*/\n'
 

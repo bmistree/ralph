@@ -101,7 +101,7 @@ class MethodDeclarationNode(_AstNode):
 
         self.method_name = method_signature_node.get_method_name()
         self.method_signature_node = method_signature_node
-        self.method_body_node = scope_body_node.get_statement_list()
+        self.method_body_statement_list = scope_body_node.get_statement_list()
         
 class MethodSignatureNode(_AstNode):
     def __init__(
@@ -242,7 +242,8 @@ class _LiteralNode(_AstNode):
     def __init__(self,label,value,line_number):
         super(_LiteralNode,self).__init__(label,line_number)
         self.line_number = line_number
-    
+        self.value = value
+        
 class NumberLiteralNode(_LiteralNode):
     def __init__(self,number,line_number):
         super(NumberLiteralNode,self).__init__(
@@ -251,16 +252,12 @@ class NumberLiteralNode(_LiteralNode):
 class TextLiteralNode(_LiteralNode):
     def __init__(self,text,line_number):
         super(TextLiteralNode,self).__init__(
-            ast_labels.TEXT_LITERAL,line_number)
-        self.value = text
+            ast_labels.TEXT_LITERAL,text,line_number)
         
 class TrueFalseLiteralNode(_LiteralNode):
     def __init__(self,true_false,line_number):
         super(TrueFalseLiteralNode,self).__init__(
-            ast_labels.TRUE_FALSE_LITERAL,line_number)
-        self.value = true_false
-    
-        
+            ast_labels.TRUE_FALSE_LITERAL,true_false,line_number)
         
 class VariableTypeNode(_AstNode):
     def __init__(self,basic_type,is_tvar,line_number):
