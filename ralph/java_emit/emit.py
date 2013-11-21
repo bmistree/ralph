@@ -130,6 +130,13 @@ def emit_type(type_object):
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_type method.*/'
 
+# indices are labels; values are operators should compile to.
+NUMERICAL_ONLY_BINARY_LABELS_DICT = {
+    ast_labels.ADD: '+',
+    ast_labels.SUBTRACT: '-',
+    ast_labels.MULTIPLY: '*',
+    ast_labels.DIVIDE: '/'
+    }
 
 def emit_statement(emit_ctx,statement_node):
     '''
@@ -139,12 +146,14 @@ def emit_statement(emit_ctx,statement_node):
     @param {AstNode} statement_node --- Can be any ast node that is
     classified as a statement in the parsing rules
     '''
-    if statement_node.label == ast_labels.ADD:
+    if statement_node.label in NUMERICAL_ONLY_BINARY_LABELS_DICT:
         lhs_add = emit_statement(emit_ctx,statement_node.lhs_expression_node)
         rhs_add = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+        
+        java_operator = NUMERICAL_ONLY_BINARY_LABELS_DICT[statement_node.label]
         return (
-            '(new Double(%s.doubleValue() + %s.doublevalue() ) )' %
-            (lhs_add, rhs_add))
+            '(new Double(%s.doubleValue() %s %s.doublevalue() ) )' %
+            (lhs_add, java_operator, rhs_add))
     
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
