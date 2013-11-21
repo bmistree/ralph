@@ -137,6 +137,13 @@ NUMERICAL_ONLY_BINARY_LABELS_DICT = {
     ast_labels.MULTIPLY: '*',
     ast_labels.DIVIDE: '/'
     }
+NUMERICAL_ONLY_COMPARISONS_DICT = {
+    ast_labels.GREATER_THAN: '>',
+    ast_labels.GREATER_THAN_EQUALS: '>=',
+    ast_labels.LESS_THAN: '<',
+    ast_labels.LESS_THAN_EQUALS: '<='
+    }
+
 
 def emit_statement(emit_ctx,statement_node):
     '''
@@ -147,16 +154,34 @@ def emit_statement(emit_ctx,statement_node):
     classified as a statement in the parsing rules
     '''
     if statement_node.label in NUMERICAL_ONLY_BINARY_LABELS_DICT:
-        lhs_add = emit_statement(emit_ctx,statement_node.lhs_expression_node)
-        rhs_add = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+        lhs = emit_statement(emit_ctx,statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx,statement_node.rhs_expression_node)
         
         java_operator = NUMERICAL_ONLY_BINARY_LABELS_DICT[statement_node.label]
         return (
             '(new Double(%s.doubleValue() %s %s.doublevalue() ) )' %
-            (lhs_add, java_operator, rhs_add))
+            (lhs, java_operator, rhs))
     
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
+
+    elif statement_node.label == ast_labels.EQUALS:
+        lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
+        return '(new Boolean((%s.equals(%s)))' % (lhs,rhs)
+    elif statement_node.label == ast_labels.NOT_EQUALS:
+        lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
+        return '(new Boolean(! %s.equals(%s)))' % (lhs,rhs)    
+
+    elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:
+        lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
+        comparison = NUMERICAL_ONLY_COMPARISONS_DICT[statement_node.label]
+        return (
+            '(new Boolean(%s.doubleValue() %s %s.doubleValue()))' %
+            (lhs,comparison,rhs))
+
     
     return '\n/** FIXME: must fill in emit_method_body*/\n'
 
