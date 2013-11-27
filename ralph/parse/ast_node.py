@@ -1,6 +1,8 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
+from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import Type
+from ralph.parse.type_check_context import TypeCheckContext
 
 class _AstNode(object):
 
@@ -19,7 +21,6 @@ class _AstNode(object):
         self.type = node_type
         self.children = []
 
-        
     def _append_child(self,child_node):
         '''
         Should be protected method, but do not have decorator for it
@@ -27,7 +28,12 @@ class _AstNode(object):
         self.children.append(child_node)
     def _prepend_child(self,child_node):
         self.children.insert(0,child_node)
-        
+
+    def type_check(self,type_check_ctx):
+        """Type check this statement.
+        """
+        print '\nPure virtual type check in AstNode.\n'
+        assert(False)
         
 class RootStatementNode(_AstNode):
     def __init__(self,endpoint_node_list):
@@ -42,6 +48,11 @@ class RootStatementNode(_AstNode):
 
         self.endpoint_node_list = list(endpoint_node_list)
 
+    def type_check(self):
+        for endpt_node in self.endpoint_node_list:
+            endpt_node.type_check()
+        
+        
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
         super(EndpointDefinitionNode,self).__init__(
@@ -49,6 +60,11 @@ class EndpointDefinitionNode(_AstNode):
 
         self.name = name_identifier_node.get_value()
         self.body_node = endpoint_body_node
+
+    def type_check(self):
+        type_check_ctx = TypeCheckContext(self.name)
+        type_check_ctx.push_scope()
+        self.body_node.type_check(type_check_ctx)
 
 
 class EndpointBodyNode(_AstNode):
@@ -66,6 +82,20 @@ class EndpointBodyNode(_AstNode):
         self,method_declaration_node):
         self.method_declaration_nodes.insert(0,method_declaration_node)
         
+    def type_check(self,type_check_ctx):
+        # First populate global scope with all endpoint nodes.
+        for variable_declaration_node in self.variable_declaration_nodes:
+            variable_declaration_node.type_check(type_check_ctx)
+            
+        # Populate every method signature in ctx
+        for method_declaration_node in self.method_declaration_nodes:
+            method_name = method_declaration_node.method_name
+            method_type = method_declaration_node.method_signature_node.type
+            type_check_ctx.add_var_name(method_name,method_type)
+
+        # Type check the body of each method
+        for method_declaration_node in self.method_declaration_nodes:
+            method_declaration_node.type_check(type_check_ctx)
         
 class IdentifierNode(_AstNode):
     def __init__(self,value,line_number):
@@ -86,7 +116,6 @@ class DeclarationStatementNode(_AstNode):
             ast_labels.DECLARATION_STATEMENT,
             type_node.line_number,type_node.type)
 
-
         self.var_name = var_name_identifier_node.get_value()
         self.initializer_node = initializer_node
 
@@ -102,6 +131,16 @@ class MethodDeclarationNode(_AstNode):
         self.method_name = method_signature_node.get_method_name()
         self.method_signature_node = method_signature_node
         self.method_body_statement_list = scope_body_node.get_statement_list()
+
+    def type_check(self,type_check_ctx):
+        """
+
+        Note: does not insert type name and signature into
+        type_check_ctx.  Should have already been inserted in
+        EndpointBodyNode.
+        """
+        print '\nFinish type checking method body\n'
+
         
 class MethodSignatureNode(_AstNode):
     def __init__(
@@ -121,6 +160,7 @@ class MethodSignatureNode(_AstNode):
         self.method_name = method_name_identifier_node.get_value()
         self.method_declaration_args = method_declaration_args_node.to_list()
 
+        # FIXME: type should also include arguments                                        
         self.type = None
         if returns_type_node is not None:
             self.type = returns_type_node.type

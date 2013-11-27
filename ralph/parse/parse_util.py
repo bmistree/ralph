@@ -14,3 +14,11 @@ class ParseException(CompilerException):
     def __str__(self):
         return 'Error on line %i:%s' % (self.line_number,self.msg)
 
+
+class TypeCheckException(CompilerException):
+    def __init__(self,line_number,msg):
+        self.line_number = line_number
+        self.msg = msg
+    def __str__(self):
+        return 'Error on line %i:%s' % (self.line_number,self.msg)
+
