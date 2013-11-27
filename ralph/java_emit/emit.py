@@ -208,6 +208,23 @@ def emit_statement(emit_ctx,statement_node):
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
         return '(new Boolean(! %s.equals(%s)))' % (lhs,rhs)    
 
+    elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
+        internal_var_name = emit_ctx.lookup_internal_var_name(
+            statement_node.value)
+        if internal_var_name is None:
+            # internal_var_name is not declared in this scope: it's an
+            # endpoint global variable.
+            type_text = emit_type(statement_node.type)
+            internal_var_name = '''
+((%s)_active_event.event_parent.global_var_stack.get_var_if_exists("%s"))
+''' % (type_text,statement_node.value)
+
+        if not emit_ctx.get_lhs_of_assign():
+            # if not in lhs of assign, then actually get internal
+            # value of variable.  (So can perform action on it.)
+            internal_var_name += '.get_val(_active_event)'
+        return internal_var_name
+    
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)

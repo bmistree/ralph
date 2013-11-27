@@ -41,6 +41,7 @@ class EmitContext(object):
         assignment statement.
         '''
         self.lhs_of_assign = lhs_of_assign
+
     def get_lhs_of_assign(self):
         return self.lhs_of_assign
         
@@ -74,4 +75,5 @@ class EmitContext(object):
         # could not find variable name, must be an endpoint global
         # variable (or undeclared)
         return None
+
 
