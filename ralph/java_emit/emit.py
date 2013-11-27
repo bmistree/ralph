@@ -208,6 +208,13 @@ def emit_statement(emit_ctx,statement_node):
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
         return '(new Boolean(! %s.equals(%s)))' % (lhs,rhs)    
 
+    elif statement_node.label == ast_labels.ASSIGNMENT:
+        rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
+        emit_ctx.set_lhs_of_assign(True)
+        lhs_text = emit_statement(emit_ctx,statement_node.lhs_node)
+        emit_ctx.set_lhs_of_assign(False)
+        return '%s.set_val(_active_event,%s);\n' % (lhs_text,rhs_text);
+
     elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.value)
