@@ -182,6 +182,23 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
 
+    elif statement_node.label == ast_labels.NOT:
+        to_not_text = emit_statement(emit_ctx,statement_node.to_not_node)
+        return '(new Boolean( ! %s.booleanValue()))' % to_not_text
+
+    elif statement_node.label == ast_labels.AND:
+        lhs = emit_statement(emit_ctx,statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+        return (
+            '(new Boolean( %s.booleanValue() && %s.booleanValue()))' %
+            (lhs,rhs))
+    elif statement_node.label == ast_labels.OR:
+        lhs = emit_statement(emit_ctx,statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+        return (
+            '(new Boolean( %s.booleanValue() || %s.booleanValue()))' %
+            (lhs,rhs))
+    
     elif statement_node.label == ast_labels.EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
