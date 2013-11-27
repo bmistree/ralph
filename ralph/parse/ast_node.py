@@ -1,7 +1,7 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
-from ralph.parse.type import Type
+from ralph.parse.type import BasicType, MethodType
 from ralph.parse.type_check_context import TypeCheckContext
 
 class _AstNode(object):
@@ -323,7 +323,8 @@ class VariableTypeNode(_AstNode):
         self.type = self._build_type(basic_type,is_tvar)
         
     def _build_type(self,basic_type,is_tvar):
-        return Type(basic_type,is_tvar)
+        return BasicType(basic_type,is_tvar)
+
     
 class _BinaryExpressionNode(_AstNode):
     def __init__(
