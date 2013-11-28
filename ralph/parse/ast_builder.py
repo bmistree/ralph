@@ -29,7 +29,7 @@ def p_EndpointList(p):
     else:
         endpoint_list_node = p[1]
         endpoint_definition_node = p[2]
-        endpoint_list_node.prepend_endpoint_definition(
+        endpoint_list_node.append_endpoint_definition(
             endpoint_definition_node)
         
     p[0] = endpoint_list_node
@@ -115,7 +115,7 @@ def p_ScopeBody(p):
         scope_body_node = p[1]
         statement_node = p[2]
 
-    scope_body_node.prepend_statement_node(statement_node)
+    scope_body_node.append_statement_node(statement_node)
     p[0] = scope_body_node
     
     
@@ -145,11 +145,11 @@ def p_MethodDeclarationArgs(p):
         method_declaration_args = MethodDeclarationArgsNode()
         second_arg = p[1]
         if second_arg is not None:
-            method_declaration_args.prepend_method_declaration_arg(second_arg)
+            method_declaration_args.append_method_declaration_arg(second_arg)
     else:
         method_declaration_args = p[1]
         method_declaration_arg = p[3]
-        method_declaration_args.prepend_method_declaration_arg(
+        method_declaration_args.append_method_declaration_arg(
             method_declaration_arg)
 
     p[0] = method_declaration_args
@@ -181,7 +181,7 @@ def p_MethodCallArgs(p):
     if len(p) == 4:
         expression_node = p[3]
         method_call_args_node = p[1]
-        method_call_args_node.prepend_arg(expression_node)
+        method_call_args_node.append_arg(expression_node)
     else:
         if is_empty(p[1]):
             method_call_args_node = MethodCallArgsNode(0)
@@ -189,7 +189,7 @@ def p_MethodCallArgs(p):
             expression_node = p[1]
             method_call_args_node = MethodCallArgsNode(
                 expression_node.line_number)
-            method_call_args_node.prepend_arg(expression_node)
+            method_call_args_node.append_arg(expression_node)
         
     p[0] = method_call_args_node
         
@@ -286,7 +286,7 @@ def p_ElseIfStatements(p):
     else:
         else_if_nodes = p[1]
         else_if_statement = p[2]
-        else_if_nodes.prepend_else_if(else_if_statement)
+        else_if_nodes.append_else_if(else_if_statement)
     p[0] = else_if_nodes
 
     
@@ -545,9 +545,9 @@ def p_Boolean(p):
     Boolean : TRUE
             | FALSE
     '''
-    boolean_literal = p[1] == TRUE_TOKEN
+    boolean_literal = p[1] == 'True'
     line_number = p.lineno(1)
-    p[0] = BooleanLiteralNode(boolean_literal,line_number)
+    p[0] = TrueFalseLiteralNode(boolean_literal,line_number)
 
     
 def p_VariableType(p):

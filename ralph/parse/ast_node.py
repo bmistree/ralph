@@ -34,7 +34,7 @@ class _AstNode(object):
         """
         print '\nPure virtual type check in AstNode.\n'
         assert(False)
-        
+
 class RootStatementNode(_AstNode):
     def __init__(self,endpoint_node_list):
         super(RootStatementNode,self).__init__(
@@ -51,7 +51,6 @@ class RootStatementNode(_AstNode):
     def type_check(self):
         for endpt_node in self.endpoint_node_list:
             endpt_node.type_check()
-        
         
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
@@ -77,7 +76,7 @@ class EndpointBodyNode(_AstNode):
     def prepend_variable_declaration_node(
         self,variable_declaration_node):
         self.variable_declaration_nodes.insert(0,variable_declaration_node)
-
+        
     def prepend_method_declaration_node(
         self,method_declaration_node):
         self.method_declaration_nodes.insert(0,method_declaration_node)
@@ -86,17 +85,17 @@ class EndpointBodyNode(_AstNode):
         # First populate global scope with all endpoint nodes.
         for variable_declaration_node in self.variable_declaration_nodes:
             variable_declaration_node.type_check(type_check_ctx)
-
+            
         # Populate every method signature in ctx
         for method_declaration_node in self.method_declaration_nodes:
             method_name = method_declaration_node.method_name
             method_type = method_declaration_node.method_signature_node.type
-            type_check_ctx.add_var_name(method_name,method_type)
+            type_check_ctx.add_var_name(method_name,method_declaration_node)
 
         # Type check the body of each method
         for method_declaration_node in self.method_declaration_nodes:
             method_declaration_node.type_check(type_check_ctx)
-        
+            
 class IdentifierNode(_AstNode):
     def __init__(self,value,line_number):
         super(IdentifierNode,self).__init__(
@@ -104,6 +103,14 @@ class IdentifierNode(_AstNode):
 
         self.value = value
 
+    def type_check(self,type_check_ctx):
+        decl_ast_node = type_check_ctx.lookup_internal_ast_node(self.value)
+        if decl_ast_node is None:
+            raise TypeCheckException(
+                self.line_number,
+                ' %s is not declared.' % self.value )
+        self.type = decl_ast_node.type
+        
     def get_value(self):
         return self.value
 
@@ -119,6 +126,11 @@ class DeclarationStatementNode(_AstNode):
         self.var_name = var_name_identifier_node.get_value()
         self.initializer_node = initializer_node
 
+    def type_check(self,type_check_ctx):
+        # when we declare a new variable, add it to scope.
+        type_check_ctx.add_var_name(self.var_name,self)
+        
+        
 class MethodDeclarationNode(_AstNode):
     def __init__(
         self,method_signature_node,scope_body_node ):
@@ -139,7 +151,13 @@ class MethodDeclarationNode(_AstNode):
         type_check_ctx.  Should have already been inserted in
         EndpointBodyNode.
         """
-        print '\nFinish type checking method body\n'
+        # each method declaration node has separate var scope
+        type_check_ctx.push_scope()
+        # pushes method arguments into scope
+        self.method_signature_node.type_check(type_check_ctx)
+        for node in self.method_body_statement_list:
+            node.type_check(type_check_ctx)
+        type_check_ctx.pop_scope()
 
         
 class MethodSignatureNode(_AstNode):
@@ -170,9 +188,14 @@ class MethodSignatureNode(_AstNode):
         
         self.type = MethodType(return_type,arg_type_list)
         
-
     def get_method_name(self):
         return self.method_name
+
+    def type_check(self,type_check_ctx):
+        # push all arguments into type check context
+        for method_arg_node in self.method_declaration_args:
+            type_check_ctx.add_var_name(
+                method_arg_node.arg_name,method_arg_node)
 
 
 class MethodDeclarationArgNode(_AstNode):
@@ -192,15 +215,30 @@ class AtomicallyNode(_AstNode):
             ast_labels.ATOMICALLY,scope_node.line_number)
 
         self.statement_list = scope_node.get_statement_list()
+
+    def type_check(self,type_check_ctx):
+        # push new scope for any variables declared in statement list.
+        type_check_ctx.push_scope()
+        for node in self.statement_list:
+            node.type_check(type_check_ctx)
+        type_check_ctx.pop_scope()
         
 class ScopeNode (_AstNode):
     def __init__(self,scope_body_node):
         super(ScopeNode,self).__init__(
             ast_labels.SCOPE,scope_body_node.line_number)
-        
         self.statement_list = scope_body_node.get_statement_list()
+
     def get_statement_list(self):
         return list(self.statement_list)
+
+    def type_check(self,type_check_ctx):
+        # push new scope for any variables declared in statement list.
+        type_check_ctx.push_scope()
+        for node in self.statement_list:
+            node.type_check(type_check_ctx)
+        type_check_ctx.pop_scope()
+
         
 class ParallelNode(_AstNode):
     def __init__(
@@ -208,7 +246,11 @@ class ParallelNode(_AstNode):
         super(ParallelNode,self).__init__(ast_labels.PARALLEL,line_number)
         self.to_iter_over_expression_node = to_iter_over_expression_node
         self.lambda_expression_node = lambda_expression_node
-    
+
+    def type_check(self,type_check_ctx):
+        self.to_iter_over_expression_node.type_check(type_check_ctx)
+        self.lambda_expression_node.type_check(type_check_ctx)
+        
 class AssignmentNode(_AstNode):
     def __init__(self,lhs_node,rhs_node):
         super(AssignmentNode,self).__init__(
@@ -216,13 +258,26 @@ class AssignmentNode(_AstNode):
         self.lhs_node = lhs_node
         self.rhs_node = rhs_node
 
+    def type_check(self,type_check_ctx):
+        self.lhs_node.type_check(type_check_ctx)
+        self.rhs_node.type_check(type_check_ctx)
+        if self.lhs_node.type != self.rhs_node.type:
+            raise TypeCheckException(
+                self.line_number,
+                'lhs type of %s does not agree with rhs type of %s' %
+                (str(self.lhs_node.type),str(self.rhs_node.type)))
+            
+        
 class NotNode(_AstNode):
     def __init__(self,to_not_node):
         super(NotNode,self).__init__(
             ast_labels.NOT,to_not_node.line_number)
         
         self.to_not_node = to_not_node
-
+        
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class LenNode(_AstNode):
     def __init__(self,len_of_node,line_number):
         super(LenNode,self).__init__(
@@ -230,12 +285,19 @@ class LenNode(_AstNode):
         
         self.len_of_node = len_of_node
 
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+        
 class ReturnNode(_AstNode):
     def __init__(self,line_number):
         super(ReturnNode,self).__init__(ast_labels.RETURN,line_number)
         self.what_to_return_node = None
     def add_return_expression_node(self,what_to_return_node):
         self.what_to_return_node = what_to_return_node
+
+    def type_check(self,type_check_ctx):
+        self.what_to_return_node.type_check(type_check_ctx)
+        self.type = self.what_to_return_node.type
         
 class ConditionNode(_AstNode):
     def __init__(self,if_node,elifs_node,else_node):
@@ -250,7 +312,9 @@ class ConditionNode(_AstNode):
         # else_none_body may be None
         self.else_node_body = else_node.body_node
 
-        
+    def type_check(self,type_check_ctx):
+        self.type = None
+
         
 class BracketNode(_AstNode):
     def __init__(self,outside_bracket_node,inside_bracket_node):
@@ -264,6 +328,11 @@ class BracketNode(_AstNode):
         self.outside_bracket_node = outside_bracket_node
         self.inside_bracket_node = inside_bracket_node
 
+    def type_check(self,type_check_ctx):
+        self.outside_bracket_node.type_check(type_check_ctx)
+        self.inside_bracket_node.type_check(type_check_ctx)
+        self.type = self.outside_bracket_node.type.value_type
+        
 class DotNode(_AstNode):
     def __init__(self,left_of_dot_node, right_of_dot_node):
         super(DotNode,self).__init__(
@@ -272,6 +341,10 @@ class DotNode(_AstNode):
         self.left_of_dot_node = left_of_dot_node
         self.right_of_dot_node = right_of_dot_node
 
+    def type_check(self,type_check_ctx):
+        self.left_of_dot_node.type_check(type_check_ctx)
+        self.right_of_dot_node.type_check(type_check_ctx)
+        self.type = self.right_of_dot_node.type
 
 class MethodCallNode(_AstNode):
     def __init__(self,variable_node,method_call_args_node):
@@ -281,6 +354,10 @@ class MethodCallNode(_AstNode):
         self.method_node = variable_node
         self.args_list = method_call_args_node.get_args_list()
 
+    def type_check(self,type_check_ctx):
+        self.method_node.type_check(type_check_ctx)
+        self.type = self.method_node.type.returns_type
+        
 class RangeExpressionNode(_AstNode):
     def __init__(
         self,start_expression_node,increment_expression_node,
@@ -296,6 +373,8 @@ class RangeExpressionNode(_AstNode):
         # where to end range expression
         self.end_expression_node = end_expression_node
         
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
 class _LiteralNode(_AstNode):
     '''
@@ -306,6 +385,9 @@ class _LiteralNode(_AstNode):
         super(_LiteralNode,self).__init__(label,line_number)
         self.line_number = line_number
         self.value = value
+        
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(self.label,False)
         
 class NumberLiteralNode(_LiteralNode):
     def __init__(self,number,line_number):
@@ -332,6 +414,9 @@ class VariableTypeNode(_AstNode):
         
     def _build_type(self,basic_type,is_tvar):
         return BasicType(basic_type,is_tvar)
+    
+    def type_check(self,type_check_ctx):
+        pass
 
     
 class _BinaryExpressionNode(_AstNode):
@@ -342,68 +427,104 @@ class _BinaryExpressionNode(_AstNode):
             label,lhs_expression_node.line_number)
         self.lhs_expression_node = lhs_expression_node
         self.rhs_expression_node = rhs_expression_node
-
+        
 class MultiplyExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(MultiplyExpressionNode,self).__init__(
             ast_labels.MULTIPLY,lhs_expression_node,rhs_expression_node)
-
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
 class DivideExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(DivideExpressionNode,self).__init__(
             ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
-
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+        
 class AddExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(AddExpressionNode,self).__init__(
             ast_labels.ADD,lhs_expression_node,rhs_expression_node)
-
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+        
 class SubtractExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(SubtractExpressionNode,self).__init__(
             ast_labels.SUBTRACT,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+        
 class GreaterThanExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(GreaterThanExpressionNode,self).__init__(
             ast_labels.GREATER_THAN,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class GreaterThanEqualsExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(GreaterThanEqualsExpressionNode,self).__init__(
             ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class LessThanExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(LessThanExpressionNode,self).__init__(
             ast_labels.LESS_THAN,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class LessThanEqualsExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(LessThanEqualsExpressionNode,self).__init__(
             ast_labels.LESS_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class EqualsExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(EqualsExpressionNode,self).__init__(
             ast_labels.EQUALS,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class NotEqualsExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(NotEqualsExpressionNode,self).__init__(
             ast_labels.NOT_EQUALS,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)        
+        
 class AndExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(AndExpressionNode,self).__init__(
             ast_labels.AND,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class OrExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(OrExpressionNode,self).__init__(
             ast_labels.OR,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class InExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(InExpressionNode,self).__init__(
             ast_labels.IN,lhs_expression_node,rhs_expression_node)
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
 class NotInExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(NotInExpressionNode,self).__init__(
             ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
-
+    def type_check(self,type_check_ctx):
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
         
 def create_binary_expression_node(
@@ -452,9 +573,9 @@ class EndpointListNode(_AstNode):
 
         self._append_child(endpoint_definition_node)
 
-    def prepend_endpoint_definition(self,endpoint_definition_node):
-        self._prepend_child(endpoint_definition_node)
-        
+    def append_endpoint_definition(self,endpoint_definition_node):
+        self._append_child(endpoint_definition_node)
+
     def __iter__(self):
         return iter(self.children)
 
@@ -467,8 +588,8 @@ class MethodDeclarationArgsNode(_AstNode):
     def __init__(self):
         super(MethodDeclarationArgsNode,self).__init__(
             ast_labels.METHOD_DECLARATION_ARGS,0)
-    def prepend_method_declaration_arg(self,method_declaration_arg):
-        self._prepend_child(method_declaration_arg)
+    def append_method_declaration_arg(self,method_declaration_arg):
+        self._append_child(method_declaration_arg)
 
     def to_list(self):
         return list(self.children)
@@ -478,8 +599,8 @@ class ScopeBodyNode(_AstNode):
         super(ScopeBodyNode,self).__init__(
             ast_labels.SCOPE_BODY,line_number)
         
-    def prepend_statement_node(self,statement_node):
-        self._prepend_child(statement_node)
+    def append_statement_node(self,statement_node):
+        self._append_child(statement_node)
 
     def get_statement_list(self):
         '''
@@ -493,13 +614,13 @@ class MethodCallArgsNode(_AstNode):
         super(MethodCallArgsNode,self).__init__(
             ast_labels.METHOD_CALL_ARGS,line_number)
 
-    def prepend_arg(self,expression_node):
-        self._prepend_child(expression_node)
+    def append_arg(self,expression_node):
+        self._append_child(expression_node)
 
     def get_args_list(self):
         return list(self.children)
 
-
+    
 class IfNode(_AstNode):
     def __init__(self,predicate_node,if_body_node,line_number):
         super(IfNode,self).__init__(ast_labels.IF,line_number)
@@ -512,12 +633,12 @@ class ElseIfNodes(_AstNode):
         super(ElseIfNodes,self).__init__(ast_labels.ELSE_IFS,0)
         # each element of children is an if ndoe
 
-    def prepend_else_if(self,else_if_node):
+    def append_else_if(self,else_if_node):
         '''
         @param {IfNode} else_if_node --- Because of similar structure,
         each else_if_node is an IfNode.
         '''
-        self._prepend_child(else_if_node)
+        self._append_child(else_if_node)
         
     def get_else_if_node_list(self):
         return list(self.children)
