@@ -6,6 +6,9 @@ class BasicType(Type):
     def __init__(self,basic_type,is_tvar):
         self.basic_type = basic_type
         self.is_tvar = is_tvar
+
+    def __ne__(self,other_type):
+        return not self == other_type
         
     def __eq__(self,other_type):
         if not isinstance(other_type,BasicType):
@@ -21,7 +24,10 @@ class MethodType(Type):
     def __init__(self,returns_type,arg_type_list):
         self.returns_type = returns_type
         self.arg_type_list = arg_type_list
-
+        
+    def __ne__(self,other_type):
+        return not self == other_type
+        
     def __eq__(self,other_type):
         if not isinstance(other_type,MethodType):
             return False

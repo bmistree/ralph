@@ -261,6 +261,7 @@ class AssignmentNode(_AstNode):
     def type_check(self,type_check_ctx):
         self.lhs_node.type_check(type_check_ctx)
         self.rhs_node.type_check(type_check_ctx)
+        
         if self.lhs_node.type != self.rhs_node.type:
             raise TypeCheckException(
                 self.line_number,
@@ -357,6 +358,7 @@ class MethodCallNode(_AstNode):
     def type_check(self,type_check_ctx):
         self.method_node.type_check(type_check_ctx)
         self.type = self.method_node.type.returns_type
+
         
 class RangeExpressionNode(_AstNode):
     def __init__(
