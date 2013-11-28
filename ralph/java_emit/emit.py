@@ -1,6 +1,8 @@
 import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
+from ralph.parse.type import BasicType,MethodType
+from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 
 def emit(root_node,package_name,program_name):
     '''
@@ -104,14 +106,14 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     # 2: construct signature to return
     return_type = 'void'
     if method_signature_node.type is not None:
-        return_type = emit_type(method_signature_node.type)
+        return_type = emit_internal_type(method_signature_node.type)
 
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
 
     argument_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
-        argument_type_text = emit_type(argument_node.type)
+        argument_type_text = emit_internal_type(argument_node.type)
         argument_name_text = argument_node.arg_name
         argument_text_list.append(
             argument_type_text + ' ' + argument_name_text)
@@ -132,17 +134,63 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     return to_return
 
 
-def emit_type(type_object):
+def emit_ralph_wrapped_type(type_object):
+    '''
+    @param {Type or None} type_object --- None if type corresponds to
+    void (eg., in method signature).
+
+    @returns{String} --- Java-ized version of wrapped Ralph type: eg.,
+    LockedNumberVarialbe, etc.
+    '''
+    if type_object is None:
+        return 'void'
+    else:
+        if isinstance(type_object,BasicType):
+            typer = type_object.basic_type
+            is_tvar = type_object.is_tvar
+        elif isinstance(type_object,MethodType):
+            typer = type_object.returns_type
+            is_tvar = False
+            
+        if typer == BOOL_TYPE:
+            if is_tvar:
+                return 'LockedTrueFalseVariable'
+            return 'SingleThreadedLockedTrueFalseVariable'
+        elif typer == NUMBER_TYPE:
+            if is_tvar:
+                return 'LockedNumberVariable'
+            return 'SingleThreadedLockedNumberVariable'        
+        elif typer == STRING_TYPE:
+            if is_tvar:
+                return 'LockedTextVariable'
+            return 'SingleThreadedLockedTextVariable'
+
+    # FIXME: construct useful type from type object
+    return '/** Fixme: must fill in emit_type method.*/'
+
+
+def emit_internal_type(type_object):
     '''
     @param {Type or None} type_object --- None if type corresponds to
     void (eg., in method signature).
 
     @returns{String} --- Java-ized version of Ralph type: eg.,
-    LockedNumberVariable.
+    Double, Boolean, etc.
     '''
-
     if type_object is None:
         return 'void'
+    else:
+        if isinstance(type_object,BasicType):
+            typer = type_object.basic_type
+        elif isinstance(type_object,MethodType):
+            typer = type_object.returns_type
+
+        if typer == BOOL_TYPE:
+            return 'Boolean'
+        elif typer == NUMBER_TYPE:
+            return 'Double'
+        elif typer == STRING_TYPE:
+            return 'String'        
 
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_type method.*/'
@@ -221,7 +269,7 @@ def emit_statement(emit_ctx,statement_node):
         if internal_var_name is None:
             # internal_var_name is not declared in this scope: it's an
             # endpoint global variable.
-            type_text = emit_type(statement_node.type)
+            type_text = emit_ralph_wrapped_type(statement_node.type)
             internal_var_name = '''
 ((%s)_active_event.event_parent.global_var_stack.get_var_if_exists("%s"))
 ''' % (type_text,statement_node.value)
