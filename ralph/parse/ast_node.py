@@ -86,7 +86,7 @@ class EndpointBodyNode(_AstNode):
         # First populate global scope with all endpoint nodes.
         for variable_declaration_node in self.variable_declaration_nodes:
             variable_declaration_node.type_check(type_check_ctx)
-            
+
         # Populate every method signature in ctx
         for method_declaration_node in self.method_declaration_nodes:
             method_name = method_declaration_node.method_name
@@ -160,10 +160,16 @@ class MethodSignatureNode(_AstNode):
         self.method_name = method_name_identifier_node.get_value()
         self.method_declaration_args = method_declaration_args_node.to_list()
 
-        # FIXME: type should also include arguments                                        
-        self.type = None
+        # construct type from return type and args type
+        return_type = None
         if returns_type_node is not None:
-            self.type = returns_type_node.type
+            return_type = returns_type_node.type
+        arg_type_list = map(
+            lambda arg_node: arg_node.type,
+            self.method_declaration_args)
+        
+        self.type = MethodType(return_type,arg_type_list)
+        
 
     def get_method_name(self):
         return self.method_name
@@ -174,8 +180,10 @@ class MethodDeclarationArgNode(_AstNode):
         super(MethodDeclarationArgNode,self).__init__(
             ast_labels.METHOD_DECLARATION_ARG,
             variable_type_node.line_number,variable_type_node.type)
-
+        
         self.arg_name = name_identifier_node.get_value()
+        self.type = variable_type_node.type
+        
 
 class AtomicallyNode(_AstNode):
     def __init__(self,scope_node):
