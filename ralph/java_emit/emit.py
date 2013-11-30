@@ -224,13 +224,17 @@ def emit_internal_type(type_object):
             typer = type_object.basic_type
         elif isinstance(type_object,MethodType):
             typer = type_object.returns_type
+            if typer is not None:
+                typer = typer.basic_type
 
         if typer == BOOL_TYPE:
             return 'Boolean'
         elif typer == NUMBER_TYPE:
             return 'Double'
         elif typer == STRING_TYPE:
-            return 'String'        
+            return 'String'
+        elif typer is None:
+            return 'void'
 
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_type method.*/'
