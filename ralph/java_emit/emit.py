@@ -63,7 +63,6 @@ def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
     # reference it later.
     for method_declaration_node in method_declaration_node_list:
         add_method_signature_to_ctx(emit_ctx,method_declaration_node)
-
     
     for method_declaration_node in method_declaration_node_list:
         to_return += emit_method_declaration_node(
@@ -83,6 +82,9 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     '''
     @param {MethodDeclarationNode} method_declaration_node
     '''
+    external_method_text = emit_external_facing_method(
+        emit_ctx,method_declaration_node.method_signature_node)
+    
     emit_ctx.push_scope()
     signature_plus_head = emit_method_signature_plus_head(
         emit_ctx,
@@ -96,7 +98,52 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     emit_ctx.pop_scope()
 
     body += '_ctx.var_stack.pop();'
-    return signature_plus_head + indent_string(body) + '\n}'
+    internal_method_text = signature_plus_head + indent_string(body) + '\n}'
+    
+    return external_method_text + internal_method_text
+
+
+def emit_external_facing_method(emit_ctx,method_signature_node):
+    """Methods can be called from both code within ralph and code
+    external to ralph.  The external facing code requires different
+    arguments and just calls into the internal code.
+    """
+    return_type = 'void'
+    void_return_type = True
+    if method_signature_node.type is not None:
+        return_type = emit_internal_type(method_signature_node.type)
+        void_return_type = False
+        
+    to_return = (
+        'public %s %s (' % (return_type, method_signature_node.method_name) )
+    argument_text_list = []
+    argument_name_text_list = []
+    for argument_node in method_signature_node.method_declaration_args:
+        # for placing the arguments actually in method signature
+        argument_type_text = emit_internal_type(argument_node.type)
+        argument_name_text = argument_node.arg_name
+        argument_text_list.append(
+            argument_type_text + ' ' + argument_name_text)
+
+        # for putting arguments into internal function call
+        argument_name_text_list.append(argument_name_text)
+
+    # finish method signature
+    to_return += ','.join(argument_text_list) + ') {\n'
+
+    # call the internal version of the function
+    method_body_text = (
+        '%s (create_context() ,_act_event_map.create_root_event()' %
+        method_signature_node.method_name)
+    for argument_name in argument_name_text_list:
+        method_body_text += ',' + argument_name
+    method_body_text += ');'
+    
+    if not void_return_type:
+        method_body_text = 'return ' + method_body_text
+        
+    to_return += indent_string(method_body_text) + '\n}\n' 
+    return to_return
 
 
 def emit_method_signature_plus_head(emit_ctx,method_signature_node):
@@ -108,7 +155,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
     @returns {String} --- A java signature for method.  Eg.,
 
-    public Double some_method (
+    private Double some_method (
         ExecutingEventContext _ctx, LockedActiveEvent _active_event,
         SomeType SomeVar)
     {
@@ -126,8 +173,9 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         return_type = emit_internal_type(method_signature_node.type)
 
     to_return = (
-        'public %s %s (' % (return_type, method_signature_node.method_name) )
-
+        'private %s %s (' % (return_type, method_signature_node.method_name) )
+    to_return += 'ExecutingEventContext _ctx, LockedActiveEvent _active_event'
+    
     argument_text_list = []
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
@@ -141,12 +189,11 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         argument_name_text_list.append(argument_name_text)
 
         
-    to_return += ','.join(argument_text_list) + ')'
+    to_return += ','.join(argument_text_list) + ') {'
 
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
-    to_return += '\n{\n'
     to_return += indent_string(
         '\n_ctx.var_stack.push(true);//true because func scope\n');
     
