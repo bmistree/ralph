@@ -93,7 +93,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     body = ''
     for statement in method_declaration_node.method_body_statement_list:
         body += emit_statement(emit_ctx,statement)
-        body += '\n'
+        body += ';\n'
         
     emit_ctx.pop_scope()
 
@@ -176,26 +176,22 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         'private %s %s (' % (return_type, method_signature_node.method_name) )
     to_return += 'ExecutingEventContext _ctx, LockedActiveEvent _active_event'
     
-    argument_text_list = []
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
         # for placing the arguments actually in method signature
         argument_type_text = emit_internal_type(argument_node.type)
         argument_name_text = argument_node.arg_name
-        argument_text_list.append(
-            argument_type_text + ' ' + argument_name_text)
+        to_return += ', ' + argument_type_text + ' ' + argument_name_text
 
         # for putting arguments into scope at top of method
         argument_name_text_list.append(argument_name_text)
 
-        
-    to_return += ','.join(argument_text_list) + ') {'
-
+    to_return += ') {\n'
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
     to_return += indent_string(
-        '\n_ctx.var_stack.push(true);//true because func scope\n');
+        '_ctx.var_stack.push(true);//true because func scope\n');
     
     for argument_name in argument_name_text_list:
         to_return += indent_string(
@@ -356,7 +352,7 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
-        return '(new Boolean((%s.equals(%s)))' % (lhs,rhs)
+        return '(new Boolean(%s.equals(%s)))' % (lhs,rhs)
     elif statement_node.label == ast_labels.NOT_EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
@@ -437,12 +433,13 @@ def emit_statement(emit_ctx,statement_node):
             '%s %s = %s;' %
             (java_type_statement,internal_var_name,new_expression))
 
+        # no ; at end, because caller will place one on.
         context_stack_push_statement = (
-            '_ctx.var_stack.add_var("%s",%s);' %
+            '_ctx.var_stack.add_var("%s",%s)' % 
             (internal_var_name,internal_var_name))
         
         return (
-            declaration_statement + '\n' + context_stack_push_statement + '\n')
+            declaration_statement + '\n' + context_stack_push_statement)
 
     elif statement_node.label == ast_labels.CONDITION:
 
@@ -475,21 +472,22 @@ def emit_statement(emit_ctx,statement_node):
         return elif_text
     
     elif statement_node.label == ast_labels.SCOPE:
-        to_return = '''
-_ctx.var_stack.push(false);
-'''
+        to_return = '{\n'
+        
+        scope_body_text = '_ctx.var_stack.push(false);\n'
+
         # Any variable declared in this scope should be removed after
         # this scope statement: so push on a scope to emit_ctx and
         # after emitting individual statements (ie, at end of for
         # loop, pop off of emit_ctx).
         emit_ctx.push_scope()
         for individual_statement_node in statement_node.statement_list:
-            to_return += emit_statement(emit_ctx,individual_statement_node)
+            scope_body_text += emit_statement(emit_ctx,individual_statement_node)
+            scope_body_text += ';\n'
         emit_ctx.pop_scope()
 
-        to_return += '''
-_ctx.var_stack.pop();
-'''
+        scope_body_text +='\n_ctx.var_stack.pop();'
+        to_return += indent_string(scope_body_text) + '\n}\n'
         return to_return
         
     return (
