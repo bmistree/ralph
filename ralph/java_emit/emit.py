@@ -401,7 +401,8 @@ _ctx.var_stack.push(false);
         to_return += '''
 _ctx.var_stack.pop();
 '''
-
+        return to_return
+        
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
         statement_node.label)
