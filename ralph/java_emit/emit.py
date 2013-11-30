@@ -3,6 +3,7 @@ from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
+from ralph.java_emit.emit_utils import InternalEmitException
 
 def emit(root_node,package_name,program_name):
     '''
@@ -76,8 +77,9 @@ def emit_method_declaration_node(method_declaration_node):
     for statement in method_declaration_node.method_body_statement_list:
         body += emit_statement(emit_ctx,statement)
         body += '\n'
+        
     emit_ctx.pop_scope()
-    
+
     body += '_ctx.var_stack.pop();'
     return signature_plus_head + indent_string(body) + '\n}'
 
@@ -112,12 +114,18 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         'public %s %s (' % (return_type, method_signature_node.method_name) )
 
     argument_text_list = []
+    argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
+        # for placing the arguments actually in method signature
         argument_type_text = emit_internal_type(argument_node.type)
         argument_name_text = argument_node.arg_name
         argument_text_list.append(
             argument_type_text + ' ' + argument_name_text)
 
+        # for putting arguments into scope at top of method
+        argument_name_text_list.append(argument_name_text)
+
+        
     to_return += ','.join(argument_text_list) + ')'
 
     # 3: emit head section where add to scope stack and push arguments
@@ -126,10 +134,11 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     to_return += '\n{\n'
     to_return += indent_string(
         '\n_ctx.var_stack.push(true);//true because func scope\n');
-    for argument_text in argument_text_list:
+    
+    for argument_name in argument_name_text_list:
         to_return += indent_string(
             '\n_ctx.var_stack.add_var("%s",%s);\n' %
-            (argument_text,argument_text))
+            (argument_name,argument_name))
 
     return to_return
 
@@ -167,6 +176,37 @@ def emit_ralph_wrapped_type(type_object):
 
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_type method.*/'
+
+def construct_new_expression(type_object,initializer_node,emit_ctx):
+    """Generates the java new expression that assign a newly-declared
+    variable to.
+
+    Args:
+        type_object: {BasicType object}
+        
+        initializer_node: {None or AstNode} What to assign with new
+        expression
+
+        emit_ctx: {EmitContext}
+
+    Returns:
+        {string} --- Java-ized expression used on rhs of equals during
+        declaration.
+    """
+    #### DEBUG
+    if not isinstance(type_object,BasicType):
+        raise InternalEmitException(
+            'Can only construct new expression from basic type')
+    #### END DEBUG
+
+    initializer_text = None
+    if initializer_node is not None:
+        initializer_text = emit_statement(eit_ctx,initializer_node)
+        
+    java_type_text = emit_ralph_wrapped_type(type_object)
+    if initializer_text is None:
+        return 'new %s (_host_uuid,false)' % java_type_text
+    return 'new %s (_host_uuid,false,%s)' % (java_type_text,initializer_text)
 
 
 def emit_internal_type(type_object):
@@ -288,6 +328,28 @@ def emit_statement(emit_ctx,statement_node):
             '(new Boolean(%s.doubleValue() %s %s.doubleValue()))' %
             (lhs,comparison,rhs))
 
+    elif statement_node.label == ast_labels.DECLARATION_STATEMENT:
+        java_type_statement = emit_ralph_wrapped_type(statement_node.type)
+        new_expression = construct_new_expression(
+            statement_node.type,statement_node.initializer_node,emit_ctx)
+
+        # add new variable to emit_ctx stack
+        emit_ctx.add_var_name(statement_node.var_name)
+        internal_var_name = emit_ctx.lookup_internal_var_name(
+            statement_node.var_name)
+
+        declaration_statement = (
+            '%s %s = %s;' %
+            (java_type_statement,internal_var_name,new_expression))
+
+        context_stack_push_statement = (
+            '_ctx.var_stack.add_var("%s",%s);' %
+            (internal_var_name,internal_var_name))
+        
+        return (
+            declaration_statement + '\n' + context_stack_push_statement + '\n')
+
+    
     elif statement_node.label == ast_labels.SCOPE:
         to_return = '''
 _ctx.var_stack.push(false);
@@ -305,5 +367,7 @@ _ctx.var_stack.push(false);
 _ctx.var_stack.pop();
 '''
     
-    return '\n/** FIXME: must fill in emit_method_body*/\n'
+    return (
+        '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
+        statement_node.label)
 

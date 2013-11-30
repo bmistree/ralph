@@ -1,3 +1,4 @@
+from ralph.common.compiler_exceptions import CompilerException
 
 def indent_string(string,amt_to_indent=1):
     '''
@@ -23,3 +24,10 @@ def indent_string(string,amt_to_indent=1):
             indented_string += '\n'
 
     return indented_string
+
+
+class InternalEmitException(CompilerException):
+    def __init__(self,msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
