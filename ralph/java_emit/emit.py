@@ -424,6 +424,9 @@ def emit_statement(emit_ctx,statement_node):
         if statement_node.value:
             internal = 'true'
         return '(new Boolean(%s))' % internal
+
+    elif statement_node.label == ast_labels.TEXT_LITERAL:
+        return '("' + statement_node.value + '")'
     
     elif statement_node.label == ast_labels.DECLARATION_STATEMENT:
         java_type_statement = emit_ralph_wrapped_type(statement_node.type)
