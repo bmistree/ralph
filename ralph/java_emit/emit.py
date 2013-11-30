@@ -50,7 +50,14 @@ def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
     @param {list} variable_declaration_node_list --- Each element is
     a DeclarationStatementNode.
     '''
-    return "/**\nWarn: Skipping endpoint's variable declarations.\n*/"
+    emit_ctx.set_in_endpoint_global_vars(True)
+    endpoint_variable_text = ''
+    for variable_declaration_node in variable_declaration_node_list:
+        endpoint_variable_text += (
+            emit_statement(emit_ctx,variable_declaration_node) )
+        
+    emit_ctx.set_in_endpoint_global_vars(False)
+    return endpoint_variable_text
 
 def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
     '''
@@ -381,13 +388,12 @@ def emit_statement(emit_ctx,statement_node):
         # guaranteed that the identifier is for a non-method object type
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.value)
+        
         if internal_var_name is None:
-            # internal_var_name is not declared in this scope: it's an
-            # endpoint global variable.
-            type_text = emit_ralph_wrapped_type(statement_node.type)
-            internal_var_name = '''
-((%s)_active_event.event_parent.global_var_stack.get_var_if_exists("%s"))
-''' % (type_text,statement_node.value)
+            # internal_var_name is not declared in this scope: some
+            # type of error.
+            raise InternalEmitException(
+                'No record of variable named %s' % statement_node.value)
 
         if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
@@ -433,11 +439,17 @@ def emit_statement(emit_ctx,statement_node):
             '%s %s = %s;' %
             (java_type_statement,internal_var_name,new_expression))
 
-        # no ; at end, because caller will place one on.
-        context_stack_push_statement = (
-            '_ctx.var_stack.add_var("%s",%s)' % 
-            (internal_var_name,internal_var_name))
-        
+        # should not add to var context if we're in the middle of
+        # declaring endpoint global variables.  
+        if not emit_ctx.get_in_endpoint_global_vars():
+            # no ; at end, because caller will place one on.
+            context_stack_push_statement = (
+                '_ctx.var_stack.add_var("%s",%s)' % 
+                (internal_var_name,internal_var_name))            
+        else:
+            declaration_statement = 'private ' + declaration_statement;
+            context_stack_push_statement = ''
+            
         return (
             declaration_statement + '\n' + context_stack_push_statement)
 
