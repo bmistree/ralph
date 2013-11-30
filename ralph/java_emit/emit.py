@@ -33,41 +33,56 @@ def emit_endpt(endpt_node):
 
     @returns {String}
     '''
+    emit_ctx = EmitContext()
+    emit_ctx.push_scope()    
     endpt_class_signature = 'public static class %s { \n' % endpt_node.name
     
     endpt_class_body = emit_endpt_variable_declarations(
-        endpt_node.body_node.variable_declaration_nodes)
+        emit_ctx,endpt_node.body_node.variable_declaration_nodes)
     endpt_class_body += '\n'
     endpt_class_body += emit_endpt_method_declarations(
-        endpt_node.body_node.method_declaration_nodes)
+        emit_ctx,endpt_node.body_node.method_declaration_nodes)
     endpt_class_body += '\n'
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
 
-def emit_endpt_variable_declarations(variable_declaration_node_list):
+def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
     '''
     @param {list} variable_declaration_node_list --- Each element is
     a DeclarationStatementNode.
     '''
     return "/**\nWarn: Skipping endpoint's variable declarations.\n*/"
 
-def emit_endpt_method_declarations(method_declaration_node_list):
+def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
     '''
     @param {list} method_declaration_node_list --- Each element is a
     MethodDeclarationNode.
     '''
     to_return = ''
 
+    # first, for each node, load the method name into emit_ctx so can
+    # reference it later.
     for method_declaration_node in method_declaration_node_list:
-        to_return += emit_method_declaration_node(method_declaration_node)
+        add_method_signature_to_ctx(emit_ctx,method_declaration_node)
+
+    
+    for method_declaration_node in method_declaration_node_list:
+        to_return += emit_method_declaration_node(
+            emit_ctx,method_declaration_node)
         to_return += '\n'
 
     return to_return
 
-def emit_method_declaration_node(method_declaration_node):
+def add_method_signature_to_ctx(emit_ctx,method_declaration_node):
+    """Add method signature to emit_ctx so that can reference it
+    later in lookup to emit_ctx
+    """
+    method_signature_node = method_declaration_node.method_signature_node
+    emit_ctx.add_method_name_to_method_set(method_signature_node.method_name)
+
+def emit_method_declaration_node(emit_ctx,method_declaration_node):
     '''
     @param {MethodDeclarationNode} method_declaration_node
     '''
-    emit_ctx = EmitContext()
     emit_ctx.push_scope()
     signature_plus_head = emit_method_signature_plus_head(
         emit_ctx,
@@ -308,6 +323,19 @@ def emit_statement(emit_ctx,statement_node):
         return '%s.set_val(_active_event,%s);\n' % (lhs_text,rhs_text);
 
     elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
+
+        # first, check if call is a method.  if it is, then just emit
+        # it directly.
+        if isinstance(statement_node.type,MethodType):
+            # check if global method or local method
+            if emit_ctx.method_name_in_method_set(statement_node.value):
+                # it is a global method: return the unaltered name
+                # immediately.
+                return statement_node.value
+            else:
+                return '/** Not yet supporting function objects.*/'
+
+        # guaranteed that the identifier is for a non-method object type
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.value)
         if internal_var_name is None:
@@ -323,6 +351,16 @@ def emit_statement(emit_ctx,statement_node):
             # value of variable.  (So can perform action on it.)
             internal_var_name += '.get_val(_active_event)'
         return internal_var_name
+
+    elif statement_node.label == ast_labels.METHOD_CALL:
+
+        # FIXME: Need to handle method calls on objects as well
+        method_text = emit_statement(emit_ctx,statement_node.method_node)
+        method_text += '(_ctx,_active_event'
+        for arg_node in statement_node.args_list:
+            method_text += ',' + emit_statement(emit_ctx,arg_node)
+        method_text += ')'
+        return method_text
     
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)

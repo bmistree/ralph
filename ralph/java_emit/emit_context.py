@@ -33,6 +33,14 @@ class EmitContext(object):
         # assign or if emitting the rhs of an assignment statement.
         self.lhs_of_assign = False
 
+        self.method_set = set()
+
+    def add_method_name_to_method_set(self,method_name):
+        self.method_set.add(method_name)
+
+    def method_name_in_method_set(self,method_name):
+        return method_name in self.method_set
+        
     def set_lhs_of_assign(self,lhs_of_assign):
         '''
         @param {boolean} lhs_of_assign --- True if emitting expression for left
