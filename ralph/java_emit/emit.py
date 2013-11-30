@@ -15,6 +15,14 @@ def emit(root_node,package_name,program_name):
     prog_txt = '''
 package %s;
 
+import ralph.*
+import ralph.LockedVariables.LockedNumberVariable;
+import ralph.LockedVariables.LockedTextVariable;
+import ralph.LockedVariables.LockedTrueFalseVariable;
+import ralph.LockedVariables.SingleThreadedNumberVariable;
+import ralph.LockedVariables.SingleThreadedTextVariable;
+import ralph.LockedVariables.SingleThreadedTrueFalseVariable;
+
 public class %s
 {
 ''' % (package_name,program_name)
@@ -35,15 +43,26 @@ def emit_endpt(endpt_node):
     '''
     emit_ctx = EmitContext()
     emit_ctx.push_scope()    
-    endpt_class_signature = 'public static class %s { \n' % endpt_node.name
+    endpt_class_signature = (
+        'public static class %s extends Endpoint { \n' % endpt_node.name)
     
     endpt_class_body = emit_endpt_variable_declarations(
         emit_ctx,endpt_node.body_node.variable_declaration_nodes)
     endpt_class_body += '\n'
+    endpt_class_body += emit_constructor(emit_ctx,endpt_node)
     endpt_class_body += emit_endpt_method_declarations(
         emit_ctx,endpt_node.body_node.method_declaration_nodes)
     endpt_class_body += '\n'
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
+
+def emit_constructor(emit_ctx,endpt_node):
+    constructor_text = '''
+public %s ( RalphGlobals ralph_globals,String host_uuid,
+            ConnectionObj conn_obj) {
+    super(ralph_globals,host_uuid,conn_obj,new VariableStore(false));
+}
+''' % endpt_node.name
+    return constructor_text
 
 def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
     '''
