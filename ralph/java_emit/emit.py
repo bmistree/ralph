@@ -328,6 +328,12 @@ def emit_statement(emit_ctx,statement_node):
             '(new Boolean(%s.doubleValue() %s %s.doubleValue()))' %
             (lhs,comparison,rhs))
 
+    elif statement_node.label == ast_labels.TRUE_FALSE_LITERAL:
+        internal = 'false'
+        if statement_node.value:
+            internal = 'true'
+        return '(new Boolean(%s))' % internal
+    
     elif statement_node.label == ast_labels.DECLARATION_STATEMENT:
         java_type_statement = emit_ralph_wrapped_type(statement_node.type)
         new_expression = construct_new_expression(
@@ -349,6 +355,35 @@ def emit_statement(emit_ctx,statement_node):
         return (
             declaration_statement + '\n' + context_stack_push_statement + '\n')
 
+    elif statement_node.label == ast_labels.CONDITION:
+
+        if_text = emit_statement(emit_ctx,statement_node.if_node)
+        elif_text = '\n'
+        for elif_node in statement_node.elifs_list:
+            elif_text += emit_statement(emit_ctx,elif_node)
+            elif_text += '\n'
+        else_text = ''
+        if statement_node.else_node_body is not None:
+            else_text = 'else {\n'
+            else_text_body = emit_statement(emit_ctx,statement_node.else_node_body)
+            else_text += indent_string(else_text_body)
+            else_text += '\n}\n'
+
+        return if_text + elif_text + else_text
+
+    elif statement_node.label == ast_labels.IF:
+        predicate_text = emit_statement(emit_ctx,statement_node.predicate_node)
+        if_text = 'if (%s.booleanValue()){\n' % predicate_text
+        if_body_text = emit_statement(emit_ctx,statement_node.body_node)
+        if_text += indent_string(if_body_text) + '\n}\n'
+        return if_text
+
+    elif statement_node.label == ast_labels.ELIF:
+        predicate_text = emit_statement(emit_ctx,statement_node.predicate_node)
+        elif_text = 'else if (%s.booleanValue()){\n' % predicate_text
+        elif_body_text = emit_statement(emit_ctx,statement_node.body_node)
+        elif_text += indent_string(elif_body_text) + '\n}\n'
+        return elif_text
     
     elif statement_node.label == ast_labels.SCOPE:
         to_return = '''
@@ -366,7 +401,7 @@ _ctx.var_stack.push(false);
         to_return += '''
 _ctx.var_stack.pop();
 '''
-    
+
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
         statement_node.label)

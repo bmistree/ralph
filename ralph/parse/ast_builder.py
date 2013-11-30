@@ -298,7 +298,7 @@ def p_ElseIfStatement(p):
     # using if node for else if node
     predicate_node = p[3]
     body_node = p[5]
-    else_if_node = IfNode(predicate_node,body_node,line_number)
+    else_if_node = ElifNode(predicate_node,body_node,line_number)
     p[0] = else_if_node
 
 def p_ElseStatement(p):

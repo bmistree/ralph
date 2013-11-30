@@ -43,6 +43,8 @@ NOT_IN = 'not_in'
 
 LEN = 'len'
 CONDITION = 'condition'
+IF = 'if'
+ELIF = 'elif'
 RETURN = 'return'
 METHOD_CALL = 'method_call'
 
@@ -55,7 +57,6 @@ METHOD_DECLARATION_ARGS = 'method_declaration_args'
 SCOPE_BODY = 'scope_body'
 METHOD_CALL_ARGS = 'method_call_args'
 
-IF = 'if'
 ELSE_IFS = 'elifs'
 ELSE = 'else'
 

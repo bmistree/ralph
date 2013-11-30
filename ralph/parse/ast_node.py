@@ -316,6 +316,20 @@ class ConditionNode(_AstNode):
     def type_check(self,type_check_ctx):
         self.type = None
 
+class IfNode(_AstNode):
+    def __init__(self,predicate_node,if_body_node,line_number):
+        super(IfNode,self).__init__(ast_labels.IF,line_number)
+
+        self.predicate_node = predicate_node
+        self.body_node = if_body_node
+        
+class ElifNode(_AstNode):
+    def __init__(self,predicate_node,elif_body_node,line_number):
+        super(ElifNode,self).__init__(ast_labels.ELIF,line_number)
+
+        self.predicate_node = predicate_node
+        self.body_node = elif_body_node
+        
         
 class BracketNode(_AstNode):
     def __init__(self,outside_bracket_node,inside_bracket_node):
@@ -621,15 +635,7 @@ class MethodCallArgsNode(_AstNode):
 
     def get_args_list(self):
         return list(self.children)
-
     
-class IfNode(_AstNode):
-    def __init__(self,predicate_node,if_body_node,line_number):
-        super(IfNode,self).__init__(ast_labels.IF,line_number)
-
-        self.predicate_node = predicate_node
-        self.body_node = if_body_node
-
 class ElseIfNodes(_AstNode):
     def __init__(self):
         super(ElseIfNodes,self).__init__(ast_labels.ELSE_IFS,0)
