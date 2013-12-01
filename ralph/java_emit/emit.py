@@ -124,7 +124,17 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
         
     emit_ctx.pop_scope()
 
-    body += '_ctx.var_stack.pop();'
+    # all return statements already pop from var stacks themselves.
+    # this is because java compiler throws error for unreachable code.
+    # Eg.,
+    #
+    #      _ctx.var_stack.push(true);//true because func scope
+    #      return __internal__0internal_number.get_val(_active_event);
+    #      _ctx.var_stack.pop();
+    #
+    # will throw a compile error becaue could never hit _ctx.var_stack.pop();
+    if method_declaration_node.method_signature_node.type.returns_type is None:
+        body += '_ctx.var_stack.pop();'
     internal_method_text = signature_plus_head + indent_string(body) + '\n}'
     
     return external_method_text + internal_method_text
@@ -494,6 +504,14 @@ def emit_statement(emit_ctx,statement_node):
         return (
             declaration_statement + '\n' + context_stack_push_statement)
 
+    elif statement_node.label == ast_labels.RETURN:
+        return_text = '_ctx.var_stack.pop();\n'
+        return_text += 'return'
+        if statement_node.what_to_return_node is not None:
+            return_text += ' ' + emit_statement(
+                emit_ctx,statement_node.what_to_return_node)
+        return return_text
+    
     elif statement_node.label == ast_labels.CONDITION:
 
         if_text = emit_statement(emit_ctx,statement_node.if_node)

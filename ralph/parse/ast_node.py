@@ -297,8 +297,11 @@ class ReturnNode(_AstNode):
         self.what_to_return_node = what_to_return_node
 
     def type_check(self,type_check_ctx):
-        self.what_to_return_node.type_check(type_check_ctx)
-        self.type = self.what_to_return_node.type
+        if self.what_to_return_node is None:
+            self.type = None
+        else:
+            self.what_to_return_node.type_check(type_check_ctx)
+            self.type = self.what_to_return_node.type
         
 class ConditionNode(_AstNode):
     def __init__(self,if_node,elifs_node,else_node):
