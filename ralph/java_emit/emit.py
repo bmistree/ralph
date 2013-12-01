@@ -214,22 +214,39 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         # for putting arguments into scope at top of method
         argument_name_text_list.append(argument_name_text)
 
+
     to_return += ') {\n'
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
     to_return += indent_string(
         '_ctx.var_stack.push(true);//true because func scope\n');
-    
-    for argument_name in argument_name_text_list:
+
+    # convert each method argument to ralph variable and then add to
+    # stack.
+    for index in range(0,len(argument_name_text_list)):
+        argument_name = argument_name_text_list[index]
+        argument_node = method_signature_node.method_declaration_args[index]
+        argument_type = argument_node.type
+
+        java_type_statement = emit_ralph_wrapped_type(argument_type,True)
+                
+        new_ralph_variable = (
+            'new %s (_host_uuid,false,%s)' %
+            (java_type_statement,argument_name))
+
+        internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
+        to_return +=indent_string(
+            '%s %s = %s;\n' %
+            (java_type_statement,internal_arg_name,new_ralph_variable))
         to_return += indent_string(
             '\n_ctx.var_stack.add_var("%s",%s);\n' %
-            (argument_name,argument_name))
+            (internal_arg_name,internal_arg_name))
 
     return to_return
 
 
-def emit_ralph_wrapped_type(type_object):
+def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     '''
     @param {Type or None} type_object --- None if type corresponds to
     void (eg., in method signature).
@@ -248,15 +265,15 @@ def emit_ralph_wrapped_type(type_object):
             is_tvar = False
             
         if typer == BOOL_TYPE:
-            if is_tvar:
+            if is_tvar and (not force_single_threaded):
                 return 'LockedTrueFalseVariable'
             return 'SingleThreadedLockedTrueFalseVariable'
         elif typer == NUMBER_TYPE:
-            if is_tvar:
+            if is_tvar and (not force_single_threaded):
                 return 'LockedNumberVariable'
             return 'SingleThreadedLockedNumberVariable'        
         elif typer == STRING_TYPE:
-            if is_tvar:
+            if is_tvar and (not force_single_threaded):
                 return 'LockedTextVariable'
             return 'SingleThreadedLockedTextVariable'
 
@@ -469,7 +486,7 @@ def emit_statement(emit_ctx,statement_node):
             # no ; at end, because caller will place one on.
             context_stack_push_statement = (
                 '_ctx.var_stack.add_var("%s",%s)' % 
-                (internal_var_name,internal_var_name))            
+                (internal_var_name,internal_var_name))
         else:
             declaration_statement = 'private ' + declaration_statement;
             context_stack_push_statement = ''
