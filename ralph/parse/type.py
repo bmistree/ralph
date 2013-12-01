@@ -14,11 +14,14 @@ class BasicType(Type):
         if not isinstance(other_type,BasicType):
             return False
         
-        return ((self.basic_type == other_type.basic_type) and
-                (self.is_tvar == other_type.is_tvar))
+        return self.basic_type == other_type.basic_type
+        # return ((self.basic_type == other_type.basic_type) and
+        #         (self.is_tvar == other_type.is_tvar))
 
     def __str__(self):
-        return self.basic_type
+        prefix = 'TVar ' if self.is_tvar else ''
+        return prefix + self.basic_type
+
     
 class MethodType(Type):
     def __init__(self,returns_type,arg_type_list):
