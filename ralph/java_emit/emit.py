@@ -59,7 +59,7 @@ def emit_endpt(endpt_node):
 def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
 public %s ( RalphGlobals ralph_globals,String host_uuid,
-            ConnectionObj conn_obj) {
+            ConnectionObj conn_obj) throws Exception {
     super(ralph_globals,host_uuid,conn_obj,new VariableStore(false));
 }
 ''' % endpt_node.name
@@ -157,7 +157,7 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
         argument_name_text_list.append(argument_name_text)
 
     # finish method signature
-    to_return += ','.join(argument_text_list) + ') {\n'
+    to_return += ','.join(argument_text_list) + ') throws Exception {\n'
 
     # call the internal version of the function
     method_body_text = (
@@ -185,7 +185,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
     private Double some_method (
         ExecutingEventContext _ctx, LockedActiveEvent _active_event,
-        SomeType SomeVar)
+        SomeType SomeVar) throws Exception
     {
         _ctx.var_stack.push(true); // true because function var scope
         _ctx.var_stack.add_var('SomeVar',SomeVar);
@@ -215,7 +215,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         argument_name_text_list.append(argument_name_text)
 
 
-    to_return += ') {\n'
+    to_return += ') throws Exception {\n'
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
