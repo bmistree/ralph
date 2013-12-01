@@ -13,7 +13,7 @@
   <property name="build.dir" location="${emit_test_dir}/classes"/>
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
   <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
-  <property name="src.dir" location="${emit_test_dir}/.."/>
+  <property name="test_src.dir" location="${emit_test_dir}/../test_src"/>
   <property
       name="lib_build_path"
       location="${emit_test_dir}/../../../ralph/java_lib/build"/>
@@ -31,16 +31,15 @@
     <mkdir dir="${ralph_emitted.dir}"/>
   </target>
 
+
+  <!-- COMPILING -->
   <!-- compile java libraries -->
   <target name="compile_libs" depends="init" description="compile library files">
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
 
   <!-- compile ralph endpoints to java programs -->
-  <target name="compile_ralph" depends="init,compile_basic_ralph" description="compile ralph files">
-  </target>
-
-  <target name="compile_basic_ralph" depends="init" description="compile basic ralph">
+  <target name="compile_ralph" depends="init" description="compile ralph files">
     <!-- Compile to java -->
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
@@ -49,15 +48,45 @@
       <arg line="emit_test_package"/>
       <arg line="BasicRalph"/>      
     </exec>
-    
-    <!-- Compile java to bytecode -->
+
+    <!-- Compile all ralph java to bytecode -->
     <javac
         srcdir="${ralph_emitted.dir}"
         destdir="${build.dir}"
         classpath="${lib_class_path}"
         includeantruntime="false" />
+    
   </target>
 
+  <target name="compile_ralph_tests" depends="init,compile_ralph" description="compile basic ralph">
+    <!-- compile all ralph tests  -->
+    <javac
+        srcdir="${test_src.dir}"
+        destdir="${build.dir}"
+        classpath="${build.dir}"
+        includeantruntime="false" />
+  </target>
+
+  <!-- RUNNING TESTS -->
+  <target
+      name="run_all"
+      depends=
+        "run_BasicSetterGetter">
+  </target>
+
+  <!-- Single side setter getter -->
+  <target
+      name="run_BasicSetterGetter"
+      depends="compile_ralph_tests"
+      description="Single side setter getter test.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.BasicSetterGetter" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
+  
+  
   
   
   <!-- Delete the build directories -->
