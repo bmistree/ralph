@@ -1,0 +1,39 @@
+
+Endpoint SetterGetter
+{
+    TVar Number internal_number = 15;
+    Text internal_text = 'hello';
+    TVar TrueFalse internal_tf = True;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+
+    set_number(Number new_number)
+    {
+        internal_number = new_number;
+    }
+
+    
+    get_text() returns Text
+    {
+        return internal_text;
+    }
+
+    set_text(Text new_text)
+    {
+        internal_text = new_text;
+    }
+
+
+    get_tf() returns TrueFalse
+    {
+        return internal_tf;
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        internal_tf = new_tf;
+    }
+}

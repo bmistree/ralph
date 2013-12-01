@@ -1,0 +1,71 @@
+<project name="RalphEmitTest" default="compile" basedir=".">
+  
+  <description>
+    Test cases for java libraries.
+  </description>
+
+  <dirname
+    property="emit_test_dir"
+    file="${ant.file.RalphJavaLibTest}"
+  />
+
+  <!-- global properties for this build file -->
+  <property name="build.dir" location="${emit_test_dir}/classes"/>
+  <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
+  <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
+  <property name="src.dir" location="${emit_test_dir}/.."/>
+  <property
+      name="lib_build_path"
+      location="${emit_test_dir}/../../../ralph/java_lib/build"/>
+  <property
+      name="lib_class_path" location="${lib_build_path}/classes/"/>
+  <property
+      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>
+
+  
+  <!-- set up build directories for test -->
+  <target name="init" description="setup build directories">
+    <echo message="Setting up build directories for tests"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${ralph_emitted.dir}"/>
+  </target>
+
+  <!-- compile java libraries -->
+  <target name="compile_libs" depends="init" description="compile library files">
+    <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
+  </target>
+
+  <!-- compile ralph endpoints to java programs -->
+  <target name="compile_ralph" depends="init,compile_basic_ralph" description="compile ralph files">
+  </target>
+
+  <target name="compile_basic_ralph" depends="init" description="compile basic ralph">
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/basic_ralph.rph"/>
+      <arg line="${ralph_emitted.dir}/BasicRalph.java"/>
+      <arg line="BasicRalph"/>
+      <arg line="emit_test_package"/>
+    </exec>
+  </target>
+
+  
+  
+  <!-- Delete the build directories -->
+  <target name="clean" description="get rid of build dir">
+    <delete dir="${build.dir}"/>
+    <delete dir="${ralph_emitted.dir}"/>
+  </target>
+
+  <target
+      name="clean_all"
+      depends="clean"
+      description="get rid of build dir and all built libs">
+    
+    <ant antfile="${lib_build_path}/build.xml" target="clean" />
+    
+  </target>
+
+  
+</project>
