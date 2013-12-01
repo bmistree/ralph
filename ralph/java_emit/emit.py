@@ -15,13 +15,14 @@ def emit(root_node,package_name,program_name):
     prog_txt = '''
 package %s;
 
-import ralph.*
+import ralph.*;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.LockedVariables.LockedTextVariable;
 import ralph.LockedVariables.LockedTrueFalseVariable;
-import ralph.LockedVariables.SingleThreadedNumberVariable;
-import ralph.LockedVariables.SingleThreadedTextVariable;
-import ralph.LockedVariables.SingleThreadedTrueFalseVariable;
+import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
+import ralph.LockedVariables.SingleThreadedLockedTextVariable;
+import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
+import RalphConnObj.ConnectionObj;
 
 public class %s
 {
@@ -136,10 +137,11 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     """
     return_type = 'void'
     void_return_type = True
-    if method_signature_node.type is not None:
+
+    if method_signature_node.type.returns_type is not None:
         return_type = emit_internal_type(method_signature_node.type)
         void_return_type = False
-        
+
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
     argument_text_list = []
@@ -164,7 +166,7 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     for argument_name in argument_name_text_list:
         method_body_text += ',' + argument_name
     method_body_text += ');'
-    
+
     if not void_return_type:
         method_body_text = 'return ' + method_body_text
         
