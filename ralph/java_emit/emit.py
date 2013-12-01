@@ -285,7 +285,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
     initializer_text = None
     if initializer_node is not None:
-        initializer_text = emit_statement(eit_ctx,initializer_node)
+        initializer_text = emit_statement(emit_ctx,initializer_node)
         
     java_type_text = emit_ralph_wrapped_type(type_object)
     if initializer_text is None:
