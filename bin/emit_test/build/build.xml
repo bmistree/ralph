@@ -41,13 +41,21 @@
   </target>
 
   <target name="compile_basic_ralph" depends="init" description="compile basic ralph">
+    <!-- Compile to java -->
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/basic_ralph.rph"/>
       <arg line="${ralph_emitted.dir}/BasicRalph.java"/>
-      <arg line="BasicRalph"/>
       <arg line="emit_test_package"/>
+      <arg line="BasicRalph"/>      
     </exec>
+    
+    <!-- Compile java to bytecode -->
+    <javac
+        srcdir="${ralph_emitted.dir}"
+        destdir="${build.dir}"
+        classpath="${lib_class_path}"
+        includeantruntime="false" />
   </target>
 
   
