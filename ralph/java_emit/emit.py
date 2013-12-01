@@ -23,6 +23,7 @@ import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import RalphConnObj.ConnectionObj;
+import RalphExceptions.*;
 
 public class %s
 {
@@ -145,13 +146,14 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     external to ralph.  The external facing code requires different
     arguments and just calls into the internal code.
     """
+    # creating method signature
     return_type = 'void'
     void_return_type = True
 
     if method_signature_node.type.returns_type is not None:
         return_type = emit_internal_type(method_signature_node.type)
         void_return_type = False
-
+        
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
     argument_text_list = []
@@ -170,15 +172,38 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     to_return += ','.join(argument_text_list) + ') throws Exception {\n'
 
     # call the internal version of the function
-    method_body_text = (
-        '%s (create_context() ,_act_event_map.create_root_event()' %
-        method_signature_node.method_name)
+    method_body_text = 'ExecutingEventContext ctx = create_context();\n'
+    method_body_text += '''
+LockedActiveEvent active_event = _act_event_map.create_root_event();
+'''
+    
+    inner_method_call_text = (
+        '%s (ctx ,active_event' % method_signature_node.method_name)
     for argument_name in argument_name_text_list:
-        method_body_text += ',' + argument_name
-    method_body_text += ');'
+        inner_method_call_text += ',' + argument_name
+    inner_method_call_text += ');\n'
 
     if not void_return_type:
-        method_body_text = 'return ' + method_body_text
+        # assign the method call to an object to return
+        inner_method_call_text = (
+            '%s to_return = %s' % (return_type, inner_method_call_text))
+
+    method_body_text += inner_method_call_text
+        
+    # try to commit the event
+    method_body_text += '''
+active_event.begin_first_phase_commit();
+try {
+    ((RootEventParent)active_event.event_parent).event_complete_queue.take();
+} catch (InterruptedException _ex) {
+    // TODO Auto-generated catch block
+    _ex.printStackTrace();
+}
+'''
+
+    # return the grabbed value
+    if not void_return_type:
+        method_body_text += 'return to_return;'
         
     to_return += indent_string(method_body_text) + '\n}\n' 
     return to_return
