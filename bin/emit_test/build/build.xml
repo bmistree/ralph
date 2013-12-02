@@ -39,7 +39,7 @@
   </target>
 
   <!-- compile ralph endpoints to java programs -->
-  <target name="compile_ralph" depends="init" description="compile ralph files">
+  <target name="compile_ralph" depends="init,compile_libs" description="compile ralph files">
     <!-- Compile to java -->
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
