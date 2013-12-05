@@ -375,7 +375,6 @@ class MethodCallNode(_AstNode):
     def type_check(self,type_check_ctx):
         self.method_node.type_check(type_check_ctx)
         self.type = self.method_node.type.returns_type
-
         
 class RangeExpressionNode(_AstNode):
     def __init__(
@@ -446,90 +445,80 @@ class _BinaryExpressionNode(_AstNode):
             label,lhs_expression_node.line_number)
         self.lhs_expression_node = lhs_expression_node
         self.rhs_expression_node = rhs_expression_node
+
+class _ArithmeticExpressionNode(_BinaryExpressionNode):
+    def type_check(self,type_check_ctx):
+        self.lhs_expression_node.type_check(type_check_ctx)
+        self.rhs_expression_node.type_check(type_check_ctx)
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
-class MultiplyExpressionNode(_BinaryExpressionNode):
+class _LogicalExpressionNode(_BinaryExpressionNode):
+    def type_check(self,type_check_ctx):
+        self.lhs_expression_node.type_check(type_check_ctx)
+        self.rhs_expression_node.type_check(type_check_ctx)
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+
+        
+class MultiplyExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(MultiplyExpressionNode,self).__init__(
             ast_labels.MULTIPLY,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
-class DivideExpressionNode(_BinaryExpressionNode):
+class DivideExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(DivideExpressionNode,self).__init__(
             ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
-class AddExpressionNode(_BinaryExpressionNode):
+class AddExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(AddExpressionNode,self).__init__(
             ast_labels.ADD,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
-class SubtractExpressionNode(_BinaryExpressionNode):
+class SubtractExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(SubtractExpressionNode,self).__init__(
             ast_labels.SUBTRACT,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
-class GreaterThanExpressionNode(_BinaryExpressionNode):
+class GreaterThanExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(GreaterThanExpressionNode,self).__init__(
             ast_labels.GREATER_THAN,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class GreaterThanEqualsExpressionNode(_BinaryExpressionNode):
+class GreaterThanEqualsExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(GreaterThanEqualsExpressionNode,self).__init__(
-            ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+            ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,
+            rhs_expression_node)
         
-class LessThanExpressionNode(_BinaryExpressionNode):
+class LessThanExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(LessThanExpressionNode,self).__init__(
             ast_labels.LESS_THAN,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class LessThanEqualsExpressionNode(_BinaryExpressionNode):
+class LessThanEqualsExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(LessThanEqualsExpressionNode,self).__init__(
             ast_labels.LESS_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class EqualsExpressionNode(_BinaryExpressionNode):
+class EqualsExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(EqualsExpressionNode,self).__init__(
             ast_labels.EQUALS,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class NotEqualsExpressionNode(_BinaryExpressionNode):
+class NotEqualsExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(NotEqualsExpressionNode,self).__init__(
             ast_labels.NOT_EQUALS,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)        
         
-class AndExpressionNode(_BinaryExpressionNode):
+class AndExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(AndExpressionNode,self).__init__(
             ast_labels.AND,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class OrExpressionNode(_BinaryExpressionNode):
+class OrExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(OrExpressionNode,self).__init__(
             ast_labels.OR,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
 class InExpressionNode(_BinaryExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
@@ -538,12 +527,10 @@ class InExpressionNode(_BinaryExpressionNode):
     def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-class NotInExpressionNode(_BinaryExpressionNode):
+class NotInExpressionNode(_LogicalExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):
         super(NotInExpressionNode,self).__init__(
             ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
         
 def create_binary_expression_node(
