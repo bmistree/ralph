@@ -1,0 +1,15 @@
+
+Endpoint InternalMethodCaller
+{
+    TVar Number internal_number = 15;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+
+    increment_number()
+    {
+        internal_number = get_number() + 1;
+    }
+}

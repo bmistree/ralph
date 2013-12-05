@@ -46,7 +46,15 @@
       <arg line="${ralph_src.dir}/basic_ralph.rph"/>
       <arg line="${ralph_emitted.dir}/BasicRalph.java"/>
       <arg line="emit_test_package"/>
-      <arg line="BasicRalph"/>      
+      <arg line="BasicRalph"/>
+    </exec>
+    
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/internal_method_call.rph"/>
+      <arg line="${ralph_emitted.dir}/InternalMethodCall.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="InternalMethodCall"/>
     </exec>
 
     <!-- Compile all ralph java to bytecode -->
