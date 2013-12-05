@@ -79,7 +79,7 @@
   <target
       name="run_all"
       depends=
-        "run_BasicSetterGetter">
+        "run_BasicSetterGetter, run_BasicInternalMethodCall">
   </target>
 
   <!-- Single side setter getter -->
@@ -93,6 +93,19 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+  <!-- Internal method call on single host -->
+  <target
+      name="run_BasicInternalMethodCall"
+      depends="compile_ralph_tests"
+      description="Single side internal method call.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.BasicInternalMethodCall" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   
   
