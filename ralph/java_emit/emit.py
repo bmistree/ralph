@@ -406,7 +406,7 @@ def emit_statement(emit_ctx,statement_node):
         
         java_operator = NUMERICAL_ONLY_BINARY_LABELS_DICT[statement_node.label]
         return (
-            '(new Double(%s.doubleValue() %s %s.doublevalue() ) )' %
+            '(new Double(%s.doubleValue() %s %s.doubleValue() ) )' %
             (lhs, java_operator, rhs))
     
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
@@ -468,6 +468,7 @@ def emit_statement(emit_ctx,statement_node):
             raise InternalEmitException(
                 'No record of variable named %s' % statement_node.value)
 
+        
         if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
