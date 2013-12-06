@@ -20,7 +20,6 @@ import RalphCallResults.BackoutBeforeEndpointCallResult;
 
 public class LockedActiveEvent extends ActiveEvent
 {
-	
     private enum State 
     {
         STATE_RUNNING, STATE_FIRST_PHASE_COMMIT,
@@ -278,7 +277,11 @@ public class LockedActiveEvent extends ActiveEvent
         }
         return true;
     }
-
+    
+    public boolean immediate_complete()
+    {
+        return false;
+    }
 	
     public void begin_first_phase_commit()
     {
@@ -305,7 +308,6 @@ public class LockedActiveEvent extends ActiveEvent
             //# message again.
             return;
         }
-        
         
         //# transition into first phase commit state        
         state = State.STATE_FIRST_PHASE_COMMIT;

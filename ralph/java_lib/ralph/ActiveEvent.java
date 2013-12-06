@@ -83,7 +83,14 @@ public abstract class ActiveEvent
     */
     public abstract void obj_request_no_backout_and_release_lock();
 
+    /**
+       Immediately after getting or setting a value, should a locked
+       object commit the active event's operation?  (True for
+       non-atomics, false for atomics.)
+     */
+    public abstract boolean immediate_complete();
 
+    
     /**
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished

@@ -147,8 +147,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         //# priority ends up in WaitingElement, another thread can later
         //# update it.
         String cached_priority = active_event.get_priority();
-        
-        
+
         //# must be careful to add obj to active_event's touched_objs.
         //# That way, if active_event needs to backout, we're guaranteed
         //# that the state we've allocated for accounting the
@@ -803,7 +802,14 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     {
         DataWrapper<T,D> to_write_on = acquire_write_lock(active_event);
         to_write_on.write(new_val);
+        if (active_event.immediate_complete())
+        {
+            // nonatomics only operate for a single get or set and do not
+            // backout their changes.
+            complete_commit(active_event);
+        }
     }
+    
 
     /**
        CALLED FROM WITHIN LOCK HOLDER
@@ -937,7 +943,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         _unlock();
     }
 
-
     public T get_val(ActiveEvent active_event) throws BackoutException
     {
     	if (active_event == null)
@@ -946,11 +951,20 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             //# check the value of an external reference.
             return val.val;
     	}
-        
+
         DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
         return data_wrapper.val;
     }
-
+    
+    
     /**
        ASSUMES ALREADY HOLDING LOCK
 
@@ -972,6 +986,9 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        */
     private boolean insert_in_touched_objs(ActiveEvent active_event)
     {
+        if (active_event.immediate_complete())
+            return true;
+        
     	if (waiting_events.containsKey(active_event.uuid) ||
             read_lock_holders.containsKey(active_event.uuid))
             return true;
@@ -979,4 +996,5 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
+    
 }

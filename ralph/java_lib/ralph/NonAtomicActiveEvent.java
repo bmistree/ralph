@@ -21,7 +21,7 @@ import RalphCallResults.BackoutBeforeEndpointCallResult;
 public class NonAtomicActiveEvent extends ActiveEvent
 {
     public ActiveEventMap event_map = null;
-	
+    
     HashMap<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
@@ -61,17 +61,15 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
 	
     /**
-       @returns {bool} --- True if not in the midst of two phase
-       commit.  False otherwise.
-
-       If it is not in the midst of two phase commit, then does not
-       return the lock that it is holding.  The lock must be released
-       in obj_request_backout_and_release_lock or
-       obj_request_no_backout_and_release_lock.
+       @returns {bool} --- False.  Will never backout a non-atomic
+       event.  A non-atomic event only performs single atomic reads
+       and writes.  In this case, just let the entire operation
+       complete, instead of rescheduling it.
     */
     public boolean can_backout_and_hold_lock()
     {
-        return true;
+        // will never backout a non-atomic event that 
+        return false;
     }
 
 	
@@ -418,6 +416,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
             "Non-atomic should not receive complit_commit_and_forward");
     }
 
+    public boolean immediate_complete()
+    {
+        return true;
+    }
+    
 
     public void forward_backout_request_and_backout_self()
     {
