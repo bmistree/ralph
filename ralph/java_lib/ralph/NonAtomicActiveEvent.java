@@ -77,9 +77,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
 	
     public void begin_first_phase_commit()
     {
-        // nothing to do because non-atomic does not need to commit.
+        // a non-atomic can only be started from root.
+        ((RootEventParent)event_parent).non_atomic_completed();
     }
-	
+
+    
     /**
      * If can enter Should send a message back to parent that 
         
@@ -87,7 +89,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
      */
     public void begin_first_phase_commit(boolean from_partner)
     {
-        // nothing to do because non-atomic does not need to commit.
+        begin_first_phase_commit();
     }
 
     public void second_phase_commit()

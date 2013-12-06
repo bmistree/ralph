@@ -60,6 +60,14 @@ public class RootEventParent extends EventParent {
         _endpoints_waiting_on_commit_lock.unlock();
     }
 
+    /**
+       Non-atomic notified that we are done with event.
+     */
+    public void non_atomic_completed()
+    {
+    	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
+    }
+    
         
     /**
      * @see second_phase_transition_success in EventParent
