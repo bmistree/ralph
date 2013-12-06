@@ -36,31 +36,84 @@ public class NonAtomic
         if (! NonAtomic.test_non_atomic_read(endpt,num_tvar))
             return false;
 
+        if (! NonAtomic.test_concurrent_non_atomic_reads_and_writes(endpt,num_tvar))
+            return false;
+
         return true;
     }
 
+    /**
+       Two non-atomics should be able to read and write to data
+       concurrently before either commit.
+     */
+    public static boolean test_concurrent_non_atomic_reads_and_writes(
+        Endpoint endpt, LockedNumberVariable num_tvar)
+    {
+        try
+        {
+            for (int i =0; i < 20; ++i)
+            {
+                ActiveEvent reader =
+                    endpt._act_event_map.create_root_event(false);
+                ActiveEvent writer =
+                    endpt._act_event_map.create_root_event(false);
+
+                // atomics reader/writers would not be able to execute
+                // in parallel.
+                num_tvar.get_val(reader);
+                num_tvar.set_val(writer,new Double(359));
+
+                reader.begin_first_phase_commit();
+                writer.begin_first_phase_commit();
+                
+                RootEventParent reader_event_parent =
+                    (RootEventParent)reader.event_parent;
+                RootEventParent writer_event_parent =
+                    (RootEventParent)writer.event_parent;
+
+                ResultType reader_commit_resp =
+                    reader_event_parent.event_complete_queue.take();
+                ResultType writer_commit_resp =
+                    writer_event_parent.event_complete_queue.take();
+                
+                if (reader_commit_resp != ResultType.COMPLETE)
+                    return false;
+                if (writer_commit_resp != ResultType.COMPLETE)
+                    return false;                
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
     public static boolean test_non_atomic_read(
         Endpoint endpt, LockedNumberVariable num_tvar)
     {
         try
         {
-            ActiveEvent reader =
-                endpt._act_event_map.create_root_event(false);
-
-            if (! num_tvar.get_val(reader).equals(
-                    TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
+            for (int i = 0; i < 20; ++i)
             {
-                return false;
-            }
-            reader.begin_first_phase_commit();
-            RootEventParent reader_event_parent =
-                (RootEventParent)reader.event_parent;
-            ResultType reader_commit_resp =
-                reader_event_parent.event_complete_queue.take();
+                ActiveEvent reader =
+                    endpt._act_event_map.create_root_event(false);
 
-            if (reader_commit_resp != ResultType.COMPLETE)
-                return false;
-            
+                if (! num_tvar.get_val(reader).equals(
+                        TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
+                {
+                    return false;
+                }
+                reader.begin_first_phase_commit();
+                RootEventParent reader_event_parent =
+                    (RootEventParent)reader.event_parent;
+                ResultType reader_commit_resp =
+                    reader_event_parent.event_complete_queue.take();
+
+                if (reader_commit_resp != ResultType.COMPLETE)
+                    return false;
+            }
         }
         catch (Exception ex)
         {
