@@ -2,7 +2,7 @@ package java_lib_test;
 
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.Endpoint;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.ParallelBlock;
 import ralph.ParallelBlockConstructor;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,7 +44,7 @@ public class BasicParallel
         
         
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-        LockedActiveEvent active_event = null;
+        ActiveEvent active_event = null;
         try
         {
             active_event = endpt._act_event_map.create_root_event();

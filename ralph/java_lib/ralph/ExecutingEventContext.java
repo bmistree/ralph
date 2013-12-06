@@ -58,10 +58,6 @@ public class ExecutingEventContext
        return result of rpc.
      */
     private ArrayList<RPCArgObject> args_to_reply_with = null;
-    /**
-       If was begun by rpc and rpc was transactional, this is true.
-     */
-    private boolean part_of_transaction = false;
     
     boolean msg_send_initialized_bit = false;
 
@@ -93,12 +89,10 @@ public class ExecutingEventContext
      */
     public ExecutingEventContext (
         VariableStack _var_stack,
-        ArrayList<RPCArgObject> _args_to_reply_with,
-        boolean _part_of_transaction)
+        ArrayList<RPCArgObject> _args_to_reply_with)
     {
         var_stack = _var_stack.fork_stack();
         args_to_reply_with = _args_to_reply_with;
-        part_of_transaction = _part_of_transaction;
     }
     
     public void set_from_endpoint_true()
@@ -166,7 +160,7 @@ public class ExecutingEventContext
 
     public Object set_val (
         Object to_write_to, Object to_write,
-        LockedActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event) throws BackoutException
     {
         if (LockedObject.class.isInstance(to_write_to))
         {
@@ -205,7 +199,7 @@ public class ExecutingEventContext
      This function will either call get_val on the oject (if it's a
      WaldoReference) or just pass it through otherwise.
 
-     @param {LockedActiveEvent or None} --- If None, then this
+     @param {ActiveEvent or None} --- If None, then this
      is used during initialization of variables.  Means that the
      Waldo Reference should just return the actual committed value
      of the variable.  Don't wait for commit or anything else.
@@ -213,7 +207,7 @@ public class ExecutingEventContext
 
      */
     public Object get_val_if_waldo(
-        Object val, LockedActiveEvent active_event) throws BackoutException
+        Object val, ActiveEvent active_event) throws BackoutException
     {
         if (LockedObject.class.isInstance(val))
             return ((LockedObject)val).get_val(active_event);
@@ -230,7 +224,7 @@ public class ExecutingEventContext
        Otherwise, return the value and variable keeps Python form.
     */
     public Object turn_into_waldo_var_if_was_var(
-        Object val, boolean force_copy, LockedActiveEvent active_event,
+        Object val, boolean force_copy, ActiveEvent active_event,
         String host_uuid, boolean new_peered,
         boolean new_multi_threaded) throws BackoutException
     {
@@ -288,7 +282,7 @@ public class ExecutingEventContext
        If it is false, then just return val.  Otherwise, make copy.        
     */
     public LockedObject turn_into_waldo_var(
-        Object val, boolean force_copy, LockedActiveEvent active_event,
+        Object val, boolean force_copy, ActiveEvent active_event,
         String host_uuid, boolean new_peered,
         boolean new_multi_threaded) throws BackoutException
     {
@@ -370,7 +364,7 @@ public class ExecutingEventContext
      * @return
      */
     public LockedObject func_turn_into_waldo_var(
-        Object val, boolean force_copy, LockedActiveEvent active_event,
+        Object val, boolean force_copy, ActiveEvent active_event,
         String host_uuid, boolean new_peered,
         ArrayList<Object>ext_args_array, boolean new_multi_threaded)
     {
@@ -387,7 +381,7 @@ public class ExecutingEventContext
        function.
     */
     public Object call_func_obj(
-        LockedActiveEvent active_event, Object func_obj,Object...args)
+        ActiveEvent active_event, Object func_obj,Object...args)
     {
         Util.logger_assert("Not handling function objects for now");
         return null;
@@ -403,7 +397,7 @@ public class ExecutingEventContext
        * @throws BackoutException 
        */
     public LockedObject convert_for_seq_local(
-        Object val, LockedActiveEvent active_event,
+        Object val, ActiveEvent active_event,
         String host_uuid) throws BackoutException
     {
         return turn_into_waldo_var(
@@ -421,7 +415,7 @@ public class ExecutingEventContext
      * @throws BackoutException 
      */
     public Object de_waldoify(
-        Object val,LockedActiveEvent active_event) throws BackoutException
+        Object val,ActiveEvent active_event) throws BackoutException
     {
         if (LockedObject.class.isInstance(val))
             return ((LockedObject)val).de_waldoify(active_event);
@@ -483,7 +477,7 @@ public class ExecutingEventContext
        False otherwise.
     */
     public boolean assign(
-        Object lhs, Object rhs, LockedActiveEvent active_event) throws BackoutException
+        Object lhs, Object rhs, ActiveEvent active_event) throws BackoutException
     {
     	if (! LockedObject.class.isInstance(lhs))
             return false;
@@ -497,7 +491,7 @@ public class ExecutingEventContext
      * @throws BackoutException 
      */
     public boolean assign_on_key(
-        Object lhs,Object key,Object rhs, LockedActiveEvent active_event) throws BackoutException
+        Object lhs,Object key,Object rhs, ActiveEvent active_event) throws BackoutException
     {
         if (! LockedObject.class.isInstance(lhs))
             return false;
@@ -541,7 +535,7 @@ public class ExecutingEventContext
 
 
     public Object get_val_on_key(
-        Object to_get_from, Object key, LockedActiveEvent active_event)
+        Object to_get_from, Object key, ActiveEvent active_event)
         throws BackoutException
     {
     	Object raw_key = get_val_if_waldo(key,active_event);
@@ -592,7 +586,7 @@ public class ExecutingEventContext
      * @return
      */
     public Iterator get_for_iter(
-        Object to_iter_over, LockedActiveEvent active_event)
+        Object to_iter_over, ActiveEvent active_event)
     {
     	Util.logger_assert("Have not converted iter in executing event yet");
     	return null;
@@ -600,7 +594,7 @@ public class ExecutingEventContext
     
     
     public String to_text(
-        Object what_to_call_to_text_on, LockedActiveEvent active_event)
+        Object what_to_call_to_text_on, ActiveEvent active_event)
     {
     	Util.logger_assert("Have not converted to text method in java branch yet.");
     	return null;
@@ -608,7 +602,7 @@ public class ExecutingEventContext
     
 
     public void signal_call(
-        LockedActiveEvent active_event, SignalFunction func ,Object...args)
+        ActiveEvent active_event, SignalFunction func ,Object...args)
     {
     	Util.logger_assert(
             "Have not converted signal call code in java branch yet.");
@@ -624,7 +618,7 @@ public class ExecutingEventContext
     */
     public int handle_len(
         Object what_calling_len_on,
-        LockedActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event) throws BackoutException
     {
     	if (HashMap.class.isInstance(what_calling_len_on))
             return ((HashMap)what_calling_len_on).size();
@@ -659,7 +653,7 @@ public class ExecutingEventContext
        message.
     */    
     public void hide_sequence_completed_call(
-        Endpoint endpoint, LockedActiveEvent active_event)
+        Endpoint endpoint, ActiveEvent active_event)
         throws NetworkException, ApplicationException, BackoutException
     {
         // DEBUG: Should only call sequence completed if context was
@@ -688,8 +682,7 @@ public class ExecutingEventContext
             endpoint,active_event,
             null,  // no function name
             false, // not first msg sent
-            args_to_reply_with,
-            part_of_transaction);
+            args_to_reply_with);
     }
 
 
@@ -719,9 +712,8 @@ public class ExecutingEventContext
        * @throws BackoutException 
        */
     public void hide_partner_call(
-        Endpoint endpoint, LockedActiveEvent active_event,
-        String func_name, boolean first_msg,ArrayList<RPCArgObject> args,
-        boolean transactional)
+        Endpoint endpoint, ActiveEvent active_event,
+        String func_name, boolean first_msg,ArrayList<RPCArgObject> args)
         throws NetworkException, ApplicationException, BackoutException
     {
     	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
@@ -729,8 +721,7 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                this, func_name, threadsafe_unblock_queue, first_msg,args,
-                transactional);
+                this, func_name, threadsafe_unblock_queue, first_msg,args);
         
     	if (! partner_call_requested)
     	{
@@ -820,7 +811,7 @@ public class ExecutingEventContext
     }
 
     public Object hide_endpoint_call( 
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         ExecutingEventContext context, Endpoint endpoint_obj, String method_name,
         Object...args) throws BackoutException, NetworkException, ApplicationException
     {
@@ -884,7 +875,7 @@ public class ExecutingEventContext
        inference, etc. at compile time rather than at run time.
     */
     public boolean handle_in_check(
-        Object lhs, Object rhs, LockedActiveEvent active_event)
+        Object lhs, Object rhs, ActiveEvent active_event)
     {
     	Util.logger_assert("Have not added in check yet");
     	return false;

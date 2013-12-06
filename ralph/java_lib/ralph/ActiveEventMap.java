@@ -9,7 +9,7 @@ import RalphExceptions.StoppedException;
 
 public class ActiveEventMap
 {
-    private HashMap<String,LockedActiveEvent> map = new HashMap<String,LockedActiveEvent>();
+    private HashMap<String,ActiveEvent> map = new HashMap<String,ActiveEvent>();
     private java.util.concurrent.locks.ReentrantLock _mutex = 
         new java.util.concurrent.locks.ReentrantLock();
     public Endpoint local_endpoint = null;
@@ -53,13 +53,13 @@ public class ActiveEventMap
         // themselves from the map.  To prevent invalidating the map as
         // we iterate over it, we first copy all the elements into a
         // list, then iterate.
-        ArrayList<LockedActiveEvent> evt_list =
-            new ArrayList<LockedActiveEvent>(map.values());
+        ArrayList<ActiveEvent> evt_list =
+            new ArrayList<ActiveEvent>(map.values());
         
         in_stop_phase = true;
         _unlock();
         
-        for (LockedActiveEvent evt : evt_list)
+        for (ActiveEvent evt : evt_list)
             evt.stop(skip_partner);        
     }
 
@@ -89,7 +89,7 @@ public class ActiveEventMap
      this endpoint and returns it.        
      * @return
      */
-    public LockedActiveEvent create_root_event()
+    public ActiveEvent create_root_event()
         throws RalphExceptions.StoppedException
     {
         _lock();
@@ -99,7 +99,7 @@ public class ActiveEventMap
             throw new RalphExceptions.StoppedException();
         }
 
-        LockedActiveEvent root_event = boosted_manager.create_root_event();
+        ActiveEvent root_event = boosted_manager.create_root_event();
         map.put(root_event.uuid,root_event);
         _unlock();
         return root_event;
@@ -147,8 +147,8 @@ public class ActiveEventMap
     {        
         _lock();
         
-        LockedActiveEvent to_remove = map.remove(event_uuid);
-        LockedActiveEvent successor_event = null;
+        ActiveEvent to_remove = map.remove(event_uuid);
+        ActiveEvent successor_event = null;
         
         if ((to_remove != null) &&
             RootEventParent.class.isInstance(to_remove.event_parent))
@@ -177,10 +177,10 @@ public class ActiveEventMap
      is not in map.  Otherwise, reutrns the _ActiveEvent in the
      map.
     */
-    public LockedActiveEvent get_event(String uuid)
+    public ActiveEvent get_event(String uuid)
     {
         _lock();
-        LockedActiveEvent to_return = map.get(uuid);
+        ActiveEvent to_return = map.get(uuid);
         _unlock();
         return to_return;
     }
@@ -195,7 +195,7 @@ public class ActiveEventMap
         
      @returns {_ActiveEvent}
     */
-    public LockedActiveEvent get_or_create_partner_event(
+    public ActiveEvent get_or_create_partner_event(
         String uuid, String priority) throws StoppedException
     {
         
@@ -212,13 +212,13 @@ public class ActiveEventMap
             {
                 PartnerEventParent pep =
                     new PartnerEventParent(local_endpoint,uuid,priority);
-                LockedActiveEvent new_event =
+                ActiveEvent new_event =
                     new LockedActiveEvent(pep,this);
                 map.put(uuid, new_event);
             }
         }
 
-        LockedActiveEvent to_return = map.get(uuid);
+        ActiveEvent to_return = map.get(uuid);
         _unlock();
         return to_return;
     }
@@ -238,7 +238,7 @@ public class ActiveEventMap
        Create an event because received an endpoint call
     */
 	
-    public LockedActiveEvent get_or_create_endpoint_called_event(
+    public ActiveEvent get_or_create_endpoint_called_event(
         Endpoint endpoint_calling, String event_uuid, String priority,
         ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue)
         throws StoppedException 
@@ -255,10 +255,10 @@ public class ActiveEventMap
             EndpointEventParent eep =
                 new EndpointEventParent(
                     event_uuid,endpoint_calling, local_endpoint,result_queue,priority);
-            LockedActiveEvent new_event = new LockedActiveEvent(eep,this);
+            ActiveEvent new_event = new LockedActiveEvent(eep,this);
             map.put(event_uuid, new_event);
         }
-        LockedActiveEvent to_return = map.get(event_uuid);
+        ActiveEvent to_return = map.get(event_uuid);
 		
         _unlock();
         return to_return;

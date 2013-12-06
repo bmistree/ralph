@@ -29,29 +29,29 @@ import RalphExceptions.BackoutException;
  */
 public interface ContainerInterface <K,V,D>
 {
-    public V get_val_on_key(LockedActiveEvent active_event, K key);
+    public V get_val_on_key(ActiveEvent active_event, K key);
 	
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, V to_write,
+        ActiveEvent active_event, K key, V to_write,
         boolean copy_if_peered) throws BackoutException;
     
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, V to_write) throws BackoutException;
+        ActiveEvent active_event, K key, V to_write) throws BackoutException;
     
     public void del_key_called(
-        LockedActiveEvent active_event,K key_to_delete) throws BackoutException;
+        ActiveEvent active_event,K key_to_delete) throws BackoutException;
     
     public int get_len(
-        LockedActiveEvent active_event) throws BackoutException;
+        ActiveEvent active_event) throws BackoutException;
     
     public ArrayList<K> get_keys(
-        LockedActiveEvent active_event) throws BackoutException;
+        ActiveEvent active_event) throws BackoutException;
     
     public boolean contains_key_called(
-        LockedActiveEvent active_event, K contains_key) throws BackoutException;
+        ActiveEvent active_event, K contains_key) throws BackoutException;
     
     public boolean contains_val_called(
-        LockedActiveEvent active_event,V contains_val) throws BackoutException;
+        ActiveEvent active_event,V contains_val) throws BackoutException;
 	
     /**
      * @see waldoLockedObj.waldoLockedObj
@@ -59,5 +59,5 @@ public interface ContainerInterface <K,V,D>
      * @return
      */
     public DataWrapper<HashMap<K,V>, HashMap<K,D>>
-        get_dirty_wrapped_val(LockedActiveEvent active_event);
+        get_dirty_wrapped_val(ActiveEvent active_event);
 }

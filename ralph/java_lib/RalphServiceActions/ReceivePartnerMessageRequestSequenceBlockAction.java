@@ -34,7 +34,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction extends
         {
             String uuid = partner_request_block_msg.getEventUuid().getData();
             String priority = partner_request_block_msg.getPriority().getData();
-            ralph.LockedActiveEvent evt =
+            ralph.ActiveEvent evt =
                 local_endpoint._act_event_map.get_or_create_partner_event(uuid,priority);
             
             evt.recv_partner_sequence_call_msg(partner_request_block_msg);

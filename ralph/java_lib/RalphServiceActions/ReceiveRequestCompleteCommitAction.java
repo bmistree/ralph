@@ -32,7 +32,7 @@ public class ReceiveRequestCompleteCommitAction extends ServiceAction {
     @Override
     public void run() 
     {
-        ralph.LockedActiveEvent evt =
+        ralph.ActiveEvent evt =
             local_endpoint._act_event_map.get_event(event_uuid);
 		
         if (evt == null)

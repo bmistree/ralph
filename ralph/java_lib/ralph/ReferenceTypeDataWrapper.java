@@ -63,7 +63,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
         peered = _peered;
     }
 	
-    public HashMap<K,D> de_waldoify(LockedActiveEvent active_event) throws BackoutException
+    public HashMap<K,D> de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         HashMap<K,D>to_return_map = new HashMap<K,D>();			
         for (Map.Entry<K, LockedObject<T,D>> entry : val.entrySet())
@@ -92,7 +92,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * 
      */
     public void set_val_on_key(
-        LockedActiveEvent active_event,K key, LockedObject<T,D> to_write,
+        ActiveEvent active_event,K key, LockedObject<T,D> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if (! val.containsKey(key))
@@ -109,7 +109,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
     }
 		
     public void set_val_on_key(
-        LockedActiveEvent active_event,K key, LockedObject<T,D> to_write) throws BackoutException
+        ActiveEvent active_event,K key, LockedObject<T,D> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
@@ -117,7 +117,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
 	
 
     public void del_key(
-        LockedActiveEvent active_event, K key_to_delete,
+        ActiveEvent active_event, K key_to_delete,
         boolean incorporating_deltas)
     {
     	/*
@@ -130,14 +130,14 @@ public class ReferenceTypeDataWrapper<K,T,D>
         val.remove(key_to_delete);	
     }
     
-    public void del_key(LockedActiveEvent active_event,K key_to_delete)
+    public void del_key(ActiveEvent active_event,K key_to_delete)
     {
     	del_key(active_event,key_to_delete,false);
     }
     
 
     public void add_key(
-        LockedActiveEvent active_event, K key_added,
+        ActiveEvent active_event, K key_added,
         LockedObject<T,D> new_object, boolean incorporating_deltas)
     {
     	/*
@@ -154,7 +154,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
     }
     
     public void add_key(
-        LockedActiveEvent active_event,K key_to_add,LockedObject<T,D> new_object)
+        ActiveEvent active_event,K key_to_add,LockedObject<T,D> new_object)
     {
     	add_key(active_event,key_to_add,new_object,false);
     }
@@ -168,14 +168,14 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * @param incorporating_deltas
      */
     public void insert(
-        LockedActiveEvent active_event, int where_to_insert,
+        ActiveEvent active_event, int where_to_insert,
         LockedObject<T,D> new_val, boolean incorporating_deltas)
     {
     	Util.logger_assert("Cannot insert on map");
     }
 
     public void insert(
-        LockedActiveEvent active_event,int where_to_insert,
+        ActiveEvent active_event,int where_to_insert,
         LockedObject<T,D> new_val)
     {
     	insert(active_event,where_to_insert,new_val,false);
@@ -188,14 +188,14 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * @param incorporating_deltas
      */
     public void append(
-        LockedActiveEvent active_event, LockedObject<T,D> new_val,
+        ActiveEvent active_event, LockedObject<T,D> new_val,
         boolean incorporating_deltas)
     {
     	Util.logger_assert("Can only append to list");
     }
     
     public void append(
-        LockedActiveEvent active_event, LockedObject<T,D> new_val)
+        ActiveEvent active_event, LockedObject<T,D> new_val)
     {
     	append(active_event,new_val,false);
     }

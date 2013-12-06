@@ -14,13 +14,11 @@ public class ActiveEventTwoTuple
          Otherwise, return None.
     */	
 
-    LockedActiveEvent a = null;
-    LockedActiveEvent b = null;
-    public ActiveEventTwoTuple(LockedActiveEvent _a, LockedActiveEvent _b)
+    ActiveEvent a = null;
+    ActiveEvent b = null;
+    public ActiveEventTwoTuple(ActiveEvent _a, ActiveEvent _b)
     {
         a = _a;
         b = _b;		
     }
-	
-	
 }

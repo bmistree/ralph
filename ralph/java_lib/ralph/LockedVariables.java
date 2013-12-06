@@ -74,7 +74,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             Double internal_val = get_val(active_event);
@@ -99,7 +99,7 @@ public class LockedVariables {
                 text_value_type_data_wrapper_constructor);            
         }
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             String internal_val = get_val(active_event);
@@ -127,7 +127,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             Boolean internal_val = get_val(active_event);
@@ -158,7 +158,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference)
         {
             Double internal_val = get_val(active_event);
@@ -188,7 +188,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             String internal_val = get_val(active_event);
@@ -219,7 +219,7 @@ public class LockedVariables {
         }
 
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference)
         {
             Boolean internal_val = get_val(active_event);
@@ -267,7 +267,7 @@ public class LockedVariables {
         }
 
         public void serialize_as_rpc_arg(
-            LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             SingleThreadedLockedContainer<K,V,D> internal_val =

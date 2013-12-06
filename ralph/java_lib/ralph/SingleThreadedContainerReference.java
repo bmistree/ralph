@@ -29,7 +29,7 @@ public abstract class SingleThreadedContainerReference <K,V,D>
     }
 	
 	
-    public D de_waldoify(LockedActiveEvent active_event) throws BackoutException
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         return val.de_waldoify(active_event);
     }

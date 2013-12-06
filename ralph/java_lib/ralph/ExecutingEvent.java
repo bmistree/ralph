@@ -13,12 +13,12 @@ public class ExecutingEvent
 {
 
     private static Class[] param_types_args =
-        {LockedActiveEvent.class, ExecutingEventContext.class, Object[].class};
+        {ActiveEvent.class, ExecutingEventContext.class, Object[].class};
     private static Class[] param_types_no_args =
-        {LockedActiveEvent.class, ExecutingEventContext.class};
+        {ActiveEvent.class, ExecutingEventContext.class};
 	
     private String to_exec_internal_name;
-    private LockedActiveEvent active_event;
+    private ActiveEvent active_event;
     private ExecutingEventContext ctx;
     private ArrayBlockingQueue<EndpointCallResultObject> result_queue;
     private Object[] to_exec_args;
@@ -50,7 +50,7 @@ public class ExecutingEvent
        get passed to the closure to be executed.
     */
     public ExecutingEvent(
-        String _to_exec_internal_name,LockedActiveEvent _active_event,
+        String _to_exec_internal_name,ActiveEvent _active_event,
         ExecutingEventContext _ctx,
         ArrayBlockingQueue<EndpointCallResultObject> _result_queue,
         boolean _takes_args,// sequence calls do not take arguments
@@ -70,7 +70,7 @@ public class ExecutingEvent
      * @see arguments to constructor.
      */
     public static void static_run(
-        String to_exec_internal_name,LockedActiveEvent active_event,
+        String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         boolean takes_args,

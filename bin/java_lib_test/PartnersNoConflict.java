@@ -6,7 +6,7 @@ import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
 import ralph.LockedObject;
 import ralph.LockedVariables;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
 import java.util.ArrayList;
@@ -85,7 +85,7 @@ public class PartnersNoConflict
         
         try
         {
-            LockedActiveEvent root_event =
+            ActiveEvent root_event =
                 endpta._act_event_map.create_root_event();
             ExecutingEventContext ctx = endpta.create_context();
 
@@ -125,7 +125,7 @@ public class PartnersNoConflict
             // actually make call with arguments on partner endpoint
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_args_method",true,
-                arg_list, true);
+                arg_list);
 
             
             // check that commit worked
@@ -140,7 +140,7 @@ public class PartnersNoConflict
 
             // check that the methods on partner endpoint updated the
             // values of local variables correctly
-            LockedActiveEvent check_event =
+            ActiveEvent check_event =
                 endpta._act_event_map.create_root_event();
 
             
@@ -205,13 +205,13 @@ public class PartnersNoConflict
 
         try
         {
-            LockedActiveEvent root_event =
+            ActiveEvent root_event =
                 endpta._act_event_map.create_root_event();
             ExecutingEventContext ctx = endpta.create_context();
 
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_method",true,
-                new ArrayList<RPCArgObject> (), true);
+                new ArrayList<RPCArgObject> ());
 
             root_event.begin_first_phase_commit();
             RootEventParent root_event_parent =

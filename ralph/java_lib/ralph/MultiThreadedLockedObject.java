@@ -56,9 +56,9 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         implements Comparable <EventCachedPriorityObj>
     {
     	String cached_priority = "";
-    	LockedActiveEvent event = null;
+    	ActiveEvent event = null;
     	public EventCachedPriorityObj (
-            LockedActiveEvent active_event,String _cached_priority)
+            ActiveEvent active_event,String _cached_priority)
     	{
             event = active_event;
             cached_priority = _cached_priority;
@@ -134,7 +134,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
      Blocks until has acquired.
     */
     private DataWrapper<T,D> acquire_read_lock(
-        LockedActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event) throws BackoutException
     {
         // FIXME: finish
 		
@@ -264,7 +264,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
      * @throws BackoutException 
      */
     protected DataWrapper<T,D> acquire_write_lock(
-        LockedActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event) throws BackoutException
     {
         _lock();
         //# Each event has a priority associated with it.  This priority
@@ -395,7 +395,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         }
     }
 	
-    public D de_waldoify(LockedActiveEvent active_event) throws BackoutException
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
         return wrapped_val.de_waldoify(active_event);
@@ -428,7 +428,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        * @param active_event
        */
     private void obj_request_backout_and_release_lock(
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
         active_event.obj_request_backout_and_release_lock(this);
 
@@ -456,7 +456,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
      * @param active_event
      */
     public DataWrapper<T,D> get_dirty_wrapped_val(
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
         Util.logger_assert(
             "Have not determined how to serialize multithreaded peered data.");
@@ -469,7 +469,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        if event has been preempted.)
     */
     public boolean get_and_reset_has_been_written_since_last_msg(
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
         boolean has_been_written = false;
         _lock();
@@ -494,7 +494,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        from holding a lock and check if any other events can be
        scheduled.
     */
-    public void complete_commit(LockedActiveEvent active_event)
+    public void complete_commit(ActiveEvent active_event)
     {
         _lock();
         if ((write_lock_holder != null) &&
@@ -538,7 +538,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        If not already holding lock, then delete it from waiting
        events
     */
-    public void backout (LockedActiveEvent active_event)
+    public void backout (ActiveEvent active_event)
     {        
         //# FIXME: Are there chances that could process a stale backout?
         //# I think so.
@@ -632,13 +632,13 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             new ArrayList<EventCachedPriorityObj>(read_lock_holders.values());
         Collections.sort(read_lock_holder_event_cached_priorities);
 
-        ArrayList<LockedActiveEvent> to_backout_list =
-            new ArrayList<LockedActiveEvent>();
+        ArrayList<ActiveEvent> to_backout_list =
+            new ArrayList<ActiveEvent>();
         boolean can_backout_all = true;
         for (EventCachedPriorityObj event_cached_priority_obj :
                  read_lock_holder_event_cached_priorities)
         {
-            LockedActiveEvent read_event = event_cached_priority_obj.event;
+            ActiveEvent read_event = event_cached_priority_obj.event;
             String read_uuid = read_event.uuid;
             if (read_uuid != event_to_not_backout_uuid)
             {
@@ -656,7 +656,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         //# Phase 2:
         if (can_backout_all)
         {
-            for (LockedActiveEvent event_to_backout : to_backout_list)
+            for (ActiveEvent event_to_backout : to_backout_list)
                 obj_request_backout_and_release_lock(event_to_backout);
  
             EventCachedPriorityObj event_cached_priority =
@@ -668,7 +668,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         }
         else
         {
-            for (LockedActiveEvent event_not_to_backout : to_backout_list)
+            for (ActiveEvent event_not_to_backout : to_backout_list)
                 event_not_to_backout.obj_request_no_backout_and_release_lock();
         }
         return can_backout_all;		
@@ -799,7 +799,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
      * @throws BackoutException 
      */
     public void set_val(
-        LockedActiveEvent active_event,T new_val) throws BackoutException
+        ActiveEvent active_event,T new_val) throws BackoutException
     {
         DataWrapper<T,D> to_write_on = acquire_write_lock(active_event);
         to_write_on.write(new_val);
@@ -938,7 +938,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     }
 
 
-    public T get_val(LockedActiveEvent active_event) throws BackoutException
+    public T get_val(ActiveEvent active_event) throws BackoutException
     {
     	if (active_event == null)
     	{
@@ -954,7 +954,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     /**
        ASSUMES ALREADY HOLDING LOCK
 
-       @param {WaldoLockedActiveEvent} active_event --- 
+       @param {WaldoActiveEvent} active_event --- 
 
        @returns {bool} --- True if obj has been inserted into
        active_event's touched_obj dict or already existed there.
@@ -970,7 +970,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
        * @param active_event
        * @return
        */
-    private boolean insert_in_touched_objs(LockedActiveEvent active_event)
+    private boolean insert_in_touched_objs(ActiveEvent active_event)
     {
     	if (waiting_events.containsKey(active_event.uuid) ||
             read_lock_holders.containsKey(active_event.uuid))

@@ -15,8 +15,8 @@ public class BoostedManager
        event is in this list, the older it is.  The oldest event in
        this list should be made a boosted event.
     */
-    private ArrayList<LockedActiveEvent> event_list =
-        new ArrayList<LockedActiveEvent>();
+    private ArrayList<ActiveEvent> event_list =
+        new ArrayList<ActiveEvent>();
 	
 	
     /**
@@ -30,7 +30,7 @@ public class BoostedManager
         last_boosted_complete = clock.get_timestamp();		
     }
 	
-    public LockedActiveEvent create_root_event()
+    public ActiveEvent create_root_event()
     {
         String evt_uuid = Util.generate_uuid();
         
@@ -51,7 +51,7 @@ public class BoostedManager
             new RootEventParent(
                 act_event_map.local_endpoint,evt_uuid,evt_priority);
         
-        LockedActiveEvent root_event = new LockedActiveEvent(rep,act_event_map);
+        ActiveEvent root_event = new LockedActiveEvent(rep,act_event_map);
         event_list.add(root_event);
         return root_event;
     }
@@ -70,17 +70,17 @@ public class BoostedManager
        waiting event.  Otherwise, we remove it from the list of
        waiting uuids.
 
-       @returns {null/LockedActiveEvent} --- If retry is True, we
+       @returns {null/ActiveEvent} --- If retry is True, we
        return a new event with successor uuid.  Otherwise, return
        null. 
     */
-    public LockedActiveEvent complete_root_event(
+    public ActiveEvent complete_root_event(
         String completed_event_uuid, boolean retry)
     {
         int counter = 0;
         int remove_counter = -1;
-        LockedActiveEvent completed_event = null;
-        for (LockedActiveEvent event : event_list)
+        ActiveEvent completed_event = null;
+        for (ActiveEvent event : event_list)
         {
             if (event.uuid == completed_event_uuid)
             {
@@ -99,7 +99,7 @@ public class BoostedManager
         }
         /// END DEBUG
 
-        LockedActiveEvent replacement_event = null;
+        ActiveEvent replacement_event = null;
         if (retry)
         {
             String replacement_priority = "";

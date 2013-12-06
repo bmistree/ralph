@@ -4,7 +4,7 @@ import ralph.VariableStack;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
 
@@ -53,9 +53,9 @@ public class WriteReadTVar
     {
         try
         {
-            LockedActiveEvent writer =
+            ActiveEvent writer =
                 endpt._act_event_map.create_root_event();
-            LockedActiveEvent reader =
+            ActiveEvent reader =
                 endpt._act_event_map.create_root_event();
 
             if (! num_tvar.get_val(reader).equals(
@@ -107,8 +107,8 @@ public class WriteReadTVar
     {
         try
         {
-            LockedActiveEvent rdr1 = endpt._act_event_map.create_root_event();
-            LockedActiveEvent rdr2 = endpt._act_event_map.create_root_event();
+            ActiveEvent rdr1 = endpt._act_event_map.create_root_event();
+            ActiveEvent rdr2 = endpt._act_event_map.create_root_event();
             
             if (! num_tvar.get_val(rdr1).equals(
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))

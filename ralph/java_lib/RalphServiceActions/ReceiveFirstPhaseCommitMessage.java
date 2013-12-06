@@ -33,7 +33,7 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
     @Override
     public void run() 
     {
-        ralph.LockedActiveEvent act_event =
+        ralph.ActiveEvent act_event =
             local_endpoint._act_event_map.get_event(event_uuid);
 
         if (act_event != null)

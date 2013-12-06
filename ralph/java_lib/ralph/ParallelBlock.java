@@ -30,11 +30,11 @@ public abstract class ParallelBlock <E> implements Callable<Integer>
 
         
     protected VariableStack vstack = null;
-    protected LockedActiveEvent active_event = null;
+    protected ActiveEvent active_event = null;
     protected E to_run_on = null;
     
     public ParallelBlock(
-        VariableStack _vstack,LockedActiveEvent _active_event)
+        VariableStack _vstack,ActiveEvent _active_event)
     {
         vstack = _vstack;
         active_event = _active_event;

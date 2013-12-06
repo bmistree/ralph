@@ -15,7 +15,7 @@ public abstract class LockedValueVariable<T,D> extends MultiThreadedLockedObject
 
     @Override
     public void swap_internal_vals(
-        LockedActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,LockedObject to_swap_with)
         throws BackoutException
     {
         this.set_val(active_event,(T)to_swap_with.get_val(active_event));
@@ -23,7 +23,7 @@ public abstract class LockedValueVariable<T,D> extends MultiThreadedLockedObject
     
     @Override
     public void write_if_different(
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         Object new_val) throws BackoutException 
     {
         DataWrapper<T, D> to_write_on = acquire_write_lock(active_event);

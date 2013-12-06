@@ -16,7 +16,7 @@ public class WaitingElement <T,D>
     //	# promotion.
     public String cached_priority; 
 	
-    public LockedActiveEvent event;
+    public ActiveEvent event;
     private boolean read;
     DataWrapperConstructor<T,D> data_wrapper_constructor;
 	
@@ -43,7 +43,7 @@ public class WaitingElement <T,D>
      * @param peered
      */
     public WaitingElement(
-        LockedActiveEvent active_event,String _priority,boolean _read, 
+        ActiveEvent active_event,String _priority,boolean _read, 
         DataWrapperConstructor<T,D> _data_wrapper_constructor,boolean _peered)
     {
         event = active_event;

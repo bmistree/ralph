@@ -18,7 +18,7 @@ public class PartnerEventParent extends EventParent {
     @Override
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, LockedActiveEvent _event)
+        boolean partner_contacted, ActiveEvent _event)
     {
         //# forwards the message to others
         super.first_phase_transition_success(

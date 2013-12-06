@@ -162,10 +162,10 @@ public class Endpoint
        requested was transactional.
      */
     public ExecutingEventContext create_context_for_recv_rpc(
-        ArrayList<RPCArgObject> rpc_args,boolean transactional)
+        ArrayList<RPCArgObject> rpc_args)
     {
         return new ExecutingEventContext(
-            global_var_stack,rpc_args,transactional);
+            global_var_stack,rpc_args);
     }
     
 
@@ -895,7 +895,7 @@ public class Endpoint
      reply_with message field of the last message that the partner
      said as part of this sequence in.
 
-     @param {LockedActiveEvent} active_event --- The active event that
+     @param {ActiveEvent} active_event --- The active event that
      is requesting the message to be sent.
 
      @param {VariableStack} sequence_local_var_stack --- We convert
@@ -917,7 +917,7 @@ public class Endpoint
     public void _send_partner_message_sequence_block_request(
         String block_name,String event_uuid,String priority,
         String reply_with_uuid, String reply_to_uuid,
-        LockedActiveEvent active_event, Variables.Builder rpc_variables,
+        ActiveEvent active_event, Variables.Builder rpc_variables,
         boolean first_msg,boolean transactional)
     {
     	GeneralMessage.Builder general_message =
@@ -994,7 +994,7 @@ public class Endpoint
      */
     public void _notify_partner_peered_before_return(
         String event_uuid,String reply_with_uuid,
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
     	Util.logger_assert("Not handling multithreaded peereds");
     }

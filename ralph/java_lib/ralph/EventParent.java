@@ -22,7 +22,7 @@ public abstract class EventParent
     private String priority = null;
     private ReentrantLock _priority_mutex = new ReentrantLock();
 	
-    protected LockedActiveEvent event = null;
+    protected ActiveEvent event = null;
     private boolean has_been_boosted = false;
 	
 	
@@ -165,7 +165,7 @@ public abstract class EventParent
     */
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, LockedActiveEvent _event)
+        boolean partner_contacted, ActiveEvent _event)
     {
         event = _event;
         //# first keep track of all events that we are waiting on

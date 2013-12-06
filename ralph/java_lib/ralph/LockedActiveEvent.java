@@ -18,7 +18,7 @@ import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
 
-public class LockedActiveEvent
+public class LockedActiveEvent extends ActiveEvent
 {
 	
     private enum State 
@@ -27,9 +27,6 @@ public class LockedActiveEvent
         STATE_SECOND_PHASE_COMMITTED, STATE_BACKED_OUT
     }
 	
-    public String uuid;
-
-    public EventParent event_parent = null;
     public ActiveEventMap event_map = null;
 	
 	
@@ -518,7 +515,7 @@ public class LockedActiveEvent
         //# retry_event in constructor.
         ActiveEventTwoTuple event_map_remove_result =
             event_map.remove_event(uuid,true);
-        retry_event = event_map_remove_result.b;
+        retry_event = (LockedActiveEvent)event_map_remove_result.b;
         
         //# 5
         //# do not need to acquire locks on other_endpoints_contacted
@@ -691,9 +688,6 @@ public class LockedActiveEvent
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
-
-       @param {boolean} transactional --- True if this call should be
-       part of a transaction.  False if it's just a regular rpc.
        
        The local endpoint is requesting its partner to call some
        method on itself.
@@ -701,7 +695,7 @@ public class LockedActiveEvent
     public boolean issue_partner_sequence_block_call(
         ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args, boolean transactional)
+        boolean first_msg,ArrayList<RPCArgObject>args)
     {
         boolean partner_call_requested = false;
         _lock();
@@ -763,7 +757,7 @@ public class LockedActiveEvent
             event_parent.local_endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
                 ctx.to_reply_with_uuid,this,serialized_arguments,
-                first_msg,transactional);
+                first_msg,false);
 
         }
         
@@ -989,7 +983,7 @@ public class LockedActiveEvent
         // references.
         ExecutingEventContext ctx =
             event_parent.local_endpoint.create_context_for_recv_rpc(
-                args,msg.getTransaction());
+                args);
         
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());

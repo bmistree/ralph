@@ -5,7 +5,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import ralph.ActiveEventMap;
 import ralph.ExecutingEventContext;
 import ralph.ExecutingEvent;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.VariableStore;
 
 /**
@@ -49,7 +49,7 @@ public class ReceiveEndpointCallAction extends ServiceAction
     public void run() 
     {
         ActiveEventMap act_evt_map = local_endpoint._act_event_map;
-        LockedActiveEvent act_event = null;
+        ActiveEvent act_event = null;
         try
         {
             act_event = act_evt_map.get_or_create_endpoint_called_event(

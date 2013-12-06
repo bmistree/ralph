@@ -41,7 +41,7 @@ public class DataWrapper<T,D>
         return to_return;
     }
 
-    public D de_waldoify(LockedActiveEvent active_event) throws BackoutException
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
     	return (D)val;
     }

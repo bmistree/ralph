@@ -38,7 +38,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     {}
 
     @Override
-    public T get_val(LockedActiveEvent active_event)
+    public T get_val(ActiveEvent active_event)
     {
         return val.val;
     }
@@ -49,7 +49,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
      * @param new_val
      */
     @Override
-    public void set_val(LockedActiveEvent active_event, T new_val)
+    public void set_val(ActiveEvent active_event, T new_val)
     {
         val.write(new_val);
     }
@@ -71,7 +71,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
      */
     @Override
     public boolean get_and_reset_has_been_written_since_last_msg(
-        LockedActiveEvent active_event) 
+        ActiveEvent active_event) 
     {
         // check if active event even has ability to write to variable
         boolean has_been_written =
@@ -80,7 +80,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     }
 
     @Override
-    public void complete_commit(LockedActiveEvent active_event)
+    public void complete_commit(ActiveEvent active_event)
     {
         // nothing to do when completing commit: do nothing
     }
@@ -92,7 +92,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     }
 
     @Override
-    public void backout(LockedActiveEvent active_event)
+    public void backout(ActiveEvent active_event)
     {
         /*
          Do not actually need to remove changes to this variable: no
@@ -103,7 +103,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     }
 
     @Override
-    public D de_waldoify(LockedActiveEvent active_event) throws BackoutException
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         return val.de_waldoify(active_event);
     }

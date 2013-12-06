@@ -65,7 +65,7 @@ public class SingleThreadedLockedContainer<K,V,D>
         val = reference_type_val;		
     }
 
-    public V get_val_on_key(LockedActiveEvent active_event, K key) 
+    public V get_val_on_key(ActiveEvent active_event, K key) 
     {
         /*
          *
@@ -96,7 +96,7 @@ public class SingleThreadedLockedContainer<K,V,D>
        them into any_builder.
      */
     public void serialize_as_rpc_arg (
-        LockedActiveEvent active_event, Variables.Any.Builder any_builder,
+        ActiveEvent active_event, Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
         Variables.Map.Builder map_builder = Variables.Map.newBuilder();
@@ -146,7 +146,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     @Override
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, V to_write) throws BackoutException
+        ActiveEvent active_event, K key, V to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);		
     }
@@ -154,7 +154,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 	
     @Override
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key,
+        ActiveEvent active_event, K key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
         // note: may need to change this to cast to LockedObject<V,D> and use other set_val.
@@ -164,7 +164,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 		
     }	
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, LockedObject<V,D> to_write) throws BackoutException
+        ActiveEvent active_event, K key, LockedObject<V,D> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
@@ -172,7 +172,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
 	
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, LockedObject<V,D> to_write,
+        ActiveEvent active_event, K key, LockedObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
         //def set_val_on_key(self,active_event,key,to_write,copy_if_peered=False):
@@ -195,14 +195,14 @@ public class SingleThreadedLockedContainer<K,V,D>
 
 	
     private ReferenceTypeDataWrapper<K, V, D> get_dirty_wrapped_val_reference(
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
         return reference_type_val;
     }
 
     @Override
     public void swap_internal_vals(
-        LockedActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,LockedObject to_swap_with)
         throws BackoutException
     {
         Util.logger_assert(
@@ -211,7 +211,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     
     @Override
-    public HashMap<K, LockedObject<V,D>> get_val(LockedActiveEvent active_event)
+    public HashMap<K, LockedObject<V,D>> get_val(ActiveEvent active_event)
     {
     	Util.logger_assert("Cannot call get val on a container object.");
     	return null;
@@ -219,7 +219,7 @@ public class SingleThreadedLockedContainer<K,V,D>
     
     @Override
     public void set_val(
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         HashMap<K,LockedObject<V,D>> val_to_set_to)
     {
     	Util.logger_assert("Cannot call set val on a container object directly.");
@@ -227,7 +227,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     @Override
     public void write_if_different(
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         HashMap<K, LockedObject<V,D>> new_val)
     {
         // should only call this method on a value type
@@ -236,7 +236,7 @@ public class SingleThreadedLockedContainer<K,V,D>
   
 	
     public DataWrapper<HashMap<K, V>, HashMap<K, D>> get_dirty_wrapped_val(
-        LockedActiveEvent active_event)
+        ActiveEvent active_event)
     {
         Util.logger_assert(
             "Must use dirty_wrapped_val_reference for containers");
@@ -244,13 +244,13 @@ public class SingleThreadedLockedContainer<K,V,D>
     }
 
     @Override
-    public int get_len(LockedActiveEvent active_event) 
+    public int get_len(ActiveEvent active_event) 
     {
         return val.val.size();
     }
 
     @Override
-    public ArrayList<K> get_keys(LockedActiveEvent active_event) 
+    public ArrayList<K> get_keys(ActiveEvent active_event) 
     {
         return new ArrayList<K>(val.val.keySet());
     }
@@ -258,14 +258,14 @@ public class SingleThreadedLockedContainer<K,V,D>
 	
 	
     @Override
-    public void del_key_called(LockedActiveEvent active_event, K key_to_delete) 
+    public void del_key_called(ActiveEvent active_event, K key_to_delete) 
     {
         reference_type_val.del_key(active_event, key_to_delete);
     }
 
     @Override
     public boolean contains_key_called(
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         K contains_key) 
     {
         return val.val.containsKey(contains_key);
@@ -273,7 +273,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     @Override
     public boolean contains_val_called(
-        LockedActiveEvent active_event,
+        ActiveEvent active_event,
         V contains_val) 
     {
         return val.val.containsValue(contains_val);

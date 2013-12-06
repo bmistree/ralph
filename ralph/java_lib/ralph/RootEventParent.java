@@ -103,7 +103,7 @@ public class RootEventParent extends EventParent {
     @Override
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, LockedActiveEvent _event)
+        boolean partner_contacted, ActiveEvent _event)
     {
         // # note that we should not wait on ourselves to commit
     	_lock_endpoints_waiting_on_commit();

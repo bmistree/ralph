@@ -50,7 +50,7 @@ public class EndpointEventParent extends EventParent
     */
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, LockedActiveEvent _event)
+        boolean partner_contacted, ActiveEvent _event)
     {
         super.first_phase_transition_success(
             same_host_endpoints_contacted_dict,partner_contacted,event);

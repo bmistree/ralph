@@ -6,7 +6,7 @@ import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.VariableStack;
 import ralph.DeferBlock;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 
 
 public class BasicDefer
@@ -30,7 +30,7 @@ public class BasicDefer
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
         
-        LockedActiveEvent active_event = null;
+        ActiveEvent active_event = null;
         try
         {
             active_event = endpt._act_event_map.create_root_event();

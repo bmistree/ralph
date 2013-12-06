@@ -6,7 +6,7 @@ import ralph.VariableStore;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.ExecutingEventContext;
 import RalphConnObj.SingleSideConnection;
 import RalphConnObj.SameHostConnection;
@@ -49,7 +49,7 @@ public class TestClassUtil
         }
 
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_method(
-            LockedActiveEvent active_event,ExecutingEventContext ctx) throws Exception
+            ActiveEvent active_event,ExecutingEventContext ctx) throws Exception
         {
             try{}
             catch (Exception _ex)
@@ -65,7 +65,7 @@ public class TestClassUtil
         }
 
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_increment_local_num(
-            LockedActiveEvent active_event,ExecutingEventContext ctx,Object ... args)
+            ActiveEvent active_event,ExecutingEventContext ctx,Object ... args)
             throws Exception
         {
             try
@@ -98,7 +98,7 @@ public class TestClassUtil
 
         
 	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_args_method(
-            LockedActiveEvent active_event,ExecutingEventContext ctx,
+            ActiveEvent active_event,ExecutingEventContext ctx,
             Object ... args) throws Exception
 
         {

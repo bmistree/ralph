@@ -1,12 +1,12 @@
 package RalphServiceActions;
 
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 
 public class EventBackoutTouchedObjs extends ServiceAction {
 
-    LockedActiveEvent event_to_backout = null;
+    ActiveEvent event_to_backout = null;
 	
-    public EventBackoutTouchedObjs(LockedActiveEvent _to_backout)
+    public EventBackoutTouchedObjs(ActiveEvent _to_backout)
     {
         event_to_backout = _to_backout;
     }

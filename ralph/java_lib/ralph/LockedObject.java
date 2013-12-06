@@ -18,7 +18,7 @@ public abstract class LockedObject<T,D>
     protected String host_uuid = null;
 	
     public LockedObject<T,D> copy(
-        LockedActiveEvent active_event, boolean peered,
+        ActiveEvent active_event, boolean peered,
         boolean multi_threaded) throws BackoutException
     {
         if (multi_threaded)
@@ -36,7 +36,7 @@ public abstract class LockedObject<T,D>
        into another.  this.
      */
     public abstract void swap_internal_vals(
-        LockedActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,LockedObject to_swap_with)
         throws BackoutException;
     
     /**
@@ -44,12 +44,12 @@ public abstract class LockedObject<T,D>
        Varialbes.Any.Builder.
      */
     public abstract void serialize_as_rpc_arg(
-        LockedActiveEvent active_event,Variables.Any.Builder any_builder,
+        ActiveEvent active_event,Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException;
 
 	
     public abstract void write_if_different(
-        LockedActiveEvent active_event, T new_val) throws BackoutException;
+        ActiveEvent active_event, T new_val) throws BackoutException;
 	
     /**
      * 
@@ -62,10 +62,10 @@ public abstract class LockedObject<T,D>
         String uuid,String new_priority); 
 
     public abstract T get_val(
-        LockedActiveEvent active_event) throws BackoutException;
+        ActiveEvent active_event) throws BackoutException;
 
     public abstract void set_val(
-        LockedActiveEvent active_event, T new_val) throws BackoutException;
+        ActiveEvent active_event, T new_val) throws BackoutException;
 
     /**
      * @returns {bool} --- True if when call get_val_from_key on a
@@ -79,14 +79,14 @@ public abstract class LockedObject<T,D>
      if event has been preempted.)
     */
     public abstract boolean get_and_reset_has_been_written_since_last_msg(
-        LockedActiveEvent active_event);
+        ActiveEvent active_event);
     
-    public abstract void complete_commit(LockedActiveEvent active_event);
+    public abstract void complete_commit(ActiveEvent active_event);
 
     public abstract boolean is_peered();
 
-    public abstract void backout(LockedActiveEvent active_event);
+    public abstract void backout(ActiveEvent active_event);
 
     public abstract D de_waldoify(
-        LockedActiveEvent active_event) throws BackoutException;
+        ActiveEvent active_event) throws BackoutException;
 }

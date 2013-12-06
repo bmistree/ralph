@@ -40,7 +40,7 @@ public class ReceiveRequestBackoutAction extends ServiceAction
 
     public void run()
     {
-        ralph.LockedActiveEvent event =
+        ralph.ActiveEvent event =
             local_endpoint._act_event_map.get_event(uuid);
         if (event == null)
         {

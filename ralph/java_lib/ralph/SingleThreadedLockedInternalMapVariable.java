@@ -29,7 +29,7 @@ public class SingleThreadedLockedInternalMapVariable<K,V,D>
 	
     @Override
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key, V to_write) throws BackoutException
+        ActiveEvent active_event, K key, V to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);		
     }
@@ -37,7 +37,7 @@ public class SingleThreadedLockedInternalMapVariable<K,V,D>
 	
     @Override
     public void set_val_on_key(
-        LockedActiveEvent active_event, K key,
+        ActiveEvent active_event, K key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
         LockedObject<V,D> wrapped_to_write = 

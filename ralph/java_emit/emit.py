@@ -174,7 +174,7 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     # call the internal version of the function
     method_body_text = 'ExecutingEventContext ctx = create_context();\n'
     method_body_text += '''
-LockedActiveEvent active_event = _act_event_map.create_root_event();
+LockedActiveEvent active_event = (LockedActiveEvent)_act_event_map.create_root_event();
 '''
     
     inner_method_call_text = (
@@ -237,7 +237,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
     to_return = (
         'private %s %s (' % (return_type, method_signature_node.method_name) )
-    to_return += 'ExecutingEventContext _ctx, LockedActiveEvent _active_event'
+    to_return += 'ExecutingEventContext _ctx, ActiveEvent _active_event'
     
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:

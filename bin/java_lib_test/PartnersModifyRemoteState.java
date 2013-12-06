@@ -6,7 +6,7 @@ import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
 import ralph.LockedObject;
 import ralph.LockedVariables;
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class PartnersModifyRemoteState
                         endpta._host_uuid, false);
 
                 
-                LockedActiveEvent root_event =
+                ActiveEvent root_event =
                     endpta._act_event_map.create_root_event();
                 ExecutingEventContext ctx = endpta.create_context();
 
@@ -70,7 +70,7 @@ public class PartnersModifyRemoteState
                 
                 ctx.hide_partner_call(
                     endpta, root_event,"test_increment_local_num",true,
-                    arg_list, true);
+                    arg_list);
 
                 // check that value recovered from reference variable
                 // passed in contains correct result.

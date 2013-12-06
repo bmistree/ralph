@@ -18,17 +18,17 @@ import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
 
-public class NonAtomicActiveEvent extends LockedActiveEvent
+public class NonAtomicActiveEvent extends ActiveEvent
 {
-    public String uuid;
-    public EventParent event_parent = null;
     public ActiveEventMap event_map = null;
 	
+    HashMap<String,
+    	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
+    	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
     
     public NonAtomicActiveEvent(
         EventParent _event_parent, ActiveEventMap _event_map)
     {
-        super(_event_parent,_event_map);
         event_parent = _event_parent;
         event_map = _event_map;
 
@@ -109,16 +109,13 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
             "Non-atomic statements cannot have signals.");
     }
 
-
     /**
-     * Called from a separate thread in waldoServiceActions.  Nothing
-     * to back out for non-atomics.
+     * Called from a separate thread in waldoServiceActions.  Runs
+     through all touched objects and backs out of them.
     */
     public void _backout_touched_objs()
-    {
-        Util.logger_warn("May need to backout waiting queues here");
-    }
-
+    {}
+    
     /**
      *  @param error {Exception}
      */
@@ -259,16 +256,13 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
        reference or not (ie, we should update the variable's value on
        the caller).
 
-       @param {boolean} transactional --- True if this call should be
-       part of a transaction.  False if it's just a regular rpc.
-       
        The local endpoint is requesting its partner to call some
        method on itself.
     */
     public boolean issue_partner_sequence_block_call(
         ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args, boolean transactional)
+        boolean first_msg,ArrayList<RPCArgObject>args)
     {
         Util.logger_warn(
             "When sending a message from non-atomic, " +
@@ -323,7 +317,7 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
         event_parent.local_endpoint._send_partner_message_sequence_block_request(
             func_name,uuid,get_priority(),reply_with_uuid,
             ctx.to_reply_with_uuid,this,serialized_arguments,
-            first_msg,transactional);
+            first_msg,false);
         
         return true;
     }
@@ -352,7 +346,7 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
     public boolean issue_endpoint_object_call(
         Endpoint endpoint_calling,String func_name,
         ArrayBlockingQueue<EndpointCallResultObject>result_queue,
-        Object...args)            
+        Object...args)
     {
         
         //# perform the actual endpoint function call.  note that this
@@ -516,7 +510,7 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
         // references.
         ExecutingEventContext ctx =
             event_parent.local_endpoint.create_context_for_recv_rpc(
-                args,msg.getTransaction());
+                args);
         
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
@@ -545,10 +539,7 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
     }
 
 	
-    /**
-     * 
-     * @param msg
-     */
+
     public void recv_partner_sequence_call_msg(
         PartnerRequestSequenceBlock msg)
     {
@@ -620,40 +611,6 @@ public class NonAtomicActiveEvent extends LockedActiveEvent
         //# no need holding onto queue waiting on a message response.
         message_listening_queues_map.remove(reply_to_uuid);
     }	
-
-    /**
-       @param     error     GeneralMessage.error
-
-       Places an ApplicationExceptionCallResult in the event complete queue to 
-       indicate to the endpoint that an application exception has been raised 
-       somewhere down the call graph.
-
-       Note that the type of error is 
-    */
-    public void send_exception_to_listener(PartnerError error)
-    {
-        //# Send an ApplicationExceptionCallResult to each listening queue
-        for (String reply_with_uuid : message_listening_queues_map.keySet())
-        {
-            //### FIXME: It probably isn't necessary to send an exception result to
-            //### each queue.
-            ArrayBlockingQueue<MessageCallResultObject> message_listening_queue = 
-                message_listening_queues_map.get(reply_with_uuid);
-
-            if (error.getType() == PartnerError.ErrorType.APPLICATION)
-            {
-                message_listening_queue.add(
-                    MessageCallResultObject.application_exception(
-                        error.getTrace()));
-            }
-            else if (error.getType() == PartnerError.ErrorType.NETWORK)
-            {
-                message_listening_queue.add(
-                    MessageCallResultObject.network_failure(
-                        error.getTrace()));
-            }
-        }
-    }
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,

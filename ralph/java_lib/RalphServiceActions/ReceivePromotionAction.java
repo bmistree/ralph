@@ -1,6 +1,6 @@
 package RalphServiceActions;
 
-import ralph.LockedActiveEvent;
+import ralph.ActiveEvent;
 
 
 /**
@@ -27,7 +27,7 @@ public class ReceivePromotionAction extends ServiceAction {
     @Override
     public void run() 
     {
-        LockedActiveEvent evt =
+        ActiveEvent evt =
             local_endpoint._act_event_map.get_event(event_uuid);
         if (evt != null)
             evt.promote_boosted(new_priority);
