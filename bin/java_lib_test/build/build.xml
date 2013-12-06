@@ -50,7 +50,8 @@
       name="run_all"
       depends=
         "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
-         run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel">
+         run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
+         run_NonAtomic">
   </target>
 
   
@@ -126,6 +127,20 @@
     <java
         dir="${build.dir}"
         classname="java_lib_test.BasicParallel"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
+    <target
+      name="run_NonAtomic"
+      depends="compile_all"
+      description="Tries to non atomic event.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.NonAtomic"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
