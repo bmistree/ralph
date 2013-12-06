@@ -47,7 +47,7 @@ public class BasicParallel
         ActiveEvent active_event = null;
         try
         {
-            active_event = endpt._act_event_map.create_root_event();
+            active_event = endpt._act_event_map.create_root_event(true);
 
             new ParallelBlockConstructor<AtomicInteger>(
                 endpt.global_var_stack,active_event)

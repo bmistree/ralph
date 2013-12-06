@@ -30,7 +30,7 @@ public class BoostedManager
         last_boosted_complete = clock.get_timestamp();		
     }
 	
-    public ActiveEvent create_root_event()
+    public ActiveEvent create_root_event(boolean atomic)
     {
         String evt_uuid = Util.generate_uuid();
         
@@ -51,7 +51,13 @@ public class BoostedManager
             new RootEventParent(
                 act_event_map.local_endpoint,evt_uuid,evt_priority);
         
-        ActiveEvent root_event = new LockedActiveEvent(rep,act_event_map);
+        ActiveEvent root_event = null;
+
+        if (atomic)
+            root_event = new LockedActiveEvent(rep,act_event_map);
+        else
+            root_event = new NonAtomicActiveEvent(rep,act_event_map);
+        
         event_list.add(root_event);
         return root_event;
     }

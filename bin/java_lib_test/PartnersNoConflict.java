@@ -86,7 +86,7 @@ public class PartnersNoConflict
         try
         {
             ActiveEvent root_event =
-                endpta._act_event_map.create_root_event();
+                endpta._act_event_map.create_root_event(true);
             ExecutingEventContext ctx = endpta.create_context();
 
             // grab num object from base scope
@@ -141,7 +141,7 @@ public class PartnersNoConflict
             // check that the methods on partner endpoint updated the
             // values of local variables correctly
             ActiveEvent check_event =
-                endpta._act_event_map.create_root_event();
+                endpta._act_event_map.create_root_event(true);
 
             
             // determine what the lcal values should be
@@ -206,7 +206,7 @@ public class PartnersNoConflict
         try
         {
             ActiveEvent root_event =
-                endpta._act_event_map.create_root_event();
+                endpta._act_event_map.create_root_event(true);
             ExecutingEventContext ctx = endpta.create_context();
 
             ctx.hide_partner_call(

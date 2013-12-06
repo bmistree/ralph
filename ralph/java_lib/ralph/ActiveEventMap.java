@@ -85,11 +85,14 @@ public class ActiveEventMap
     
     
     /**
-     * Generates a new active event for events that were begun on
-     this endpoint and returns it.        
+       @param {boolean} atomic --- True if root event that we create
+       should be atomic instead of non-atomic.  False for non-atomics.
+       
+       Generates a new active event for events that were begun on this
+     endpoint and returns it.
      * @return
      */
-    public ActiveEvent create_root_event()
+    public ActiveEvent create_root_event(boolean atomic)
         throws RalphExceptions.StoppedException
     {
         _lock();
@@ -99,7 +102,7 @@ public class ActiveEventMap
             throw new RalphExceptions.StoppedException();
         }
 
-        ActiveEvent root_event = boosted_manager.create_root_event();
+        ActiveEvent root_event = boosted_manager.create_root_event(atomic);
         map.put(root_event.uuid,root_event);
         _unlock();
         return root_event;

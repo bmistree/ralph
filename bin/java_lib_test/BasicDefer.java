@@ -33,7 +33,7 @@ public class BasicDefer
         ActiveEvent active_event = null;
         try
         {
-            active_event = endpt._act_event_map.create_root_event();
+            active_event = endpt._act_event_map.create_root_event(true);
         }
         catch (Exception _ex)
         {

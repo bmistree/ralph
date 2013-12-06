@@ -54,9 +54,9 @@ public class WriteReadTVar
         try
         {
             ActiveEvent writer =
-                endpt._act_event_map.create_root_event();
+                endpt._act_event_map.create_root_event(true);
             ActiveEvent reader =
-                endpt._act_event_map.create_root_event();
+                endpt._act_event_map.create_root_event(true);
 
             if (! num_tvar.get_val(reader).equals(
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
@@ -107,8 +107,8 @@ public class WriteReadTVar
     {
         try
         {
-            ActiveEvent rdr1 = endpt._act_event_map.create_root_event();
-            ActiveEvent rdr2 = endpt._act_event_map.create_root_event();
+            ActiveEvent rdr1 = endpt._act_event_map.create_root_event(true);
+            ActiveEvent rdr2 = endpt._act_event_map.create_root_event(true);
             
             if (! num_tvar.get_val(rdr1).equals(
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
