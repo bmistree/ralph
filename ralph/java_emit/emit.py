@@ -57,6 +57,8 @@ def emit_endpt(endpt_node):
     endpt_class_body += '\n'
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
 
+
+
 def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
 public %s ( RalphGlobals ralph_globals,String host_uuid,

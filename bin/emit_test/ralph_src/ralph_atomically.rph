@@ -1,0 +1,38 @@
+
+Endpoint TestAtomically
+{
+    TVar Number internal_number = 15;
+
+    increment_number() returns Number
+    {
+        Number to_return = 0;
+        atomically
+        {
+            internal_number = get_number() + 1;
+            to_return = internal_number;
+        }
+    
+        return to_return;
+    }
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+    
+    recursive_increment_number( Number times_to_increment)
+        returns Number
+    {
+        Number to_return = 0;
+        atomically
+        {
+            if (times_to_increment == 0)
+                to_return = get_number();
+
+            increment_number();
+
+            to_return = recursive_increment_number( times_to_increment - 1);
+        }
+        return to_return;
+    }
+}

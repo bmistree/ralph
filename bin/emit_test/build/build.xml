@@ -57,6 +57,15 @@
       <arg line="InternalMethodCall"/>
     </exec>
 
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/ralph_atomically.rph"/>
+      <arg line="${ralph_emitted.dir}/RalphAtomically.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="RalphAtomically"/>
+    </exec>
+
+    
     <!-- Compile all ralph java to bytecode -->
     <javac
         srcdir="${ralph_emitted.dir}"
@@ -106,7 +115,17 @@
     </java>
   </target>
 
-  
+  <!-- Atomically change -->
+  <target
+      name="run_BasicTestAtomically"
+      depends="compile_ralph_tests"
+      description="Test nested atomically-s.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.BasicTestAtomically" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   
