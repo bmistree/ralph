@@ -14,6 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.BackoutException;
+import RalphExceptions.StoppedException;
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
@@ -27,7 +28,19 @@ public class LockedActiveEvent extends ActiveEvent
     }
 	
     public ActiveEventMap event_map = null;
-	
+
+
+    /**
+       When we are inside of one atomic event and encounter another
+       atomic block, we increase our reference count.  We decrement
+       that reference count when we leave the atomic statement.  We
+       ignore all requests to commit until our reference count is back
+       down to zero.  This way, for each atomic statement, emitter can
+       emit request to commit on atomic event regardless of how deeply
+       nested our atomic statements are.
+     */
+    private int atomic_reference_counts = 0;
+    ActiveEvent to_restore_from_atomic = null;
 	
     //# FIXME: maybe can unmake this reentrant, but get deadlock
     //# from serializing data when need to add to touched objects.
@@ -146,17 +159,45 @@ public class LockedActiveEvent extends ActiveEvent
 
     */
     public LockedActiveEvent retry_event = null;
-        
+
+    
+    /**
+       @param {ActiveEvent} _to_restore_from_atomic --- We frequently
+       create atomic events from within nonatomicevents.  We want to
+       be able to access the parente event that created it after the
+       atomic event has completed.  Can do so using
+       to_restore_from_atomic.
+     */
     public LockedActiveEvent(
-        EventParent _event_parent, ActiveEventMap _event_map)
+        EventParent _event_parent, ActiveEventMap _event_map,
+        ActiveEvent _to_restore_from_atomic)
     {
         event_parent = _event_parent;
         event_map = _event_map;
 		
         uuid = event_parent.get_uuid();
+        to_restore_from_atomic = _to_restore_from_atomic;
     }
 
-	
+
+    /**
+       Use this constructor internally from
+       create_new_event_for_retry.  Whenever we have to backout of our
+       last transaction, create a replacement of LockedActiveEvent
+       that copies reference_counts and to_restore_from.
+     */
+    private LockedActiveEvent (
+        EventParent _event_parent, ActiveEventMap _event_map,
+        int _atomic_reference_counts, ActiveEvent _to_restore_from_atomic)
+    {
+        event_parent = _event_parent;
+        event_map = _event_map;
+		
+        uuid = event_parent.get_uuid();
+        to_restore_from_atomic = _to_restore_from_atomic;
+        atomic_reference_counts = _atomic_reference_counts;
+    }
+
     private void _lock()
     {
         mutex.lock();		
@@ -192,7 +233,21 @@ public class LockedActiveEvent extends ActiveEvent
         return still_running;
     }
 
+    /**
+       The atomic part of this event failed, we've got to create a new
+       event to retry it.  This new event should preserve
+       atomic_reference_count and to_restore_from_atomic.
+     */
+    public ActiveEvent create_new_event_for_retry(
+        RootEventParent event_parent, ActiveEventMap act_event_map)
+    {
+        return new LockedActiveEvent (
+            event_parent, act_event_map, atomic_reference_counts,
+            to_restore_from_atomic);
+    }
+    
 
+    
     /**
      * 
      Gets called either from active event map or from a service
@@ -256,6 +311,35 @@ public class LockedActiveEvent extends ActiveEvent
             copied_partner_contacted,copied_other_endpoints_contacted,new_priority);
     }
 
+    /**
+       Nest transactions: when create a new atomic event inside of one
+       atomic event, enclosing atomic event should just subsume
+       original atomic event.
+     */
+    public ActiveEvent clone_atomic() throws StoppedException
+    {
+        _lock();
+        ++ atomic_reference_counts;
+        _unlock();
+        return this; 
+    }
+    /**
+       When reference count gets back to zero, restore from parent
+       that created it.
+     */
+    public ActiveEvent restore_from_atomic()
+    {
+        _lock();
+        -- atomic_reference_counts;
+        boolean should_return_self = atomic_reference_counts != 0;
+        _unlock();
+
+        if (should_return_self)
+            return this;
+
+        return to_restore_from_atomic;
+    }
+    
 	
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -283,9 +367,9 @@ public class LockedActiveEvent extends ActiveEvent
         return false;
     }
 	
-    public void begin_first_phase_commit()
+    public boolean begin_first_phase_commit()
     {
-        begin_first_phase_commit(false);
+        return begin_first_phase_commit(false);
     }
 	
     /**
@@ -293,9 +377,14 @@ public class LockedActiveEvent extends ActiveEvent
         
      * @param from_partner
      */
-    public void begin_first_phase_commit(boolean from_partner)
+    public boolean begin_first_phase_commit(boolean from_partner)
     {
         _lock();
+        if (atomic_reference_counts > 0)
+        {
+            _unlock();
+            return false;
+        }
 
         if (state != State.STATE_RUNNING)
         {
@@ -306,7 +395,7 @@ public class LockedActiveEvent extends ActiveEvent
             //# etc. as soon as we backed out telling them that they
             //# should also back out.  Do not need to send the same
             //# message again.
-            return;
+            return true;
         }
         
         //# transition into first phase commit state        
@@ -325,6 +414,7 @@ public class LockedActiveEvent extends ActiveEvent
             //# forward commit to partner.
             partner_contacted && (! get_network_failure()),
             this);
+        return true;
     }
 
 
@@ -759,7 +849,7 @@ public class LockedActiveEvent extends ActiveEvent
             event_parent.local_endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
                 ctx.to_reply_with_uuid,this,serialized_arguments,
-                first_msg,false);
+                first_msg,true);
 
         }
         

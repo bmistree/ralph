@@ -14,8 +14,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.BackoutException;
+import RalphExceptions.StoppedException;
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
+
 
 
 public class NonAtomicActiveEvent extends ActiveEvent
@@ -51,15 +53,41 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
 
 
+    public ActiveEvent create_new_event_for_retry(
+        RootEventParent rep, ActiveEventMap act_event_map)
+    {
+        Util.logger_assert("Retry is not currently defined for non-atomics.");
+        return null;
+    }
+    
     /**
      * @param new_priority
      */
     public void promote_boosted(String new_priority)
     {
-        Util.logger_warn("Must handle non-atomic promotion messages still.");
+        // likely want to forward them on to 
+        Util.logger_warn(
+            "Must handle non-atomic promotion messages still.");
     }
 
-	
+    public ActiveEvent clone_atomic() throws StoppedException
+    {
+        Util.logger_warn(
+            "Warning: may want atomics to inherit priority of parents.");
+        Util.logger_warn(
+            "Warning: because atomic events must be preceded " +
+            "by non-atomic events, currently, can never have a " +
+            "primary atomic event.");
+        return event_map.create_root_atomic_event(this);
+    }
+    public ActiveEvent restore_from_atomic()
+    {
+        Util.logger_assert(
+            "Should never reach a case where restoring " +
+            "an atomic from non-atomic");
+        return null;
+    }
+    
     /**
        @returns {bool} --- False.  Will never backout a non-atomic
        event.  A non-atomic event only performs single atomic reads
@@ -73,10 +101,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
 
 	
-    public void begin_first_phase_commit()
+    public boolean begin_first_phase_commit()
     {
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
+        return true;
     }
 
     
@@ -85,9 +114,9 @@ public class NonAtomicActiveEvent extends ActiveEvent
         
      * @param from_partner
      */
-    public void begin_first_phase_commit(boolean from_partner)
+    public boolean begin_first_phase_commit(boolean from_partner)
     {
-        begin_first_phase_commit();
+        return begin_first_phase_commit();
     }
 
     public void second_phase_commit()

@@ -29,8 +29,19 @@ public class BoostedManager
         clock = _clock;
         last_boosted_complete = clock.get_timestamp();		
     }
-	
-    public ActiveEvent create_root_event(boolean atomic)
+
+    public ActiveEvent create_root_atomic_event(ActiveEvent atomic_parent)
+    {
+        return create_root_event(true,atomic_parent);
+    }
+
+    public ActiveEvent create_root_non_atomic_event()
+    {
+        return create_root_event(false,null);
+    }
+    
+    private ActiveEvent create_root_event(
+        boolean atomic,ActiveEvent atomic_parent)
     {
         String evt_uuid = Util.generate_uuid();
         
@@ -54,7 +65,7 @@ public class BoostedManager
         ActiveEvent root_event = null;
 
         if (atomic)
-            root_event = new LockedActiveEvent(rep,act_event_map);
+            root_event = new LockedActiveEvent(rep,act_event_map,atomic_parent);
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
         
@@ -149,7 +160,8 @@ public class BoostedManager
                 act_event_map.local_endpoint,Util.generate_uuid(),
                 replacement_priority);
             
-            replacement_event = new LockedActiveEvent(rep,act_event_map);
+            replacement_event =
+                completed_event.create_new_event_for_retry(rep,act_event_map);
             event_list.set(counter, replacement_event);
         }
         else

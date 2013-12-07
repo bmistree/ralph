@@ -54,9 +54,9 @@ public class NonAtomic
             for (int i =0; i < 20; ++i)
             {
                 ActiveEvent reader =
-                    endpt._act_event_map.create_root_event(false);
+                    endpt._act_event_map.create_root_non_atomic_event();
                 ActiveEvent writer =
-                    endpt._act_event_map.create_root_event(false);
+                    endpt._act_event_map.create_root_non_atomic_event();
 
                 // atomics reader/writers would not be able to execute
                 // in parallel.
@@ -98,7 +98,7 @@ public class NonAtomic
             for (int i = 0; i < 20; ++i)
             {
                 ActiveEvent reader =
-                    endpt._act_event_map.create_root_event(false);
+                    endpt._act_event_map.create_root_non_atomic_event();
 
                 if (! num_tvar.get_val(reader).equals(
                         TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))

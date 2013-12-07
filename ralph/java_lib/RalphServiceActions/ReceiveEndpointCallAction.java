@@ -52,8 +52,11 @@ public class ReceiveEndpointCallAction extends ServiceAction
         ActiveEvent act_event = null;
         try
         {
+            ralph.Util.logger_warn(
+                "\nWarning endpoint call action assumes atomic\n");
+            boolean atomic = true;
             act_event = act_evt_map.get_or_create_endpoint_called_event(
-                endpoint_making_call,event_uuid, priority, result_queue);
+                endpoint_making_call,event_uuid, priority, result_queue,atomic);
         }
         catch(RalphExceptions.StoppedException ex)
         {

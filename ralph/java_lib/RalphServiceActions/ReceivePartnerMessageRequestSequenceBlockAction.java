@@ -12,8 +12,8 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
    partner_request_block_msg
    *
    */
-public class ReceivePartnerMessageRequestSequenceBlockAction extends
-                                                             ServiceAction 
+public class ReceivePartnerMessageRequestSequenceBlockAction
+    extends ServiceAction 
 {
     private ralph.Endpoint local_endpoint = null;
     private PartnerRequestSequenceBlock partner_request_block_msg;
@@ -29,13 +29,15 @@ public class ReceivePartnerMessageRequestSequenceBlockAction extends
     @Override
     public void run() 
     {
-		
         try
         {
+            boolean atomic = partner_request_block_msg.getTransaction();
+            
             String uuid = partner_request_block_msg.getEventUuid().getData();
             String priority = partner_request_block_msg.getPriority().getData();
             ralph.ActiveEvent evt =
-                local_endpoint._act_event_map.get_or_create_partner_event(uuid,priority);
+                local_endpoint._act_event_map.get_or_create_partner_event(
+                    uuid,priority,atomic);
             
             evt.recv_partner_sequence_call_msg(partner_request_block_msg);
 			
@@ -55,7 +57,6 @@ public class ReceivePartnerMessageRequestSequenceBlockAction extends
 //            #     return
 //            raise
 //
-
     }
 
 }

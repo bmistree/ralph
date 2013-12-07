@@ -174,7 +174,7 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
     # call the internal version of the function
     method_body_text = 'ExecutingEventContext ctx = create_context();\n'
     method_body_text += '''
-ActiveEvent active_event = _act_event_map.create_root_event(false);
+ActiveEvent active_event = _act_event_map.create_root_non_atomic_event();
 '''
     
     inner_method_call_text = (
@@ -438,6 +438,38 @@ def emit_statement(emit_ctx,statement_node):
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
         return '(new Boolean(! %s.equals(%s)))' % (lhs,rhs)    
 
+    elif statement_node.label == ast_labels.ATOMICALLY:
+        atomic_logic = ''
+        for statement in statement_node.statement_list:
+            atomic_logic += emit_statement(emit_ctx,statement_node)
+            atomic_logic += '\n'
+        atomic_logic = indent_string(atomic_logic,2)
+        
+        return '''
+{
+    _active_event = _active_event.clone_atomic();
+    while(true)
+    {
+// what to actually execute inside of atomic block
+%s
+        if (_active_event.begin_first_phase_commit())
+        {
+            try {
+                ((RootEventParent)active_event.event_parent).event_complete_queue.take();
+            } catch (InterruptedException _ex) {
+                // TODO Auto-generated catch block
+                _ex.printStackTrace();
+            }
+            // FIXME: should actually check that the commit went through
+            // before breaking.
+            System.out.println("\nWarn: must cycle in case atomic fails\n");
+            break;
+        }
+    }
+    _active_event = _active_event.restore_from_atomic();
+}
+''' % atomic_logic
+    
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
         emit_ctx.set_lhs_of_assign(True)

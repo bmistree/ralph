@@ -83,16 +83,29 @@ public class ActiveEventMap
             stop_callback.run();
     }
     
+
+    public ActiveEvent create_root_atomic_event(ActiveEvent event_parent)
+        throws RalphExceptions.StoppedException
+    {
+        return create_root_event(true,event_parent);
+    }
+
+    public ActiveEvent create_root_non_atomic_event()
+        throws RalphExceptions.StoppedException
+    {
+        return create_root_event(false,null);
+    }
     
+
     /**
        @param {boolean} atomic --- True if root event that we create
        should be atomic instead of non-atomic.  False for non-atomics.
        
        Generates a new active event for events that were begun on this
-     endpoint and returns it.
-     * @return
+       endpoint and returns it.
      */
-    public ActiveEvent create_root_event(boolean atomic)
+    private ActiveEvent create_root_event(
+        boolean atomic, ActiveEvent event_parent)
         throws RalphExceptions.StoppedException
     {
         _lock();
@@ -102,7 +115,12 @@ public class ActiveEventMap
             throw new RalphExceptions.StoppedException();
         }
 
-        ActiveEvent root_event = boosted_manager.create_root_event(atomic);
+        ActiveEvent root_event = null;
+        if (atomic)
+            root_event = boosted_manager.create_root_atomic_event(event_parent);
+        else
+            root_event = boosted_manager.create_root_non_atomic_event();
+
         map.put(root_event.uuid,root_event);
         _unlock();
         return root_event;
@@ -199,9 +217,8 @@ public class ActiveEventMap
      @returns {_ActiveEvent}
     */
     public ActiveEvent get_or_create_partner_event(
-        String uuid, String priority) throws StoppedException
+        String uuid, String priority,boolean atomic) throws StoppedException
     {
-        
         _lock();
 		
         if (! map.containsKey(uuid))
@@ -215,8 +232,11 @@ public class ActiveEventMap
             {
                 PartnerEventParent pep =
                     new PartnerEventParent(local_endpoint,uuid,priority);
-                ActiveEvent new_event =
-                    new LockedActiveEvent(pep,this);
+                ActiveEvent new_event = null;
+                if (atomic)
+                    new_event = new LockedActiveEvent(pep,this,null);
+                else
+                    new_event = new NonAtomicActiveEvent(pep,this);
                 map.put(uuid, new_event);
             }
         }
@@ -243,7 +263,8 @@ public class ActiveEventMap
 	
     public ActiveEvent get_or_create_endpoint_called_event(
         Endpoint endpoint_calling, String event_uuid, String priority,
-        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue)
+        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue,
+        boolean atomic)
         throws StoppedException 
     {
         _lock();
@@ -254,11 +275,17 @@ public class ActiveEventMap
                 _unlock();
                 throw new RalphExceptions.StoppedException();
             }
-			
+
+            
             EndpointEventParent eep =
                 new EndpointEventParent(
                     event_uuid,endpoint_calling, local_endpoint,result_queue,priority);
-            ActiveEvent new_event = new LockedActiveEvent(eep,this);
+            ActiveEvent new_event = null;
+            if (atomic)
+                new_event = new LockedActiveEvent(eep,this,null);
+            else
+                new_event = new NonAtomicActiveEvent(eep,this);
+            
             map.put(event_uuid, new_event);
         }
         ActiveEvent to_return = map.get(event_uuid);

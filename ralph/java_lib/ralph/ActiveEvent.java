@@ -7,12 +7,32 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.MessageCallResultObject;
 import RalphCallResults.EndpointCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-
+import RalphExceptions.StoppedException;
 
 public abstract class ActiveEvent
 {
     public String uuid = null;
     public EventParent event_parent = null;
+
+    /**
+       When we enter an atomic block from a non-atomic block, we
+       create a new atomic active event and return it.  The new atomic
+       active event should keep track of the parent that created it.
+       Calling restore_from_atomic should return the parent that
+       cloned the atomic event.
+     */
+    public abstract ActiveEvent clone_atomic() throws StoppedException;
+        
+    public abstract ActiveEvent restore_from_atomic();
+
+    /**
+       If an event fails and is going to be retried, we clone relevant
+       internal state using this method into a new ActiveEvent.
+
+       Note: only retrying for AtomicActiveEvents.
+     */
+    public abstract ActiveEvent create_new_event_for_retry(
+        RootEventParent rep, ActiveEventMap act_event_map);
     
     /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
@@ -36,13 +56,25 @@ public abstract class ActiveEvent
        obj_request_no_backout_and_release_lock.
     */
     public abstract boolean can_backout_and_hold_lock();
-    public abstract void begin_first_phase_commit();
+
+    /**
+       For each atomic block, emitter creates an atomic event from
+       existing event.  Then, at end of atomic block, call
+       begin_first_phase_commit.  If begin_first_phase_commit returns
+       true, should read event parent's completion queue to see if
+       commit was successful or unsuccessful.  If returns false,
+       likely trying to commit a nested transaction, should not read
+       from event parent queue because transaction is incomplete and
+       will read it later.
+     */
+    public abstract boolean begin_first_phase_commit();
+    
     /**
      * If can enter Should send a message back to parent that 
         
      * @param from_partner
      */
-    public abstract void begin_first_phase_commit(boolean from_partner);
+    public abstract boolean begin_first_phase_commit(boolean from_partner);
     public abstract void second_phase_commit();
     /**
        No such thing as peered objects: always return true.

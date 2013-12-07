@@ -62,7 +62,7 @@ public class PartnersModifyRemoteState
 
                 
                 ActiveEvent root_event =
-                    endpta._act_event_map.create_root_event(true);
+                    endpta._act_event_map.create_root_atomic_event(null);
                 ExecutingEventContext ctx = endpta.create_context();
 
                 ArrayList<RPCArgObject> arg_list = new ArrayList<RPCArgObject>();
