@@ -444,7 +444,7 @@ def emit_statement(emit_ctx,statement_node):
         atomic_logic = ''
         for statement in statement_node.statement_list:
             atomic_logic += emit_statement(emit_ctx,statement)
-            atomic_logic += '\n'
+            atomic_logic += ';\n'
         atomic_logic = indent_string(atomic_logic,2)
         
         return '''
@@ -457,7 +457,7 @@ def emit_statement(emit_ctx,statement_node):
         if (_active_event.begin_first_phase_commit())
         {
             try {
-                ((RootEventParent)active_event.event_parent).event_complete_queue.take();
+                ((RootEventParent)_active_event.event_parent).event_complete_queue.take();
             } catch (InterruptedException _ex) {
                 // TODO Auto-generated catch block
                 _ex.printStackTrace();

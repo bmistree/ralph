@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import emit_test_package.Ralph.TestAtomically;
+import emit_test_package.RalphAtomically.TestAtomically;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
@@ -28,9 +28,7 @@ public class BasicTestAtomically
             for (int i = 0; i < 30; ++i)
             {
                 double original_number = endpt.get_number().doubleValue();
-
-                endpt.recursive_increment_number(i);
-
+                endpt.recursive_increment_number(new Double((double)i));
                 double current_number = endpt.get_number().doubleValue();
 
                 if (current_number != (original_number + i))
