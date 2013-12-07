@@ -321,6 +321,12 @@ class ConditionNode(_AstNode):
 
     def type_check(self,type_check_ctx):
         self.type = None
+        self.if_node.type_check(type_check_ctx)
+        for elif_node in self.elifs_list:
+            elif_node.type_check(type_check_ctx)
+        if self.else_node_body is not None:
+            self.else_node_body.type_check(type_check_ctx)
+        
 
 class IfNode(_AstNode):
     def __init__(self,predicate_node,if_body_node,line_number):
