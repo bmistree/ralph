@@ -95,6 +95,7 @@ class EndpointBodyNode(_AstNode):
         # Type check the body of each method
         for method_declaration_node in self.method_declaration_nodes:
             method_declaration_node.type_check(type_check_ctx)
+
             
 class IdentifierNode(_AstNode):
     def __init__(self,value,line_number):
@@ -263,10 +264,12 @@ class AssignmentNode(_AstNode):
         self.rhs_node.type_check(type_check_ctx)
         
         if self.lhs_node.type != self.rhs_node.type:
-            raise TypeCheckException(
-                self.line_number,
-                'lhs type of %s does not agree with rhs type of %s' %
-                (str(self.lhs_node.type),str(self.rhs_node.type)))
+            if (isinstance(self.rhs_node.type,MethodType) and
+                (self.lhs_node.type != self.rhs_node.type.returns_type)):
+                    raise TypeCheckException(
+                        self.line_number,
+                        'lhs type of %s does not agree with rhs type of %s' %
+                        (str(self.lhs_node.type),str(self.rhs_node.type)))
             
         
 class NotNode(_AstNode):
@@ -326,12 +329,24 @@ class IfNode(_AstNode):
         self.predicate_node = predicate_node
         self.body_node = if_body_node
         
+    def type_check(self,type_check_ctx):
+        self.type = None
+        self.predicate_node.type_check(type_check_ctx)
+        self.body_node.type_check(type_check_ctx)
+        
+        
 class ElifNode(_AstNode):
     def __init__(self,predicate_node,elif_body_node,line_number):
         super(ElifNode,self).__init__(ast_labels.ELIF,line_number)
 
         self.predicate_node = predicate_node
         self.body_node = elif_body_node
+        
+    def type_check(self,type_check_ctx):
+        self.type = None
+        self.predicate_node.type_check(type_check_ctx)
+        self.body_node.type_check(type_check_ctx)
+
         
         
 class BracketNode(_AstNode):
@@ -374,7 +389,7 @@ class MethodCallNode(_AstNode):
 
     def type_check(self,type_check_ctx):
         self.method_node.type_check(type_check_ctx)
-        self.type = self.method_node.type.returns_type
+        self.type = self.method_node.type
         
 class RangeExpressionNode(_AstNode):
     def __init__(

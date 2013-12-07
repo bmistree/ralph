@@ -502,7 +502,6 @@ def emit_statement(emit_ctx,statement_node):
             raise InternalEmitException(
                 'No record of variable named %s' % statement_node.value)
 
-        
         if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
