@@ -441,7 +441,7 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.ATOMICALLY:
         atomic_logic = ''
         for statement in statement_node.statement_list:
-            atomic_logic += emit_statement(emit_ctx,statement_node)
+            atomic_logic += emit_statement(emit_ctx,statement)
             atomic_logic += '\n'
         atomic_logic = indent_string(atomic_logic,2)
         
