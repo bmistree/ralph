@@ -7,20 +7,20 @@ import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 
 public class LockedVariables {
-    final static ValueTypeDataWrapperConstructor<Double,Double>
+    final static NumberTypeDataWrapperConstructor
         number_value_type_data_wrapper_constructor =
-        new ValueTypeDataWrapperConstructor<Double,Double>();
+        new NumberTypeDataWrapperConstructor();
     final static Double default_number = new Double(0.0);
 
-    final static ValueTypeDataWrapperConstructor<String,String>
+    final static TextTypeDataWrapperConstructor
         text_value_type_data_wrapper_constructor =
-        new ValueTypeDataWrapperConstructor<String,String>();
+        new TextTypeDataWrapperConstructor();
     
     final static String default_text = new String();
 	
-    final static ValueTypeDataWrapperConstructor<Boolean,Boolean>
+    final static TrueFalseTypeDataWrapperConstructor
         true_false_value_type_data_wrapper_constructor = 
-        new ValueTypeDataWrapperConstructor<Boolean,Boolean>();
+        new TrueFalseTypeDataWrapperConstructor();
     
     final static Boolean default_tf = false;
 	

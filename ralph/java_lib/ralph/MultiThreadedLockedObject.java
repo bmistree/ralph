@@ -298,8 +298,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         if ((write_lock_holder != null) && 
             read_lock_holders.isEmpty())
         {
-            Util.logger_warn(
-                "Grabbing internal value of val.  Different from python.");
             dirty_val = data_wrapper_constructor.construct(val.val, peered);
             write_lock_holder =
                 new EventCachedPriorityObj(active_event,cached_priority);
@@ -325,8 +323,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
 
                 write_lock_holder =
                     new EventCachedPriorityObj(active_event,cached_priority);
-                Util.logger_warn(
-                    "Grabbing internal value of val.  Different from python.");
                 dirty_val = data_wrapper_constructor.construct(val.val,peered);
                 DataWrapper<T,D> to_return = dirty_val;
                 _unlock();
