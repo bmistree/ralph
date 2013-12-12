@@ -517,6 +517,23 @@ def emit_statement(emit_ctx,statement_node):
             method_text += ',' + emit_statement(emit_ctx,arg_node)
         method_text += ')'
         return method_text
+
+    elif statement_node.label == ast_labels.PARTNER_METHOD_CALL:
+        rpc_args = []
+        for rpc_arg_node in statement_node.args_list:
+            rpc_arg_text = emit_statement(emit_ctx,rpc_arg_node)
+            rpc_args.append(rpc_arg_text)
+            
+        rpc_args_list_text = (
+            'new ArrayList<RPCArgObject>( Arrays.asList(%s))' %
+            ','.join(rpc_args))
+        
+        partner_call_text = '''
+_ctx.hide_partner_call(
+    this, _active_event,"%s",true, //whether or not first method call
+    %s)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
+
+        return partner_call_text
     
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)

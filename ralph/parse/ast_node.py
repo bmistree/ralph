@@ -103,9 +103,9 @@ class PartnerMethodCallNode(_AstNode):
             method_name_node: {IdentifierNode}
         """
         super(PartnerMethodCallNode,self).__init__(
-            ast_labels.PARTNER_CALL_NODE,line_number)
+            ast_labels.PARTNER_METHOD_CALL,line_number)
 
-        self.name = method_name_node.value
+        self.partner_method_name = method_name_node.value
         self.args_list = method_call_args_node.get_args_list()
         
     def type_check(self,type_check_ctx):
