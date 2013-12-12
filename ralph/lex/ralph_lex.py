@@ -30,7 +30,8 @@ reserved = {
     'atomically': 'ATOMICALLY',
     'parallel': 'PARALLEL',
     'returns': 'RETURNS',
-    'TVar' : 'TVAR'
+    'TVar' : 'TVAR',
+    'partner': 'PARTNER'
     }
 
 
@@ -59,7 +60,6 @@ tokens = [
     "COMMA",
     "COLON",
     "AT",
-    
 
     # operator=
     "PLUS_EQUAL",
@@ -271,6 +271,10 @@ def t_COMMA(t):
 
 def t_COLON(t):
     '\:'
+    return lex_state_machine.add_token(t)
+
+def t_AT(t):
+    '@'
     return lex_state_machine.add_token(t)
 
 def t_LEFT_BRACKET(t):

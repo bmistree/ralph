@@ -96,6 +96,22 @@ class EndpointBodyNode(_AstNode):
         for method_declaration_node in self.method_declaration_nodes:
             method_declaration_node.type_check(type_check_ctx)
 
+class PartnerMethodCallNode(_AstNode):
+    def __init__(self,method_name_node,method_call_args_node,line_number):
+        """
+        Args:
+            method_name_node: {IdentifierNode}
+        """
+        super(PartnerMethodCallNode,self).__init__(
+            ast_labels.PARTNER_CALL_NODE,line_number)
+
+        self.name = method_name_node.value
+        self.args_list = method_call_args_node.get_args_list()
+        
+    def type_check(self,type_check_ctx):
+        for arg_node in self.args_list:
+            arg_node.type_check(type_check_ctx)
+
             
 class IdentifierNode(_AstNode):
     def __init__(self,value,line_number):

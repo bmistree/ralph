@@ -171,6 +171,18 @@ def p_MethodCall(p):
     method_name_node = p[1]
     method_args_node = p[3]
     p[0] = MethodCallNode(method_name_node,method_args_node)
+
+def p_PartnerMethodCall(p):
+    '''
+    PartnerMethodCall : AT PARTNER DOT Identifier LEFT_PAREN MethodCallArgs RIGHT_PAREN
+    '''
+    line_number = p.lineno(1)
+    method_name_node = p[4]
+    method_call_args_node = p[6]
+    p[0] = PartnerMethodCallNode(
+        method_name_node,method_call_args_node,line_number)
+
+
     
 def p_MethodCallArgs(p):
     '''
@@ -506,6 +518,7 @@ def p_Term(p):
     '''
     Term : Variable
          | MethodCall
+         | PartnerMethodCall
          | Number
          | String
          | Boolean

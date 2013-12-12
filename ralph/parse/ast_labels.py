@@ -16,6 +16,7 @@ ASSIGNMENT = 'assignment'
 NOT = 'not'
 DOT = 'dot'
 BRACKET = 'bracket'
+PARTNER_CALL_NODE = 'partner_call'
 
 TEXT_LITERAL = 'text_literal'
 NUMBER_LITERAL = 'number_literal'
