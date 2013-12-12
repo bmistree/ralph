@@ -76,9 +76,30 @@ public class ReceiveEndpointCallAction extends ServiceAction
         //# structs).
         evt_ctx.set_from_endpoint_true();
         String to_exec_internal_name = ralph.Util.endpoint_call_func_name(func_name);
-	    		
-        ExecutingEvent.static_run(
-            to_exec_internal_name, act_event, evt_ctx, result_queue, true, args);
-    }
 
+        try
+        {
+            ExecutingEvent.static_run(
+                to_exec_internal_name,act_event,evt_ctx,result_queue,true,args);
+        }
+        catch(RalphExceptions.BackoutException ex)
+        {
+            result_queue.add(
+                new RalphCallResults.BackoutBeforeEndpointCallResult());
+        }
+        catch (RalphExceptions.NetworkException ex)
+        {
+            result_queue.add(
+                new RalphCallResults.NetworkFailureEndpointCallResult(
+                    "Must collect trace info for network failure exceptions"));
+        }
+        
+        catch (Exception ex)
+        {
+            result_queue.add(
+                new RalphCallResults.ApplicationExceptionEndpointCallResult(
+                    "Must collect trace for general application exceptions"));
+        }
+
+    }
 }

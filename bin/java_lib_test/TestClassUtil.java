@@ -12,6 +12,17 @@ import RalphConnObj.SingleSideConnection;
 import RalphConnObj.SameHostConnection;
 import RalphConnObj.ConnectionObj;
 
+import ralph.Util;
+import RalphCallResults.BackoutBeforeEndpointCallResult;
+import RalphCallResults.EndpointCompleteCallResult;
+import java.util.concurrent.ArrayBlockingQueue;
+import RalphCallResults.EndpointCallResultObject;
+
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
+
 public class TestClassUtil
 {    
     public static void print_success(String test_name)
@@ -48,94 +59,104 @@ public class TestClassUtil
             super(ralph_globals,host_uuid,conn_obj,vstore);
         }
 
-	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_method(
-            ActiveEvent active_event,ExecutingEventContext ctx) throws Exception
-        {
-            try{}
-            catch (Exception _ex)
-            {
-                //# ApplicationExceptions should be backed
-                //# out and the partner should be
-                //# notified
-                active_event.put_exception(_ex);
-                throw _ex;
-            }
-
-            ctx.hide_sequence_completed_call(this, active_event);
-        }
-
-	public void _partner_endpoint_msg_func_call_prefix__waldo__test_increment_local_num(
-            ActiveEvent active_event,ExecutingEventContext ctx,Object ... args)
-            throws Exception
-        {
-            try
-            {
-                LockedObject<Double,Double> to_return =
-                    (LockedObject<Double,Double>)args[0];
-                
-                LockedObject<Double,Double> num_obj =
-                    (LockedObject<Double,Double>)ctx.var_stack.get_var_if_exists(
-                        NUM_TVAR_NAME);
-
-                double current_val =
-                    ((Double)num_obj.get_val(active_event)).doubleValue();
-                Double new_val = new Double( current_val + 1);
-                num_obj.set_val(active_event,new_val);
-
-                to_return.set_val(active_event,new_val);
-            }
-            catch (Exception _ex)
-            {
-                //# ApplicationExceptions should be backed
-                //# out and the partner should be
-                //# notified
-                active_event.put_exception(_ex);
-                throw _ex;
-            }
-
-            ctx.hide_sequence_completed_call(this, active_event);
-        }
-
         
-	public void _partner_endpoint_msg_func_call_prefix__waldo__test_partner_args_method(
-            ActiveEvent active_event,ExecutingEventContext ctx,
-            Object ... args) throws Exception
-
+        protected void _handle_rpc_call(
+            String to_exec_internal_name,ActiveEvent active_event,
+            ExecutingEventContext ctx,
+            ArrayBlockingQueue<EndpointCallResultObject> result_queue,
+            Object...args)
+            throws ApplicationException, BackoutException, NetworkException
         {
-            try
+            Object result = null;
+            if (to_exec_internal_name.equals("test_partner_method"))
+            {
+                _test_partner_method(active_event,ctx);
+                ctx.hide_sequence_completed_call(this, active_event);
+            }
+            else if (to_exec_internal_name.equals("test_increment_local_num"))
+            {
+                LockedObject<Double,Double> arg =
+                    (LockedObject<Double,Double>)args[0];
+
+                _test_increment_local_num(active_event,ctx,arg);
+                ctx.hide_sequence_completed_call(this, active_event);
+            }
+            else if (to_exec_internal_name.equals("test_partner_args_method"))
             {
                 LockedObject<Double,Double> num_obj =
                     (LockedObject<Double,Double>)args[0];
-                    
+
                 LockedObject<Boolean,Boolean> bool_obj =
                     (LockedObject<Boolean,Boolean>) args[1];
-                
+
                 LockedObject<String,String> string_obj =
                     (LockedObject<String,String>) args[2];
 
-                Double num = num_obj.get_val(active_event);
-                num_obj.set_val(active_event,new Double(num.doubleValue() + 1));
-
-                Boolean bool = bool_obj.get_val(active_event);
-                bool_obj.set_val(active_event,new Boolean(! bool.booleanValue() ));
-
-                String string = string_obj.get_val(active_event);
-                string_obj.set_val(active_event,string + string);
+                _test_partner_args_method(
+                    active_event, ctx, num_obj,bool_obj,string_obj);
+                ctx.hide_sequence_completed_call(this, active_event);
             }
-            catch (Exception _ex)
+            else
             {
-                System.out.println(
-                    "\nSerious error: caught error in partner args.\n\n");
-                _ex.printStackTrace();
-                
-                //# ApplicationExceptions should be backed
-                //# out and the partner should be
-                //# notified
-                active_event.put_exception(_ex);
-                throw _ex;
+                Util.logger_assert(
+                    "Error handling rpc call: unknown method " +
+                    to_exec_internal_name);
             }
 
-            ctx.hide_sequence_completed_call(this, active_event);
+            if (result_queue == null)
+                return;
+
+            boolean completed = active_event.wait_if_modified_peered();
+            if (! completed)
+            {
+                result_queue.add(
+                    new RalphCallResults.BackoutBeforeEndpointCallResult());
+            }
+            else
+            {
+                result_queue.add(new EndpointCompleteCallResult(result));
+            }
+        }
+
+        
+	public void _test_partner_method(
+            ActiveEvent active_event,ExecutingEventContext ctx)
+        {
+        }
+
+	public void _test_increment_local_num(
+            ActiveEvent active_event,ExecutingEventContext ctx,
+            LockedObject<Double,Double>to_return)
+            throws BackoutException
+        {
+            LockedObject<Double,Double> num_obj =
+                (LockedObject<Double,Double>)ctx.var_stack.get_var_if_exists(
+                    NUM_TVAR_NAME);
+
+            double current_val =
+                ((Double)num_obj.get_val(active_event)).doubleValue();
+            Double new_val = new Double( current_val + 1);
+            num_obj.set_val(active_event,new_val);
+
+            to_return.set_val(active_event,new_val);
+        }
+
+        
+	public void _test_partner_args_method(
+            ActiveEvent active_event,ExecutingEventContext ctx,
+            LockedObject<Double,Double> num_obj,
+            LockedObject<Boolean,Boolean> bool_obj,
+            LockedObject<String,String> string_obj)
+            throws BackoutException
+        {
+            Double num = num_obj.get_val(active_event);
+            num_obj.set_val(active_event,new Double(num.doubleValue() + 1));
+
+            Boolean bool = bool_obj.get_val(active_event);
+            bool_obj.set_val(active_event,new Boolean(! bool.booleanValue() ));
+
+            String string = string_obj.get_val(active_event);
+            string_obj.set_val(active_event,string + string);
         }
     } // closes default endpoint
 

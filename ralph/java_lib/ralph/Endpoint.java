@@ -21,6 +21,11 @@ import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.VariablesProto.Variables;
+import RalphCallResults.EndpointCallResultObject;
+
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
 
 
 /**
@@ -33,7 +38,7 @@ import ralph_protobuffs.VariablesProto.Variables;
  active events on this endpoint.
  *
  */
-public class Endpoint 
+public abstract class Endpoint 
 {
     public String _uuid = Util.generate_uuid();
     public String _host_uuid = null;
@@ -1160,5 +1165,77 @@ public class Endpoint
     {
     	return _uuid;
     }
+
+    /**
+       This method takes in a name for a method to execute on a local
+       endpoint and executes it.  The compiler should override this
+       method so that it will call correct internal method name for
+       each string (and pass correct arguments to it).
+       
+       @param {String} to_exec_internal_name --- The internal
+       name of the method to execute on this endpoint. 
+
+       @param {_ActiveEvent object} active_event --- The active event
+       object that to_exec should use for accessing endpoint data.
+
+       @param {_ExecutingEventContext} ctx ---
+
+       @param {result_queue or None} --- This value should be
+       non-None for endpoint-call initiated events.  For endpoint
+       call events, we wait for the endpoint to check if any of the
+       peered data that it modifies also need to be modified on the
+       endpoint's partner (and wait for partner to respond).  (@see
+       discussion in waldoActiveEvent.wait_if_modified_peered.)  When
+       finished execution, put wrapped result in result_queue.  This
+       way the endpoint call that is waiting on the result can
+       receive it.  Can be None only for events that were initiated
+       by messages (in which the modified peered data would already
+       have been updated).
     
+       @param {*args} to_exec_args ---- Any additional arguments that
+       get passed to the closure to be executed.
+    */
+    protected abstract void _handle_rpc_call(
+        String to_exec_internal_name,ActiveEvent active_event,
+        ExecutingEventContext ctx,
+        ArrayBlockingQueue<EndpointCallResultObject> result_queue,
+        Object...to_exec_args)
+        throws ApplicationException, BackoutException, NetworkException;
+
+    /**
+       Just calls into _handle_rpc_calls.
+     */
+    public void handle_rpc_call(
+        String to_exec_internal_name,ActiveEvent active_event,
+        ExecutingEventContext ctx,
+        ArrayBlockingQueue<EndpointCallResultObject> result_queue,
+        Object...args)
+        throws ApplicationException, BackoutException, NetworkException
+    {
+        try
+        {
+            _handle_rpc_call(
+                to_exec_internal_name,active_event, ctx,
+                result_queue,args);
+        }
+        catch (BackoutException _ex)
+        {
+            active_event.put_exception(_ex);
+            throw _ex;
+        }
+        catch (NetworkException _ex)
+        {
+            active_event.put_exception(_ex);
+            throw _ex;
+        }
+        catch (Exception _ex)
+        {
+            //# ApplicationExceptions should be backed
+            //# out and the partner should be
+            //# notified
+            active_event.put_exception(_ex);
+            // FIXME: fill in backtrace for application exception.
+            throw new ApplicationException("Caught application exception");
+        }
+    }
 }

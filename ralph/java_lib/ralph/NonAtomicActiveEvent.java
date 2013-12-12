@@ -18,6 +18,10 @@ import RalphExceptions.StoppedException;
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
 
 
 public class NonAtomicActiveEvent extends ActiveEvent
@@ -572,10 +576,9 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return to_return;
     }
 
-	
-
     public void recv_partner_sequence_call_msg(
         PartnerRequestSequenceBlock msg)
+        throws ApplicationException, BackoutException, NetworkException
     {
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its

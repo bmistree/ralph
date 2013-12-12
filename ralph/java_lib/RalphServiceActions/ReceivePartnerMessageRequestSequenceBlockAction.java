@@ -50,6 +50,20 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             //  # need to.
             return;
         }
+        catch (RalphExceptions.BackoutException _ex)
+        {
+            // do not have to do anything in this case.
+            return;
+        }
+        catch (Exception _ex)
+        {
+            // should have already been caught.  Print stack trace,
+            // just in case it isn't (for compiler debugging).
+            Util.logger_warn(
+                "Warning: ensure that caught and processed exception " +
+                "with stack trace below: ");
+            _ex.printStackTrace();
+        }
 			
 //        except Exception as ex:
 //            # if hasattr(ex,'ralph_handled'):

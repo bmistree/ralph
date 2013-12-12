@@ -18,6 +18,10 @@ import RalphExceptions.StoppedException;
 import RalphCallResults.StopAlreadyCalledEndpointCallResult;
 import RalphCallResults.BackoutBeforeEndpointCallResult;
 
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
 
 public class LockedActiveEvent extends ActiveEvent
 {
@@ -1048,6 +1052,7 @@ public class LockedActiveEvent extends ActiveEvent
     */
     private ExecutingEvent handle_first_sequence_msg_from_partner(
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
+        throws ApplicationException, BackoutException, NetworkException
     {
 
         //#### DEBUG
@@ -1103,13 +1108,17 @@ public class LockedActiveEvent extends ActiveEvent
         return to_return;
     }
 
-	
+
     /**
-     * 
+     * Exception that gets thrown is from executing internal code.
+     * Could be backout, could be stopped, could be other errors (eg.,
+     * div by zero).
+     *
      * @param msg
      */
     public void recv_partner_sequence_call_msg(
         PartnerRequestSequenceBlock msg)
+        throws ApplicationException, BackoutException, NetworkException
     {
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its
@@ -1266,7 +1275,6 @@ public class LockedActiveEvent extends ActiveEvent
         return failure;
     }
 
-    
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
@@ -1274,7 +1282,6 @@ public class LockedActiveEvent extends ActiveEvent
     {
         forward_backout_request_and_backout_self();
     }
-	
 }
 
 

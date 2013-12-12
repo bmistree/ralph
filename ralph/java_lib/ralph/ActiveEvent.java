@@ -8,6 +8,10 @@ import RalphCallResults.MessageCallResultObject;
 import RalphCallResults.EndpointCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import RalphExceptions.StoppedException;
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
 
 public abstract class ActiveEvent
 {
@@ -239,7 +243,9 @@ public abstract class ActiveEvent
         boolean stop_request);
     
     public abstract void recv_partner_sequence_call_msg(
-        PartnerRequestSequenceBlock msg);
+        PartnerRequestSequenceBlock msg)
+        throws ApplicationException, BackoutException, NetworkException;
+
 
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,

@@ -8,6 +8,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphCallResults.EndpointCompleteCallResult;
 import RalphCallResults.EndpointCallResultObject;
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
 
 public class ExecutingEvent 
 {
@@ -25,7 +29,7 @@ public class ExecutingEvent
     private boolean takes_args;
 	
     /**
-       @param {Closure} to_exec_internal_name --- The internal
+       @param {String} to_exec_internal_name --- The internal
        name of the method to execute on this endpoint. 
     
 
@@ -65,7 +69,6 @@ public class ExecutingEvent
         
     }
 	
-	
     /**
      * @see arguments to constructor.
      */
@@ -73,80 +76,21 @@ public class ExecutingEvent
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
-        boolean takes_args,
-        Object...to_exec_args) 
+        boolean takes_args, Object...to_exec_args)
+        throws ApplicationException, BackoutException, NetworkException
     {
-        // for now, using reflection		
         Endpoint endpt_to_run_on = active_event.event_parent.local_endpoint;
-        Method to_run = null;
-        try {
-            if (takes_args)
-            {
-                to_run = endpt_to_run_on.getClass().getMethod(
-                    to_exec_internal_name, param_types_args);
-            }
-            else
-            {
-                to_run = endpt_to_run_on.getClass().getMethod(
-                    to_exec_internal_name, param_types_no_args);
-            }
-				
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            Util.logger_assert("Invoke error");
-        } catch (NoSuchMethodException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            Util.logger_assert("Invoke error");
-        }
-			
-		
-        Object result = null;
-        try {
-            if (takes_args)
-                result = to_run.invoke(endpt_to_run_on,active_event, ctx,to_exec_args);
-            else
-                result = to_run.invoke(endpt_to_run_on,active_event, ctx);
-			
-        } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Util.logger_assert("Invoke error");
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Util.logger_assert("Invoke error");
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Util.logger_assert("Invoke error");
-        } 
-				
-        
-        if (result_queue == null)
-            return;
-        
-        //# check if the active event has touched any peered data.  if
-        //# have, then send an update message to partner and wait for
-        //# ack of message before returning.
-        boolean completed = active_event.wait_if_modified_peered();
-        
-        if (! completed)
-        {
-            result_queue.add(
-                new RalphCallResults.BackoutBeforeEndpointCallResult());
-        }
-        else
-        {
-            result_queue.add(new EndpointCompleteCallResult(result));
-        }		
+        endpt_to_run_on.handle_rpc_call(
+            to_exec_internal_name,active_event,
+            ctx,result_queue,to_exec_args);
     }
 			
-			
-    public void run() 
+    public void run()
+        throws ApplicationException, BackoutException, NetworkException
     {
-        static_run(to_exec_internal_name,active_event,ctx,result_queue,takes_args,to_exec_args);
+        static_run(
+            to_exec_internal_name,active_event,ctx,
+            result_queue,takes_args,to_exec_args);
     }
 		
 }
