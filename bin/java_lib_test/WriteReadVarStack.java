@@ -95,40 +95,40 @@ public class WriteReadVarStack
         vstack.add_var(var_name,higher_a);
 
         /** Check can operate on variables on top of stack. */
-        if (get_number_from_stack(vstack,var_name) !=
-            higher_a_init_val)
+        if (! get_number_from_stack(vstack,var_name).equals(
+                higher_a_init_val))
             return false;
         
 
         Double new_higher_val = higher_a_init_val + 1;
         set_number_on_stack(vstack,var_name,new_higher_val);
 
-        if (get_number_from_stack(vstack,var_name) !=
-            new_higher_val)
+        if (! get_number_from_stack(vstack,var_name).equals(
+                new_higher_val))
             return false;
 
         /** Check can operate on non-shadowed variable in lower layer
          * of stack. */
-        if (get_number_from_stack(vstack,var_name_b) !=
-            root_b_init_val)
+        if (! get_number_from_stack(vstack,var_name_b).equals(
+                root_b_init_val))
             return false;
 
         Double new_b_val = root_b_init_val + 1;
         set_number_on_stack(vstack,var_name_b,new_b_val);
         
-        if (get_number_from_stack(vstack,var_name_b) !=
-            new_b_val)
+        if (! get_number_from_stack(vstack,var_name_b).equals(
+                new_b_val))
             return false;
 
         /** Pop stack and ensure that shadowed variable at root of
          * stack was not affected and that unshadowed variable was.*/
         vstack.pop();
         Double root_a_val = get_number_from_stack(vstack,var_name);
-        if (root_a_val != root_a_init_val)
+        if (! root_a_val.equals(root_a_init_val))
             return false;
 
         Double b_val  = get_number_from_stack(vstack, var_name_b);
-        if (b_val != new_b_val)
+        if (! b_val.equals(new_b_val))
             return false;
 
         // test passed
