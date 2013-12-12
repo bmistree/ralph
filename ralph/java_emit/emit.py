@@ -24,6 +24,8 @@ import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class %s
 {
@@ -520,9 +522,19 @@ def emit_statement(emit_ctx,statement_node):
 
     elif statement_node.label == ast_labels.PARTNER_METHOD_CALL:
         rpc_args = []
+
+        #FIXME: only allowing putting identifiers into arguments of
+        #remote method call because must create RPCArgObjects.
+        prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+        emit_ctx.set_lhs_of_assign(True)
         for rpc_arg_node in statement_node.args_list:
-            rpc_arg_text = emit_statement(emit_ctx,rpc_arg_node)
+            # FIXME: Setting false here, which disallows sending arg
+            # as reference.
+            rpc_arg_text = (
+                'new RPCArgObject( %s,false )' %
+                emit_statement(emit_ctx,rpc_arg_node))
             rpc_args.append(rpc_arg_text)
+        emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
             
         rpc_args_list_text = (
             'new ArrayList<RPCArgObject>( Arrays.asList(%s))' %

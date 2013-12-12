@@ -111,6 +111,21 @@ class PartnerMethodCallNode(_AstNode):
     def type_check(self,type_check_ctx):
         for arg_node in self.args_list:
             arg_node.type_check(type_check_ctx)
+            # FIXME: for now, only permitting putting in identifiers
+            # as arguments to partner method calls.  This is because
+            # later, when emitting, must generate RPCArgObjects in
+            # Java, which require wrapping RalphObjects, not Booleans,
+            # Doubles, Strings, etc.
+            if arg_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+                raise TypeCheckException(
+                    self.line_number,
+                    'arg to partner method call must be an identifier ' +
+                    'for now.  For now, only permitting putting in ' +
+                    'identifiers as arguments to partner method calls.  ' +
+                    'This is because later, when emitting, must ' +
+                    'generate RPCArgObjects in Java, which require ' +
+                    'wrapping RalphObjects, not Booleans, Doubles, ' +
+                    'Strings, etc.')
 
             
 class IdentifierNode(_AstNode):
