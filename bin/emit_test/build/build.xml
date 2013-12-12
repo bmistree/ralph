@@ -96,9 +96,11 @@
   <target
       name="run_all"
       depends=
-        "run_BasicSetterGetter, run_BasicInternalMethodCall">
+        "run_BasicSetterGetter, run_BasicInternalMethodCall,
+         run_BasicTestAtomically,run_BasicPartnerCall">
   </target>
 
+  
   <!-- Single side setter getter -->
   <target
       name="run_BasicSetterGetter"
@@ -135,6 +137,22 @@
     </java>
   </target>
   
+
+  <!-- Partner call -->
+  <target
+      name="run_BasicPartnerCall"
+      depends="compile_ralph_tests"
+      description="Test calling partner methods.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.BasicPartnerCall"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+  
+
   
   
   <!-- Delete the build directories -->
