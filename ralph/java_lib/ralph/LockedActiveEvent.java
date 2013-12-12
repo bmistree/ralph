@@ -1065,10 +1065,6 @@ public class LockedActiveEvent extends ActiveEvent
         }
         //#### END DEBUG
 
-        //FIGURE OUT WHAT TO EXECUTE NEXT
-        String block_to_exec_internal_name =
-            Util.partner_endpoint_msg_call_func_name(
-                name_of_block_to_exec_next);
 
         // grab all arguments from message
         ArrayList <RPCArgObject> args =
@@ -1096,7 +1092,7 @@ public class LockedActiveEvent extends ActiveEvent
             "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
 
         ExecutingEvent to_return = new ExecutingEvent (
-            block_to_exec_internal_name,this,ctx,
+            name_of_block_to_exec_next,this,ctx,
             // using null here means that we do not need to bother
             // with waiting for modified peered-s to update.
             null,

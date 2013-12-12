@@ -48,10 +48,6 @@ public class Util {
      * @param func_name
      * @return
      */
-    static public String partner_endpoint_msg_call_func_name(String func_name)
-    {
-        return "_partner_endpoint_msg_func_call_prefix__waldo__" + func_name;
-    }
 
     static public String internal_oncreate_func_call_name(String func_name)
     {
