@@ -1,0 +1,23 @@
+Endpoint SideA
+{
+    increment_other_side_number(Number amt_to_increment_by)
+    {
+        @partner.increment_number(amt_to_increment_by);
+    }
+}
+
+Endpoint SideB
+{
+    TVar Number internal_number = 15;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+
+    increment_number(Number amt_to_increment_by)
+    {
+        internal_number = internal_number + amt_to_increment_by;
+    }
+}
+

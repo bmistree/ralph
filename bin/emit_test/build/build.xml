@@ -65,6 +65,14 @@
       <arg line="RalphAtomically"/>
     </exec>
 
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/basic_partner.rph"/>
+      <arg line="${ralph_emitted.dir}/BasicPartner.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="BasicPartner"/>
+    </exec>
+
     
     <!-- Compile all ralph java to bytecode -->
     <javac
