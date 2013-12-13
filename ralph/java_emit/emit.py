@@ -249,7 +249,8 @@ protected void _handle_rpc_call(
     ExecutingEventContext ctx,
     ArrayBlockingQueue<EndpointCallResultObject> result_queue,
     Object...args)
-    throws ApplicationException, BackoutException, NetworkException
+    throws ApplicationException, BackoutException, NetworkException,
+    StoppedException
 {
     Object result = null;
 
@@ -415,7 +416,8 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     private Double some_method (
         ExecutingEventContext _ctx, LockedActiveEvent _active_event,
         SomeType SomeVar) 
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
     {
         _ctx.var_stack.push(true); // true because function var scope
         _ctx.var_stack.add_var('SomeVar',SomeVar);
@@ -445,7 +447,9 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         argument_name_text_list.append(argument_name_text)
 
 
-    to_return += ') throws ApplicationException, BackoutException, NetworkException {\n'
+    to_return += (
+        ') throws ApplicationException, BackoutException, ' +
+        'NetworkException,StoppedException {\n')
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
