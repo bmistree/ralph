@@ -11,6 +11,7 @@ import RalphExceptions.StoppedException;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
 
 
 public abstract class ActiveEvent
@@ -244,7 +245,8 @@ public abstract class ActiveEvent
     
     public abstract void recv_partner_sequence_call_msg(
         PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException;
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException;
 
 
     public abstract void receive_unsuccessful_first_phase_commit_msg(

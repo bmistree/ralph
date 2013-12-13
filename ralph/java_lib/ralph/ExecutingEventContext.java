@@ -8,6 +8,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
 import ralph.LockedVariables.LockedTextVariable;
 import ralph.LockedVariables.LockedNumberVariable;
 import ralph.LockedVariables.LockedTrueFalseVariable;
@@ -654,7 +655,8 @@ public class ExecutingEventContext
     */    
     public void hide_sequence_completed_call(
         Endpoint endpoint, ActiveEvent active_event)
-        throws NetworkException, ApplicationException, BackoutException
+        throws NetworkException, ApplicationException, BackoutException,
+        StoppedException
     {
         // DEBUG: Should only call sequence completed if context was
         // begun from an rpc.  If it was begun from an rpc, should
@@ -714,7 +716,7 @@ public class ExecutingEventContext
     public void hide_partner_call(
         Endpoint endpoint, ActiveEvent active_event,
         String func_name, boolean first_msg,ArrayList<RPCArgObject> args)
-        throws NetworkException, ApplicationException, BackoutException
+        throws NetworkException, ApplicationException, BackoutException,StoppedException
     {
     	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
             new ArrayBlockingQueue<MessageCallResultObject> (Util.SMALL_QUEUE_CAPACITIES);

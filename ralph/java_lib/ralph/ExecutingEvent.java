@@ -11,6 +11,7 @@ import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
 
 
 public class ExecutingEvent 
@@ -77,7 +78,8 @@ public class ExecutingEvent
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         boolean takes_args, Object...to_exec_args)
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
     {
         Endpoint endpt_to_run_on = active_event.event_parent.local_endpoint;
         endpt_to_run_on.handle_rpc_call(
@@ -86,7 +88,8 @@ public class ExecutingEvent
     }
 			
     public void run()
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
     {
         static_run(
             to_exec_internal_name,active_event,ctx,

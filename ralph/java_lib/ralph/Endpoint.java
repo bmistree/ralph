@@ -26,6 +26,7 @@ import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
 
 
 /**
@@ -1200,7 +1201,8 @@ public abstract class Endpoint
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         Object...to_exec_args)
-        throws ApplicationException, BackoutException, NetworkException;
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException;
 
     /**
        Just calls into _handle_rpc_calls.
@@ -1210,7 +1212,7 @@ public abstract class Endpoint
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         Object...args)
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,StoppedException
     {
         try
         {

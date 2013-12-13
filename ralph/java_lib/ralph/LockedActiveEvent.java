@@ -21,6 +21,7 @@ import RalphCallResults.BackoutBeforeEndpointCallResult;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+import RalphExceptions.StoppedException;
 
 
 public class LockedActiveEvent extends ActiveEvent
@@ -1052,7 +1053,8 @@ public class LockedActiveEvent extends ActiveEvent
     */
     private ExecutingEvent handle_first_sequence_msg_from_partner(
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
     {
 
         //#### DEBUG
@@ -1114,7 +1116,8 @@ public class LockedActiveEvent extends ActiveEvent
      */
     public void recv_partner_sequence_call_msg(
         PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
     {
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its
