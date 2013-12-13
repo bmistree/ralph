@@ -221,8 +221,8 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
             exec_dispatch_sequence_call(method_declaration_node))
 
         rpc_text_for_methods += (
-            if_elif + '(to_exec_internal_name.equals(' +
-            method_declaration_node.method_name + ')) {\n' + 
+            if_elif + '(to_exec_internal_name.equals("' +
+            method_declaration_node.method_name + '")) {\n' + 
             indent_string(if_elif_body,1) + 
             '\n}\n')
     
