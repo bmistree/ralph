@@ -240,7 +240,7 @@ else
 '''
     #### End debug
     
-    method_signature = '''
+    emitted_method = '''
 protected void _handle_rpc_call(
     String to_exec_internal_name,ActiveEvent active_event,
     ExecutingEventContext ctx,
@@ -268,7 +268,7 @@ protected void _handle_rpc_call(
 }
 ''' % indent_string(rpc_text_for_methods,1)
 
-    return indent_string(method_signature,1)
+    return emitted_method
 
 
 def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
