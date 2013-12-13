@@ -26,6 +26,7 @@ import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
 import java.util.Arrays;
 import java.util.ArrayList;
+import ralph.Util;
 
 public class %s
 {
@@ -57,6 +58,9 @@ def emit_endpt(endpt_node):
     endpt_class_body += emit_endpt_method_declarations(
         emit_ctx,endpt_node.body_node.method_declaration_nodes)
     endpt_class_body += '\n'
+    endpt_class_body += emit_rpc_dispatch(
+        emit_ctx,endpt_node.body_node.method_declaration_nodes)
+    endpt_class_body += '\n'
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
 
 
@@ -83,6 +87,189 @@ def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
         
     emit_ctx.set_in_endpoint_global_vars(False)
     return endpoint_variable_text
+
+def convert_args_text_for_dispatch(method_declaration_node):
+    '''
+    When emitting rpc dispatch method for each endpoint, must convert
+    args passed in to method into args that the method will use.
+
+    This method returns a text string that contains all the argument
+    casts necessary to call internal methods.  Eg.,
+
+    Double arg0 = ((LockedObject<Double,Double>)args[0]).get_val(null);
+
+    Note that it is dumb that we deserialize into a locked object,
+    instead of the value directly.  Should change.
+
+    @param {int} index --- Which value of args array to read from and
+    how to name transalted arg (eg., "arg0" above instead of "arg1" or
+    "arg2".)
+    '''
+    print (
+        'FIXME: when deserialize should deserialize into ' +
+        'a java native object instead of a locked object.')
+
+    method_declaration_arg_node_list = (
+        method_declaration_node.method_signature_node.method_declaration_args)
+
+    to_return = ''
+    for arg_number in range(0,len(method_declaration_arg_node_list)):
+        method_declaration_arg_node = method_declaration_arg_node_list[arg_number]
+        arg_name = 'arg%i' % arg_number
+        arg_vec_to_read_from = 'args[%i]' % arg_number
+        locked_type,java_type = get_method_arg_type_as_locked(
+            method_declaration_arg_node)
+
+
+        single_arg_string = '''
+%s %s = ((%s)%s).get_val(null);
+''' % (java_type,arg_name,locked_type,arg_vec_to_read_from)
+        to_return += single_arg_string
+    return to_return
+
+def get_method_arg_type_as_locked(method_declaration_arg_node):
+    '''
+    Takes in a method's declared argument ast node and returns a
+    string for a LockedObject of that type.  Eg., if
+    method_declaration_arg_node has type Number, return
+      LockedObject<Double,Double>, Double
+    String, return:
+      LockedObject<String,String>, String
+    Boolean, return:
+      LockedObject<Boolean,Boolean>, Boolean
+    '''
+    #### DEBUG: currently, only know how to transalate arguments for
+    #### basic types
+    if not isinstance(method_declaration_arg_node.type,BasicType):
+        raise InternalEmitException(
+            'Currently, cannot handle non-value method types.')
+    #### END DEBUG
+
+    arg_basic_type = method_declaration_arg_node.type.basic_type
+    if arg_basic_type == BOOL_TYPE:
+        java_type = 'Boolean'
+    elif arg_basic_type == NUMBER_TYPE:
+        java_type = 'Double'
+    elif arg_basic_type == STRING_TYPE:
+        java_type = 'String'
+    #### DEBUG
+    else:
+        raise InternalEmitException(
+            'Unknown basic type when emitting.')
+    #### END DEBUG
+    return ('LockedObject<%s,%s>' % (java_type,java_type)), java_type
+
+def exec_dispatch_sequence_call(method_declaration_node):
+    '''
+    When emitting rpc dispatch method, this method actually executes
+    method call associated with method_declaration_node, assuming that
+    convert_args_text_for_dispatch has run and put the method's
+    arugments into arg0, arg1, arg2, etc.
+    '''
+    method_name = method_declaration_node.method_name
+    method_declaration_arg_node_list = (
+        method_declaration_node.method_signature_node.method_declaration_args)
+
+    # assumes that all arguments are named arg0, arg1, arg2,
+    # etc. (should be based on running convert_args_text_for_dispatch.
+    arg_list = map(
+        lambda arg_number:
+            'arg%i'%arg_number,
+        range(0,len(method_declaration_arg_node_list)))
+    
+    args_text = ','.join(arg_list)
+    if args_text != '':
+        args_text = ',' + args_text
+    
+    actual_call = method_name + '(ctx,active_event' + args_text + ');\n'
+    if method_declaration_node.returns_value():
+        actual_call = 'result = (Object)' + actual_call
+    return actual_call
+
+
+def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
+    '''
+    Each endpoint has a method for dispatching rpcs that takes in the
+    name of the method to execute locally as well as Object arguments
+    to that method.  This method then actually executes the local
+    method associated with the rpc call.
+    '''
+    # contains actual if-else if-else logic for dispatch method.
+    rpc_text_for_methods = ''
+    first = True
+    for index in range(0,len(method_declaration_node_list)):
+        method_declaration_node = method_declaration_node_list[index]
+        # trying to add something like:
+        # else if (to_exec_internal_name.equals("test_partner_args_method"))
+        # {
+        #     LockedObject<Double,Double> num_obj =
+        #         (LockedObject<Double,Double>)args[0];
+        #     _test_partner_args_method(active_event, ctx, num_obj);
+        #     ctx.hide_sequence_completed_call(this, active_event);
+        # }
+        # to method body.
+
+        # whether is if or else if
+        if_elif = 'else if'
+        if first:
+            first = False
+            if_elif = 'if'
+
+        # contents of if-elif statement
+        if_elif_body = (
+            convert_args_text_for_dispatch(method_declaration_node) +
+            exec_dispatch_sequence_call(method_declaration_node))
+
+        rpc_text_for_methods += (
+            if_elif + '(to_exec_internal_name.equals(' +
+            method_declaration_node.method_name + ')) {\n' + 
+            indent_string(if_elif_body,1) + 
+            '\n}\n')
+    
+    #### For debugging: what happens if asked to run an rpc method
+    #### that isn't available locally.
+    if rpc_text_for_methods != '':
+        rpc_text_for_methods += '''
+else
+{
+    Util.logger_assert(
+        "Error handling rpc call: unknown method " +
+        to_exec_internal_name);
+}
+
+'''
+    #### End debug
+    
+    method_signature = '''
+protected void _handle_rpc_call(
+    String to_exec_internal_name,ActiveEvent active_event,
+    ExecutingEventContext ctx,
+    ArrayBlockingQueue<EndpointCallResultObject> result_queue,
+    Object...args)
+    throws ApplicationException, BackoutException, NetworkException
+{
+    Object result = null;
+
+%s
+
+    if (result_queue == null)
+        return;
+
+    boolean completed = active_event.wait_if_modified_peered();
+    if (! completed)
+    {
+        result_queue.add(
+            new RalphCallResults.BackoutBeforeEndpointCallResult());
+    }
+    else
+    {
+        result_queue.add(new EndpointCompleteCallResult(result));
+    }
+}
+''' % indent_string(rpc_text_for_methods,1)
+
+    return indent_string(method_signature,1)
+
 
 def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
     '''

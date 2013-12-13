@@ -176,6 +176,14 @@ class MethodDeclarationNode(_AstNode):
         self.method_signature_node = method_signature_node
         self.method_body_statement_list = scope_body_node.get_statement_list()
 
+    def returns_value(self):
+        '''
+        Returns:
+           {boolean} True if method actually returns value; false otherwise.
+        '''
+        return self.method_signature_node.type.returns_type is not None
+
+        
     def type_check(self,type_check_ctx):
         """
 
@@ -451,28 +459,32 @@ class _LiteralNode(_AstNode):
     Parent class of NumberLiteralNode, TextLiteralNode,
     TrueFalseLiteralNode
     '''
-    def __init__(self,label,value,line_number):
+    def __init__(self,label,value,line_number,basic_type):
         super(_LiteralNode,self).__init__(label,line_number)
         self.line_number = line_number
         self.value = value
+        self.basic_type = basic_type
         
     def type_check(self,type_check_ctx):
-        self.type = BasicType(self.label,False)
+        self.type = BasicType(self.basic_type,False)
         
 class NumberLiteralNode(_LiteralNode):
     def __init__(self,number,line_number):
         super(NumberLiteralNode,self).__init__(
-            ast_labels.NUMBER_LITERAL,number,line_number)
-        
+            ast_labels.NUMBER_LITERAL,number,line_number,
+            ast_labels.NUMBER_TYPE)
+
 class TextLiteralNode(_LiteralNode):
     def __init__(self,text,line_number):
         super(TextLiteralNode,self).__init__(
-            ast_labels.TEXT_LITERAL,text,line_number)
+            ast_labels.TEXT_LITERAL,text,line_number,
+            ast_labels.STRING_TYPE)
         
 class TrueFalseLiteralNode(_LiteralNode):
     def __init__(self,true_false,line_number):
         super(TrueFalseLiteralNode,self).__init__(
-            ast_labels.TRUE_FALSE_LITERAL,true_false,line_number)
+            ast_labels.TRUE_FALSE_LITERAL,true_false,line_number,
+            ast_labels.BOOL_TYPE)
         
 class VariableTypeNode(_AstNode):
     def __init__(self,basic_type,is_tvar,line_number):
