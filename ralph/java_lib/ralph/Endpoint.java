@@ -933,7 +933,7 @@ public abstract class Endpoint
     	PartnerRequestSequenceBlock.Builder request_sequence_block_msg =
             PartnerRequestSequenceBlock.newBuilder();
     	request_sequence_block_msg.setTransaction(transactional);
-    	
+
     	// event uuid + priority
     	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
     	event_uuid_msg.setData(event_uuid);

@@ -298,9 +298,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,ArrayList<RPCArgObject>args)
     {
-        Util.logger_warn(
-            "When sending a message from non-atomic, " +
-            "should specify that message is non-atomic.");
         
         //# code is listening on threadsafe result_queue.  when we
         //# receive a response, put it inside of the result queue.

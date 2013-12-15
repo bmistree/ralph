@@ -32,7 +32,6 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
         try
         {
             boolean atomic = partner_request_block_msg.getTransaction();
-            
             String uuid = partner_request_block_msg.getEventUuid().getData();
             String priority = partner_request_block_msg.getPriority().getData();
             ralph.ActiveEvent evt =
