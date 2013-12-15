@@ -731,7 +731,7 @@ public class ExecutingEventContext
             //# exception
             throw new BackoutException();
     	}
-
+        
         // do not wait on result of call if it was the final return of
         // the call.
     	if (func_name == null)
@@ -745,7 +745,6 @@ public class ExecutingEventContext
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     	if (queue_elem.result_type ==
             MessageCallResultObject.ResultType.BACKOUT_BEFORE_RECEIVE_MESSAGE)
         {
@@ -852,7 +851,7 @@ public class ExecutingEventContext
         {
             throw new BackoutException();
         }
-        
+
         EndpointCompleteCallResult casted = 
             (EndpointCompleteCallResult) queue_elem;
         

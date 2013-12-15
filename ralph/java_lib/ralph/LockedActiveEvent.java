@@ -1102,7 +1102,7 @@ public class LockedActiveEvent extends ActiveEvent
             takes_args,
             // what those arguments are.
             rpc_call_arg_array);
-        
+
         return to_return;
     }
 

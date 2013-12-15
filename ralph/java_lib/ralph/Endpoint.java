@@ -1239,5 +1239,10 @@ public abstract class Endpoint
             // FIXME: fill in backtrace for application exception.
             throw new ApplicationException("Caught application exception");
         }
+
+        ///FIXME: unnecessarily taking in empty args list.  may be
+        ///better to pass null.
+        ctx.hide_partner_call(
+            this,active_event,null,false,new ArrayList<RPCArgObject>());
     }
 }
