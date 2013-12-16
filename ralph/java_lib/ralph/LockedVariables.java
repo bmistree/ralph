@@ -266,6 +266,21 @@ public class LockedVariables {
             load_init_vals(init_val,incorporating_deltas);
         }
 
+
+        public SingleThreadedLockedMapVariable(
+            String _host_uuid, boolean _peered)
+        {
+            // FIXME: I'm pretty sure that the type signature for the locked object above
+            // is incorrect: it shouldn't be D, right?			
+            super(
+                _host_uuid,_peered,
+                // initial value
+                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
+                // default value
+                new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
+                new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+        }
+
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException

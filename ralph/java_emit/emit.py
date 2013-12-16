@@ -1,7 +1,7 @@
 import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
-from ralph.parse.type import BasicType,MethodType
+from ralph.parse.type import BasicType,MethodType,MapType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -487,17 +487,42 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
 
     @returns{String} --- Java-ized version of wrapped Ralph type: eg.,
     LockedNumberVarialbe, etc.
-    '''
+    '''    
     if type_object is None:
         return 'void'
     else:
+        # emit for maps
+        if isinstance(type_object,MapType):
+            if type_object.is_tvar:
+                raise InternalEmitException('Must add emit for tvar maps')
+            else:
+                key_type_node = type_object.from_type_node
+                value_type_node = type_object.to_type_node
+                
+                key_internal_type_text = emit_internal_type(
+                    key_type_node.type)
+                value_internal_type_text = emit_internal_type(
+                    value_type_node.type)
+                dewaldoify_type_text = (
+                    'HashMap<%s,%s>' %
+                    (key_internal_type_text,value_internal_type_text))
+                
+                print 'May not be dewaldo-ifying maps correctly'
+                to_return = (
+                    'SingleThreadedLockedMapVariable<%s,%s,%s>' %
+                    (key_internal_type_text,value_internal_type_text,
+                     dewaldoify_type_text))
+                
+                return to_return
+            
+        # emit for others
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
             is_tvar = type_object.is_tvar
         elif isinstance(type_object,MethodType):
             typer = type_object.returns_type
             is_tvar = False
-            
+
         if typer == BOOL_TYPE:
             if is_tvar and (not force_single_threaded):
                 return 'LockedTrueFalseVariable'
@@ -512,7 +537,8 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
             return 'SingleThreadedLockedTextVariable'
 
     # FIXME: construct useful type from type object
-    return '/** Fixme: must fill in emit_type method.*/'
+    return '/** Fixme: must fill in emit_wrapped_type method.*/'
+
 
 def construct_new_expression(type_object,initializer_node,emit_ctx):
     """Generates the java new expression that assign a newly-declared
@@ -530,21 +556,29 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         {string} --- Java-ized expression used on rhs of equals during
         declaration.
     """
+    if isinstance(type_object,BasicType):
+        initializer_text = None
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        if initializer_text is None:
+            return 'new %s (_host_uuid,false)' % java_type_text
+        return 'new %s (_host_uuid,false,%s)' % (java_type_text,initializer_text)
+    elif isinstance(type_object,MapType):
+        if type_object.is_tvar:
+            # FIXME: Cannot yet handle tvar maps
+            raise InternalEmitException(
+                'FIXME: not currently emitting tvar map')
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        # currently, disallowing initializing maps
+        to_return = 'new %s(_host_uuid,false)' % java_type_text
+        return to_return
     #### DEBUG
-    if not isinstance(type_object,BasicType):
+    else:
         raise InternalEmitException(
-            'Can only construct new expression from basic type')
-    #### END DEBUG
-
-    initializer_text = None
-    if initializer_node is not None:
-        initializer_text = emit_statement(emit_ctx,initializer_node)
-        
-    java_type_text = emit_ralph_wrapped_type(type_object)
-    if initializer_text is None:
-        return 'new %s (_host_uuid,false)' % java_type_text
-    return 'new %s (_host_uuid,false,%s)' % (java_type_text,initializer_text)
-
+            'Can only construct new expression from basic type or map type')
+    #### END DEBUG    
 
 def emit_internal_type(type_object):
     '''
@@ -557,6 +591,29 @@ def emit_internal_type(type_object):
     if type_object is None:
         return 'void'
     else:
+        # emit for map type
+        if isinstance(type_object,MapType):
+            if type_object.is_tvar:
+                raise InternalEmitException('Must add emit for tvar maps')
+            else:
+                key_type_node = type_object.from_type_node
+                value_type_node = type_object.to_type_node
+                
+                key_internal_type_text = emit_internal_type(key_type_node.type)
+                value_internal_type_text = emit_internal_type(value_type_node.type)
+                dewaldoify_type_text = (
+                    'HashMap<%s,%s>' %
+                    (key_internal_type_text,value_internal_type_text))
+                
+                print 'May not be dewaldo-ifying maps correctly'
+                to_return = (
+                    'SingleThreadedLockedMapVariable<%s,%s,%s>' %
+                    (key_internal_type_text,value_internal_type_text,
+                     dewaldoify_type_text))
+
+                return to_return
+
+        # emit for basic types
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
         elif isinstance(type_object,MethodType):

@@ -572,16 +572,32 @@ def p_VariableType(p):
                  | TVAR BOOL_TYPE
                  | TVAR NUMBER_TYPE
                  | TVAR STRING_TYPE
-    '''
-    basic_type_index = 1
-    is_tvar = False
-    if len(p) == 3:
-        basic_type_index = 2
-        is_tvar = True
 
-    basic_type = p[basic_type_index]
-    line_number = p.lineno(basic_type_index)
-    p[0] = VariableTypeNode(basic_type,is_tvar,line_number)
+                 | MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
+    '''
+
+    if len(p) == 11:
+        # map type
+        from_type_index = 5
+        to_type_index = 9
+
+        from_type_node = p[from_type_index]
+        to_type_node = p[to_type_index]
+        line_number = p.lineno(0)
+        p[0] = MapVariableTypeNode(
+            from_type_node,to_type_node,False,line_number)
+
+    else:
+        # basic type or tvar type
+        basic_type_index = 1
+        is_tvar = False
+        if len(p) == 3:
+            basic_type_index = 2
+            is_tvar = True
+
+        basic_type = p[basic_type_index]
+        line_number = p.lineno(basic_type_index)
+        p[0] = BasicTypeNode(basic_type,is_tvar,line_number)
 
 
 def p_Identifier(p):

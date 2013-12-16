@@ -22,6 +22,12 @@ class BasicType(Type):
         prefix = 'TVar ' if self.is_tvar else ''
         return prefix + self.basic_type
 
+class MapType(Type):
+    def __init__(self,from_type_node,to_type_node,is_tvar):
+        self.from_type_node = from_type_node
+        self.to_type_node = to_type_node
+        self.is_tvar = is_tvar
+
     
 class MethodType(Type):
     def __init__(self,returns_type,arg_type_list):

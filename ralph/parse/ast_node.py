@@ -1,8 +1,9 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
-from ralph.parse.type import BasicType, MethodType
+from ralph.parse.type import BasicType, MethodType, MapType
 from ralph.parse.type_check_context import TypeCheckContext
+
 
 class _AstNode(object):
 
@@ -487,6 +488,9 @@ class TrueFalseLiteralNode(_LiteralNode):
             ast_labels.BOOL_TYPE)
         
 class VariableTypeNode(_AstNode):
+    pass
+        
+class BasicTypeNode(VariableTypeNode):
     def __init__(self,basic_type,is_tvar,line_number):
         
         super(VariableTypeNode,self).__init__(
@@ -500,6 +504,14 @@ class VariableTypeNode(_AstNode):
     def type_check(self,type_check_ctx):
         pass
 
+class MapVariableTypeNode(VariableTypeNode):
+    def __init__(self,from_type_node,to_type_node,is_tvar,line_number):
+        super(MapVariableTypeNode,self).__init__(
+            ast_labels.MAP_VARIABLE_TYPE,line_number)
+        self.type = MapType(from_type_node,to_type_node,is_tvar)
+        
+    def type_check(self,type_check_ctx):
+        pass
     
 class _BinaryExpressionNode(_AstNode):
     def __init__(
