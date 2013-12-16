@@ -763,14 +763,26 @@ def emit_statement(emit_ctx,statement_node):
         return internal_var_name
 
     elif statement_node.label == ast_labels.METHOD_CALL:
-
         # FIXME: Need to handle method calls on objects as well
-        method_text = emit_statement(emit_ctx,statement_node.method_node)
-        method_text += '(_ctx,_active_event'
+        method_text = emit_statement(
+            emit_ctx,
+            # statement_node.method node is an identifier or dot node
+            statement_node.method_node)
+
+        # dot statements should not take in ExecutingEventContexts.
+        # Eg., calling .size on a map should not call .get_len on
+        # internal map and pass in a _ctx.  It should just pass in
+        # _active_event.
+        if statement_node.method_node.label != ast_labels.DOT:
+            method_text += '(_ctx,_active_event'
+        else:
+            method_text += '(_active_event'
+            
         for arg_node in statement_node.args_list:
             method_text += ',' + emit_statement(emit_ctx,arg_node)
         method_text += ')'
         return method_text
+
 
     elif statement_node.label == ast_labels.PARTNER_METHOD_CALL:
         rpc_args = []
@@ -900,8 +912,42 @@ _ctx.hide_partner_call(
         scope_body_text +='\n_ctx.var_stack.pop();'
         to_return += indent_string(scope_body_text) + '\n}\n'
         return to_return
-        
+
+    elif statement_node.label == ast_labels.DOT:
+        return emit_dot_statement(emit_ctx,statement_node)
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
         statement_node.label)
 
+
+def emit_dot_statement(emit_ctx,dot_node):
+    """
+    """
+    left_of_dot_node = dot_node.left_of_dot_node
+    right_of_dot_node = dot_node.right_of_dot_node
+    to_return = emit_statement(emit_ctx,left_of_dot_node)
+
+    if isinstance(left_of_dot_node.type,MapType):
+        if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+            raise InternalEmitException(
+                'Expected identifier to the right of %s' %
+                statement_node.value)
+        right_hand_side_method = right_of_dot_node.value
+        if right_hand_side_method == MapType.SIZE_METHOD_NAME:
+            to_return += '.get_len'
+        elif right_hand_side_method == MapType.CONTAINS_METHOD_NAME:
+            to_return += '.contains_key_called'
+        elif right_hand_side_method == MapType.GET_METHOD_NAME:
+            to_return += '.get_val_on_key'
+        elif right_hand_side_method == MapType.SET_METHOD_NAME:
+            to_return += '.set_val_on_key'
+        #### DEBUG
+        else:
+            raise InternalEmitException(
+                'Unknown identifier on rhs of dot for map.')
+        #### END DEBUG
+    else:
+        raise InternalEmitException(
+            'Unknown dot statement: not dot on map.')
+        
+    return to_return

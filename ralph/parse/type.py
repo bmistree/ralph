@@ -31,6 +31,11 @@ class BasicType(Type):
         return prefix + self.basic_type
 
 class MapType(Type):
+    SIZE_METHOD_NAME = 'size'
+    CONTAINS_METHOD_NAME = 'contains'
+    GET_METHOD_NAME = 'get'
+    SET_METHOD_NAME = 'set'
+    
     def __init__(self,from_type_node,to_type_node,is_tvar):
         self.from_type_node = from_type_node
         self.to_type_node = to_type_node
@@ -66,12 +71,12 @@ class MapType(Type):
         set_method_type = MethodType(
             self.to_type_node.type,
             [self.from_type_node.type, self.to_type_node.type])
-        
+
         self.dot_dict_methods = {
-            'size': size_method_type,
-            'contains': contains_method_type,
-            'get': get_method_type,
-            'set': set_method_type
+            MapType.SIZE_METHOD_NAME: size_method_type,
+            MapType.CONTAINS_METHOD_NAME: contains_method_type,
+            MapType.GET_METHOD_NAME: get_method_type,
+            MapType.SET_METHOD_NAME: set_method_type
             }
         
     def dict_dot_fields(self):
