@@ -143,7 +143,7 @@ class IdentifierNode(_AstNode):
                 self.line_number,
                 ' %s is not declared.' % self.value )
         self.type = decl_ast_node.type
-        
+
     def get_value(self):
         return self.value
 
@@ -422,9 +422,46 @@ class DotNode(_AstNode):
 
     def type_check(self,type_check_ctx):
         self.left_of_dot_node.type_check(type_check_ctx)
-        self.right_of_dot_node.type_check(type_check_ctx)
+
+        # for dots, need to ensure that right hand of dot exists/is
+        # available.
+        if self.right_of_dot_node.label == ast_labels.METHOD_CALL:
+            # check in left hand side whether method is a valid field
+            # of left hand side.
+            method_name = self.right_of_dot_node.method_node.value
+            dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
+
+            if method_name not in dict_dot_fields:
+                raise TypeCheckException(
+                    self.line_number,
+                    'Unknown field %s on lhs of type %s' %
+                    (method_name,str(self.left_of_dot_node.type)))
+
+            self.right_of_dot_node.type = dict_dot_fields[method_name]
+            
+        elif self.right_of_dot_node.label == ast_labels.DOT:
+            # FIXME: type check to ensure that identifier exists
+            self.right_of_dot_node.type_check(type_check_ctx)
+        elif self.right_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
+            identifier_name = self.right_of_dot_node.value
+            dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
+
+            if identifier_name not in dict_dot_fields:
+                raise TypeCheckException(
+                    self.line_number,
+                    'Unknown field %s on lhs of type %s' %
+                    (identifier_name,str(self.left_of_dot_node.type)))
+
+            self.right_of_dot_node.type = dict_dot_fields[identifier_name]
+        else:
+            raise TypeCheckException(
+                self.line_number,
+                'Type check error for dot expression.  Right hand side of ' + 
+                'dot must be an identifier.')
+            
         self.type = self.right_of_dot_node.type
 
+        
 class MethodCallNode(_AstNode):
     def __init__(self,variable_node,method_call_args_node):
         super(MethodCallNode,self).__init__(
@@ -436,6 +473,12 @@ class MethodCallNode(_AstNode):
     def type_check(self,type_check_ctx):
         self.method_node.type_check(type_check_ctx)
         self.type = self.method_node.type
+        # type check each argument passed in
+        self.type_check_args_list(type_check_ctx)
+        
+    def type_check_args_list(self,type_check_ctx):
+        for arg_node in self.args_list:
+            arg_node.type_check(type_check_ctx)
         
 class RangeExpressionNode(_AstNode):
     def __init__(
