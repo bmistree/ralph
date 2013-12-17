@@ -7,24 +7,25 @@ import RalphExceptions.BackoutException;
 public class SingleThreadedLockedInternalMapVariable<K,V,D>
     extends SingleThreadedLockedContainer<K,V,D>
 {
-
     public SingleThreadedLockedInternalMapVariable(
-        String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val)
+        String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
+        SingleThreadedLockedContainer.IndexType index_type)
     {
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
-        init(_host_uuid,_peered,rtdwc,init_val);
+        init(_host_uuid,_peered,rtdwc,init_val,index_type);
     }
     public SingleThreadedLockedInternalMapVariable(
-        String _host_uuid,boolean _peered)
+        String _host_uuid,boolean _peered,
+        SingleThreadedLockedContainer.IndexType index_type)
     {
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
         HashMap<K,LockedObject<V,D>> init_val =
             new HashMap<K,LockedObject<V,D>>();
-        init(_host_uuid,_peered,rtdwc,init_val);
+        init(_host_uuid,_peered,rtdwc,init_val,index_type);
     }
 	
     @Override

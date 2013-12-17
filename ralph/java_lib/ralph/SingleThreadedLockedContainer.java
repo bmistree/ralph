@@ -22,7 +22,7 @@ public class SingleThreadedLockedContainer<K,V,D>
     >  
     implements ContainerInterface<K,V,D>
 {
-    protected enum IndexType{
+    public enum IndexType{
         DOUBLE,STRING,BOOLEAN
     };
 
@@ -42,20 +42,11 @@ public class SingleThreadedLockedContainer<K,V,D>
     public void init(
         String _host_uuid, boolean _peered,
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
-        HashMap<K,LockedObject<V,D>>init_val)
+        HashMap<K,LockedObject<V,D>>init_val,
+        IndexType _index_type)
     {
-        // ugly way to populate index type
-        K tmp = null;
-        if (Double.class.isInstance(tmp))
-            index_type = IndexType.DOUBLE;
-        else if (Boolean.class.isInstance(tmp))
-            index_type = IndexType.BOOLEAN;
-        else if (String.class.isInstance(tmp))
-            index_type = IndexType.STRING;
-        else
-            Util.logger_assert("Unknown index type for single threaded map.");
-
-
+        index_type = _index_type;
+        
         host_uuid = _host_uuid;
         peered = _peered;
         reference_data_wrapper_constructor = rtdwc;

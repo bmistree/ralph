@@ -233,9 +233,10 @@ public class LockedVariables {
         extends SingleThreadedLockedMap<K,V,D>
     {
         public SingleThreadedMapVariable(
-            String _host_uuid, boolean _peered)
+            String _host_uuid, boolean _peered,
+            SingleThreadedLockedContainer.IndexType index_type)
         {
-            super(_host_uuid,_peered);
+            super(_host_uuid,_peered,index_type);
         }
     }
     

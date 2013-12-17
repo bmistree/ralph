@@ -28,32 +28,38 @@ public abstract class SingleThreadedLockedMap<K,V,D>
 {
     public SingleThreadedLockedMap(
         String _host_uuid, boolean _peered,
-        HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas)
+        HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
+        SingleThreadedLockedContainer.IndexType index_type)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid,false,index_type),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid, _peered,index_type),
             new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
     
     public SingleThreadedLockedMap(
-        String _host_uuid, boolean _peered)
+        String _host_uuid, boolean _peered,
+        SingleThreadedLockedContainer.IndexType index_type)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid,false,index_type),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid, _peered,index_type),
             new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
     }
 
@@ -69,16 +75,19 @@ public abstract class SingleThreadedLockedMap<K,V,D>
 
     public SingleThreadedLockedMap(
         String _host_uuid, boolean _peered,
-        HashMap<K,LockedObject<V,D>> init_val)
+        HashMap<K,LockedObject<V,D>> init_val,
+        SingleThreadedLockedContainer.IndexType index_type)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid,false),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid,false,index_type),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(_host_uuid, _peered),
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid, _peered,index_type),
             new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);
