@@ -106,7 +106,7 @@
       name="run_all"
       depends=
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
-         run_BasicTestAtomically,run_BasicPartnerCall">
+         run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest">
   </target>
 
   
@@ -161,6 +161,20 @@
     </java>
   </target>
   
+
+  <!-- MapTesting -->
+  <target
+      name="run_MapTest"
+      depends="compile_ralph_tests"
+      description="Test map methods.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.MapTester"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   <!-- Delete the build directories -->

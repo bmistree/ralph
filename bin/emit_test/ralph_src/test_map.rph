@@ -1,4 +1,4 @@
-Endpoint SetterGetter
+Endpoint MapEndpoint
 {
     Map(from: Number, to: Number) number_map;
     
