@@ -244,9 +244,16 @@ public class SingleThreadedLockedContainer<K,V,D>
     }
 
     @Override
-    public int get_len(ActiveEvent active_event) 
+    public int get_len(ActiveEvent active_event) throws BackoutException
     {
         return val.val.size();
+    }
+
+    @Override
+    public Double get_len_boxed(ActiveEvent active_event)
+        throws BackoutException
+    {
+        return new Double(get_len(active_event));
     }
 
     @Override
@@ -255,8 +262,6 @@ public class SingleThreadedLockedContainer<K,V,D>
         return new ArrayList<K>(val.val.keySet());
     }
 
-	
-	
     @Override
     public void del_key_called(ActiveEvent active_event, K key_to_delete) 
     {
@@ -271,6 +276,14 @@ public class SingleThreadedLockedContainer<K,V,D>
         return val.val.containsKey(contains_key);
     }
 
+    @Override
+    public Boolean contains_key_called_boxed(
+        ActiveEvent active_event, K contains_key) throws BackoutException
+    {
+        return new Boolean(
+            contains_key_called(active_event,contains_key));
+    }    
+    
     @Override
     public boolean contains_val_called(
         ActiveEvent active_event,

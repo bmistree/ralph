@@ -84,33 +84,6 @@ public abstract class SingleThreadedLockedMap<K,V,D>
         load_init_vals(init_val,false);
     }
 
-    public abstract V get_val_on_key(ActiveEvent active_event,K key)
-        throws BackoutException;
-
-    
-    public void set_val_on_key(ActiveEvent active_event,K key, V value)
-        throws BackoutException
-    {
-        SingleThreadedLockedContainer<K,V,D>
-            internal_container = get_val(active_event);
-        internal_container.set_val_on_key(active_event,key,value);
-    }
-    public Double get_len(ActiveEvent active_event) throws BackoutException
-    {
-        SingleThreadedLockedContainer<K,V,D>
-            internal_container = get_val(active_event);
-        return new Double(internal_container.get_len(active_event));
-    }
-    public Boolean contains_key(ActiveEvent active_event,K key)
-        throws BackoutException
-    {
-        SingleThreadedLockedContainer<K,V,D>
-            internal_container = get_val(active_event);
-        return new Boolean(
-            internal_container.contains_key_called(active_event,key));
-    }
-
-    
     public void load_init_vals(
         HashMap<K,LockedObject<V,D>> init_val, boolean incorporating_deltas)
     {

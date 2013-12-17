@@ -43,11 +43,17 @@ public interface ContainerInterface <K,V,D>
     
     public int get_len(
         ActiveEvent active_event) throws BackoutException;
-    
+
+    public Double get_len_boxed(
+        ActiveEvent active_event) throws BackoutException;
+
     public ArrayList<K> get_keys(
         ActiveEvent active_event) throws BackoutException;
     
     public boolean contains_key_called(
+        ActiveEvent active_event, K contains_key) throws BackoutException;
+
+    public Boolean contains_key_called_boxed(
         ActiveEvent active_event, K contains_key) throws BackoutException;
     
     public boolean contains_val_called(

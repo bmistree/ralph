@@ -1,0 +1,24 @@
+Endpoint SetterGetter
+{
+    Map(from: Number, to: Number) number_map;
+    
+    put_number(Number index, Number value) 
+    {
+        number_map.set(index,value);
+    }
+
+    get_number(Number index) returns Number
+    {
+        return number_map.get(index);
+    }
+
+    contains_index(Number index) returns TrueFalse
+    {
+        return number_map.contains(index);
+    }
+
+    get_size() returns Number
+    {
+        return number_map.size();
+    }
+}

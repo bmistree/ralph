@@ -22,6 +22,8 @@ import ralph.LockedVariables.LockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
+import ralph.LockedVariables.SingleThreadedMapVariable;
+
 import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
 import java.util.Arrays;
@@ -30,6 +32,8 @@ import ralph.Util;
 import RalphCallResults.EndpointCallResultObject;
 import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.EndpointCompleteCallResult;
+import java.util.HashMap;
+
 
 public class %s
 {
@@ -509,7 +513,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
                 
                 print 'May not be dewaldo-ifying maps correctly'
                 to_return = (
-                    'SingleThreadedLockedMapVariable<%s,%s,%s>' %
+                    'SingleThreadedMapVariable<%s,%s,%s>' %
                     (key_internal_type_text,value_internal_type_text,
                      dewaldoify_type_text))
                 
@@ -604,13 +608,18 @@ def emit_internal_type(type_object):
                 dewaldoify_type_text = (
                     'HashMap<%s,%s>' %
                     (key_internal_type_text,value_internal_type_text))
-                
-                print 'May not be dewaldo-ifying maps correctly'
+
+                if not isinstance(value_type_node,BasicType):
+                    # FIXME: only emitting maps with values that are
+                    # value types.
+                    raise InternalEmitException(
+                        'FIXME: only emitting maps with values ' +
+                        'that are value types.')
+
                 to_return = (
-                    'SingleThreadedLockedMapVariable<%s,%s,%s>' %
+                    'SingleThreadedMapVariable<%s,%s,%s>' %
                     (key_internal_type_text,value_internal_type_text,
                      dewaldoify_type_text))
-
                 return to_return
 
         # emit for basic types
@@ -934,9 +943,9 @@ def emit_dot_statement(emit_ctx,dot_node):
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
         if right_hand_side_method == MapType.SIZE_METHOD_NAME:
-            to_return += '.get_len'
+            to_return += '.get_len_boxed'
         elif right_hand_side_method == MapType.CONTAINS_METHOD_NAME:
-            to_return += '.contains_key_called'
+            to_return += '.contains_key_called_boxed'
         elif right_hand_side_method == MapType.GET_METHOD_NAME:
             to_return += '.get_val_on_key'
         elif right_hand_side_method == MapType.SET_METHOD_NAME:
