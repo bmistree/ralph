@@ -23,6 +23,8 @@ import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedMapVariable;
+// index types for maps
+import ralph.SingleThreadedLockedContainer.IndexType;
 
 import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
@@ -576,7 +578,26 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 'FIXME: not currently emitting tvar map')
         java_type_text = emit_ralph_wrapped_type(type_object)
         # currently, disallowing initializing maps
-        to_return = 'new %s(_host_uuid,false)' % java_type_text
+
+        index_basic_type = type_object.from_type_node.type.basic_type
+        if index_basic_type == NUMBER_TYPE:
+            java_map_index_type_text = (
+                'SingleThreadedLockedContainer.IndexType.DOUBLE')            
+        elif index_basic_type == TEXT_TYPE:
+            java_map_index_type_text = (
+                'SingleThreadedLockedContainer.IndexType.STRING')
+        elif index_basic_type == BOOL_TYPE:
+            java_map_index_type_text = (
+                'SingleThreadedLockedContainer.IndexType.BOOLEAN')
+        #### DEBUG
+        else:
+            raise InternalEmitException(
+                'Map only accepts value types for indices')
+        #### END DEBUG
+        
+        to_return = (
+            'new %s(_host_uuid,false,%s)' %
+            (java_type_text,java_map_index_type_text))
         return to_return
     #### DEBUG
     else:
