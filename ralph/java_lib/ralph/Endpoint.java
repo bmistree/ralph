@@ -1240,9 +1240,7 @@ public abstract class Endpoint
             throw new ApplicationException("Caught application exception");
         }
 
-        ///FIXME: unnecessarily taking in empty args list.  may be
-        ///better to pass null.
-        ctx.hide_partner_call(
-            this,active_event,null,false,new ArrayList<RPCArgObject>());
+        // tell other side that the rpc call has completed
+        ctx.hide_sequence_completed_call(this, active_event);
     }
 }

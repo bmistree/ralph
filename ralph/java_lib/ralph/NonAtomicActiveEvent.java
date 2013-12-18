@@ -625,7 +625,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         {
             Util.logger_assert(
                 "Error: partner response message responding to " +
-                "unknown _ActiveEvent message.");
+                "unknown _ActiveEvent message in NonAtomic.");
         }
         //#### END DEBUG
         

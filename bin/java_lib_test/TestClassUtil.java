@@ -60,7 +60,7 @@ public class TestClassUtil
             super(ralph_globals,host_uuid,conn_obj,vstore);
         }
 
-        
+
         protected void _handle_rpc_call(
             String to_exec_internal_name,ActiveEvent active_event,
             ExecutingEventContext ctx,
@@ -73,7 +73,6 @@ public class TestClassUtil
             if (to_exec_internal_name.equals("test_partner_method"))
             {
                 _test_partner_method(active_event,ctx);
-                ctx.hide_sequence_completed_call(this, active_event);
             }
             else if (to_exec_internal_name.equals("test_increment_local_num"))
             {
@@ -81,7 +80,6 @@ public class TestClassUtil
                     (LockedObject<Double,Double>)args[0];
 
                 _test_increment_local_num(active_event,ctx,arg);
-                ctx.hide_sequence_completed_call(this, active_event);
             }
             else if (to_exec_internal_name.equals("test_partner_args_method"))
             {
@@ -96,7 +94,6 @@ public class TestClassUtil
 
                 _test_partner_args_method(
                     active_event, ctx, num_obj,bool_obj,string_obj);
-                ctx.hide_sequence_completed_call(this, active_event);
             }
             else
             {

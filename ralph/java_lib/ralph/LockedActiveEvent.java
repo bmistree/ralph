@@ -809,7 +809,6 @@ public class LockedActiveEvent extends ActiveEvent
             //# from partner to determine which result queue is finished
         	
             String reply_with_uuid = Util.generate_uuid();
-                
             if (threadsafe_unblock_queue != null)
             {
                 //# may get None for result queue for the last message
@@ -1166,13 +1165,13 @@ public class LockedActiveEvent extends ActiveEvent
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
     {
         String reply_to_uuid = msg.getReplyToUuid().getData();
-		
+
         //#### DEBUG
         if (! message_listening_queues_map.containsKey(reply_to_uuid))
         {
             Util.logger_assert(
                 "Error: partner response message responding to " +
-                "unknown _ActiveEvent message.");
+                "unknown _ActiveEvent message in LockedActiveEvent.");
         }
         //#### END DEBUG
         
