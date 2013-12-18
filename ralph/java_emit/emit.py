@@ -624,13 +624,15 @@ def emit_internal_type(type_object):
                 key_type_node = type_object.from_type_node
                 value_type_node = type_object.to_type_node
                 
-                key_internal_type_text = emit_internal_type(key_type_node.type)
-                value_internal_type_text = emit_internal_type(value_type_node.type)
+                key_internal_type_text = emit_internal_type(
+                    key_type_node.type)
+                value_internal_type_text = emit_internal_type(
+                    value_type_node.type)
                 dewaldoify_type_text = (
                     'HashMap<%s,%s>' %
                     (key_internal_type_text,value_internal_type_text))
 
-                if not isinstance(value_type_node,BasicType):
+                if not isinstance(value_type_node.type,BasicType):
                     # FIXME: only emitting maps with values that are
                     # value types.
                     raise InternalEmitException(

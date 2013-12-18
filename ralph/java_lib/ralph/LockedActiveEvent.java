@@ -1190,7 +1190,7 @@ public class LockedActiveEvent extends ActiveEvent
     }	
 
     /**
-       @param     error     GeneralMessage.error
+       @param error GeneralMessage.error
 
        Places an ApplicationExceptionCallResult in the event complete queue to 
        indicate to the endpoint that an application exception has been raised 

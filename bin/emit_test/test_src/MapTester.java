@@ -58,6 +58,10 @@ public class MapTester
                 if (gotten != value_number.doubleValue())
                     return false;
             }
+
+            // test that pass map through in method call as reference
+            
+            
             return true;
         }
         catch(Exception _ex)
