@@ -126,13 +126,24 @@ def convert_args_text_for_dispatch(method_declaration_node):
         method_declaration_arg_node = method_declaration_arg_node_list[arg_number]
         arg_name = 'arg%i' % arg_number
         arg_vec_to_read_from = 'args[%i]' % arg_number
-        locked_type,java_type = get_method_arg_type_as_locked(
+
+        if isinstance(method_declaration_arg_node.type, MapType):
+            # for map types, just push the map variable directly as
+            # argument to method.  (Do not need to call get_val
+            # directly because when pass arguments to a method, the
+            # method expects a map type.
+            map_type = emit_internal_type(method_declaration_arg_node.type)
+            single_arg_string = (
+                '%s %s = (%s) %s;' %
+                (map_type, arg_name, map_type, arg_vec_to_read_from))
+        else:
+            locked_type,java_type = get_method_arg_type_as_locked(
             method_declaration_arg_node)
 
-
-        single_arg_string = '''
+            single_arg_string = '''
 %s %s = ((%s)%s).get_val(null);
 ''' % (java_type,arg_name,locked_type,arg_vec_to_read_from)
+            
         to_return += single_arg_string
     return to_return
 
@@ -147,26 +158,26 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
     Boolean, return:
       LockedObject<Boolean,Boolean>, Boolean
     '''
-    #### DEBUG: currently, only know how to transalate arguments for
-    #### basic types
-    if not isinstance(method_declaration_arg_node.type,BasicType):
-        raise InternalEmitException(
-            'Currently, cannot handle non-value method types.')
-    #### END DEBUG
+    if isinstance(method_declaration_arg_node.type,BasicType):
+        arg_basic_type = method_declaration_arg_node.type.basic_type
+        if arg_basic_type == BOOL_TYPE:
+            java_type = 'Boolean'
+        elif arg_basic_type == NUMBER_TYPE:
+            java_type = 'Double'
+        elif arg_basic_type == STRING_TYPE:
+            java_type = 'String'
+        #### DEBUG
+        else:
+            raise InternalEmitException(
+                'Unknown basic type when emitting.')
+        #### END DEBUG
+        return ('LockedObject<%s,%s>' % (java_type,java_type)), java_type
 
-    arg_basic_type = method_declaration_arg_node.type.basic_type
-    if arg_basic_type == BOOL_TYPE:
-        java_type = 'Boolean'
-    elif arg_basic_type == NUMBER_TYPE:
-        java_type = 'Double'
-    elif arg_basic_type == STRING_TYPE:
-        java_type = 'String'
     #### DEBUG
     else:
-        raise InternalEmitException(
-            'Unknown basic type when emitting.')
+        raise InternalEmitException('Unknown argument type for method.')
     #### END DEBUG
-    return ('LockedObject<%s,%s>' % (java_type,java_type)), java_type
+        
 
 def exec_dispatch_sequence_call(method_declaration_node):
     '''
@@ -463,11 +474,22 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         '_ctx.var_stack.push(true);//true because func scope\n');
 
     # convert each method argument to ralph variable and then add to
-    # stack.
+    # stack.  Note: skip this step for maps, which caller already
+    # cloned for us.
     for index in range(0,len(argument_name_text_list)):
         argument_name = argument_name_text_list[index]
         argument_node = method_signature_node.method_declaration_args[index]
         argument_type = argument_node.type
+
+        if isinstance(argument_type,MapType):
+            # reference types are cloned by callers: do not need to
+            # wrap their java versions in Ralph objects.  Just need to
+            # add the variable to the context stack.
+            emit_ctx.set_var_name(argument_name)
+            to_return += indent_string(
+                '_ctx.var_stack.add_var("%s",%s);\n' %
+                (argument_name, argument_name))
+            continue
 
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
                 
@@ -788,9 +810,15 @@ def emit_statement(emit_ctx,statement_node):
             raise InternalEmitException(
                 'No record of variable named %s' % statement_node.value)
 
-        if not emit_ctx.get_lhs_of_assign():
+        if ((not emit_ctx.get_lhs_of_assign()) and
+            (not isinstance(statement_node.type,MapType))):
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
+
+            # for maps, explicitly need to call get_val and set_val in
+            # methods.  (This is because need to be able to call
+            # clone_for_args method directly on exterrnal maps rather
+            # than the internal map that they are wrapping.)
             internal_var_name += '.get_val(_active_event)'
         return internal_var_name
 
@@ -811,7 +839,11 @@ def emit_statement(emit_ctx,statement_node):
             method_text += '(_active_event'
             
         for arg_node in statement_node.args_list:
-            method_text += ',' + emit_statement(emit_ctx,arg_node)
+            arg_text = emit_statement(emit_ctx,arg_node)
+            if isinstance(arg_node.type,MapType):
+                arg_text += '.clone_for_args(_active_event)'
+            
+            method_text += ',' + arg_text
         method_text += ')'
         return method_text
 
@@ -966,13 +998,13 @@ def emit_dot_statement(emit_ctx,dot_node):
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
         if right_hand_side_method == MapType.SIZE_METHOD_NAME:
-            to_return += '.get_len_boxed'
+            to_return += '.get_val(_active_event).get_len_boxed'
         elif right_hand_side_method == MapType.CONTAINS_METHOD_NAME:
-            to_return += '.contains_key_called_boxed'
+            to_return += '.get_val(_active_event).contains_key_called_boxed'
         elif right_hand_side_method == MapType.GET_METHOD_NAME:
-            to_return += '.get_val_on_key'
+            to_return += '.get_val(_active_event).get_val_on_key'
         elif right_hand_side_method == MapType.SET_METHOD_NAME:
-            to_return += '.set_val_on_key'
+            to_return += '.get_val(_active_event).set_val_on_key'
         #### DEBUG
         else:
             raise InternalEmitException(

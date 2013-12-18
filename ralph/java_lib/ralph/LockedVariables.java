@@ -232,12 +232,33 @@ public class LockedVariables {
     public static class SingleThreadedMapVariable <K,V,D>
         extends SingleThreadedLockedMap<K,V,D>
     {
+        private SingleThreadedLockedContainer.IndexType index_type;
         public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer.IndexType index_type)
+            SingleThreadedLockedContainer.IndexType _index_type)
         {
-            super(_host_uuid,_peered,index_type);
+            super(_host_uuid,_peered,_index_type);
+            index_type = _index_type;
+        }
+
+        private SingleThreadedMapVariable(
+            String _host_uuid, boolean _peered,
+            SingleThreadedLockedContainer<K,V,D> internal_val,
+            SingleThreadedLockedContainer.IndexType _index_type)
+        {
+            super(
+                _host_uuid, _peered,internal_val,_index_type);
+            index_type = _index_type;
+        }
+        
+        public SingleThreadedMapVariable<K,V,D> clone_for_args(
+            ActiveEvent active_event)
+        {
+            SingleThreadedLockedContainer<K,V,D> internal_val =
+                (SingleThreadedLockedContainer<K,V,D>)get_val(active_event);
+
+            return new SingleThreadedMapVariable(
+                host_uuid,peered,internal_val,index_type);
         }
     }
-    
 }

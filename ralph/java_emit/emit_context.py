@@ -79,6 +79,15 @@ class EmitContext(object):
 
         top_scope = self.scope_stack[last_valid_index]
         top_scope.add_var(ralph_var_name,internal_var_name)
+
+    def set_var_name(self,ralph_var_name):
+        """Pushes the name ralph_var_name as an internal variable name
+        in stack.
+        """
+        last_valid_index = len(self.scope_stack) - 1
+        top_scope = self.scope_stack[last_valid_index]
+        top_scope.add_var(ralph_var_name,ralph_var_name)
+
         
     def lookup_internal_var_name(self,ralph_var_name):
         '''

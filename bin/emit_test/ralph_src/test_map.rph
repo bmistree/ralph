@@ -25,7 +25,8 @@ Endpoint MapEndpoint
     test_change_in_method_call(
         Number index, Number val)
     {
-        insert_val_through_method_call(index,val);
+        insert_val_through_method_call(
+            number_map,index,val);
     }
 
     insert_val_through_method_call(

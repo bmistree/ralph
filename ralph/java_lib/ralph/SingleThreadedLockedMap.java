@@ -45,6 +45,26 @@ public abstract class SingleThreadedLockedMap<K,V,D>
 
         load_init_vals(init_val,incorporating_deltas);
     }
+
+    /**
+       When pass an argument into a method call, should unwrap
+       internal value and put it into another SingleThreadedLockMap.
+       This constructor is for this.
+     */
+    public SingleThreadedLockedMap(
+        String _host_uuid, boolean _peered,
+        SingleThreadedLockedContainer<K,V,D> internal_val,
+        SingleThreadedLockedContainer.IndexType index_type)
+    {
+        super(
+            _host_uuid,_peered,
+            // initial value
+            internal_val,
+            // default value
+            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+                _host_uuid, _peered,index_type),
+            new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+    }
     
     public SingleThreadedLockedMap(
         String _host_uuid, boolean _peered,
