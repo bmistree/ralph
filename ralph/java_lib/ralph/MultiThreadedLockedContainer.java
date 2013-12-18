@@ -83,10 +83,11 @@ public class MultiThreadedLockedContainer<K,V,D>
         ActiveEvent active_event, Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when serializing tvar map");
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         
         Variables.Map.Builder map_builder = Variables.Map.newBuilder();
-        for (Entry<K,LockedObject<V,D>> map_entry : val.val.entrySet() )
+        for (Entry<K,LockedObject<V,D>> map_entry : wrapped_val.val.entrySet() )
         {
             // create any for index
             Variables.Any.Builder index_builder = Variables.Any.newBuilder();
@@ -112,7 +113,6 @@ public class MultiThreadedLockedContainer<K,V,D>
                     "Unrecognized index type when serializing matrix");
             }
 
-            
             // create any for value
             Variables.Any.Builder value_builder = Variables.Any.newBuilder();
             LockedObject<V,D> map_value = map_entry.getValue();
@@ -161,12 +161,8 @@ public class MultiThreadedLockedContainer<K,V,D>
         ActiveEvent active_event, K key, LockedObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
-        Util.logger_warn("Must acquire write lock when setting val on key");
-        //def set_val_on_key(self,active_event,key,to_write,copy_if_peered=False):
-        //    if copy_if_peered:
-        //        if isinstance(to_write,WaldoLockedObj):
-        //            to_write = to_write.copy(active_event,True,True)
-        //    return self.val.set_val_on_key(active_event,key,to_write)
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         if (copy_if_peered)
         {
             try {
@@ -176,7 +172,7 @@ public class MultiThreadedLockedContainer<K,V,D>
                 e.printStackTrace();
             }
         }
-        reference_type_val.set_val_on_key(active_event,key,to_write);
+        wrapped_val.set_val_on_key(active_event,key,to_write);
     }
 
 	
@@ -227,15 +223,15 @@ public class MultiThreadedLockedContainer<K,V,D>
     @Override
     public int get_len(ActiveEvent active_event) throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when getting len");
-        return val.val.size();
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        return wrapped_val.val.size();
     }
 
     @Override
     public Double get_len_boxed(ActiveEvent active_event) 
         throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when getting boxed len");
         return new Double(get_len(active_event));
     }
 
@@ -243,16 +239,18 @@ public class MultiThreadedLockedContainer<K,V,D>
     public ArrayList<K> get_keys(ActiveEvent active_event)
         throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when getting keys");
-        return new ArrayList<K>(val.val.keySet());
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        return new ArrayList<K>(wrapped_val.val.keySet());
     }
 
     @Override
     public void del_key_called(ActiveEvent active_event, K key_to_delete)
         throws BackoutException
     {
-        Util.logger_warn("Must acquire write lock when getting keys");
-        reference_type_val.del_key(active_event, key_to_delete);
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+        wrapped_val.del_key(active_event, key_to_delete);
     }
 
     @Override
@@ -260,8 +258,9 @@ public class MultiThreadedLockedContainer<K,V,D>
         ActiveEvent active_event,
         K contains_key)  throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when calling contains key");
-        return val.val.containsKey(contains_key);
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        return wrapped_val.val.containsKey(contains_key);
     }
 
     @Override
@@ -277,7 +276,8 @@ public class MultiThreadedLockedContainer<K,V,D>
         ActiveEvent active_event,
         V contains_val) throws BackoutException
     {
-        Util.logger_warn("Must acquire read lock when calling contains val");
-        return val.val.containsValue(contains_val);
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        return wrapped_val.val.containsValue(contains_val);
     }
 }
