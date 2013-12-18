@@ -21,4 +21,18 @@ Endpoint MapEndpoint
     {
         return number_map.size();
     }
+
+    test_change_in_method_call(
+        Number index, Number val)
+    {
+        insert_val_through_method_call(index,val);
+    }
+
+    insert_val_through_method_call(
+        Map(from: Number, to: Number) arg_map,
+        Number index, Number val)
+    {
+        arg_map.set(index,val);
+    }
+    
 }
