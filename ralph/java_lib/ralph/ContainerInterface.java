@@ -29,7 +29,8 @@ import RalphExceptions.BackoutException;
  */
 public interface ContainerInterface <K,V,D>
 {
-    public V get_val_on_key(ActiveEvent active_event, K key);
+    public V get_val_on_key(ActiveEvent active_event, K key)
+        throws BackoutException;
 	
     public void set_val_on_key(
         ActiveEvent active_event, K key, V to_write,
@@ -59,11 +60,4 @@ public interface ContainerInterface <K,V,D>
     public boolean contains_val_called(
         ActiveEvent active_event,V contains_val) throws BackoutException;
 	
-    /**
-     * @see waldoLockedObj.waldoLockedObj
-     * @param active_event
-     * @return
-     */
-    public DataWrapper<HashMap<K,V>, HashMap<K,D>>
-        get_dirty_wrapped_val(ActiveEvent active_event);
 }

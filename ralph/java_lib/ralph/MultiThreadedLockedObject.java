@@ -133,7 +133,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
 
      Blocks until has acquired.
     */
-    private DataWrapper<T,D> acquire_read_lock(
+    protected DataWrapper<T,D> acquire_read_lock(
         ActiveEvent active_event) throws BackoutException
     {
         // FIXME: finish

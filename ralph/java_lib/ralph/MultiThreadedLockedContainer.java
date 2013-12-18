@@ -5,6 +5,7 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
+import ralph.SingleThreadedLockedContainer.IndexType;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -13,8 +14,8 @@ import java.util.Map.Entry;
  * @param <D> --- The Java type of data that the internal locked
  * objects should dewaldoify into
  */
-public class SingleThreadedLockedContainer<K,V,D> 
-    extends SingleThreadedLockedObject <
+public class MultiThreadedLockedContainer<K,V,D> 
+    extends MultiThreadedLockedObject <
     // The internal values that these are holding
     HashMap<K,LockedObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
@@ -22,10 +23,6 @@ public class SingleThreadedLockedContainer<K,V,D>
     >  
     implements ContainerInterface<K,V,D>
 {
-    public enum IndexType{
-        DOUBLE,STRING,BOOLEAN
-    };
-
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     protected IndexType index_type;
@@ -35,7 +32,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     private ReferenceTypeDataWrapper<K,V,D> reference_type_val = null;
 	
-    public SingleThreadedLockedContainer()
+    public MultiThreadedLockedContainer()
     {
         super();
     }
@@ -59,14 +56,9 @@ public class SingleThreadedLockedContainer<K,V,D>
     @Override
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
     {
-        /*
-         *
-         internal_key_val = self.val.val[key]
-         if internal_key_val.return_internal_val_from_container():
-         return internal_key_val.get_val(active_event)
-         return internal_key_val
-        */
-        LockedObject<V,D> internal_key_val = val.val.get(key);
+        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        LockedObject<V,D> internal_key_val = wrapped_val.val.get(key);
 		
         if (internal_key_val.return_internal_val_from_container())
         {
@@ -91,6 +83,8 @@ public class SingleThreadedLockedContainer<K,V,D>
         ActiveEvent active_event, Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when serializing tvar map");
+        
         Variables.Map.Builder map_builder = Variables.Map.newBuilder();
         for (Entry<K,LockedObject<V,D>> map_entry : val.val.entrySet() )
         {
@@ -167,12 +161,12 @@ public class SingleThreadedLockedContainer<K,V,D>
         ActiveEvent active_event, K key, LockedObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
+        Util.logger_warn("Must acquire write lock when setting val on key");
         //def set_val_on_key(self,active_event,key,to_write,copy_if_peered=False):
         //    if copy_if_peered:
         //        if isinstance(to_write,WaldoLockedObj):
         //            to_write = to_write.copy(active_event,True,True)
         //    return self.val.set_val_on_key(active_event,key,to_write)
-		
         if (copy_if_peered)
         {
             try {
@@ -185,13 +179,14 @@ public class SingleThreadedLockedContainer<K,V,D>
         reference_type_val.set_val_on_key(active_event,key,to_write);
     }
 
+	
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,LockedObject to_swap_with)
         throws BackoutException
     {
         Util.logger_assert(
-            "Still must define swap method for SingleThreadedLockedContainer.");
+            "Still must define swap method for MultiThreadedLockedContainer.");
     }
 
     
@@ -220,8 +215,19 @@ public class SingleThreadedLockedContainer<K,V,D>
     }
 
     @Override
+    public boolean return_internal_val_from_container()
+    {
+        Util.logger_warn(
+            "Warning: check in multithreaded container whether " +
+            "should return internal value");
+        return false;
+    }
+
+
+    @Override
     public int get_len(ActiveEvent active_event) throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when getting len");
         return val.val.size();
     }
 
@@ -229,6 +235,7 @@ public class SingleThreadedLockedContainer<K,V,D>
     public Double get_len_boxed(ActiveEvent active_event) 
         throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when getting boxed len");
         return new Double(get_len(active_event));
     }
 
@@ -236,20 +243,24 @@ public class SingleThreadedLockedContainer<K,V,D>
     public ArrayList<K> get_keys(ActiveEvent active_event)
         throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when getting keys");
         return new ArrayList<K>(val.val.keySet());
     }
 
     @Override
-    public void del_key_called(ActiveEvent active_event, K key_to_delete) throws BackoutException
+    public void del_key_called(ActiveEvent active_event, K key_to_delete)
+        throws BackoutException
     {
+        Util.logger_warn("Must acquire write lock when getting keys");
         reference_type_val.del_key(active_event, key_to_delete);
     }
 
     @Override
     public boolean contains_key_called(
         ActiveEvent active_event,
-        K contains_key) throws BackoutException
+        K contains_key)  throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when calling contains key");
         return val.val.containsKey(contains_key);
     }
 
@@ -266,6 +277,7 @@ public class SingleThreadedLockedContainer<K,V,D>
         ActiveEvent active_event,
         V contains_val) throws BackoutException
     {
+        Util.logger_warn("Must acquire read lock when calling contains val");
         return val.val.containsValue(contains_val);
     }
 }
