@@ -261,4 +261,38 @@ public class LockedVariables {
                 host_uuid,peered,internal_val,index_type);
         }
     }
+
+    public static class MultiThreadedMapVariable <K,V,D>
+        extends MultiThreadedLockedMap<K,V,D>
+    {
+        private SingleThreadedLockedContainer.IndexType index_type;
+        public MultiThreadedMapVariable(
+            String _host_uuid, boolean _peered,
+            SingleThreadedLockedContainer.IndexType _index_type)
+        {
+            super(_host_uuid,_peered,_index_type);
+            index_type = _index_type;
+        }
+
+        private MultiThreadedMapVariable(
+            String _host_uuid, boolean _peered,
+            MultiThreadedLockedContainer<K,V,D> internal_val,
+            SingleThreadedLockedContainer.IndexType _index_type)
+        {
+            super(
+                _host_uuid, _peered,internal_val,_index_type);
+            index_type = _index_type;
+        }
+        
+        public MultiThreadedMapVariable<K,V,D> clone_for_args(
+            ActiveEvent active_event) throws BackoutException
+        {
+            MultiThreadedLockedContainer<K,V,D> internal_val =
+                (MultiThreadedLockedContainer<K,V,D>)get_val(active_event);
+
+            return new MultiThreadedMapVariable(
+                host_uuid,peered,internal_val,index_type);
+        }
+    }
+    
 }
