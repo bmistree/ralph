@@ -60,7 +60,13 @@ public class MapTester
             }
 
             // test that pass map through in method call as reference
-            
+            Double index =  new Double(23);
+            Double new_value = new Double(5093);
+            endpt.test_change_in_method_call(index,new_value);
+
+            Double received_double = endpt.get_number(index);
+            if (!received_double.equals(new_value))
+                return false;
             
             return true;
         }
