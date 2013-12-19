@@ -10,7 +10,7 @@ public abstract class LockedValueVariable<T,D> extends MultiThreadedLockedObject
         ValueTypeDataWrapperConstructor<T,D> vtdwc)
     {
         super();
-        init(vtdwc,_host_uuid,_peered,init_val);
+        init_multithreaded_locked_object(vtdwc,_host_uuid,_peered,init_val);
     }
 
     @Override

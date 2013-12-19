@@ -14,7 +14,8 @@ public class MultiThreadedLockedInternalMapVariable<K,V,D>
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
-        init(_host_uuid,_peered,rtdwc,init_val,index_type);
+        init_multithreaded_locked_container(
+            _host_uuid,_peered,rtdwc,init_val,index_type);
     }
     public MultiThreadedLockedInternalMapVariable(
         String _host_uuid,boolean _peered,
@@ -25,7 +26,8 @@ public class MultiThreadedLockedInternalMapVariable<K,V,D>
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
         HashMap<K,LockedObject<V,D>> init_val =
             new HashMap<K,LockedObject<V,D>>();
-        init(_host_uuid,_peered,rtdwc,init_val,index_type);
+        init_multithreaded_locked_container(
+            _host_uuid,_peered,rtdwc,init_val,index_type);
     }
 	
     @Override

@@ -27,30 +27,21 @@ public class MultiThreadedLockedContainer<K,V,D>
     // and deserializing data.
     protected IndexType index_type;
     
-    private ReferenceTypeDataWrapperConstructor <K,V,D> reference_data_wrapper_constructor =
-        null;
-
-    private ReferenceTypeDataWrapper<K,V,D> reference_type_val = null;
 	
     public MultiThreadedLockedContainer()
     {
         super();
     }
-    public void init(
+
+    public void init_multithreaded_locked_container(
         String _host_uuid, boolean _peered,
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val,
         IndexType _index_type)
     {
         index_type = _index_type;
-        
-        host_uuid = _host_uuid;
-        peered = _peered;
-        reference_data_wrapper_constructor = rtdwc;
-        reference_type_val =
-            (ReferenceTypeDataWrapper<K, V, D>)
-            reference_data_wrapper_constructor.construct(init_val, peered); 
-        val = reference_type_val;		
+        init_multithreaded_locked_object(
+            rtdwc,_host_uuid, _peered, init_val);
     }
 
     @Override
@@ -162,7 +153,7 @@ public class MultiThreadedLockedContainer<K,V,D>
         boolean copy_if_peered) throws BackoutException 
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+            (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
         if (copy_if_peered)
         {
             try {

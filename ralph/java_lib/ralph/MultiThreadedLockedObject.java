@@ -21,12 +21,12 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
     public boolean peered;
-    private DataWrapperConstructor<T,D> data_wrapper_constructor;
+    protected DataWrapperConstructor<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     private ReentrantLock _mutex = new ReentrantLock();
     public DataWrapper<T,D> dirty_val = null;
 		
-    //# If write_lock_holder is not None, then the only element in
+    //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
     //# read_lock_holders maps from uuids to EventCachedPriorityObj.
     private HashMap<String, EventCachedPriorityObj>read_lock_holders =
@@ -76,7 +76,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
 	
     public MultiThreadedLockedObject(){}
 	
-    public void init(
+    public void init_multithreaded_locked_object(
         ValueTypeDataWrapperConstructor<T,D> vtdwc, String _host_uuid,
         boolean _peered, T init_val)
     {
@@ -85,7 +85,17 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         peered = _peered;
         val = data_wrapper_constructor.construct(init_val,peered);
     }
-	
+
+    public void init_multithreaded_locked_object(
+        ReferenceTypeDataWrapperConstructor rtdwc, String _host_uuid,
+        boolean _peered, T init_val)
+    {
+        data_wrapper_constructor = rtdwc;
+        host_uuid = _host_uuid;
+        peered = _peered;
+        val = data_wrapper_constructor.construct(init_val,peered);
+    }
+    
     private void _lock()
     {
         _mutex.lock();
@@ -284,7 +294,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             _unlock();
             throw new RalphExceptions.BackoutException();
         }
-
         //# case 0 above
         if ((write_lock_holder != null) &&
             (active_event.uuid == write_lock_holder.event.uuid))
@@ -293,7 +302,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             _unlock();
             return to_return;
         }
-        
         //# case 1 above
         if ((write_lock_holder != null) && 
             read_lock_holders.isEmpty())
@@ -309,7 +317,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             _unlock();
             return to_return;
         }
-
         if (is_gte_than_lock_holding_events(cached_priority))
         {
             //# Stage 2 from above
@@ -320,16 +327,15 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
                 read_lock_holders.put(
                     active_event.uuid, 
                     new EventCachedPriorityObj(active_event,cached_priority));
-
                 write_lock_holder =
                     new EventCachedPriorityObj(active_event,cached_priority);
+
                 dirty_val = data_wrapper_constructor.construct(val.val,peered);
                 DataWrapper<T,D> to_return = dirty_val;
                 _unlock();
                 return to_return;
             }
         }
-        
         //# case 3: add to wait queue and wait
         WaitingElement <T,D> write_waiting_event = new WaitingElement<T,D>(
             active_event,cached_priority,false,data_wrapper_constructor,
@@ -344,7 +350,6 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
         return to_return;
     }
 
