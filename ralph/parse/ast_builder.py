@@ -574,18 +574,29 @@ def p_VariableType(p):
                  | TVAR STRING_TYPE
 
                  | MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
+                 | TVAR MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
     '''
 
-    if len(p) == 11:
-        # map type
-        from_type_index = 5
-        to_type_index = 9
+    if len(p) > 5:
+        # It's a map
+        if len(p) == 11:
+            # non tvar map type
+            is_tvar = False
+            from_type_index = 5
+            to_type_index = 9
+        elif len(p) == 12:
+            is_tvar = True
+            from_type_index = 6
+            to_type_index = 10
+        else:
+            raise InternalParseException(
+                'Incorrect number of tokens fro map variable')
 
         from_type_node = p[from_type_index]
         to_type_node = p[to_type_index]
         line_number = p.lineno(0)
         p[0] = MapVariableTypeNode(
-            from_type_node,to_type_node,False,line_number)
+            from_type_node,to_type_node,is_tvar,line_number)
 
     else:
         # basic type or tvar type
