@@ -521,28 +521,8 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     else:
         # emit for maps
         if isinstance(type_object,MapType):
-            if type_object.is_tvar:
-                raise InternalEmitException('Must add emit for tvar maps')
-            else:
-                key_type_node = type_object.from_type_node
-                value_type_node = type_object.to_type_node
-                
-                key_internal_type_text = emit_internal_type(
-                    key_type_node.type)
-                value_internal_type_text = emit_internal_type(
-                    value_type_node.type)
-                dewaldoify_type_text = (
-                    'HashMap<%s,%s>' %
-                    (key_internal_type_text,value_internal_type_text))
-                
-                print 'May not be dewaldo-ifying maps correctly'
-                to_return = (
-                    'SingleThreadedMapVariable<%s,%s,%s>' %
-                    (key_internal_type_text,value_internal_type_text,
-                     dewaldoify_type_text))
-                
-                return to_return
-            
+            return emit_map_type(type_object)
+        
         # emit for others
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
@@ -594,10 +574,6 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             return 'new %s (_host_uuid,false)' % java_type_text
         return 'new %s (_host_uuid,false,%s)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
-        if type_object.is_tvar:
-            # FIXME: Cannot yet handle tvar maps
-            raise InternalEmitException(
-                'FIXME: not currently emitting tvar map')
         java_type_text = emit_ralph_wrapped_type(type_object)
         # currently, disallowing initializing maps
 
@@ -627,6 +603,36 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'Can only construct new expression from basic type or map type')
     #### END DEBUG    
 
+def emit_map_type(type_object):
+    # emit for maps
+    if isinstance(type_object,MapType):
+        key_type_node = type_object.from_type_node
+        value_type_node = type_object.to_type_node
+
+        key_internal_type_text = emit_internal_type(
+            key_type_node.type)
+        value_internal_type_text = emit_internal_type(
+            value_type_node.type)
+        dewaldoify_type_text = (
+            'HashMap<%s,%s>' %
+            (key_internal_type_text,value_internal_type_text))
+
+        map_var_type = 'SingleThreadedMapVariable'
+        if type_object.is_tvar:
+            map_var_type = 'MultiThreadedMapVariable'
+
+        print 'May not be dewaldo-ifying maps correctly'
+        to_return = (
+            '%s<%s,%s,%s>' %
+            (map_var_type,key_internal_type_text,
+             value_internal_type_text,dewaldoify_type_text))
+
+        return to_return
+    else:
+        raise InternalEmitException(
+            'Requires map type in emit_map_type')
+
+    
 def emit_internal_type(type_object):
     '''
     @param {Type or None} type_object --- None if type corresponds to
@@ -640,33 +646,8 @@ def emit_internal_type(type_object):
     else:
         # emit for map type
         if isinstance(type_object,MapType):
-            if type_object.is_tvar:
-                raise InternalEmitException('Must add emit for tvar maps')
-            else:
-                key_type_node = type_object.from_type_node
-                value_type_node = type_object.to_type_node
-                
-                key_internal_type_text = emit_internal_type(
-                    key_type_node.type)
-                value_internal_type_text = emit_internal_type(
-                    value_type_node.type)
-                dewaldoify_type_text = (
-                    'HashMap<%s,%s>' %
-                    (key_internal_type_text,value_internal_type_text))
-
-                if not isinstance(value_type_node.type,BasicType):
-                    # FIXME: only emitting maps with values that are
-                    # value types.
-                    raise InternalEmitException(
-                        'FIXME: only emitting maps with values ' +
-                        'that are value types.')
-
-                to_return = (
-                    'SingleThreadedMapVariable<%s,%s,%s>' %
-                    (key_internal_type_text,value_internal_type_text,
-                     dewaldoify_type_text))
-                return to_return
-
+            return emit_map_type(type_object)
+        
         # emit for basic types
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
