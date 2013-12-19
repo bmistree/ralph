@@ -27,7 +27,7 @@ public abstract class ActiveEvent
        cloned the atomic event.
      */
     public abstract ActiveEvent clone_atomic() throws StoppedException;
-        
+    
     public abstract ActiveEvent restore_from_atomic();
 
     /**

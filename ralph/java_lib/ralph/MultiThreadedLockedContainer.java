@@ -50,20 +50,30 @@ public class MultiThreadedLockedContainer<K,V,D>
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         LockedObject<V,D> internal_key_val = wrapped_val.val.get(key);
-		
+
+        Object to_return = null;        
         if (internal_key_val.return_internal_val_from_container())
         {
-            Object to_return = null;
             try {
                 to_return = internal_key_val.get_val(active_event);
             } catch (BackoutException e) {
                 // TODO Auto-generated catch block
+                to_return = internal_key_val;
                 e.printStackTrace();
             }
-            return (V)to_return;
         }
-		
-        return (V) internal_key_val;
+        else
+            to_return = internal_key_val;
+
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+        return (V)to_return;
     }
 
     /**
@@ -76,7 +86,7 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        
+
         Variables.Map.Builder map_builder = Variables.Map.newBuilder();
         for (Entry<K,LockedObject<V,D>> map_entry : wrapped_val.val.entrySet() )
         {
@@ -117,7 +127,16 @@ public class MultiThreadedLockedContainer<K,V,D>
         }
         any_builder.setVarName("");
         any_builder.setMap(map_builder);
-        any_builder.setReference(is_reference);            
+        any_builder.setReference(is_reference);
+        
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
     }
     
 
@@ -154,6 +173,7 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+
         if (copy_if_peered)
         {
             try {
@@ -164,6 +184,14 @@ public class MultiThreadedLockedContainer<K,V,D>
             }
         }
         wrapped_val.set_val_on_key(active_event,key,to_write);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
     }
 
 	
@@ -216,7 +244,17 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        return wrapped_val.val.size();
+        int size = wrapped_val.val.size();
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+
+        return size;
     }
 
     @Override
@@ -232,7 +270,18 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        return new ArrayList<K>(wrapped_val.val.keySet());
+
+        
+        ArrayList<K> to_return = new ArrayList<K>(wrapped_val.val.keySet());
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+        return to_return;
     }
 
     @Override
@@ -242,6 +291,14 @@ public class MultiThreadedLockedContainer<K,V,D>
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
         wrapped_val.del_key(active_event, key_to_delete);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
     }
 
     @Override
@@ -251,7 +308,16 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        return wrapped_val.val.containsKey(contains_key);
+        boolean to_return = wrapped_val.val.containsKey(contains_key);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+        return to_return;
     }
 
     @Override
@@ -269,6 +335,15 @@ public class MultiThreadedLockedContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        return wrapped_val.val.containsValue(contains_val);
+        boolean to_return = wrapped_val.val.containsValue(contains_val);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+        return to_return;
     }
 }
