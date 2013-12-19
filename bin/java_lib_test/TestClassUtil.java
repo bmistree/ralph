@@ -23,6 +23,10 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
+import java.util.HashMap;
+import ralph.LockedVariables.MultiThreadedMapVariable;
+import ralph.SingleThreadedLockedContainer;
+
 
 public class TestClassUtil
 {    
@@ -52,14 +56,15 @@ public class TestClassUtil
     {
         public static final String NUM_TVAR_NAME = "num_tvar";
         public static final Double NUM_TVAR_INIT_VAL = new Double (5);
+        public static final String MAP_TVAR_NAME = "map_tvar";
+        
         
         public DefaultEndpoint(
             RalphGlobals ralph_globals,String host_uuid,
             ConnectionObj conn_obj,VariableStore vstore)
         {
             super(ralph_globals,host_uuid,conn_obj,vstore);
-        }
-
+        }        
 
         protected void _handle_rpc_call(
             String to_exec_internal_name,ActiveEvent active_event,
@@ -130,8 +135,8 @@ public class TestClassUtil
         {
             LockedObject<Double,Double> num_obj =
                 (LockedObject<Double,Double>)ctx.var_stack.get_var_if_exists(
-                    NUM_TVAR_NAME);
-
+                    NUM_TVAR_NAME);            
+            
             double current_val =
                 ((Double)num_obj.get_val(active_event)).doubleValue();
             Double new_val = new Double( current_val + 1);
@@ -174,6 +179,12 @@ public class TestClassUtil
                 dummy_host_uuid,false,
                 DefaultEndpoint.NUM_TVAR_INIT_VAL));
 
+        vstore.add_var(
+            DefaultEndpoint.MAP_TVAR_NAME,
+            new MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>>(
+                dummy_host_uuid,false,
+                SingleThreadedLockedContainer.IndexType.DOUBLE));
+            
         DefaultEndpoint to_return = new DefaultEndpoint(
             new RalphGlobals(),
             dummy_host_uuid,
@@ -181,7 +192,6 @@ public class TestClassUtil
             vstore);
 
         return to_return;
-
     }
 
     

@@ -51,9 +51,8 @@
       depends=
         "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
          run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
-         run_NonAtomic">
+         run_NonAtomic,run_MapTVar">
   </target>
-
   
   <!-- List individual tests -->
   <target
@@ -120,6 +119,20 @@
   </target>
 
 
+    <target
+      name="run_MapTVar"
+      depends="compile_all"
+      description="Tests can use a map as a tvar.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.MapTVarConflict"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
     <target
       name="run_BasicParallel"
       depends="compile_all"
