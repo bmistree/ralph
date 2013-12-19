@@ -23,6 +23,7 @@ import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedMapVariable;
+import ralph.LockedVariables.MultiThreadedMapVariable;
 // index types for maps
 import ralph.SingleThreadedLockedContainer.IndexType;
 

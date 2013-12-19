@@ -1,0 +1,39 @@
+Endpoint TVarMapEndpoint
+{
+    TVar Map(from: Number, to: Number) number_map;
+    
+    put_number(Number index, Number value) 
+    {
+        number_map.set(index,value);
+    }
+
+    get_number(Number index) returns Number
+    {
+        return number_map.get(index);
+    }
+
+    contains_index(Number index) returns TrueFalse
+    {
+        return number_map.contains(index);
+    }
+
+    get_size() returns Number
+    {
+        return number_map.size();
+    }
+
+    test_change_in_method_call(
+        Number index, Number val)
+    {
+        insert_val_through_method_call(
+            number_map,index,val);
+    }
+
+    insert_val_through_method_call(
+        TVar Map(from: Number, to: Number) arg_map,
+        Number index, Number val)
+    {
+        arg_map.set(index,val);
+    }
+    
+}

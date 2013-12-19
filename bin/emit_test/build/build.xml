@@ -82,6 +82,14 @@
       <arg line="MapTest"/>
     </exec>
 
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/atomic_map.rph"/>
+      <arg line="${ralph_emitted.dir}/AtomicMapTest.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="AtomicMapTest"/>
+    </exec>
+
     
     <!-- Compile all ralph java to bytecode -->
     <javac
@@ -106,7 +114,8 @@
       name="run_all"
       depends=
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
-         run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest">
+         run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
+         run_AtomicMapTest">
   </target>
 
   
@@ -175,6 +184,22 @@
         <arg line="${args}"/>
     </java>
   </target>
+  
+  <!-- Atomic map test -->
+  <target
+      name="run_AtomicMapTest"
+      depends="compile_ralph_tests"
+      description="Test atomic map methods.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.AtomicMapTester"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
   
   
   <!-- Delete the build directories -->
