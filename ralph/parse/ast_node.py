@@ -4,6 +4,20 @@ import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 
+# Type check is broken into two passes:
+#
+#   Pass one:
+#     To handle user-defined struct types, first run through entire
+#     ast with a dictionary mapping struct names to their field types.
+#     For each struct variable type, find its associated field types
+#     from the dict and label the struct variable type with them.
+#     After first pass, should be guaranteed that all ast type nodes
+#     (ie, BasicTypeNode, MapTypeNode, StructTypeNode) have their
+#     .type fields populated correctly.
+#
+#   Pass two:
+#     Propagate type information from ast type nodes (ie,
+#     BasicTypeNode, MapTypeNode, StructTypeNode) to all ast nodes.
 
 class _AstNode(object):
 
@@ -30,12 +44,20 @@ class _AstNode(object):
     def _prepend_child(self,child_node):
         self.children.insert(0,child_node)
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
         """Type check this statement.
         """
-        print '\nPure virtual type check in AstNode.\n'
-        assert(False)
+        raise InternalParseException(
+            'Pure virtual type check pass one in AstNode.')
         
+    def type_check_pass_two(self,type_check_ctx):
+        """Type check this statement.
+        """
+        raise InternalParseException(
+            'Pure virtual type check pass two in AstNode.')
+
+
+    
 class RootStatementNode(_AstNode):
     def __init__(self,struct_node_list,endpoint_node_list):
         super(RootStatementNode,self).__init__(
@@ -50,6 +72,7 @@ class RootStatementNode(_AstNode):
         self.endpoint_node_list = list(endpoint_node_list)
         self.struct_node_list = struct_node_list.to_list()
 
+
     def type_check(self):
         # notate all user-defined struct types.
         struct_types_ctx = StructTypesContext()
@@ -57,9 +80,10 @@ class RootStatementNode(_AstNode):
             struct_node.add_struct_type(struct_types_ctx)
         
         for endpt_node in self.endpoint_node_list:
-            type_check_ctx = TypeCheckContext(self.name,struct_types_ctx)
+            endpt_node.type_check_pass_one(struct_types_ctx)
+            type_check_ctx = TypeCheckContext(endpt_node.name,struct_types_ctx)
             type_check_ctx.push_scope()
-            endpt_node.type_check(type_check_ctx)
+            endpt_node.type_check_pass_two(type_check_ctx)
 
 class StructDefinitionNode(_AstNode):
 
@@ -92,8 +116,11 @@ class EndpointDefinitionNode(_AstNode):
         self.name = name_identifier_node.get_value()
         self.body_node = endpoint_body_node
 
-    def type_check(self,type_check_ctx):
-        self.body_node.type_check(type_check_ctx)
+    def type_check_pass_one(self,struct_types_ctx):
+        self.body_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.body_node.type_check_pass_two(type_check_ctx)
 
 
 class EndpointBodyNode(_AstNode):
@@ -110,21 +137,29 @@ class EndpointBodyNode(_AstNode):
     def prepend_method_declaration_node(
         self,method_declaration_node):
         self.method_declaration_nodes.insert(0,method_declaration_node)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        for variable_declaration_node in self.variable_declaration_nodes:
+            variable_declaration_node.type_check_pass_one(struct_types_ctx)
+
+        for method_declaration_node in self.method_declaration_nodes:
+            method_declaration_node.type_check_pass_one(struct_types_ctx)
+
         
-    def type_check(self,type_check_ctx):
+    def type_check_pass_two(self,type_check_ctx):
         # First populate global scope with all endpoint nodes.
         for variable_declaration_node in self.variable_declaration_nodes:
-            variable_declaration_node.type_check(type_check_ctx)
+            variable_declaration_node.type_check_pass_two(type_check_ctx)
             
         # Populate every method signature in ctx
         for method_declaration_node in self.method_declaration_nodes:
             method_name = method_declaration_node.method_name
             method_type = method_declaration_node.method_signature_node.type
             type_check_ctx.add_var_name(method_name,method_declaration_node)
-
+            
         # Type check the body of each method
         for method_declaration_node in self.method_declaration_nodes:
-            method_declaration_node.type_check(type_check_ctx)
+            method_declaration_node.type_check_pass_two(type_check_ctx)
 
 class PartnerMethodCallNode(_AstNode):
     def __init__(self,method_name_node,method_call_args_node,line_number):
@@ -138,9 +173,13 @@ class PartnerMethodCallNode(_AstNode):
         self.partner_method_name = method_name_node.value
         self.args_list = method_call_args_node.get_args_list()
         
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
         for arg_node in self.args_list:
-            arg_node.type_check(type_check_ctx)
+            arg_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        for arg_node in self.args_list:
+            arg_node.type_check_pass_two(type_check_ctx)
             # FIXME: for now, only permitting putting in identifiers
             # as arguments to partner method calls.  This is because
             # later, when emitting, must generate RPCArgObjects in
@@ -165,7 +204,10 @@ class IdentifierNode(_AstNode):
 
         self.value = value
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+        
+    def type_check_pass_two(self,type_check_ctx):
         decl_ast_node = type_check_ctx.lookup_internal_ast_node(self.value)
         if decl_ast_node is None:
             raise TypeCheckException(
@@ -183,15 +225,26 @@ class DeclarationStatementNode(_AstNode):
         
         super(DeclarationStatementNode,self).__init__(
             ast_labels.DECLARATION_STATEMENT,
-            type_node.line_number,type_node.type)
+            type_node.line_number)
 
+        self.type_node = type_node
         self.var_name = var_name_identifier_node.get_value()
         self.initializer_node = initializer_node
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        self.type_node.type_check_pass_one(struct_types_ctx)
+        if self.initializer_node is not None:
+            self.initializer_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.type_node.type_check_pass_two(type_check_ctx)
+        self.type = self.type_node.type
+        
         # when we declare a new variable, add it to scope.
         type_check_ctx.add_var_name(self.var_name,self)
-        
+
+        if self.initializer_node is not None:
+            self.initializer_node.type_check_pass_two(type_check_ctx)
         
 class MethodDeclarationNode(_AstNode):
     def __init__(
@@ -199,8 +252,7 @@ class MethodDeclarationNode(_AstNode):
 
         super(MethodDeclarationNode,self).__init__(
             ast_labels.METHOD_DECLARATION,
-            method_signature_node.line_number,
-            method_signature_node.type)
+            method_signature_node.line_number)
 
         self.method_name = method_signature_node.get_method_name()
         self.method_signature_node = method_signature_node
@@ -213,10 +265,14 @@ class MethodDeclarationNode(_AstNode):
         '''
         return self.method_signature_node.type.returns_type is not None
 
+    def type_check_pass_one(self,struct_types_ctx):
+        self.method_signature_node.type_check_pass_one(struct_types_ctx)
+        self.type = self.method_signature_node.type
+        for node in self.method_body_statement_list:
+            node.type_check_pass_one(struct_types_ctx)
         
-    def type_check(self,type_check_ctx):
+    def type_check_pass_two(self,type_check_ctx):
         """
-
         Note: does not insert type name and signature into
         type_check_ctx.  Should have already been inserted in
         EndpointBodyNode.
@@ -224,9 +280,9 @@ class MethodDeclarationNode(_AstNode):
         # each method declaration node has separate var scope
         type_check_ctx.push_scope()
         # pushes method arguments into scope
-        self.method_signature_node.type_check(type_check_ctx)
+        self.method_signature_node.type_check_pass_two(type_check_ctx)
         for node in self.method_body_statement_list:
-            node.type_check(type_check_ctx)
+            node.type_check_pass_two(type_check_ctx)
         type_check_ctx.pop_scope()
 
         
@@ -248,10 +304,18 @@ class MethodSignatureNode(_AstNode):
         self.method_name = method_name_identifier_node.get_value()
         self.method_declaration_args = method_declaration_args_node.to_list()
 
+        self.returns_type_node = returns_type_node
+
+    def type_check_pass_one(self,struct_types_ctx):
+        if self.returns_type_node is not None:
+            self.returns_type_node.type_check_pass_one(struct_types_ctx)
+        for arg_node in self.method_declaration_args:
+            arg_node.type_check_pass_one(struct_types_ctx)
+            
         # construct type from return type and args type
         return_type = None
-        if returns_type_node is not None:
-            return_type = returns_type_node.type
+        if self.returns_type_node is not None:
+            return_type = self.returns_type_node.type
         arg_type_list = map(
             lambda arg_node: arg_node.type,
             self.method_declaration_args)
@@ -261,9 +325,10 @@ class MethodSignatureNode(_AstNode):
     def get_method_name(self):
         return self.method_name
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_two(self,type_check_ctx):
         # push all arguments into type check context
         for method_arg_node in self.method_declaration_args:
+            method_arg_node.type_check_pass_two(type_check_ctx)
             type_check_ctx.add_var_name(
                 method_arg_node.arg_name,method_arg_node)
 
@@ -272,10 +337,18 @@ class MethodDeclarationArgNode(_AstNode):
     def __init__(self, variable_type_node, name_identifier_node):
         super(MethodDeclarationArgNode,self).__init__(
             ast_labels.METHOD_DECLARATION_ARG,
-            variable_type_node.line_number,variable_type_node.type)
-        
+            variable_type_node.line_number)
+
+        self.variable_type_node = variable_type_node
         self.arg_name = name_identifier_node.get_value()
-        self.type = variable_type_node.type
+
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.variable_type_node.type_check_pass_one(struct_types_ctx)
+        self.type = self.variable_type_node.type
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.variable_type_node.type_check_pass_two(type_check_ctx)
         
 
 class AtomicallyNode(_AstNode):
@@ -286,11 +359,15 @@ class AtomicallyNode(_AstNode):
 
         self.statement_list = scope_node.get_statement_list()
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        for node in self.statement_list:
+            node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
         # push new scope for any variables declared in statement list.
         type_check_ctx.push_scope()
         for node in self.statement_list:
-            node.type_check(type_check_ctx)
+            node.type_check_pass_two(type_check_ctx)
         type_check_ctx.pop_scope()
         
 class ScopeNode (_AstNode):
@@ -302,7 +379,11 @@ class ScopeNode (_AstNode):
     def get_statement_list(self):
         return list(self.statement_list)
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        for node in self.statement_list:
+            node.type_check_pass_one(struct_types_ctx)
+    
+    def type_check_pass_two(self,type_check_ctx):
         # push new scope for any variables declared in statement list.
         type_check_ctx.push_scope()
         for node in self.statement_list:
@@ -317,9 +398,13 @@ class ParallelNode(_AstNode):
         self.to_iter_over_expression_node = to_iter_over_expression_node
         self.lambda_expression_node = lambda_expression_node
 
-    def type_check(self,type_check_ctx):
-        self.to_iter_over_expression_node.type_check(type_check_ctx)
-        self.lambda_expression_node.type_check(type_check_ctx)
+    def type_check_pass_one(self,struct_types_ctx):
+        self.to_iter_over_expression_node.type_check_pass_one(struct_types_ctx)
+        self.lambda_expression_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.to_iter_over_expression_node.type_check_pass_two(type_check_ctx)
+        self.lambda_expression_node.type_check_pass_two(type_check_ctx)
         
 class AssignmentNode(_AstNode):
     def __init__(self,lhs_node,rhs_node):
@@ -328,9 +413,13 @@ class AssignmentNode(_AstNode):
         self.lhs_node = lhs_node
         self.rhs_node = rhs_node
 
-    def type_check(self,type_check_ctx):
-        self.lhs_node.type_check(type_check_ctx)
-        self.rhs_node.type_check(type_check_ctx)
+    def type_check_pass_one(self,struct_types_ctx):
+        self.lhs_node.type_check_pass_one(struct_types_ctx)
+        self.rhs_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.lhs_node.type_check_pass_two(type_check_ctx)
+        self.rhs_node.type_check_pass_two(type_check_ctx)
         
         if self.lhs_node.type != self.rhs_node.type:
             if (isinstance(self.rhs_node.type,MethodType) and
@@ -347,9 +436,14 @@ class NotNode(_AstNode):
             ast_labels.NOT,to_not_node.line_number)
         
         self.to_not_node = to_not_node
-        
-    def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+
         
 class LenNode(_AstNode):
     def __init__(self,len_of_node,line_number):
@@ -357,9 +451,14 @@ class LenNode(_AstNode):
             ast_labels.LEN,line_number)
         
         self.len_of_node = len_of_node
-
-    def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+    
         
 class ReturnNode(_AstNode):
     def __init__(self,line_number):
@@ -368,13 +467,17 @@ class ReturnNode(_AstNode):
     def add_return_expression_node(self,what_to_return_node):
         self.what_to_return_node = what_to_return_node
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        if self.what_to_return_node is not None:
+            self.what_to_return_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
         if self.what_to_return_node is None:
             self.type = None
         else:
-            self.what_to_return_node.type_check(type_check_ctx)
+            self.what_to_return_node.type_check_pass_two(type_check_ctx)
             self.type = self.what_to_return_node.type
-        
+
 class ConditionNode(_AstNode):
     def __init__(self,if_node,elifs_node,else_node):
         '''
@@ -388,27 +491,39 @@ class ConditionNode(_AstNode):
         # else_none_body may be None
         self.else_node_body = else_node.body_node
 
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
         self.type = None
-        self.if_node.type_check(type_check_ctx)
+        self.if_node.type_check_pass_one(struct_types_ctx)
         for elif_node in self.elifs_list:
-            elif_node.type_check(type_check_ctx)
+            elif_node.type_check_pass_one(struct_types_ctx)
         if self.else_node_body is not None:
-            self.else_node_body.type_check(type_check_ctx)
+            self.else_node_body.type_check_pass_one(struct_types_ctx)
         
+    def type_check_pass_two(self,type_check_ctx):
+        self.type = None
+        self.if_node.type_check_pass_two(type_check_ctx)
+        for elif_node in self.elifs_list:
+            elif_node.type_check_pass_two(type_check_ctx)
+        if self.else_node_body is not None:
+            self.else_node_body.type_check_pass_two(type_check_ctx)
 
+            
 class IfNode(_AstNode):
     def __init__(self,predicate_node,if_body_node,line_number):
         super(IfNode,self).__init__(ast_labels.IF,line_number)
 
         self.predicate_node = predicate_node
         self.body_node = if_body_node
-        
-    def type_check(self,type_check_ctx):
         self.type = None
-        self.predicate_node.type_check(type_check_ctx)
-        self.body_node.type_check(type_check_ctx)
         
+    def type_check_pass_one(self,struct_types_ctx):
+        self.predicate_node.type_check_pass_one(struct_types_ctx)
+        self.body_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.predicate_node.type_check_pass_two(type_check_ctx)
+        self.body_node.type_check_pass_two(type_check_ctx)
+
         
 class ElifNode(_AstNode):
     def __init__(self,predicate_node,elif_body_node,line_number):
@@ -416,14 +531,17 @@ class ElifNode(_AstNode):
 
         self.predicate_node = predicate_node
         self.body_node = elif_body_node
-        
-    def type_check(self,type_check_ctx):
         self.type = None
-        self.predicate_node.type_check(type_check_ctx)
-        self.body_node.type_check(type_check_ctx)
 
+    def type_check_pass_one(self,struct_types_ctx):
+        self.predicate_node.type_check_pass_two(struct_types_ctx)
+        self.body_node.type_check_pass_two(struct_types_ctx)
         
-        
+    def type_check_pass_two(self,type_check_ctx):
+        self.predicate_node.type_check_pass_two(type_check_ctx)
+        self.body_node.type_check_pass_two(type_check_ctx)
+
+
 class BracketNode(_AstNode):
     def __init__(self,outside_bracket_node,inside_bracket_node):
         '''
@@ -435,10 +553,14 @@ class BracketNode(_AstNode):
         
         self.outside_bracket_node = outside_bracket_node
         self.inside_bracket_node = inside_bracket_node
-
-    def type_check(self,type_check_ctx):
-        self.outside_bracket_node.type_check(type_check_ctx)
-        self.inside_bracket_node.type_check(type_check_ctx)
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.outside_bracket_node.type_check_pass_one(struct_types_ctx)
+        self.inside_bracket_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.outside_bracket_node.type_check_pass_two(type_check_ctx)
+        self.inside_bracket_node.type_check_pass_two(type_check_ctx)
         self.type = self.outside_bracket_node.type.value_type
         
 class DotNode(_AstNode):
@@ -449,8 +571,12 @@ class DotNode(_AstNode):
         self.left_of_dot_node = left_of_dot_node
         self.right_of_dot_node = right_of_dot_node
 
-    def type_check(self,type_check_ctx):
-        self.left_of_dot_node.type_check(type_check_ctx)
+    def type_check_pass_one(self,struct_types_ctx):
+        self.left_of_dot_node.type_check_pass_one(struct_types_ctx)
+        self.right_of_dot_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.left_of_dot_node.type_check_pass_two(type_check_ctx)
 
         # for dots, need to ensure that right hand of dot exists/is
         # available.
@@ -470,7 +596,7 @@ class DotNode(_AstNode):
             
         elif self.right_of_dot_node.label == ast_labels.DOT:
             # FIXME: type check to ensure that identifier exists
-            self.right_of_dot_node.type_check(type_check_ctx)
+            self.right_of_dot_node.type_check_pass_two(type_check_ctx)
         elif self.right_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
             identifier_name = self.right_of_dot_node.value
             dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
@@ -498,16 +624,19 @@ class MethodCallNode(_AstNode):
         
         self.method_node = variable_node
         self.args_list = method_call_args_node.get_args_list()
-
-    def type_check(self,type_check_ctx):
-        self.method_node.type_check(type_check_ctx)
-        self.type = self.method_node.type
-        # type check each argument passed in
-        self.type_check_args_list(type_check_ctx)
         
-    def type_check_args_list(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        self.method_node.type_check_pass_one(struct_types_ctx)
         for arg_node in self.args_list:
-            arg_node.type_check(type_check_ctx)
+            arg_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.method_node.type_check_pass_two(type_check_ctx)
+        self.type = self.method_node.type
+        
+        # type check each argument passed in
+        for arg_node in self.args_list:
+            arg_node.type_check_pass_two(type_check_ctx)
         
 class RangeExpressionNode(_AstNode):
     def __init__(
@@ -523,9 +652,13 @@ class RangeExpressionNode(_AstNode):
         self.increment_expression_node = increment_expression_node
         # where to end range expression
         self.end_expression_node = end_expression_node
-        
-    def type_check(self,type_check_ctx):
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        raise InternalParseException(
+            'FIXME: must add type check for range expression')
+    def type_check_pass_two(self,type_check_ctx):
+        raise InternalParseException(
+            'FIXME: must add type check for range expression')        
         
 class _LiteralNode(_AstNode):
     '''
@@ -537,9 +670,13 @@ class _LiteralNode(_AstNode):
         self.line_number = line_number
         self.value = value
         self.basic_type = basic_type
-        
-    def type_check(self,type_check_ctx):
         self.type = BasicType(self.basic_type,False)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+
         
 class NumberLiteralNode(_LiteralNode):
     def __init__(self,number,line_number):
@@ -572,19 +709,49 @@ class BasicTypeNode(VariableTypeNode):
         
     def _build_type(self,basic_type,is_tvar):
         return BasicType(basic_type,is_tvar)
-    
-    def type_check(self,type_check_ctx):
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass    
+    def type_check_pass_two(self,type_check_ctx):
         pass
 
 class MapVariableTypeNode(VariableTypeNode):
     def __init__(self,from_type_node,to_type_node,is_tvar,line_number):
         super(MapVariableTypeNode,self).__init__(
             ast_labels.MAP_VARIABLE_TYPE,line_number)
-        self.type = MapType(from_type_node,to_type_node,is_tvar)
+        self.from_type_node = from_type_node
+        self.to_type_node = to_type_node
+        self.is_tvar = is_tvar
         
-    def type_check(self,type_check_ctx):
+    def type_check_pass_one(self,struct_types_ctx):
+        self.from_type_node.type_check_pass_one(struct_types_ctx)
+        self.to_type_node.type_check_pass_one(struct_types_ctx)
+        self.type = MapType(
+            self.from_type_node,self.to_type_node,self.is_tvar)
+        
+    def type_check_pass_two(self,type_check_ctx):
         pass
-    
+
+class StructVariableTypeNode(VariableTypeNode):
+    def __init__(self,struct_name_identifier_node,is_tvar,line_number):
+        super(StructVariableTypeNode,self).__init__(
+            ast_labels.STRUCT_VARIABLE_TYPE,line_number)
+        self.struct_name = struct_name_node.value
+        self.is_tvar = is_tvar
+    def type_check_pass_one(self,struct_types_ctx):
+        struct_type_obj = (
+            struct_types_ctx.get_type_obj_from_name(
+                self.struct_name))
+        if struct_type_obj is None:
+            raise TypeCheckException(
+                self.line_number,
+                'Unknown struct named %s.' % self.struct_name)
+        # struct_type_obj should be a StructType object
+        self.type = struct_type_obj.clone(self.is_tvar)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+        
 class _BinaryExpressionNode(_AstNode):
     def __init__(
         self,label,lhs_expression_node,rhs_expression_node):
@@ -595,17 +762,26 @@ class _BinaryExpressionNode(_AstNode):
         self.rhs_expression_node = rhs_expression_node
 
 class _ArithmeticExpressionNode(_BinaryExpressionNode):
-    def type_check(self,type_check_ctx):
-        self.lhs_expression_node.type_check(type_check_ctx)
-        self.rhs_expression_node.type_check(type_check_ctx)
-        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
-        
-class _LogicalExpressionNode(_BinaryExpressionNode):
-    def type_check(self,type_check_ctx):
-        self.lhs_expression_node.type_check(type_check_ctx)
-        self.rhs_expression_node.type_check(type_check_ctx)
-        self.type = BasicType(ast_labels.BOOL_TYPE,False)
 
+    def type_check_pass_one(self,struct_types_ctx):
+        self.lhs_expression_node.type_check_pass_one(struct_types_ctx)
+        self.rhs_expression_node.type_check_pass_one(struct_types_ctx)
+    
+    def type_check_pass_two(self,type_check_ctx):
+        self.lhs_expression_node.type_check_pass_two(type_check_ctx)
+        self.rhs_expression_node.type_check_pass_two(type_check_ctx)
+        self.type = BasicType(ast_labels.NUMBER_TYPE,False)
+
+class _LogicalExpressionNode(_BinaryExpressionNode):
+    def type_check_pass_one(self,struct_types_ctx):
+        self.lhs_expression_node.type_check_pass_one(struct_types_ctx)
+        self.rhs_expression_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.lhs_expression_node.type_check_pass_two(type_check_ctx)
+        self.rhs_expression_node.type_check_pass_two(type_check_ctx)
+        self.type = BasicType(ast_labels.BOOL_TYPE,False)
+        
         
 class MultiplyExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,lhs_expression_node,rhs_expression_node):

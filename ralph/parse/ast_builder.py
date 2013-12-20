@@ -1,4 +1,5 @@
-from ralph.lex.ralph_lex import tokens,construct_lexer,TRUE_TOKEN
+from ralph.lex.ralph_lex import tokens,construct_lexer
+from ralph.lex.ralph_lex import TRUE_TOKEN,STRUCT_TYPE_TOKEN
 import deps.ply.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -614,6 +615,9 @@ def p_VariableType(p):
 
                  | MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
                  | TVAR MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
+
+                 | STRUCT_TYPE Identifier
+                 | TVAR STRUCT_TYPE Identifier
     '''
 
     if len(p) > 5:
@@ -636,7 +640,18 @@ def p_VariableType(p):
         line_number = p.lineno(0)
         p[0] = MapVariableTypeNode(
             from_type_node,to_type_node,is_tvar,line_number)
-
+    elif (len(p) == 4) or (p[1] == STRUCT_TYPE_TOKEN):
+        # emitting a struct type
+        is_tvar = False
+        struct_name_node_index = 2
+        if len(p) == 4:
+            # struct is a tvar
+            is_tvar = True
+            struct_name_node_index = 3
+        line_number = p.lineno(1)
+        struct_name_node = p[struct_name_node_index]
+        p[0] = StructVariableTypeNode(
+            struct_name_node,is_tvar,line_number)
     else:
         # basic type or tvar type
         basic_type_index = 1

@@ -782,6 +782,7 @@ def emit_statement(emit_ctx,statement_node):
             else:
                 return '/** Not yet supporting function objects.*/'
 
+
         # guaranteed that the identifier is for a non-method object type
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.value)

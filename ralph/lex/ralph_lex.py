@@ -3,6 +3,7 @@ from ralph.common.compiler_exceptions import CompilerException
 
 IDENTIFIER_TOKEN = "IDENTIFIER"
 TRUE_TOKEN = 'TRUE'
+STRUCT_TYPE_TOKEN = 'STRUCT_TYPE'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Method': 'METHOD',
@@ -25,7 +26,7 @@ reserved = {
     'keys': 'KEYS',
     'len': 'LEN',
     'Map': 'MAP_TYPE',
-    'Struct': 'STRUCT_TYPE',
+    'Struct': STRUCT_TYPE_TOKEN,
     'from': 'FROM',
     'to': 'TO',
     'try': 'TRY',
