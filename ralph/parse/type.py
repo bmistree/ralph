@@ -10,6 +10,20 @@ class Type(object):
         """
         return {}
 
+class StructType(object):
+    def __init__(self,name_to_field_type_dict,is_tvar):
+        self.name_to_field_type_dict = name_to_field_type_dict
+        self.is_tvar = is_tvar
+    
+    def clone(self,is_tvar):
+        '''Each user-defined struct has one canonical type.  When
+        assigning a node this type, use the clone method on that
+        canonical type to make a copy of it and assign that copy to
+        that node's type field.
+        '''
+        return StructType(dict(self.name_to_filed_type_dict),is_tvar)
+        
+    
 class BasicType(Type):
     def __init__(self,basic_type,is_tvar):
         self.basic_type = basic_type

@@ -1,8 +1,8 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
-from ralph.parse.type import BasicType, MethodType, MapType
-from ralph.parse.type_check_context import TypeCheckContext
+from ralph.parse.type import BasicType, MethodType, MapType,StructType
+from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 
 
 class _AstNode(object):
@@ -35,9 +35,9 @@ class _AstNode(object):
         """
         print '\nPure virtual type check in AstNode.\n'
         assert(False)
-
+        
 class RootStatementNode(_AstNode):
-    def __init__(self,endpoint_node_list):
+    def __init__(self,struct_node_list,endpoint_node_list):
         super(RootStatementNode,self).__init__(
             ast_labels.ROOT_STATEMENT,0,None)
         
@@ -48,10 +48,41 @@ class RootStatementNode(_AstNode):
         #### END DEBUG
 
         self.endpoint_node_list = list(endpoint_node_list)
+        self.struct_node_list = struct_node_list.to_list()
 
     def type_check(self):
+        # notate all user-defined struct types.
+        struct_types_ctx = StructTypesContext()
+        for struct_node in self.struct_node_list:
+            struct_node.add_struct_type(struct_types_ctx)
+        
         for endpt_node in self.endpoint_node_list:
-            endpt_node.type_check()
+            type_check_ctx = TypeCheckContext(self.name,struct_types_ctx)
+            type_check_ctx.push_scope()
+            endpt_node.type_check(type_check_ctx)
+
+class StructDefinitionNode(_AstNode):
+
+    def __init__(
+        self,struct_name_identifier_node,struct_body_node,line_number):
+        """
+        Args:
+            struct_body_node: {StructBodyNode}
+        """
+        super(StructDefinitionNode,self).__init__(
+            ast_labels.STRUCT_DEFINITION,line_number)
+
+        self.struct_name = struct_name_identifier_node.value
+        # name_to_types_dict: {dict} Indices are strings; each is the
+        # name of a field in the struct.  Values are type objects (not
+        # type astnodes) associated with each field.
+        name_to_types_dict = struct_body_node.get_field_dict()
+        self.type = StructType(name_to_types_dict,False)
+        
+    def add_struct_type(self,struct_types_ctx):
+        struct_types_ctx.add_type_obj_for_name(
+            self.struct_name,self.type,self.line_number)
+    
         
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
@@ -61,9 +92,7 @@ class EndpointDefinitionNode(_AstNode):
         self.name = name_identifier_node.get_value()
         self.body_node = endpoint_body_node
 
-    def type_check(self):
-        type_check_ctx = TypeCheckContext(self.name)
-        type_check_ctx.push_scope()
+    def type_check(self,type_check_ctx):
         self.body_node.type_check(type_check_ctx)
 
 
@@ -768,3 +797,33 @@ class ElseNode (_AstNode):
         self.body_node = body_node
         
     
+class StructListNode(_AstNode):
+    def __init__(self):
+        super(StructListNode,self).__init__(ast_labels.STRUCT_LIST_NODE,0)
+        
+    def add_struct_definition_node(self,struct_definition_node):
+        self._append_child(struct_definition_node)
+        
+    def to_list(self):
+        return list(self.children)
+    
+    
+class StructBodyNode(_AstNode):
+    def __init__(self):
+        super(StructBodyNode,self).__init__(
+            ast_labels.STRUCT_BODY,0)
+    
+    def add_struct_field(self,declaration_statement_node):
+        self._append_child(declaration_statement_node)
+    def get_field_dict(self):
+        '''
+        Returns:
+            {dict} Indices are strings; each is the name of a field in
+            the struct.  Values are type objects (not type astnodes)
+            associated with each field.
+        '''
+        field_dict = {}
+        for declaration_statement_node in self.children:
+            field_name = declaration_statement_node.var_name
+            field_dict[field_name] = declaration_statement_node.type
+        return field_dict

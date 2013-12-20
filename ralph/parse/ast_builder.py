@@ -12,10 +12,49 @@ lexer = None
 
 def p_RootStatement(p):
     '''
-    RootStatement : EndpointList
+    RootStatement : StructList EndpointList
     '''
-    endpoint_list_node = p[1]
-    p[0] = RootStatementNode(endpoint_list_node)
+    struct_list_node = p[1]
+    endpoint_list_node = p[2]
+    p[0] = RootStatementNode(struct_list_node,endpoint_list_node)
+    
+
+def p_StructList(p):
+    '''
+    StructList : StructList StructDefinition
+               | Empty
+    '''
+    if len(p) == 2:
+        struct_list_node = StructListNode()
+    else:
+        struct_list_node = p[1]
+        struct_definition_node = p[2]
+        struct_list_node.add_struct_definition_node(struct_definition_node)
+    p[0] = struct_list_node
+
+def p_StructDefinition(p):
+    '''
+    StructDefinition : STRUCT_TYPE Identifier CURLY_LEFT StructBody CURLY_RIGHT
+    '''
+    line_number = p.lineno(1)
+    struct_name_node = p[2]
+    struct_body_node = p[4]
+    p[0] = StructDefinitionNode(struct_name_node,struct_body_node,line_number)
+
+    
+def p_StructBody(p):
+    '''
+    StructBody : StructBody DeclarationStatement SEMI_COLON
+               | Empty
+    '''
+    if len(p) == 2:
+        struct_body_node = StructBodyNode()
+    else:
+        struct_body_node = p[1]
+        declaration_statement_node = p[2]
+        struct_body_node.add_struct_field(declaration_statement_node)
+    p[0] = struct_body_node
+
     
     
 def p_EndpointList(p):

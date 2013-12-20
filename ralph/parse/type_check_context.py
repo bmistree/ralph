@@ -1,3 +1,5 @@
+from ralph.parse.parse_util import TypeCheckException
+
 class Scope(object):
     def __init__(self):
         # from ralph variable name to ast_nodes 
@@ -12,18 +14,43 @@ class Scope(object):
         '''
         return self.var_dict.get(ralph_var_name,None)
 
+class StructTypesContext(object):
+    """Maintains a dict from struct names to their type objects.
+    """
+    def __init__(self):
+        self.name_to_type_obj_dict = {}
+        
+    def get_type_obj_from_name(self,name):
+        '''
+        Returns:
+           TypeObject or None (if type name does not exist).
+        '''
+        return self.name_to_type_obj_dict.get(name,None)
+    
+    def add_type_obj_for_name(self,name,type_obj,line_number):
+        if name in self.name_to_type_obj_dict:
+            raise TypeCheckException(
+                line_number,
+                'Already have a type named %s' % name)
+        self.name_to_type_obj_dict[name] = type_obj
 
+    
 class TypeCheckContext(object):
     """Tracks information necessary for type checking as type
     checking.  (Eg., variables previously declared in this lexical
     scope, etc.
-
     """
 
-    def __init__(self,endpoint_name):
+    def __init__(self,endpoint_name,struct_types_ctx):
+        '''
+        Args:
+            endpoint_name: {String} name of endpoint
+            struct_types: {StructTypesContext object}
+        '''
         # end of list is more recent scope
         self.scope_stack = []
         self.endpoint_name = endpoint_name
+        self.struct_types_ctx = struct_types_ctx
 
     def push_scope(self):
         self.scope_stack.append(Scope())

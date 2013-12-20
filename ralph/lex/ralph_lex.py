@@ -25,6 +25,7 @@ reserved = {
     'keys': 'KEYS',
     'len': 'LEN',
     'Map': 'MAP_TYPE',
+    'Struct': 'STRUCT_TYPE',
     'from': 'FROM',
     'to': 'TO',
     'try': 'TRY',

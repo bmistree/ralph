@@ -52,6 +52,9 @@ METHOD_CALL = 'method_call'
 
 RANGE = 'range'
 
+STRUCT_DEFINITION = 'struct_definition'
+
+
 ### intermediate ast nodes that get removed from tree ###
 ENDPOINT_LIST_STATEMENT = 'endpoint_list_statement'
 EMPTY_STATEMENT = 'empty_statement'
@@ -61,6 +64,9 @@ METHOD_CALL_ARGS = 'method_call_args'
 
 ELSE_IFS = 'elifs'
 ELSE = 'else'
+
+STRUCT_LIST_NODE = 'struct_list_node'
+STRUCT_BODY = 'struct_body'
 
 ### types ###
 BOOL_TYPE = 'TrueFalse'
