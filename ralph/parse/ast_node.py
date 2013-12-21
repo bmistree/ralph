@@ -56,7 +56,6 @@ class _AstNode(object):
         raise InternalParseException(
             'Pure virtual type check pass two in AstNode.')
 
-
     
 class RootStatementNode(_AstNode):
     def __init__(self,struct_node_list,endpoint_node_list):
@@ -74,16 +73,23 @@ class RootStatementNode(_AstNode):
 
 
     def type_check(self):
+        '''
+        Returns:
+            StructTypesContext object that maps from struct names to
+            field values.
+        '''
         # notate all user-defined struct types.
         struct_types_ctx = StructTypesContext()
         for struct_node in self.struct_node_list:
             struct_node.add_struct_type(struct_types_ctx)
-        
+
         for endpt_node in self.endpoint_node_list:
             endpt_node.type_check_pass_one(struct_types_ctx)
             type_check_ctx = TypeCheckContext(endpt_node.name,struct_types_ctx)
             type_check_ctx.push_scope()
             endpt_node.type_check_pass_two(type_check_ctx)
+
+        return struct_types_ctx
 
 class StructDefinitionNode(_AstNode):
 
@@ -102,7 +108,7 @@ class StructDefinitionNode(_AstNode):
         # type astnodes) associated with each field.
         name_to_types_dict = struct_body_node.get_field_dict()
         self.type = StructType(name_to_types_dict,False)
-        
+
     def add_struct_type(self,struct_types_ctx):
         struct_types_ctx.add_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
@@ -701,7 +707,6 @@ class VariableTypeNode(_AstNode):
         
 class BasicTypeNode(VariableTypeNode):
     def __init__(self,basic_type,is_tvar,line_number):
-        
         super(VariableTypeNode,self).__init__(
             ast_labels.VARIABLE_TYPE,line_number)
 
@@ -1001,5 +1006,5 @@ class StructBodyNode(_AstNode):
         field_dict = {}
         for declaration_statement_node in self.children:
             field_name = declaration_statement_node.var_name
-            field_dict[field_name] = declaration_statement_node.type
+            field_dict[field_name] = declaration_statement_node.type_node.type
         return field_dict
