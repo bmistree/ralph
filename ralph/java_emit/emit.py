@@ -1,7 +1,7 @@
 import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
-from ralph.parse.type import BasicType,MethodType,MapType
+from ralph.parse.type import BasicType,MethodType,MapType,StructType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -636,32 +636,37 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     '''    
     if type_object is None:
         return 'void'
-    else:
-        # emit for maps
-        if isinstance(type_object,MapType):
-            return emit_map_type(type_object)
-        
-        # emit for others
-        if isinstance(type_object,BasicType):
-            typer = type_object.basic_type
-            is_tvar = type_object.is_tvar
-        elif isinstance(type_object,MethodType):
-            typer = type_object.returns_type
-            is_tvar = False
 
-        if typer == BOOL_TYPE:
-            if is_tvar and (not force_single_threaded):
-                return 'LockedTrueFalseVariable'
-            return 'SingleThreadedLockedTrueFalseVariable'
-        elif typer == NUMBER_TYPE:
-            if is_tvar and (not force_single_threaded):
-                return 'LockedNumberVariable'
-            return 'SingleThreadedLockedNumberVariable'        
-        elif typer == STRING_TYPE:
-            if is_tvar and (not force_single_threaded):
-                return 'LockedTextVariable'
-            return 'SingleThreadedLockedTextVariable'
+    # emit for maps
+    if isinstance(type_object,MapType):
+        return emit_map_type(type_object)
 
+    # emit for structs
+    if isinstance(type_object,StructType):
+        return type_object.struct_name
+    
+    # emit for others
+    if isinstance(type_object,BasicType):
+        typer = type_object.basic_type
+        is_tvar = type_object.is_tvar
+    elif isinstance(type_object,MethodType):
+        typer = type_object.returns_type
+        is_tvar = False
+
+    if typer == BOOL_TYPE:
+        if is_tvar and (not force_single_threaded):
+            return 'LockedTrueFalseVariable'
+        return 'SingleThreadedLockedTrueFalseVariable'
+    elif typer == NUMBER_TYPE:
+        if is_tvar and (not force_single_threaded):
+            return 'LockedNumberVariable'
+        return 'SingleThreadedLockedNumberVariable'        
+    elif typer == STRING_TYPE:
+        if is_tvar and (not force_single_threaded):
+            return 'LockedTextVariable'
+        return 'SingleThreadedLockedTextVariable'
+
+    
     # FIXME: construct useful type from type object
     return '/** Fixme: must fill in emit_wrapped_type method.*/'
 
@@ -715,10 +720,16 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'new %s(_host_uuid,false,%s)' %
             (java_type_text,java_map_index_type_text))
         return to_return
+    elif isinstance(type_object,StructType):
+        struct_name = type_object.struct_name
+        to_return = (
+            'new  %s(_host_uuid,false)' % struct_name)
+        return to_return
+    
     #### DEBUG
     else:
         raise InternalEmitException(
-            'Can only construct new expression from basic type or map type')
+            'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
 def emit_map_type(type_object):

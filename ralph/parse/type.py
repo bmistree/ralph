@@ -11,7 +11,8 @@ class Type(object):
         return {}
 
 class StructType(object):
-    def __init__(self,name_to_field_type_dict,is_tvar):
+    def __init__(self,struct_name,name_to_field_type_dict,is_tvar):
+        self.struct_name = struct_name
         self.name_to_field_type_dict = name_to_field_type_dict
         self.is_tvar = is_tvar
     
@@ -21,12 +22,21 @@ class StructType(object):
         canonical type to make a copy of it and assign that copy to
         that node's type field.
         '''
-        return StructType(dict(self.name_to_filed_type_dict),is_tvar)
-        
+        return StructType(
+            self.struct_name,dict(self.name_to_field_type_dict),is_tvar)
+
     
 class BasicType(Type):
     def __init__(self,basic_type,is_tvar):
         self.basic_type = basic_type
+
+        #### DEBUG
+        if self.basic_type not in ast_labels.BASIC_TYPES_LIST:
+            import pdb
+            pdb.set_trace()
+            raise InternalParseException('Unknown type in basic type')
+        #### END DEBUG
+        
         self.is_tvar = is_tvar
 
     def __ne__(self,other_type):
