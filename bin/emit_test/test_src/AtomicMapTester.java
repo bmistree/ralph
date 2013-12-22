@@ -9,9 +9,9 @@ public class AtomicMapTester
     public static void main(String[] args)
     {
         if (AtomicMapTester.run_test())
-            System.out.println("\nSUCCESS in MapTester\n");
+            System.out.println("\nSUCCESS in AtomicMapTester\n");
         else
-            System.out.println("\nFAILURE in MapTester\n");
+            System.out.println("\nFAILURE in AtomicMapTester\n");
     }
     
     public static boolean run_test()
