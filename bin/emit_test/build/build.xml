@@ -73,7 +73,6 @@
       <arg line="BasicPartner"/>
     </exec>
 
-
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/test_map.rph"/>
@@ -88,6 +87,14 @@
       <arg line="${ralph_emitted.dir}/AtomicMapTest.java"/>
       <arg line="emit_test_package"/>
       <arg line="AtomicMapTest"/>
+    </exec>
+
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/struct_test.rph"/>
+      <arg line="${ralph_emitted.dir}/StructTest.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="StructTest"/>
     </exec>
 
     

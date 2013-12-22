@@ -612,7 +612,6 @@ class DotNode(_AstNode):
                     self.line_number,
                     'Unknown field %s on lhs of type %s' %
                     (identifier_name,str(self.left_of_dot_node.type)))
-
             self.right_of_dot_node.type = dict_dot_fields[identifier_name]
         else:
             raise TypeCheckException(

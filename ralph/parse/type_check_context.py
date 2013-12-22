@@ -34,6 +34,9 @@ class StructTypesContext(object):
                 'Already have a type named %s' % name)
         self.name_to_type_obj_dict[name] = type_obj
 
+    def __iter__(self):
+        return iter(self.name_to_type_obj_dict.keys())
+        
     
 class TypeCheckContext(object):
     """Tracks information necessary for type checking as type

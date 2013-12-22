@@ -5,7 +5,7 @@ from ralph.parse.type import BasicType,MethodType,MapType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
-def emit(root_node,package_name,program_name):
+def emit(root_node,struct_types_ctx,package_name,program_name):
     '''
     @param {RootStatementNode} root_node 
     
@@ -36,12 +36,24 @@ import RalphCallResults.EndpointCallResultObject;
 import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.EndpointCompleteCallResult;
 import java.util.HashMap;
-
+import ralph_protobuffs.VariablesProto.Variables;
 
 public class %s
 {
 ''' % (package_name,program_name)
 
+    # emit individual struct types
+    prog_txt += indent_string(
+        '/*********** STRUCT DEFINITIONS ******/\n')
+    for struct_name in struct_types_ctx:
+        struct_type = struct_types_ctx.get_type_obj_from_name(struct_name)
+        prog_txt += indent_string(
+            emit_struct_definition(struct_name,struct_type))
+        prog_txt += '\n'
+
+    # emit individual endpoints
+    prog_txt += indent_string(
+        '/*********** ENDPOINT DEFINITIONS ******/\n')
     for endpt_node in root_node.endpoint_node_list:
         prog_txt += indent_string(emit_endpt(endpt_node))
         prog_txt += '\n'
@@ -49,7 +61,112 @@ public class %s
     prog_txt += '}' # closes class program_name
 
     return prog_txt
-        
+
+
+def emit_struct_definition(struct_name,struct_type):
+    '''
+    Each user-defined struct has a wrapper class and an internal
+    class.  (Call wrapper class' get_val and set_val to access the
+    internal values of the struct.)
+    '''
+    internal_struct_name = '_Internal%s' % struct_name
+
+    dw_constructor_text = emit_struct_data_wrapper_constructor(
+        struct_name,internal_struct_name)
+    external_struct_definition_text = emit_struct_wrapper(
+        struct_name,internal_struct_name)
+
+    internal_struct_definition_text = emit_internal_struct(
+        internal_struct_name,struct_type)
+
+    return (
+        dw_constructor_text + '\n' +
+        external_struct_definition_text + '\n' +
+        internal_struct_definition_text)
+
+
+def emit_struct_data_wrapper_constructor(struct_name,internal_struct_name):
+    '''
+    Each user-defined struct has its own data wrapper const
+    '''
+    data_wrapper_type_text = (
+        'ValueTypeDataWrapperConstructor<%s,%s>' %
+        (internal_struct_name,internal_struct_name))
+    
+    data_wrapper_constructor_text = '''
+final static %s
+    %s_type_data_wrapper_constructor =
+    new %s();
+''' % (data_wrapper_type_text,struct_name,data_wrapper_type_text)
+    return data_wrapper_constructor_text
+    
+
+def emit_struct_wrapper(struct_name,internal_struct_name):
+    '''
+    Each user-defined struct gets wrapped by a locked variable that
+    points to an internal struct object that has individual fields
+    that are multithreaded objects and singlethreaded objects.
+    '''
+    ##### External wrapped struct
+    external_struct_definition_text = '''
+public static class %s extends LockedValueVariable<%s,%s>
+{''' % (struct_name, internal_struct_name, internal_struct_name)
+
+    external_struct_definition_constructor = '''
+public %s (String _host_uuid, boolean _peered)
+{
+    super(
+        _host_uuid,_peered,
+        // FIXME: unclear what the difference should be
+        // between internal value and default value.
+        new %s(),new %s(),
+        %s_type_data_wrapper_constructor);
+}
+
+public void serialize_as_rpc_arg(
+    ActiveEvent active_event,Variables.Any.Builder any_builder,
+    boolean is_reference) throws BackoutException
+{
+    // FIXME: must finish serialization of struct
+    Util.logger_assert(
+        "Have not defined serializing structs as rpc arguments.");
+}
+''' % (struct_name, internal_struct_name, internal_struct_name,struct_name)
+    # FIXME: should define rpc serialization for structs.
+    
+    external_struct_definition_text += indent_string(
+        external_struct_definition_constructor)
+    external_struct_definition_text += '}\n'
+    
+    return external_struct_definition_text
+
+def emit_internal_struct(internal_struct_name,struct_type):
+    '''
+    Each internal struct's fields are single threaded locked and
+    unlocked variables.
+    '''
+    ### Internal wrapped struct    
+    internal_struct_definition_text = '''
+public static class %s
+{
+''' % internal_struct_name
+
+    emit_ctx = None
+    internal_struct_body_text = ''
+    for field_name in struct_type.name_to_field_type_dict:
+        field_type = struct_type.name_to_field_type_dict[field_name]
+        internal_struct_body_text += (
+            'public %s %s = %s;\n' %
+            (emit_ralph_wrapped_type(field_type),
+             field_name,
+             construct_new_expression(field_type,None,emit_ctx)))
+
+    internal_struct_definition_text += indent_string(
+        internal_struct_body_text)
+    internal_struct_definition_text += '\n}'
+    return internal_struct_definition_text
+
+
 def emit_endpt(endpt_node):
     '''
     @param {EndpointDefinitionNode} endpt_node
@@ -495,7 +612,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
                 
         new_ralph_variable = (
-            'new %s (_host_uuid,false,%s)' %
+            'new %s ("_host_uuid",false,%s)' %
             (java_type_statement,argument_name))
 
         internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
@@ -572,8 +689,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_text is None:
-            return 'new %s (_host_uuid,false)' % java_type_text
-        return 'new %s (_host_uuid,false,%s)' % (java_type_text,initializer_text)
+            return 'new %s ("_host_uuid",false)' % java_type_text
+        return 'new %s ("_host_uuid",false,%s)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
         java_type_text = emit_ralph_wrapped_type(type_object)
         # currently, disallowing initializing maps

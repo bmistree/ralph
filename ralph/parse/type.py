@@ -42,7 +42,7 @@ class BasicType(Type):
 
     def __str__(self):
         prefix = 'TVar ' if self.is_tvar else ''
-        return prefix + self.basic_type
+        return prefix + str(self.basic_type)
 
 class MapType(Type):
     SIZE_METHOD_NAME = 'size'

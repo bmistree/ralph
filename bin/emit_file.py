@@ -11,8 +11,8 @@ from ralph.java_emit.emit import emit
 
 def compile_ralph(input_filename,output_filename,package_name,program_name):
     root_node = parse(input_filename)
-    root_node.type_check()
-    emitted_text = emit(root_node,package_name,program_name)
+    struct_types_ctx = root_node.type_check()
+    emitted_text = emit(root_node,struct_types_ctx,package_name,program_name)
     file_fd = open(output_filename,'w')
     file_fd.write(emitted_text)
     file_fd.flush()
