@@ -1,7 +1,7 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
-from ralph.parse.type import BasicType, MethodType, MapType,StructType
+from ralph.parse.type import BasicType, MethodType, MapType,StructType, Type
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 
 # Type check is broken into two passes:
@@ -107,7 +107,7 @@ class StructDefinitionNode(_AstNode):
         # name of a field in the struct.  Values are type objects (not
         # type astnodes) associated with each field.
         name_to_types_dict = struct_body_node.get_field_dict()
-        self.type = StructType(name_to_types_dict,False)
+        self.type = StructType(self.struct_name,name_to_types_dict,False)
 
     def add_struct_type(self,struct_types_ctx):
         struct_types_ctx.add_type_obj_for_name(
@@ -241,11 +241,11 @@ class DeclarationStatementNode(_AstNode):
         self.type_node.type_check_pass_one(struct_types_ctx)
         if self.initializer_node is not None:
             self.initializer_node.type_check_pass_one(struct_types_ctx)
-        
+
     def type_check_pass_two(self,type_check_ctx):
         self.type_node.type_check_pass_two(type_check_ctx)
         self.type = self.type_node.type
-        
+
         # when we declare a new variable, add it to scope.
         type_check_ctx.add_var_name(self.var_name,self)
 
@@ -740,7 +740,7 @@ class StructVariableTypeNode(VariableTypeNode):
     def __init__(self,struct_name_identifier_node,is_tvar,line_number):
         super(StructVariableTypeNode,self).__init__(
             ast_labels.STRUCT_VARIABLE_TYPE,line_number)
-        self.struct_name = struct_name_node.value
+        self.struct_name = struct_name_identifier_node.value
         self.is_tvar = is_tvar
     def type_check_pass_one(self,struct_types_ctx):
         struct_type_obj = (

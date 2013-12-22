@@ -1,9 +1,8 @@
 from deps.ply.ply import lex
 from ralph.common.compiler_exceptions import CompilerException
 
-IDENTIFIER_TOKEN = "IDENTIFIER"
-TRUE_TOKEN = 'TRUE'
-STRUCT_TYPE_TOKEN = 'STRUCT_TYPE'
+_IDENTIFIER_TOKEN = 'IDENTIFIER'
+STRUCT_TYPE_TOKEN = 'Struct'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Method': 'METHOD',
@@ -14,7 +13,7 @@ reserved = {
     'else': 'ELSE',
     'not': 'NOT',
     'TrueFalse': 'BOOL_TYPE',
-    'True': TRUE_TOKEN,
+    'True': 'TRUE',
     'False': 'FALSE',
     'Number': 'NUMBER_TYPE',
     'Text': 'STRING_TYPE',
@@ -26,7 +25,7 @@ reserved = {
     'keys': 'KEYS',
     'len': 'LEN',
     'Map': 'MAP_TYPE',
-    'Struct': STRUCT_TYPE_TOKEN,
+    'Struct': 'STRUCT_TYPE',
     'from': 'FROM',
     'to': 'TO',
     'try': 'TRY',
@@ -89,7 +88,8 @@ tokens = [
     'DOT',
     
     "NUMBER",
-    IDENTIFIER_TOKEN,
+    _IDENTIFIER_TOKEN,
+
     
     #Strings and quotes
     "SINGLE_LINE_STRING",
@@ -344,7 +344,7 @@ def t_NUMBER(t):
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z][a-zA-Z_0-9_]*'
-    t.type = reserved.get(t.value,IDENTIFIER_TOKEN)    # Check for reserved words
+    t.type = reserved.get(t.value,_IDENTIFIER_TOKEN)    # Check for reserved words
     return lex_state_machine.add_token(t)
 
 def t_SINGLE_LINE_STRING(t):
