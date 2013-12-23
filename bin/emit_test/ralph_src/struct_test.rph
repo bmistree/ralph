@@ -12,35 +12,31 @@ Endpoint SetterGetter
 
     get_number() returns Number
     {
-        return 0;
-        //return struct.internal_number;
+        return struct.internal_number;
     }
 
     set_number(Number new_number)
     {
-        //struct.internal_number = new_number;
+        struct.internal_number = new_number;
     }
-
     
     get_text() returns Text
     {
-        return '';
-        //return struct.internal_text;
+        return struct.internal_text;
     }
 
     set_text(Text new_text)
     {
-        //struct.internal_text = new_text;
+        struct.internal_text = new_text;
     }
 
     get_tf() returns TrueFalse
     {
-        return False;
-        //return struct.internal_tf;
+        return struct.internal_tf;
     }
 
     set_tf(TrueFalse new_tf)
     {
-        //struct.internal_tf = new_tf;
+        struct.internal_tf = new_tf;
     }
 }

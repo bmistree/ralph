@@ -25,6 +25,13 @@ class StructType(object):
         return StructType(
             self.struct_name,dict(self.name_to_field_type_dict),is_tvar)
 
+    def dict_dot_fields(self):
+        """Returns dict of dot can access on type.
+
+        Should just be the user-defined fields of the struct.
+        """
+        return dict(self.name_to_field_type_dict)
+
     
 class BasicType(Type):
     def __init__(self,basic_type,is_tvar):

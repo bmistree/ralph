@@ -922,7 +922,8 @@ def emit_statement(emit_ctx,statement_node):
                 'No record of variable named %s' % statement_node.value)
 
         if ((not emit_ctx.get_lhs_of_assign()) and
-            (not isinstance(statement_node.type,MapType))):
+            (not isinstance(statement_node.type,MapType)) and
+            (not isinstance(statement_node.type,StructType))):
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
 
@@ -1121,8 +1122,22 @@ def emit_dot_statement(emit_ctx,dot_node):
             raise InternalEmitException(
                 'Unknown identifier on rhs of dot for map.')
         #### END DEBUG
+    elif isinstance(left_of_dot_node.type,StructType):
+        in_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+
+        if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+            raise InternalEmitException(
+                'FIXME: Cannot handle accessing struct nested field beyond ' +
+                'two layers.  Eg., a.b is fine, but a.b.c is not.')
+        rhs_node_identifier_name = right_of_dot_node.value
+
+        to_return += (
+            '.get_val(_active_event).' + rhs_node_identifier_name)        
+        if not in_lhs_of_assign:
+            to_return += '.get_val(_active_event)'
+
     else:
         raise InternalEmitException(
-            'Unknown dot statement: not dot on map.')
+            'Unknown dot statement: not dot on map or struct.')
         
     return to_return
