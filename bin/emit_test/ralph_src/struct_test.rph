@@ -10,6 +10,39 @@ Endpoint SetterGetter
 {
     Struct BasicStruct struct;
 
+    initialize(
+        Number new_number, Text new_text, TrueFalse new_tf)
+    {
+        struct.internal_number = new_number;
+        struct.internal_text = new_text;
+        struct.internal_tf = new_tf;
+    }
+
+    
+    // initialize_internal_struct (
+    //     Number new_number, Text new_text, TrueFalse new_tf)
+    // {
+    //     initialize_particular_struct(
+    //         struct, new_number, new_text, new_tf);
+    // }
+
+    // initialize_particular_struct(
+    //     Struct BasicStruct s, Number new_number, Text new_text, TrueFalse new_tf)
+    // {
+    //     s.internal_number = new_number;
+    //     s.internal_text = new_text;
+    //     s.internal_tf = new_tf;
+    // }
+
+    // new_struct(
+    //     Number new_number, Text new_text, TrueFalse new_tf)
+    // {
+    //     Struct BasicStruct new_struct;
+    //     initialize_particular_struct(
+    //         new_struct, new_number, new_text,new_tf);
+    //     struct = new_struct;
+    // }
+    
     get_number() returns Number
     {
         return struct.internal_number;

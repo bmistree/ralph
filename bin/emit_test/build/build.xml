@@ -122,7 +122,7 @@
       depends=
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
-         run_AtomicMapTest">
+         run_AtomicMapTest,run_StructSetterGetter">
   </target>
 
   
@@ -138,6 +138,18 @@
     </java>
   </target>
 
+  <!-- Struct setter getter -->
+  <target
+      name="run_StructSetterGetter"
+      depends="compile_ralph_tests"
+      description="Setters and getters on struct fields test.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.StructSetterGetter" fork="yes">
+        <arg line="${args}"/>
+    </java>
+  </target>
+  
   <!-- Internal method call on single host -->
   <target
       name="run_BasicInternalMethodCall"

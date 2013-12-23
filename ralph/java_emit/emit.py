@@ -784,7 +784,7 @@ def emit_internal_type(type_object):
             typer = type_object.returns_type
             if typer is not None:
                 typer = typer.basic_type
-
+                
         if typer == BOOL_TYPE:
             return 'Boolean'
         elif typer == NUMBER_TYPE:
