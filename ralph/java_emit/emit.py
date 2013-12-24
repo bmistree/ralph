@@ -638,18 +638,6 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
             isinstance(argument_type,StructType)):
             reference_type = True
             
-        # lkjs;
-        # if (isinstance(argument_type,MapType) or
-        #     isinstance(argument_type,StructType)):
-        #     # reference types are cloned by callers: do not need to
-        #     # wrap their java versions in Ralph objects.  Just need to
-        #     # add the variable to the context stack.
-        #     emit_ctx.set_var_name(argument_name)
-        #     to_return += indent_string(
-        #         '_ctx.var_stack.add_var("%s",%s);\n' %
-        #         (argument_name, argument_name))
-        #     continue
-
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
 
         initializer = argument_name
@@ -999,10 +987,7 @@ def emit_statement(emit_ctx,statement_node):
             # type of error.
             raise InternalEmitException(
                 'No record of variable named %s' % statement_node.value)
-        # lkjs;
-        # if ((not emit_ctx.get_lhs_of_assign()) and
-        #     (not isinstance(statement_node.type,MapType)) and
-        #     (not isinstance(statement_node.type,StructType))):
+
         if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
@@ -1032,10 +1017,6 @@ def emit_statement(emit_ctx,statement_node):
             
         for arg_node in statement_node.args_list:
             arg_text = emit_statement(emit_ctx,arg_node)
-            # lkjs
-            # if (isinstance(arg_node.type,MapType) or
-            #     isinstance(arg_node.type,StructType)):
-            #     arg_text += '.clone_for_args(_active_event)'
                 
             method_text += ',' + arg_text
         method_text += ')'
