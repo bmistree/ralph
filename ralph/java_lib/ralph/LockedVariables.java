@@ -232,14 +232,11 @@ public class LockedVariables {
     public static class SingleThreadedMapVariable <K,V,D>
         extends SingleThreadedLockedMap<K,V,D>
     {
-        // lkjs;
-        private SingleThreadedLockedContainer.IndexType index_type;
         public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer.IndexType _index_type)
         {
             super(_host_uuid,_peered,_index_type);
-            index_type = _index_type;
         }
 
         public SingleThreadedMapVariable(
@@ -249,31 +246,17 @@ public class LockedVariables {
         {
             super(
                 _host_uuid, _peered,internal_val,_index_type);
-            index_type = _index_type;
-        }
-
-        // lkjs;
-        public SingleThreadedMapVariable<K,V,D> clone_for_args(
-            ActiveEvent active_event)
-        {
-            SingleThreadedLockedContainer<K,V,D> internal_val =
-                (SingleThreadedLockedContainer<K,V,D>)get_val(active_event);
-
-            return new SingleThreadedMapVariable(
-                host_uuid,peered,internal_val,index_type);
         }
     }
 
     public static class MultiThreadedMapVariable <K,V,D>
         extends MultiThreadedLockedMap<K,V,D>
     {
-        public SingleThreadedLockedContainer.IndexType index_type;
         public MultiThreadedMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer.IndexType _index_type)
         {
             super(_host_uuid,_peered,_index_type);
-            index_type = _index_type;
         }
 
         public MultiThreadedMapVariable(
@@ -283,17 +266,6 @@ public class LockedVariables {
         {
             super(
                 _host_uuid, _peered,internal_val,_index_type);
-            index_type = _index_type;
-        }
-        
-        public MultiThreadedMapVariable<K,V,D> clone_for_args(
-            ActiveEvent active_event) throws BackoutException
-        {
-            MultiThreadedLockedContainer<K,V,D> internal_val =
-                (MultiThreadedLockedContainer<K,V,D>)get_val(active_event);
-
-            return new MultiThreadedMapVariable(
-                host_uuid,peered,internal_val,index_type);
         }
     }
     
