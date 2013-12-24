@@ -62,10 +62,10 @@ public class StructSetterGetter
                 if (gotten_boolean != new_boolean)
                     return false;
             }
-            
+
             // testing creating a new struct and assigning to it.
-            new_number = 3.3;
-            new_text = "wow";
+            double new_number = 3.3;
+            String new_text = "wow";
             new_boolean = false;
             endpt.new_struct(
                 new Double(new_number), new_text, new Boolean( new_boolean));

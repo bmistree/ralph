@@ -10,7 +10,6 @@ Endpoint SetterGetter
 {
     Struct BasicStruct struct;
 
-    
     initialize_internal_struct (
         Number new_number, Text new_text, TrueFalse new_tf)
     {

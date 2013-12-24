@@ -62,6 +62,8 @@ public class %s
 
     return prog_txt
 
+def emit_internal_struct_type(struct_name):
+    return '_Internal' + struct_name
 
 def emit_struct_definition(struct_name,struct_type):
     '''
@@ -69,15 +71,9 @@ def emit_struct_definition(struct_name,struct_type):
     class.  (Call wrapper class' get_val and set_val to access the
     internal values of the struct.)
     '''
-    internal_struct_name = '_Internal%s' % struct_name
-
-    dw_constructor_text = emit_struct_data_wrapper_constructor(
-        struct_name,internal_struct_name)
-    external_struct_definition_text = emit_struct_wrapper(
-        struct_name,internal_struct_name)
-
-    internal_struct_definition_text = emit_internal_struct(
-        internal_struct_name,struct_type)
+    dw_constructor_text = emit_struct_data_wrapper_constructor(struct_name)
+    external_struct_definition_text = emit_struct_wrapper(struct_name)
+    internal_struct_definition_text = emit_internal_struct(struct_type)
 
     return (
         dw_constructor_text + '\n' +
@@ -85,10 +81,11 @@ def emit_struct_definition(struct_name,struct_type):
         internal_struct_definition_text)
 
 
-def emit_struct_data_wrapper_constructor(struct_name,internal_struct_name):
+def emit_struct_data_wrapper_constructor(struct_name):
     '''
     Each user-defined struct has its own data wrapper const
     '''
+    internal_struct_name = emit_internal_struct_type(struct_name)
     data_wrapper_type_text = (
         'ValueTypeDataWrapperConstructor<%s,%s>' %
         (internal_struct_name,internal_struct_name))
@@ -101,12 +98,14 @@ final static %s
     return data_wrapper_constructor_text
     
 
-def emit_struct_wrapper(struct_name,internal_struct_name):
+def emit_struct_wrapper(struct_name):
     '''
     Each user-defined struct gets wrapped by a locked variable that
     points to an internal struct object that has individual fields
     that are multithreaded objects and singlethreaded objects.
     '''
+    internal_struct_name = emit_internal_struct_type(struct_name)
+    
     ##### External wrapped struct
     external_struct_definition_text = '''
 public static class %s extends LockedValueVariable<%s,%s>
@@ -138,8 +137,8 @@ public void serialize_as_rpc_arg(
     # when pass a struct into a method, should clone the struct's
     # wrapper to have pass-by-reference semantics.
     clone_for_args_method_constructor_text = '''
-/** Private constructor for cloning into args */
-private %s (
+/** Constructor for cloning into args */
+public %s (
     String _host_uuid, boolean _peered,
     %s internal_val)
 
@@ -155,25 +154,21 @@ private %s (
     # FIXME: maybe use a method to map struct name to its data wrapper
     # constructor
 
-    clone_for_args_method_text = '''
-%s
-public %s clone_for_args(ActiveEvent active_event)
-{
-    return new %s (host_uuid,peered,get_val(active_event));
-}
-''' % (clone_for_args_method_constructor_text, struct_name,struct_name)
-
     external_struct_definition_text += indent_string(
-        external_struct_definition_constructor + clone_for_args_method_text)
+        external_struct_definition_constructor +
+        clone_for_args_method_constructor_text)
     external_struct_definition_text += '}\n'
     
     return external_struct_definition_text
 
-def emit_internal_struct(internal_struct_name,struct_type):
+def emit_internal_struct(struct_type):
     '''
     Each internal struct's fields are single threaded locked and
     unlocked variables.
     '''
+    internal_struct_name = emit_internal_struct_type(
+        struct_type.struct_name)
+    
     ### Internal wrapped struct    
     internal_struct_definition_text = '''
 public static class %s
@@ -284,12 +279,14 @@ def convert_args_text_for_dispatch(method_declaration_node):
                 '%s %s = (%s) %s;' %
                 (map_type, arg_name, map_type, arg_vec_to_read_from))
         elif isinstance(method_declaration_arg_node.type, StructType):
+            internal_struct_type = emit_internal_struct_type(
+                method_declaration_arg_node.type.struct_name)
             # for struct types, just push the struct variable directly
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
             single_arg_string = (
-                '%s %s = (%s) %s;' %
-                (struct_type_name, arg_name, struct_type_name,
+                '%s %s = ((%s) %s).get_val(active_event);' %
+                (internal_struct_type, arg_name, struct_type_name,
                  arg_vec_to_read_from))
         else:
             locked_type,java_type = get_method_arg_type_as_locked(
@@ -355,7 +352,7 @@ def exec_dispatch_sequence_call(method_declaration_node):
     args_text = ','.join(arg_list)
     if args_text != '':
         args_text = ',' + args_text
-    
+
     actual_call = method_name + '(ctx,active_event' + args_text + ');\n'
     if method_declaration_node.returns_value():
         actual_call = 'result = (Object)' + actual_call
@@ -636,22 +633,39 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         argument_node = method_signature_node.method_declaration_args[index]
         argument_type = argument_node.type
 
+        reference_type = False
         if (isinstance(argument_type,MapType) or
             isinstance(argument_type,StructType)):
-            # reference types are cloned by callers: do not need to
-            # wrap their java versions in Ralph objects.  Just need to
-            # add the variable to the context stack.
-            emit_ctx.set_var_name(argument_name)
-            to_return += indent_string(
-                '_ctx.var_stack.add_var("%s",%s);\n' %
-                (argument_name, argument_name))
-            continue
+            reference_type = True
+            
+        # lkjs;
+        # if (isinstance(argument_type,MapType) or
+        #     isinstance(argument_type,StructType)):
+        #     # reference types are cloned by callers: do not need to
+        #     # wrap their java versions in Ralph objects.  Just need to
+        #     # add the variable to the context stack.
+        #     emit_ctx.set_var_name(argument_name)
+        #     to_return += indent_string(
+        #         '_ctx.var_stack.add_var("%s",%s);\n' %
+        #         (argument_name, argument_name))
+        #     continue
 
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
-                
-        new_ralph_variable = (
-            'new %s ("_host_uuid",false,%s)' %
-            (java_type_statement,argument_name))
+
+        initializer = argument_name
+
+        if isinstance(argument_type,MapType):
+            new_ralph_variable = (
+                'new %s ("_host_uuid",false,%s,%s.index_type)' %
+                (java_type_statement,argument_name,argument_name))
+        elif isinstance(argument_type,StructType):
+            new_ralph_variable = (
+                'new %s ("_host_uuid",false,%s)' %
+                (java_type_statement,argument_name))
+        else:
+            new_ralph_variable = (
+                'new %s ("_host_uuid",false,%s)' %
+                (java_type_statement,argument_name))
 
         internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
         to_return +=indent_string(
@@ -770,6 +784,29 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
+def emit_internal_map_type(type_object):
+    key_type_node = type_object.from_type_node
+    value_type_node = type_object.to_type_node
+
+    key_internal_type_text = emit_internal_type(
+        key_type_node.type)
+    value_internal_type_text = emit_internal_type(
+        value_type_node.type)
+    dewaldoify_type_text = (
+        'HashMap<%s,%s>' %
+        (key_internal_type_text,value_internal_type_text))
+
+    if type_object.is_tvar:
+        internal_map_var_type = 'MultiThreadedLockedContainer'
+    else:
+        internal_map_var_type = 'SingleThreadedLockedContainer'
+        
+    return (
+        internal_map_var_type +
+        ('<%s,%s,%s>' %
+         (key_internal_type_text,value_internal_type_text,dewaldoify_type_text)))
+        
+    
 def emit_map_type(type_object):
     # emit for maps
     if isinstance(type_object,MapType):
@@ -813,11 +850,11 @@ def emit_internal_type(type_object):
     else:
         # emit for map type
         if isinstance(type_object,MapType):
-            return emit_map_type(type_object)
-
+            return emit_internal_map_type(type_object)
+        
         # emit for struct type
         if isinstance(type_object,StructType):
-            return type_object.struct_name
+            return emit_internal_struct_type(type_object.struct_name)
         
         # emit for basic types
         if isinstance(type_object,BasicType):
@@ -962,10 +999,11 @@ def emit_statement(emit_ctx,statement_node):
             # type of error.
             raise InternalEmitException(
                 'No record of variable named %s' % statement_node.value)
-
-        if ((not emit_ctx.get_lhs_of_assign()) and
-            (not isinstance(statement_node.type,MapType)) and
-            (not isinstance(statement_node.type,StructType))):
+        # lkjs;
+        # if ((not emit_ctx.get_lhs_of_assign()) and
+        #     (not isinstance(statement_node.type,MapType)) and
+        #     (not isinstance(statement_node.type,StructType))):
+        if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
 
@@ -994,9 +1032,10 @@ def emit_statement(emit_ctx,statement_node):
             
         for arg_node in statement_node.args_list:
             arg_text = emit_statement(emit_ctx,arg_node)
-            if (isinstance(arg_node.type,MapType) or
-                isinstance(arg_node.type,StructType)):
-                arg_text += '.clone_for_args(_active_event)'
+            # lkjs
+            # if (isinstance(arg_node.type,MapType) or
+            #     isinstance(arg_node.type,StructType)):
+            #     arg_text += '.clone_for_args(_active_event)'
                 
             method_text += ',' + arg_text
         method_text += ')'
@@ -1153,13 +1192,13 @@ def emit_dot_statement(emit_ctx,dot_node):
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
         if right_hand_side_method == MapType.SIZE_METHOD_NAME:
-            to_return += '.get_val(_active_event).get_len_boxed'
+            to_return += '.get_len_boxed'
         elif right_hand_side_method == MapType.CONTAINS_METHOD_NAME:
-            to_return += '.get_val(_active_event).contains_key_called_boxed'
+            to_return += '.contains_key_called_boxed'
         elif right_hand_side_method == MapType.GET_METHOD_NAME:
-            to_return += '.get_val(_active_event).get_val_on_key'
+            to_return += '.get_val_on_key'
         elif right_hand_side_method == MapType.SET_METHOD_NAME:
-            to_return += '.get_val(_active_event).set_val_on_key'
+            to_return += '.set_val_on_key'
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -1167,18 +1206,22 @@ def emit_dot_statement(emit_ctx,dot_node):
         #### END DEBUG
     elif isinstance(left_of_dot_node.type,StructType):
         in_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+        # note that if we are assigning to a struct's internal fields,
+        # then we should get the internal value of the struct so that
+        # can access fields.
+        if in_lhs_of_assign:
+            to_return += '.get_val(_active_event)'
 
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
                 'FIXME: Cannot handle accessing struct nested field beyond ' +
                 'two layers.  Eg., a.b is fine, but a.b.c is not.')
         rhs_node_identifier_name = right_of_dot_node.value
-
-        to_return += (
-            '.get_val(_active_event).' + rhs_node_identifier_name)        
+        rhs_node_text = '.' + rhs_node_identifier_name
         if not in_lhs_of_assign:
-            to_return += '.get_val(_active_event)'
-
+            rhs_node_text += '.get_val(_active_event)'
+        to_return += rhs_node_text
+        
     else:
         raise InternalEmitException(
             'Unknown dot statement: not dot on map or struct.')

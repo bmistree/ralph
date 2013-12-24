@@ -232,6 +232,7 @@ public class LockedVariables {
     public static class SingleThreadedMapVariable <K,V,D>
         extends SingleThreadedLockedMap<K,V,D>
     {
+        // lkjs;
         private SingleThreadedLockedContainer.IndexType index_type;
         public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
@@ -241,7 +242,7 @@ public class LockedVariables {
             index_type = _index_type;
         }
 
-        private SingleThreadedMapVariable(
+        public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer<K,V,D> internal_val,
             SingleThreadedLockedContainer.IndexType _index_type)
@@ -250,7 +251,8 @@ public class LockedVariables {
                 _host_uuid, _peered,internal_val,_index_type);
             index_type = _index_type;
         }
-        
+
+        // lkjs;
         public SingleThreadedMapVariable<K,V,D> clone_for_args(
             ActiveEvent active_event)
         {
@@ -265,7 +267,7 @@ public class LockedVariables {
     public static class MultiThreadedMapVariable <K,V,D>
         extends MultiThreadedLockedMap<K,V,D>
     {
-        private SingleThreadedLockedContainer.IndexType index_type;
+        public SingleThreadedLockedContainer.IndexType index_type;
         public MultiThreadedMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer.IndexType _index_type)
@@ -274,7 +276,7 @@ public class LockedVariables {
             index_type = _index_type;
         }
 
-        private MultiThreadedMapVariable(
+        public MultiThreadedMapVariable(
             String _host_uuid, boolean _peered,
             MultiThreadedLockedContainer<K,V,D> internal_val,
             SingleThreadedLockedContainer.IndexType _index_type)

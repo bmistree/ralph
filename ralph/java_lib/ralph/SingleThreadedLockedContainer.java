@@ -28,7 +28,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
-    protected IndexType index_type;
+    public IndexType index_type;
     
     private ReferenceTypeDataWrapperConstructor <K,V,D> reference_data_wrapper_constructor =
         null;
