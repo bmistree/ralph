@@ -26,7 +26,8 @@ public class StructSetterGetter
                 new SingleSideConnection());
 
             // initialize struct on endpoint
-            endpt.initialize(new Double(0),"",new Boolean(false));
+            endpt.initialize_internal_struct(
+                new Double(0),"",new Boolean(false));
             
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
@@ -62,24 +63,24 @@ public class StructSetterGetter
                     return false;
             }
             
-            // // testing creating a new struct and assigning to it.
-            // new_number = 3.3;
-            // new_text = "wow";
-            // new_boolean = false;
-            // endpt.new_struct(
-            //     new Double(new_number), new_text, new Boolean( new_boolean));
+            // testing creating a new struct and assigning to it.
+            new_number = 3.3;
+            new_text = "wow";
+            new_boolean = false;
+            endpt.new_struct(
+                new Double(new_number), new_text, new Boolean( new_boolean));
 
-            // double gotten_number = endpt.get_number().doubleValue();
-            // if (gotten_number != new_number)
-            //     return false;
+            double gotten_number = endpt.get_number().doubleValue();
+            if (gotten_number != new_number)
+                return false;
             
-            // String gotten_text = endpt.get_text();
-            // if (! new_text.equals(gotten_text))
-            //     return false;
+            String gotten_text = endpt.get_text();
+            if (! new_text.equals(gotten_text))
+                return false;
             
-            // boolean gotten_boolean = endpt.get_tf().booleanValue();
-            // if (gotten_boolean != new_boolean)
-            //     return false;
+            boolean gotten_boolean = endpt.get_tf().booleanValue();
+            if (gotten_boolean != new_boolean)
+                return false;
             
             return true;
         }
