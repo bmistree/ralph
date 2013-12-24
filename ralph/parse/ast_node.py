@@ -83,6 +83,15 @@ class RootStatementNode(_AstNode):
         for struct_node in self.struct_node_list:
             struct_node.add_struct_type(struct_types_ctx)
 
+        # in case any of the structs have maps/lists/structs in them,
+        # will need to resolve those.
+        for struct_node in self.struct_node_list:
+            type_check_ctx = TypeCheckContext(
+                struct_node.struct_name,struct_types_ctx)
+            type_check_ctx.push_scope()
+            struct_node.type_check_pass_one(struct_types_ctx)
+            struct_node.type_check_pass_two(type_check_ctx)
+            
         for endpt_node in self.endpoint_node_list:
             endpt_node.type_check_pass_one(struct_types_ctx)
             type_check_ctx = TypeCheckContext(endpt_node.name,struct_types_ctx)
@@ -103,16 +112,24 @@ class StructDefinitionNode(_AstNode):
             ast_labels.STRUCT_DEFINITION,line_number)
 
         self.struct_name = struct_name_identifier_node.value
+        self.struct_body_node = struct_body_node
         # name_to_types_dict: {dict} Indices are strings; each is the
         # name of a field in the struct.  Values are type objects (not
         # type astnodes) associated with each field.
         name_to_types_dict = struct_body_node.get_field_dict()
         self.type = StructType(self.struct_name,name_to_types_dict,False)
-
+        
     def add_struct_type(self,struct_types_ctx):
         struct_types_ctx.add_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
-    
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.struct_body_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.struct_body_node.type_check_pass_two(type_check_ctx)
+
+        
         
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,name_identifier_node,endpoint_body_node,line_number):
@@ -726,13 +743,14 @@ class MapVariableTypeNode(VariableTypeNode):
         self.from_type_node = from_type_node
         self.to_type_node = to_type_node
         self.is_tvar = is_tvar
-        
+        self.type = MapType()
+
     def type_check_pass_one(self,struct_types_ctx):
         self.from_type_node.type_check_pass_one(struct_types_ctx)
         self.to_type_node.type_check_pass_one(struct_types_ctx)
-        self.type = MapType(
+        self.type.update_from_to_tvar(
             self.from_type_node,self.to_type_node,self.is_tvar)
-        
+
     def type_check_pass_two(self,type_check_ctx):
         pass
 
@@ -1007,3 +1025,11 @@ class StructBodyNode(_AstNode):
             field_name = declaration_statement_node.var_name
             field_dict[field_name] = declaration_statement_node.type_node.type
         return field_dict
+
+    def type_check_pass_one(self,struct_types_ctx):
+        for child in self.children:
+            child.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        for child in self.children:
+            child.type_check_pass_two(type_check_ctx)

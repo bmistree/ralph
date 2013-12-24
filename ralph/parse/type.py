@@ -11,11 +11,17 @@ class Type(object):
         return {}
 
 class StructType(object):
-    def __init__(self,struct_name,name_to_field_type_dict,is_tvar):
+    def __init__(self,struct_name,name_to_field_type_dict=None,is_tvar=None):
+        '''@see constructor for map type
+        '''
         self.struct_name = struct_name
+        if name_to_field_type_dict is not None:
+            self.update_struct_type(name_to_field_type_dict,is_tvar)
+
+    def update_struct_type(self,name_to_field_type_dict,is_tvar):
         self.name_to_field_type_dict = name_to_field_type_dict
         self.is_tvar = is_tvar
-    
+        
     def clone(self,is_tvar):
         '''Each user-defined struct has one canonical type.  When
         assigning a node this type, use the clone method on that
@@ -66,8 +72,25 @@ class MapType(Type):
     CONTAINS_METHOD_NAME = 'contains'
     GET_METHOD_NAME = 'get'
     SET_METHOD_NAME = 'set'
-    
-    def __init__(self,from_type_node,to_type_node,is_tvar):
+
+    def __init__(self,from_type_node=None,to_type_node=None,is_tvar=None):
+        '''Allow constructing empty map types so that can assign a
+        provisional type to maps.  Can fill in from and to later.
+        This allows having nested types, eg.,
+
+        Struct Tree
+        {
+            Map(from: Number, to: Struct Tree) children;
+        }
+
+        This way, when create Struct Tree, can say that it has type of
+        (empty) map, and then update the empty map with the correct
+        fields.
+        '''
+        if from_type_node is not None:
+            self.update_from_to_tvar(from_type_node,to_type_node,is_tvar)
+        
+    def update_from_to_tvar(self,from_type_node,to_type_node,is_tvar):
         self.from_type_node = from_type_node
         self.to_type_node = to_type_node
         self.is_tvar = is_tvar
