@@ -1,0 +1,91 @@
+
+Struct NodeInfo
+{
+    Number node_id;
+    Number node_value;
+}
+
+Struct Tree
+{
+    Struct NodeInfo node_data;
+    TVar Map(from: Text, to: TVar Struct Tree) children;
+}
+
+
+Endpoint End
+{
+    Text left = 'left';
+    Text right = 'right';
+
+    // binary search tree.  Note: the real root is contained in left
+    // node of root.
+    TVar Struct Tree root;
+
+    TVar Number node_id_maker = 0;
+    
+    insert_value(Number val_to_insert)
+    {
+        Number new_node_id;
+        atomically
+        {
+            new_node_id = node_id_maker;
+            node_id_maker = node_id_maker + 1;
+        }
+
+        TVar Struct Tree to_insert;
+        Struct NodeInfo node_info = to_insert.node_data;
+        node_info.node_id = new_node_id;
+        node_info.node_value = val_to_insert;
+        atomically
+        {
+            if (root.children.contains(left))
+                inner_insert(root.children.get(left),to_insert);
+            else
+                root.children.set(left,to_insert);
+        }
+    }
+
+    inner_insert(TVar Struct Tree binary_tree, TVar Struct Tree to_insert)
+    {
+        Text to_insert_into = left;
+        Struct NodeInfo to_insert_info = to_insert.node_data;
+        if( binary_tree.node_data.node_value > to_insert_info.node_value)
+            to_insert_into = right;
+            
+        // insert into right branch of tree, if it exists
+        if (binary_tree.children.contains(to_insert_into))
+            inner_insert(binary_tree.children.get(to_insert_into),to_insert);
+        else
+            binary_tree.children.set(to_insert_into,to_insert);
+    }
+
+    value_exists (Number value_to_check) returns TrueFalse
+    {
+        TrueFalse to_return = False;
+        atomically
+        {
+            TVar Struct Tree inner_root = root.children.get(left);
+            if (root.children.contains(left))
+                to_return = inner_value_exists(inner_root,value_to_check);
+        }
+        return to_return;
+    }
+
+    inner_value_exists(TVar Struct Tree to_check,Number value_to_check)
+        returns TrueFalse
+    {
+        Struct NodeInfo node_data = to_check.node_data;
+        if (node_data.node_value == value_to_check)
+           return True;
+
+        Text child_to_check = left;
+        if (node_data.node_value > value_to_check)
+           child_to_check = right;
+
+           
+        if (to_check.children.contains(child_to_check))
+           return inner_value_exists(to_check.children.get(child_to_check));
+
+        return False;
+    }
+}
