@@ -38,8 +38,7 @@
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
 
-  <!-- compile ralph endpoints to java programs -->
-  <target name="compile_ralph" depends="init,compile_libs" description="compile ralph files">
+  <target name="translate_ralph" depends="init" description="translate ralph files">
     <!-- Compile to java -->
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
@@ -105,16 +104,29 @@
       <arg line="NestedStructTest"/>
     </exec>
 
+  </target>
+
+  <target name="ralph_to_byte_code" depends="init,compile_libs" description="compile ralph files">
     <!-- Compile all ralph java to bytecode -->
     <javac
         srcdir="${ralph_emitted.dir}"
         destdir="${build.dir}"
         classpath="${lib_class_path}"
         includeantruntime="false" />
-    
   </target>
 
-  <target name="compile_ralph_tests" depends="init,compile_ralph" description="compile basic ralph">
+    
+  <!-- compile ralph endpoints to java programs, including translating -->
+  <target
+      name="compile_ralph"
+      depends="init,compile_libs,translate_ralph,ralph_to_byte_code"
+      description="compile ralph files">
+  </target>
+
+  <target
+      name="compile_ralph_tests"
+      depends="init,compile_ralph"
+      description="compile basic ralph">
     <!-- compile all ralph tests  -->
     <javac
         srcdir="${test_src.dir}"
