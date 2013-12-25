@@ -663,6 +663,12 @@ class MethodCallNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.method_node.type_check_pass_two(type_check_ctx)
         self.type = self.method_node.type
+        if self.type.num_arguments() != len(self.args_list):
+            method_name = self.method_node.value
+            raise TypeCheckException(
+                self.line_number,
+                'Type check error on method call: incorrect number ' +
+                'of arguments passed in to method %s.' % method_name)
         
         # type check each argument passed in
         for arg_node in self.args_list:

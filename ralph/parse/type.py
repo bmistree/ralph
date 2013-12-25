@@ -160,6 +160,9 @@ class MethodType(Type):
     def __init__(self,returns_type,arg_type_list):
         self.returns_type = returns_type
         self.arg_type_list = arg_type_list
+
+    def num_arguments(self):
+        return len(self.arg_type_list)
         
     def __ne__(self,other_type):
         return not self == other_type
