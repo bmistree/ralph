@@ -362,7 +362,7 @@ def p_ElseStatement(p):
         else_node = ElseNode(0)
     else:
         line_number = p.lineno(1)
-        body_node = p[1]
+        body_node = p[2]
         else_node = ElseNode(line_number)
         else_node.add_else_body_node(body_node)
     p[0] = else_node
