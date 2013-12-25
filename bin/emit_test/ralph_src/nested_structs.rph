@@ -84,7 +84,7 @@ Endpoint End
 
            
         if (to_check.children.contains(child_to_check))
-           return inner_value_exists(to_check.children.get(child_to_check));
+           return inner_value_exists(to_check.children.get(child_to_check),value_to_check);
 
         return False;
     }
