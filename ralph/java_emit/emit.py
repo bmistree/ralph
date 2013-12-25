@@ -744,7 +744,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
                 'SingleThreadedLockedContainer.IndexType.DOUBLE')            
-        elif index_basic_type == TEXT_TYPE:
+        elif index_basic_type == STRING_TYPE:
             java_map_index_type_text = (
                 'SingleThreadedLockedContainer.IndexType.STRING')
         elif index_basic_type == BOOL_TYPE:
