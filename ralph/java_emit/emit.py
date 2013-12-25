@@ -115,7 +115,7 @@ public static class %s extends LockedValueVariable<%s,%s>
 public %s (String _host_uuid, boolean _peered)
 {
     super(
-        _host_uuid,_peered,
+        "_host_uuid",_peered,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
         new %s(),new %s(),
@@ -144,7 +144,7 @@ public %s (
 
 {
     super(
-        _host_uuid,_peered,
+        "_host_uuid",_peered,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
         internal_val,internal_val,
@@ -757,13 +757,13 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         #### END DEBUG
         
         to_return = (
-            'new %s(_host_uuid,false,%s)' %
+            'new %s("_host_uuid",false,%s)' %
             (java_type_text,java_map_index_type_text))
         return to_return
     elif isinstance(type_object,StructType):
         struct_name = type_object.struct_name
         to_return = (
-            'new  %s(_host_uuid,false)' % struct_name)
+            'new  %s("_host_uuid",false)' % struct_name)
         return to_return
     
     #### DEBUG
