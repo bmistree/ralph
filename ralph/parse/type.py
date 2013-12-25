@@ -31,6 +31,14 @@ class StructType(object):
         return StructType(
             self.struct_name,dict(self.name_to_field_type_dict),is_tvar)
 
+    def __str__(self):
+        tvar_string = 'TVar'
+        if not self.is_tvar:
+            tvar_string = ''
+            
+        return (
+            'Struct %s %s' % (tvar_string,self.struct_name))
+    
     def dict_dot_fields(self):
         """Returns dict of dot can access on type.
 
@@ -89,7 +97,18 @@ class MapType(Type):
         '''
         if from_type_node is not None:
             self.update_from_to_tvar(from_type_node,to_type_node,is_tvar)
-        
+
+    def __str__(self):
+        tvar_string = 'TVar'
+        if not self.is_tvar:
+            tvar_string = ''
+        from_type_string = str(self.from_type_node.type)
+        # to_type_string = str(self.to_type_node.type)
+        to_type_string = ''
+        return (
+            'Map %s { from: %s, to: %s}' %
+            (tvar_string, from_type_string,to_type_string))
+            
     def update_from_to_tvar(self,from_type_node,to_type_node,is_tvar):
         self.from_type_node = from_type_node
         self.to_type_node = to_type_node
