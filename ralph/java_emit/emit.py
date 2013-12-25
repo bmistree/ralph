@@ -1116,7 +1116,7 @@ _ctx.hide_partner_call(
         if statement_node.else_node_body is not None:
             else_text = 'else {\n'
             else_text_body = emit_statement(emit_ctx,statement_node.else_node_body)
-            else_text += indent_string(else_text_body)
+            else_text += indent_string(else_text_body + ';')
             else_text += '\n}\n'
 
         return if_text + elif_text + else_text
@@ -1124,15 +1124,15 @@ _ctx.hide_partner_call(
     elif statement_node.label == ast_labels.IF:
         predicate_text = emit_statement(emit_ctx,statement_node.predicate_node)
         if_text = 'if (%s.booleanValue()){\n' % predicate_text
-        if_body_text = emit_statement(emit_ctx,statement_node.body_node)
-        if_text += indent_string(if_body_text) + '\n}\n'
+        if_body_text = emit_statement(emit_ctx,statement_node.body_node) 
+        if_text += indent_string(if_body_text + ';') + '\n}\n'
         return if_text
 
     elif statement_node.label == ast_labels.ELIF:
         predicate_text = emit_statement(emit_ctx,statement_node.predicate_node)
         elif_text = 'else if (%s.booleanValue()){\n' % predicate_text
-        elif_body_text = emit_statement(emit_ctx,statement_node.body_node)
-        elif_text += indent_string(elif_body_text) + '\n}\n'
+        elif_body_text = emit_statement(emit_ctx,statement_node.body_node) 
+        elif_text += indent_string(elif_body_text + ';') + '\n}\n'
         return elif_text
     
     elif statement_node.label == ast_labels.SCOPE:
