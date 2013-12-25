@@ -768,6 +768,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
     
     #### DEBUG
     else:
+        import pdb
+        pdb.set_trace()
         raise InternalEmitException(
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    

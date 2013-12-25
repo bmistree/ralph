@@ -81,8 +81,9 @@ class RootStatementNode(_AstNode):
         # notate all user-defined struct types.
         struct_types_ctx = StructTypesContext()
         for struct_node in self.struct_node_list:
-            struct_node.add_struct_type(struct_types_ctx)
-
+            to_fixup = struct_node.add_struct_type(struct_types_ctx)
+        struct_types_ctx.perform_fixups()
+            
         # in case any of the structs have maps/lists/structs in them,
         # will need to resolve those.
         for struct_node in self.struct_node_list:
@@ -116,12 +117,19 @@ class StructDefinitionNode(_AstNode):
         # name_to_types_dict: {dict} Indices are strings; each is the
         # name of a field in the struct.  Values are type objects (not
         # type astnodes) associated with each field.
-        name_to_types_dict = struct_body_node.get_field_dict()
+        name_to_types_dict,self.to_fixup = struct_body_node.get_field_dict()
         self.type = StructType(self.struct_name,name_to_types_dict,False)
-        
+
     def add_struct_type(self,struct_types_ctx):
         struct_types_ctx.add_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
+        
+        # for structs that have fields that point to other structs.
+        for field_name_to_fixup in self.to_fixup:
+            to_fixup_with = self.to_fixup[field_name_to_fixup]
+            struct_types_ctx.to_fixup(
+                self.struct_name, field_name_to_fixup,to_fixup_with)
+
 
     def type_check_pass_one(self,struct_types_ctx):
         self.struct_body_node.type_check_pass_one(struct_types_ctx)
@@ -1013,18 +1021,29 @@ class StructBodyNode(_AstNode):
     
     def add_struct_field(self,declaration_statement_node):
         self._append_child(declaration_statement_node)
+
     def get_field_dict(self):
         '''
         Returns:
             {dict} Indices are strings; each is the name of a field in
             the struct.  Values are type objects (not type astnodes)
             associated with each field.
+
+            {dict} To fixup
         '''
         field_dict = {}
+        to_fixup = {}
         for declaration_statement_node in self.children:
             field_name = declaration_statement_node.var_name
             field_dict[field_name] = declaration_statement_node.type_node.type
-        return field_dict
+            
+            if field_dict[field_name] is None:
+                # means that it's a pointer to a struct that we may
+                # have to fixup later
+                to_fixup[field_name] = (
+                    declaration_statement_node.type_node.struct_name)
+            
+        return field_dict, to_fixup
 
     def type_check_pass_one(self,struct_types_ctx):
         for child in self.children:

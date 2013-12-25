@@ -14,11 +14,62 @@ class Scope(object):
         '''
         return self.var_dict.get(ralph_var_name,None)
 
+class _FixupObject(object):
+    def __init__(
+        self,struct_to_fixup_name,field_struct_to_fixup,
+        struct_name_to_fixup_with):
+        self.struct_to_fixup_name = struct_to_fixup_name
+        self.field_struct_to_fixup = field_struct_to_fixup
+        self.struct_name_to_fixup_with = struct_name_to_fixup_with
+
+    
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.
     """
+    
     def __init__(self):
         self.name_to_type_obj_dict = {}
+        # each element is a FixupObject
+        self.list_to_fixup = []
+        
+    def to_fixup(
+        self,struct_to_fixup_name,field_struct_to_fixup,
+        struct_name_to_fixup_with):
+        '''When a struct contains another struct, sometimes cannot
+        specify the full type of the struct because the other struct
+        isn't defined.  Eg.,
+
+        Struct Outer
+        {
+            Struct Inner inner;
+        }
+
+        Struct Inner
+        {
+            Number num;
+        }
+
+        Cannot fix full type of Struct Outer until have defined
+        Struct Inner.
+        '''
+        self.list_to_fixup.append(
+            _FixupObject(
+                struct_to_fixup_name,field_struct_to_fixup,
+                struct_name_to_fixup_with))
+
+    def perform_fixups(self):
+        for fixup_obj in self.list_to_fixup:
+            struct_type_to_fixup = (
+                self.name_to_type_obj_dict[fixup_obj.struct_to_fixup_name])
+
+            struct_type_to_fixup_with = (
+                self.name_to_type_obj_dict[fixup_obj.struct_name_to_fixup_with])
+
+            to_fixup_field_type_dict = struct_type_to_fixup.name_to_field_type_dict
+            to_fixup_field_type_dict[fixup_obj.field_struct_to_fixup] = (
+                struct_type_to_fixup_with)
+        self.list_to_fixup = []
+
         
     def get_type_obj_from_name(self,name):
         '''
