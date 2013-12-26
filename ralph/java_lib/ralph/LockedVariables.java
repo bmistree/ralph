@@ -24,39 +24,6 @@ public class LockedVariables {
     final static Boolean default_tf = false;
 	
 	
-	
-    public static LockedObject ensure_locked_obj(
-        Object to_write,String host_uuid, boolean single_thread)
-    {
-        if (Boolean.class.isInstance(to_write))
-        {
-            return
-                new LockedVariables.SingleThreadedLockedTrueFalseVariable(
-                    host_uuid,false,(Boolean) to_write);
-        }
-        else if (Double.class.isInstance(to_write))
-        {
-            return
-                new LockedVariables.SingleThreadedLockedNumberVariable(
-                    host_uuid,false,(Double) to_write);
-        }
-        else if (String.class.isInstance(to_write))
-        {
-            return
-                new LockedVariables.SingleThreadedLockedTextVariable(
-                    host_uuid,false,(String) to_write);
-        }
-        else if (LockedObject.class.isInstance(to_write))
-        {
-            return (LockedObject)to_write;
-        }
-		
-        Util.logger_assert(
-            "Unknown type to ensure locked in SingleThreadedLockedMap");
-        return null;
-    }
-	
-	
     public static class LockedNumberVariable extends LockedValueVariable<Double,Double>
     {
         public LockedNumberVariable(String _host_uuid, boolean _peered,Object init_val)
@@ -234,18 +201,21 @@ public class LockedVariables {
     {
         public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer.IndexType _index_type)
+            SingleThreadedLockedContainer.IndexType _index_type,
+            EnsureLockedWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,_index_type);
+            super(_host_uuid,_peered,_index_type,locked_wrapper);
         }
 
         public SingleThreadedMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer<K,V,D> internal_val,
-            SingleThreadedLockedContainer.IndexType _index_type)
+            SingleThreadedLockedContainer.IndexType _index_type,
+            EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,_index_type);
+                _host_uuid, _peered,internal_val,_index_type,
+                locked_wrapper);
         }
     }
 
@@ -254,18 +224,21 @@ public class LockedVariables {
     {
         public MultiThreadedMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer.IndexType _index_type)
+            SingleThreadedLockedContainer.IndexType _index_type,
+            EnsureLockedWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,_index_type);
+            super(_host_uuid,_peered,_index_type,locked_wrapper);
         }
 
         public MultiThreadedMapVariable(
             String _host_uuid, boolean _peered,
             MultiThreadedLockedContainer<K,V,D> internal_val,
-            SingleThreadedLockedContainer.IndexType _index_type)
+            SingleThreadedLockedContainer.IndexType _index_type,
+            EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,_index_type);
+                _host_uuid, _peered,internal_val,_index_type,
+                locked_wrapper);
         }
     }
     

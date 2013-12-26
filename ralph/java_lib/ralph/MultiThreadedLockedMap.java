@@ -29,7 +29,8 @@ public abstract class MultiThreadedLockedMap<K,V,D>
     public MultiThreadedLockedMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
-        SingleThreadedLockedContainer.IndexType index_type)
+        SingleThreadedLockedContainer.IndexType index_type,
+        EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -37,10 +38,10 @@ public abstract class MultiThreadedLockedMap<K,V,D>
             _host_uuid,_peered,
             // initial value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid,false,index_type),
+                _host_uuid,false,index_type,locked_wrapper),
             // default value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid, _peered,index_type),
+                _host_uuid, _peered,index_type,locked_wrapper),
             new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
@@ -54,7 +55,8 @@ public abstract class MultiThreadedLockedMap<K,V,D>
     public MultiThreadedLockedMap(
         String _host_uuid, boolean _peered,
         MultiThreadedLockedContainer<K,V,D> internal_val,
-        SingleThreadedLockedContainer.IndexType index_type)
+        SingleThreadedLockedContainer.IndexType index_type,
+        EnsureLockedWrapper<V,D> locked_wrapper)
     {
         super(
             _host_uuid,_peered,
@@ -62,13 +64,14 @@ public abstract class MultiThreadedLockedMap<K,V,D>
             internal_val,
             // default value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid, _peered,index_type),
+                _host_uuid, _peered,index_type,locked_wrapper),
             new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
     }
     
     public MultiThreadedLockedMap(
         String _host_uuid, boolean _peered,
-        SingleThreadedLockedContainer.IndexType index_type)
+        SingleThreadedLockedContainer.IndexType index_type,
+        EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -76,10 +79,10 @@ public abstract class MultiThreadedLockedMap<K,V,D>
             _host_uuid,_peered,
             // initial value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid,false,index_type),
+                _host_uuid,false,index_type,locked_wrapper),
             // default value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid, _peered,index_type),
+                _host_uuid, _peered,index_type,locked_wrapper),
             new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
     }
 
@@ -96,7 +99,8 @@ public abstract class MultiThreadedLockedMap<K,V,D>
     public MultiThreadedLockedMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,
-        SingleThreadedLockedContainer.IndexType index_type)
+        SingleThreadedLockedContainer.IndexType index_type,
+        EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -104,10 +108,10 @@ public abstract class MultiThreadedLockedMap<K,V,D>
             _host_uuid,_peered,
             // initial value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid,false,index_type),
+                _host_uuid,false,index_type,locked_wrapper),
             // default value
             new MultiThreadedLockedInternalMapVariable<K,V,D>(
-                _host_uuid, _peered,index_type),
+                _host_uuid, _peered,index_type,locked_wrapper),
             new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);

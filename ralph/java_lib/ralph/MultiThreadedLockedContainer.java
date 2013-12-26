@@ -156,15 +156,13 @@ public class MultiThreadedLockedContainer<K,V,D>
         // note: may need to change this to cast to LockedObject<V,D> and use other set_val.
         Util.logger_assert(
             "Should never be setting value directly on container.  " +
-            "Instead, should have wrapped V in a LockedObject at an earlier call.");
-		
+            "Instead, should have wrapped V in a LockedObject at an earlier call.");		
     }	
     public void set_val_on_key(
         ActiveEvent active_event, K key, LockedObject<V,D> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
-
 
 	
     public void set_val_on_key(
