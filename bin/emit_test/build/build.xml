@@ -141,7 +141,7 @@
       depends=
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
-         run_AtomicMapTest,run_StructSetterGetter">
+         run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest">
   </target>
 
   
@@ -237,6 +237,21 @@
     </java>
   </target>
 
+  <!-- Nested struct test -->
+  <target
+      name="run_NestedStructTest"
+      depends="compile_ralph_tests"
+      description="Test nested struct.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.NestedStructs"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
