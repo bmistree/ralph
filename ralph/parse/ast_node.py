@@ -441,7 +441,7 @@ class ScopeNode (_AstNode):
         # push new scope for any variables declared in statement list.
         type_check_ctx.push_scope()
         for node in self.statement_list:
-            node.type_check(type_check_ctx)
+            node.type_check_pass_two(type_check_ctx)
         type_check_ctx.pop_scope()
 
         
