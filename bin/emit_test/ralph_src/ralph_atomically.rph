@@ -15,6 +15,30 @@ Endpoint TestAtomically
         return to_return;
     }
 
+    double_atomically() returns Number
+    {
+        // check if can have two atomically statements in single method.
+        increment_number();
+        return increment_number();
+    }
+
+    same_method_double_atomically() returns Number
+    {
+        Number to_return = 0;
+        atomically
+        {
+            internal_number = get_number() + 1;
+            to_return = internal_number;
+        }
+
+        atomically
+        {
+            internal_number = get_number() + 1;
+            to_return = internal_number;
+        }
+        return to_return;
+    }
+    
     get_number() returns Number
     {
         return internal_number;

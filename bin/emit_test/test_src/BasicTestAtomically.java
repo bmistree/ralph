@@ -35,6 +35,13 @@ public class BasicTestAtomically
                     return false;
             }
 
+            // check that can use two atomic statements in same
+            // ActiveEvent.
+            endpt.double_atomically();
+            endpt.double_atomically();
+
+            endpt.same_method_double_atomically();
+            endpt.same_method_double_atomically();
         }
         catch (Exception _ex)
         {
