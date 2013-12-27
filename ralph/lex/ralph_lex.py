@@ -3,6 +3,7 @@ from ralph.common.compiler_exceptions import CompilerException
 
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
+PRINT_TYPE_TOKEN = 'print'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Method': 'METHOD',
@@ -19,6 +20,7 @@ reserved = {
     'Text': 'STRING_TYPE',
     'and': 'AND',
     'or': 'OR',
+    'print': 'PRINT',
     'while': 'WHILE',
     'for': 'FOR',
     'range': 'RANGE',

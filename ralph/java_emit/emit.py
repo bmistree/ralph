@@ -975,6 +975,11 @@ def emit_statement(emit_ctx,statement_node):
         return (
             '(new Boolean( %s.booleanValue() || %s.booleanValue()))' %
             (lhs,rhs))
+
+    elif statement_node.label == ast_labels.PRINT_CALL:
+        print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
+        return 'System.out.print(%s)' % print_arg_statement
+
     
     elif statement_node.label == ast_labels.EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)

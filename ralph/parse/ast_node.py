@@ -101,6 +101,7 @@ class RootStatementNode(_AstNode):
 
         return struct_types_ctx
 
+    
 class StructDefinitionNode(_AstNode):
 
     def __init__(
@@ -276,7 +277,29 @@ class DeclarationStatementNode(_AstNode):
 
         if self.initializer_node is not None:
             self.initializer_node.type_check_pass_two(type_check_ctx)
+
+class PrintCallNode(_AstNode):
+    def __init__(self,method_args_node,line_number):
+        super(PrintCallNode,self).__init__(
+            ast_labels.PRINT_CALL,line_number)
+
+        print_call_args_list = method_args_node.get_args_list()
+        if len(print_call_args_list) != 1:
+            raise TypeCheckException(
+                self.line_number,
+                ('Print requires 1 argument, not %s.' %
+                 len(print_call_args_list)))
         
+        self.print_arg_node = print_call_args_list[0]
+        
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.print_arg_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.print_arg_node.type_check_pass_two(type_check_ctx)
+        
+
 class MethodDeclarationNode(_AstNode):
     def __init__(
         self,method_signature_node,scope_body_node ):

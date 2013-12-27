@@ -1,5 +1,5 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer
-from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN
+from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
 import deps.ply.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -207,10 +207,16 @@ def p_MethodDeclarationArg(p):
 def p_MethodCall(p):
     '''
     MethodCall : Variable LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               | PRINT LEFT_PAREN MethodCallArgs RIGHT_PAREN
     '''
-    method_name_node = p[1]
-    method_args_node = p[3]
-    p[0] = MethodCallNode(method_name_node,method_args_node)
+    if p[1] == PRINT_TYPE_TOKEN:
+        line_number = p.lineno(1)
+        method_args_node = p[3]
+        p[0] = PrintCallNode(method_args_node,line_number)
+    else:
+        method_name_node = p[1]
+        method_args_node = p[3]
+        p[0] = MethodCallNode(method_name_node,method_args_node)
 
 def p_PartnerMethodCall(p):
     '''
