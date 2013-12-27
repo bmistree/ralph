@@ -772,8 +772,12 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         return 'new %s ("_host_uuid",false,%s)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
         java_type_text = emit_ralph_wrapped_type(type_object)
-        # currently, disallowing initializing maps
-
+        
+        # FIXME: currently, disallowing initializing maps
+        if initializer_node is not None:
+            raise InternalEmitException(
+                'Not handling initializers for map types')
+        
         index_basic_type = type_object.from_type_node.type.basic_type
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
@@ -822,10 +826,17 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'new %s("_host_uuid",false,%s,%s)' %
             (java_type_text,java_map_index_type_text,value_type_wrapper))
         return to_return
+    
     elif isinstance(type_object,StructType):
         struct_name = type_object.struct_name
-        to_return = (
-            'new  %s("_host_uuid",false)' % struct_name)
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+            to_return = (
+                'new  %s("_host_uuid",false,%s)' % (struct_name,initializer_text))
+        else:
+            to_return = (
+                'new  %s("_host_uuid",false)' % struct_name)
+
         return to_return
     
     #### DEBUG
