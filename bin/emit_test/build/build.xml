@@ -112,6 +112,8 @@
         srcdir="${ralph_emitted.dir}"
         destdir="${build.dir}"
         classpath="${lib_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
         includeantruntime="false" />
   </target>
 
@@ -132,6 +134,8 @@
         srcdir="${test_src.dir}"
         destdir="${build.dir}"
         classpath="${build.dir}"
+        debug="true"
+        debuglevel="lines,vars,source"
         includeantruntime="false" />
   </target>
 
