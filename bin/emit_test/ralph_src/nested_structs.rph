@@ -64,9 +64,11 @@ Endpoint End
         TrueFalse to_return = False;
         atomically
         {
-            TVar Struct Tree inner_root = root.children.get(left);
             if (root.children.contains(left))
+            {
+                TVar Struct Tree inner_root = root.children.get(left);            
                 to_return = inner_value_exists(inner_root,value_to_check);
+            }
         }
         return to_return;
     }
