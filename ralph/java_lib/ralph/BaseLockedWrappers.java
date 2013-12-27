@@ -3,16 +3,16 @@ package ralph;
 
 public class BaseLockedWrappers
 {
-    final static SingleThreadedNumberWrapper SINGLE_THREADED_NUMBER_WRAPPER =
+    public final static SingleThreadedNumberWrapper SINGLE_THREADED_NUMBER_WRAPPER =
         new SingleThreadedNumberWrapper();
-    final static SingleThreadedTrueFalseWrapper SINGLE_THREADED_TRUE_FALSE_WRAPPER =
+    public final static SingleThreadedTrueFalseWrapper SINGLE_THREADED_TRUE_FALSE_WRAPPER =
         new SingleThreadedTrueFalseWrapper();
-    final static SingleThreadedTextWrapper SINGLE_THREADED_TEXT_WRAPPER =
+    public final static SingleThreadedTextWrapper SINGLE_THREADED_TEXT_WRAPPER =
         new SingleThreadedTextWrapper();    
 
-    final static NumberWrapper NUMBER_WRAPPER = new NumberWrapper();
-    final static TrueFalseWrapper TRUE_FALSE_WRAPPER = new TrueFalseWrapper();
-    final static TextWrapper TEXT_WRAPPER = new TextWrapper();    
+    public final static NumberWrapper NUMBER_WRAPPER = new NumberWrapper();
+    public final static TrueFalseWrapper TRUE_FALSE_WRAPPER = new TrueFalseWrapper();
+    public final static TextWrapper TEXT_WRAPPER = new TextWrapper();    
     
 
     /**** Single threaded wrappers for base variables */
