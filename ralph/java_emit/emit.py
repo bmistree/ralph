@@ -37,6 +37,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.EndpointCompleteCallResult;
 import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
+import ralph.BaseLockedWrappers;
 
 public class %s
 {
@@ -644,8 +645,10 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
         if isinstance(argument_type,MapType):
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s,%s.index_type)' %
-                (java_type_statement,argument_name,argument_name))
+                'new %s ("_host_uuid",false,%s,%s.index_type,%s.locked_wrapper)'
+                %
+                (java_type_statement,argument_name,argument_name,argument_name))
+            
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
                 'new %s ("_host_uuid",false,%s)' %
@@ -755,10 +758,35 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             raise InternalEmitException(
                 'Map only accepts value types for indices')
         #### END DEBUG
+
+        # require EnsureLockedWrapper object to 
+        value_type_is_tvar = type_object.to_type_node.type.is_tvar
+        value_type = type_object.to_type_node.type
+        if isinstance(value_type,BasicType):
+            value_basic_type = type_object.to_type_node.type.basic_type
+            if value_basic_type == NUMBER_TYPE:
+                value_type_wrapper = 'NUMBER_WRAPPER'
+            elif value_basic_type == STRING_TYPE:
+                value_type_wrapper = 'TEXT_WRAPPER'
+            elif value_basic_type == BOOL_TYPE:
+                value_type_wrapper = 'TRUE_FALSE_WRAPPER'
+            #### DEBUG
+            else:
+                raise InternalEmitException(
+                    'Unknown basic type.')
+            #### END DEBUG
+            if not value_type_is_tvar:
+                value_type_wrapper = 'SINGLE_THREADED_' + value_type_wrapper
+            value_type_wrapper = 'BaseLockedWrappers.' + value_type_wrapper
+            
+        else:
+            # FIXME: Need to emit wrappers for non-basic value types.
+            raise InternalEmitException(
+                'FIXME: Still need to emit wrappers for non-basic value types.')
         
         to_return = (
-            'new %s("_host_uuid",false,%s)' %
-            (java_type_text,java_map_index_type_text))
+            'new %s("_host_uuid",false,%s,%s)' %
+            (java_type_text,java_map_index_type_text,value_type_wrapper))
         return to_return
     elif isinstance(type_object,StructType):
         struct_name = type_object.struct_name
@@ -782,9 +810,7 @@ def emit_internal_map_type(type_object):
         key_type_node.type)
     value_internal_type_text = emit_internal_type(
         value_type_node.type)
-    dewaldoify_type_text = (
-        'HashMap<%s,%s>' %
-        (key_internal_type_text,value_internal_type_text))
+    dewaldoify_type_text = value_internal_type_text
 
     if type_object.is_tvar:
         internal_map_var_type = 'MultiThreadedLockedContainer'
@@ -807,9 +833,7 @@ def emit_map_type(type_object):
             key_type_node.type)
         value_internal_type_text = emit_internal_type(
             value_type_node.type)
-        dewaldoify_type_text = (
-            'HashMap<%s,%s>' %
-            (key_internal_type_text,value_internal_type_text))
+        dewaldoify_type_text = value_internal_type_text
 
         map_var_type = 'SingleThreadedMapVariable'
         if type_object.is_tvar:

@@ -8,7 +8,6 @@ public class SingleThreadedLockedInternalMapVariable<K,V,D>
     extends SingleThreadedLockedContainer<K,V,D>
 {
 
-    
     public SingleThreadedLockedInternalMapVariable(
         String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
         SingleThreadedLockedContainer.IndexType index_type,
