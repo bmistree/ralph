@@ -27,7 +27,8 @@ public class MultiThreadedLockedContainer<K,V,D>
     // and deserializing data.
     public IndexType index_type;
     
-	
+    public EnsureLockedWrapper<V,D>locked_wrapper;
+    
     public MultiThreadedLockedContainer()
     {
         super();
@@ -37,9 +38,11 @@ public class MultiThreadedLockedContainer<K,V,D>
         String _host_uuid, boolean _peered,
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val,
-        IndexType _index_type)
+        IndexType _index_type,
+        EnsureLockedWrapper<V,D>_locked_wrapper)
     {
         index_type = _index_type;
+        locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
             rtdwc,_host_uuid, _peered, init_val);
     }

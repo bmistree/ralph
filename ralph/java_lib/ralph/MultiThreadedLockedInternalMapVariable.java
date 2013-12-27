@@ -7,8 +7,6 @@ import RalphExceptions.BackoutException;
 public class MultiThreadedLockedInternalMapVariable<K,V,D>
     extends MultiThreadedLockedContainer<K,V,D>
 {
-    private EnsureLockedWrapper<V,D>locked_wrapper;
-    
     public MultiThreadedLockedInternalMapVariable(
         String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
         SingleThreadedLockedContainer.IndexType index_type,
@@ -18,8 +16,8 @@ public class MultiThreadedLockedInternalMapVariable<K,V,D>
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
         init_multithreaded_locked_container(
-            _host_uuid,_peered,rtdwc,init_val,index_type);
-        locked_wrapper = _locked_wrapper;
+            _host_uuid,_peered,rtdwc,init_val,index_type,
+            _locked_wrapper);
     }
     public MultiThreadedLockedInternalMapVariable(
         String _host_uuid,boolean _peered,
@@ -32,8 +30,8 @@ public class MultiThreadedLockedInternalMapVariable<K,V,D>
         HashMap<K,LockedObject<V,D>> init_val =
             new HashMap<K,LockedObject<V,D>>();
         init_multithreaded_locked_container(
-            _host_uuid,_peered,rtdwc,init_val,index_type);
-        locked_wrapper = _locked_wrapper;
+            _host_uuid,_peered,rtdwc,init_val,index_type,
+            _locked_wrapper);
     }
 	
     @Override

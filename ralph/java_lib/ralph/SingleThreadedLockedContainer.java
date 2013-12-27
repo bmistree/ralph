@@ -26,6 +26,8 @@ public class SingleThreadedLockedContainer<K,V,D>
         DOUBLE,STRING,BOOLEAN
     };
 
+    public EnsureLockedWrapper<V,D>locked_wrapper;
+    
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     public IndexType index_type;
@@ -43,12 +45,14 @@ public class SingleThreadedLockedContainer<K,V,D>
         String _host_uuid, boolean _peered,
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val,
-        IndexType _index_type)
+        IndexType _index_type,
+        EnsureLockedWrapper<V,D>_locked_wrapper)
     {
         index_type = _index_type;
         
         host_uuid = _host_uuid;
         peered = _peered;
+        locked_wrapper = _locked_wrapper;
         reference_data_wrapper_constructor = rtdwc;
         reference_type_val =
             (ReferenceTypeDataWrapper<K, V, D>)
