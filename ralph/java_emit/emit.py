@@ -1028,10 +1028,13 @@ def emit_statement(emit_ctx,statement_node):
             System.out.println("\\nWarn: must cycle in case atomic fails\\n");
             break;
         }
+        System.out.println("\\nWARNING: do not know how to handle failed first commit.\\n");
+        int __tmp__ = 1/0; // forces throwing an exception.
     }
     _active_event = _active_event.restore_from_atomic();
 }
 ''' % atomic_logic
+
     
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
