@@ -75,11 +75,13 @@ def emit_struct_definition(struct_name,struct_type):
     dw_constructor_text = emit_struct_data_wrapper_constructor(struct_name)
     external_struct_definition_text = emit_struct_wrapper(struct_name)
     internal_struct_definition_text = emit_internal_struct(struct_type)
-
+    struct_map_wrapper = emit_struct_map_wrapper(struct_name)
+    
     return (
         dw_constructor_text + '\n' +
         external_struct_definition_text + '\n' +
-        internal_struct_definition_text)
+        internal_struct_definition_text + '\n' +
+        struct_map_wrapper)
 
 
 def emit_struct_data_wrapper_constructor(struct_name):
@@ -99,6 +101,34 @@ final static %s
     return data_wrapper_constructor_text
     
 
+def emit_struct_map_wrapper(struct_name):
+    internal_struct_name = emit_internal_struct_type(struct_name)
+    
+    # ensure locked wrappers
+    locked_wrappers_text = '''
+public static class %s_ensure_locked_wrapper implements EnsureLockedWrapper<%s,%s>
+{
+    public LockedObject<%s,%s> ensure_locked_object(
+        %s object_to_ensure)
+    {
+        return new %s(
+            "host_uuid",false,object_to_ensure);
+    }
+}
+''' % (struct_name,internal_struct_name,internal_struct_name,
+       internal_struct_name,internal_struct_name,internal_struct_name,
+       struct_name)
+
+    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(struct_name)
+    locked_wrappers_text += '''
+private final static %s_ensure_locked_wrapper %s = new %s_ensure_locked_wrapper();
+''' % (struct_name, struct_locked_wrapper_name,struct_name)
+
+    return locked_wrappers_text
+       
+def emit_struct_locked_map_wrapper_name(struct_name):
+    return 'STRUCT_LOCKED_MAP_WRAPPER__' + struct_name
+
 def emit_struct_wrapper(struct_name):
     '''
     Each user-defined struct gets wrapped by a locked variable that
@@ -112,6 +142,7 @@ def emit_struct_wrapper(struct_name):
 public static class %s extends LockedValueVariable<%s,%s>
 {''' % (struct_name, internal_struct_name, internal_struct_name)
 
+    
     external_struct_definition_constructor = '''
 public %s (String _host_uuid, boolean _peered)
 {
@@ -758,7 +789,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             raise InternalEmitException(
                 'Map only accepts value types for indices')
         #### END DEBUG
-
+        
         # require EnsureLockedWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
@@ -772,15 +803,18 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 value_type_wrapper = 'TRUE_FALSE_WRAPPER'
             #### DEBUG
             else:
-                raise InternalEmitException(
-                    'Unknown basic type.')
+                raise InternalEmitException('Unknown basic type.')
             #### END DEBUG
             if not value_type_is_tvar:
                 value_type_wrapper = 'SINGLE_THREADED_' + value_type_wrapper
             value_type_wrapper = 'BaseLockedWrappers.' + value_type_wrapper
-            
+
+        elif isinstance(value_type,StructType):
+            struct_name = value_type.struct_name
+            value_type_wrapper = emit_struct_locked_map_wrapper_name(struct_name)
         else:
-            # FIXME: Need to emit wrappers for non-basic value types.
+            # FIXME: Need to emit wrappers for non-struct/non-basic
+            # types.  (Eg., map types, list types.)
             raise InternalEmitException(
                 'FIXME: Still need to emit wrappers for non-basic value types.')
         

@@ -14,7 +14,7 @@ public class BaseLockedWrappers
     public final static TrueFalseWrapper TRUE_FALSE_WRAPPER = new TrueFalseWrapper();
     public final static TextWrapper TEXT_WRAPPER = new TextWrapper();    
     
-
+    
     /**** Single threaded wrappers for base variables */
     public static class SingleThreadedNumberWrapper
         implements EnsureLockedWrapper<Double,Double>
