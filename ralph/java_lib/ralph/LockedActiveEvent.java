@@ -336,9 +336,8 @@ public class LockedActiveEvent extends ActiveEvent
     {
         _lock();
         -- atomic_reference_counts;
-        boolean should_return_self = atomic_reference_counts != 0;
+        boolean should_return_self = atomic_reference_counts >= 0;
         _unlock();
-
         if (should_return_self)
             return this;
 
