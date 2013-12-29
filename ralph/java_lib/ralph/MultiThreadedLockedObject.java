@@ -95,6 +95,17 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
         peered = _peered;
         val = data_wrapper_constructor.construct(init_val,peered);
     }
+
+    public void init_multithreaded_locked_object(
+        ListTypeDataWrapperConstructor rtdwc, String _host_uuid,
+        boolean _peered, T init_val)
+    {
+        data_wrapper_constructor = rtdwc;
+        host_uuid = _host_uuid;
+        peered = _peered;
+        val = data_wrapper_constructor.construct(init_val,peered);
+    }
+
     
     private void _lock()
     {

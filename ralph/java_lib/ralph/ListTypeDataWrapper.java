@@ -9,17 +9,13 @@ import java.util.Set;
 import RalphExceptions.BackoutException;
 
 /**
- * 
- * @author bmistree
- *
- * @param <K> --- The key type
  * @param <T> --- The actual java type of the values holding (ie,
  * outside of locked object)
  * @param <D> --- What the java variables in the hashmap should
  * dewaldoify into (if they are locked objects)
  */
-public class ReferenceTypeDataWrapper<K,T,D>
-    extends DataWrapper<HashMap<K,LockedObject<T,D>>, HashMap<K,D>>{
+public class ListTypeDataWrapper<T,D>
+    extends DataWrapper<ArrayList<LockedObject<T,D>>, ArrayList<D>>{
 	
     class OpTuple
     {
@@ -28,18 +24,16 @@ public class ReferenceTypeDataWrapper<K,T,D>
         public static final int WRITE_FLAG = 2;
 		
         public int type;
-        public K key;
-        public OpTuple(int _type, K _key)
+        public Integer key;
+        public OpTuple(int _type, Integer _key)
         {
             type = _type;
             key = _key;
         }		
 		
     }
-	
     private boolean peered;
     protected boolean has_been_written_since_last_msg = false;
-	
 	
     /*
      * tracks all insertions, removals, etc. made to this reference
@@ -49,27 +43,24 @@ public class ReferenceTypeDataWrapper<K,T,D>
     private ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public ReferenceTypeDataWrapper(HashMap<K,LockedObject<T,D>> v, boolean _peered)
+    public ListTypeDataWrapper(ArrayList<LockedObject<T,D>> v, boolean _peered)
     {
-        super( (HashMap<K,LockedObject<T,D>>)v.clone(),_peered);
+        super( (ArrayList<LockedObject<T,D>>)v.clone(),_peered);
         peered = _peered;
     }
 	
-    public ReferenceTypeDataWrapper(ReferenceTypeDataWrapper<K,T,D> v, boolean _peered)
+    public ListTypeDataWrapper(ListTypeDataWrapper<T,D> v, boolean _peered)
     {
         super(v.val,_peered);
         peered = _peered;
     }
 	
-    public HashMap<K,D> de_waldoify(ActiveEvent active_event) throws BackoutException
+    public ArrayList<D> de_waldoify(ActiveEvent active_event) throws BackoutException
     {
-        HashMap<K,D>to_return_map = new HashMap<K,D>();			
-        for (Map.Entry<K, LockedObject<T,D>> entry : val.entrySet())
-        {
-            LockedObject<T,D> locked_obj = entry.getValue();
-            to_return_map.put(entry.getKey(), locked_obj.de_waldoify(active_event) );
-        }		
-        return to_return_map;        
+        ArrayList<D>to_return_list = new ArrayList<D>();
+        for (LockedObject<T,D> locked_obj : val)
+            to_return_list.add(locked_obj.de_waldoify(active_event) );
+        return to_return_list;        
     }
 	
 	
@@ -90,15 +81,9 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,K key, LockedObject<T,D> to_write,
+        ActiveEvent active_event,Integer key, LockedObject<T,D> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
-        if (! val.containsKey(key))
-        {
-            add_key(active_event,key,to_write,incorporating_deltas);
-            return;
-        }
-			
         if ((peered) && (! incorporating_deltas))
             partner_change_log.add(write_key_tuple(key));
 
@@ -107,15 +92,15 @@ public class ReferenceTypeDataWrapper<K,T,D>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,K key, LockedObject<T,D> to_write) throws BackoutException
+        ActiveEvent active_event,Integer key, LockedObject<T,D> to_write)
+        throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
 	
 	
-
     public void del_key(
-        ActiveEvent active_event, K key_to_delete,
+        ActiveEvent active_event, Integer key_to_delete,
         boolean incorporating_deltas)
     {
     	/*
@@ -125,38 +110,29 @@ public class ReferenceTypeDataWrapper<K,T,D>
         */
     	if (peered && (! incorporating_deltas))
             partner_change_log.add(delete_key_tuple(key_to_delete));
-        val.remove(key_to_delete);	
+        val.remove(key_to_delete);
     }
     
-    public void del_key(ActiveEvent active_event,K key_to_delete)
+    public void del_key(ActiveEvent active_event,Integer key_to_delete)
     {
     	del_key(active_event,key_to_delete,false);
     }
     
-
-    public void add_key(
-        ActiveEvent active_event, K key_added,
-        LockedObject<T,D> new_object, boolean incorporating_deltas)
+    public void append(
+        ActiveEvent active_event, LockedObject<T,D> new_object,
+        boolean incorporating_deltas)
     {
-    	/*
-          if self.peered and (not incorporating_deltas):
-          self.partner_change_log.append(add_key_tuple(key_added))
-
-          self.val[key_added] = new_val
-        */
-    	
+        Integer key_added = new Integer(val.size());        
     	if (peered && (! incorporating_deltas))
             partner_change_log.add(add_key_tuple(key_added));
-    	
-    	val.put(key_added,new_object);    	
+    	val.add(key_added,new_object);        
     }
     
-    public void add_key(
-        ActiveEvent active_event,K key_to_add,LockedObject<T,D> new_object)
+    public void append(
+        ActiveEvent active_event, LockedObject<T,D> new_object)
     {
-    	add_key(active_event,key_to_add,new_object,false);
+    	append(active_event,new_object,false);
     }
-
     
     /**
      * Can only be called on list, so where to insert is int
@@ -169,9 +145,12 @@ public class ReferenceTypeDataWrapper<K,T,D>
         ActiveEvent active_event, int where_to_insert,
         LockedObject<T,D> new_val, boolean incorporating_deltas)
     {
-    	Util.logger_assert("Cannot insert on map");
+        Integer key_added = new Integer(val.size());
+        if (peered && (! incorporating_deltas))
+            partner_change_log.add(add_key_tuple(key_added));
+    	val.add(where_to_insert,new_val);
     }
-
+    
     public void insert(
         ActiveEvent active_event,int where_to_insert,
         LockedObject<T,D> new_val)
@@ -179,28 +158,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
     	insert(active_event,where_to_insert,new_val,false);
     }
 
-    /**
-     * Can only be called on list.
-     * @param active_event
-     * @param new_val
-     * @param incorporating_deltas
-     */
-    public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_val,
-        boolean incorporating_deltas)
-    {
-    	Util.logger_assert("Can only append to list");
-    }
-    
-    public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_val)
-    {
-    	append(active_event,new_val,false);
-    }
-
-    
-
-    public OpTuple delete_key_tuple(K _key)
+    public OpTuple delete_key_tuple(Integer _key)
     {
         return new OpTuple(OpTuple.DELETE_FLAG,_key);
     }
@@ -209,7 +167,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
         return opt.type == OpTuple.DELETE_FLAG;
     }
 
-    public OpTuple add_key_tuple(K _key)
+    public OpTuple add_key_tuple(Integer _key)
     {
         return new OpTuple(OpTuple.ADD_FLAG,_key);
     }
@@ -218,7 +176,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
         return opt.type == OpTuple.ADD_FLAG;
     }
 	
-    public OpTuple write_key_tuple(K _key)
+    public OpTuple write_key_tuple(Integer _key)
     {
         return new OpTuple(OpTuple.WRITE_FLAG,_key);
     }
