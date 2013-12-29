@@ -46,7 +46,7 @@ class StructType(object):
         """
         return dict(self.name_to_field_type_dict)
 
-    
+
 class BasicType(Type):
     def __init__(self,basic_type,is_tvar):
         self.basic_type = basic_type
@@ -75,6 +75,62 @@ class BasicType(Type):
         prefix = 'TVar ' if self.is_tvar else ''
         return prefix + str(self.basic_type)
 
+
+class ListType(Type):
+    SIZE_METHOD_NAME = 'size'
+    GET_METHOD_NAME = 'get'
+    SET_METHOD_NAME = 'set'
+
+    def __init__(self,element_type_node=None,is_tvar=None):
+        if element_type_node is not None:
+            self.update_element_type_tvar(element_type_node,is_tvar)
+
+    def __str__(self):
+        tvar_string = 'TVar'
+        if not self.is_tvar:
+            tvar_string = ''
+        element_type_string = str(self.from_type_node.type)
+        return (
+            'List %s { element: %s}' %
+            (tvar_string, element_type_string))
+            
+    def update_element_type_tvar(self,element_type_node,is_tvar):
+        self.element_type_node = element_type_node
+        self.is_tvar = is_tvar
+        self._create_dot_dict_methods()
+        
+    def _create_dot_dict_methods(self):
+        # size returns a number and takes no arguments
+        size_method_type = MethodType(
+            # returns number
+            BasicType(
+                ast_labels.NUMBER_TYPE,
+                False),
+            # takes no arguments
+            [])
+
+        # get returns a from type and takes a single key argument
+        get_method_type = MethodType(
+            self.to_type_node.type,
+            [BasicType(ast_labels.NUMBER_TYPE,False)])
+
+        
+        # set returns a from type and takes a single key argument
+        set_method_type = MethodType(
+            self.to_type_node.type,
+            [BasicType(ast_labels.NUMBER_TYPE,False), # list index
+             self.element_type_node.type])
+
+        self.dot_dict_methods = {
+            ListType.SIZE_METHOD_NAME: size_method_type,
+            ListType.GET_METHOD_NAME: get_method_type,
+            ListType.SET_METHOD_NAME: set_method_type
+            }
+        
+    def dict_dot_fields(self):
+        return self.dot_dict_methods
+
+    
 class MapType(Type):
     SIZE_METHOD_NAME = 'size'
     CONTAINS_METHOD_NAME = 'contains'
@@ -125,7 +181,7 @@ class MapType(Type):
             # takes no arguments
             [])
 
-        # contains returns a number and takes no arguments
+        # contains returns a boolean and takes no arguments
         contains_method_type = MethodType(
             # returns boolean
             BasicType(

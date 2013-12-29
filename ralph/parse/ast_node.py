@@ -1,7 +1,8 @@
 from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
-from ralph.parse.type import BasicType, MethodType, MapType,StructType, Type
+from ralph.parse.type import BasicType, MethodType, MapType,StructType
+from ralph.parse.type import ListType, Type
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 
 # Type check is broken into two passes:
@@ -773,6 +774,22 @@ class BasicTypeNode(VariableTypeNode):
     def type_check_pass_two(self,type_check_ctx):
         pass
 
+class ListVariableTypeNode(VariableTypeNode):
+    def __init__(self,element_type_node,is_tvar,line_number):
+        super(ListVariableTypeNode,self).__init__(
+            ast_labels.LIST_VARIABLE_TYPE,line_number)
+        self.element_type_node = element_type_node
+        self.is_tvar = is_tvar
+        self.type = ListType()
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.element_type_node.type_check_pass_one(struct_types_ctx)
+        self.type.update_element_type_tvar(
+            self.element_type_node,self.is_tvar)
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+    
 class MapVariableTypeNode(VariableTypeNode):
     def __init__(self,from_type_node,to_type_node,is_tvar,line_number):
         super(MapVariableTypeNode,self).__init__(

@@ -37,7 +37,9 @@ reserved = {
     'parallel': 'PARALLEL',
     'returns': 'RETURNS',
     'TVar' : 'TVAR',
-    'partner': 'PARTNER'
+    'partner': 'PARTNER',
+    'List': 'LIST_TYPE',
+    'element': 'ELEMENT'
     }
 
 

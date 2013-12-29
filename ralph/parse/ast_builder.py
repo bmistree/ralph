@@ -622,11 +622,14 @@ def p_VariableType(p):
                  | MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
                  | TVAR MAP_TYPE LEFT_PAREN FROM COLON VariableType COMMA TO COLON VariableType RIGHT_PAREN
 
+                 | LIST_TYPE LEFT_PAREN ELEMENT COLON VariableType RIGHT_PAREN
+                 | TVAR LIST_TYPE LEFT_PAREN ELEMENT COLON VariableType RIGHT_PAREN
+                 
                  | STRUCT_TYPE Identifier
                  | TVAR STRUCT_TYPE Identifier
     '''
 
-    if len(p) > 5:
+    if len(p) >= 11:
         # It's a map
         if len(p) == 11:
             # non tvar map type
@@ -646,6 +649,18 @@ def p_VariableType(p):
         line_number = p.lineno(0)
         p[0] = MapVariableTypeNode(
             from_type_node,to_type_node,is_tvar,line_number)
+    elif len(p) in [7,8]:
+        # it's a list type
+        line_number = p.lineno(1)
+        is_tvar = False
+        list_element_type_index = 5
+        if len(p) == 8:
+            is_tvar = True
+            list_element_type_index = 6
+        list_element_type_node = p[list_element_type_index]
+        p[0] = ListVariableTypeNode(
+            list_element_type_node,is_tvar,line_number)
+
     elif (len(p) == 4) or (p[1] == STRUCT_TYPE_TOKEN):
         # emitting a struct type
         is_tvar = False
