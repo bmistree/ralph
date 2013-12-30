@@ -243,4 +243,27 @@ public class LockedVariables {
         }
     }
     
+    /************ Handling Lists ********/
+    public static class MultiThreadedListVariable <V,D>
+        extends MultiThreadedLockedList<V,D>
+    {
+        public MultiThreadedListVariable(
+            String _host_uuid, boolean _peered,
+            EnsureLockedWrapper<V,D> locked_wrapper)
+        {
+            super(_host_uuid,_peered,locked_wrapper);
+        }
+
+
+        public MultiThreadedListVariable(
+            String _host_uuid, boolean _peered,
+            MultiThreadedListContainer<V,D> internal_val,
+            EnsureLockedWrapper<V,D> locked_wrapper)
+        {
+            super(
+                _host_uuid, _peered,internal_val,
+                locked_wrapper);
+        }
+    }
+    
 }

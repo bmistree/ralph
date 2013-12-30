@@ -120,7 +120,7 @@ public class ListTypeDataWrapper<T,D>
     
     public void append(
         ActiveEvent active_event, LockedObject<T,D> new_object,
-        boolean incorporating_deltas)
+        boolean incorporating_deltas) throws BackoutException
     {
         Integer key_added = new Integer(val.size());        
     	if (peered && (! incorporating_deltas))
@@ -130,6 +130,7 @@ public class ListTypeDataWrapper<T,D>
     
     public void append(
         ActiveEvent active_event, LockedObject<T,D> new_object)
+        throws BackoutException
     {
     	append(active_event,new_object,false);
     }
@@ -144,6 +145,7 @@ public class ListTypeDataWrapper<T,D>
     public void insert(
         ActiveEvent active_event, int where_to_insert,
         LockedObject<T,D> new_val, boolean incorporating_deltas)
+        throws BackoutException
     {
         Integer key_added = new Integer(val.size());
         if (peered && (! incorporating_deltas))
@@ -153,7 +155,7 @@ public class ListTypeDataWrapper<T,D>
     
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        LockedObject<T,D> new_val)
+        LockedObject<T,D> new_val) throws BackoutException
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
