@@ -5,7 +5,7 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
-import ralph.SingleThreadedLockedContainer.IndexType;
+import ralph.NonAtomicMapContainer.IndexType;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or

@@ -29,7 +29,7 @@ public abstract class AtomicMap<K,V,D>
     public AtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -55,7 +55,7 @@ public abstract class AtomicMap<K,V,D>
     public AtomicMap(
         String _host_uuid, boolean _peered,
         AtomicMapContainer<K,V,D> internal_val,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         super(
@@ -70,7 +70,7 @@ public abstract class AtomicMap<K,V,D>
     
     public AtomicMap(
         String _host_uuid, boolean _peered,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -99,7 +99,7 @@ public abstract class AtomicMap<K,V,D>
     public AtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above

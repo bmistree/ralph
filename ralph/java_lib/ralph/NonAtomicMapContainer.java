@@ -13,7 +13,7 @@ import java.util.Map.Entry;
  * @param <D> --- The Java type of data that the internal locked
  * objects should dewaldoify into
  */
-public class SingleThreadedLockedContainer<K,V,D> 
+public class NonAtomicMapContainer<K,V,D> 
     extends NonAtomicObject <
     // The internal values that these are holding
     HashMap<K,LockedObject<V,D>>,
@@ -37,7 +37,7 @@ public class SingleThreadedLockedContainer<K,V,D>
 
     private ReferenceTypeDataWrapper<K,V,D> reference_type_val = null;
 	
-    public SingleThreadedLockedContainer()
+    public NonAtomicMapContainer()
     {
         super();
     }
@@ -195,7 +195,7 @@ public class SingleThreadedLockedContainer<K,V,D>
         throws BackoutException
     {
         Util.logger_assert(
-            "Still must define swap method for SingleThreadedLockedContainer.");
+            "Still must define swap method for NonAtomicMapContainer.");
     }
 
     

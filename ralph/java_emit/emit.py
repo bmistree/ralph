@@ -22,10 +22,10 @@ import ralph.LockedVariables.LockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
-import ralph.LockedVariables.SingleThreadedMapVariable;
+import ralph.LockedVariables.NonAtomicMapVariable;
 import ralph.LockedVariables.AtomicMapVariable;
 // index types for maps
-import ralph.SingleThreadedLockedContainer.IndexType;
+import ralph.NonAtomicMapContainer.IndexType;
 
 import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
@@ -781,13 +781,13 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         index_basic_type = type_object.from_type_node.type.basic_type
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
-                'SingleThreadedLockedContainer.IndexType.DOUBLE')            
+                'NonAtomicMapContainer.IndexType.DOUBLE')            
         elif index_basic_type == STRING_TYPE:
             java_map_index_type_text = (
-                'SingleThreadedLockedContainer.IndexType.STRING')
+                'NonAtomicMapContainer.IndexType.STRING')
         elif index_basic_type == BOOL_TYPE:
             java_map_index_type_text = (
-                'SingleThreadedLockedContainer.IndexType.BOOLEAN')
+                'NonAtomicMapContainer.IndexType.BOOLEAN')
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -860,7 +860,7 @@ def emit_internal_map_type(type_object):
     if type_object.is_tvar:
         internal_map_var_type = 'AtomicMapContainer'
     else:
-        internal_map_var_type = 'SingleThreadedLockedContainer'
+        internal_map_var_type = 'NonAtomicMapContainer'
         
     return (
         internal_map_var_type +
@@ -880,7 +880,7 @@ def emit_map_type(type_object):
             value_type_node.type)
         dewaldoify_type_text = value_internal_type_text
 
-        map_var_type = 'SingleThreadedMapVariable'
+        map_var_type = 'NonAtomicMapVariable'
         if type_object.is_tvar:
             map_var_type = 'AtomicMapVariable'
 

@@ -23,13 +23,13 @@ import java.util.Map.Entry;
  *     HashMap<Number,HashMap<String,Number>>>
  * 
  */
-public abstract class SingleThreadedLockedMap<K,V,D>
-    extends SingleThreadedContainerReference<K,V,D>
+public abstract class NonAtomicMap<K,V,D>
+    extends NonAtomicMapContainerReference<K,V,D>
 {
-    public SingleThreadedLockedMap(
+    public NonAtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -37,25 +37,25 @@ public abstract class SingleThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
 
     /**
        When pass an argument into a method call, should unwrap
-       internal value and put it into another SingleThreadedLockMap.
+       internal value and put it into another NonAtomicLockMap.
        This constructor is for this.
      */
-    public SingleThreadedLockedMap(
+    public NonAtomicMap(
         String _host_uuid, boolean _peered,
-        SingleThreadedLockedContainer<K,V,D> internal_val,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer<K,V,D> internal_val,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         super(
@@ -63,14 +63,14 @@ public abstract class SingleThreadedLockedMap<K,V,D>
             // initial value
             internal_val,
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
     }
     
-    public SingleThreadedLockedMap(
+    public NonAtomicMap(
         String _host_uuid, boolean _peered,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -78,28 +78,28 @@ public abstract class SingleThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        SingleThreadedLockedContainer<K,V,D> internal_val =
+        NonAtomicMapContainer<K,V,D> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
     }
 
-    public SingleThreadedLockedMap(
+    public NonAtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -107,12 +107,12 @@ public abstract class SingleThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new SingleThreadedLockedInternalMapVariable<K,V,D>(
+            new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<SingleThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);
     }

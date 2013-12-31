@@ -9,7 +9,7 @@ public class AtomicInternalMapVariable<K,V,D>
 {
     public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D>_locked_wrapper)
     {
         super();
@@ -21,7 +21,7 @@ public class AtomicInternalMapVariable<K,V,D>
     }
     public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,
-        SingleThreadedLockedContainer.IndexType index_type,
+        NonAtomicMapContainer.IndexType index_type,
         EnsureLockedWrapper<V,D>_locked_wrapper)
     {
         super();

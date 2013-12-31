@@ -196,21 +196,21 @@ public class LockedVariables {
     }
 
     /************ Handling maps ********/
-    public static class SingleThreadedMapVariable <K,V,D>
-        extends SingleThreadedLockedMap<K,V,D>
+    public static class NonAtomicMapVariable <K,V,D>
+        extends NonAtomicMap<K,V,D>
     {
-        public SingleThreadedMapVariable(
+        public NonAtomicMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer.IndexType _index_type,
+            NonAtomicMapContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
         }
 
-        public SingleThreadedMapVariable(
+        public NonAtomicMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer<K,V,D> internal_val,
-            SingleThreadedLockedContainer.IndexType _index_type,
+            NonAtomicMapContainer<K,V,D> internal_val,
+            NonAtomicMapContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(
@@ -224,7 +224,7 @@ public class LockedVariables {
     {
         public AtomicMapVariable(
             String _host_uuid, boolean _peered,
-            SingleThreadedLockedContainer.IndexType _index_type,
+            NonAtomicMapContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
@@ -234,7 +234,7 @@ public class LockedVariables {
         public AtomicMapVariable(
             String _host_uuid, boolean _peered,
             AtomicMapContainer<K,V,D> internal_val,
-            SingleThreadedLockedContainer.IndexType _index_type,
+            NonAtomicMapContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(
