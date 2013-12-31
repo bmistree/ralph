@@ -18,9 +18,9 @@ public class ListTVarConflict
 {
     protected static String test_name = "ListTVarConflict";
     public static final Double INSERTION_INDEX = new Double(30);
-    public static final Double TO_INSERT_1 = new Double(303);
-    public static final Double TO_INSERT_2 = new Double(304);
-    public static final Double TO_INSERT_3 = new Double(305);
+    public static final Double TO_INSERT_0 = new Double(303);
+    public static final Double TO_INSERT_1 = new Double(304);
+    public static final Double TO_INSERT_2 = new Double(305);
     
     public static void main(String [] args)
     {
@@ -65,14 +65,14 @@ public class ListTVarConflict
             if (! list_tvar.get_val(event).get_len_boxed(event).equals(0.0))
                 return false;
             
+            list_tvar.get_val(event).append(event,TO_INSERT_1);
             list_tvar.get_val(event).append(event,TO_INSERT_2);
-            list_tvar.get_val(event).append(event,TO_INSERT_3);
-            list_tvar.get_val(event).insert(event, new Integer(0),TO_INSERT_1);
+            list_tvar.get_val(event).insert(event, new Integer(0),TO_INSERT_0);
             
             Double gotten_val_index_2 = list_tvar.get_val(event).get_val_on_key(
                 event,new Integer(2));
 
-            if (! gotten_val_index_2.equals(TO_INSERT_3.doubleValue()))
+            if (! gotten_val_index_2.equals(TO_INSERT_2.doubleValue()))
                 return false;
 
             // commit changes
@@ -85,27 +85,28 @@ public class ListTVarConflict
             if (commit_resp != ResultType.COMPLETE)
                 return false;
             
-            // // check that list maintains inserted value
-            // event =
-            //     endpt._act_event_map.create_root_atomic_event(null);
+            // check that list maintains inserted value
+            event =
+                endpt._act_event_map.create_root_atomic_event(null);
 
-            // if (! list_tvar.get_val(event).get_len_boxed(event).equals(1.0))
-            //     return false;
-            // Double key_val =
-            //     list_tvar.get_val(event).get_val_on_key(event,INSERTION_INDEX);
+            if (! list_tvar.get_val(event).get_len_boxed(event).equals(3.0))
+                return false;
+
+            Double key_val =
+                list_tvar.get_val(event).get_val_on_key(event,new Integer(1));
             
-            // if (! key_val.equals(ORIGINAL_VAL_INSERTED.doubleValue()))
-            //     return false;
+            if (! key_val.equals(TO_INSERT_1.doubleValue()))
+                return false;
 
-            // // commit read changes
-            // event.begin_first_phase_commit();
-            // event_parent =
-            //     (RootEventParent)event.event_parent;
-            // commit_resp =
-            //     event_parent.event_complete_queue.take();
+            // commit read changes
+            event.begin_first_phase_commit();
+            event_parent =
+                (RootEventParent)event.event_parent;
+            commit_resp =
+                event_parent.event_complete_queue.take();
 
-            // if (commit_resp != ResultType.COMPLETE)
-            //     return false;
+            if (commit_resp != ResultType.COMPLETE)
+                return false;
         }
         catch(Exception _ex)
         {
