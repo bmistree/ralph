@@ -101,6 +101,22 @@ public class MultiThreadedListContainer<V,D>
         return (V)to_return;
     }
 
+
+    public void append(
+        ActiveEvent active_event, V what_to_insert)
+        throws BackoutException
+    {
+        LockedObject<V,D> wrapped_to_insert =
+            locked_wrapper.ensure_locked_object(what_to_insert);
+
+        ListTypeDataWrapper<V,D> wrapped_val =
+            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
+        int size = wrapped_val.val.size();
+        Integer index_to_insert_in = new Integer(size);
+        insert(
+            active_event, index_to_insert_in, wrapped_to_insert);
+    }
+
     /**
        Runs through all the entries in the map/list/struct and puts
        them into any_builder.

@@ -31,13 +31,6 @@ public class MultiThreadedInternalListVariable<V,D>
             _host_uuid,_peered,rtdwc,init_val,
             _locked_wrapper);
     }
-	
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key, V to_write) throws BackoutException
-    {
-        set_val_on_key(active_event,key,to_write,false);		
-    }
 
     @Override
     public void insert(
@@ -50,15 +43,4 @@ public class MultiThreadedInternalListVariable<V,D>
             active_event, index_to_insert_in, wrapped_to_write);
     }
 
-    
-	
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key,
-        V to_write, boolean copy_if_peered) throws BackoutException 
-    {
-        LockedObject<V,D> wrapped_to_write =
-            locked_wrapper.ensure_locked_object(to_write);
-        set_val_on_key(active_event,key,wrapped_to_write,false);
-    }	
 }
