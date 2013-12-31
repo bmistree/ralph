@@ -26,7 +26,6 @@ public class MultiThreadedListContainer<V,D>
     {
         super();
     }
-
     
     public void init_multithreaded_list_container(
         String _host_uuid, boolean _peered,
@@ -40,7 +39,38 @@ public class MultiThreadedListContainer<V,D>
     }
 
     @Override
-    public V get_val_on_key(ActiveEvent active_event, Integer key) throws BackoutException
+    public void insert(
+        ActiveEvent active_event, Integer index_to_insert_in,
+        V what_to_insert)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "Need to override list inertion code.");
+    }
+    
+    @Override
+    public void insert(
+        ActiveEvent active_event, Integer key,
+        LockedObject<V,D> to_insert)  throws BackoutException
+    {
+        ListTypeDataWrapper<V,D> wrapped_val =
+            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
+
+        wrapped_val.insert(active_event,key,to_insert);
+        if (active_event.immediate_complete())
+        {
+            // non-atomics should immediately commit their changes.  Note:
+            // it's fine to presuppose this commit without backout because
+            // we've defined non-atomic events to never backout of their
+            // currrent commits.
+            complete_commit(active_event);
+        }
+    }
+
+    
+    @Override
+    public V get_val_on_key(
+        ActiveEvent active_event, Integer key) throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val =
             (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event);

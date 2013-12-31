@@ -48,6 +48,25 @@ public class MultiThreadedLockedContainer<K,V,D>
     }
 
     @Override
+    public void insert(ActiveEvent active_event, K key, V to_insert)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "Insertion only defined for list objects");
+    }
+
+    @Override
+    public void insert(
+        ActiveEvent active_event, K index_to_insert_in,
+        LockedObject<V,D> what_to_insert)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "insert method only defined for lists, not maps.");
+    }
+    
+    
+    @Override
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =

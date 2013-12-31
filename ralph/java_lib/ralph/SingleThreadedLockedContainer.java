@@ -272,4 +272,22 @@ public class SingleThreadedLockedContainer<K,V,D>
     {
         return val.val.containsValue(contains_val);
     }
+
+    @Override
+    public void insert(
+        ActiveEvent active_event, K index_to_insert_in, V what_to_insert)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "insert method only defined for lists, not maps.");
+    }
+    @Override
+    public void insert(
+        ActiveEvent active_event, K index_to_insert_in,
+        LockedObject<V,D> what_to_insert)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "insert method only defined for lists, not maps.");
+    }
 }

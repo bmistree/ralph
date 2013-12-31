@@ -38,7 +38,19 @@ public class MultiThreadedInternalListVariable<V,D>
     {
         set_val_on_key(active_event,key,to_write,false);		
     }
-	
+
+    @Override
+    public void insert(
+        ActiveEvent active_event, Integer index_to_insert_in, V what_to_insert)
+        throws BackoutException
+    {
+        LockedObject<V,D> wrapped_to_write =
+            locked_wrapper.ensure_locked_object(what_to_insert);
+        insert(
+            active_event, index_to_insert_in, wrapped_to_write);
+    }
+
+    
 	
     @Override
     public void set_val_on_key(

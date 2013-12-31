@@ -59,5 +59,14 @@ public interface ContainerInterface <K,V,D>
     
     public boolean contains_val_called(
         ActiveEvent active_event,V contains_val) throws BackoutException;
+
+    // list specific
+    public void insert(
+        ActiveEvent active_event, K index_to_insert_in, V what_to_insert)
+        throws BackoutException;
+    public void insert(
+        ActiveEvent active_event, K index_to_insert_in,
+        LockedObject<V,D> what_to_insert)
+        throws BackoutException;
 	
 }
