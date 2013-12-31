@@ -42,9 +42,9 @@ public class ListTVarConflict
         // Populate a few values in map.
         if (! ListTVarConflict.test_add_values(endpt,list_tvar))
             return false;
-        // // Tests concurrent read of tvar.
-        // if (! ListTVarConflict.test_concurrent_read(endpt,list_tvar))
-        //     return false;
+        // Tests concurrent read of tvar.
+        if (! ListTVarConflict.test_concurrent_read(endpt,list_tvar))
+            return false;
         // // Tests preempted read of tvar.
         // if (! ListTVarConflict.test_preempted_read(endpt,list_tvar))
         //     return false;        
@@ -173,44 +173,59 @@ public class ListTVarConflict
     // }
 
     
-    // /**
-    //    @returns {boolean} --- True if test passed; false if test
-    //    failed.  (Test passes if two read events are able to access
-    //    variable and commit; false otherwise.)
-    //  */
-    // public static boolean test_concurrent_read(
-    //     Endpoint endpt,
-    //     MultiThreadedListVariable<Double,Double,Double> list_tvar)
-    // {
-    //     try
-    //     {
-    //         ActiveEvent rdr1 =
-    //             endpt._act_event_map.create_root_atomic_event(null);
-    //         ActiveEvent rdr2 =
-    //             endpt._act_event_map.create_root_atomic_event(null);
-            
-    //         if (! list_tvar.get_val(rdr1).get_val_on_key(
-    //                 rdr1,INSERTION_INDEX).equals(ORIGINAL_VAL_INSERTED.doubleValue()))
-    //             return false;
+    /**
+       @returns {boolean} --- True if test passed; false if test
+       failed.  (Test passes if two read events are able to access
+       variable and commit; false otherwise.)
+     */
+    public static boolean test_concurrent_read(
+        Endpoint endpt,
+        MultiThreadedListVariable<Double,Double> list_tvar)
+    {
+        try
+        {
+            ActiveEvent rdr1 =
+                endpt._act_event_map.create_root_atomic_event(null);
+            ActiveEvent rdr2 =
+                endpt._act_event_map.create_root_atomic_event(null);
 
-    //         if (! list_tvar.get_val(rdr2).get_val_on_key(
-    //                 rdr2,INSERTION_INDEX).equals(ORIGINAL_VAL_INSERTED.doubleValue()))
-    //             return false;
-            
-    //         rdr1.begin_first_phase_commit();
-    //         rdr2.begin_first_phase_commit();
+            // read all values with active event rdr1
+            if (! list_tvar.get_val(rdr1).get_val_on_key(
+                    rdr1,new Integer(0)).equals(TO_INSERT_0.doubleValue()))
+                return false;
+            if (! list_tvar.get_val(rdr1).get_val_on_key(
+                    rdr1,new Integer(1)).equals(TO_INSERT_1.doubleValue()))
+                return false;
+            if (! list_tvar.get_val(rdr1).get_val_on_key(
+                    rdr1,new Integer(2)).equals(TO_INSERT_2.doubleValue()))
+                return false;
 
-    //         ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
-    //         ((RootEventParent)rdr2.event_parent).event_complete_queue.take();
+            // read all values with active event rdr2
+            if (! list_tvar.get_val(rdr2).get_val_on_key(
+                    rdr2,new Integer(0)).equals(TO_INSERT_0.doubleValue()))
+                return false;
+            if (! list_tvar.get_val(rdr2).get_val_on_key(
+                    rdr2,new Integer(1)).equals(TO_INSERT_1.doubleValue()))
+                return false;
+            if (! list_tvar.get_val(rdr2).get_val_on_key(
+                    rdr2,new Integer(1)).equals(TO_INSERT_1.doubleValue()))
+                return false;
             
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         ex.printStackTrace();
-    //         return false;
-    //     }
-    //     return true;
-    // }
+            
+            rdr1.begin_first_phase_commit();
+            rdr2.begin_first_phase_commit();
+
+            ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
+            ((RootEventParent)rdr2.event_parent).event_complete_queue.take();
+            
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     
 }
 
