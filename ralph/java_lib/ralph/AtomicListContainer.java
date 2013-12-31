@@ -190,7 +190,7 @@ public class AtomicListContainer<V,D>
         throws BackoutException
     {
         Util.logger_assert(
-            "Still must define swap method for MultiThreadedLockedContainer.");
+            "Still must define swap method for AtomicListContainer.");
     }
 
     

@@ -23,7 +23,7 @@ import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
 import ralph.LockedVariables.SingleThreadedLockedTextVariable;
 import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
 import ralph.LockedVariables.SingleThreadedMapVariable;
-import ralph.LockedVariables.MultiThreadedMapVariable;
+import ralph.LockedVariables.AtomicMapVariable;
 // index types for maps
 import ralph.SingleThreadedLockedContainer.IndexType;
 
@@ -858,7 +858,7 @@ def emit_internal_map_type(type_object):
     dewaldoify_type_text = value_internal_type_text
 
     if type_object.is_tvar:
-        internal_map_var_type = 'MultiThreadedLockedContainer'
+        internal_map_var_type = 'AtomicMapContainer'
     else:
         internal_map_var_type = 'SingleThreadedLockedContainer'
         
@@ -882,7 +882,7 @@ def emit_map_type(type_object):
 
         map_var_type = 'SingleThreadedMapVariable'
         if type_object.is_tvar:
-            map_var_type = 'MultiThreadedMapVariable'
+            map_var_type = 'AtomicMapVariable'
 
         print 'May not be dewaldo-ifying maps correctly'
         to_return = (

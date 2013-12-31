@@ -1,8 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import java.util.HashMap;
-import ralph.LockedVariables.MultiThreadedMapVariable;
+import ralph.LockedVariables.AtomicMapVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
@@ -32,8 +31,8 @@ public class MapTVarConflict
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
 
-        MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>> map_tvar =
-            (MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>>)
+        AtomicMapVariable<Double,Double,Double> map_tvar =
+            (AtomicMapVariable<Double,Double,Double>)
             endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.MAP_TVAR_NAME);
 
@@ -52,7 +51,7 @@ public class MapTVarConflict
 
     public static boolean test_add_values(
         Endpoint endpt,
-        MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>> map_tvar)
+        AtomicMapVariable<Double,Double,Double> map_tvar)
     {
         try
         {
@@ -121,7 +120,7 @@ public class MapTVarConflict
      */
     public static boolean test_preempted_read(
         Endpoint endpt,
-        MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>> map_tvar)
+        AtomicMapVariable<Double,Double,Double> map_tvar)
     {
         try
         {
@@ -176,7 +175,7 @@ public class MapTVarConflict
      */
     public static boolean test_concurrent_read(
         Endpoint endpt,
-        MultiThreadedMapVariable<Double,Double,HashMap<Double,Double>> map_tvar)
+        AtomicMapVariable<Double,Double,Double> map_tvar)
     {
         try
         {

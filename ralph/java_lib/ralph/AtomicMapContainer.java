@@ -14,7 +14,7 @@ import ralph.SingleThreadedLockedContainer.IndexType;
  * @param <D> --- The Java type of data that the internal locked
  * objects should dewaldoify into
  */
-public class MultiThreadedLockedContainer<K,V,D> 
+public class AtomicMapContainer<K,V,D> 
     extends AtomicObject <
     // The internal values that these are holding
     HashMap<K,LockedObject<V,D>>,
@@ -29,7 +29,7 @@ public class MultiThreadedLockedContainer<K,V,D>
     
     public EnsureLockedWrapper<V,D>locked_wrapper;
     
-    public MultiThreadedLockedContainer()
+    public AtomicMapContainer()
     {
         super();
     }
@@ -221,7 +221,7 @@ public class MultiThreadedLockedContainer<K,V,D>
         throws BackoutException
     {
         Util.logger_assert(
-            "Still must define swap method for MultiThreadedLockedContainer.");
+            "Still must define swap method for AtomicMapContainer.");
     }
 
     

@@ -84,7 +84,7 @@ public abstract class AtomicList<V,D>
         boolean is_reference) throws BackoutException
     {
         Util.logger_assert("FIXME: finish serializing lists.");
-        // MultiThreadedLockedContainer<K,V,D> internal_val =
+        // AtomicMapContainer<K,V,D> internal_val =
         //     get_val(active_event);
         // internal_val.serialize_as_rpc_arg(
         //     active_event,any_builder,is_reference);

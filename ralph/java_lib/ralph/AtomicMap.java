@@ -23,10 +23,10 @@ import java.util.Map.Entry;
  *     HashMap<Number,HashMap<String,Number>>>
  * 
  */
-public abstract class MultiThreadedLockedMap<K,V,D>
-    extends MultiThreadedMapContainerReference<K,V,D>
+public abstract class AtomicMap<K,V,D>
+    extends AtomicMapContainerReference<K,V,D>
 {
-    public MultiThreadedLockedMap(
+    public AtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
         SingleThreadedLockedContainer.IndexType index_type,
@@ -37,12 +37,12 @@ public abstract class MultiThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -52,9 +52,9 @@ public abstract class MultiThreadedLockedMap<K,V,D>
        internal value and put it into another MultiThreadedLockMap.
        This constructor is for this.
      */
-    public MultiThreadedLockedMap(
+    public AtomicMap(
         String _host_uuid, boolean _peered,
-        MultiThreadedLockedContainer<K,V,D> internal_val,
+        AtomicMapContainer<K,V,D> internal_val,
         SingleThreadedLockedContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
@@ -63,12 +63,12 @@ public abstract class MultiThreadedLockedMap<K,V,D>
             // initial value
             internal_val,
             // default value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
     }
     
-    public MultiThreadedLockedMap(
+    public AtomicMap(
         String _host_uuid, boolean _peered,
         SingleThreadedLockedContainer.IndexType index_type,
         EnsureLockedWrapper<V,D> locked_wrapper)
@@ -78,25 +78,25 @@ public abstract class MultiThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        MultiThreadedLockedContainer<K,V,D> internal_val =
+        AtomicMapContainer<K,V,D> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
     }
 
-    public MultiThreadedLockedMap(
+    public AtomicMap(
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,
         SingleThreadedLockedContainer.IndexType index_type,
@@ -107,12 +107,12 @@ public abstract class MultiThreadedLockedMap<K,V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid,false,index_type,locked_wrapper),
             // default value
-            new MultiThreadedLockedInternalMapVariable<K,V,D>(
+            new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedLockedContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);
     }

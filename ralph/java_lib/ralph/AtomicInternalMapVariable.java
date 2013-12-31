@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 import RalphExceptions.BackoutException;
 
-public class MultiThreadedLockedInternalMapVariable<K,V,D>
-    extends MultiThreadedLockedContainer<K,V,D>
+public class AtomicInternalMapVariable<K,V,D>
+    extends AtomicMapContainer<K,V,D>
 {
-    public MultiThreadedLockedInternalMapVariable(
+    public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
         SingleThreadedLockedContainer.IndexType index_type,
         EnsureLockedWrapper<V,D>_locked_wrapper)
@@ -19,7 +19,7 @@ public class MultiThreadedLockedInternalMapVariable<K,V,D>
             _host_uuid,_peered,rtdwc,init_val,index_type,
             _locked_wrapper);
     }
-    public MultiThreadedLockedInternalMapVariable(
+    public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,
         SingleThreadedLockedContainer.IndexType index_type,
         EnsureLockedWrapper<V,D>_locked_wrapper)

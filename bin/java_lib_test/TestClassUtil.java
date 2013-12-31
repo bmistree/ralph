@@ -24,7 +24,7 @@ import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
 import java.util.HashMap;
-import ralph.LockedVariables.MultiThreadedMapVariable;
+import ralph.LockedVariables.AtomicMapVariable;
 import ralph.LockedVariables.AtomicListVariable;
 import ralph.SingleThreadedLockedContainer;
 import ralph.BaseLockedWrappers;
@@ -184,7 +184,7 @@ public class TestClassUtil
 
         vstore.add_var(
             DefaultEndpoint.MAP_TVAR_NAME,
-            new MultiThreadedMapVariable<Double,Double,Double>(
+            new AtomicMapVariable<Double,Double,Double>(
                 dummy_host_uuid,false,
                 SingleThreadedLockedContainer.IndexType.DOUBLE,
                 BaseLockedWrappers.NUMBER_WRAPPER));

@@ -219,10 +219,10 @@ public class LockedVariables {
         }
     }
 
-    public static class MultiThreadedMapVariable <K,V,D>
-        extends MultiThreadedLockedMap<K,V,D>
+    public static class AtomicMapVariable <K,V,D>
+        extends AtomicMap<K,V,D>
     {
-        public MultiThreadedMapVariable(
+        public AtomicMapVariable(
             String _host_uuid, boolean _peered,
             SingleThreadedLockedContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
@@ -231,9 +231,9 @@ public class LockedVariables {
         }
 
 
-        public MultiThreadedMapVariable(
+        public AtomicMapVariable(
             String _host_uuid, boolean _peered,
-            MultiThreadedLockedContainer<K,V,D> internal_val,
+            AtomicMapContainer<K,V,D> internal_val,
             SingleThreadedLockedContainer.IndexType _index_type,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {

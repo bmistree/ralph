@@ -10,8 +10,8 @@ import RalphExceptions.BackoutException;
 public abstract class AtomicListContainerReference <V,D> 
     extends LockedValueVariable<
     // this wraps a locked container object.  Ie,
-    // calling get_val on this will return MultiThreadedLockedContainer.
-    // when call set val, must pass in a MultiThreadedLockedContainer
+    // calling get_val on this will return AtomicListContainer.
+    // when call set val, must pass in a AtomicListContainer
     AtomicListContainer<V,D>, 
     // what will return when call de_waldoify.
     D>
