@@ -7,21 +7,21 @@ import RalphExceptions.BackoutException;
  * @param <V> --- Values held in locked objects of list.
  * @param <D> --- What this object will dewaldoify into.
  */
-public abstract class MultiThreadedListContainerReference <V,D> 
+public abstract class AtomicListContainerReference <V,D> 
     extends LockedValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return MultiThreadedLockedContainer.
     // when call set val, must pass in a MultiThreadedLockedContainer
-    MultiThreadedListContainer<V,D>, 
+    AtomicListContainer<V,D>, 
     // what will return when call de_waldoify.
     D>
 {
-    public MultiThreadedListContainerReference(
+    public AtomicListContainerReference(
         String _host_uuid, boolean _peered, 
-        MultiThreadedListContainer<V,D> init_val, 
-        MultiThreadedListContainer<V,D> default_value,
+        AtomicListContainer<V,D> init_val, 
+        AtomicListContainer<V,D> default_value,
         // using value type here: treating internal reference as value
-        ValueTypeDataWrapperConstructor<MultiThreadedListContainer<V,D>,D>vtdwc)
+        ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>vtdwc)
     {
         super(_host_uuid,_peered,init_val,default_value,vtdwc);
     }

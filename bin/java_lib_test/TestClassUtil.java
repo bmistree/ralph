@@ -25,7 +25,7 @@ import RalphExceptions.StoppedException;
 
 import java.util.HashMap;
 import ralph.LockedVariables.MultiThreadedMapVariable;
-import ralph.LockedVariables.MultiThreadedListVariable;
+import ralph.LockedVariables.AtomicListVariable;
 import ralph.SingleThreadedLockedContainer;
 import ralph.BaseLockedWrappers;
 
@@ -191,7 +191,7 @@ public class TestClassUtil
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
-            new MultiThreadedListVariable<Double,Double>(
+            new AtomicListVariable<Double,Double>(
                 dummy_host_uuid,false,
                 BaseLockedWrappers.NUMBER_WRAPPER));
 

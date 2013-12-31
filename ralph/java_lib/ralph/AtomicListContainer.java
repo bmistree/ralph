@@ -11,7 +11,7 @@ import java.util.Map.Entry;
  * @param <V> --- The Java type of data that are elements in the list
  * @param <D> --- The Java type of data that elements should dewaldoify into.
  */
-public class MultiThreadedListContainer<V,D> 
+public class AtomicListContainer<V,D> 
     extends AtomicObject <
     // The internal values that these are holding
     ArrayList<LockedObject<V,D>>,
@@ -22,7 +22,7 @@ public class MultiThreadedListContainer<V,D>
 {
     public EnsureLockedWrapper<V,D>locked_wrapper;
     
-    public MultiThreadedListContainer()
+    public AtomicListContainer()
     {
         super();
     }

@@ -2,7 +2,7 @@ package java_lib_test;
 
 import ralph.VariableStack;
 import java.util.HashMap;
-import ralph.LockedVariables.MultiThreadedListVariable;
+import ralph.LockedVariables.AtomicListVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
@@ -34,8 +34,8 @@ public class ListTVarConflict
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
 
-        MultiThreadedListVariable<Double,Double> list_tvar =
-            (MultiThreadedListVariable<Double,Double>)
+        AtomicListVariable<Double,Double> list_tvar =
+            (AtomicListVariable<Double,Double>)
             endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.LIST_TVAR_NAME);
 
@@ -54,7 +54,7 @@ public class ListTVarConflict
 
     public static boolean test_add_values(
         Endpoint endpt,
-        MultiThreadedListVariable<Double,Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -124,7 +124,7 @@ public class ListTVarConflict
      */
     public static boolean test_preempted_read(
         Endpoint endpt,
-        MultiThreadedListVariable<Double,Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -180,7 +180,7 @@ public class ListTVarConflict
      */
     public static boolean test_concurrent_read(
         Endpoint endpt,
-        MultiThreadedListVariable<Double,Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {

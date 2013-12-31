@@ -21,10 +21,10 @@ import ralph_protobuffs.VariablesProto.Variables;
  *     ArrayList<Number,ArrayList<Number>>>
  * 
  */
-public abstract class MultiThreadedLockedList<V,D>
-    extends MultiThreadedListContainerReference<V,D>
+public abstract class AtomicList<V,D>
+    extends AtomicListContainerReference<V,D>
 {
-    public MultiThreadedLockedList(
+    public AtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<LockedObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureLockedWrapper<V,D> locked_wrapper)
@@ -32,12 +32,12 @@ public abstract class MultiThreadedLockedList<V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedListContainer<V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -47,9 +47,9 @@ public abstract class MultiThreadedLockedList<V,D>
        internal value and put it into another MultiThreadedList.
        This constructor is for this.
      */
-    public MultiThreadedLockedList(
+    public AtomicList(
         String _host_uuid, boolean _peered,
-        MultiThreadedListContainer<V,D> internal_val,
+        AtomicListContainer<V,D> internal_val,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
         super(
@@ -57,12 +57,12 @@ public abstract class MultiThreadedLockedList<V,D>
             // initial value
             internal_val,
             // default value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedListContainer<V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
     }
     
-    public MultiThreadedLockedList(
+    public AtomicList(
         String _host_uuid, boolean _peered,
         EnsureLockedWrapper<V,D> locked_wrapper)
     {
@@ -71,12 +71,12 @@ public abstract class MultiThreadedLockedList<V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedListContainer<V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
@@ -90,7 +90,7 @@ public abstract class MultiThreadedLockedList<V,D>
         //     active_event,any_builder,is_reference);
     }
 
-    public MultiThreadedLockedList(
+    public AtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<LockedObject<V,D>> init_val,
         EnsureLockedWrapper<V,D> locked_wrapper)
@@ -100,12 +100,12 @@ public abstract class MultiThreadedLockedList<V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new MultiThreadedInternalListVariable<V,D>(
+            new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<MultiThreadedListContainer<V,D>,D>());
+            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,false);
     }

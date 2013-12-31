@@ -244,10 +244,10 @@ public class LockedVariables {
     }
     
     /************ Handling Lists ********/
-    public static class MultiThreadedListVariable <V,D>
-        extends MultiThreadedLockedList<V,D>
+    public static class AtomicListVariable <V,D>
+        extends AtomicList<V,D>
     {
-        public MultiThreadedListVariable(
+        public AtomicListVariable(
             String _host_uuid, boolean _peered,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
@@ -255,9 +255,9 @@ public class LockedVariables {
         }
 
 
-        public MultiThreadedListVariable(
+        public AtomicListVariable(
             String _host_uuid, boolean _peered,
-            MultiThreadedListContainer<V,D> internal_val,
+            AtomicListContainer<V,D> internal_val,
             EnsureLockedWrapper<V,D> locked_wrapper)
         {
             super(

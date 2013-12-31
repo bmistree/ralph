@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import RalphExceptions.BackoutException;
 
 
-public class MultiThreadedInternalListVariable<V,D>
-    extends MultiThreadedListContainer<V,D>
+public class AtomicInternalListVariable<V,D>
+    extends AtomicListContainer<V,D>
 {
-    public MultiThreadedInternalListVariable(
+    public AtomicInternalListVariable(
         String _host_uuid,boolean _peered,ArrayList<LockedObject<V,D>> init_val,
         EnsureLockedWrapper<V,D>_locked_wrapper)
     {
@@ -18,7 +18,7 @@ public class MultiThreadedInternalListVariable<V,D>
             _host_uuid,_peered,rtdwc,init_val,
             _locked_wrapper);
     }
-    public MultiThreadedInternalListVariable(
+    public AtomicInternalListVariable(
         String _host_uuid,boolean _peered,
         EnsureLockedWrapper<V,D>_locked_wrapper)
     {
