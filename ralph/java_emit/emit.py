@@ -615,7 +615,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     @returns {String} --- A java signature for method.  Eg.,
 
     private Double some_method (
-        ExecutingEventContext _ctx, LockedActiveEvent _active_event,
+        ExecutingEventContext _ctx, ActiveEvent _active_event,
         SomeType SomeVar) 
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException

@@ -65,7 +65,7 @@ public class BoostedManager
         ActiveEvent root_event = null;
 
         if (atomic)
-            root_event = new LockedActiveEvent(rep,act_event_map,atomic_parent);
+            root_event = new AtomicActiveEvent(rep,act_event_map,atomic_parent);
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
         

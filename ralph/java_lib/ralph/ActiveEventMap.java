@@ -234,7 +234,7 @@ public class ActiveEventMap
                     new PartnerEventParent(local_endpoint,uuid,priority);
                 ActiveEvent new_event = null;
                 if (atomic)
-                    new_event = new LockedActiveEvent(pep,this,null);
+                    new_event = new AtomicActiveEvent(pep,this,null);
                 else
                     new_event = new NonAtomicActiveEvent(pep,this);
                 map.put(uuid, new_event);
@@ -282,7 +282,7 @@ public class ActiveEventMap
                     event_uuid,endpoint_calling, local_endpoint,result_queue,priority);
             ActiveEvent new_event = null;
             if (atomic)
-                new_event = new LockedActiveEvent(eep,this,null);
+                new_event = new AtomicActiveEvent(eep,this,null);
             else
                 new_event = new NonAtomicActiveEvent(eep,this);
             

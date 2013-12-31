@@ -24,7 +24,7 @@ import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
 
-public class LockedActiveEvent extends ActiveEvent
+public class AtomicActiveEvent extends ActiveEvent
 {
     private enum State 
     {
@@ -163,7 +163,7 @@ public class LockedActiveEvent extends ActiveEvent
      # in retry_event so that it can be acccessed by emitted code.
 
     */
-    public LockedActiveEvent retry_event = null;
+    public AtomicActiveEvent retry_event = null;
 
     
     /**
@@ -173,7 +173,7 @@ public class LockedActiveEvent extends ActiveEvent
        atomic event has completed.  Can do so using
        to_restore_from_atomic.
      */
-    public LockedActiveEvent(
+    public AtomicActiveEvent(
         EventParent _event_parent, ActiveEventMap _event_map,
         ActiveEvent _to_restore_from_atomic)
     {
@@ -188,10 +188,10 @@ public class LockedActiveEvent extends ActiveEvent
     /**
        Use this constructor internally from
        create_new_event_for_retry.  Whenever we have to backout of our
-       last transaction, create a replacement of LockedActiveEvent
+       last transaction, create a replacement of AtomicActiveEvent
        that copies reference_counts and to_restore_from.
      */
-    private LockedActiveEvent (
+    private AtomicActiveEvent (
         EventParent _event_parent, ActiveEventMap _event_map,
         int _atomic_reference_counts, ActiveEvent _to_restore_from_atomic)
     {
@@ -246,7 +246,7 @@ public class LockedActiveEvent extends ActiveEvent
     public ActiveEvent create_new_event_for_retry(
         RootEventParent event_parent, ActiveEventMap act_event_map)
     {
-        return new LockedActiveEvent (
+        return new AtomicActiveEvent (
             event_parent, act_event_map, atomic_reference_counts,
             to_restore_from_atomic);
     }
@@ -611,7 +611,7 @@ public class LockedActiveEvent extends ActiveEvent
         //# retry_event in constructor.
         ActiveEventTwoTuple event_map_remove_result =
             event_map.remove_event(uuid,true);
-        retry_event = (LockedActiveEvent)event_map_remove_result.b;
+        retry_event = (AtomicActiveEvent)event_map_remove_result.b;
         
         //# 5
         //# do not need to acquire locks on other_endpoints_contacted
@@ -1089,7 +1089,7 @@ public class LockedActiveEvent extends ActiveEvent
         boolean takes_args = args.size() != 0;
         
         Util.logger_warn(
-            "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
+            "\n\nUnclear if should pass null in in AtomicActiveEvent.\n\n");
 
         ExecutingEvent to_return = new ExecutingEvent (
             name_of_block_to_exec_next,this,ctx,
@@ -1170,7 +1170,7 @@ public class LockedActiveEvent extends ActiveEvent
         {
             Util.logger_assert(
                 "Error: partner response message responding to " +
-                "unknown _ActiveEvent message in LockedActiveEvent.");
+                "unknown _ActiveEvent message in AtomicActiveEvent.");
         }
         //#### END DEBUG
         
@@ -1259,7 +1259,7 @@ public class LockedActiveEvent extends ActiveEvent
         _network_failure = true;
         _nfunlock();
         //# self._lock()
-        //# if self.state == LockedActiveEvent.STATE_FIRST_PHASE_COMMIT:
+        //# if self.state == AtomicActiveEvent.STATE_FIRST_PHASE_COMMIT:
         //#     self.forward_backout_request_and_backout_self()
         //# self._unlock()
     }
