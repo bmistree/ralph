@@ -45,9 +45,9 @@ public class ListTVarConflict
         // Tests concurrent read of tvar.
         if (! ListTVarConflict.test_concurrent_read(endpt,list_tvar))
             return false;
-        // // Tests preempted read of tvar.
-        // if (! ListTVarConflict.test_preempted_read(endpt,list_tvar))
-        //     return false;        
+        // Tests preempted read of tvar.
+        if (! ListTVarConflict.test_preempted_read(endpt,list_tvar))
+            return false;        
 
         return true;
     }
@@ -116,61 +116,61 @@ public class ListTVarConflict
         return true;
     }
     
+    /**
+       @returns {boolean} --- Starts two events.  The second event
+       that is started (the one with lower priority) reads list_tvar.
+       The first event (the event with higher priority) then writes to
+       list_tvar.  Returns true if first event preempts second.
+     */
+    public static boolean test_preempted_read(
+        Endpoint endpt,
+        MultiThreadedListVariable<Double,Double> list_tvar)
+    {
+        try
+        {
+            ActiveEvent writer =
+                endpt._act_event_map.create_root_atomic_event(null);
+            ActiveEvent reader =
+                endpt._act_event_map.create_root_atomic_event(null);
 
-    // /**
-    //    @returns {boolean} --- Starts two events.  The second event
-    //    that is started (the one with lower priority) reads list_tvar.
-    //    The first event (the event with higher priority) then writes to
-    //    list_tvar.  Returns true if first event preempts second.
-    //  */
-    // public static boolean test_preempted_read(
-    //     Endpoint endpt,
-    //     MultiThreadedListVariable<Double,Double> list_tvar)
-    // {
-    //     try
-    //     {
-    //         ActiveEvent writer =
-    //             endpt._act_event_map.create_root_atomic_event(null);
-    //         ActiveEvent reader =
-    //             endpt._act_event_map.create_root_atomic_event(null);
+            if (! list_tvar.get_val(reader).get_val_on_key(reader,new Integer(0)).equals(
+                    TO_INSERT_0.doubleValue()))
+            {
+                return false;
+            }
 
-    //         if (! list_tvar.get_val(reader).get_val_on_key(reader,INSERTION_INDEX).equals(
-    //                 ORIGINAL_VAL_INSERTED.doubleValue()))
-    //         {
-    //             return false;
-    //         }
-
-    //         Double new_val = new Double(
-    //             ORIGINAL_VAL_INSERTED.doubleValue() + 10);
-    //         list_tvar.get_val(writer).set_val_on_key(
-    //             writer,INSERTION_INDEX,new_val);
+            // insert a new value in list
+            Double new_val = new Double(
+                TO_INSERT_0.doubleValue() + 10);
+            list_tvar.get_val(writer).append(
+                writer,new_val);
             
-    //         reader.begin_first_phase_commit();
-    //         writer.begin_first_phase_commit();
+            reader.begin_first_phase_commit();
+            writer.begin_first_phase_commit();
 
-    //         RootEventParent reader_event_parent =
-    //             (RootEventParent)reader.event_parent;
-    //         ResultType reader_commit_resp =
-    //             reader_event_parent.event_complete_queue.take();
+            RootEventParent reader_event_parent =
+                (RootEventParent)reader.event_parent;
+            ResultType reader_commit_resp =
+                reader_event_parent.event_complete_queue.take();
 
-    //         RootEventParent writer_event_parent =
-    //             (RootEventParent)writer.event_parent;
-    //         ResultType writer_commit_resp = 
-    //             writer_event_parent.event_complete_queue.take();
+            RootEventParent writer_event_parent =
+                (RootEventParent)writer.event_parent;
+            ResultType writer_commit_resp = 
+                writer_event_parent.event_complete_queue.take();
 
-    //         if (reader_commit_resp == ResultType.COMPLETE)
-    //             return false;
-    //         if (writer_commit_resp != ResultType.COMPLETE)
-    //             return false;
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         ex.printStackTrace();
-    //         return false;
-    //     }
+            if (reader_commit_resp == ResultType.COMPLETE)
+                return false;
+            if (writer_commit_resp != ResultType.COMPLETE)
+                return false;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
         
-    //     return true;
-    // }
+        return true;
+    }
 
     
     /**
