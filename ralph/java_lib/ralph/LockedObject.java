@@ -12,8 +12,8 @@ import ralph_protobuffs.VariablesProto.Variables;
  */
 public abstract class LockedObject<T,D>
 {
-    private MultiThreadedConstructor multi_threaded_constructor = null;
-    private SingleThreadedConstructor single_threaded_constructor = null;
+    private AtomicFactory atomic_factory = null;
+    private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
 	
@@ -23,11 +23,11 @@ public abstract class LockedObject<T,D>
     {
         if (multi_threaded)
         {
-            return multi_threaded_constructor.construct(
+            return atomic_factory.construct(
                 host_uuid,peered,get_val(active_event));
         }
 		
-        return single_threaded_constructor.construct(
+        return non_atomic_factory.construct(
             host_uuid,peered,get_val(active_event));
     }
 

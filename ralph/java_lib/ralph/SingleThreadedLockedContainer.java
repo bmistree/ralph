@@ -14,7 +14,7 @@ import java.util.Map.Entry;
  * objects should dewaldoify into
  */
 public class SingleThreadedLockedContainer<K,V,D> 
-    extends SingleThreadedLockedObject <
+    extends NonAtomicObject <
     // The internal values that these are holding
     HashMap<K,LockedObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
