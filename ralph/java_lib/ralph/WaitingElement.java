@@ -72,7 +72,7 @@ public class WaitingElement <T,D>
      threadsafe queue to unjam the waiting events.  
      * @return
      */
-    public void unwait(MultiThreadedLockedObject multi_threaded_obj)
+    public void unwait(AtomicObject multi_threaded_obj)
     {
         if (read)
         {

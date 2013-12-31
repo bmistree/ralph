@@ -15,7 +15,7 @@ import ralph.SingleThreadedLockedContainer.IndexType;
  * objects should dewaldoify into
  */
 public class MultiThreadedLockedContainer<K,V,D> 
-    extends MultiThreadedLockedObject <
+    extends AtomicObject <
     // The internal values that these are holding
     HashMap<K,LockedObject<V,D>>,
     // When call dewaldoify on this container, what we should get back

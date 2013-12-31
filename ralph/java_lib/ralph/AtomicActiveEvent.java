@@ -61,8 +61,8 @@ public class AtomicActiveEvent extends ActiveEvent
      //# and complete commit.  On backout, must run through each and
      //# call backout.
      */
-    HashMap<String,MultiThreadedLockedObject>touched_objs = 
-        new HashMap<String,MultiThreadedLockedObject>();
+    HashMap<String,AtomicObject>touched_objs = 
+        new HashMap<String,AtomicObject>();
 
     /**
      //# using a separate lock for touched objects so that if we are
@@ -224,7 +224,7 @@ public class AtomicActiveEvent extends ActiveEvent
      @returns {bool} --- Returns True if have not already backed
      out.  Returns False otherwise.
     */
-    public boolean add_touched_obj(MultiThreadedLockedObject obj)
+    public boolean add_touched_obj(AtomicObject obj)
     {
         _lock();
         boolean still_running = (state == State.STATE_RUNNING);
@@ -299,11 +299,11 @@ public class AtomicActiveEvent extends ActiveEvent
         }
          
         _touched_objs_lock();
-        HashMap<String,MultiThreadedLockedObject> touched_objs_copy = 
-            new HashMap<String,MultiThreadedLockedObject>(touched_objs);
+        HashMap<String,AtomicObject> touched_objs_copy = 
+            new HashMap<String,AtomicObject>(touched_objs);
         _touched_objs_unlock();
 
-        for (MultiThreadedLockedObject obj : touched_objs_copy.values())
+        for (AtomicObject obj : touched_objs_copy.values())
             obj.update_event_priority(uuid, new_priority);
 
         _others_contacted_lock();
@@ -523,11 +523,11 @@ public class AtomicActiveEvent extends ActiveEvent
         //# note that by the time we get here, we know that we will not
         //# be modifying touched_objs dict.  Therefore, we do not need
         //# to take any locks.
-        for (MultiThreadedLockedObject obj : touched_objs.values())
+        for (AtomicObject obj : touched_objs.values())
             obj.complete_commit(this);
 
         _touched_objs_lock();
-        touched_objs = new HashMap<String,MultiThreadedLockedObject>();
+        touched_objs = new HashMap<String,AtomicObject>();
         _touched_objs_unlock();        
         
         if (signal_queue != null)
@@ -630,11 +630,11 @@ public class AtomicActiveEvent extends ActiveEvent
     public void _backout_touched_objs()
     {
         _touched_objs_lock();
-        HashMap<String,MultiThreadedLockedObject> copied_touched_objs =
-            new HashMap<String,MultiThreadedLockedObject>(touched_objs);
+        HashMap<String,AtomicObject> copied_touched_objs =
+            new HashMap<String,AtomicObject>(touched_objs);
         _touched_objs_unlock();
         
-        for (MultiThreadedLockedObject touched_obj : copied_touched_objs.values())
+        for (AtomicObject touched_obj : copied_touched_objs.values())
             touched_obj.backout(this);
     }
 
@@ -734,7 +734,7 @@ public class AtomicActiveEvent extends ActiveEvent
        * @param obj_requesting
        */
     public void obj_request_backout_and_release_lock(
-        MultiThreadedLockedObject obj_requesting)
+        AtomicObject obj_requesting)
     {
         //# note that because _backout creates a new thread to run
         //# through each touched object and back them out separately, we

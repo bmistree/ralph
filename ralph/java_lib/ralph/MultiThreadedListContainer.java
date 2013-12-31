@@ -12,7 +12,7 @@ import java.util.Map.Entry;
  * @param <D> --- The Java type of data that elements should dewaldoify into.
  */
 public class MultiThreadedListContainer<V,D> 
-    extends MultiThreadedLockedObject <
+    extends AtomicObject <
     // The internal values that these are holding
     ArrayList<LockedObject<V,D>>,
     // When call dewaldoify on this container, what we should get back

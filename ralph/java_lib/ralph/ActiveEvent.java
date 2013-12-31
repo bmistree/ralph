@@ -49,7 +49,7 @@ public abstract class ActiveEvent
      @returns {bool} --- Returns True if have not already backed
      out.  Returns False otherwise.
     */
-    public abstract boolean add_touched_obj(MultiThreadedLockedObject obj);
+    public abstract boolean add_touched_obj(AtomicObject obj);
     public abstract void promote_boosted(String new_priority);
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -106,7 +106,7 @@ public abstract class ActiveEvent
        * @param obj_requesting
        */
     public abstract void obj_request_backout_and_release_lock(
-        MultiThreadedLockedObject obj_requesting);
+        AtomicObject obj_requesting);
 
     /**
        Either this or obj_request_backout_and_release_lock

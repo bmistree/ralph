@@ -9,6 +9,6 @@ package ralph;
  */
 public interface MultiThreadedConstructor<T,D>
 {
-    public MultiThreadedLockedObject<T,D> construct(
+    public AtomicObject<T,D> construct(
         String host_uuid, boolean peered, Object init_val);
 }

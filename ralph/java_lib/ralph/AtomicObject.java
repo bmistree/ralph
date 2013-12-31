@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <D> --- The type that gets returned from dewaldoify.  Not entirely true
  * If this is an internal container, then contains what each value in map/list would dewaldoify to.
  */
-public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D> 
+public abstract class AtomicObject<T,D> extends LockedObject<T,D> 
 {
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
@@ -74,7 +74,7 @@ public abstract class MultiThreadedLockedObject<T,D> extends LockedObject<T,D>
     }
 	
 	
-    public MultiThreadedLockedObject(){}
+    public AtomicObject(){}
 	
     public void init_multithreaded_locked_object(
         ValueTypeDataWrapperConstructor<T,D> vtdwc, String _host_uuid,

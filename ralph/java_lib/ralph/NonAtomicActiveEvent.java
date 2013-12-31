@@ -52,7 +52,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
      @returns {bool} --- Returns True if have not already backed
      out.  Returns False otherwise.
     */
-    public boolean add_touched_obj(MultiThreadedLockedObject obj)
+    public boolean add_touched_obj(AtomicObject obj)
     {
         return true;
     }
@@ -248,7 +248,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        * @param obj_requesting
        */
     public void obj_request_backout_and_release_lock(
-        MultiThreadedLockedObject obj_requesting)
+        AtomicObject obj_requesting)
     {
         Util.logger_assert(
             "Non-atomic should never be asked to backout and release lock.");
