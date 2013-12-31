@@ -9,7 +9,7 @@ import RalphExceptions.BackoutException;
  * @param <V> --- Values held in locked objects of map.
  * @param <D> --- What this object will dewaldoify into.
  */
-public abstract class MultiThreadedContainerReference <K,V,D> 
+public abstract class MultiThreadedMapContainerReference <K,V,D> 
     extends LockedValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return MultiThreadedLockedContainer.
@@ -18,7 +18,7 @@ public abstract class MultiThreadedContainerReference <K,V,D>
     // what will return when call de_waldoify.
     D>
 {
-    public MultiThreadedContainerReference(
+    public MultiThreadedMapContainerReference(
         String _host_uuid, boolean _peered, 
         MultiThreadedLockedContainer<K,V,D> init_val, 
         MultiThreadedLockedContainer<K,V,D> default_value,

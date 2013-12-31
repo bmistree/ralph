@@ -24,7 +24,7 @@ import java.util.Map.Entry;
  * 
  */
 public abstract class MultiThreadedLockedMap<K,V,D>
-    extends MultiThreadedContainerReference<K,V,D>
+    extends MultiThreadedMapContainerReference<K,V,D>
 {
     public MultiThreadedLockedMap(
         String _host_uuid, boolean _peered,
