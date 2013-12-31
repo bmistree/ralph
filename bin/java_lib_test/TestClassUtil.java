@@ -25,6 +25,7 @@ import RalphExceptions.StoppedException;
 
 import java.util.HashMap;
 import ralph.LockedVariables.MultiThreadedMapVariable;
+import ralph.LockedVariables.MultiThreadedListVariable;
 import ralph.SingleThreadedLockedContainer;
 import ralph.BaseLockedWrappers;
 
@@ -58,6 +59,7 @@ public class TestClassUtil
         public static final String NUM_TVAR_NAME = "num_tvar";
         public static final Double NUM_TVAR_INIT_VAL = new Double (5);
         public static final String MAP_TVAR_NAME = "map_tvar";
+        public static final String LIST_TVAR_NAME = "list_tvar";
         
         
         public DefaultEndpoint(
@@ -187,6 +189,13 @@ public class TestClassUtil
                 SingleThreadedLockedContainer.IndexType.DOUBLE,
                 BaseLockedWrappers.NUMBER_WRAPPER));
 
+        vstore.add_var(
+            DefaultEndpoint.LIST_TVAR_NAME,
+            new MultiThreadedListVariable<Double,Double>(
+                dummy_host_uuid,false,
+                BaseLockedWrappers.NUMBER_WRAPPER));
+
+        
         DefaultEndpoint to_return = new DefaultEndpoint(
             new RalphGlobals(),
             dummy_host_uuid,

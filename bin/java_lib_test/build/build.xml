@@ -53,7 +53,7 @@
       depends=
         "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
          run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
-         run_NonAtomic,run_MapTVar">
+         run_NonAtomic,run_MapTVar,run_ListTVar">
   </target>
   
   <!-- List individual tests -->
@@ -134,6 +134,18 @@
     </java>
   </target>
 
+    <target
+      name="run_ListTVar"
+      depends="compile_all"
+      description="Tests can use a list as a tvar.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.ListTVarConflict"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
     <target
       name="run_BasicParallel"
