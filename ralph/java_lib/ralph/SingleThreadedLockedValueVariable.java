@@ -1,7 +1,7 @@
 package ralph;
 import RalphExceptions.BackoutException;
 
-public abstract class SingleThreadedLockedValueVariable<T,D> extends SingleThreadedLockedObject<T,D>
+public abstract class SingleThreadedLockedValueVariable<T,D> extends NonAtomicObject<T,D>
 {
     public SingleThreadedLockedValueVariable(
         String _host_uuid, boolean _peered,

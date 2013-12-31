@@ -12,7 +12,7 @@ import RalphExceptions.BackoutException;
  * entirely true If this is an internal container, then contains what
  * each value in map/list would dewaldoify to.
  */
-public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> {
+public abstract class NonAtomicObject<T,D> extends LockedObject<T,D> {
 	
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
@@ -20,7 +20,7 @@ public abstract class SingleThreadedLockedObject<T,D> extends LockedObject<T,D> 
     private DataWrapperConstructor<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
 	
-    public SingleThreadedLockedObject(){}
+    public NonAtomicObject(){}
 	
     public void init(
         ValueTypeDataWrapperConstructor<T,D> vtdwc, String _host_uuid,
