@@ -277,14 +277,7 @@ public class NonAtomicListContainer<V,D>
         return val.val.contains(contains_val);
     }
 
-    @Override
-    public void insert(
-        ActiveEvent active_event, Integer index_to_insert_in, V what_to_insert)
-        throws BackoutException
-    {
-        Util.logger_assert(
-            "Need to override list inertion code in parent.");
-    }
+
     @Override
     public void insert(
         ActiveEvent active_event, Integer index_to_insert_in,
@@ -293,4 +286,25 @@ public class NonAtomicListContainer<V,D>
     {
         val.val.add(index_to_insert_in,what_to_insert);
     }
+    
+    @Override
+    public void insert(
+        ActiveEvent active_event, Integer index_to_insert_in,
+        V what_to_insert)
+        throws BackoutException
+    {
+        RalphObject<V,D> wrapped_to_insert =
+            locked_wrapper.ensure_atomic_object(what_to_insert);
+        insert(active_event,index_to_insert_in,wrapped_to_insert);
+    }
+    
+    public void insert(
+        ActiveEvent active_event, Double index_to_insert_in,
+        V what_to_insert)
+        throws BackoutException
+    {
+        insert(
+            active_event,new Integer((int)index_to_insert_in.doubleValue()),
+            what_to_insert);
+    }    
 }
