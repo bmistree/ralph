@@ -5,6 +5,10 @@ import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
 
 /**
  * @param <K>  ---- The keys used for indexing
@@ -42,7 +46,7 @@ public abstract class NonAtomicMap<K,V,D>
             // default value
             new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -65,7 +69,7 @@ public abstract class NonAtomicMap<K,V,D>
             // default value
             new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicMapContainer<K,V,D>,D>());
     }
     
     public NonAtomicMap(
@@ -83,7 +87,7 @@ public abstract class NonAtomicMap<K,V,D>
             // default value
             new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicMapContainer<K,V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
@@ -112,7 +116,7 @@ public abstract class NonAtomicMap<K,V,D>
             // default value
             new NonAtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<NonAtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);
     }
@@ -126,7 +130,7 @@ public abstract class NonAtomicMap<K,V,D>
         //FIXME probably inefficient to add each field separately
         for (Entry<K, RalphObject<V,D>> entry : init_val.entrySet())
         {
-            ReferenceTypeDataWrapper<K,V,D>casted_wrapper = (ReferenceTypeDataWrapper<K,V,D>)val.val.val;
+            MapTypeDataWrapper<K,V,D>casted_wrapper = (MapTypeDataWrapper<K,V,D>)val.val.val;
 
             // single threaded variables will not throw backout exceptions.
             try {

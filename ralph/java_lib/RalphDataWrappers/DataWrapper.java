@@ -1,6 +1,7 @@
-package ralph;
+package RalphDataWrappers;
 
 import RalphExceptions.BackoutException;
+import ralph.ActiveEvent;
 
 /**
  * @param <T> --- Type of internal data holding
@@ -8,8 +9,7 @@ import RalphExceptions.BackoutException;
  */
 public class DataWrapper<T,D>
 {
-	
-    protected T val;
+    public T val;
     protected boolean has_been_written_since_last_msg = false;
 	
     public DataWrapper(T _val, boolean peered)

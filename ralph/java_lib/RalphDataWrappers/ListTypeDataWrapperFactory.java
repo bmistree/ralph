@@ -1,7 +1,7 @@
-package ralph;
+package RalphDataWrappers;
 
 import java.util.ArrayList;
-
+import ralph.RalphObject;
 /**
  * value, returned from dewaldoify
  * @param <V> --- Java variables in the array list
@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * dewaldoify into (if they are locked objects)
  */
 
-public class ListTypeDataWrapperConstructor<V,D>
-    extends DataWrapperConstructor<
+public class ListTypeDataWrapperFactory<V,D>
+    extends DataWrapperFactory<
     // The actual internal data that will be held by the data wrapper
     ArrayList<RalphObject<V,D>>, 
     // what you get when you call dewaldoify on the data wrapper

@@ -3,6 +3,8 @@ package ralph;
 import java.util.HashMap;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphExceptions.BackoutException;
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
 
 public class AtomicInternalMapVariable<K,V,D>
     extends AtomicMapContainer<K,V,D>
@@ -13,8 +15,8 @@ public class AtomicInternalMapVariable<K,V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
-            new ReferenceTypeDataWrapperConstructor<K,V,D>();
+        MapTypeDataWrapperFactory<K,V,D>rtdwc =
+            new MapTypeDataWrapperFactory<K,V,D>();
         init_multithreaded_locked_container(
             _host_uuid,_peered,rtdwc,init_val,index_type,
             _locked_wrapper);
@@ -25,8 +27,8 @@ public class AtomicInternalMapVariable<K,V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
-            new ReferenceTypeDataWrapperConstructor<K,V,D>();
+        MapTypeDataWrapperFactory<K,V,D>rtdwc =
+            new MapTypeDataWrapperFactory<K,V,D>();
         HashMap<K,RalphObject<V,D>> init_val =
             new HashMap<K,RalphObject<V,D>>();
         init_multithreaded_locked_container(

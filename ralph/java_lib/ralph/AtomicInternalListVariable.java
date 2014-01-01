@@ -3,6 +3,7 @@ package ralph;
 import java.util.ArrayList;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
 
 public class AtomicInternalListVariable<V,D>
     extends AtomicListContainer<V,D>
@@ -12,8 +13,8 @@ public class AtomicInternalListVariable<V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ListTypeDataWrapperConstructor<V,D>rtdwc =
-            new ListTypeDataWrapperConstructor<V,D>();
+        ListTypeDataWrapperFactory<V,D>rtdwc =
+            new ListTypeDataWrapperFactory<V,D>();
         init_multithreaded_list_container(
             _host_uuid,_peered,rtdwc,init_val,
             _locked_wrapper);
@@ -23,8 +24,8 @@ public class AtomicInternalListVariable<V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ListTypeDataWrapperConstructor<V,D>rtdwc =
-            new ListTypeDataWrapperConstructor<V,D>();
+        ListTypeDataWrapperFactory<V,D>rtdwc =
+            new ListTypeDataWrapperFactory<V,D>();
         ArrayList<RalphObject<V,D>> init_val =
             new ArrayList<RalphObject<V,D>>();
         init_multithreaded_list_container(

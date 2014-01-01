@@ -1,6 +1,6 @@
 package ralph;
 
-
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphExceptions.BackoutException;
 
 
@@ -23,7 +23,7 @@ public abstract class AtomicMapContainerReference <K,V,D>
         AtomicMapContainer<K,V,D> init_val, 
         AtomicMapContainer<K,V,D> default_value,
         // using value type here: treating internal reference as value
-        ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>vtdwc)
+        ValueTypeDataWrapperFactory<AtomicMapContainer<K,V,D>,D>vtdwc)
     {
         super(_host_uuid,_peered,init_val,default_value,vtdwc);
     }

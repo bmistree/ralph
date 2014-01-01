@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
  * @param <V>  ---- The type of each internal value in the internal arraylist
@@ -37,7 +39,7 @@ public abstract class AtomicList<V,D>
             // default value
             new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -59,7 +61,7 @@ public abstract class AtomicList<V,D>
             // default value
             new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
     }
     
     public AtomicList(
@@ -76,7 +78,7 @@ public abstract class AtomicList<V,D>
             // default value
             new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
@@ -105,7 +107,7 @@ public abstract class AtomicList<V,D>
             // default value
             new AtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,false);
     }

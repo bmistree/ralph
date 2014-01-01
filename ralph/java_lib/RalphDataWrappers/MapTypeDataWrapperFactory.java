@@ -1,6 +1,8 @@
-package ralph;
+package RalphDataWrappers;
 
 import java.util.HashMap;
+import ralph.RalphObject;
+import ralph.ActiveEvent;
 
 /**
  * 
@@ -14,8 +16,8 @@ import java.util.HashMap;
  * dewaldoify into (if they are locked objects)
  */
 
-public class ReferenceTypeDataWrapperConstructor<K,V,D> 	
-    extends DataWrapperConstructor<
+public class MapTypeDataWrapperFactory<K,V,D> 	
+    extends DataWrapperFactory<
     // The actual internal data that will be held by the data wrapper
     HashMap<K,RalphObject<V,D>>, 
     // what you get when you call dewaldoify on the data wrapper
@@ -27,7 +29,7 @@ public class ReferenceTypeDataWrapperConstructor<K,V,D>
         construct(
             HashMap<K, RalphObject<V,D>> _val, boolean peered) 
     {
-        return new ReferenceTypeDataWrapper<K,V,D>(_val,peered);
+        return new MapTypeDataWrapper<K,V,D>(_val,peered);
     }
 	
 }

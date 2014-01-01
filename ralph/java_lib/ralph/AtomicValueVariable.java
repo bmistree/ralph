@@ -1,13 +1,15 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
+import RalphDataWrappers.DataWrapper;
 
 public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D> 
 {
     public AtomicValueVariable(
         String _host_uuid, boolean _peered, T init_val,T default_value,
-        ValueTypeDataWrapperConstructor<T,D> vtdwc)
+        ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
         super();
         init_multithreaded_locked_object(vtdwc,_host_uuid,_peered,init_val);

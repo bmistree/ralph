@@ -1,7 +1,7 @@
-package ralph;
+package RalphDataWrappers;
 
-public class TrueFalseTypeDataWrapperConstructor
-    extends ValueTypeDataWrapperConstructor<Boolean,Boolean>
+public class TrueFalseTypeDataWrapperFactory
+    extends ValueTypeDataWrapperFactory<Boolean,Boolean>
 {	
     @Override
     public DataWrapper<Boolean,Boolean> construct(

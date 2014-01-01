@@ -6,6 +6,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
+import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
  * @param <V> --- The Java type of data that are elements in the list
@@ -29,7 +31,7 @@ public class AtomicListContainer<V,D>
     
     public void init_multithreaded_list_container(
         String _host_uuid, boolean _peered,
-        ListTypeDataWrapperConstructor<V,D> rtdwc,
+        ListTypeDataWrapperFactory<V,D> rtdwc,
         ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {

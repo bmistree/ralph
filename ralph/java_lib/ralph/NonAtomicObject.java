@@ -1,6 +1,10 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
+import RalphDataWrappers.DataWrapperFactory;
+import RalphDataWrappers.DataWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
 
 
 /**
@@ -17,13 +21,13 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
     public boolean peered;
-    private DataWrapperConstructor<T,D> data_wrapper_constructor;
+    private DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
 	
     public NonAtomicObject(){}
 	
     public void init(
-        ValueTypeDataWrapperConstructor<T,D> vtdwc, String _host_uuid,
+        ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
         boolean _peered, T init_val)
     {
         data_wrapper_constructor = vtdwc;

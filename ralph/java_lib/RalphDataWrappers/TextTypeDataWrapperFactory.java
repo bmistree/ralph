@@ -1,7 +1,7 @@
-package ralph;
+package RalphDataWrappers;
 
-public class TextTypeDataWrapperConstructor
-    extends ValueTypeDataWrapperConstructor<String,String>
+public class TextTypeDataWrapperFactory
+    extends ValueTypeDataWrapperFactory<String,String>
 {	
     @Override
     public DataWrapper<String,String> construct(

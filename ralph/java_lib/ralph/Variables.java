@@ -6,21 +6,26 @@ import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
+import RalphDataWrappers.NumberTypeDataWrapperFactory;
+import RalphDataWrappers.TextTypeDataWrapperFactory;
+import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
+
+
 public class Variables {
-    final static NumberTypeDataWrapperConstructor
-        number_value_type_data_wrapper_constructor =
-        new NumberTypeDataWrapperConstructor();
+    final static NumberTypeDataWrapperFactory
+        number_value_type_data_wrapper_factory =
+        new NumberTypeDataWrapperFactory();
     final static Double default_number = new Double(0.0);
 
-    final static TextTypeDataWrapperConstructor
-        text_value_type_data_wrapper_constructor =
-        new TextTypeDataWrapperConstructor();
+    final static TextTypeDataWrapperFactory
+        text_value_type_data_wrapper_factory =
+        new TextTypeDataWrapperFactory();
     
     final static String default_text = new String();
 	
-    final static TrueFalseTypeDataWrapperConstructor
-        true_false_value_type_data_wrapper_constructor = 
-        new TrueFalseTypeDataWrapperConstructor();
+    final static TrueFalseTypeDataWrapperFactory
+        true_false_value_type_data_wrapper_factory = 
+        new TrueFalseTypeDataWrapperFactory();
     
     final static Boolean default_tf = false;
 	
@@ -31,13 +36,13 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered, new Double(((Number) init_val).doubleValue()),
-                default_number,number_value_type_data_wrapper_constructor);		
+                default_number,number_value_type_data_wrapper_factory);		
         }
         public AtomicNumberVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_number,default_number,
-                number_value_type_data_wrapper_constructor);		
+                number_value_type_data_wrapper_factory);		
         }
         
         public void serialize_as_rpc_arg(
@@ -57,13 +62,13 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,(String)init_val,default_text,
-                text_value_type_data_wrapper_constructor);		
+                text_value_type_data_wrapper_factory);		
         }
         public AtomicTextVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_text,default_text,
-                text_value_type_data_wrapper_constructor);            
+                text_value_type_data_wrapper_factory);            
         }
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
@@ -84,13 +89,13 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,(Boolean)init_val,default_tf,
-                true_false_value_type_data_wrapper_constructor);		
+                true_false_value_type_data_wrapper_factory);		
         }
         public AtomicTrueFalseVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_tf,default_tf,
-                true_false_value_type_data_wrapper_constructor);
+                true_false_value_type_data_wrapper_factory);
         }
         
         public void serialize_as_rpc_arg(
@@ -113,7 +118,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,init_val,default_number,
-                number_value_type_data_wrapper_constructor);
+                number_value_type_data_wrapper_factory);
         }
 
         public NonAtomicNumberVariable(
@@ -121,7 +126,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,default_number,default_number,
-                number_value_type_data_wrapper_constructor);			
+                number_value_type_data_wrapper_factory);			
         }
         
         public void serialize_as_rpc_arg(
@@ -143,7 +148,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,init_val,default_text,
-                text_value_type_data_wrapper_constructor);
+                text_value_type_data_wrapper_factory);
         }
 		
         public NonAtomicTextVariable(
@@ -151,7 +156,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,default_text,default_text,
-                text_value_type_data_wrapper_constructor);
+                text_value_type_data_wrapper_factory);
         }
         
         public void serialize_as_rpc_arg(
@@ -174,7 +179,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,init_val,default_tf,
-                true_false_value_type_data_wrapper_constructor);
+                true_false_value_type_data_wrapper_factory);
         }
 
         public NonAtomicTrueFalseVariable(
@@ -182,7 +187,7 @@ public class Variables {
         {
             super(
                 _host_uuid,_peered,default_tf,default_tf,
-                true_false_value_type_data_wrapper_constructor);
+                true_false_value_type_data_wrapper_factory);
         }
 
         public void serialize_as_rpc_arg(

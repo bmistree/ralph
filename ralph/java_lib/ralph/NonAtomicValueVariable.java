@@ -1,11 +1,13 @@
 package ralph;
 import RalphExceptions.BackoutException;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
 
 public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
 {
     public NonAtomicValueVariable(
         String _host_uuid, boolean _peered,
-        T init_val, T DEFAULT_VALUE, ValueTypeDataWrapperConstructor<T,D> vtdwc)
+        T init_val, T DEFAULT_VALUE, ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
         if (init_val == null)
             init_val = DEFAULT_VALUE;

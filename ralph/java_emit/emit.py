@@ -39,6 +39,8 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+
 
 public class %s
 {
@@ -91,7 +93,7 @@ def emit_struct_data_wrapper_constructor(struct_name):
     '''
     internal_struct_name = emit_internal_struct_type(struct_name)
     data_wrapper_type_text = (
-        'ValueTypeDataWrapperConstructor<%s,%s>' %
+        'ValueTypeDataWrapperFactory<%s,%s>' %
         (internal_struct_name,internal_struct_name))
     
     data_wrapper_constructor_text = '''

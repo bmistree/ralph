@@ -1,7 +1,7 @@
 package ralph;
 
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphExceptions.BackoutException;
-
 
 /**
  * @param <V> --- Values held in locked objects of list.
@@ -21,7 +21,7 @@ public abstract class AtomicListContainerReference <V,D>
         AtomicListContainer<V,D> init_val, 
         AtomicListContainer<V,D> default_value,
         // using value type here: treating internal reference as value
-        ValueTypeDataWrapperConstructor<AtomicListContainer<V,D>,D>vtdwc)
+        ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>vtdwc)
     {
         super(_host_uuid,_peered,init_val,default_value,vtdwc);
     }

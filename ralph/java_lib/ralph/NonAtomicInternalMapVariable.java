@@ -3,6 +3,9 @@ package ralph;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import java.util.HashMap;
 import RalphExceptions.BackoutException;
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
+
 
 public class NonAtomicInternalMapVariable<K,V,D>
     extends NonAtomicMapContainer<K,V,D>
@@ -14,8 +17,8 @@ public class NonAtomicInternalMapVariable<K,V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
-            new ReferenceTypeDataWrapperConstructor<K,V,D>();
+        MapTypeDataWrapperFactory<K,V,D>rtdwc =
+            new MapTypeDataWrapperFactory<K,V,D>();
         init(_host_uuid,_peered,rtdwc,init_val,index_type,
             _locked_wrapper);
     }
@@ -25,8 +28,8 @@ public class NonAtomicInternalMapVariable<K,V,D>
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
-        ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
-            new ReferenceTypeDataWrapperConstructor<K,V,D>();
+        MapTypeDataWrapperFactory<K,V,D>rtdwc =
+            new MapTypeDataWrapperFactory<K,V,D>();
         HashMap<K,RalphObject<V,D>> init_val =
             new HashMap<K,RalphObject<V,D>>();
         init(

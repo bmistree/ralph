@@ -7,6 +7,14 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import RalphExceptions.BackoutException;
 import java.util.concurrent.locks.ReentrantLock;
+import RalphDataWrappers.DataWrapperFactory;
+import RalphDataWrappers.DataWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
+import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
  * 
@@ -21,7 +29,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
     public boolean peered;
-    protected DataWrapperConstructor<T,D> data_wrapper_constructor;
+    protected DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     private ReentrantLock _mutex = new ReentrantLock();
     public DataWrapper<T,D> dirty_val = null;
@@ -77,7 +85,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public AtomicObject(){}
 	
     public void init_multithreaded_locked_object(
-        ValueTypeDataWrapperConstructor<T,D> vtdwc, String _host_uuid,
+        ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
         boolean _peered, T init_val)
     {
         data_wrapper_constructor = vtdwc;
@@ -87,7 +95,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     public void init_multithreaded_locked_object(
-        ReferenceTypeDataWrapperConstructor rtdwc, String _host_uuid,
+        MapTypeDataWrapperFactory rtdwc, String _host_uuid,
         boolean _peered, T init_val)
     {
         data_wrapper_constructor = rtdwc;
@@ -97,7 +105,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     public void init_multithreaded_locked_object(
-        ListTypeDataWrapperConstructor rtdwc, String _host_uuid,
+        ListTypeDataWrapperFactory rtdwc, String _host_uuid,
         boolean _peered, T init_val)
     {
         data_wrapper_constructor = rtdwc;

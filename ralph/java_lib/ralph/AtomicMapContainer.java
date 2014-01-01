@@ -7,7 +7,8 @@ import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import ralph.NonAtomicMapContainer.IndexType;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
-
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -38,7 +39,7 @@ public class AtomicMapContainer<K,V,D>
 
     public void init_multithreaded_locked_container(
         String _host_uuid, boolean _peered,
-        ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
+        MapTypeDataWrapperFactory<K,V,D> rtdwc,
         HashMap<K,RalphObject<V,D>>init_val,
         IndexType _index_type,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
@@ -71,8 +72,8 @@ public class AtomicMapContainer<K,V,D>
     @Override
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         RalphObject<V,D> internal_key_val = wrapped_val.val.get(key);
 
         Object to_return = null;        
@@ -108,8 +109,8 @@ public class AtomicMapContainer<K,V,D>
         ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
 
         VariablesProto.Variables.Map.Builder map_builder = VariablesProto.Variables.Map.newBuilder();
         for (Entry<K,RalphObject<V,D>> map_entry : wrapped_val.val.entrySet() )
@@ -193,8 +194,8 @@ public class AtomicMapContainer<K,V,D>
         ActiveEvent active_event, K key, RalphObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
 
         if (copy_if_peered)
         {
@@ -264,8 +265,8 @@ public class AtomicMapContainer<K,V,D>
     @Override
     public int get_len(ActiveEvent active_event) throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         int size = wrapped_val.val.size();
         if (active_event.immediate_complete())
         {
@@ -290,8 +291,8 @@ public class AtomicMapContainer<K,V,D>
     public ArrayList<K> get_keys(ActiveEvent active_event)
         throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
 
         
         ArrayList<K> to_return = new ArrayList<K>(wrapped_val.val.keySet());
@@ -310,8 +311,8 @@ public class AtomicMapContainer<K,V,D>
     public void del_key_called(ActiveEvent active_event, K key_to_delete)
         throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
         wrapped_val.del_key(active_event, key_to_delete);
         if (active_event.immediate_complete())
         {
@@ -328,8 +329,8 @@ public class AtomicMapContainer<K,V,D>
         ActiveEvent active_event,
         K contains_key)  throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         boolean to_return = wrapped_val.val.containsKey(contains_key);
         if (active_event.immediate_complete())
         {
@@ -355,8 +356,8 @@ public class AtomicMapContainer<K,V,D>
         ActiveEvent active_event,
         V contains_val) throws BackoutException
     {
-        ReferenceTypeDataWrapper<K,V,D> wrapped_val =
-            (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V,D> wrapped_val =
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         boolean to_return = wrapped_val.val.containsValue(contains_val);
         if (active_event.immediate_complete())
         {

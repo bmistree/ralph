@@ -1,8 +1,8 @@
-package ralph;
+package RalphDataWrappers;
 
 
-public class ValueTypeDataWrapperConstructor<T,D>
-    extends DataWrapperConstructor<T,D>
+public class ValueTypeDataWrapperFactory<T,D>
+    extends DataWrapperFactory<T,D>
 {	
     @Override
     public DataWrapper<T,D> construct(T _val, boolean peered)

@@ -6,6 +6,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.MapTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -33,10 +35,10 @@ public class NonAtomicMapContainer<K,V,D>
     // and deserializing data.
     public IndexType index_type;
     
-    private ReferenceTypeDataWrapperConstructor <K,V,D> reference_data_wrapper_constructor =
+    private MapTypeDataWrapperFactory <K,V,D> reference_data_wrapper_constructor =
         null;
 
-    private ReferenceTypeDataWrapper<K,V,D> reference_type_val = null;
+    private MapTypeDataWrapper<K,V,D> reference_type_val = null;
 	
     public NonAtomicMapContainer()
     {
@@ -44,7 +46,7 @@ public class NonAtomicMapContainer<K,V,D>
     }
     public void init(
         String _host_uuid, boolean _peered,
-        ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
+        MapTypeDataWrapperFactory<K,V,D> rtdwc,
         HashMap<K,RalphObject<V,D>>init_val,
         IndexType _index_type,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
@@ -56,7 +58,7 @@ public class NonAtomicMapContainer<K,V,D>
         locked_wrapper = _locked_wrapper;
         reference_data_wrapper_constructor = rtdwc;
         reference_type_val =
-            (ReferenceTypeDataWrapper<K, V, D>)
+            (MapTypeDataWrapper<K, V, D>)
             reference_data_wrapper_constructor.construct(init_val, peered); 
         val = reference_type_val;		
     }

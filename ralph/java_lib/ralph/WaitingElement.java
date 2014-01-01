@@ -1,6 +1,9 @@
 package ralph;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import RalphDataWrappers.DataWrapperFactory;
+import RalphDataWrappers.DataWrapper;
+
 public class WaitingElement <T,D>
     implements Comparable<WaitingElement<T,D>>
 {
@@ -18,7 +21,7 @@ public class WaitingElement <T,D>
 	
     public ActiveEvent event;
     private boolean read;
-    DataWrapperConstructor<T,D> data_wrapper_constructor;
+    DataWrapperFactory<T,D> data_wrapper_constructor;
 	
     // Acquire write lock and acquire read lock block reading this queu
     // if they cannot instantly acquire the write/read lock
@@ -44,7 +47,7 @@ public class WaitingElement <T,D>
      */
     public WaitingElement(
         ActiveEvent active_event,String _priority,boolean _read, 
-        DataWrapperConstructor<T,D> _data_wrapper_constructor,boolean _peered)
+        DataWrapperFactory<T,D> _data_wrapper_constructor,boolean _peered)
     {
         event = active_event;
         cached_priority = _priority;

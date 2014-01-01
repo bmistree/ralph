@@ -5,6 +5,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.MapTypeDataWrapper;
 
 /**
  * @param <K>  ---- The keys used for indexing
@@ -42,7 +44,7 @@ public abstract class AtomicMap<K,V,D>
             // default value
             new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -65,7 +67,7 @@ public abstract class AtomicMap<K,V,D>
             // default value
             new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicMapContainer<K,V,D>,D>());
     }
     
     public AtomicMap(
@@ -83,7 +85,7 @@ public abstract class AtomicMap<K,V,D>
             // default value
             new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicMapContainer<K,V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
@@ -112,7 +114,7 @@ public abstract class AtomicMap<K,V,D>
             // default value
             new AtomicInternalMapVariable<K,V,D>(
                 _host_uuid, _peered,index_type,locked_wrapper),
-            new ValueTypeDataWrapperConstructor<AtomicMapContainer<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicMapContainer<K,V,D>,D>());
 
         load_init_vals(init_val,false);
     }
@@ -126,7 +128,7 @@ public abstract class AtomicMap<K,V,D>
         //FIXME probably inefficient to add each field separately
         for (Entry<K, RalphObject<V,D>> entry : init_val.entrySet())
         {
-            ReferenceTypeDataWrapper<K,V,D>casted_wrapper = (ReferenceTypeDataWrapper<K,V,D>)val.val.val;
+            MapTypeDataWrapper<K,V,D>casted_wrapper = (MapTypeDataWrapper<K,V,D>)val.val.val;
 
             // single threaded variables will not throw backout exceptions.
             try {

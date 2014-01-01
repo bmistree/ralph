@@ -1,7 +1,8 @@
-package ralph;
+package RalphDataWrappers;
+import ralph.RalphObject;
 
-public class NumberTypeDataWrapperConstructor
-    extends ValueTypeDataWrapperConstructor<Double,Double>
+public class NumberTypeDataWrapperFactory
+    extends ValueTypeDataWrapperFactory<Double,Double>
 {	
     @Override
     public DataWrapper<Double,Double> construct(
