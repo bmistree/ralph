@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 public class Variables {
     final static NumberTypeDataWrapperConstructor
@@ -202,7 +203,7 @@ public class Variables {
         public NonAtomicMapVariable(
             String _host_uuid, boolean _peered,
             NonAtomicMapContainer.IndexType _index_type,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
         }
@@ -211,7 +212,7 @@ public class Variables {
             String _host_uuid, boolean _peered,
             NonAtomicMapContainer<K,V,D> internal_val,
             NonAtomicMapContainer.IndexType _index_type,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
                 _host_uuid, _peered,internal_val,_index_type,
@@ -225,7 +226,7 @@ public class Variables {
         public AtomicMapVariable(
             String _host_uuid, boolean _peered,
             NonAtomicMapContainer.IndexType _index_type,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
         }
@@ -235,7 +236,7 @@ public class Variables {
             String _host_uuid, boolean _peered,
             AtomicMapContainer<K,V,D> internal_val,
             NonAtomicMapContainer.IndexType _index_type,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
                 _host_uuid, _peered,internal_val,_index_type,
@@ -249,7 +250,7 @@ public class Variables {
     {
         public AtomicListVariable(
             String _host_uuid, boolean _peered,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,locked_wrapper);
         }
@@ -258,7 +259,7 @@ public class Variables {
         public AtomicListVariable(
             String _host_uuid, boolean _peered,
             AtomicListContainer<V,D> internal_val,
-            EnsureLockedWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
                 _host_uuid, _peered,internal_val,

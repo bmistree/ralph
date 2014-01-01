@@ -5,7 +5,7 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
-
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 /**
  * @param <V> --- The Java type of data that are elements in the list
@@ -20,7 +20,7 @@ public class AtomicListContainer<V,D>
     >  
     implements ContainerInterface<Integer,V,D>
 {
-    public EnsureLockedWrapper<V,D>locked_wrapper;
+    public EnsureAtomicWrapper<V,D>locked_wrapper;
     
     public AtomicListContainer()
     {
@@ -31,7 +31,7 @@ public class AtomicListContainer<V,D>
         String _host_uuid, boolean _peered,
         ListTypeDataWrapperConstructor<V,D> rtdwc,
         ArrayList<LockedObject<V,D>>init_val,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
@@ -107,7 +107,7 @@ public class AtomicListContainer<V,D>
         throws BackoutException
     {
         LockedObject<V,D> wrapped_to_insert =
-            locked_wrapper.ensure_locked_object(what_to_insert);
+            locked_wrapper.ensure_atomic_object(what_to_insert);
 
         ListTypeDataWrapper<V,D> wrapped_val =
             (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);

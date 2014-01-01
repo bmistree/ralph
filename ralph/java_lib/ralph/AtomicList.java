@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
-
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 /**
  * @param <V>  ---- The type of each internal value in the internal arraylist
@@ -27,7 +27,7 @@ public abstract class AtomicList<V,D>
     public AtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<LockedObject<V,D>> init_val,boolean incorporating_deltas,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super(
             _host_uuid,_peered,
@@ -50,7 +50,7 @@ public abstract class AtomicList<V,D>
     public AtomicList(
         String _host_uuid, boolean _peered,
         AtomicListContainer<V,D> internal_val,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super(
             _host_uuid,_peered,
@@ -64,7 +64,7 @@ public abstract class AtomicList<V,D>
     
     public AtomicList(
         String _host_uuid, boolean _peered,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -93,7 +93,7 @@ public abstract class AtomicList<V,D>
     public AtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<LockedObject<V,D>> init_val,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			

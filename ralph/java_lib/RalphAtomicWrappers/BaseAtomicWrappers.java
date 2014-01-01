@@ -1,7 +1,8 @@
-package ralph;
+package RalphAtomicWrappers;
+import ralph.LockedObject;
+import ralph.Variables;
 
-
-public class BaseLockedWrappers
+public class BaseAtomicWrappers
 {
     public final static SingleThreadedNumberWrapper SINGLE_THREADED_NUMBER_WRAPPER =
         new SingleThreadedNumberWrapper();
@@ -17,9 +18,9 @@ public class BaseLockedWrappers
     
     /**** Single threaded wrappers for base variables */
     public static class SingleThreadedNumberWrapper
-        implements EnsureLockedWrapper<Double,Double>
+        implements EnsureAtomicWrapper<Double,Double>
     {
-        public LockedObject<Double,Double> ensure_locked_object(
+        public LockedObject<Double,Double> ensure_atomic_object(
             Double object_to_ensure)
         {
             return new Variables.SingleThreadedLockedNumberVariable(
@@ -28,9 +29,9 @@ public class BaseLockedWrappers
     }
 
     public static class SingleThreadedTrueFalseWrapper
-        implements EnsureLockedWrapper<Boolean,Boolean>
+        implements EnsureAtomicWrapper<Boolean,Boolean>
     {
-        public LockedObject<Boolean,Boolean>ensure_locked_object(
+        public LockedObject<Boolean,Boolean>ensure_atomic_object(
             Boolean object_to_ensure)
         {
             return new Variables.SingleThreadedLockedTrueFalseVariable(
@@ -39,9 +40,9 @@ public class BaseLockedWrappers
     }
     
     public static class SingleThreadedTextWrapper
-        implements EnsureLockedWrapper<String,String>
+        implements EnsureAtomicWrapper<String,String>
     {
-        public LockedObject<String,String>ensure_locked_object(
+        public LockedObject<String,String>ensure_atomic_object(
             String object_to_ensure)
         {
             return new Variables.SingleThreadedLockedTextVariable(
@@ -51,9 +52,9 @@ public class BaseLockedWrappers
 
     /**** Multithreaded wrappers for base variables */
     public static class NumberWrapper
-        implements EnsureLockedWrapper<Double,Double>
+        implements EnsureAtomicWrapper<Double,Double>
     {
-        public LockedObject<Double,Double> ensure_locked_object(
+        public LockedObject<Double,Double> ensure_atomic_object(
             Double object_to_ensure)
         {
             return new Variables.LockedNumberVariable(
@@ -62,9 +63,9 @@ public class BaseLockedWrappers
     }
 
     public static class TrueFalseWrapper
-        implements EnsureLockedWrapper<Boolean,Boolean>
+        implements EnsureAtomicWrapper<Boolean,Boolean>
     {
-        public LockedObject<Boolean,Boolean>ensure_locked_object(
+        public LockedObject<Boolean,Boolean>ensure_atomic_object(
             Boolean object_to_ensure)
         {
             return new Variables.LockedTrueFalseVariable(
@@ -73,9 +74,9 @@ public class BaseLockedWrappers
     }
     
     public static class TextWrapper
-        implements EnsureLockedWrapper<String,String>
+        implements EnsureAtomicWrapper<String,String>
     {
-        public LockedObject<String,String>ensure_locked_object(
+        public LockedObject<String,String>ensure_atomic_object(
             String object_to_ensure)
         {
             return new Variables.LockedTextVariable(

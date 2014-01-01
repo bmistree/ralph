@@ -37,7 +37,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.EndpointCompleteCallResult;
 import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
-import ralph.BaseLockedWrappers;
+import RalphAtomicWrappers.BaseAtomicWrappers;
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 public class %s
 {
@@ -106,9 +107,9 @@ def emit_struct_map_wrapper(struct_name):
     
     # ensure locked wrappers
     locked_wrappers_text = '''
-public static class %s_ensure_locked_wrapper implements EnsureLockedWrapper<%s,%s>
+public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
 {
-    public LockedObject<%s,%s> ensure_locked_object(
+    public LockedObject<%s,%s> ensure_atomic_object(
         %s object_to_ensure)
     {
         return new %s(
@@ -121,7 +122,7 @@ public static class %s_ensure_locked_wrapper implements EnsureLockedWrapper<%s,%
 
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(struct_name)
     locked_wrappers_text += '''
-private final static %s_ensure_locked_wrapper %s = new %s_ensure_locked_wrapper();
+private final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
 ''' % (struct_name, struct_locked_wrapper_name,struct_name)
 
     return locked_wrappers_text
@@ -811,7 +812,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             #### END DEBUG
             if not value_type_is_tvar:
                 value_type_wrapper = 'SINGLE_THREADED_' + value_type_wrapper
-            value_type_wrapper = 'BaseLockedWrappers.' + value_type_wrapper
+            value_type_wrapper = 'BaseAtomicWrappers.' + value_type_wrapper
 
         elif isinstance(value_type,StructType):
             struct_name = value_type.struct_name

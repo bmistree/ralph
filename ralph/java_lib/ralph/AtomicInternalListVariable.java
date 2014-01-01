@@ -2,14 +2,14 @@ package ralph;
 
 import java.util.ArrayList;
 import RalphExceptions.BackoutException;
-
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 public class AtomicInternalListVariable<V,D>
     extends AtomicListContainer<V,D>
 {
     public AtomicInternalListVariable(
         String _host_uuid,boolean _peered,ArrayList<LockedObject<V,D>> init_val,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
         ListTypeDataWrapperConstructor<V,D>rtdwc =
@@ -20,7 +20,7 @@ public class AtomicInternalListVariable<V,D>
     }
     public AtomicInternalListVariable(
         String _host_uuid,boolean _peered,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
         ListTypeDataWrapperConstructor<V,D>rtdwc =
@@ -38,7 +38,7 @@ public class AtomicInternalListVariable<V,D>
         throws BackoutException
     {
         LockedObject<V,D> wrapped_to_write =
-            locked_wrapper.ensure_locked_object(what_to_insert);
+            locked_wrapper.ensure_atomic_object(what_to_insert);
         insert(
             active_event, index_to_insert_in, wrapped_to_write);
     }

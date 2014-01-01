@@ -5,6 +5,7 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -26,7 +27,7 @@ public class NonAtomicMapContainer<K,V,D>
         DOUBLE,STRING,BOOLEAN
     };
 
-    public EnsureLockedWrapper<V,D>locked_wrapper;
+    public EnsureAtomicWrapper<V,D>locked_wrapper;
     
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
@@ -46,7 +47,7 @@ public class NonAtomicMapContainer<K,V,D>
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val,
         IndexType _index_type,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         index_type = _index_type;
         

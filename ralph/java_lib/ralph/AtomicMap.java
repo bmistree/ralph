@@ -4,7 +4,7 @@ import java.util.HashMap;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
-
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 /**
  * @param <K>  ---- The keys used for indexing
@@ -30,7 +30,7 @@ public abstract class AtomicMap<K,V,D>
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -56,7 +56,7 @@ public abstract class AtomicMap<K,V,D>
         String _host_uuid, boolean _peered,
         AtomicMapContainer<K,V,D> internal_val,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super(
             _host_uuid,_peered,
@@ -71,7 +71,7 @@ public abstract class AtomicMap<K,V,D>
     public AtomicMap(
         String _host_uuid, boolean _peered,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
@@ -100,7 +100,7 @@ public abstract class AtomicMap<K,V,D>
         String _host_uuid, boolean _peered,
         HashMap<K,LockedObject<V,D>> init_val,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			

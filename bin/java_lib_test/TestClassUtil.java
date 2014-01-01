@@ -27,7 +27,7 @@ import java.util.HashMap;
 import ralph.Variables.AtomicMapVariable;
 import ralph.Variables.AtomicListVariable;
 import ralph.NonAtomicMapContainer;
-import ralph.BaseLockedWrappers;
+import RalphAtomicWrappers.BaseAtomicWrappers;
 
 
 public class TestClassUtil
@@ -187,13 +187,13 @@ public class TestClassUtil
             new AtomicMapVariable<Double,Double,Double>(
                 dummy_host_uuid,false,
                 NonAtomicMapContainer.IndexType.DOUBLE,
-                BaseLockedWrappers.NUMBER_WRAPPER));
+                BaseAtomicWrappers.NUMBER_WRAPPER));
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
             new AtomicListVariable<Double,Double>(
                 dummy_host_uuid,false,
-                BaseLockedWrappers.NUMBER_WRAPPER));
+                BaseAtomicWrappers.NUMBER_WRAPPER));
 
         
         DefaultEndpoint to_return = new DefaultEndpoint(

@@ -1,7 +1,7 @@
 package ralph;
 
 import java.util.HashMap;
-
+import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphExceptions.BackoutException;
 
 public class AtomicInternalMapVariable<K,V,D>
@@ -10,7 +10,7 @@ public class AtomicInternalMapVariable<K,V,D>
     public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
@@ -22,7 +22,7 @@ public class AtomicInternalMapVariable<K,V,D>
     public AtomicInternalMapVariable(
         String _host_uuid,boolean _peered,
         NonAtomicMapContainer.IndexType index_type,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
@@ -48,7 +48,7 @@ public class AtomicInternalMapVariable<K,V,D>
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
         LockedObject<V,D> wrapped_to_write =
-            locked_wrapper.ensure_locked_object(to_write);
+            locked_wrapper.ensure_atomic_object(to_write);
         set_val_on_key(active_event,key,wrapped_to_write,false);
     }	
 }

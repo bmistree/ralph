@@ -6,6 +6,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import ralph.NonAtomicMapContainer.IndexType;
+import RalphAtomicWrappers.EnsureAtomicWrapper;
+
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -27,7 +29,7 @@ public class AtomicMapContainer<K,V,D>
     // and deserializing data.
     public IndexType index_type;
     
-    public EnsureLockedWrapper<V,D>locked_wrapper;
+    public EnsureAtomicWrapper<V,D>locked_wrapper;
     
     public AtomicMapContainer()
     {
@@ -39,7 +41,7 @@ public class AtomicMapContainer<K,V,D>
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
         HashMap<K,LockedObject<V,D>>init_val,
         IndexType _index_type,
-        EnsureLockedWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         index_type = _index_type;
         locked_wrapper = _locked_wrapper;
