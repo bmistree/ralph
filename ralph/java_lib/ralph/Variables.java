@@ -2,10 +2,10 @@ package ralph;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 
-public class LockedVariables {
+public class Variables {
     final static NumberTypeDataWrapperConstructor
         number_value_type_data_wrapper_constructor =
         new NumberTypeDataWrapperConstructor();
@@ -24,7 +24,7 @@ public class LockedVariables {
     final static Boolean default_tf = false;
 	
 	
-    public static class LockedNumberVariable extends LockedValueVariable<Double,Double>
+    public static class LockedNumberVariable extends AtomicValueVariable<Double,Double>
     {
         public LockedNumberVariable(String _host_uuid, boolean _peered,Object init_val)
         {
@@ -40,7 +40,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             Double internal_val = get_val(active_event);
@@ -50,7 +50,7 @@ public class LockedVariables {
         }
     }
 
-    public static class LockedTextVariable extends LockedValueVariable<String,String>
+    public static class LockedTextVariable extends AtomicValueVariable<String,String>
     {
         public LockedTextVariable(String _host_uuid, boolean _peered,Object init_val)
         {
@@ -65,7 +65,7 @@ public class LockedVariables {
                 text_value_type_data_wrapper_constructor);            
         }
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             String internal_val = get_val(active_event);
@@ -76,7 +76,7 @@ public class LockedVariables {
     }
 	
     public static class LockedTrueFalseVariable
-        extends LockedValueVariable<Boolean,Boolean>
+        extends AtomicValueVariable<Boolean,Boolean>
     {
         public LockedTrueFalseVariable(
             String _host_uuid, boolean _peered,Object init_val)
@@ -93,7 +93,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             Boolean internal_val = get_val(active_event);
@@ -105,7 +105,7 @@ public class LockedVariables {
 	
 	
     public static class SingleThreadedLockedNumberVariable
-        extends SingleThreadedLockedValueVariable<Double,Double>
+        extends NonAtomicValueVariable<Double,Double>
     {
         public SingleThreadedLockedNumberVariable(
             String _host_uuid, boolean _peered, Double init_val)
@@ -124,7 +124,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference)
         {
             Double internal_val = get_val(active_event);
@@ -135,7 +135,7 @@ public class LockedVariables {
     }
 
     public static class SingleThreadedLockedTextVariable
-        extends SingleThreadedLockedValueVariable<String,String>
+        extends NonAtomicValueVariable<String,String>
     {
         public SingleThreadedLockedTextVariable(
             String _host_uuid, boolean _peered,String init_val)
@@ -154,7 +154,7 @@ public class LockedVariables {
         }
         
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             String internal_val = get_val(active_event);
@@ -166,7 +166,7 @@ public class LockedVariables {
     }
 
     public static class SingleThreadedLockedTrueFalseVariable
-        extends SingleThreadedLockedValueVariable<Boolean,Boolean>
+        extends NonAtomicValueVariable<Boolean,Boolean>
     {
         public SingleThreadedLockedTrueFalseVariable(
             String _host_uuid, boolean _peered, Boolean init_val)
@@ -185,7 +185,7 @@ public class LockedVariables {
         }
 
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,Variables.Any.Builder any_builder,
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference)
         {
             Boolean internal_val = get_val(active_event);

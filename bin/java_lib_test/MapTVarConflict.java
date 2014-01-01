@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.LockedVariables.AtomicMapVariable;
+import ralph.Variables.AtomicMapVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;

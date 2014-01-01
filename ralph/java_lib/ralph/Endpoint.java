@@ -20,7 +20,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 import RalphCallResults.EndpointCallResultObject;
 
 import RalphExceptions.ApplicationException;
@@ -923,7 +923,7 @@ public abstract class Endpoint
     public void _send_partner_message_sequence_block_request(
         String block_name,String event_uuid,String priority,
         String reply_with_uuid, String reply_to_uuid,
-        ActiveEvent active_event, Variables.Builder rpc_variables,
+        ActiveEvent active_event, VariablesProto.Variables.Builder rpc_variables,
         boolean first_msg,boolean transactional)
     {
     	GeneralMessage.Builder general_message =

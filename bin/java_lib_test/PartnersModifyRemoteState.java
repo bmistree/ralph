@@ -5,7 +5,7 @@ import java_lib_test.TestClassUtil.ConnectedEndpointPair;
 import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
 import ralph.LockedObject;
-import ralph.LockedVariables;
+import ralph.Variables;
 import ralph.ActiveEvent;
 import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
@@ -56,8 +56,8 @@ public class PartnersModifyRemoteState
             {
                 expected_value += 1;
 
-                LockedVariables.SingleThreadedLockedNumberVariable num_var =
-                    new LockedVariables.SingleThreadedLockedNumberVariable(
+                Variables.SingleThreadedLockedNumberVariable num_var =
+                    new Variables.SingleThreadedLockedNumberVariable(
                         endpta._host_uuid, false);
 
                 

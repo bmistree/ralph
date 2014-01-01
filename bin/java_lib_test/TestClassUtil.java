@@ -1,9 +1,9 @@
 package java_lib_test;
 
 import ralph.LockedObject;
-import ralph.LockedVariables;
+import ralph.Variables;
 import ralph.VariableStore;
-import ralph.LockedVariables.LockedNumberVariable;
+import ralph.Variables.LockedNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
@@ -24,8 +24,8 @@ import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
 import java.util.HashMap;
-import ralph.LockedVariables.AtomicMapVariable;
-import ralph.LockedVariables.AtomicListVariable;
+import ralph.Variables.AtomicMapVariable;
+import ralph.Variables.AtomicListVariable;
 import ralph.NonAtomicMapContainer;
 import ralph.BaseLockedWrappers;
 

@@ -3,9 +3,9 @@ package ralph;
 import RalphExceptions.BackoutException;
 
 
-public abstract class LockedValueVariable<T,D> extends AtomicObject<T,D> 
+public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D> 
 {
-    public LockedValueVariable(
+    public AtomicValueVariable(
         String _host_uuid, boolean _peered, T init_val,T default_value,
         ValueTypeDataWrapperConstructor<T,D> vtdwc)
     {

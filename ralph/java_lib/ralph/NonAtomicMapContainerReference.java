@@ -10,7 +10,7 @@ import RalphExceptions.BackoutException;
  * @param <D> --- What this object will dewaldoify into.
  */
 public abstract class NonAtomicMapContainerReference <K,V,D> 
-    extends SingleThreadedLockedValueVariable<
+    extends NonAtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return NonAtomicMapContainer.
     // when call set val, must pass in a NonAtomicMapContainer

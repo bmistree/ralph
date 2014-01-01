@@ -4,8 +4,8 @@ public class LockedVarUtils {
 
     public static boolean is_non_ext_text_var(Object to_get_from)
     {
-        if (LockedVariables.SingleThreadedLockedTextVariable.class.isInstance(to_get_from) ||
-            LockedVariables.LockedTextVariable.class.isInstance(to_get_from))
+        if (Variables.SingleThreadedLockedTextVariable.class.isInstance(to_get_from) ||
+            Variables.LockedTextVariable.class.isInstance(to_get_from))
             return true;
         return false;
     }

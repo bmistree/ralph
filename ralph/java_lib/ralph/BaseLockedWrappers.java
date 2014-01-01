@@ -22,7 +22,7 @@ public class BaseLockedWrappers
         public LockedObject<Double,Double> ensure_locked_object(
             Double object_to_ensure)
         {
-            return new LockedVariables.SingleThreadedLockedNumberVariable(
+            return new Variables.SingleThreadedLockedNumberVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
@@ -33,7 +33,7 @@ public class BaseLockedWrappers
         public LockedObject<Boolean,Boolean>ensure_locked_object(
             Boolean object_to_ensure)
         {
-            return new LockedVariables.SingleThreadedLockedTrueFalseVariable(
+            return new Variables.SingleThreadedLockedTrueFalseVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
@@ -44,7 +44,7 @@ public class BaseLockedWrappers
         public LockedObject<String,String>ensure_locked_object(
             String object_to_ensure)
         {
-            return new LockedVariables.SingleThreadedLockedTextVariable(
+            return new Variables.SingleThreadedLockedTextVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
@@ -56,7 +56,7 @@ public class BaseLockedWrappers
         public LockedObject<Double,Double> ensure_locked_object(
             Double object_to_ensure)
         {
-            return new LockedVariables.LockedNumberVariable(
+            return new Variables.LockedNumberVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
@@ -67,7 +67,7 @@ public class BaseLockedWrappers
         public LockedObject<Boolean,Boolean>ensure_locked_object(
             Boolean object_to_ensure)
         {
-            return new LockedVariables.LockedTrueFalseVariable(
+            return new Variables.LockedTrueFalseVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
@@ -78,7 +78,7 @@ public class BaseLockedWrappers
         public LockedObject<String,String>ensure_locked_object(
             String object_to_ensure)
         {
-            return new LockedVariables.LockedTextVariable(
+            return new Variables.LockedTextVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }

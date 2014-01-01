@@ -2,7 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import ralph.NonAtomicMapContainer.IndexType;
@@ -103,17 +103,17 @@ public class AtomicMapContainer<K,V,D>
        them into any_builder.
      */
     public void serialize_as_rpc_arg (
-        ActiveEvent active_event, Variables.Any.Builder any_builder,
+        ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
 
-        Variables.Map.Builder map_builder = Variables.Map.newBuilder();
+        VariablesProto.Variables.Map.Builder map_builder = VariablesProto.Variables.Map.newBuilder();
         for (Entry<K,LockedObject<V,D>> map_entry : wrapped_val.val.entrySet() )
         {
             // create any for index
-            Variables.Any.Builder index_builder = Variables.Any.newBuilder();
+            VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
             index_builder.setVarName("");
             if (index_type == IndexType.DOUBLE)
             {
@@ -137,7 +137,7 @@ public class AtomicMapContainer<K,V,D>
             }
 
             // create any for value
-            Variables.Any.Builder value_builder = Variables.Any.newBuilder();
+            VariablesProto.Variables.Any.Builder value_builder = VariablesProto.Variables.Any.newBuilder();
             LockedObject<V,D> map_value = map_entry.getValue();
             
             map_value.serialize_as_rpc_arg(

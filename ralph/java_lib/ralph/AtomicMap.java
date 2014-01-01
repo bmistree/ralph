@@ -1,7 +1,7 @@
 package ralph;
 
 import java.util.HashMap;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 
@@ -87,7 +87,7 @@ public abstract class AtomicMap<K,V,D>
     }
 
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,Variables.Any.Builder any_builder,
+        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
         AtomicMapContainer<K,V,D> internal_val =

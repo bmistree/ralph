@@ -8,7 +8,7 @@ import RalphServiceActions.ServiceAction;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -818,7 +818,7 @@ public class AtomicActiveEvent extends ActiveEvent
             }
 
             // construct variables for arg messages
-            Variables.Builder serialized_arguments = Variables.newBuilder();
+            VariablesProto.Variables.Builder serialized_arguments = VariablesProto.Variables.newBuilder();
             for (RPCArgObject arg : args)
             {
                 try
@@ -827,7 +827,7 @@ public class AtomicActiveEvent extends ActiveEvent
                     // sequence complete call to an endpoint where the
                     // passed in argument was not passed in by
                     // reference.
-                    Variables.Any.Builder any_builder = Variables.Any.newBuilder();
+                    VariablesProto.Variables.Any.Builder any_builder = VariablesProto.Variables.Any.newBuilder();
 
                     if (arg == null)
                     {
@@ -1175,7 +1175,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //#### END DEBUG
         
         String reply_with_uuid = msg.getReplyWithUuid().getData();
-        Variables returned_variables = msg.getArguments();
+        VariablesProto.Variables returned_variables = msg.getArguments();
 
         //# unblock waiting listening queue.
         message_listening_queues_map.get(reply_to_uuid).add(

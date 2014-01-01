@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.LockedVariables.LockedNumberVariable;
+import ralph.Variables.LockedNumberVariable;
 import ralph.LockedObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;

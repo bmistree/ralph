@@ -8,7 +8,7 @@ import RalphExceptions.BackoutException;
  * @param <D> --- What this object will dewaldoify into.
  */
 public abstract class AtomicListContainerReference <V,D> 
-    extends LockedValueVariable<
+    extends AtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return AtomicListContainer.
     // when call set val, must pass in a AtomicListContainer

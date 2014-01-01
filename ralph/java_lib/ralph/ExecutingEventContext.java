@@ -9,13 +9,13 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-import ralph.LockedVariables.LockedTextVariable;
-import ralph.LockedVariables.LockedNumberVariable;
-import ralph.LockedVariables.LockedTrueFalseVariable;
-import ralph.LockedVariables.SingleThreadedLockedTextVariable;
-import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
-import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph.Variables.LockedTextVariable;
+import ralph.Variables.LockedNumberVariable;
+import ralph.Variables.LockedTrueFalseVariable;
+import ralph.Variables.SingleThreadedLockedTextVariable;
+import ralph.Variables.SingleThreadedLockedNumberVariable;
+import ralph.Variables.SingleThreadedLockedTrueFalseVariable;
+import ralph_protobuffs.VariablesProto;
 
 
 import RalphCallResults.MessageCallResultObject;
@@ -774,7 +774,7 @@ public class ExecutingEventContext
         */
 
         // step 1: grab arguments from message object
-        Variables variables = queue_elem.returned_variables;
+        VariablesProto.Variables variables = queue_elem.returned_variables;
 
         // step 2: deserialize message variables
         ArrayList<LockedObject> returned_variables =
@@ -888,14 +888,14 @@ public class ExecutingEventContext
        Index of map is variable name; value of map is object.
      */
     public static HashMap<String,LockedObject> deserialize_variables_map(
-        Variables variables,boolean references_only,String host_uuid)
+        VariablesProto.Variables variables,boolean references_only,String host_uuid)
     {
         HashMap<String,LockedObject> to_return =
             new HashMap<String,LockedObject>();
         
         
         // run through variables and turn into map
-        for (Variables.Any variable : variables.getVarsList() )
+        for (VariablesProto.Variables.Any variable : variables.getVarsList() )
         {
             boolean is_reference = variable.getReference();
 
@@ -911,12 +911,12 @@ public class ExecutingEventContext
     }
 
     public static ArrayList<RPCArgObject> deserialize_rpc_args_list(
-        Variables variables,String host_uuid)
+        VariablesProto.Variables variables,String host_uuid)
     {
         ArrayList<RPCArgObject> to_return = new ArrayList<RPCArgObject>();
 
         // run through variables and turn into map
-        for (Variables.Any variable : variables.getVarsList())
+        for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
             LockedObject lo = deserialize_any(variable,host_uuid);
             boolean is_reference = variable.getReference();
@@ -934,12 +934,12 @@ public class ExecutingEventContext
        put null values in for the non-references.
      */
     public static ArrayList<LockedObject> deserialize_variables_list(
-        Variables variables,boolean references_only,String host_uuid)
+        VariablesProto.Variables variables,boolean references_only,String host_uuid)
     {
         ArrayList<LockedObject> to_return = new ArrayList<LockedObject>();
 
         // run through variables and turn into map
-        for (Variables.Any variable : variables.getVarsList())
+        for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
             boolean is_reference = variable.getReference();
             
@@ -963,7 +963,7 @@ public class ExecutingEventContext
        non-passed-by-reference argument.
      */
     public static LockedObject deserialize_any(
-        Variables.Any variable, String host_uuid)
+        VariablesProto.Variables.Any variable, String host_uuid)
     {
         LockedObject lo = null;
 

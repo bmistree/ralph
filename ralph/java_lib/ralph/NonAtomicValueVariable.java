@@ -1,9 +1,9 @@
 package ralph;
 import RalphExceptions.BackoutException;
 
-public abstract class SingleThreadedLockedValueVariable<T,D> extends NonAtomicObject<T,D>
+public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
 {
-    public SingleThreadedLockedValueVariable(
+    public NonAtomicValueVariable(
         String _host_uuid, boolean _peered,
         T init_val, T DEFAULT_VALUE, ValueTypeDataWrapperConstructor<T,D> vtdwc)
     {

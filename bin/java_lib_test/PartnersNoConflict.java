@@ -5,7 +5,7 @@ import java_lib_test.TestClassUtil.ConnectedEndpointPair;
 import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
 import ralph.LockedObject;
-import ralph.LockedVariables;
+import ralph.Variables;
 import ralph.ActiveEvent;
 import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
@@ -103,12 +103,12 @@ public class PartnersNoConflict
             Boolean init_boolean_value = new Boolean(false);
             String init_string_value = "a";
             
-            LockedVariables.SingleThreadedLockedTrueFalseVariable bool_var =
-                new LockedVariables.SingleThreadedLockedTrueFalseVariable(
+            Variables.SingleThreadedLockedTrueFalseVariable bool_var =
+                new Variables.SingleThreadedLockedTrueFalseVariable(
                     endpta._host_uuid, false, init_boolean_value);
             
-            LockedVariables.SingleThreadedLockedTextVariable string_var =
-                new LockedVariables.SingleThreadedLockedTextVariable(
+            Variables.SingleThreadedLockedTextVariable string_var =
+                new Variables.SingleThreadedLockedTextVariable(
                     endpta._host_uuid, false, init_string_value);
             
             endpta.global_var_stack.add_var(bool_var_name,bool_var);

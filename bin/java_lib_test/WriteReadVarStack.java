@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
+import ralph.Variables.SingleThreadedLockedNumberVariable;
 import ralph.LockedObject;
 
 public class WriteReadVarStack

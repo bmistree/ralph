@@ -16,14 +16,14 @@ def emit(root_node,struct_types_ctx,package_name,program_name):
 package %s;
 
 import ralph.*;
-import ralph.LockedVariables.LockedNumberVariable;
-import ralph.LockedVariables.LockedTextVariable;
-import ralph.LockedVariables.LockedTrueFalseVariable;
-import ralph.LockedVariables.SingleThreadedLockedNumberVariable;
-import ralph.LockedVariables.SingleThreadedLockedTextVariable;
-import ralph.LockedVariables.SingleThreadedLockedTrueFalseVariable;
-import ralph.LockedVariables.NonAtomicMapVariable;
-import ralph.LockedVariables.AtomicMapVariable;
+import ralph.Variables.LockedNumberVariable;
+import ralph.Variables.LockedTextVariable;
+import ralph.Variables.LockedTrueFalseVariable;
+import ralph.Variables.SingleThreadedLockedNumberVariable;
+import ralph.Variables.SingleThreadedLockedTextVariable;
+import ralph.Variables.SingleThreadedLockedTrueFalseVariable;
+import ralph.Variables.NonAtomicMapVariable;
+import ralph.Variables.AtomicMapVariable;
 // index types for maps
 import ralph.NonAtomicMapContainer.IndexType;
 
@@ -139,7 +139,7 @@ def emit_struct_wrapper(struct_name):
     
     ##### External wrapped struct
     external_struct_definition_text = '''
-public static class %s extends LockedValueVariable<%s,%s>
+public static class %s extends AtomicValueVariable<%s,%s>
 {''' % (struct_name, internal_struct_name, internal_struct_name)
 
     

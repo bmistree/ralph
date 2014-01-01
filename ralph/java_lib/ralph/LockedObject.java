@@ -1,7 +1,7 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 
 /**
  * 
@@ -44,7 +44,7 @@ public abstract class LockedObject<T,D>
        Varialbes.Any.Builder.
      */
     public abstract void serialize_as_rpc_arg(
-        ActiveEvent active_event,Variables.Any.Builder any_builder,
+        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException;
 
 	

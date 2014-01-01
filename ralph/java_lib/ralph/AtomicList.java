@@ -3,7 +3,7 @@ package ralph;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto.Variables;
+import ralph_protobuffs.VariablesProto;
 
 
 /**
@@ -80,7 +80,7 @@ public abstract class AtomicList<V,D>
     }
 
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,Variables.Any.Builder any_builder,
+        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
         Util.logger_assert("FIXME: finish serializing lists.");

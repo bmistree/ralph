@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto.Variables;
 
 public class VariableStore 
 {
