@@ -239,7 +239,7 @@ class IdentifierNode(_AstNode):
 
     def type_check_pass_one(self,struct_types_ctx):
         pass
-        
+
     def type_check_pass_two(self,type_check_ctx):
         decl_ast_node = type_check_ctx.lookup_internal_ast_node(self.value)
         if decl_ast_node is None:
@@ -589,8 +589,8 @@ class ElifNode(_AstNode):
         self.type = None
 
     def type_check_pass_one(self,struct_types_ctx):
-        self.predicate_node.type_check_pass_two(struct_types_ctx)
-        self.body_node.type_check_pass_two(struct_types_ctx)
+        self.predicate_node.type_check_pass_one(struct_types_ctx)
+        self.body_node.type_check_pass_one(struct_types_ctx)
         
     def type_check_pass_two(self,type_check_ctx):
         self.predicate_node.type_check_pass_two(type_check_ctx)
