@@ -1,0 +1,42 @@
+Endpoint MapEndpoint
+{
+    List(element: Number) number_list;
+    
+    put_number(Number index, Number value) 
+    {
+        if (index == -1)
+            number_list.append(value);
+        else
+            number_list.set(index,value);
+    }
+
+    get_number(Number index) returns Number
+    {
+        return number_list.get(index);
+    }
+
+    contains_index(Number index) returns TrueFalse
+    {
+        return number_list.contains(index);
+    }
+
+    get_size() returns Number
+    {
+        return number_list.size();
+    }
+
+    test_change_in_method_call(
+        Number index, Number val)
+    {
+        insert_val_through_method_call(
+            number_list,index,val);
+    }
+
+    insert_val_through_method_call(
+        List(element: Number) arg_list,
+        Number index, Number val)
+    {
+        arg_list.set(index,val);
+    }
+    
+}
