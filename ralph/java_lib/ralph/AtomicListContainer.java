@@ -169,10 +169,9 @@ public class AtomicListContainer<V,D>
         ActiveEvent active_event, Integer key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
-        // note: may need to change this to cast to RalphObject<V,D> and use other set_val.
-        Util.logger_assert(
-            "Should never be setting value directly on container.  " +
-            "Instead, should have wrapped V in a RalphObject at an earlier call.");		
+        RalphObject<V,D> wrapped_to_write =
+            locked_wrapper.ensure_atomic_object(to_write);
+        set_val_on_key(active_event,key,wrapped_to_write,copy_if_peered);
     }	
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
