@@ -675,7 +675,8 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
         reference_type = False
         if (isinstance(argument_type,MapType) or
-            isinstance(argument_type,StructType)):
+            isinstance(argument_type,StructType) or
+            isinstance(argument_type,ListType)):
             reference_type = True
             
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
@@ -687,7 +688,11 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
                 'new %s ("_host_uuid",false,%s,%s.index_type,%s.locked_wrapper)'
                 %
                 (java_type_statement,argument_name,argument_name,argument_name))
-            
+        elif isinstance(argument_type,ListType):
+            new_ralph_variable = (
+                'new %s ("_host_uuid",false,%s.locked_wrapper)'
+                %
+                (java_type_statement,argument_name))
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
                 'new %s ("_host_uuid",false,%s)' %
