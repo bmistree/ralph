@@ -40,7 +40,7 @@
 
   <target name="translate_ralph" depends="init" description="translate ralph files">
     <!-- Compile to java -->
-    <echo message="\nEmitting basic_ralph.rph\n"/>
+    <echo message="${line.separator}Emitting basic_ralph.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/basic_ralph.rph"/>
@@ -49,7 +49,7 @@
       <arg line="BasicRalph"/>
     </exec>
 
-    <echo message="\nEmitting internal_method_call.rph\n"/>
+    <echo message="${line.separator}Emitting internal_method_call.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/internal_method_call.rph"/>
@@ -58,7 +58,7 @@
       <arg line="InternalMethodCall"/>
     </exec>
 
-    <echo message="\nEmitting ralph_atomically.rph\n"/>
+    <echo message="${line.separator}Emitting ralph_atomically.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/ralph_atomically.rph"/>
@@ -67,7 +67,7 @@
       <arg line="RalphAtomically"/>
     </exec>
     
-    <echo message="\nEmitting basic_partner.rph\n"/>
+    <echo message="${line.separator}Emitting basic_partner.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/basic_partner.rph"/>
@@ -76,7 +76,7 @@
       <arg line="BasicPartner"/>
     </exec>
     
-    <echo message="\nEmitting test_map.rph\n"/>
+    <echo message="${line.separator}Emitting test_map.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/test_map.rph"/>
@@ -85,7 +85,7 @@
       <arg line="MapTest"/>
     </exec>
     
-    <echo message="\nEmitting atomic_map.rph\n"/>
+    <echo message="${line.separator}Emitting atomic_map.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/atomic_map.rph"/>
@@ -94,7 +94,7 @@
       <arg line="AtomicMapTest"/>
     </exec>
     
-    <echo message="\nEmitting struct_test.rph\n"/>
+    <echo message="${line.separator}Emitting struct_test.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/struct_test.rph"/>
@@ -103,7 +103,7 @@
       <arg line="StructTest"/>
     </exec>
 
-    <echo message="\nEmitting nested_structs.rph\n"/>
+    <echo message="${line.separator}Emitting nested_structs.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/nested_structs.rph"/>
@@ -112,7 +112,7 @@
       <arg line="NestedStructTest"/>
     </exec>
 
-    <echo message="\nEmitting test_list.rph\n"/>
+    <echo message="${line.separator}Emitting test_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/test_list.rph"/>
@@ -121,7 +121,7 @@
       <arg line="ListTest"/>
     </exec>
 
-    <echo message="\nEmitting atomic_list.rph\n"/>
+    <echo message="${line.separator}Emitting atomic_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/atomic_list.rph"/>
