@@ -29,13 +29,19 @@
 
   <!-- compile protobuffs into classes -->
   <target name="compile_proto" depends="init" description="compile sources for protos">
-    <javac srcdir="${proto.dir}" destdir="${build.dir}" classpath="${protobuf_path}"
-           includeantruntime="false" />
+    <javac
+        srcdir="${proto.dir}"
+        destdir="${build.dir}"
+        classpath="${protobuf_path}"
+        includeantruntime="false"
+        debug="true"
+        debuglevel="lines,vars,source"
+        />
   </target>
 
   <target name="compile_exceptions" depends="init" description="compile sources for exceptions">
-    <javac srcdir="${exceptions.dir}" destdir="${build.dir}"
-           includeantruntime="false" />
+    <javac srcdir="${exceptions.dir}" destdir="${build.dir}" debug="true"
+           debuglevel="lines,vars,source" includeantruntime="false" />
   </target>
 
   <target
@@ -46,6 +52,8 @@
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:${atomic_wrappers.dir}"
         destdir="${build.dir}"
         classpath="${build.dir}/ralph_protobuffs/*.class:${protobuf_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
         includeantruntime="false" />
   </target>
 
