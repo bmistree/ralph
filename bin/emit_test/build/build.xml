@@ -40,6 +40,7 @@
 
   <target name="translate_ralph" depends="init" description="translate ralph files">
     <!-- Compile to java -->
+    <echo message="\nEmitting basic_ralph.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/basic_ralph.rph"/>
@@ -47,7 +48,8 @@
       <arg line="emit_test_package"/>
       <arg line="BasicRalph"/>
     </exec>
-    
+
+    <echo message="\nEmitting internal_method_call.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/internal_method_call.rph"/>
@@ -56,6 +58,7 @@
       <arg line="InternalMethodCall"/>
     </exec>
 
+    <echo message="\nEmitting ralph_atomically.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/ralph_atomically.rph"/>
@@ -63,7 +66,8 @@
       <arg line="emit_test_package"/>
       <arg line="RalphAtomically"/>
     </exec>
-
+    
+    <echo message="\nEmitting basic_partner.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/basic_partner.rph"/>
@@ -71,7 +75,8 @@
       <arg line="emit_test_package"/>
       <arg line="BasicPartner"/>
     </exec>
-
+    
+    <echo message="\nEmitting test_map.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/test_map.rph"/>
@@ -79,7 +84,8 @@
       <arg line="emit_test_package"/>
       <arg line="MapTest"/>
     </exec>
-
+    
+    <echo message="\nEmitting atomic_map.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/atomic_map.rph"/>
@@ -87,7 +93,8 @@
       <arg line="emit_test_package"/>
       <arg line="AtomicMapTest"/>
     </exec>
-
+    
+    <echo message="\nEmitting struct_test.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/struct_test.rph"/>
@@ -96,6 +103,7 @@
       <arg line="StructTest"/>
     </exec>
 
+    <echo message="\nEmitting nested_structs.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/nested_structs.rph"/>
@@ -104,6 +112,7 @@
       <arg line="NestedStructTest"/>
     </exec>
 
+    <echo message="\nEmitting test_list.rph\n"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
       <arg line="${ralph_src.dir}/test_list.rph"/>
@@ -153,7 +162,8 @@
       depends=
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
-         run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest">
+         run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
+         run_ListTest">
   </target>
 
   
@@ -243,6 +253,20 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.AtomicMapTester"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  <!-- ListTesting -->
+  <target
+      name="run_ListTest"
+      depends="compile_ralph_tests"
+      description="Test list methods.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ListTester"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

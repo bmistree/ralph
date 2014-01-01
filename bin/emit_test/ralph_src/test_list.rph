@@ -1,4 +1,4 @@
-Endpoint MapEndpoint
+Endpoint ListEndpoint
 {
     List(element: Number) number_list;
     
@@ -6,6 +6,8 @@ Endpoint MapEndpoint
     {
         if (index == -1)
             number_list.append(value);
+        elif (index >= number_list.size())
+            number_list.insert(index,value);
         else
             number_list.set(index,value);
     }
