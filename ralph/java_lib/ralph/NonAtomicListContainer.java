@@ -49,6 +49,14 @@ public class NonAtomicListContainer<V,D>
         val = reference_type_val;		
     }
 
+    public V get_val_on_key(
+        ActiveEvent active_event, Double key)  throws BackoutException
+    {
+        return get_val_on_key(
+            active_event,new Integer((int)key.doubleValue()));
+    }
+
+    
     @Override
     public V get_val_on_key(ActiveEvent active_event, Integer key)
         throws BackoutException
@@ -119,6 +127,24 @@ public class NonAtomicListContainer<V,D>
     }
 
     public void set_val_on_key(
+        ActiveEvent active_event, Double key, RalphObject<V,D> to_write)
+        throws BackoutException
+    {
+        set_val_on_key(
+            active_event,new Integer((int)key.doubleValue()),to_write,false);
+    }
+    
+    public void set_val_on_key(
+        ActiveEvent active_event, Double key, V to_write)
+        throws BackoutException
+    {
+        RalphObject<V,D> wrapped_to_write =
+            locked_wrapper.ensure_atomic_object(to_write);
+        set_val_on_key(
+            active_event,new Integer((int)key.doubleValue()),wrapped_to_write);
+    }
+    
+    public void set_val_on_key(
         ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
@@ -148,7 +174,6 @@ public class NonAtomicListContainer<V,D>
         Util.logger_assert(
             "Still must define swap method for NonAtomicListContainer.");
     }
-
     
     @Override
     public ArrayList<RalphObject<V,D>> get_val(ActiveEvent active_event)
@@ -165,6 +190,19 @@ public class NonAtomicListContainer<V,D>
     	Util.logger_assert("Cannot call set val on a container object directly.");
     }
 
+    public void append(
+        ActiveEvent active_event, V what_to_insert)
+        throws BackoutException
+    {
+        RalphObject<V,D> wrapped_to_insert =
+            locked_wrapper.ensure_atomic_object(what_to_insert);
+        int size = val.val.size();
+        Integer index_to_insert_in = new Integer(size);
+        insert(
+            active_event, index_to_insert_in, wrapped_to_insert);
+    }
+
+    
     @Override
     public void write_if_different(
         ActiveEvent active_event,
@@ -220,6 +258,16 @@ public class NonAtomicListContainer<V,D>
         return new Boolean(
             contains_key_called(active_event,contains_key));
     }    
+
+    public Boolean contains_key_called_boxed(
+        ActiveEvent active_event, Double contains_key) throws BackoutException
+    {
+        return new Boolean(
+            contains_key_called(
+                active_event,
+                new Integer((int)contains_key.doubleValue())));
+    }    
+
     
     @Override
     public boolean contains_val_called(
