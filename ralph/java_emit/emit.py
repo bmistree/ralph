@@ -1,7 +1,8 @@
 import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
-from ralph.parse.type import BasicType,MethodType,MapType,StructType
+from ralph.parse.type import BasicType,MethodType
+from ralph.parse.type import MapType,StructType,ListType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -27,6 +28,9 @@ import ralph.Variables.AtomicMapVariable;
 // index types for maps
 import ralph.NonAtomicMapContainer.IndexType;
 
+import ralph.Variables.NonAtomicListVariable;
+import ralph.Variables.AtomicListVariable;
+
 import RalphConnObj.ConnectionObj;
 import RalphExceptions.*;
 import java.util.Arrays;
@@ -40,7 +44,6 @@ import ralph_protobuffs.VariablesProto.Variables;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
-
 
 public class %s
 {
@@ -304,7 +307,8 @@ def convert_args_text_for_dispatch(method_declaration_node):
         arg_name = 'arg%i' % arg_number
         arg_vec_to_read_from = 'args[%i]' % arg_number
 
-        if isinstance(method_declaration_arg_node.type, MapType):
+        if (isinstance(method_declaration_arg_node.type, MapType) or
+            isinstance(method_declaration_arg_node.type, ListType)):
             # for map types, just push the map variable directly as
             # argument to method.  (Do not need to call get_val
             # directly because when pass arguments to a method, the
@@ -313,6 +317,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             single_arg_string = (
                 '%s %s = (%s) %s;' %
                 (map_type, arg_name, map_type, arg_vec_to_read_from))
+
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
                 method_declaration_arg_node.type.struct_name)
@@ -718,6 +723,10 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     if isinstance(type_object,MapType):
         return emit_map_type(type_object)
 
+    # emit for lists
+    if isinstance(type_object,ListType):
+        return emit_list_type(type_object)
+        
     # emit for structs
     if isinstance(type_object,StructType):
         return type_object.struct_name
@@ -800,36 +809,26 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         # require EnsureAtomicWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
-        if isinstance(value_type,BasicType):
-            value_basic_type = type_object.to_type_node.type.basic_type
-            if value_basic_type == NUMBER_TYPE:
-                value_type_wrapper = 'NUMBER_WRAPPER'
-            elif value_basic_type == STRING_TYPE:
-                value_type_wrapper = 'TEXT_WRAPPER'
-            elif value_basic_type == BOOL_TYPE:
-                value_type_wrapper = 'TRUE_FALSE_WRAPPER'
-            #### DEBUG
-            else:
-                raise InternalEmitException('Unknown basic type.')
-            #### END DEBUG
-            if not value_type_is_tvar:
-                value_type_wrapper = 'NON_ATOMIC_' + value_type_wrapper
-            else:
-                value_type_wrapper = 'ATOMIC_' + value_type_wrapper
-            value_type_wrapper = 'BaseAtomicWrappers.' + value_type_wrapper
-
-        elif isinstance(value_type,StructType):
-            struct_name = value_type.struct_name
-            value_type_wrapper = emit_struct_locked_map_wrapper_name(struct_name)
-        else:
-            # FIXME: Need to emit wrappers for non-struct/non-basic
-            # types.  (Eg., map types, list types.)
-            raise InternalEmitException(
-                'FIXME: Still need to emit wrappers for non-basic value types.')
-        
+        value_type_wrapper = list_map_wrappers(value_type)
         to_return = (
             'new %s("_host_uuid",false,%s,%s)' %
             (java_type_text,java_map_index_type_text,value_type_wrapper))
+        return to_return
+
+    elif isinstance(type_object,ListType):
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        
+        # FIXME: currently, disallowing initializing maps
+        if initializer_node is not None:
+            raise InternalEmitException(
+                'Not handling initializers for list types')
+        
+        # require EnsureAtomicWrapper object to 
+        element_type = type_object.element_type_node.type
+        element_type_wrapper = list_map_wrappers(element_type)
+        to_return = (
+            'new %s("_host_uuid",false,%s)' %
+            (java_type_text,element_type_wrapper))
         return to_return
     
     elif isinstance(type_object,StructType):
@@ -846,12 +845,44 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
     
     #### DEBUG
     else:
-        import pdb
-        pdb.set_trace()
         raise InternalEmitException(
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
+def list_map_wrappers(element_type):
+    '''The type object of a list's elements or a map's values.
+    '''
+    element_type_is_tvar = element_type.is_tvar
+    if isinstance(element_type,BasicType):
+        element_basic_type = element_type.basic_type
+        if element_basic_type == NUMBER_TYPE:
+            element_type_wrapper = 'NUMBER_WRAPPER'
+        elif element_basic_type == STRING_TYPE:
+            element_type_wrapper = 'TEXT_WRAPPER'
+        elif element_basic_type == BOOL_TYPE:
+            element_type_wrapper = 'TRUE_FALSE_WRAPPER'
+        #### DEBUG
+        else:
+            raise InternalEmitException('Unknown basic type.')
+        #### END DEBUG
+        if not element_type_is_tvar:
+            element_type_wrapper = 'NON_ATOMIC_' + element_type_wrapper
+        else:
+            element_type_wrapper = 'ATOMIC_' + element_type_wrapper
+        element_type_wrapper = 'BaseAtomicWrappers.' + element_type_wrapper
+
+    elif isinstance(element_type,StructType):
+        struct_name = element_type.struct_name
+        element_type_wrapper = emit_struct_locked_map_wrapper_name(struct_name)
+    else:
+        # FIXME: Need to emit wrappers for non-struct/non-basic
+        # types.  (Eg., map types, list types.)
+        raise InternalEmitException(
+            'FIXME: Still need to emit wrappers for non-basic value types.')
+
+    return element_type_wrapper
+
+    
 def emit_internal_map_type(type_object):
     key_type_node = type_object.from_type_node
     value_type_node = type_object.to_type_node
@@ -871,7 +902,24 @@ def emit_internal_map_type(type_object):
         internal_map_var_type +
         ('<%s,%s,%s>' %
          (key_internal_type_text,value_internal_type_text,dewaldoify_type_text)))
+
+def emit_internal_list_type(type_object):
+    element_type_node = type_object.element_type_node
+    element_type_text = emit_internal_type(
+        element_type_node.type)
+    dewaldoify_type_text = element_type_text
+
+    if type_object.is_tvar:
+        internal_map_var_type = 'AtomicListContainer'
+    else:
+        internal_map_var_type = 'NonAtomicListContainer'
         
+    return (
+        internal_map_var_type +
+        ('<%s,%s>' %
+         (element_type_text,dewaldoify_type_text)))
+
+
     
 def emit_map_type(type_object):
     # emit for maps
@@ -901,6 +949,31 @@ def emit_map_type(type_object):
             'Requires map type in emit_map_type')
 
     
+def emit_list_type(type_object):
+    # emit for lists
+    if isinstance(type_object,ListType):
+        element_type_node = type_object.element_type_node
+        element_internal_type_text = emit_internal_type(
+            element_type_node.type)
+        dewaldoify_type_text = element_internal_type_text
+
+        list_var_type = 'NonAtomicListVariable'
+        if type_object.is_tvar:
+            list_var_type = 'AtomicListVariable'
+
+        print 'May not be dewaldo-ifying lists correctly'
+        to_return = (
+            '%s<%s,%s>' %
+            (list_var_type,element_internal_type_text,
+             dewaldoify_type_text))
+
+        return to_return
+    else:
+        raise InternalEmitException(
+            'Requires list type in emit_list_type')
+
+    
+    
 def emit_internal_type(type_object):
     '''
     @param {Type or None} type_object --- None if type corresponds to
@@ -915,6 +988,10 @@ def emit_internal_type(type_object):
         # emit for map type
         if isinstance(type_object,MapType):
             return emit_internal_map_type(type_object)
+
+        # emit for list type
+        if isinstance(type_object,ListType):
+            return emit_internal_list_type(type_object)
         
         # emit for struct type
         if isinstance(type_object,StructType):
@@ -1264,6 +1341,29 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.get_val_on_key'
         elif right_hand_side_method == MapType.SET_METHOD_NAME:
             to_return += '.set_val_on_key'
+        #### DEBUG
+        else:
+            raise InternalEmitException(
+                'Unknown identifier on rhs of dot for map.')
+        #### END DEBUG
+    elif isinstance(left_of_dot_node.type,ListType):
+        if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+            raise InternalEmitException(
+                'Expected identifier to the right of %s' %
+                statement_node.value)
+        right_hand_side_method = right_of_dot_node.value
+        if right_hand_side_method == ListType.SIZE_METHOD_NAME:
+            to_return += '.get_len_boxed'
+        elif right_hand_side_method == ListType.CONTAINS_METHOD_NAME:
+            to_return += '.contains_key_called_boxed'
+        elif right_hand_side_method == ListType.GET_METHOD_NAME:
+            to_return += '.get_val_on_key'
+        elif right_hand_side_method == ListType.SET_METHOD_NAME:
+            to_return += '.set_val_on_key'
+        elif right_hand_side_method == ListType.APPEND_METHOD_NAME:
+            to_return += '.append'
+        elif right_hand_side_method == ListType.INSERT_METHOD_NAME:
+            to_return += '.insert'
         #### DEBUG
         else:
             raise InternalEmitException(

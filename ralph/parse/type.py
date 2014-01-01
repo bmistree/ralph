@@ -80,7 +80,10 @@ class ListType(Type):
     SIZE_METHOD_NAME = 'size'
     GET_METHOD_NAME = 'get'
     SET_METHOD_NAME = 'set'
-
+    APPEND_METHOD_NAME = 'append'
+    INSERT_METHOD_NAME = 'insert'
+    CONTAINS_METHOD_NAME = 'contains'
+    
     def __init__(self,element_type_node=None,is_tvar=None):
         if element_type_node is not None:
             self.update_element_type_tvar(element_type_node,is_tvar)
@@ -89,7 +92,7 @@ class ListType(Type):
         tvar_string = 'TVar'
         if not self.is_tvar:
             tvar_string = ''
-        element_type_string = str(self.from_type_node.type)
+        element_type_string = str(self.element_type_node.type)
         return (
             'List %s { element: %s}' %
             (tvar_string, element_type_string))
@@ -109,22 +112,45 @@ class ListType(Type):
             # takes no arguments
             [])
 
-        # get returns a from type and takes a single key argument
+        # get returns an element type and takes a single key argument
         get_method_type = MethodType(
-            self.to_type_node.type,
+            self.element_type_node.type,
             [BasicType(ast_labels.NUMBER_TYPE,False)])
 
+        # contains returns a boolean and takes no arguments
+        contains_method_type = MethodType(
+            # returns boolean
+            BasicType(
+                ast_labels.BOOL_TYPE,
+                False),
+            # takes single key argument
+            [self.element_type_node.type])
         
-        # set returns a from type and takes a single key argument
+        
+        # set returns an element type node and takes a single key argument
         set_method_type = MethodType(
-            self.to_type_node.type,
+            self.element_type_node.type,
             [BasicType(ast_labels.NUMBER_TYPE,False), # list index
              self.element_type_node.type])
 
+        # insert key, value argument
+        insert_method_type = MethodType(
+            self.element_type_node.type,
+            [BasicType(ast_labels.NUMBER_TYPE,False), # list index
+             self.element_type_node.type])
+
+        # append: value
+        append_method_type = MethodType(
+            self.element_type_node.type,
+            [self.element_type_node.type])
+        
         self.dot_dict_methods = {
             ListType.SIZE_METHOD_NAME: size_method_type,
             ListType.GET_METHOD_NAME: get_method_type,
-            ListType.SET_METHOD_NAME: set_method_type
+            ListType.SET_METHOD_NAME: set_method_type,
+            ListType.CONTAINS_METHOD_NAME: contains_method_type,
+            ListType.INSERT_METHOD_NAME: insert_method_type,
+            ListType.APPEND_METHOD_NAME: append_method_type
             }
         
     def dict_dot_fields(self):
