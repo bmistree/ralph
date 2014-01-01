@@ -3,7 +3,7 @@ package java_lib_test;
 import ralph.RalphObject;
 import ralph.Variables;
 import ralph.VariableStore;
-import ralph.Variables.LockedNumberVariable;
+import ralph.Variables.AtomicNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
@@ -178,7 +178,7 @@ public class TestClassUtil
         // adding a number tvar
         vstore.add_var(
             DefaultEndpoint.NUM_TVAR_NAME,
-            new LockedNumberVariable(
+            new AtomicNumberVariable(
                 dummy_host_uuid,false,
                 DefaultEndpoint.NUM_TVAR_INIT_VAL));
 
@@ -187,13 +187,13 @@ public class TestClassUtil
             new AtomicMapVariable<Double,Double,Double>(
                 dummy_host_uuid,false,
                 NonAtomicMapContainer.IndexType.DOUBLE,
-                BaseAtomicWrappers.NUMBER_WRAPPER));
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
             new AtomicListVariable<Double,Double>(
                 dummy_host_uuid,false,
-                BaseAtomicWrappers.NUMBER_WRAPPER));
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
 
         
         DefaultEndpoint to_return = new DefaultEndpoint(

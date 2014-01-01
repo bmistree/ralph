@@ -1,6 +1,5 @@
 package java_lib_test;
 
-import ralph.Variables.LockedNumberVariable;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.ParallelBlock;

@@ -25,15 +25,15 @@ public class Variables {
     final static Boolean default_tf = false;
 	
 	
-    public static class LockedNumberVariable extends AtomicValueVariable<Double,Double>
+    public static class AtomicNumberVariable extends AtomicValueVariable<Double,Double>
     {
-        public LockedNumberVariable(String _host_uuid, boolean _peered,Object init_val)
+        public AtomicNumberVariable(String _host_uuid, boolean _peered,Object init_val)
         {
             super(
                 _host_uuid,_peered, new Double(((Number) init_val).doubleValue()),
                 default_number,number_value_type_data_wrapper_constructor);		
         }
-        public LockedNumberVariable(String _host_uuid, boolean _peered)
+        public AtomicNumberVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_number,default_number,
@@ -51,15 +51,15 @@ public class Variables {
         }
     }
 
-    public static class LockedTextVariable extends AtomicValueVariable<String,String>
+    public static class AtomicTextVariable extends AtomicValueVariable<String,String>
     {
-        public LockedTextVariable(String _host_uuid, boolean _peered,Object init_val)
+        public AtomicTextVariable(String _host_uuid, boolean _peered,Object init_val)
         {
             super(
                 _host_uuid,_peered,(String)init_val,default_text,
                 text_value_type_data_wrapper_constructor);		
         }
-        public LockedTextVariable(String _host_uuid, boolean _peered)
+        public AtomicTextVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_text,default_text,
@@ -76,17 +76,17 @@ public class Variables {
         }
     }
 	
-    public static class LockedTrueFalseVariable
+    public static class AtomicTrueFalseVariable
         extends AtomicValueVariable<Boolean,Boolean>
     {
-        public LockedTrueFalseVariable(
+        public AtomicTrueFalseVariable(
             String _host_uuid, boolean _peered,Object init_val)
         {
             super(
                 _host_uuid,_peered,(Boolean)init_val,default_tf,
                 true_false_value_type_data_wrapper_constructor);		
         }
-        public LockedTrueFalseVariable(String _host_uuid, boolean _peered)
+        public AtomicTrueFalseVariable(String _host_uuid, boolean _peered)
         {
             super(
                 _host_uuid,_peered,default_tf,default_tf,
@@ -105,10 +105,10 @@ public class Variables {
     }
 	
 	
-    public static class SingleThreadedLockedNumberVariable
+    public static class NonAtomicNumberVariable
         extends NonAtomicValueVariable<Double,Double>
     {
-        public SingleThreadedLockedNumberVariable(
+        public NonAtomicNumberVariable(
             String _host_uuid, boolean _peered, Double init_val)
         {
             super(
@@ -116,7 +116,7 @@ public class Variables {
                 number_value_type_data_wrapper_constructor);
         }
 
-        public SingleThreadedLockedNumberVariable(
+        public NonAtomicNumberVariable(
             String _host_uuid, boolean _peered)
         {
             super(
@@ -135,10 +135,10 @@ public class Variables {
         }
     }
 
-    public static class SingleThreadedLockedTextVariable
+    public static class NonAtomicTextVariable
         extends NonAtomicValueVariable<String,String>
     {
-        public SingleThreadedLockedTextVariable(
+        public NonAtomicTextVariable(
             String _host_uuid, boolean _peered,String init_val)
         {
             super(
@@ -146,7 +146,7 @@ public class Variables {
                 text_value_type_data_wrapper_constructor);
         }
 		
-        public SingleThreadedLockedTextVariable(
+        public NonAtomicTextVariable(
             String _host_uuid, boolean _peered)
         {
             super(
@@ -166,10 +166,10 @@ public class Variables {
         
     }
 
-    public static class SingleThreadedLockedTrueFalseVariable
+    public static class NonAtomicTrueFalseVariable
         extends NonAtomicValueVariable<Boolean,Boolean>
     {
-        public SingleThreadedLockedTrueFalseVariable(
+        public NonAtomicTrueFalseVariable(
             String _host_uuid, boolean _peered, Boolean init_val)
         {
             super(
@@ -177,7 +177,7 @@ public class Variables {
                 true_false_value_type_data_wrapper_constructor);
         }
 
-        public SingleThreadedLockedTrueFalseVariable(
+        public NonAtomicTrueFalseVariable(
             String _host_uuid, boolean _peered)
         {
             super(

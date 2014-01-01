@@ -56,8 +56,8 @@ public class PartnersModifyRemoteState
             {
                 expected_value += 1;
 
-                Variables.SingleThreadedLockedNumberVariable num_var =
-                    new Variables.SingleThreadedLockedNumberVariable(
+                Variables.NonAtomicNumberVariable num_var =
+                    new Variables.NonAtomicNumberVariable(
                         endpta._host_uuid, false);
 
                 

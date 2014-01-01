@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.Variables.LockedNumberVariable;
+import ralph.Variables.AtomicNumberVariable;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
@@ -28,8 +28,8 @@ public class NonAtomic
     public static boolean run_test()
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-        LockedNumberVariable num_tvar =
-            (LockedNumberVariable) endpt.global_var_stack.get_var_if_exists(
+        AtomicNumberVariable num_tvar =
+            (AtomicNumberVariable) endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
 
         // Tests concurrent read of tvar.
@@ -47,7 +47,7 @@ public class NonAtomic
        concurrently before either commit.
      */
     public static boolean test_concurrent_non_atomic_reads_and_writes(
-        Endpoint endpt, LockedNumberVariable num_tvar)
+        Endpoint endpt, AtomicNumberVariable num_tvar)
     {
         try
         {
@@ -91,7 +91,7 @@ public class NonAtomic
     }
     
     public static boolean test_non_atomic_read(
-        Endpoint endpt, LockedNumberVariable num_tvar)
+        Endpoint endpt, AtomicNumberVariable num_tvar)
     {
         try
         {

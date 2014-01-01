@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.Variables.LockedNumberVariable;
+import ralph.Variables.AtomicNumberVariable;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.VariableStack;
@@ -52,8 +52,8 @@ public class BasicDefer
             @Override
             public void run()
             {
-                LockedNumberVariable num_tvar =
-                    (LockedNumberVariable) vstack.get_var_if_exists(
+                AtomicNumberVariable num_tvar =
+                    (AtomicNumberVariable) vstack.get_var_if_exists(
                         TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
                 try
                 {
@@ -75,8 +75,8 @@ public class BasicDefer
 
         // read the num_tvar to ensure that it got incremented
         
-        LockedNumberVariable num_tvar =
-            (LockedNumberVariable) endpt.global_var_stack.get_var_if_exists(
+        AtomicNumberVariable num_tvar =
+            (AtomicNumberVariable) endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
 
         try

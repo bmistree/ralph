@@ -103,12 +103,12 @@ public class PartnersNoConflict
             Boolean init_boolean_value = new Boolean(false);
             String init_string_value = "a";
             
-            Variables.SingleThreadedLockedTrueFalseVariable bool_var =
-                new Variables.SingleThreadedLockedTrueFalseVariable(
+            Variables.NonAtomicTrueFalseVariable bool_var =
+                new Variables.NonAtomicTrueFalseVariable(
                     endpta._host_uuid, false, init_boolean_value);
             
-            Variables.SingleThreadedLockedTextVariable string_var =
-                new Variables.SingleThreadedLockedTextVariable(
+            Variables.NonAtomicTextVariable string_var =
+                new Variables.NonAtomicTextVariable(
                     endpta._host_uuid, false, init_string_value);
             
             endpta.global_var_stack.add_var(bool_var_name,bool_var);

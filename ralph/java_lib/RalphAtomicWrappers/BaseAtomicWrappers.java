@@ -4,82 +4,82 @@ import ralph.Variables;
 
 public class BaseAtomicWrappers
 {
-    public final static SingleThreadedNumberWrapper SINGLE_THREADED_NUMBER_WRAPPER =
-        new SingleThreadedNumberWrapper();
-    public final static SingleThreadedTrueFalseWrapper SINGLE_THREADED_TRUE_FALSE_WRAPPER =
-        new SingleThreadedTrueFalseWrapper();
-    public final static SingleThreadedTextWrapper SINGLE_THREADED_TEXT_WRAPPER =
-        new SingleThreadedTextWrapper();    
+    public final static NonAtomicNumberWrapper NON_ATOMIC_NUMBER_WRAPPER =
+        new NonAtomicNumberWrapper();
+    public final static NonAtomicTrueFalseWrapper NON_ATOMIC_TRUE_FALSE_WRAPPER =
+        new NonAtomicTrueFalseWrapper();
+    public final static NonAtomicTextWrapper NON_ATOMIC_TEXT_WRAPPER =
+        new NonAtomicTextWrapper();    
 
-    public final static NumberWrapper NUMBER_WRAPPER = new NumberWrapper();
-    public final static TrueFalseWrapper TRUE_FALSE_WRAPPER = new TrueFalseWrapper();
-    public final static TextWrapper TEXT_WRAPPER = new TextWrapper();    
+    public final static AtomicNumberWrapper ATOMIC_NUMBER_WRAPPER = new AtomicNumberWrapper();
+    public final static AtomicTrueFalseWrapper ATOMIC_TRUE_FALSE_WRAPPER = new AtomicTrueFalseWrapper();
+    public final static AtomicTextWrapper ATOMIC_TEXT_WRAPPER = new AtomicTextWrapper();    
     
     
     /**** Single threaded wrappers for base variables */
-    public static class SingleThreadedNumberWrapper
+    private static class NonAtomicNumberWrapper
         implements EnsureAtomicWrapper<Double,Double>
     {
         public RalphObject<Double,Double> ensure_atomic_object(
             Double object_to_ensure)
         {
-            return new Variables.SingleThreadedLockedNumberVariable(
+            return new Variables.NonAtomicNumberVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
 
-    public static class SingleThreadedTrueFalseWrapper
+    private static class NonAtomicTrueFalseWrapper
         implements EnsureAtomicWrapper<Boolean,Boolean>
     {
         public RalphObject<Boolean,Boolean>ensure_atomic_object(
             Boolean object_to_ensure)
         {
-            return new Variables.SingleThreadedLockedTrueFalseVariable(
+            return new Variables.NonAtomicTrueFalseVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
     
-    public static class SingleThreadedTextWrapper
+    private static class NonAtomicTextWrapper
         implements EnsureAtomicWrapper<String,String>
     {
         public RalphObject<String,String>ensure_atomic_object(
             String object_to_ensure)
         {
-            return new Variables.SingleThreadedLockedTextVariable(
+            return new Variables.NonAtomicTextVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
 
     /**** Multithreaded wrappers for base variables */
-    public static class NumberWrapper
+    private static class AtomicNumberWrapper
         implements EnsureAtomicWrapper<Double,Double>
     {
         public RalphObject<Double,Double> ensure_atomic_object(
             Double object_to_ensure)
         {
-            return new Variables.LockedNumberVariable(
+            return new Variables.AtomicNumberVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
 
-    public static class TrueFalseWrapper
+    private static class AtomicTrueFalseWrapper
         implements EnsureAtomicWrapper<Boolean,Boolean>
     {
         public RalphObject<Boolean,Boolean>ensure_atomic_object(
             Boolean object_to_ensure)
         {
-            return new Variables.LockedTrueFalseVariable(
+            return new Variables.AtomicTrueFalseVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }
     
-    public static class TextWrapper
+    private static class AtomicTextWrapper
         implements EnsureAtomicWrapper<String,String>
     {
         public RalphObject<String,String>ensure_atomic_object(
             String object_to_ensure)
         {
-            return new Variables.LockedTextVariable(
+            return new Variables.AtomicTextVariable(
                 "host_uuid",false,object_to_ensure);
         }
     }

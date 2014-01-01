@@ -16,12 +16,12 @@ def emit(root_node,struct_types_ctx,package_name,program_name):
 package %s;
 
 import ralph.*;
-import ralph.Variables.LockedNumberVariable;
-import ralph.Variables.LockedTextVariable;
-import ralph.Variables.LockedTrueFalseVariable;
-import ralph.Variables.SingleThreadedLockedNumberVariable;
-import ralph.Variables.SingleThreadedLockedTextVariable;
-import ralph.Variables.SingleThreadedLockedTrueFalseVariable;
+import ralph.Variables.AtomicNumberVariable;
+import ralph.Variables.AtomicTextVariable;
+import ralph.Variables.AtomicTrueFalseVariable;
+import ralph.Variables.NonAtomicNumberVariable;
+import ralph.Variables.NonAtomicTextVariable;
+import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph.Variables.NonAtomicMapVariable;
 import ralph.Variables.AtomicMapVariable;
 // index types for maps
@@ -707,7 +707,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     void (eg., in method signature).
 
     @returns{String} --- Java-ized version of wrapped Ralph type: eg.,
-    LockedNumberVarialbe, etc.
+    AtomicNumberVarialbe, etc.
     '''    
     if type_object is None:
         return 'void'
@@ -730,16 +730,16 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
 
     if typer == BOOL_TYPE:
         if is_tvar and (not force_single_threaded):
-            return 'LockedTrueFalseVariable'
-        return 'SingleThreadedLockedTrueFalseVariable'
+            return 'AtomicTrueFalseVariable'
+        return 'NonAtomicTrueFalseVariable'
     elif typer == NUMBER_TYPE:
         if is_tvar and (not force_single_threaded):
-            return 'LockedNumberVariable'
-        return 'SingleThreadedLockedNumberVariable'        
+            return 'AtomicNumberVariable'
+        return 'NonAtomicNumberVariable'        
     elif typer == STRING_TYPE:
         if is_tvar and (not force_single_threaded):
-            return 'LockedTextVariable'
-        return 'SingleThreadedLockedTextVariable'
+            return 'AtomicTextVariable'
+        return 'NonAtomicTextVariable'
 
     
     # FIXME: construct useful type from type object
@@ -795,7 +795,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 'Map only accepts value types for indices')
         #### END DEBUG
         
-        # require EnsureLockedWrapper object to 
+        # require EnsureAtomicWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
         if isinstance(value_type,BasicType):
@@ -811,7 +811,9 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 raise InternalEmitException('Unknown basic type.')
             #### END DEBUG
             if not value_type_is_tvar:
-                value_type_wrapper = 'SINGLE_THREADED_' + value_type_wrapper
+                value_type_wrapper = 'NON_ATOMIC_' + value_type_wrapper
+            else:
+                value_type_wrapper = 'ATOMIC_' + value_type_wrapper
             value_type_wrapper = 'BaseAtomicWrappers.' + value_type_wrapper
 
         elif isinstance(value_type,StructType):

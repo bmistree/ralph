@@ -1,7 +1,7 @@
 package java_lib_test;
 
 import ralph.VariableStack;
-import ralph.Variables.SingleThreadedLockedNumberVariable;
+import ralph.Variables.NonAtomicNumberVariable;
 import ralph.RalphObject;
 
 public class WriteReadVarStack
@@ -74,15 +74,15 @@ public class WriteReadVarStack
         Double higher_a_init_val = new Double(root_a_init_val + 30);
 
         /** Create new variables */
-        SingleThreadedLockedNumberVariable root_a =
-            new SingleThreadedLockedNumberVariable(
+        NonAtomicNumberVariable root_a =
+            new NonAtomicNumberVariable(
                 dummy_host_uuid,false,root_a_init_val);
-        SingleThreadedLockedNumberVariable higher_a =
-            new SingleThreadedLockedNumberVariable(
+        NonAtomicNumberVariable higher_a =
+            new NonAtomicNumberVariable(
                 dummy_host_uuid,false,higher_a_init_val);        
 
-        SingleThreadedLockedNumberVariable root_b =
-            new SingleThreadedLockedNumberVariable(
+        NonAtomicNumberVariable root_b =
+            new NonAtomicNumberVariable(
                 dummy_host_uuid,false,root_b_init_val);        
 
         

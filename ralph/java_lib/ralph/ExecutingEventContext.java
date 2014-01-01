@@ -9,14 +9,10 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-import ralph.Variables.LockedTextVariable;
-import ralph.Variables.LockedNumberVariable;
-import ralph.Variables.LockedTrueFalseVariable;
-import ralph.Variables.SingleThreadedLockedTextVariable;
-import ralph.Variables.SingleThreadedLockedNumberVariable;
-import ralph.Variables.SingleThreadedLockedTrueFalseVariable;
+import ralph.Variables.NonAtomicTextVariable;
+import ralph.Variables.NonAtomicNumberVariable;
+import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph_protobuffs.VariablesProto;
-
 
 import RalphCallResults.MessageCallResultObject;
 
@@ -462,17 +458,17 @@ public class ExecutingEventContext
 
         if (variable.hasNum())
         {
-            lo = new SingleThreadedLockedNumberVariable(
+            lo = new NonAtomicNumberVariable(
                 host_uuid,false,new Double(variable.getNum()));
         }
         else if (variable.hasText())
         {
-            lo = new SingleThreadedLockedTextVariable(
+            lo = new NonAtomicTextVariable(
                 host_uuid,false,variable.getText());
         }
         else if (variable.hasTrueFalse())
         {
-            lo = new SingleThreadedLockedTrueFalseVariable(
+            lo = new NonAtomicTrueFalseVariable(
                 host_uuid,false,new Boolean(variable.getTrueFalse()));
         }
         else if (variable.hasList())
