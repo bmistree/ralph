@@ -1,0 +1,89 @@
+package emit_test_harnesses;
+
+import emit_test_package.AtomicListTest.TVarListEndpoint;
+import RalphConnObj.SingleSideConnection;
+import ralph.RalphGlobals;
+
+public class AtomicListTester
+{
+    public static void main(String[] args)
+    {
+        if (AtomicListTester.run_test())
+            System.out.println("\nSUCCESS in AtomicListTester\n");
+        else
+            System.out.println("\nFAILURE in AtomicListTester\n");
+    }
+    
+    public static boolean run_test()
+    {
+        try
+        {
+            String dummy_host_uuid = "dummy_host_uuid";
+            
+            TVarListEndpoint endpt = new TVarListEndpoint(
+                new RalphGlobals(),
+                dummy_host_uuid,
+                new SingleSideConnection());
+
+            double list_size = endpt.get_size().doubleValue();
+            if (list_size != 0)
+                return false;
+            
+            for (int i = 0; i < 20; ++i)
+            {
+                boolean contains =
+                    endpt.contains_index(new Double((double)i)).booleanValue();
+                if (contains)
+                    return false;
+            }
+
+            // append to end of list
+            for (int i = 5; i < 20; ++i)
+            {
+                // uses -1 in order to just append to end of list
+                Double index_number = new Double(-1.0);
+                Double value_number = new Double((double)i);
+                endpt.put_number(index_number,value_number);
+            }
+            // insert into front of list
+            for (int i = 0; i < 5; ++i)
+            {
+                Double index_number = new Double((double)i);
+                Double value_number = new Double((double)i);
+                endpt.put_number(index_number,value_number);
+
+                double gotten = endpt.get_number(index_number).doubleValue();
+                if (gotten != value_number.doubleValue())
+                    return false;
+            }
+
+            // overwrite previous values with new values.
+            for (int i = 0; i < 20; ++i)
+            {
+                Double index_number = new Double((double)i);
+                Double value_number = new Double((double) i+ 30);
+                endpt.put_number(index_number,value_number);
+
+                double gotten = endpt.get_number(index_number).doubleValue();
+                if (gotten != value_number.doubleValue())
+                    return false;
+            }
+
+            // test that pass map through in method call as reference
+            Double index =  new Double(0);
+            Double new_value = new Double(5093);
+            endpt.test_change_in_method_call(index,new_value);
+
+            Double received_double = endpt.get_number(index);
+            if (!received_double.equals(new_value))
+                return false;
+            
+            return true;
+        }
+        catch(Exception _ex)
+        {
+            _ex.printStackTrace();
+            return false;
+        }
+    }
+}

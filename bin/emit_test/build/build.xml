@@ -120,6 +120,15 @@
       <arg line="emit_test_package"/>
       <arg line="ListTest"/>
     </exec>
+
+    <echo message="\nEmitting atomic_list.rph\n"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/atomic_list.rph"/>
+      <arg line="${ralph_emitted.dir}/AtomicListTest.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="AtomicListTest"/>
+    </exec>
     
   </target>
 
@@ -163,7 +172,7 @@
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
-         run_ListTest">
+         run_ListTest,run_AtomicListTest">
   </target>
 
   
@@ -273,6 +282,21 @@
     </java>
   </target>
 
+  <!-- AtomicListTesting -->
+  <target
+      name="run_AtomicListTest"
+      depends="compile_ralph_tests"
+      description="Test atomic list methods.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.AtomicListTester"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   <!-- Nested struct test -->
   <target
       name="run_NestedStructTest"
