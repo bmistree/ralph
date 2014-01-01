@@ -271,5 +271,27 @@ public class Variables {
                 locked_wrapper);
         }
     }
+
+    public static class NonAtomicListVariable <V,D>
+        extends NonAtomicList<V,D>
+    {
+        public NonAtomicListVariable(
+            String _host_uuid, boolean _peered,
+            EnsureAtomicWrapper<V,D> locked_wrapper)
+        {
+            super(_host_uuid,_peered,locked_wrapper);
+        }
+
+        public NonAtomicListVariable(
+            String _host_uuid, boolean _peered,
+            NonAtomicListContainer<V,D> internal_val,
+            EnsureAtomicWrapper<V,D> locked_wrapper)
+        {
+            super(
+                _host_uuid, _peered,internal_val,
+                locked_wrapper);
+        }
+    }
+
     
 }

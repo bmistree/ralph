@@ -1,11 +1,12 @@
 package ralph;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
@@ -23,35 +24,37 @@ import RalphDataWrappers.ListTypeDataWrapper;
  *     ArrayList<Number,ArrayList<Number>>>
  * 
  */
-public abstract class AtomicList<V,D>
-    extends AtomicListContainerReference<V,D>
+public abstract class NonAtomicList<V,D>
+    extends NonAtomicListContainerReference<V,D>
 {
-    public AtomicList(
+    public NonAtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
+        // FIXME: I'm pretty sure that the type signature for the locked object above
+        // is incorrect: it shouldn't be D, right?			
         super(
             _host_uuid,_peered,
             // initial value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
 
     /**
        When pass an argument into a method call, should unwrap
-       internal value and put it into another MultiThreadedList.
+       internal value and put it into another NonAtomicLockList.
        This constructor is for this.
      */
-    public AtomicList(
+    public NonAtomicList(
         String _host_uuid, boolean _peered,
-        AtomicListContainer<V,D> internal_val,
+        NonAtomicListContainer<V,D> internal_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super(
@@ -59,12 +62,12 @@ public abstract class AtomicList<V,D>
             // initial value
             internal_val,
             // default value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
     }
     
-    public AtomicList(
+    public NonAtomicList(
         String _host_uuid, boolean _peered,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -73,26 +76,25 @@ public abstract class AtomicList<V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
     }
 
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+        ActiveEvent active_event,Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        Util.logger_assert("FIXME: finish serializing lists.");
-        // AtomicMapContainer<K,V,D> internal_val =
-        //     get_val(active_event);
-        // internal_val.serialize_as_rpc_arg(
-        //     active_event,any_builder,is_reference);
+        NonAtomicListContainer<V,D> internal_val =
+            get_val(active_event);
+        internal_val.serialize_as_rpc_arg(
+            active_event,any_builder,is_reference);
     }
 
-    public AtomicList(
+    public NonAtomicList(
         String _host_uuid, boolean _peered,
         ArrayList<RalphObject<V,D>> init_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
@@ -102,12 +104,12 @@ public abstract class AtomicList<V,D>
         super(
             _host_uuid,_peered,
             // initial value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid,false,locked_wrapper),
             // default value
-            new AtomicInternalListVariable<V,D>(
+            new NonAtomicInternalListVariable<V,D>(
                 _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
 
         load_init_vals(init_val,false);
     }
