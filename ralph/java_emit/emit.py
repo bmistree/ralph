@@ -690,9 +690,10 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
                 (java_type_statement,argument_name,argument_name,argument_name))
         elif isinstance(argument_type,ListType):
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s.locked_wrapper)'
+                'new %s ("_host_uuid",false,%s,%s.locked_wrapper)'
                 %
-                (java_type_statement,argument_name))
+                (java_type_statement,argument_name,argument_name))
+
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
                 'new %s ("_host_uuid",false,%s)' %
