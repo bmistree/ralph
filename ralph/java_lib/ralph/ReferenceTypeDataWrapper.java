@@ -19,7 +19,7 @@ import RalphExceptions.BackoutException;
  * dewaldoify into (if they are locked objects)
  */
 public class ReferenceTypeDataWrapper<K,T,D>
-    extends DataWrapper<HashMap<K,LockedObject<T,D>>, HashMap<K,D>>{
+    extends DataWrapper<HashMap<K,RalphObject<T,D>>, HashMap<K,D>>{
 	
     class OpTuple
     {
@@ -49,9 +49,9 @@ public class ReferenceTypeDataWrapper<K,T,D>
     private ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public ReferenceTypeDataWrapper(HashMap<K,LockedObject<T,D>> v, boolean _peered)
+    public ReferenceTypeDataWrapper(HashMap<K,RalphObject<T,D>> v, boolean _peered)
     {
-        super( (HashMap<K,LockedObject<T,D>>)v.clone(),_peered);
+        super( (HashMap<K,RalphObject<T,D>>)v.clone(),_peered);
         peered = _peered;
     }
 	
@@ -64,9 +64,9 @@ public class ReferenceTypeDataWrapper<K,T,D>
     public HashMap<K,D> de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         HashMap<K,D>to_return_map = new HashMap<K,D>();			
-        for (Map.Entry<K, LockedObject<T,D>> entry : val.entrySet())
+        for (Map.Entry<K, RalphObject<T,D>> entry : val.entrySet())
         {
-            LockedObject<T,D> locked_obj = entry.getValue();
+            RalphObject<T,D> locked_obj = entry.getValue();
             to_return_map.put(entry.getKey(), locked_obj.de_waldoify(active_event) );
         }		
         return to_return_map;        
@@ -90,7 +90,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,K key, LockedObject<T,D> to_write,
+        ActiveEvent active_event,K key, RalphObject<T,D> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if (! val.containsKey(key))
@@ -107,7 +107,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,K key, LockedObject<T,D> to_write) throws BackoutException
+        ActiveEvent active_event,K key, RalphObject<T,D> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
@@ -136,7 +136,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
 
     public void add_key(
         ActiveEvent active_event, K key_added,
-        LockedObject<T,D> new_object, boolean incorporating_deltas)
+        RalphObject<T,D> new_object, boolean incorporating_deltas)
     {
     	/*
           if self.peered and (not incorporating_deltas):
@@ -152,7 +152,7 @@ public class ReferenceTypeDataWrapper<K,T,D>
     }
     
     public void add_key(
-        ActiveEvent active_event,K key_to_add,LockedObject<T,D> new_object)
+        ActiveEvent active_event,K key_to_add,RalphObject<T,D> new_object)
     {
     	add_key(active_event,key_to_add,new_object,false);
     }
@@ -167,14 +167,14 @@ public class ReferenceTypeDataWrapper<K,T,D>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        LockedObject<T,D> new_val, boolean incorporating_deltas)
+        RalphObject<T,D> new_val, boolean incorporating_deltas)
     {
     	Util.logger_assert("Cannot insert on map");
     }
 
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        LockedObject<T,D> new_val)
+        RalphObject<T,D> new_val)
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
@@ -186,14 +186,14 @@ public class ReferenceTypeDataWrapper<K,T,D>
      * @param incorporating_deltas
      */
     public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_val,
+        ActiveEvent active_event, RalphObject<T,D> new_val,
         boolean incorporating_deltas)
     {
     	Util.logger_assert("Can only append to list");
     }
     
     public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_val)
+        ActiveEvent active_event, RalphObject<T,D> new_val)
     {
     	append(active_event,new_val,false);
     }

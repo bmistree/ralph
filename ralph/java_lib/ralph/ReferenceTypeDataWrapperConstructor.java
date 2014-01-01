@@ -17,15 +17,15 @@ import java.util.HashMap;
 public class ReferenceTypeDataWrapperConstructor<K,V,D> 	
     extends DataWrapperConstructor<
     // The actual internal data that will be held by the data wrapper
-    HashMap<K,LockedObject<V,D>>, 
+    HashMap<K,RalphObject<V,D>>, 
     // what you get when you call dewaldoify on the data wrapper
     HashMap<K,D> >
 {
 
     @Override
-    public DataWrapper<HashMap<K, LockedObject<V,D>>, HashMap<K,D>>
+    public DataWrapper<HashMap<K, RalphObject<V,D>>, HashMap<K,D>>
         construct(
-            HashMap<K, LockedObject<V,D>> _val, boolean peered) 
+            HashMap<K, RalphObject<V,D>> _val, boolean peered) 
     {
         return new ReferenceTypeDataWrapper<K,V,D>(_val,peered);
     }

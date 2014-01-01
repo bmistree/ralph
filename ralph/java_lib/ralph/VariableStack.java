@@ -74,12 +74,12 @@ public class VariableStack
      @returns {_WaldoVariable or None} --- None if variable does
      not exist, _WaldoVariable otherwise.
     */
-    public LockedObject get_var_if_exists(String unique_name)
+    public RalphObject get_var_if_exists(String unique_name)
     {
         for (int index = scope_stack.size() - 1; index >= 0; --index)
         {
             VariableStore vstore = scope_stack.get(index);
-            LockedObject var = vstore.get_var_if_exists(unique_name);
+            RalphObject var = vstore.get_var_if_exists(unique_name);
             if (var != null)
                 return var;
         }
@@ -92,7 +92,7 @@ public class VariableStack
 
      @param {_WaldoVariable} waldo_variable 
     */
-    public void add_var(String unique_name,LockedObject ralph_variable)
+    public void add_var(String unique_name,RalphObject ralph_variable)
     {
         //DEBUG
         if (scope_stack.size() == 0)

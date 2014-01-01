@@ -1,6 +1,6 @@
 package java_lib_test;
 
-import ralph.LockedObject;
+import ralph.RalphObject;
 import ralph.Variables;
 import ralph.VariableStore;
 import ralph.Variables.LockedNumberVariable;
@@ -84,21 +84,21 @@ public class TestClassUtil
             }
             else if (to_exec_internal_name.equals("test_increment_local_num"))
             {
-                LockedObject<Double,Double> arg =
-                    (LockedObject<Double,Double>)args[0];
+                RalphObject<Double,Double> arg =
+                    (RalphObject<Double,Double>)args[0];
 
                 _test_increment_local_num(active_event,ctx,arg);
             }
             else if (to_exec_internal_name.equals("test_partner_args_method"))
             {
-                LockedObject<Double,Double> num_obj =
-                    (LockedObject<Double,Double>)args[0];
+                RalphObject<Double,Double> num_obj =
+                    (RalphObject<Double,Double>)args[0];
 
-                LockedObject<Boolean,Boolean> bool_obj =
-                    (LockedObject<Boolean,Boolean>) args[1];
+                RalphObject<Boolean,Boolean> bool_obj =
+                    (RalphObject<Boolean,Boolean>) args[1];
 
-                LockedObject<String,String> string_obj =
-                    (LockedObject<String,String>) args[2];
+                RalphObject<String,String> string_obj =
+                    (RalphObject<String,String>) args[2];
 
                 _test_partner_args_method(
                     active_event, ctx, num_obj,bool_obj,string_obj);
@@ -133,11 +133,11 @@ public class TestClassUtil
 
 	public void _test_increment_local_num(
             ActiveEvent active_event,ExecutingEventContext ctx,
-            LockedObject<Double,Double>to_return)
+            RalphObject<Double,Double>to_return)
             throws BackoutException
         {
-            LockedObject<Double,Double> num_obj =
-                (LockedObject<Double,Double>)ctx.var_stack.get_var_if_exists(
+            RalphObject<Double,Double> num_obj =
+                (RalphObject<Double,Double>)ctx.var_stack.get_var_if_exists(
                     NUM_TVAR_NAME);            
             
             double current_val =
@@ -151,9 +151,9 @@ public class TestClassUtil
         
 	public void _test_partner_args_method(
             ActiveEvent active_event,ExecutingEventContext ctx,
-            LockedObject<Double,Double> num_obj,
-            LockedObject<Boolean,Boolean> bool_obj,
-            LockedObject<String,String> string_obj)
+            RalphObject<Double,Double> num_obj,
+            RalphObject<Boolean,Boolean> bool_obj,
+            RalphObject<String,String> string_obj)
             throws BackoutException
         {
             Double num = num_obj.get_val(active_event);

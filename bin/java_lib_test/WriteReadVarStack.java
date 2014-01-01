@@ -2,7 +2,7 @@ package java_lib_test;
 
 import ralph.VariableStack;
 import ralph.Variables.SingleThreadedLockedNumberVariable;
-import ralph.LockedObject;
+import ralph.RalphObject;
 
 public class WriteReadVarStack
 {
@@ -26,8 +26,8 @@ public class WriteReadVarStack
     public static Double get_number_from_stack (
         VariableStack vstack, String var_name)
     {
-        LockedObject<Double,Double> lo =
-            (LockedObject<Double,Double>)vstack.get_var_if_exists(var_name);
+        RalphObject<Double,Double> lo =
+            (RalphObject<Double,Double>)vstack.get_var_if_exists(var_name);
 
         Double val = null;
         try
@@ -46,8 +46,8 @@ public class WriteReadVarStack
     public static void set_number_on_stack(
         VariableStack vstack,String var_name,Double val_to_set_to)
     {
-        LockedObject<Double,Double> lo =
-            (LockedObject<Double,Double>)vstack.get_var_if_exists(var_name);
+        RalphObject<Double,Double> lo =
+            (RalphObject<Double,Double>)vstack.get_var_if_exists(var_name);
         try
         {
             lo.set_val(null,val_to_set_to);

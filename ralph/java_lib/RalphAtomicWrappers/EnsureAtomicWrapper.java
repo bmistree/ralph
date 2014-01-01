@@ -1,6 +1,6 @@
 package RalphAtomicWrappers;
 
-import ralph.LockedObject;
+import ralph.RalphObject;
 
 /**
    When setting_val_on_key for a map, pass in internal value of
@@ -26,5 +26,5 @@ import ralph.LockedObject;
  */
 public interface EnsureAtomicWrapper<V,D>
 {
-    public LockedObject<V,D> ensure_atomic_object(V object_to_ensure);
+    public RalphObject<V,D> ensure_atomic_object(V object_to_ensure);
 }

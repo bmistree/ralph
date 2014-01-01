@@ -53,7 +53,7 @@ public class ExecutingEventContext
 
     /**
        If this context was created from an rpc call from another
-       endpoint, then we keep track of the LockedObjects that were
+       endpoint, then we keep track of the RalphObjects that were
        passed into the RPC as arguments.  We do this because we may
        have to return one or more of these objects as references when
        return result of rpc.
@@ -294,7 +294,7 @@ public class ExecutingEventContext
         VariablesProto.Variables variables = queue_elem.returned_variables;
 
         // step 2: deserialize message variables
-        ArrayList<LockedObject> returned_variables =
+        ArrayList<RalphObject> returned_variables =
             ExecutingEventContext.deserialize_variables_list(
                 variables,true,
                 active_event.event_parent.local_endpoint._host_uuid);
@@ -302,7 +302,7 @@ public class ExecutingEventContext
         // step 3: actually overwrite local variables
         for (int i = 0; i < returned_variables.size(); ++i)
         {
-            LockedObject lo = returned_variables.get(i);
+            RalphObject lo = returned_variables.get(i);
             if (lo != null)
             {
                 // will be null for arguments that did not pass as
@@ -380,11 +380,11 @@ public class ExecutingEventContext
        Takes variables and returns their deserialized forms as a map.
        Index of map is variable name; value of map is object.
      */
-    public static HashMap<String,LockedObject> deserialize_variables_map(
+    public static HashMap<String,RalphObject> deserialize_variables_map(
         VariablesProto.Variables variables,boolean references_only,String host_uuid)
     {
-        HashMap<String,LockedObject> to_return =
-            new HashMap<String,LockedObject>();
+        HashMap<String,RalphObject> to_return =
+            new HashMap<String,RalphObject>();
         
         
         // run through variables and turn into map
@@ -396,7 +396,7 @@ public class ExecutingEventContext
                 continue;
             
             String var_name = variable.getVarName();
-            LockedObject lo = deserialize_any(variable,host_uuid);
+            RalphObject lo = deserialize_any(variable,host_uuid);
             to_return.put(var_name,lo);
         }
 
@@ -411,7 +411,7 @@ public class ExecutingEventContext
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
-            LockedObject lo = deserialize_any(variable,host_uuid);
+            RalphObject lo = deserialize_any(variable,host_uuid);
             boolean is_reference = variable.getReference();
             to_return.add(new RPCArgObject(lo,is_reference));
         }
@@ -426,17 +426,17 @@ public class ExecutingEventContext
        Returns positional values.  If references_only is true, then
        put null values in for the non-references.
      */
-    public static ArrayList<LockedObject> deserialize_variables_list(
+    public static ArrayList<RalphObject> deserialize_variables_list(
         VariablesProto.Variables variables,boolean references_only,String host_uuid)
     {
-        ArrayList<LockedObject> to_return = new ArrayList<LockedObject>();
+        ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
             boolean is_reference = variable.getReference();
             
-            LockedObject lo = null;
+            RalphObject lo = null;
             if ((references_only &&  is_reference) ||
                 (! references_only))
             {
@@ -450,15 +450,15 @@ public class ExecutingEventContext
 
     
     /**
-       @returns {LockedObject or null} --- Returns null if the
+       @returns {RalphObject or null} --- Returns null if the
        argument passed in was empty.  This could happen for instance
        if deserializing any corresponding to result for a
        non-passed-by-reference argument.
      */
-    public static LockedObject deserialize_any(
+    public static RalphObject deserialize_any(
         VariablesProto.Variables.Any variable, String host_uuid)
     {
-        LockedObject lo = null;
+        RalphObject lo = null;
 
         if (variable.hasNum())
         {

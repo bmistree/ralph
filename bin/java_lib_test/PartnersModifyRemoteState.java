@@ -4,7 +4,7 @@ package java_lib_test;
 import java_lib_test.TestClassUtil.ConnectedEndpointPair;
 import java_lib_test.TestClassUtil.DefaultEndpoint;
 import ralph.Endpoint;
-import ralph.LockedObject;
+import ralph.RalphObject;
 import ralph.Variables;
 import ralph.ActiveEvent;
 import ralph.RPCArgObject;

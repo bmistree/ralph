@@ -14,7 +14,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 public class AtomicListContainer<V,D> 
     extends AtomicObject <
     // The internal values that these are holding
-    ArrayList<LockedObject<V,D>>,
+    ArrayList<RalphObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
     ArrayList<D>
     >  
@@ -30,7 +30,7 @@ public class AtomicListContainer<V,D>
     public void init_multithreaded_list_container(
         String _host_uuid, boolean _peered,
         ListTypeDataWrapperConstructor<V,D> rtdwc,
-        ArrayList<LockedObject<V,D>>init_val,
+        ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         locked_wrapper = _locked_wrapper;
@@ -51,7 +51,7 @@ public class AtomicListContainer<V,D>
     @Override
     public void insert(
         ActiveEvent active_event, Integer key,
-        LockedObject<V,D> to_insert)  throws BackoutException
+        RalphObject<V,D> to_insert)  throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val =
             (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
@@ -74,7 +74,7 @@ public class AtomicListContainer<V,D>
     {
         ListTypeDataWrapper<V,D> wrapped_val =
             (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event);
-        LockedObject<V,D> internal_key_val = wrapped_val.val.get(key);
+        RalphObject<V,D> internal_key_val = wrapped_val.val.get(key);
 
         Object to_return = null;        
         if (internal_key_val.return_internal_val_from_container())
@@ -106,7 +106,7 @@ public class AtomicListContainer<V,D>
         ActiveEvent active_event, V what_to_insert)
         throws BackoutException
     {
-        LockedObject<V,D> wrapped_to_insert =
+        RalphObject<V,D> wrapped_to_insert =
             locked_wrapper.ensure_atomic_object(what_to_insert);
 
         ListTypeDataWrapper<V,D> wrapped_val =
@@ -143,13 +143,13 @@ public class AtomicListContainer<V,D>
         ActiveEvent active_event, Integer key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
-        // note: may need to change this to cast to LockedObject<V,D> and use other set_val.
+        // note: may need to change this to cast to RalphObject<V,D> and use other set_val.
         Util.logger_assert(
             "Should never be setting value directly on container.  " +
-            "Instead, should have wrapped V in a LockedObject at an earlier call.");		
+            "Instead, should have wrapped V in a RalphObject at an earlier call.");		
     }	
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, LockedObject<V,D> to_write)
+        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
         throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
@@ -157,7 +157,7 @@ public class AtomicListContainer<V,D>
 
 	
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, LockedObject<V,D> to_write,
+        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
         ListTypeDataWrapper<V,D> wrapped_val =
@@ -186,7 +186,7 @@ public class AtomicListContainer<V,D>
 	
     @Override
     public void swap_internal_vals(
-        ActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException
     {
         Util.logger_assert(
@@ -195,7 +195,7 @@ public class AtomicListContainer<V,D>
 
     
     @Override
-    public ArrayList<LockedObject<V,D>> get_val(ActiveEvent active_event)
+    public ArrayList<RalphObject<V,D>> get_val(ActiveEvent active_event)
     {
     	Util.logger_assert("Cannot call get val on a container object.");
     	return null;
@@ -204,7 +204,7 @@ public class AtomicListContainer<V,D>
     @Override
     public void set_val(
         ActiveEvent active_event,
-        ArrayList<LockedObject<V,D>> val_to_set_to)
+        ArrayList<RalphObject<V,D>> val_to_set_to)
     {
     	Util.logger_assert("Cannot call set val on a container object directly.");
     }
@@ -212,7 +212,7 @@ public class AtomicListContainer<V,D>
     @Override
     public void write_if_different(
         ActiveEvent active_event,
-        ArrayList<LockedObject<V,D>> new_val)
+        ArrayList<RalphObject<V,D>> new_val)
     {
         // should only call this method on a value type
         Util.logger_assert("Unable to call write if different on container");
@@ -261,9 +261,9 @@ public class AtomicListContainer<V,D>
             (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event);
 
         Util.logger_assert(
-            "FIXME: should be returning LockedObject of lists.");
+            "FIXME: should be returning RalphObject of lists.");
         
-        // ArrayList<LockedObject<Integer> to_return = new ArrayList<K>(wrapped_val.val.keySet());
+        // ArrayList<RalphObject<Integer> to_return = new ArrayList<K>(wrapped_val.val.keySet());
         // if (active_event.immediate_complete())
         // {
         //     // non-atomics should immediately commit their changes.  Note:

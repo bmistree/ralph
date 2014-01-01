@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <D> --- The type that gets returned from dewaldoify.  Not entirely true
  * If this is an internal container, then contains what each value in map/list would dewaldoify to.
  */
-public abstract class AtomicObject<T,D> extends LockedObject<T,D> 
+public abstract class AtomicObject<T,D> extends RalphObject<T,D> 
 {
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;

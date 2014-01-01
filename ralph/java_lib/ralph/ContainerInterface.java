@@ -66,7 +66,7 @@ public interface ContainerInterface <K,V,D>
         throws BackoutException;
     public void insert(
         ActiveEvent active_event, K index_to_insert_in,
-        LockedObject<V,D> what_to_insert)
+        RalphObject<V,D> what_to_insert)
         throws BackoutException;
 	
 }

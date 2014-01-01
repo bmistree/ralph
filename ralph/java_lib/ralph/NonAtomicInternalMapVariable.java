@@ -9,7 +9,7 @@ public class NonAtomicInternalMapVariable<K,V,D>
 {
 
     public NonAtomicInternalMapVariable(
-        String _host_uuid,boolean _peered,HashMap<K,LockedObject<V,D>> init_val,
+        String _host_uuid,boolean _peered,HashMap<K,RalphObject<V,D>> init_val,
         NonAtomicMapContainer.IndexType index_type,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
@@ -27,8 +27,8 @@ public class NonAtomicInternalMapVariable<K,V,D>
         super();
         ReferenceTypeDataWrapperConstructor<K,V,D>rtdwc =
             new ReferenceTypeDataWrapperConstructor<K,V,D>();
-        HashMap<K,LockedObject<V,D>> init_val =
-            new HashMap<K,LockedObject<V,D>>();
+        HashMap<K,RalphObject<V,D>> init_val =
+            new HashMap<K,RalphObject<V,D>>();
         init(
             _host_uuid,_peered,rtdwc,init_val,index_type,
             _locked_wrapper);
@@ -47,7 +47,7 @@ public class NonAtomicInternalMapVariable<K,V,D>
         ActiveEvent active_event, K key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
-        LockedObject<V,D> wrapped_to_write =
+        RalphObject<V,D> wrapped_to_write =
             locked_wrapper.ensure_atomic_object(to_write);
         set_val_on_key(active_event,key,wrapped_to_write,false);
     }	

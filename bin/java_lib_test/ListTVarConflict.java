@@ -3,7 +3,7 @@ package java_lib_test;
 import ralph.VariableStack;
 import java.util.HashMap;
 import ralph.Variables.AtomicListVariable;
-import ralph.LockedObject;
+import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RootEventParent;

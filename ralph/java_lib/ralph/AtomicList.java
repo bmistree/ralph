@@ -26,7 +26,7 @@ public abstract class AtomicList<V,D>
 {
     public AtomicList(
         String _host_uuid, boolean _peered,
-        ArrayList<LockedObject<V,D>> init_val,boolean incorporating_deltas,
+        ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super(
@@ -92,7 +92,7 @@ public abstract class AtomicList<V,D>
 
     public AtomicList(
         String _host_uuid, boolean _peered,
-        ArrayList<LockedObject<V,D>> init_val,
+        ArrayList<RalphObject<V,D>> init_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -111,13 +111,13 @@ public abstract class AtomicList<V,D>
     }
 
     public void load_init_vals(
-        ArrayList<LockedObject<V,D>> init_val, boolean incorporating_deltas)
+        ArrayList<RalphObject<V,D>> init_val, boolean incorporating_deltas)
     {
         if (init_val == null)
             return;
 
         //FIXME probably inefficient to add each field separately
-        for (LockedObject<V,D> to_load: init_val)
+        for (RalphObject<V,D> to_load: init_val)
         {
             ListTypeDataWrapper<V,D>casted_wrapper = (ListTypeDataWrapper<V,D>)val.val.val;
             // single threaded variables will not throw backout exceptions.

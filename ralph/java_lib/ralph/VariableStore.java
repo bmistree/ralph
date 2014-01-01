@@ -7,8 +7,8 @@ import RalphExceptions.BackoutException;
 
 public class VariableStore 
 {
-    private HashMap<String,LockedObject> name_to_var_map = 
-        new HashMap<String, LockedObject>();
+    private HashMap<String,RalphObject> name_to_var_map = 
+        new HashMap<String, RalphObject>();
 
     /**
        defer statements have different semantics for when a function's
@@ -68,9 +68,9 @@ public class VariableStore
     
     /**
      @param {String} unique_name ---
-     @param {LockedObject} ralph_variable 
+     @param {RalphObject} ralph_variable 
     */
-    public void add_var(String unique_name,LockedObject ralph_variable)
+    public void add_var(String unique_name,RalphObject ralph_variable)
     {
         // DEBUG
         if (get_var_if_exists(unique_name) != null)
@@ -87,10 +87,10 @@ public class VariableStore
     /**
      *
      @param {String} unique_name --- 
-     @returns {LockedObject or null} --- None if variable does
-     not exist, LockedObject otherwise.
+     @returns {RalphObject or null} --- None if variable does
+     not exist, RalphObject otherwise.
     */
-    public LockedObject get_var_if_exists(String unique_name) 
+    public RalphObject get_var_if_exists(String unique_name) 
     {
         return name_to_var_map.get(unique_name);
     }

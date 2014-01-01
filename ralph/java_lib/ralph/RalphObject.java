@@ -10,14 +10,14 @@ import ralph_protobuffs.VariablesProto;
  * @param <T> --- The internal, Java type of the data
  * @param <D> --- The java type that gets returned when call dewaldoify
  */
-public abstract class LockedObject<T,D>
+public abstract class RalphObject<T,D>
 {
     private AtomicFactory atomic_factory = null;
     private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
 	
-    public LockedObject<T,D> copy(
+    public RalphObject<T,D> copy(
         ActiveEvent active_event, boolean peered,
         boolean multi_threaded) throws BackoutException
     {
@@ -36,7 +36,7 @@ public abstract class LockedObject<T,D>
        into another.  this.
      */
     public abstract void swap_internal_vals(
-        ActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException;
     
     /**

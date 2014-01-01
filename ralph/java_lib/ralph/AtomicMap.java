@@ -28,7 +28,7 @@ public abstract class AtomicMap<K,V,D>
 {
     public AtomicMap(
         String _host_uuid, boolean _peered,
-        HashMap<K,LockedObject<V,D>> init_val,boolean incorporating_deltas,
+        HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicMapContainer.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -98,7 +98,7 @@ public abstract class AtomicMap<K,V,D>
 
     public AtomicMap(
         String _host_uuid, boolean _peered,
-        HashMap<K,LockedObject<V,D>> init_val,
+        HashMap<K,RalphObject<V,D>> init_val,
         NonAtomicMapContainer.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -118,13 +118,13 @@ public abstract class AtomicMap<K,V,D>
     }
 
     public void load_init_vals(
-        HashMap<K,LockedObject<V,D>> init_val, boolean incorporating_deltas)
+        HashMap<K,RalphObject<V,D>> init_val, boolean incorporating_deltas)
     {
         if (init_val == null)
             return;
 
         //FIXME probably inefficient to add each field separately
-        for (Entry<K, LockedObject<V,D>> entry : init_val.entrySet())
+        for (Entry<K, RalphObject<V,D>> entry : init_val.entrySet())
         {
             ReferenceTypeDataWrapper<K,V,D>casted_wrapper = (ReferenceTypeDataWrapper<K,V,D>)val.val.val;
 

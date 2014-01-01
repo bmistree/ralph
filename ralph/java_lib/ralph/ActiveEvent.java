@@ -101,7 +101,7 @@ public abstract class ActiveEvent
        are called after can_backout_and_hold_lock returns
        True.  
 
-       Called by a WaldoLockedObject to preempt this event.
+       Called by an Atomicbject to preempt this event.
 
        * @param obj_requesting
        */
@@ -113,7 +113,7 @@ public abstract class ActiveEvent
        are called after can_backout_and_hold_lock returns
        True.  
 
-       Called by a WaldoLockedObject.  WaldoLockedObject will not
+       Called by an AtomicObject.  AtomicObject will not
        preempt this event.
         
        Do not have backout event.  Just release lock.

@@ -15,7 +15,7 @@ import RalphExceptions.BackoutException;
  * dewaldoify into (if they are locked objects)
  */
 public class ListTypeDataWrapper<T,D>
-    extends DataWrapper<ArrayList<LockedObject<T,D>>, ArrayList<D>>{
+    extends DataWrapper<ArrayList<RalphObject<T,D>>, ArrayList<D>>{
 	
     class OpTuple
     {
@@ -43,9 +43,9 @@ public class ListTypeDataWrapper<T,D>
     private ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public ListTypeDataWrapper(ArrayList<LockedObject<T,D>> v, boolean _peered)
+    public ListTypeDataWrapper(ArrayList<RalphObject<T,D>> v, boolean _peered)
     {
-        super( (ArrayList<LockedObject<T,D>>)v.clone(),_peered);
+        super( (ArrayList<RalphObject<T,D>>)v.clone(),_peered);
         peered = _peered;
     }
 	
@@ -58,7 +58,7 @@ public class ListTypeDataWrapper<T,D>
     public ArrayList<D> de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         ArrayList<D>to_return_list = new ArrayList<D>();
-        for (LockedObject<T,D> locked_obj : val)
+        for (RalphObject<T,D> locked_obj : val)
             to_return_list.add(locked_obj.de_waldoify(active_event) );
         return to_return_list;        
     }
@@ -81,7 +81,7 @@ public class ListTypeDataWrapper<T,D>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,Integer key, LockedObject<T,D> to_write,
+        ActiveEvent active_event,Integer key, RalphObject<T,D> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if ((peered) && (! incorporating_deltas))
@@ -92,7 +92,7 @@ public class ListTypeDataWrapper<T,D>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,Integer key, LockedObject<T,D> to_write)
+        ActiveEvent active_event,Integer key, RalphObject<T,D> to_write)
         throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
@@ -119,7 +119,7 @@ public class ListTypeDataWrapper<T,D>
     }
     
     public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_object,
+        ActiveEvent active_event, RalphObject<T,D> new_object,
         boolean incorporating_deltas) throws BackoutException
     {
         Integer key_added = new Integer(val.size());        
@@ -129,7 +129,7 @@ public class ListTypeDataWrapper<T,D>
     }
     
     public void append(
-        ActiveEvent active_event, LockedObject<T,D> new_object)
+        ActiveEvent active_event, RalphObject<T,D> new_object)
         throws BackoutException
     {
     	append(active_event,new_object,false);
@@ -144,7 +144,7 @@ public class ListTypeDataWrapper<T,D>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        LockedObject<T,D> new_val, boolean incorporating_deltas)
+        RalphObject<T,D> new_val, boolean incorporating_deltas)
         throws BackoutException
     {
         Integer key_added = new Integer(val.size());
@@ -155,7 +155,7 @@ public class ListTypeDataWrapper<T,D>
     
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        LockedObject<T,D> new_val) throws BackoutException
+        RalphObject<T,D> new_val) throws BackoutException
     {
     	insert(active_event,where_to_insert,new_val,false);
     }

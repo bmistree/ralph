@@ -2,7 +2,7 @@ package java_lib_test;
 
 import ralph.VariableStack;
 import ralph.Variables.LockedNumberVariable;
-import ralph.LockedObject;
+import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.VariableStack;
 import ralph.DeferBlock;

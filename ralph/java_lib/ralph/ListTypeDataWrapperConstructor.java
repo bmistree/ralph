@@ -12,14 +12,14 @@ import java.util.ArrayList;
 public class ListTypeDataWrapperConstructor<V,D>
     extends DataWrapperConstructor<
     // The actual internal data that will be held by the data wrapper
-    ArrayList<LockedObject<V,D>>, 
+    ArrayList<RalphObject<V,D>>, 
     // what you get when you call dewaldoify on the data wrapper
     ArrayList<D> >
 {
     @Override
-    public DataWrapper<ArrayList<LockedObject<V,D>>, ArrayList<D>>
+    public DataWrapper<ArrayList<RalphObject<V,D>>, ArrayList<D>>
         construct(
-            ArrayList<LockedObject<V,D>> _val, boolean peered) 
+            ArrayList<RalphObject<V,D>> _val, boolean peered) 
     {
         return new ListTypeDataWrapper<V,D>(_val,peered);
     }

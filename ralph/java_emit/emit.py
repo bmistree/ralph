@@ -109,7 +109,7 @@ def emit_struct_map_wrapper(struct_name):
     locked_wrappers_text = '''
 public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
 {
-    public LockedObject<%s,%s> ensure_atomic_object(
+    public RalphObject<%s,%s> ensure_atomic_object(
         %s object_to_ensure)
     {
         return new %s(
@@ -280,7 +280,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
     This method returns a text string that contains all the argument
     casts necessary to call internal methods.  Eg.,
 
-    Double arg0 = ((LockedObject<Double,Double>)args[0]).get_val(null);
+    Double arg0 = ((RalphObject<Double,Double>)args[0]).get_val(null);
 
     Note that it is dumb that we deserialize into a locked object,
     instead of the value directly.  Should change.
@@ -335,13 +335,13 @@ def convert_args_text_for_dispatch(method_declaration_node):
 def get_method_arg_type_as_locked(method_declaration_arg_node):
     '''
     Takes in a method's declared argument ast node and returns a
-    string for a LockedObject of that type.  Eg., if
+    string for a RalphObject of that type.  Eg., if
     method_declaration_arg_node has type Number, return
-      LockedObject<Double,Double>, Double
+      RalphObject<Double,Double>, Double
     String, return:
-      LockedObject<String,String>, String
+      RalphObject<String,String>, String
     Boolean, return:
-      LockedObject<Boolean,Boolean>, Boolean
+      RalphObject<Boolean,Boolean>, Boolean
     '''
     if isinstance(method_declaration_arg_node.type,BasicType):
         arg_basic_type = method_declaration_arg_node.type.basic_type
@@ -356,7 +356,7 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
             raise InternalEmitException(
                 'Unknown basic type when emitting.')
         #### END DEBUG
-        return ('LockedObject<%s,%s>' % (java_type,java_type)), java_type
+        return ('RalphObject<%s,%s>' % (java_type,java_type)), java_type
     
     #### DEBUG
     else:
@@ -407,8 +407,8 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
         # trying to add something like:
         # else if (to_exec_internal_name.equals("test_partner_args_method"))
         # {
-        #     LockedObject<Double,Double> num_obj =
-        #         (LockedObject<Double,Double>)args[0];
+        #     RalphObject<Double,Double> num_obj =
+        #         (RalphObject<Double,Double>)args[0];
         #     _test_partner_args_method(active_event, ctx, num_obj);
         #     ctx.hide_sequence_completed_call(this, active_event);
         # }

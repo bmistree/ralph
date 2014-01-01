@@ -19,7 +19,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 public class AtomicMapContainer<K,V,D> 
     extends AtomicObject <
     // The internal values that these are holding
-    HashMap<K,LockedObject<V,D>>,
+    HashMap<K,RalphObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
     HashMap<K,D>
     >  
@@ -39,7 +39,7 @@ public class AtomicMapContainer<K,V,D>
     public void init_multithreaded_locked_container(
         String _host_uuid, boolean _peered,
         ReferenceTypeDataWrapperConstructor<K,V,D> rtdwc,
-        HashMap<K,LockedObject<V,D>>init_val,
+        HashMap<K,RalphObject<V,D>>init_val,
         IndexType _index_type,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
@@ -60,7 +60,7 @@ public class AtomicMapContainer<K,V,D>
     @Override
     public void insert(
         ActiveEvent active_event, K index_to_insert_in,
-        LockedObject<V,D> what_to_insert)
+        RalphObject<V,D> what_to_insert)
         throws BackoutException
     {
         Util.logger_assert(
@@ -73,7 +73,7 @@ public class AtomicMapContainer<K,V,D>
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
-        LockedObject<V,D> internal_key_val = wrapped_val.val.get(key);
+        RalphObject<V,D> internal_key_val = wrapped_val.val.get(key);
 
         Object to_return = null;        
         if (internal_key_val.return_internal_val_from_container())
@@ -112,7 +112,7 @@ public class AtomicMapContainer<K,V,D>
             (ReferenceTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
 
         VariablesProto.Variables.Map.Builder map_builder = VariablesProto.Variables.Map.newBuilder();
-        for (Entry<K,LockedObject<V,D>> map_entry : wrapped_val.val.entrySet() )
+        for (Entry<K,RalphObject<V,D>> map_entry : wrapped_val.val.entrySet() )
         {
             // create any for index
             VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
@@ -140,7 +140,7 @@ public class AtomicMapContainer<K,V,D>
 
             // create any for value
             VariablesProto.Variables.Any.Builder value_builder = VariablesProto.Variables.Any.newBuilder();
-            LockedObject<V,D> map_value = map_entry.getValue();
+            RalphObject<V,D> map_value = map_entry.getValue();
             
             map_value.serialize_as_rpc_arg(
                 active_event,value_builder,is_reference);
@@ -177,20 +177,20 @@ public class AtomicMapContainer<K,V,D>
         ActiveEvent active_event, K key,
         V to_write, boolean copy_if_peered) throws BackoutException 
     {
-        // note: may need to change this to cast to LockedObject<V,D> and use other set_val.
+        // note: may need to change this to cast to RalphObject<V,D> and use other set_val.
         Util.logger_assert(
             "Should never be setting value directly on container.  " +
-            "Instead, should have wrapped V in a LockedObject at an earlier call.");		
+            "Instead, should have wrapped V in a RalphObject at an earlier call.");		
     }	
     public void set_val_on_key(
-        ActiveEvent active_event, K key, LockedObject<V,D> to_write) throws BackoutException
+        ActiveEvent active_event, K key, RalphObject<V,D> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
 
 	
     public void set_val_on_key(
-        ActiveEvent active_event, K key, LockedObject<V,D> to_write,
+        ActiveEvent active_event, K key, RalphObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
     {
         ReferenceTypeDataWrapper<K,V,D> wrapped_val =
@@ -219,7 +219,7 @@ public class AtomicMapContainer<K,V,D>
 	
     @Override
     public void swap_internal_vals(
-        ActiveEvent active_event,LockedObject to_swap_with)
+        ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException
     {
         Util.logger_assert(
@@ -228,7 +228,7 @@ public class AtomicMapContainer<K,V,D>
 
     
     @Override
-    public HashMap<K, LockedObject<V,D>> get_val(ActiveEvent active_event)
+    public HashMap<K, RalphObject<V,D>> get_val(ActiveEvent active_event)
     {
     	Util.logger_assert("Cannot call get val on a container object.");
     	return null;
@@ -237,7 +237,7 @@ public class AtomicMapContainer<K,V,D>
     @Override
     public void set_val(
         ActiveEvent active_event,
-        HashMap<K,LockedObject<V,D>> val_to_set_to)
+        HashMap<K,RalphObject<V,D>> val_to_set_to)
     {
     	Util.logger_assert("Cannot call set val on a container object directly.");
     }
@@ -245,7 +245,7 @@ public class AtomicMapContainer<K,V,D>
     @Override
     public void write_if_different(
         ActiveEvent active_event,
-        HashMap<K, LockedObject<V,D>> new_val)
+        HashMap<K, RalphObject<V,D>> new_val)
     {
         // should only call this method on a value type
         Util.logger_assert("Unable to call write if different on container");
