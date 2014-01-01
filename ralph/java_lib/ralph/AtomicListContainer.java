@@ -40,15 +40,26 @@ public class AtomicListContainer<V,D>
             rtdwc,_host_uuid, _peered, init_val);
     }
 
+    public void insert(
+        ActiveEvent active_event, Double index_to_insert_in,
+        V what_to_insert)
+        throws BackoutException
+    {
+        insert(
+            active_event,index_to_insert_in.intValue(),what_to_insert);
+    }
+
     @Override
     public void insert(
         ActiveEvent active_event, Integer index_to_insert_in,
         V what_to_insert)
         throws BackoutException
     {
-        Util.logger_assert(
-            "Need to override list inertion code.");
+        RalphObject<V,D> wrapped_to_insert =
+            locked_wrapper.ensure_atomic_object(what_to_insert);
+        insert(active_event,index_to_insert_in,wrapped_to_insert);
     }
+
     
     @Override
     public void insert(
@@ -69,6 +80,12 @@ public class AtomicListContainer<V,D>
         }
     }
 
+    public V get_val_on_key(
+        ActiveEvent active_event, Double key) throws BackoutException
+    {
+        return get_val_on_key(
+            active_event,new Integer(key.intValue()));
+    }
     
     @Override
     public V get_val_on_key(
@@ -138,7 +155,14 @@ public class AtomicListContainer<V,D>
     {
         set_val_on_key(active_event,key,to_write,false);		
     }
-	
+
+    public void set_val_on_key(
+        ActiveEvent active_event, Double key, V to_write) throws BackoutException
+    {
+        set_val_on_key(active_event,key.intValue(),to_write);
+    }
+
+    
 	
     @Override
     public void set_val_on_key(
@@ -157,7 +181,14 @@ public class AtomicListContainer<V,D>
         set_val_on_key(active_event,key,to_write,false);
     }
 
-	
+
+    public void set_val_on_key(
+        ActiveEvent active_event, Double key, RalphObject<V,D> to_write)
+        throws BackoutException 
+    {
+        set_val_on_key(active_event,new Integer(key.intValue()),to_write);
+    }
+    
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
         boolean copy_if_peered) throws BackoutException 
@@ -295,6 +326,22 @@ public class AtomicListContainer<V,D>
         }
     }
 
+    public boolean contains_key_called(
+        ActiveEvent active_event,
+        Double contains_key)  throws BackoutException
+    {
+        return contains_key_called(
+            active_event, new Integer(contains_key.intValue()));
+    }
+    public Boolean contains_key_called_boxed(
+        ActiveEvent active_event,
+        Double contains_key)  throws BackoutException
+    {
+        return contains_key_called_boxed(
+            active_event, new Integer(contains_key.intValue()));
+    }
+
+    
     @Override
     public boolean contains_key_called(
         ActiveEvent active_event,
