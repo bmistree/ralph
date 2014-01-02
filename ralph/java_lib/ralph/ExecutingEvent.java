@@ -39,8 +39,8 @@ public class ExecutingEvent
 
        @param {_ExecutingEventContext} ctx ---
 
-       @param {result_queue or None} --- This value should be
-       non-None for endpoint-call initiated events.  For endpoint
+       @param {result_queue or null} --- This value should be
+       non-null for endpoint-call initiated events.  For endpoint
        call events, we wait for the endpoint to check if any of the
        peered data that it modifies also need to be modified on the
        endpoint's partner (and wait for partner to respond).  (@see

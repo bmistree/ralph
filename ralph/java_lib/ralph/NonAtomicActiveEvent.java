@@ -553,9 +553,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         
         boolean takes_args = args.size() != 0;
 
-        Util.logger_warn(
-            "\n\nUnclear if should pass null in in LockedActiveEvent.\n\n");
-
         ExecutingEvent to_return = new ExecutingEvent (
             name_of_block_to_exec_next,this,ctx,
             // using null here means that we do not need to bother
