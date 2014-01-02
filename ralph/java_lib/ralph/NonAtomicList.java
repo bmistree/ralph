@@ -25,26 +25,39 @@ import RalphDataWrappers.ListTypeDataWrapper;
  * 
  */
 public abstract class NonAtomicList<V,D>
-    extends NonAtomicListContainerReference<V,D>
+    extends NonAtomicValueVariable<
+    // this wraps a locked container object.  Ie,
+    // calling get_val on this will return NonAtomicInternalList.
+    // when call set val, must pass in a NonAtomicInternalList
+    NonAtomicInternalList<V,D>, 
+    // what will return when call de_waldoify.
+    D>
 {
     public NonAtomicList(
         String _host_uuid, boolean _peered,
-        ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
+        super();
+        
+        NonAtomicInternalList<V,D> init_val = new NonAtomicInternalList<V,D>();
+        init_val.init(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+        
+        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        default_val.init(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
 
-        load_init_vals(init_val,incorporating_deltas);
+        init_non_atomic_value_variable(
+            _host_uuid, _peered, init_val,default_val,
+            new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
 
     /**
@@ -54,66 +67,76 @@ public abstract class NonAtomicList<V,D>
      */
     public NonAtomicList(
         String _host_uuid, boolean _peered,
-        NonAtomicListContainer<V,D> internal_val,
+        NonAtomicInternalList<V,D> internal_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
-        super(
-            _host_uuid,_peered,
-            // initial value
-            internal_val,
-            // default value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
+        super();
+        
+        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        default_val.init(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+        
+        init_non_atomic_value_variable(
+            _host_uuid, _peered, internal_val,default_val,
+            new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
+
+
     
     public NonAtomicList(
         String _host_uuid, boolean _peered,
+        ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
-        // is incorrect: it shouldn't be D, right?			
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
+        // is incorrect: it shouldn't be D, right?			        
+        super();
+        
+        NonAtomicInternalList<V,D> init_val_2 = new NonAtomicInternalList<V,D>();
+        init_val_2.init(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+        
+        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        default_val.init(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+
+        init_non_atomic_value_variable(
+            _host_uuid, _peered, init_val_2,default_val,
+            new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
+
+        load_init_vals(init_val,incorporating_deltas);
     }
+
 
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        NonAtomicListContainer<V,D> internal_val =
+        NonAtomicInternalList<V,D> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
     }
 
-    public NonAtomicList(
-        String _host_uuid, boolean _peered,
-        ArrayList<RalphObject<V,D>> init_val,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
-        // FIXME: I'm pretty sure that the type signature for the locked object above
-        // is incorrect: it shouldn't be D, right?			
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new NonAtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<NonAtomicListContainer<V,D>,D>());
-
-        load_init_vals(init_val,false);
+        return val.de_waldoify(active_event);
     }
 
+    public boolean return_internal_val_from_container()
+    {
+        return false;
+    }
+    
     public void load_init_vals(
         ArrayList<RalphObject<V,D>> init_val, boolean incorporating_deltas)
     {

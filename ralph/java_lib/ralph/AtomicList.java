@@ -7,6 +7,9 @@ import ralph_protobuffs.VariablesProto;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
+
+
 
 /**
  * @param <V>  ---- The type of each internal value in the internal arraylist
@@ -24,26 +27,40 @@ import RalphDataWrappers.ListTypeDataWrapper;
  * 
  */
 public abstract class AtomicList<V,D>
-    extends AtomicListContainerReference<V,D>
+    extends AtomicValueVariable<
+    // this wraps a locked container object.  Ie,
+    // calling get_val on this will return AtomicListContainer.
+    // when call set val, must pass in a AtomicListContainer
+    AtomicInternalList<V,D>, 
+    // what will return when call de_waldoify.
+    D>
 {
     public AtomicList(
         String _host_uuid, boolean _peered,
-        ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+        super();
+        
+        AtomicInternalList<V,D> init_val = new AtomicInternalList<V,D>();
+        init_val.init_multithreaded_list_container(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
 
-        load_init_vals(init_val,incorporating_deltas);
+        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        default_val.init_multithreaded_list_container(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+
+        init_atomic_value_variable(
+            _host_uuid, _peered, init_val,default_val,
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
-
+    
+    
     /**
        When pass an argument into a method call, should unwrap
        internal value and put it into another MultiThreadedList.
@@ -51,35 +68,65 @@ public abstract class AtomicList<V,D>
      */
     public AtomicList(
         String _host_uuid, boolean _peered,
-        AtomicListContainer<V,D> internal_val,
+        AtomicInternalList<V,D> internal_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
-        super(
-            _host_uuid,_peered,
-            // initial value
-            internal_val,
-            // default value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+        super();
+        
+        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        default_val.init_multithreaded_list_container(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+
+        init_atomic_value_variable(
+            _host_uuid, _peered, internal_val,default_val,
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
+
     
     public AtomicList(
         String _host_uuid, boolean _peered,
+        ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
-        // FIXME: I'm pretty sure that the type signature for the locked object above
-        // is incorrect: it shouldn't be D, right?			
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
+        super();
+
+        AtomicInternalList<V,D> init_val_2 = new AtomicInternalList<V,D>();
+        init_val_2.init_multithreaded_list_container(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+
+        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        default_val.init_multithreaded_list_container(
+            _host_uuid, _peered,
+            new ListTypeDataWrapperFactory<V,D>(),
+            new ArrayList<RalphObject<V,D>>(),
+            locked_wrapper);
+
+        init_atomic_value_variable(
+            _host_uuid, _peered, init_val_2,default_val,
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
+
+        load_init_vals(init_val,incorporating_deltas);
     }
+    
+
+    
+    public D de_waldoify(ActiveEvent active_event) throws BackoutException
+    {
+        Util.logger_warn("Must acquire read lock when de waldoifying.");
+        return val.de_waldoify(active_event);
+    }
+
+    public boolean return_internal_val_from_container()
+    {
+        return false;
+    }
+
 
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
@@ -90,26 +137,6 @@ public abstract class AtomicList<V,D>
         //     get_val(active_event);
         // internal_val.serialize_as_rpc_arg(
         //     active_event,any_builder,is_reference);
-    }
-
-    public AtomicList(
-        String _host_uuid, boolean _peered,
-        ArrayList<RalphObject<V,D>> init_val,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
-    {
-        // FIXME: I'm pretty sure that the type signature for the locked object above
-        // is incorrect: it shouldn't be D, right?			
-        super(
-            _host_uuid,_peered,
-            // initial value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid,false,locked_wrapper),
-            // default value
-            new AtomicInternalListVariable<V,D>(
-                _host_uuid, _peered,locked_wrapper),
-            new ValueTypeDataWrapperFactory<AtomicListContainer<V,D>,D>());
-
-        load_init_vals(init_val,false);
     }
 
     public void load_init_vals(

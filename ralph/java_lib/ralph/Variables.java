@@ -263,7 +263,7 @@ public class Variables {
 
         public AtomicListVariable(
             String _host_uuid, boolean _peered,
-            AtomicListContainer<V,D> internal_val,
+            AtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
@@ -284,7 +284,7 @@ public class Variables {
 
         public NonAtomicListVariable(
             String _host_uuid, boolean _peered,
-            NonAtomicListContainer<V,D> internal_val,
+            NonAtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
@@ -292,6 +292,4 @@ public class Variables {
                 locked_wrapper);
         }
     }
-
-    
 }
