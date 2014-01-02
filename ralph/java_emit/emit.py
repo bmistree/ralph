@@ -916,9 +916,9 @@ def emit_internal_list_type(type_object):
     dewaldoify_type_text = element_type_text
 
     if type_object.is_tvar:
-        internal_map_var_type = 'AtomicListContainer'
+        internal_map_var_type = 'AtomicInternalList'
     else:
-        internal_map_var_type = 'NonAtomicListContainer'
+        internal_map_var_type = 'NonAtomicInternalList'
         
     return (
         internal_map_var_type +

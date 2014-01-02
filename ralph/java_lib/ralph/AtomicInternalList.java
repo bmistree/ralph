@@ -26,6 +26,7 @@ public class AtomicInternalList<V,D>
 {
     private ListTypeDataWrapper<V,D> reference_type_val = null;
     private RalphInternalList<V,D> internal_list = null;
+    public EnsureAtomicWrapper<V,D> locked_wrapper = null;
     
     public AtomicInternalList()
     {
@@ -39,6 +40,7 @@ public class AtomicInternalList<V,D>
         ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
+        locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
             ltdwf,_host_uuid, _peered, init_val);
         internal_list.init_ralph_internal_list(

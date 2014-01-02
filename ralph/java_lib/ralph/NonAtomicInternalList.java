@@ -26,7 +26,8 @@ public class NonAtomicInternalList<V,D>
 {    
     private ListTypeDataWrapper<V,D> reference_type_val = null;
     private RalphInternalList<V,D> internal_list = null;
-
+    public EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    
     public NonAtomicInternalList()
     {
         super();
@@ -38,6 +39,7 @@ public class NonAtomicInternalList<V,D>
         ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
+        locked_wrapper = _locked_wrapper;
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
         
