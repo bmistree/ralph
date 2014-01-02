@@ -26,7 +26,7 @@ import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph.Variables.NonAtomicMapVariable;
 import ralph.Variables.AtomicMapVariable;
 // index types for maps
-import ralph.NonAtomicMapContainer.IndexType;
+import ralph.NonAtomicInternalMap.IndexType;
 
 import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
@@ -799,13 +799,13 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         index_basic_type = type_object.from_type_node.type.basic_type
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
-                'NonAtomicMapContainer.IndexType.DOUBLE')            
+                'NonAtomicInternalMap.IndexType.DOUBLE')            
         elif index_basic_type == STRING_TYPE:
             java_map_index_type_text = (
-                'NonAtomicMapContainer.IndexType.STRING')
+                'NonAtomicInternalMap.IndexType.STRING')
         elif index_basic_type == BOOL_TYPE:
             java_map_index_type_text = (
-                'NonAtomicMapContainer.IndexType.BOOLEAN')
+                'NonAtomicInternalMap.IndexType.BOOLEAN')
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -900,9 +900,9 @@ def emit_internal_map_type(type_object):
     dewaldoify_type_text = value_internal_type_text
 
     if type_object.is_tvar:
-        internal_map_var_type = 'AtomicMapContainer'
+        internal_map_var_type = 'AtomicInternalMap'
     else:
-        internal_map_var_type = 'NonAtomicMapContainer'
+        internal_map_var_type = 'NonAtomicInternalMap'
         
     return (
         internal_map_var_type +
