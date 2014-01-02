@@ -202,12 +202,13 @@ public class Variables {
     }
 
     /************ Handling maps ********/
+    //non-atomic
     public static class NonAtomicMapVariable <K,V,D>
         extends NonAtomicMap<K,V,D>
     {
         public NonAtomicMapVariable(
             String _host_uuid, boolean _peered,
-            NonAtomicMapContainer.IndexType _index_type,
+            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
@@ -215,8 +216,8 @@ public class Variables {
 
         public NonAtomicMapVariable(
             String _host_uuid, boolean _peered,
-            NonAtomicMapContainer<K,V,D> internal_val,
-            NonAtomicMapContainer.IndexType _index_type,
+            NonAtomicInternalMap<K,V,D> internal_val,
+            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
@@ -225,12 +226,13 @@ public class Variables {
         }
     }
 
+    // atomic
     public static class AtomicMapVariable <K,V,D>
         extends AtomicMap<K,V,D>
     {
         public AtomicMapVariable(
             String _host_uuid, boolean _peered,
-            NonAtomicMapContainer.IndexType _index_type,
+            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(_host_uuid,_peered,_index_type,locked_wrapper);
@@ -239,8 +241,8 @@ public class Variables {
 
         public AtomicMapVariable(
             String _host_uuid, boolean _peered,
-            AtomicMapContainer<K,V,D> internal_val,
-            NonAtomicMapContainer.IndexType _index_type,
+            AtomicInternalMap<K,V,D> internal_val,
+            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
