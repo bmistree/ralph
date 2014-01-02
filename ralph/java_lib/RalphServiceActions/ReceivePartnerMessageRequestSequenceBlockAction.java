@@ -39,8 +39,6 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                     uuid,priority,atomic);
             
             evt.recv_partner_sequence_call_msg(partner_request_block_msg);
-			
-            Util.logger_warn("May want to catch exceptions in Ralph to hide stack trace");
         }
         catch (RalphExceptions.StoppedException stopped_excep)
         {
