@@ -387,7 +387,35 @@ class MethodSignatureNode(_AstNode):
             type_check_ctx.add_var_name(
                 method_arg_node.arg_name,method_arg_node)
 
+class ForNode(_AstNode):
+    def __init__(
+        self,variable_type_node,variable_node,in_what_node,
+        statement_node,line_number):
 
+        # for ( [variable_type_node] variable_node in in_what_node)
+        #    statement_node
+        # note: may be None if the variable already existed
+        super(ForNode,self).__init__(ast_labels.FOR,line_number)
+        self.variable_type_node = variable_type_node
+        self.variable_node = variable_node
+        self.in_what_node = in_what_node
+        self.statement_node = statement_node
+
+    def type_check_pass_one(self,struct_types_ctx):
+        if self.variable_type_node is not None:
+            self.variable_type_node.type_check_pass_one(struct_types_ctx)
+        self.variable_node.type_check_pass_one(struct_types_ctx)
+        self.in_what_node.type_check_pass_one(struct_types_ctx)
+        self.statement_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        if self.variable_type_node is not None:
+            self.variable_type_node.type_check_pass_two(struct_types_ctx)
+        self.variable_node.type_check_pass_two(struct_types_ctx)
+        self.in_what_node.type_check_pass_two(struct_types_ctx)
+        self.statement_node.type_check_pass_two(struct_types_ctx)
+        
+            
 class MethodDeclarationArgNode(_AstNode):
     def __init__(self, variable_type_node, name_identifier_node):
         super(MethodDeclarationArgNode,self).__init__(
