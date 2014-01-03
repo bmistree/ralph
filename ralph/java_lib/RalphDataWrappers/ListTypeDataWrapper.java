@@ -112,7 +112,7 @@ public class ListTypeDataWrapper<T,D>
         */
     	if (log_changes && (! incorporating_deltas))
             partner_change_log.add(delete_key_tuple(key_to_delete));
-        val.remove(key_to_delete);
+        val.remove(key_to_delete.intValue());
     }
     
     public void del_key(ActiveEvent active_event,Integer key_to_delete)
