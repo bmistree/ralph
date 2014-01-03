@@ -468,16 +468,7 @@ protected void _handle_rpc_call(
     if (result_queue == null)
         return;
 
-    boolean completed = active_event.wait_if_modified_peered();
-    if (! completed)
-    {
-        result_queue.add(
-            new RalphCallResults.BackoutBeforeEndpointCallResult());
-    }
-    else
-    {
-        result_queue.add(new EndpointCompleteCallResult(result));
-    }
+    result_queue.add(new EndpointCompleteCallResult(result));
 }
 ''' % indent_string(rpc_text_for_methods,1)
 

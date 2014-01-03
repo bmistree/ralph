@@ -81,10 +81,7 @@ public abstract class ActiveEvent
      */
     public abstract boolean begin_first_phase_commit(boolean from_partner);
     public abstract void second_phase_commit();
-    /**
-       No such thing as peered objects: always return true.
-     */
-    public abstract boolean wait_if_modified_peered();
+
     public abstract void add_signal_call(SignalFunction signaler);
     /**
      * Called from a separate thread in waldoServiceActions.  Runs

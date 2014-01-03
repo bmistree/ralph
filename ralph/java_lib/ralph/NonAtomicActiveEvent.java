@@ -128,14 +128,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
     {
         // nothing to do because non-atomic does not need to commit.
     }
-	
-    /**
-       No such thing as peered objects: always return true.
-     */
-    public boolean  wait_if_modified_peered()
-    {
-        return true;
-    }
 
     public void add_signal_call(SignalFunction signaler)
     {
