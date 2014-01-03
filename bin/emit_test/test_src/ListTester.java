@@ -83,7 +83,7 @@ public class ListTester
             // elements.
             Double last_value = endpt.get_number(new Double(19));
             endpt.remove(new Double(1));
-
+            
             // last index should now be in cell 18
             Double new_last_value = endpt.get_number(new Double(18));
             if (!last_value.equals(new_last_value))

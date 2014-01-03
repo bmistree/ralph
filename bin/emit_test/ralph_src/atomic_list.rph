@@ -16,7 +16,12 @@ Endpoint TVarListEndpoint
     {
         return number_list.get(index);
     }
-
+    
+    remove(Number index_to_remove)
+    {
+        number_list.remove(index_to_remove);
+    }
+    
     contains_index(Number index) returns TrueFalse
     {
         return number_list.contains(index);
