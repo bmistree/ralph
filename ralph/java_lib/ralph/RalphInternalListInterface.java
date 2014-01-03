@@ -55,8 +55,14 @@ public interface RalphInternalListInterface<V,D>
 
     public int get_len(ActiveEvent active_event) throws BackoutException;
     public Double get_len_boxed(ActiveEvent active_event) throws BackoutException;
-    public ArrayList<Integer> get_keys(ActiveEvent active_event)
+
+    /**
+       Must guarantee that will only read from the returned value, not
+       write to it.
+     */
+    public ArrayList<RalphObject<V,D>> get_iterable(ActiveEvent active_event)
         throws BackoutException;
+    
     
     public void remove(ActiveEvent active_event, Integer key_to_delete)
         throws BackoutException;

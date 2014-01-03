@@ -193,13 +193,12 @@ public class RalphInternalList<V,D>
     }
     
     @Override
-    public ArrayList<Integer> get_keys(ActiveEvent active_event)
+    public ArrayList<RalphObject<V,D>> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val = get_val_read(active_event);
-        Util.logger_assert(
-            "FIXME: should be returning RalphObject of lists.");
-        return null;
+        check_immediate_commit(active_event);
+        return wrapped_val.val;
     }
     
     @Override

@@ -197,10 +197,10 @@ public class AtomicInternalList<V,D>
     }
     
     @Override
-    public ArrayList<Integer> get_keys(ActiveEvent active_event)
+    public ArrayList<RalphObject<V,D>> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
-        return internal_list.get_keys(active_event);
+        return internal_list.get_iterable(active_event);
     }
 
     @Override
