@@ -404,7 +404,7 @@ public class AtomicActiveEvent extends ActiveEvent
         
         //# transition into first phase commit state        
         state = State.STATE_FIRST_PHASE_COMMIT;
-        _unlock();
+
 
         // for any objects that require pushing changes to hardware,
         // ensure that they can before reporting success.
@@ -416,6 +416,13 @@ public class AtomicActiveEvent extends ActiveEvent
                 can_commit = can_commit || obj.first_phase_commit(this);
         }
         _touched_objs_unlock();
+
+        Util.logger_warn(
+            "Not able to backout (eg., if another host issued backout call " +
+            "until pushed changes to hardware).");
+        
+        _unlock();
+
 
         Util.logger_warn(
             "\nMust check that returning false will automatically begin " +

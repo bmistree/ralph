@@ -19,7 +19,7 @@ import ralph.ActiveEvent;
 public class ListTypeDataWrapper<T,D>
     extends DataWrapper<ArrayList<RalphObject<T,D>>, ArrayList<D>>{
 	
-    class OpTuple
+    public class OpTuple
     {
         public static final int DELETE_FLAG = 0;
         public static final int ADD_FLAG = 1;
@@ -42,7 +42,7 @@ public class ListTypeDataWrapper<T,D>
      * object so can send deltas across network to partners.
      * (Note: only used for peered data.)
      */
-    private ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
+    public ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
     public ListTypeDataWrapper(ArrayList<RalphObject<T,D>> v, boolean _peered)

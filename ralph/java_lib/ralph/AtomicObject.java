@@ -41,7 +41,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         new HashMap<String,EventCachedPriorityObj>();
     
     //# write_lock_holder is EventCachedPriorityObj
-    private EventCachedPriorityObj write_lock_holder = null; 
+    protected EventCachedPriorityObj write_lock_holder = null; 
 
     
     //# A dict of event uuids to WaitingEventTypes
@@ -60,7 +60,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     /**
      * Used by 
      */
-    private class EventCachedPriorityObj
+    protected class EventCachedPriorityObj
         implements Comparable <EventCachedPriorityObj>
     {
     	String cached_priority = "";
@@ -115,11 +115,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     
-    private void _lock()
+    protected void _lock()
     {
         _mutex.lock();
     }
-    private void _unlock()
+    protected void _unlock()
     {
         _mutex.unlock();
     }
