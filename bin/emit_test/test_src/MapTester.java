@@ -67,6 +67,11 @@ public class MapTester
             Double received_double = endpt.get_number(index);
             if (!received_double.equals(new_value))
                 return false;
+
+            // test remove
+            endpt.remove(index);
+            if (endpt.contains_index(index).booleanValue())
+                return false;
             
             return true;
         }

@@ -21,7 +21,12 @@ Endpoint TVarMapEndpoint
     {
         return number_map.size();
     }
-
+    
+    remove(Number index)
+    {
+        number_map.remove(index);
+    }
+    
     test_change_in_method_call(
         Number index, Number val)
     {
