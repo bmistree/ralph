@@ -413,7 +413,7 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             Util.logger_warn("\nMay want to perform this call in parallel\n");
             for (AtomicObject obj : touched_objs.values())
-                can_commit = can_commit || obj.first_phase_commit(this);
+                can_commit = can_commit && obj.first_phase_commit(this);
         }
         _touched_objs_unlock();
 
