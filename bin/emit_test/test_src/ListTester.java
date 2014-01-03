@@ -78,6 +78,26 @@ public class ListTester
             if (!received_double.equals(new_value))
                 return false;
             
+            // remove two values from beginning of list and insure that the
+            // later values get moved down.  before remove, list had 20
+            // elements.
+            Double last_value = endpt.get_number(new Double(19));
+            endpt.remove(new Double(1));
+
+            // last index should now be in cell 18
+            Double new_last_value = endpt.get_number(new Double(18));
+            if (!last_value.equals(new_last_value))
+                return false;
+            
+            // should not have affected first index
+            received_double = endpt.get_number(new Double(0));
+            if (!received_double.equals(new_value))
+                return false;
+
+            int int_list_size = endpt.get_size().intValue();
+            if (int_list_size != 19)
+                return false;
+
             return true;
         }
         catch(Exception _ex)
