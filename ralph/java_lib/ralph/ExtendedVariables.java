@@ -25,7 +25,7 @@ public class ExtendedVariables
         {
             super();
             init_multithreaded_list_container(
-                "",false,
+                "",true,
                 new ListTypeDataWrapperFactory<T,D>(),
                 new ArrayList<RalphObject<T,D>>(),
                 _locked_wrapper);
@@ -85,7 +85,7 @@ public class ExtendedVariables
                 // add read checks as well.
                 return true;
             }
-
+            
             // log that any changes that we are making will need to be
             // undone if the event backs out.
             dirty_op_tuples_on_hardware = (ListTypeDataWrapper<T,D>)dirty_val;
