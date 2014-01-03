@@ -83,6 +83,7 @@ class ListType(Type):
     APPEND_METHOD_NAME = 'append'
     INSERT_METHOD_NAME = 'insert'
     CONTAINS_METHOD_NAME = 'contains'
+    REMOVE_METHOD_NAME = 'remove'
     
     def __init__(self,element_type_node=None,is_tvar=None):
         if element_type_node is not None:
@@ -143,6 +144,11 @@ class ListType(Type):
         append_method_type = MethodType(
             self.element_type_node.type,
             [self.element_type_node.type])
+
+        # get returns an element type and takes a single key argument
+        remove_method_type = MethodType(
+            self.element_type_node.type,
+            [BasicType(ast_labels.NUMBER_TYPE,False)])
         
         self.dot_dict_methods = {
             ListType.SIZE_METHOD_NAME: size_method_type,
@@ -150,7 +156,8 @@ class ListType(Type):
             ListType.SET_METHOD_NAME: set_method_type,
             ListType.CONTAINS_METHOD_NAME: contains_method_type,
             ListType.INSERT_METHOD_NAME: insert_method_type,
-            ListType.APPEND_METHOD_NAME: append_method_type
+            ListType.APPEND_METHOD_NAME: append_method_type,
+            ListType.REMOVE_METHOD_NAME: remove_method_type            
             }
         
     def dict_dot_fields(self):

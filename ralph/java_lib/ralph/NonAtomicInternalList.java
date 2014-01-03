@@ -195,11 +195,18 @@ public class NonAtomicInternalList<V,D>
     }
 
     @Override
-    public void del_key_called(ActiveEvent active_event, Integer key_to_delete)
+    public void remove(ActiveEvent active_event, Integer key_to_delete)
         throws BackoutException
     {
-        internal_list.del_key_called(active_event,key_to_delete);
+        internal_list.remove(active_event,key_to_delete);
     }
+    @Override
+    public void remove(ActiveEvent active_event, Double key_to_delete)
+        throws BackoutException
+    {
+        internal_list.remove(active_event,key_to_delete);
+    }
+
     
     @Override
     public boolean contains_key_called(

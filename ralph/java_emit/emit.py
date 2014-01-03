@@ -1363,6 +1363,8 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.append'
         elif right_hand_side_method == ListType.INSERT_METHOD_NAME:
             to_return += '.insert'
+        elif right_hand_side_method == ListType.REMOVE_METHOD_NAME:
+            to_return += '.remove'
         #### DEBUG
         else:
             raise InternalEmitException(

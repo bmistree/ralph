@@ -57,7 +57,10 @@ public interface RalphInternalListInterface<V,D>
     public Double get_len_boxed(ActiveEvent active_event) throws BackoutException;
     public ArrayList<Integer> get_keys(ActiveEvent active_event)
         throws BackoutException;
-    public void del_key_called(ActiveEvent active_event, Integer key_to_delete)
+    
+    public void remove(ActiveEvent active_event, Integer key_to_delete)
+        throws BackoutException;
+    public void remove(ActiveEvent active_event, Double key_to_delete)
         throws BackoutException;
     
     public boolean contains_key_called(
