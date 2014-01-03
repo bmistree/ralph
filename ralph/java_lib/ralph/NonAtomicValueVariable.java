@@ -11,21 +11,21 @@ public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
     }
 
     public NonAtomicValueVariable(
-        String _host_uuid, boolean _peered,
-        T init_val, T DEFAULT_VALUE, ValueTypeDataWrapperFactory<T,D> vtdwc)
+        String _host_uuid, T init_val, T DEFAULT_VALUE,
+        ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
         if (init_val == null)
             init_val = DEFAULT_VALUE;
-        init(vtdwc,_host_uuid,_peered,init_val);
+        init(vtdwc,_host_uuid,init_val);
     }
     
     public void init_non_atomic_value_variable(
-        String _host_uuid, boolean _peered,
-        T init_val, T DEFAULT_VALUE, ValueTypeDataWrapperFactory<T,D> vtdwc)
+        String _host_uuid, T init_val, T DEFAULT_VALUE,
+        ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
         if (init_val == null)
             init_val = DEFAULT_VALUE;
-        init(vtdwc,_host_uuid,_peered,init_val);
+        init(vtdwc,_host_uuid,init_val);
     }
 
     @Override

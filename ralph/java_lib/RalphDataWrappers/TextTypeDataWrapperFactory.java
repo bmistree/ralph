@@ -5,9 +5,9 @@ public class TextTypeDataWrapperFactory
 {	
     @Override
     public DataWrapper<String,String> construct(
-        String _val, boolean peered)
+        String _val, boolean log_changes)
     {
         return new ValueTypeDataWrapper<String,String>(
-            new String(_val),peered);
+            new String(_val),log_changes);
     }
 }

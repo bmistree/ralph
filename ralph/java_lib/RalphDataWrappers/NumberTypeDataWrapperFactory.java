@@ -6,9 +6,9 @@ public class NumberTypeDataWrapperFactory
 {	
     @Override
     public DataWrapper<Double,Double> construct(
-        Double _val, boolean peered)
+        Double _val, boolean log_changes)
     {
         return new ValueTypeDataWrapper<Double,Double>(
-            new Double(_val),peered);
+            new Double(_val),log_changes);
     }
 }

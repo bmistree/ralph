@@ -28,7 +28,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 {
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
-    public boolean peered;
+    public boolean log_changes;
     protected DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     private ReentrantLock _mutex = new ReentrantLock();
@@ -86,32 +86,32 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 	
     public void init_multithreaded_locked_object(
         ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
-        boolean _peered, T init_val)
+        boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = vtdwc;
         host_uuid = _host_uuid;
-        peered = _peered;
-        val = data_wrapper_constructor.construct(init_val,peered);
+        log_changes = _log_changes;
+        val = data_wrapper_constructor.construct(init_val,log_changes);
     }
 
     public void init_multithreaded_locked_object(
         MapTypeDataWrapperFactory rtdwc, String _host_uuid,
-        boolean _peered, T init_val)
+        boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = rtdwc;
         host_uuid = _host_uuid;
-        peered = _peered;
-        val = data_wrapper_constructor.construct(init_val,peered);
+        log_changes = _log_changes;
+        val = data_wrapper_constructor.construct(init_val,log_changes);
     }
 
     public void init_multithreaded_locked_object(
         ListTypeDataWrapperFactory rtdwc, String _host_uuid,
-        boolean _peered, T init_val)
+        boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = rtdwc;
         host_uuid = _host_uuid;
-        peered = _peered;
-        val = data_wrapper_constructor.construct(init_val,peered);
+        log_changes = _log_changes;
+        val = data_wrapper_constructor.construct(init_val,log_changes);
     }
 
     
@@ -254,7 +254,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //
         //# create a waiting read element
         WaitingElement<T,D> waiting_element = new WaitingElement(
-            active_event,cached_priority,true,data_wrapper_constructor,peered);
+            active_event,cached_priority,true,data_wrapper_constructor,log_changes);
 
         waiting_events.put(active_event.uuid, waiting_element);
         _unlock();
@@ -320,7 +320,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if ((write_lock_holder != null) && 
             read_lock_holders.isEmpty())
         {
-            dirty_val = data_wrapper_constructor.construct(val.val, peered);
+            dirty_val = data_wrapper_constructor.construct(val.val, log_changes);
             write_lock_holder =
                 new EventCachedPriorityObj(active_event,cached_priority);
             
@@ -345,7 +345,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
                 write_lock_holder =
                     new EventCachedPriorityObj(active_event,cached_priority);
 
-                dirty_val = data_wrapper_constructor.construct(val.val,peered);
+                dirty_val = data_wrapper_constructor.construct(val.val,log_changes);
                 DataWrapper<T,D> to_return = dirty_val;
                 _unlock();
                 return to_return;
@@ -355,7 +355,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# case 3: add to wait queue and wait
         WaitingElement <T,D> write_waiting_event = new WaitingElement<T,D>(
             active_event,cached_priority,false,data_wrapper_constructor,
-            peered);
+            log_changes);
         waiting_events.put(active_event.uuid, write_waiting_event);        
         _unlock();
 
@@ -465,7 +465,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
     /**
      * 
-     When serializing data to send to other side for peered
+     When serializing data to send to other side for log_changes
      variables, need to get deltas across lifetime of variable,
      this method returns a data wrapper that can be used to get
      those deltas.
@@ -475,7 +475,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         ActiveEvent active_event)
     {
         Util.logger_assert(
-            "Have not determined how to serialize multithreaded peered data.");
+            "Have not determined how to serialize multithreaded log_changes data.");
         return null;
     }
 
@@ -555,12 +555,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# have caused another read/write to be scheduled.
         try_next();
     }
-	
-    public boolean is_peered()
-    {
-        return peered;
-    }
-	
 
     /**
        When an event backs out, it calls this method on all the

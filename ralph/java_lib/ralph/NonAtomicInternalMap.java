@@ -44,7 +44,7 @@ public class NonAtomicInternalMap<K,V,D>
         internal_map = new RalphInternalMap<K,V,D>();
     }
     public void init(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, 
         MapTypeDataWrapperFactory<K,V,D> mtdwf,
         HashMap<K,RalphObject<V,D>>init_val,
         IndexType _index_type,
@@ -53,10 +53,9 @@ public class NonAtomicInternalMap<K,V,D>
         index_type = _index_type;
         
         host_uuid = _host_uuid;
-        peered = _peered;
         locked_wrapper = _locked_wrapper;
         reference_type_val =
-            (MapTypeDataWrapper<K, V, D>)mtdwf.construct(init_val, peered);
+            (MapTypeDataWrapper<K, V, D>)mtdwf.construct(init_val, false);
         val = reference_type_val;
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this);

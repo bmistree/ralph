@@ -34,14 +34,14 @@ public class AtomicInternalList<V,D>
     }
         
     public void init_multithreaded_list_container(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, boolean _log_changes,
         ListTypeDataWrapperFactory<V,D> ltdwf,
         ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
-            ltdwf,_host_uuid, _peered, init_val);
+            ltdwf,_host_uuid, _log_changes, init_val);
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
     }

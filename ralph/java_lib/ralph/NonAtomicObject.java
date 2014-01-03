@@ -20,7 +20,6 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
 	
     public String uuid = Util.generate_uuid();
     public String host_uuid = null;
-    public boolean peered;
     private DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
 	
@@ -28,12 +27,11 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
 	
     public void init(
         ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
-        boolean _peered, T init_val)
+        T init_val)
     {
         data_wrapper_constructor = vtdwc;
         host_uuid = _host_uuid;
-        peered = _peered;
-        val = data_wrapper_constructor.construct(init_val,peered);
+        val = data_wrapper_constructor.construct(init_val,false);
     }
 	
 	
@@ -87,12 +85,6 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
     public void complete_commit(ActiveEvent active_event)
     {
         // nothing to do when completing commit: do nothing
-    }
-
-    @Override
-    public boolean is_peered()
-    {
-        return peered;
     }
 
     @Override

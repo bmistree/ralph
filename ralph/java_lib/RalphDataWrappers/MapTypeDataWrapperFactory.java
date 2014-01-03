@@ -27,9 +27,9 @@ public class MapTypeDataWrapperFactory<K,V,D>
     @Override
     public DataWrapper<HashMap<K, RalphObject<V,D>>, HashMap<K,D>>
         construct(
-            HashMap<K, RalphObject<V,D>> _val, boolean peered) 
+            HashMap<K, RalphObject<V,D>> _val, boolean log_changes) 
     {
-        return new MapTypeDataWrapper<K,V,D>(_val,peered);
+        return new MapTypeDataWrapper<K,V,D>(_val,log_changes);
     }
 	
 }

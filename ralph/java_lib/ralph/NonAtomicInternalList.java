@@ -34,7 +34,7 @@ public class NonAtomicInternalList<V,D>
         internal_list = new RalphInternalList<V,D>();
     }
     public void init(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, 
         ListTypeDataWrapperFactory<V,D> ltdwf,
         ArrayList<RalphObject<V,D>>init_val,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
@@ -44,9 +44,8 @@ public class NonAtomicInternalList<V,D>
             _locked_wrapper,this,this);
         
         host_uuid = _host_uuid;
-        peered = _peered;
         reference_type_val =
-            (ListTypeDataWrapper<V, D>)ltdwf.construct(init_val, peered); 
+            (ListTypeDataWrapper<V, D>)ltdwf.construct(init_val, false); 
         val = reference_type_val;		
     }
     

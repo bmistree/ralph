@@ -18,17 +18,17 @@ public abstract class RalphObject<T,D>
     protected String host_uuid = null;
 	
     public RalphObject<T,D> copy(
-        ActiveEvent active_event, boolean peered,
+        ActiveEvent active_event, boolean log_changes,
         boolean multi_threaded) throws BackoutException
     {
         if (multi_threaded)
         {
             return atomic_factory.construct(
-                host_uuid,peered,get_val(active_event));
+                host_uuid,log_changes,get_val(active_event));
         }
 		
         return non_atomic_factory.construct(
-            host_uuid,peered,get_val(active_event));
+            host_uuid,log_changes,get_val(active_event));
     }
 
     /**
@@ -82,8 +82,6 @@ public abstract class RalphObject<T,D>
         ActiveEvent active_event);
     
     public abstract void complete_commit(ActiveEvent active_event);
-
-    public abstract boolean is_peered();
 
     public abstract void backout(ActiveEvent active_event);
 

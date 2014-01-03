@@ -37,7 +37,7 @@ public abstract class AtomicMap<K,V,D>
 {
 
     public AtomicMap(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -45,7 +45,7 @@ public abstract class AtomicMap<K,V,D>
 
         AtomicInternalMap<K,V,D> init_val = new AtomicInternalMap<K,V,D>();
         init_val.init_multithreaded_map_container(
-            _host_uuid, _peered,
+            _host_uuid, _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
@@ -53,14 +53,14 @@ public abstract class AtomicMap<K,V,D>
 
         AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
         default_val.init_multithreaded_map_container(
-            _host_uuid, _peered,
+            _host_uuid, _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _peered, init_val,default_val,
+            _host_uuid, _log_changes, init_val,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
     }
 
@@ -71,7 +71,7 @@ public abstract class AtomicMap<K,V,D>
        This constructor is for this.
      */
     public AtomicMap(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, boolean _log_changes,
         AtomicInternalMap<K,V,D> internal_val,
         NonAtomicInternalMap.IndexType index_type,        
         EnsureAtomicWrapper<V,D> locked_wrapper)
@@ -80,20 +80,20 @@ public abstract class AtomicMap<K,V,D>
         
         AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
         default_val.init_multithreaded_map_container(
-            _host_uuid, _peered,
+            _host_uuid, _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _peered, internal_val,default_val,
+            _host_uuid, _log_changes, internal_val,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
     }
 
     
     public AtomicMap(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, boolean _log_changes,
         HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
@@ -102,7 +102,7 @@ public abstract class AtomicMap<K,V,D>
 
         AtomicInternalMap<K,V,D> init_val_2 = new AtomicInternalMap<K,V,D>();
         init_val_2.init_multithreaded_map_container(
-            _host_uuid, _peered,
+            _host_uuid, _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
@@ -110,14 +110,14 @@ public abstract class AtomicMap<K,V,D>
 
         AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
         default_val.init_multithreaded_map_container(
-            _host_uuid, _peered,
+            _host_uuid, _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _peered, init_val_2,default_val,
+            _host_uuid, _log_changes, init_val_2,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

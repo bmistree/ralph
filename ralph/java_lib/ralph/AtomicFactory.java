@@ -10,5 +10,5 @@ package ralph;
 public interface AtomicFactory<T,D>
 {
     public AtomicObject<T,D> construct(
-        String host_uuid, boolean peered, Object init_val);
+        String host_uuid, boolean log_changes, Object init_val);
 }

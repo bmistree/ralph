@@ -6,5 +6,5 @@ package RalphDataWrappers;
  */
 public abstract class DataWrapperFactory<S,T>
 {
-    public abstract DataWrapper<S,T> construct(S _val, boolean peered);
+    public abstract DataWrapper<S,T> construct(S _val, boolean log_changes);
 }

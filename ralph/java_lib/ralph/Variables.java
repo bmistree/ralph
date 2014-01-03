@@ -30,18 +30,21 @@ public class Variables {
     final static Boolean default_tf = false;
 	
 	
-    public static class AtomicNumberVariable extends AtomicValueVariable<Double,Double>
+    public static class AtomicNumberVariable
+        extends AtomicValueVariable<Double,Double>
     {
-        public AtomicNumberVariable(String _host_uuid, boolean _peered,Object init_val)
+        public AtomicNumberVariable(
+            String _host_uuid, boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_peered, new Double(((Number) init_val).doubleValue()),
+                _host_uuid,_log_changes,
+                new Double(((Number) init_val).doubleValue()),
                 default_number,number_value_type_data_wrapper_factory);		
         }
-        public AtomicNumberVariable(String _host_uuid, boolean _peered)
+        public AtomicNumberVariable(String _host_uuid, boolean _log_changes)
         {
             super(
-                _host_uuid,_peered,default_number,default_number,
+                _host_uuid,_log_changes,default_number,default_number,
                 number_value_type_data_wrapper_factory);		
         }
         
@@ -56,22 +59,25 @@ public class Variables {
         }
     }
 
-    public static class AtomicTextVariable extends AtomicValueVariable<String,String>
+    public static class AtomicTextVariable
+        extends AtomicValueVariable<String,String>
     {
-        public AtomicTextVariable(String _host_uuid, boolean _peered,Object init_val)
+        public AtomicTextVariable(
+            String _host_uuid, boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_peered,(String)init_val,default_text,
+                _host_uuid,_log_changes,(String)init_val,default_text,
                 text_value_type_data_wrapper_factory);		
         }
-        public AtomicTextVariable(String _host_uuid, boolean _peered)
+        public AtomicTextVariable(String _host_uuid, boolean _log_changes)
         {
             super(
-                _host_uuid,_peered,default_text,default_text,
+                _host_uuid,_log_changes,default_text,default_text,
                 text_value_type_data_wrapper_factory);            
         }
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
             String internal_val = get_val(active_event);
@@ -85,16 +91,16 @@ public class Variables {
         extends AtomicValueVariable<Boolean,Boolean>
     {
         public AtomicTrueFalseVariable(
-            String _host_uuid, boolean _peered,Object init_val)
+            String _host_uuid, boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_peered,(Boolean)init_val,default_tf,
+                _host_uuid,_log_changes,(Boolean)init_val,default_tf,
                 true_false_value_type_data_wrapper_factory);		
         }
-        public AtomicTrueFalseVariable(String _host_uuid, boolean _peered)
+        public AtomicTrueFalseVariable(String _host_uuid, boolean _log_changes)
         {
             super(
-                _host_uuid,_peered,default_tf,default_tf,
+                _host_uuid,_log_changes,default_tf,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
         
@@ -109,23 +115,23 @@ public class Variables {
         }
     }
 	
-	
+
     public static class NonAtomicNumberVariable
         extends NonAtomicValueVariable<Double,Double>
     {
         public NonAtomicNumberVariable(
-            String _host_uuid, boolean _peered, Double init_val)
+            String _host_uuid, boolean _dummy_log_changes, Double init_val)
         {
             super(
-                _host_uuid,_peered,init_val,default_number,
+                _host_uuid,init_val,default_number,
                 number_value_type_data_wrapper_factory);
         }
 
         public NonAtomicNumberVariable(
-            String _host_uuid, boolean _peered)
+            String _host_uuid, boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,_peered,default_number,default_number,
+                _host_uuid,default_number,default_number,
                 number_value_type_data_wrapper_factory);			
         }
         
@@ -144,18 +150,18 @@ public class Variables {
         extends NonAtomicValueVariable<String,String>
     {
         public NonAtomicTextVariable(
-            String _host_uuid, boolean _peered,String init_val)
+            String _host_uuid, boolean _dummy_log_changes,String init_val)
         {
             super(
-                _host_uuid,_peered,init_val,default_text,
+                _host_uuid,init_val,default_text,
                 text_value_type_data_wrapper_factory);
         }
 		
         public NonAtomicTextVariable(
-            String _host_uuid, boolean _peered)
+            String _host_uuid, boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,_peered,default_text,default_text,
+                _host_uuid,default_text,default_text,
                 text_value_type_data_wrapper_factory);
         }
         
@@ -175,18 +181,18 @@ public class Variables {
         extends NonAtomicValueVariable<Boolean,Boolean>
     {
         public NonAtomicTrueFalseVariable(
-            String _host_uuid, boolean _peered, Boolean init_val)
+            String _host_uuid, boolean _dummy_log_changes, Boolean init_val)
         {
             super(
-                _host_uuid,_peered,init_val,default_tf,
+                _host_uuid,init_val,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
 
         public NonAtomicTrueFalseVariable(
-            String _host_uuid, boolean _peered)
+            String _host_uuid, boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,_peered,default_tf,default_tf,
+                _host_uuid,default_tf,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
 
@@ -207,21 +213,21 @@ public class Variables {
         extends NonAtomicMap<K,V,D>
     {
         public NonAtomicMapVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,_index_type,locked_wrapper);
+            super(_host_uuid,_index_type,locked_wrapper);
         }
 
         public NonAtomicMapVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _dummy_log_changes,
             NonAtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,_index_type,
+                _host_uuid, internal_val,_index_type,
                 locked_wrapper);
         }
     }
@@ -231,22 +237,21 @@ public class Variables {
         extends AtomicMap<K,V,D>
     {
         public AtomicMapVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,_index_type,locked_wrapper);
+            super(_host_uuid,_log_changes,_index_type,locked_wrapper);
         }
 
-
         public AtomicMapVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _log_changes,
             AtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,_index_type,
+                _host_uuid, _log_changes,internal_val,_index_type,
                 locked_wrapper);
         }
     }
@@ -256,20 +261,20 @@ public class Variables {
         extends AtomicList<V,D>
     {
         public AtomicListVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _log_changes,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,locked_wrapper);
+            super(_host_uuid,_log_changes,locked_wrapper);
         }
 
 
         public AtomicListVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _log_changes,
             AtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,
+                _host_uuid, _log_changes,internal_val,
                 locked_wrapper);
         }
     }
@@ -278,20 +283,19 @@ public class Variables {
         extends NonAtomicList<V,D>
     {
         public NonAtomicListVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _dummy_log_changes,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_peered,locked_wrapper);
+            super(_host_uuid,locked_wrapper);
         }
 
         public NonAtomicListVariable(
-            String _host_uuid, boolean _peered,
+            String _host_uuid, boolean _dummy_log_changes,
             NonAtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _peered,internal_val,
-                locked_wrapper);
+                _host_uuid,internal_val,locked_wrapper);
         }
     }
 }

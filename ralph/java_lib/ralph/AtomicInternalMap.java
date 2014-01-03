@@ -44,7 +44,7 @@ public class AtomicInternalMap<K,V,D>
 
     
     public void init_multithreaded_map_container(
-        String _host_uuid, boolean _peered,
+        String _host_uuid, boolean _log_changes,
         MapTypeDataWrapperFactory<K,V,D> rtdwc,
         HashMap<K,RalphObject<V,D>>init_val,
         IndexType _index_type,
@@ -53,7 +53,7 @@ public class AtomicInternalMap<K,V,D>
         index_type = _index_type;
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
-            rtdwc,_host_uuid, _peered, init_val);
+            rtdwc,_host_uuid, _log_changes, init_val);
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this);
     }

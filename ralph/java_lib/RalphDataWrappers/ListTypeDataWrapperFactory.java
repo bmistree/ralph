@@ -19,9 +19,9 @@ public class ListTypeDataWrapperFactory<V,D>
     @Override
     public DataWrapper<ArrayList<RalphObject<V,D>>, ArrayList<D>>
         construct(
-            ArrayList<RalphObject<V,D>> _val, boolean peered) 
+            ArrayList<RalphObject<V,D>> _val, boolean log_changes) 
     {
-        return new ListTypeDataWrapper<V,D>(_val,peered);
+        return new ListTypeDataWrapper<V,D>(_val,log_changes);
     }
 }
 

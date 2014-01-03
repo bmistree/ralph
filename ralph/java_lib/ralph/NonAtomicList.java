@@ -34,7 +34,7 @@ public abstract class NonAtomicList<V,D>
     D>
 {
     public NonAtomicList(
-        String _host_uuid, boolean _peered,
+        String _host_uuid,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
@@ -43,20 +43,20 @@ public abstract class NonAtomicList<V,D>
         
         NonAtomicInternalList<V,D> init_val = new NonAtomicInternalList<V,D>();
         init_val.init(
-            _host_uuid, _peered,
+            _host_uuid,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
         NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
         default_val.init(
-            _host_uuid, _peered,
+            _host_uuid,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         init_non_atomic_value_variable(
-            _host_uuid, _peered, init_val,default_val,
+            _host_uuid,init_val,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
 
@@ -66,7 +66,7 @@ public abstract class NonAtomicList<V,D>
        This constructor is for this.
      */
     public NonAtomicList(
-        String _host_uuid, boolean _peered,
+        String _host_uuid,
         NonAtomicInternalList<V,D> internal_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -74,20 +74,20 @@ public abstract class NonAtomicList<V,D>
         
         NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
         default_val.init(
-            _host_uuid, _peered,
+            _host_uuid,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
         init_non_atomic_value_variable(
-            _host_uuid, _peered, internal_val,default_val,
+            _host_uuid, internal_val,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
 
 
     
     public NonAtomicList(
-        String _host_uuid, boolean _peered,
+        String _host_uuid,
         ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -97,20 +97,20 @@ public abstract class NonAtomicList<V,D>
         
         NonAtomicInternalList<V,D> init_val_2 = new NonAtomicInternalList<V,D>();
         init_val_2.init(
-            _host_uuid, _peered,
+            _host_uuid,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
         NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
         default_val.init(
-            _host_uuid, _peered,
+            _host_uuid,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         init_non_atomic_value_variable(
-            _host_uuid, _peered, init_val_2,default_val,
+            _host_uuid, init_val_2,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

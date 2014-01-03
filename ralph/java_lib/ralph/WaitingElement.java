@@ -31,7 +31,7 @@ public class WaitingElement <T,D>
     public ArrayBlockingQueue<DataWrapper<T,D>> queue = 
         new ArrayBlockingQueue<DataWrapper<T,D>>(Util.QUEUE_CAPACITIES);
 	
-    private boolean peered;
+    private boolean log_changes;
 	
     /**
      * 
@@ -43,17 +43,17 @@ public class WaitingElement <T,D>
      * 
      * 
      * @param data_wrapper_constructor
-     * @param peered
+     * @param log_changes
      */
     public WaitingElement(
         ActiveEvent active_event,String _priority,boolean _read, 
-        DataWrapperFactory<T,D> _data_wrapper_constructor,boolean _peered)
+        DataWrapperFactory<T,D> _data_wrapper_constructor,boolean _log_changes)
     {
         event = active_event;
         cached_priority = _priority;
         read = _read;
         data_wrapper_constructor = _data_wrapper_constructor;
-        peered = _peered;		
+        log_changes = _log_changes;		
     }
 	
     public boolean is_read()
@@ -91,7 +91,7 @@ public class WaitingElement <T,D>
             //# update dirty val with value asked to write with
             multi_threaded_obj.dirty_val = 
                 data_wrapper_constructor.construct(
-                    (T)multi_threaded_obj.val.val,peered);
+                    (T)multi_threaded_obj.val.val,log_changes);
         }
     }
     

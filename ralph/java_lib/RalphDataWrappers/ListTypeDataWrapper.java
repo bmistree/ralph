@@ -34,27 +34,27 @@ public class ListTypeDataWrapper<T,D>
         }		
 		
     }
-    private boolean peered;
+    private boolean log_changes;
     protected boolean has_been_written_since_last_msg = false;
 	
     /*
      * tracks all insertions, removals, etc. made to this reference
      * object so can send deltas across network to partners.
-     * (Note: only used for peered data.)
+     * (Note: only used for log_changes data.)
      */
     public ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public ListTypeDataWrapper(ArrayList<RalphObject<T,D>> v, boolean _peered)
+    public ListTypeDataWrapper(ArrayList<RalphObject<T,D>> v, boolean _log_changes)
     {
-        super( (ArrayList<RalphObject<T,D>>)v.clone(),_peered);
-        peered = _peered;
+        super( (ArrayList<RalphObject<T,D>>)v.clone(),_log_changes);
+        log_changes = _log_changes;
     }
 	
-    public ListTypeDataWrapper(ListTypeDataWrapper<T,D> v, boolean _peered)
+    public ListTypeDataWrapper(ListTypeDataWrapper<T,D> v, boolean _log_changes)
     {
-        super(v.val,_peered);
-        peered = _peered;
+        super(v.val,_log_changes);
+        log_changes = _log_changes;
     }
 	
     public ArrayList<D> de_waldoify(ActiveEvent active_event) throws BackoutException
@@ -69,7 +69,7 @@ public class ListTypeDataWrapper<T,D>
     /**
      * @param {bool} incorporating_deltas --- True if we are setting
      a value as part of incorporating deltas that were made by
-     partner to peered data.  In this case, we do not want to log
+     partner to log_changes data.  In this case, we do not want to log
      the changes: we do not want our partner to replay the same
      changes they already have.
         
@@ -86,7 +86,7 @@ public class ListTypeDataWrapper<T,D>
         ActiveEvent active_event,Integer key, RalphObject<T,D> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
-        if ((peered) && (! incorporating_deltas))
+        if ((log_changes) && (! incorporating_deltas))
             partner_change_log.add(write_key_tuple(key));
 
         val.get(key).set_val(active_event,to_write.get_val(active_event));
@@ -106,11 +106,11 @@ public class ListTypeDataWrapper<T,D>
         boolean incorporating_deltas)
     {
     	/*
-          if self.peered and (not incorporating_deltas):
+          if self.log_changes and (not incorporating_deltas):
           self.partner_change_log.append(delete_key_tuple(key_to_delete))            
           del self.val[key_to_delete]
         */
-    	if (peered && (! incorporating_deltas))
+    	if (log_changes && (! incorporating_deltas))
             partner_change_log.add(delete_key_tuple(key_to_delete));
         val.remove(key_to_delete);
     }
@@ -125,7 +125,7 @@ public class ListTypeDataWrapper<T,D>
         boolean incorporating_deltas) throws BackoutException
     {
         Integer key_added = new Integer(val.size());        
-    	if (peered && (! incorporating_deltas))
+    	if (log_changes && (! incorporating_deltas))
             partner_change_log.add(add_key_tuple(key_added));
     	val.add(key_added,new_object);        
     }
@@ -150,7 +150,7 @@ public class ListTypeDataWrapper<T,D>
         throws BackoutException
     {
         Integer key_added = new Integer(val.size());
-        if (peered && (! incorporating_deltas))
+        if (log_changes && (! incorporating_deltas))
             partner_change_log.add(add_key_tuple(key_added));
     	val.add(where_to_insert,new_val);
     }
