@@ -162,6 +162,7 @@ class MapType(Type):
     CONTAINS_METHOD_NAME = 'contains'
     GET_METHOD_NAME = 'get'
     SET_METHOD_NAME = 'set'
+    REMOVE_METHOD_NAME = 'remove'
 
     def __init__(self,from_type_node=None,to_type_node=None,is_tvar=None):
         '''Allow constructing empty map types so that can assign a
@@ -216,7 +217,6 @@ class MapType(Type):
             # takes single key argument
             [self.from_type_node.type])
 
-        
         # get returns a from type and takes a single key argument
         get_method_type = MethodType(
             self.to_type_node.type,
@@ -227,11 +227,17 @@ class MapType(Type):
             self.to_type_node.type,
             [self.from_type_node.type, self.to_type_node.type])
 
+        # remove returns a from type and takes a single key argument
+        remove_method_type = MethodType(
+            self.to_type_node.type,
+            [self.from_type_node.type])
+
         self.dot_dict_methods = {
             MapType.SIZE_METHOD_NAME: size_method_type,
             MapType.CONTAINS_METHOD_NAME: contains_method_type,
             MapType.GET_METHOD_NAME: get_method_type,
-            MapType.SET_METHOD_NAME: set_method_type
+            MapType.SET_METHOD_NAME: set_method_type,
+            MapType.REMOVE_METHOD_NAME: remove_method_type
             }
         
     def dict_dot_fields(self):

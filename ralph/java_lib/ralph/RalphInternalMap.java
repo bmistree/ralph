@@ -198,7 +198,7 @@ public class RalphInternalMap<K,V,D>
     }
 
     @Override
-    public void del_key_called(ActiveEvent active_event, K key_to_delete)
+    public void remove(ActiveEvent active_event, K key_to_delete)
         throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val = get_val_write(active_event);

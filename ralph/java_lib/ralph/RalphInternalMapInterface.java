@@ -41,7 +41,7 @@ public interface RalphInternalMapInterface<K,V,D>
     public ArrayList<K> get_keys(ActiveEvent active_event)
         throws BackoutException;
     
-    public void del_key_called(ActiveEvent active_event, K key_to_delete)
+    public void remove(ActiveEvent active_event, K key_to_delete)
         throws BackoutException;
 
     public boolean contains_key_called(

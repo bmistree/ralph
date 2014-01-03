@@ -163,10 +163,10 @@ public class NonAtomicInternalMap<K,V,D>
     }
 
     @Override
-    public void del_key_called(ActiveEvent active_event, K key_to_delete)
+    public void remove(ActiveEvent active_event, K key_to_delete)
         throws BackoutException
     {
-        internal_map.del_key_called(active_event,key_to_delete);
+        internal_map.remove(active_event,key_to_delete);
     }
 
     @Override

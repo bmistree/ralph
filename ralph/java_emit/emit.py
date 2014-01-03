@@ -1338,6 +1338,8 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.get_val_on_key'
         elif right_hand_side_method == MapType.SET_METHOD_NAME:
             to_return += '.set_val_on_key'
+        elif right_hand_side_method == MapType.REMOVE_METHOD_NAME:
+            to_return += '.remove'
         #### DEBUG
         else:
             raise InternalEmitException(
