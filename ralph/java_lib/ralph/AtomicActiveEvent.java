@@ -406,6 +406,23 @@ public class AtomicActiveEvent extends ActiveEvent
         state = State.STATE_FIRST_PHASE_COMMIT;
         _unlock();
 
+        // for any objects that require pushing changes to hardware,
+        // ensure that they can before reporting success.
+        boolean can_commit = true;
+        _touched_objs_lock();
+        {
+            Util.logger_warn("\nMay want to perform this call in parallel\n");
+            for (AtomicObject obj : touched_objs.values())
+                can_commit = can_commit || obj.first_phase_commit(this);
+        }
+        _touched_objs_unlock();
+
+        Util.logger_warn(
+            "\nMust check that returning false will automatically begin " +
+            "process of backing out this event as well.\n");
+        if (! can_commit)
+            return false;
+        
 
         //# do not need to acquire locks on other_endpoints_contacted
         //# and partner_contacted because once enter first phase commit,

@@ -250,7 +250,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             }
         }
                 		
-
         //# Condition 2c + 3
         //
         //# create a waiting read element
@@ -271,9 +270,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return to_return;
     }
 		
-	
-	
-	
     /**
      * DOES NOT ASSUME ALREADY LOCK
      * 
@@ -507,6 +503,22 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return has_been_written;
     }
 
+    /**
+       Called from outside of lock.
+       
+       @returns {boolean} --- True if can commit in first phase, false
+       otherwise.  Note: this method is really only useful for objects
+       that push their changes to other hardware, (eg., a list that
+       propagates its changes to a router).  If the hardware is still
+       up and running, and the changes have been pushed, then, return
+       true, otherwise, return false.
+     */
+    public boolean first_phase_commit(ActiveEvent active_event)
+    {
+        return true;
+    }
+
+    
     /**
        Both readers and writers can complete commits.  If it's a
        reader, we do not update the internal value of the object.  If

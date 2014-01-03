@@ -108,8 +108,6 @@ public abstract class EventParent
     }
                 
 
-	
-
     /**
        Places the appropriate call result in the event complete queue to 
        indicate to the endpoint that an error has occured and the event
