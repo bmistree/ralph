@@ -9,7 +9,8 @@ import RalphDataWrappers.ListTypeDataWrapper;
 
 public class ExtendedVariables
 {
-    public static class ExtendedInternalAtomicList<T,D>
+    //public static class ExtendedInternalAtomicList<T,D>
+    public static abstract class ExtendedInternalAtomicList<T,D>
         extends AtomicInternalList<T,D>
     {
         // This contains changes that we pushed to hardware, but haven't
@@ -31,23 +32,28 @@ public class ExtendedVariables
                 _locked_wrapper);
         }
 
-        protected boolean apply_changes_to_hardware(ListTypeDataWrapper<T,D> dirty)
-        {
-            // run through all the changes made by latest active event
-            // and push them to the hardware.
-            ArrayList<ListTypeDataWrapper<T,D>.OpTuple> event_changes =
-                dirty.partner_change_log;
-            for (ListTypeDataWrapper<T,D>.OpTuple change : event_changes)
-                System.out.println("\nApplying change to hardware\n");
-            return true;
-        }
+        protected abstract boolean apply_changes_to_hardware(
+            ListTypeDataWrapper<T,D> dirty);
+        protected abstract void undo_dirty_changes_to_hardware(
+            ListTypeDataWrapper<T,D> to_undo);
+            
+        // protected boolean apply_changes_to_hardware(ListTypeDataWrapper<T,D> dirty)
+        // {
+        //     // run through all the changes made by latest active event
+        //     // and push them to the hardware.
+        //     ArrayList<ListTypeDataWrapper<T,D>.OpTuple> event_changes =
+        //         dirty.partner_change_log;
+        //     for (ListTypeDataWrapper<T,D>.OpTuple change : event_changes)
+        //         System.out.println("\nApplying change to hardware\n");
+        //     return true;
+        // }
 
-        protected void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<T,D> to_undo)
-        {
-            for (ListTypeDataWrapper.OpTuple change : to_undo.partner_change_log)
-                System.out.println("\nUndoing change to hardware\n");
-        }
+        // protected void undo_dirty_changes_to_hardware(
+        //     ListTypeDataWrapper<T,D> to_undo)
+        // {
+        //     for (ListTypeDataWrapper.OpTuple change : to_undo.partner_change_log)
+        //         System.out.println("\nUndoing change to hardware\n");
+        // }
 
         
         @Override

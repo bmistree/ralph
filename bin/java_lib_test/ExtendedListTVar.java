@@ -9,7 +9,7 @@ import ralph.ActiveEvent;
 import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
 import RalphAtomicWrappers.BaseAtomicWrappers;
-
+import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
    Can create an extended version of a list: one that allows us to
@@ -25,6 +25,7 @@ public class ExtendedListTVar
     public static final Double TO_INSERT_0 = new Double(303);
     public static final Double TO_INSERT_1 = new Double(304);
     public static final Double TO_INSERT_2 = new Double(305);
+    public static Double global_number_times_apply_changes_to_hardware_called = new Double(0);
     
     public static void main(String [] args)
     {
@@ -34,12 +35,30 @@ public class ExtendedListTVar
             TestClassUtil.print_failure(test_name);
     }
 
+    public static class TestExtendedInternalAtomicNumberList
+        extends ExtendedInternalAtomicList<Double,Double>
+    {
+        public TestExtendedInternalAtomicNumberList()
+        {
+            super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
+        }
+        protected boolean apply_changes_to_hardware(
+            ListTypeDataWrapper<Double,Double> dirty)
+        {
+            global_number_times_apply_changes_to_hardware_called += 1.0;
+            return true;
+        }
+        protected void undo_dirty_changes_to_hardware(
+            ListTypeDataWrapper<Double,Double> to_undo)
+        {
+        }
+    }
+    
     public static AtomicListVariable<Double,Double> create_extended_list()
     {
         // generate an internal extended list
-        ExtendedInternalAtomicList<Double,Double> extended_internal_list =
-            new ExtendedInternalAtomicList<Double,Double> (
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
+        TestExtendedInternalAtomicNumberList extended_internal_list =
+            new TestExtendedInternalAtomicNumberList();
 
         // wrap the internal extended list
         AtomicListVariable<Double,Double> to_return =
@@ -67,6 +86,10 @@ public class ExtendedListTVar
         // Tests preempted read of tvar.
         if (! ListTVarConflict.test_preempted_read(endpt,extended_list_tvar))
             return false;        
+
+        // should have entered apply_changes_to_hardware 2 times.
+        if (!global_number_times_apply_changes_to_hardware_called.equals(2.0))
+            return false;
 
         return true;
     }
