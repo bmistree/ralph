@@ -156,13 +156,6 @@ public class NonAtomicInternalList<V,D>
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key,
-        V to_write, boolean copy_if_peered) throws BackoutException
-    {
-        internal_list.set_val_on_key(active_event,key,to_write,copy_if_peered);
-    }
-    @Override
-    public void set_val_on_key(
         ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
         throws BackoutException
     {
@@ -175,14 +168,7 @@ public class NonAtomicInternalList<V,D>
     {
         internal_list.set_val_on_key(active_event,key,to_write);
     }
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
-        boolean copy_if_peered) throws BackoutException
-    {
-        internal_list.set_val_on_key(active_event,key,to_write,copy_if_peered);
-    }
-
+    
     @Override
     public boolean return_internal_val_from_container()
     {

@@ -46,17 +46,11 @@ public interface RalphInternalListInterface<V,D>
     public void set_val_on_key(
         ActiveEvent active_event, Double key, V to_write) throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key,
-        V to_write, boolean copy_if_peered) throws BackoutException ;
-    public void set_val_on_key(
         ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
         throws BackoutException;
     public void set_val_on_key(
         ActiveEvent active_event, Double key, RalphObject<V,D> to_write)
         throws BackoutException;
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
-        boolean copy_if_peered) throws BackoutException ;
     public boolean return_internal_val_from_container();
 
     public int get_len(ActiveEvent active_event) throws BackoutException;

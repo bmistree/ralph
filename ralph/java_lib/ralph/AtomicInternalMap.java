@@ -138,23 +138,9 @@ public class AtomicInternalMap<K,V,D>
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, K key,
-        V to_write, boolean copy_if_peered) throws BackoutException 
-    {
-        internal_map.set_val_on_key(active_event,key,to_write,copy_if_peered);
-    }
-    @Override
-    public void set_val_on_key(
         ActiveEvent active_event, K key, RalphObject<V,D> to_write) throws BackoutException
     {
         internal_map.set_val_on_key(active_event,key,to_write);
-    }
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, K key, RalphObject<V,D> to_write,
-        boolean copy_if_peered) throws BackoutException 
-    {
-        internal_map.set_val_on_key(active_event,key,to_write,copy_if_peered);
     }
 
     @Override

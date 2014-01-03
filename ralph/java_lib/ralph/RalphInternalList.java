@@ -139,29 +139,16 @@ public class RalphInternalList<V,D>
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException
     {
-        set_val_on_key(active_event,key,to_write,false);		
+        RalphObject<V,D> wrapped_to_write =
+            locked_wrapper.ensure_atomic_object(to_write);
+        set_val_on_key(active_event,key,wrapped_to_write);
     }
+    
     @Override
     public void set_val_on_key(
         ActiveEvent active_event, Double key, V to_write) throws BackoutException
     {
         set_val_on_key(active_event,key.intValue(),to_write);
-    }
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key,
-        V to_write, boolean copy_if_peered) throws BackoutException 
-    {
-        RalphObject<V,D> wrapped_to_write = 
-            locked_wrapper.ensure_atomic_object(to_write);
-        set_val_on_key(active_event,key,wrapped_to_write,copy_if_peered);
-    }
-    @Override
-    public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
-        throws BackoutException
-    {
-        set_val_on_key(active_event,key,to_write,false);
     }
     @Override
     public void set_val_on_key(
@@ -172,19 +159,10 @@ public class RalphInternalList<V,D>
     }
     @Override    
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write,
-        boolean copy_if_peered) throws BackoutException 
+        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
+        throws BackoutException 
     {
         ListTypeDataWrapper<V,D> wrapped_val = get_val_write(active_event);
-        if (copy_if_peered)
-        {
-            try {
-                to_write = to_write.copy(active_event, true, true);
-            } catch (BackoutException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
         wrapped_val.set_val_on_key(active_event,key,to_write);
         check_immediate_commit(active_event);
     }
