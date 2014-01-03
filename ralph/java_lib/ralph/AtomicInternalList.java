@@ -24,7 +24,6 @@ public class AtomicInternalList<V,D>
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
                RalphInternalListInterface<V,D>
 {
-    private ListTypeDataWrapper<V,D> reference_type_val = null;
     private RalphInternalList<V,D> internal_list = null;
     public EnsureAtomicWrapper<V,D> locked_wrapper = null;
     
@@ -33,7 +32,7 @@ public class AtomicInternalList<V,D>
         super();
         internal_list = new RalphInternalList<V,D>();
     }
-    
+        
     public void init_multithreaded_list_container(
         String _host_uuid, boolean _peered,
         ListTypeDataWrapperFactory<V,D> ltdwf,
