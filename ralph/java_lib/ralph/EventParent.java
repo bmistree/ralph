@@ -180,7 +180,7 @@ public abstract class EventParent
             //# send message to all other endpoints that we made direct
             //# endpoint calls on that they should attempt first phase
             //# commit
-            if (local_endpoint._uuid == waiting_on_uuid)
+            if (local_endpoint._uuid.equals(waiting_on_uuid))
                 continue;
 
             EventSubscribedTo evt_subscribed_to =

@@ -99,7 +99,7 @@ public class BoostedManager
         ActiveEvent completed_event = null;
         for (ActiveEvent event : event_list)
         {
-            if (event.uuid == completed_event_uuid)
+            if (event.uuid.equals(completed_event_uuid))
             {
                 remove_counter = counter;
                 completed_event = event;

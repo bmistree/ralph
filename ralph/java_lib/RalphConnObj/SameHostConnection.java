@@ -96,7 +96,7 @@ public class SameHostConnection implements Runnable, ConnectionObj {
         	
             Endpoint msg_sender_endpt = q_elem.endpoint;
             Endpoint msg_recvr_endpt = endpoint1;
-            if (msg_sender_endpt._uuid == endpoint1._uuid)
+            if (msg_sender_endpt._uuid.equals(endpoint1._uuid))
                 msg_recvr_endpt = endpoint2;
 
             msg_recvr_endpt._receive_msg_from_partner(msg);

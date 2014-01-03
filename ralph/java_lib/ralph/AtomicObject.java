@@ -187,7 +187,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
         //# check 0 above
         if ((write_lock_holder != null) &&
-            (active_event.uuid == write_lock_holder.event.uuid))
+            (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
             DataWrapper<T,D> to_return = dirty_val;
             _unlock();
@@ -309,7 +309,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
         //# case 0 above
         if ((write_lock_holder != null) &&
-            (active_event.uuid == write_lock_holder.event.uuid))
+            (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
             DataWrapper<T,D> to_return = dirty_val;
             _unlock();
@@ -379,7 +379,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         boolean may_require_update = false;
         
         if ((write_lock_holder != null) && 
-            (write_lock_holder.event.uuid == uuid))
+            (write_lock_holder.event.uuid.equals(uuid)))
         {
             write_lock_holder.cached_priority = new_priority;
         }
@@ -451,7 +451,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# remove write lock holder if it was one
         read_lock_holders.remove(active_event.uuid);
         if ((write_lock_holder != null) &&
-            (write_lock_holder.event.uuid == active_event.uuid))
+            (write_lock_holder.event.uuid.equals(active_event.uuid)))
         {
             write_lock_holder = null;
         }
@@ -493,7 +493,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# check if active event even has ability to write to variable
         if (write_lock_holder != null)
         {
-            if (write_lock_holder.event.uuid == active_event.uuid)
+            if (write_lock_holder.event.uuid.equals(active_event.uuid))
             {
                 has_been_written =
                     dirty_val.get_and_reset_has_been_written_since_last_msg();
@@ -530,7 +530,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         _lock();
         if ((write_lock_holder != null) &&
-            (active_event.uuid == write_lock_holder.event.uuid))
+            active_event.uuid.equals(write_lock_holder.event.uuid))
         {
             val.write(dirty_val.val);
             write_lock_holder= null;
@@ -573,7 +573,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# backout after it's
         read_lock_holders.remove(active_event.uuid);
         if ((write_lock_holder != null) &&
-            (write_lock_holder.event.uuid == active_event.uuid))
+            write_lock_holder.event.uuid.equals(active_event.uuid))
         {
             write_lock_holder = null;
         }
