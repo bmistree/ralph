@@ -138,8 +138,19 @@
       <arg line="emit_test_package"/>
       <arg line="ForListTest"/>
     </exec>
+
+    <echo message="${line.separator}Emitting for_map.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/for_map.rph"/>
+      <arg line="${ralph_emitted.dir}/ForMapTest.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="ForMapTest"/>
+    </exec>
+    
   </target>
 
+  
   <target name="ralph_to_byte_code" depends="init,compile_libs" description="compile ralph files">
     <!-- Compile all ralph java to bytecode -->
     <javac
@@ -180,7 +191,7 @@
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
-         run_ListTest,run_AtomicListTest">
+         run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest">
   </target>
 
   
@@ -332,6 +343,21 @@
     </java>
   </target>
 
+  <!-- For map test -->
+  <target
+      name="run_ForMapTest"
+      depends="compile_ralph_tests"
+      description="Test for loop on maps.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ForMap"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   
   
   <!-- Delete the build directories -->

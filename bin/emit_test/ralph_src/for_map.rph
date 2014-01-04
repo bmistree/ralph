@@ -1,0 +1,32 @@
+Endpoint MapEndpoint
+{
+    Map(from: Number, to: Number) number_map;
+    TVar Map(from: Number, to: TVar Number) atomic_number_map;
+    
+    insert_number(Number index,Number value) 
+    {
+        number_map.set(index,value);
+    }
+
+    sum_map_numbers() returns Number
+    {
+        Number to_return = 0;
+        for (Number number_index in number_map)
+            to_return = to_return + number_map.get(number_index);
+        return to_return;
+    }
+
+    atomic_insert_number(Number index,TVar Number value) 
+    {
+        number_map.set(index,value);
+    }
+
+    atomic_sum_map_numbers() returns Number
+    {
+        Number to_return = 0;
+        for (Number number_index in number_map)
+            to_return = to_return + number_map.get(number_index);
+        return to_return;
+    }
+    
+}
