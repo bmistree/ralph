@@ -392,14 +392,12 @@ class ForNode(_AstNode):
         self,variable_type_node,variable_node,in_what_node,
         statement_node,line_number):
 
-        # for ( [variable_type_node] variable_node in in_what_node)
+        # for ( variable_type_node variable_node in in_what_node)
         #    statement_node
         # note: may be None if the variable already existed
         super(ForNode,self).__init__(ast_labels.FOR,line_number)
 
-        if variable_type_node is not None:
-            self.variable_type_node = variable_type_node
-            
+        self.variable_type_node = variable_type_node
         self.variable_node = variable_node
 
         # for time-being, only allowing single identifiers to be

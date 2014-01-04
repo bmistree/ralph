@@ -377,21 +377,13 @@ def p_ElseStatement(p):
 def p_ForStatement(p):
     '''
     ForStatement : FOR LEFT_PAREN VariableType Identifier IN Expression RIGHT_PAREN Statement
-                 | FOR LEFT_PAREN Variable IN Expression RIGHT_PAREN Statement
     '''
     line_number = p.lineno(1)
-    if len(p) == 9:
-        # declaring variable locally
-        variable_type_node = p[3]
-        variable_node = p[4]
-        in_what_node = p[6]
-        statement_node = p[8]
-    else:
-        # using existing variable.
-        variable_type_node = None
-        variable_node = p[3]
-        in_what_node = p[5]
-        statement_node = p[7]
+    # declaring variable locally
+    variable_type_node = p[3]
+    variable_node = p[4]
+    in_what_node = p[6]
+    statement_node = p[8]
     p[0] = ForNode(
         variable_type_node,variable_node,in_what_node,statement_node,line_number)
 
