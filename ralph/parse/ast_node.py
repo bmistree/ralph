@@ -397,39 +397,39 @@ class ForNode(_AstNode):
         # note: may be None if the variable already existed
         super(ForNode,self).__init__(ast_labels.FOR,line_number)
 
-        self.declaration_statement_node = None
         if variable_type_node is not None:
-            self.declaration_statement_node = (
-                DeclarationStatementNode(
-                    variable_node,variable_type_node))
+            self.variable_type_node = variable_type_node
             
         self.variable_node = variable_node
+
+        # for time-being, only allowing single identifiers to be
+        if self.variable_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+            raise TypeCheckException(
+                self.line_number,
+                'For loop requires a single identifier in predicate')
+        
         self.in_what_node = in_what_node
         self.statement_node = statement_node
         
     def type_check_pass_one(self,struct_types_ctx):
-        if self.declaration_statement_node is not None:
-            self.declaration_statement_node.type_check_pass_one(struct_types_ctx)
+        self.variable_type_node.type_check_pass_one(struct_types_ctx)
         self.variable_node.type_check_pass_one(struct_types_ctx)
         self.in_what_node.type_check_pass_one(struct_types_ctx)
         self.statement_node.type_check_pass_one(struct_types_ctx)
-
         
     def type_check_pass_two(self,type_check_ctx):
-        if self.declaration_statement_node is not None:
-            self.declaration_statement_node.type_check_pass_two(type_check_ctx)
-            type_check_ctx.push_scope()
-            type_check_ctx.add_var_name(
-                #variable node is an identifier
-                self.variable_node.value,
-                self.variable_node)
+        type_check_ctx.push_scope()
+        type_check_ctx.add_var_name(
+            #variable node is an identifier
+            self.variable_node.value,
+            self.variable_node)
+        self.variable_type_node.type_check_pass_two(type_check_ctx)
 
         self.variable_node.type_check_pass_two(type_check_ctx)
         self.in_what_node.type_check_pass_two(type_check_ctx)
         self.statement_node.type_check_pass_two(type_check_ctx)
 
-        if self.declaration_statement_node is not None:
-            type_check_ctx.pop_scope()
+        type_check_ctx.pop_scope()
         
             
 class MethodDeclarationArgNode(_AstNode):

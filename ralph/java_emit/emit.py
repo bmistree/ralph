@@ -1157,6 +1157,8 @@ def emit_statement(emit_ctx,statement_node):
             internal_var_name += '.get_val(_active_event)'
         return internal_var_name
 
+    elif statement_node.label == ast_labels.FOR:
+        return emit_for_statement(statement_node,emit_ctx)
     elif statement_node.label == ast_labels.METHOD_CALL:
         # FIXME: Need to handle method calls on objects as well
         method_text = emit_statement(
@@ -1392,4 +1394,59 @@ def emit_dot_statement(emit_ctx,dot_node):
         raise InternalEmitException(
             'Unknown dot statement: not dot on map or struct.')
         
+    return to_return
+
+
+def emit_for_statement(for_node,emit_ctx):
+    '''
+    @returns {String}
+    '''
+    # first add a scope so that any variable decalred in the for
+    # loop's predicate will only be local to the for loop.
+    to_return = '_ctx.var_stack.push(false);\n'
+    emit_ctx.push_scope()
+
+    java_type_statement_text = emit_ralph_wrapped_type(
+        for_node.variable_type_node.type)
+    
+    # add new variable to emit_ctx stack
+    emit_ctx.add_var_name(for_node.variable_node.value)
+    internal_var_name_text = emit_ctx.lookup_internal_var_name(
+        for_node.variable_node.value)
+
+    # predicate of for loop
+
+    # identifier iterating over should not use its get_val (see
+    # comments about assignment)
+    in_statement_text = emit_statement(emit_ctx,for_node.in_what_node)
+    # using for predicate because cannot perform cast of ArrayList<T>
+    # to ArrayList<Y>.  Top of for loop casts __%s to %s.
+    to_return += (
+        'for (RalphObject __%s : %s.get_iterable(_active_event))'
+        % (internal_var_name_text,
+           in_statement_text))
+
+    # statement body
+    statement_body_text = emit_statement(emit_ctx,for_node.statement_node)
+    internal_statement_text = '''
+// casting back from RalphObject to actual object that it holds.
+// cannot perform cast in for predicate.
+%s %s = (%s) __%s;
+// for body
+%s;
+'''  % (#lhs of =
+        java_type_statement_text,internal_var_name_text,
+        # rhs of =
+        java_type_statement_text,internal_var_name_text,
+        # for body
+        statement_body_text)
+    
+    to_return += '''
+{
+%s
+}
+''' % indent_string(internal_statement_text)
+       
+    emit_ctx.pop_scope()
+    to_return += '_ctx.var_stack.pop();\n'
     return to_return
