@@ -2,6 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
@@ -187,15 +188,15 @@ public class RalphInternalMap<K,V,D>
     }
 
     @Override
-    public ArrayList<K> get_keys(ActiveEvent active_event)
+    public Set<K> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val = get_val_read(active_event);
-        
-        ArrayList<K> to_return = new ArrayList<K>(wrapped_val.val.keySet());
+        Set<K> to_return = wrapped_val.val.keySet();
         check_immediate_commit(active_event);
         return to_return;
     }
+    
 
     @Override
     public void remove(ActiveEvent active_event, K key_to_delete)

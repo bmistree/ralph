@@ -2,6 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
@@ -162,11 +163,12 @@ public class AtomicInternalMap<K,V,D>
     }
 
     @Override
-    public ArrayList<K> get_keys(ActiveEvent active_event)
+    public Set<K> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
-        return internal_map.get_keys(active_event);
+        return internal_map.get_iterable(active_event);
     }
+    
 
     @Override
     public void remove(ActiveEvent active_event, K key_to_delete)

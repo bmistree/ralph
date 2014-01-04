@@ -1396,6 +1396,40 @@ def emit_dot_statement(emit_ctx,dot_node):
         
     return to_return
 
+def emit_for_loop_cast_line_list(
+    internal_var_name_text,variable_type_node):
+    '''
+    cannot put ralph variables directly in predicate of for loop,
+    because of casting issue with Java collections.  This takes a
+    member of the collection and individually casts it to its
+    appropriate value as the first line of the for loop for lists.
+    Sister method emit_for_loop_cast_line_map does same thing,
+    but for map keys.
+    '''
+    java_type_statement_text = emit_ralph_wrapped_type(
+        variable_type_node.type)
+    return (
+        '%s %s = (%s) __%s;' %
+        ( #lhs of =
+            java_type_statement_text,internal_var_name_text,
+            # rhs of =
+            java_type_statement_text,internal_var_name_text))
+def emit_for_loop_cast_line_map(
+    internal_var_name_text,variable_type_node):
+    '''
+    @see emit_internal_for_statement_for_list
+    
+    Big difference between list and map is that map should hold a raw
+    Java boxed value that needs to get wrapped in Ralph object
+    '''
+    java_type_statement_text = emit_ralph_wrapped_type(
+        variable_type_node.type)
+    internal_type = emit_internal_type(variable_type_node.type)
+    return (
+        '%s %s = new %s("",false,(%s)__%s); ' %
+        (java_type_statement_text,internal_var_name_text,
+         java_type_statement_text,internal_type,
+         internal_var_name_text))
 
 def emit_for_statement(for_node,emit_ctx):
     '''
@@ -1406,15 +1440,23 @@ def emit_for_statement(for_node,emit_ctx):
     to_return = '_ctx.var_stack.push(false);\n'
     emit_ctx.push_scope()
 
-    java_type_statement_text = emit_ralph_wrapped_type(
-        for_node.variable_type_node.type)
     
     # add new variable to emit_ctx stack
     emit_ctx.add_var_name(for_node.variable_node.value)
     internal_var_name_text = emit_ctx.lookup_internal_var_name(
         for_node.variable_node.value)
 
-    # predicate of for loop
+    # predicate of for loop is different for lists and maps
+    if isinstance(for_node.in_what_node.type,ListType):
+        cast_line = emit_for_loop_cast_line_list(
+            internal_var_name_text,for_node.variable_type_node)
+    elif isinstance(for_node.in_what_node.type,MapType):
+        cast_line = emit_for_loop_cast_line_map(
+            internal_var_name_text,for_node.variable_type_node)
+    else:
+        raise InternalEmitException(
+            'Running for loop over non-map/-list is disallowed.')
+        
 
     # identifier iterating over should not use its get_val (see
     # comments about assignment)
@@ -1422,7 +1464,7 @@ def emit_for_statement(for_node,emit_ctx):
     # using for predicate because cannot perform cast of ArrayList<T>
     # to ArrayList<Y>.  Top of for loop casts __%s to %s.
     to_return += (
-        'for (RalphObject __%s : %s.get_iterable(_active_event))'
+        'for (Object __%s : %s.get_iterable(_active_event))'
         % (internal_var_name_text,
            in_statement_text))
 
@@ -1431,13 +1473,10 @@ def emit_for_statement(for_node,emit_ctx):
     internal_statement_text = '''
 // casting back from RalphObject to actual object that it holds.
 // cannot perform cast in for predicate.
-%s %s = (%s) __%s;
+%s;
 // for body
 %s;
-'''  % (#lhs of =
-        java_type_statement_text,internal_var_name_text,
-        # rhs of =
-        java_type_statement_text,internal_var_name_text,
+'''  % (cast_line,        
         # for body
         statement_body_text)
     

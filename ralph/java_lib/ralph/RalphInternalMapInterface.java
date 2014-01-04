@@ -2,6 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -38,7 +39,7 @@ public interface RalphInternalMapInterface<K,V,D>
     public Double get_len_boxed(ActiveEvent active_event) 
         throws BackoutException;
     
-    public ArrayList<K> get_keys(ActiveEvent active_event)
+    public Set<K> get_iterable(ActiveEvent active_event)
         throws BackoutException;
     
     public void remove(ActiveEvent active_event, K key_to_delete)
