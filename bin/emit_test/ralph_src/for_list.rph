@@ -1,0 +1,17 @@
+Endpoint ListEndpoint
+{
+    List(element: Number) number_list;
+    
+    append_number(Number value) 
+    {
+        number_list.append(value);
+    }
+
+    sum_list_numbers() returns Number
+    {
+        Number to_return = 0;
+        for (Number number_val in number_list)
+            to_return = to_return + number_val;
+        return to_return;
+    }
+}
