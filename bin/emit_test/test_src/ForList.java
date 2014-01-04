@@ -25,6 +25,7 @@ public class ForList
                 dummy_host_uuid,
                 new SingleSideConnection());
 
+            /** Check on non-atomic list */
             // append to end of list
             double sum_of_values_in_list = 0;
             for (int i = 5; i < 20; ++i)
@@ -36,6 +37,21 @@ public class ForList
             // calculate sum
             if (endpt.sum_list_numbers().doubleValue() != sum_of_values_in_list)
                 return false;
+
+
+            /** Check on atomic list */
+            // append to end of atomic list
+            sum_of_values_in_list = 0;
+            for (int i = 5; i < 20; ++i)
+            {
+                Double to_insert = new Double((double)i);
+                sum_of_values_in_list += to_insert;
+                endpt.atomic_append_number(to_insert);
+            }
+            // calculate sum
+            if (endpt.atomic_sum_list_numbers().doubleValue() != sum_of_values_in_list)
+                return false;
+            
             return true;
         }
         catch(Exception _ex)
