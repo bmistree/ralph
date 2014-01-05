@@ -1,4 +1,4 @@
-from deps.ply.ply import lex
+from deps.ply import lex
 from ralph.common.compiler_exceptions import CompilerException
 
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
