@@ -1,2 +1,5 @@
 *.pyc
 *.class
+parser.out
+parsetab.py
+ralph_emitted
