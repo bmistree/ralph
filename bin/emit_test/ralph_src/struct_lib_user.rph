@@ -1,0 +1,20 @@
+Struct SomeStruct alias 'StructLib.SomeStruct'
+{
+    Text internal_text;
+}
+
+Endpoint StructUser
+{
+    Struct SomeStruct internal_struct;
+
+    set_struct_text(Text new_text)
+    {
+        internal_struct.internal_text = new_text;
+    }
+
+    get_struct_text() returns Text
+    {
+        return internal_struct.internal_text;
+    }
+
+}

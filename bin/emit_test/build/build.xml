@@ -147,6 +147,25 @@
       <arg line="emit_test_package"/>
       <arg line="ForMapTest"/>
     </exec>
+
+    <echo message="${line.separator}Emitting struct_lib.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/struct_lib.rph"/>
+      <arg line="${ralph_emitted.dir}/StructLib.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="StructLib"/>
+    </exec>
+
+    <echo message="${line.separator}Emitting struct_lib_user.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/struct_lib_user.rph"/>
+      <arg line="${ralph_emitted.dir}/StructLibUser.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="StructLibUser"/>
+    </exec>
+
     
   </target>
 
@@ -191,7 +210,8 @@
         "run_BasicSetterGetter, run_BasicInternalMethodCall,
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
-         run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest">
+         run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
+         run_StructLibraries">
   </target>
 
   
@@ -357,6 +377,18 @@
     </java>
   </target>
 
+  <target
+      name="run_StructLibraries"
+      depends="compile_ralph_tests"
+      description="Tests that can import a struct from another library.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.StructLibraries"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   

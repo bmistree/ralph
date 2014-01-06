@@ -1,0 +1,4 @@
+Struct SomeStruct
+{
+    Text internal_text;
+}
