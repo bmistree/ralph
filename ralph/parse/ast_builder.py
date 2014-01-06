@@ -47,7 +47,8 @@ def p_StructDefinition(p):
     else:
         struct_body_node = struct_body_node = p[6]
         # should contain just a regular python string
-        alias_name = p[3]
+        alias_name_node = p[4]
+        alias_name = alias_name_node.value
 
     p[0] = StructDefinitionNode(
         struct_name_node,struct_body_node,alias_name,line_number)
