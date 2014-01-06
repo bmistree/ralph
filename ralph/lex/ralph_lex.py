@@ -160,7 +160,8 @@ class LexStateMachine():
                 returner.type = SKIP_TOKEN_TYPE
             else:
                 err_msg = generate_token_err_msg(toke)
-                raise LexException(generate_type_error(err_msg,toke))
+                line_num,err_msg = generate_type_error(err_msg,toke)
+                raise LexException(line_num,err_msg)
 
         #adjust state machine
         if self.in_multi_line_string:
@@ -198,16 +199,17 @@ class LexStateMachine():
             if toke_type == "MULTI_LINE_COMMENT_END":
                 err_msg = "Cannot lex.  multi-line comment "
                 err_msg = "end occurred before multi-line begin."
-                raise LexException(generate_type_error(err_msg,toke))
+                line_num, err_text = generate_type_error(err_msg,toke)
+                raise LexException(line_num,err_text)
 
         if returner.type == SKIP_TOKEN_TYPE:
             return None
         return returner
 
-    
+
 def generate_type_error(err_msg, token):
     err_body = err_msg + ' at line number ' + str(token.lexer.lineno)
-    return err_body
+    return token.lexer.lineno,err_body
 
 
 '''
@@ -362,6 +364,7 @@ def t_ALL_ELSE(t):
 
 def t_error(t):
     raise LexException(
+        t.lexer.lineno,
         "Unknown text '%s'  at line number '%s'" % (t.value,t.lexer.lineno))
 
 
