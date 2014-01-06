@@ -69,8 +69,8 @@ public class %s
 
     return prog_txt
 
-def emit_internal_struct_type(struct_name):
-    return '_Internal' + struct_name
+def emit_internal_struct_type(struct_type):
+    return struct_type.prepend_to_name('_Internal')
 
 def emit_struct_definition(struct_name,struct_type):
     '''
@@ -78,10 +78,16 @@ def emit_struct_definition(struct_name,struct_type):
     class.  (Call wrapper class' get_val and set_val to access the
     internal values of the struct.)
     '''
-    dw_constructor_text = emit_struct_data_wrapper_constructor(struct_name)
-    external_struct_definition_text = emit_struct_wrapper(struct_name)
+
+    # do not emit aliased structs.  they are defined in other, already
+    # emitted files.
+    if struct_type.alias_name is not None:
+        return ''
+    
+    dw_constructor_text = emit_struct_data_wrapper_constructor(struct_type)
+    external_struct_definition_text = emit_struct_wrapper(struct_type)
     internal_struct_definition_text = emit_internal_struct(struct_type)
-    struct_map_wrapper = emit_struct_map_wrapper(struct_name)
+    struct_map_wrapper = emit_struct_map_wrapper(struct_type)
     
     return (
         dw_constructor_text + '\n' +
@@ -90,11 +96,12 @@ def emit_struct_definition(struct_name,struct_type):
         struct_map_wrapper)
 
 
-def emit_struct_data_wrapper_constructor(struct_name):
+def emit_struct_data_wrapper_constructor(struct_type):
     '''
     Each user-defined struct has its own data wrapper const
     '''
-    internal_struct_name = emit_internal_struct_type(struct_name)
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
     data_wrapper_type_text = (
         'ValueTypeDataWrapperFactory<%s,%s>' %
         (internal_struct_name,internal_struct_name))
@@ -107,8 +114,9 @@ final static %s
     return data_wrapper_constructor_text
     
 
-def emit_struct_map_wrapper(struct_name):
-    internal_struct_name = emit_internal_struct_type(struct_name)
+def emit_struct_map_wrapper(struct_type):
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
     
     # ensure locked wrappers
     locked_wrappers_text = '''
@@ -125,23 +133,27 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
        internal_struct_name,internal_struct_name,internal_struct_name,
        struct_name)
 
-    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(struct_name)
+    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
+        struct_type)
     locked_wrappers_text += '''
 private final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
 ''' % (struct_name, struct_locked_wrapper_name,struct_name)
 
     return locked_wrappers_text
-       
-def emit_struct_locked_map_wrapper_name(struct_name):
-    return 'STRUCT_LOCKED_MAP_WRAPPER__' + struct_name
 
-def emit_struct_wrapper(struct_name):
+
+def emit_struct_locked_map_wrapper_name(struct_type):
+    return struct_type.prepend_to_name(
+        'STRUCT_LOCKED_MAP_WRAPPER__')
+
+def emit_struct_wrapper(struct_type):
     '''
     Each user-defined struct gets wrapped by a locked variable that
     points to an internal struct object that has individual fields
     that are multithreaded objects and singlethreaded objects.
     '''
-    internal_struct_name = emit_internal_struct_type(struct_name)
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
     
     ##### External wrapped struct
     external_struct_definition_text = '''
@@ -205,7 +217,7 @@ def emit_internal_struct(struct_type):
     unlocked variables.
     '''
     internal_struct_name = emit_internal_struct_type(
-        struct_type.struct_name)
+        struct_type)
     
     ### Internal wrapped struct    
     internal_struct_definition_text = '''
@@ -320,7 +332,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
-                method_declaration_arg_node.type.struct_name)
+                method_declaration_arg_node.type)
             # for struct types, just push the struct variable directly
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
@@ -727,7 +739,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     # emit for structs
     if isinstance(type_object,StructType):
         return type_object.struct_name
-    
+
     # emit for others
     if isinstance(type_object,BasicType):
         typer = type_object.basic_type
@@ -869,8 +881,8 @@ def list_map_wrappers(element_type):
         element_type_wrapper = 'BaseAtomicWrappers.' + element_type_wrapper
 
     elif isinstance(element_type,StructType):
-        struct_name = element_type.struct_name
-        element_type_wrapper = emit_struct_locked_map_wrapper_name(struct_name)
+        element_type_wrapper = emit_struct_locked_map_wrapper_name(
+            element_type)
     else:
         # FIXME: Need to emit wrappers for non-struct/non-basic
         # types.  (Eg., map types, list types.)
@@ -992,7 +1004,7 @@ def emit_internal_type(type_object):
         
         # emit for struct type
         if isinstance(type_object,StructType):
-            return emit_internal_struct_type(type_object.struct_name)
+            return emit_internal_struct_type(type_object)
         
         # emit for basic types
         if isinstance(type_object,BasicType):

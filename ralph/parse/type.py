@@ -29,6 +29,26 @@ class StructType(object):
         if self.alias_name is not None:
             self.struct_name = alias_name
 
+    def prepend_to_name(self,to_prepend):
+        '''Frequently use struct_name during emitting. If struct is
+        aliased though, then do not always want to prepend in front of
+        struct name.  This is because alias as form a.b.c.d; actually
+        want to prepend in front of d.
+        '''
+        front = ''
+        struct_name = self.struct_name
+        if self.alias_name is not None:
+            # means that we're dealing with an aliased struct.  Format of
+            # alias commands (currently) can be a.b.c.actual_struct_name.
+            # need to insert _Internal after last . if it exists
+            last_index_of = struct_name.rfind('.')
+            if last_index_of != -1:
+                front = struct_name[0:last_index_of+1]
+                struct_name = struct_name[last_index_of+1:]
+
+        return front + to_prepend + struct_name
+
+
         
     def clone(self,is_tvar):
         '''Each user-defined struct has one canonical type.  When
