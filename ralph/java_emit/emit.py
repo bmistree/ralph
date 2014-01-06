@@ -136,7 +136,8 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
         struct_type)
     locked_wrappers_text += '''
-private final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
+// making this public in case external code needs to reference it.
+public final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
 ''' % (struct_name, struct_locked_wrapper_name,struct_name)
 
     return locked_wrappers_text
