@@ -62,9 +62,13 @@ def p_EndpointList(p):
     '''
     EndpointList : EndpointList EndpointDefinition 
                  | EndpointDefinition
+                 | Empty
     '''
     if len(p) == 2:
-        endpoint_definition_node = p[1]
+        if is_empty(p[1]):
+            endpoint_definition_node = None
+        else:
+            endpoint_definition_node = p[1]
         endpoint_list_node = EndpointListNode(endpoint_definition_node)
     else:
         endpoint_list_node = p[1]

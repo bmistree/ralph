@@ -1019,7 +1019,8 @@ class EndpointListNode(_AstNode):
         super(EndpointListNode,self).__init__(
             ast_labels.ENDPOINT_LIST_STATEMENT,0)
 
-        self._append_child(endpoint_definition_node)
+        if endpoint_definition_node is not None:
+            self._append_child(endpoint_definition_node)
 
     def append_endpoint_definition(self,endpoint_definition_node):
         self._append_child(endpoint_definition_node)
