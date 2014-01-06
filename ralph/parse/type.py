@@ -11,16 +11,24 @@ class Type(object):
         return {}
 
 class StructType(object):
-    def __init__(self,struct_name,name_to_field_type_dict=None,is_tvar=None):
+    def __init__(
+            self,struct_name,name_to_field_type_dict=None,is_tvar=None,
+            alias_name=None):
         '''@see constructor for map type
         '''
         self.struct_name = struct_name
         if name_to_field_type_dict is not None:
-            self.update_struct_type(name_to_field_type_dict,is_tvar)
+            self.update_struct_type(
+                name_to_field_type_dict,is_tvar,alias_name)
 
-    def update_struct_type(self,name_to_field_type_dict,is_tvar):
+    def update_struct_type(
+            self,name_to_field_type_dict,is_tvar,alias_name):
         self.name_to_field_type_dict = name_to_field_type_dict
         self.is_tvar = is_tvar
+        self.alias_name = alias_name
+        if self.alias_name is not None:
+            self.struct_name = alias_name
+
         
     def clone(self,is_tvar):
         '''Each user-defined struct has one canonical type.  When
@@ -29,7 +37,8 @@ class StructType(object):
         that node's type field.
         '''
         return StructType(
-            self.struct_name,dict(self.name_to_field_type_dict),is_tvar)
+            self.struct_name,dict(self.name_to_field_type_dict),
+            is_tvar,self.alias_name)
 
     def __str__(self):
         tvar_string = 'TVar'

@@ -39,7 +39,8 @@ reserved = {
     'TVar' : 'TVAR',
     'partner': 'PARTNER',
     'List': 'LIST_TYPE',
-    'element': 'ELEMENT'
+    'element': 'ELEMENT',
+    'alias': 'ALIAS'
     }
 
 
