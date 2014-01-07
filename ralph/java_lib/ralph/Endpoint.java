@@ -137,9 +137,11 @@ public abstract class Endpoint
         _host_uuid = host_uuid;
 
         _conn_obj.register_endpoint(this);
-        
-        Util.logger_warn("Must add heartbeat code back in.");
-        Util.logger_warn("Skipping ready wait");
+
+        // FIXME: See issues #13 and #14 in Github.  Should have
+        // ready-wait and heartbeat code in Endpoint constructor.
+        // Util.logger_warn("Must add heartbeat code back in.");
+        // Util.logger_warn("Skipping ready wait");
         /*
           # start heartbeat thread
           self._heartbeat = Heartbeat(socket=self._conn_obj, 
