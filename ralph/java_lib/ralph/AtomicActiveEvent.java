@@ -411,22 +411,23 @@ public class AtomicActiveEvent extends ActiveEvent
         boolean can_commit = true;
         _touched_objs_lock();
         {
-            Util.logger_warn("\nMay want to perform this call in parallel\n");
+            // Added issue #11: May want to perform this call in parallel
             for (AtomicObject obj : touched_objs.values())
                 can_commit = can_commit && obj.first_phase_commit(this);
         }
         _touched_objs_unlock();
 
-        Util.logger_warn(
-            "Not able to backout (eg., if another host issued backout call " +
-            "until pushed changes to hardware).");
         
+        // Placed above inside _lock because do not want to backout
+        // (eg., if another host issued backout call until pushed
+        // changes to hardware) until push changes to hardware.
         _unlock();
 
-
-        Util.logger_warn(
-            "\nMust check that returning false will automatically begin " +
-            "process of backing out this event as well.\n");
+        // Added issue #12 for checking that this active event will be
+        // handled correctly on hardware failure.
+        // Util.logger_warn(
+        //     "\nMust check that returning false will automatically begin " +
+        //     "process of backing out this event as well.\n");
         if (! can_commit)
             return false;
         
