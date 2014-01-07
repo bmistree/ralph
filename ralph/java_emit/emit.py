@@ -1117,7 +1117,6 @@ def emit_statement(emit_ctx,statement_node):
             }
             // FIXME: should actually check that the commit went through
             // before breaking.
-            System.out.println("\\nWarn: must cycle in case atomic fails\\n");
             break;
         }
         System.out.println("\\nWARNING: do not know how to handle failed first commit.\\n");

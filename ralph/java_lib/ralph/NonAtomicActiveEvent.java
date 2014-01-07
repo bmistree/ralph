@@ -77,12 +77,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
     public ActiveEvent clone_atomic() throws StoppedException
     {
-        Util.logger_warn(
-            "Warning: may want atomics to inherit priority of parents.");
-        Util.logger_warn(
-            "Warning: because atomic events must be preceded " +
-            "by non-atomic events, currently, can never have a " +
-            "primary atomic event.");
         return event_map.create_root_atomic_event(this);
     }
     public ActiveEvent restore_from_atomic()
