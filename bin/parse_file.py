@@ -8,14 +8,14 @@ sys.path.append(base_path)
 from ralph.parse.ast_builder import construct_parser
 
 
-def parse(filename):
+def parse(filename,suppress_warnings=True):
     file_fd = open(filename,'r')
     prog_text = file_fd.read()
     file_fd.close()
 
-    parser = construct_parser(False)
+    parser = construct_parser(suppress_warnings)
     return parser.parse(prog_text)
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    parse(filename)
+    parse(filename,False)
