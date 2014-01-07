@@ -307,9 +307,8 @@ def convert_args_text_for_dispatch(method_declaration_node):
     how to name transalted arg (eg., "arg0" above instead of "arg1" or
     "arg2".)
     '''
-    print (
-        'FIXME: when deserialize should deserialize into ' +
-        'a java native object instead of a locked object.')
+    #FIXME: when deserialize should deserialize into a java native
+    #object instead of a locked object.
 
     method_declaration_arg_node_list = (
         method_declaration_node.method_signature_node.method_declaration_args)
@@ -947,7 +946,7 @@ def emit_map_type(type_object):
         if type_object.is_tvar:
             map_var_type = 'AtomicMapVariable'
 
-        print 'May not be dewaldo-ifying maps correctly'
+        # FIXME: May not be dewaldo-ifying maps correctly
         to_return = (
             '%s<%s,%s,%s>' %
             (map_var_type,key_internal_type_text,
@@ -971,7 +970,7 @@ def emit_list_type(type_object):
         if type_object.is_tvar:
             list_var_type = 'AtomicListVariable'
 
-        print 'May not be dewaldo-ifying lists correctly'
+        # FIXME: May not be dewaldo-ifying lists correctly
         to_return = (
             '%s<%s,%s>' %
             (list_var_type,element_internal_type_text,
