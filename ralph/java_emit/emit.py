@@ -761,9 +761,9 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
             return 'AtomicTextVariable'
         return 'NonAtomicTextVariable'
 
-    
-    # FIXME: construct useful type from type object
-    return '/** Fixme: must fill in emit_wrapped_type method.*/'
+    raise InternalEmitException(
+        'Unknown type to emit in emit_ralph_wrapped_type')
+
 
 
 def construct_new_expression(type_object,initializer_node,emit_ctx):
