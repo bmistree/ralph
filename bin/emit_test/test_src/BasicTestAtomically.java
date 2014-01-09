@@ -44,6 +44,11 @@ public class BasicTestAtomically
             endpt.same_method_double_atomically();
             endpt.same_method_double_atomically();
 
+            double to_set_to = 6;
+            endpt.nested_atomically(to_set_to - 3.);
+            if (endpt.get_number().doubleValue() != to_set_to)
+                return false;
+            
         }
         catch (Exception _ex)
         {

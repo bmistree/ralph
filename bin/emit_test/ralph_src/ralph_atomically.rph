@@ -60,4 +60,21 @@ Endpoint TestAtomically
         }
         return to_return;
     }
+    
+    nested_atomically (Number to_set_to_minus_three) 
+    {
+        atomically
+        {
+            atomically
+            {
+                atomically
+                {
+                    internal_number = to_set_to_minus_three;
+                }
+
+                internal_number = internal_number + 1;
+            }
+            internal_number = internal_number + 2;
+        }
+    }
 }
