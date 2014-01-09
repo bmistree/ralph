@@ -8,7 +8,7 @@ public class BasicTestAtomically
 {
     public static void main(String[] args)
     {
-        if (BasicSetterGetter.run_test())
+        if (BasicTestAtomically.run_test())
             System.out.println("\nSUCCESS in BasicTestAtomically\n");
         else
             System.out.println("\nFAILURE in BasicTestAtomically\n");
@@ -42,6 +42,7 @@ public class BasicTestAtomically
 
             endpt.same_method_double_atomically();
             endpt.same_method_double_atomically();
+
         }
         catch (Exception _ex)
         {
