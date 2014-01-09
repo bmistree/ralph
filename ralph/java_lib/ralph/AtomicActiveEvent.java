@@ -449,6 +449,25 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
 
+    /**
+       @see comment in ActiveEvent.java.
+     */
+    @Override
+    public void handle_backout_exception(BackoutException be)
+        throws BackoutException
+    {
+        _lock();
+        boolean should_reraise = (atomic_reference_counts != 0);
+        if (should_reraise)
+            --atomic_reference_counts;
+        _unlock();
+
+        if (should_reraise)
+            throw be;
+    }
+
+    
+
     public void second_phase_commit()
     {
         _lock();

@@ -1115,20 +1115,28 @@ def emit_statement(emit_ctx,statement_node):
         _active_event = _active_event.clone_atomic();
 
         // what to actually execute inside of atomic block
+        try {
 %s
+        } catch (BackoutException _be) {
+              _active_event.handle_backout_exception(_be);
+        }
+
 
         // FIXME: may want to mangle this further
         FirstPhaseCommitResponseCode __ralph_internal_resp_code =
             _active_event.begin_first_phase_commit();
+
         if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
             break;
         else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
         {
             // means that the call to 
             try {
+
                 // FIXME: should properly mangle __op_result__
                 RootCallResult.ResultType __op_result__ =
                     ((RootEventParent)_active_event.event_parent).event_complete_queue.take();
+
                 if (__op_result__ == RootCallResult.ResultType.COMPLETE)
                     break;
             } catch (InterruptedException _ex) {

@@ -107,6 +107,13 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
 
+    @Override
+    public void handle_backout_exception(BackoutException be)
+        throws BackoutException
+    {
+        Util.logger_assert(
+            "\nShould never get a backout exception in NonAtomic event.\n");
+    }
     
     /**
      * If can enter Should send a message back to parent that 

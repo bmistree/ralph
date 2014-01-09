@@ -136,6 +136,19 @@ public abstract class ActiveEvent
      */
     public abstract boolean immediate_complete();
 
+
+    /**
+       When we are executing an atomically block, we may need to throw
+       a backout exception.  If we are in the root atomically block,
+       this exception should cause the entire event to backout and
+       retry.  If we are not at the root atomically block, this should
+       re-raise the exception until we get to the root atomically
+       block, which should not re-raise the exception and continue
+       with normal program flow.
+     */
+    public abstract void handle_backout_exception(BackoutException be)
+        throws BackoutException;
+
     
     /**
        @param {String or None} func_name --- When func_name is None,
