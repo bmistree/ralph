@@ -66,20 +66,32 @@ public abstract class ActiveEvent
        For each atomic block, emitter creates an atomic event from
        existing event.  Then, at end of atomic block, call
        begin_first_phase_commit.  If begin_first_phase_commit returns
-       true, should read event parent's completion queue to see if
-       commit was successful or unsuccessful.  If returns false,
-       likely trying to commit a nested transaction, should not read
-       from event parent queue because transaction is incomplete and
-       will read it later.
+       SUCCEEDED, should read event parent's completion queue to see
+       if commit was successful or unsuccessful.  If returns FAILED,
+       means that the commit was already backed out and that it
+       failed.  If returns SKIP, likely trying to commit a nested
+       transaction, should not read from event parent queue because
+       transaction is incomplete and will read it later.
+
+       Note: just because the call to begin_first_phase_commit returns
+       SUCCEEDED, does not mean that the actual commit succeeded, it
+       just means that we were able to process the request to begin
+       the first phase of the commit.  Check results of
+       event_complete_queue in root object for whether the commit
+       actually succeded.
      */
-    public abstract boolean begin_first_phase_commit();
+    public abstract FirstPhaseCommitResponseCode begin_first_phase_commit();
+    public static enum FirstPhaseCommitResponseCode
+    {
+        FAILED, SUCCEEDED, SKIP
+    }
     
     /**
      * If can enter Should send a message back to parent that 
         
      * @param from_partner
      */
-    public abstract boolean begin_first_phase_commit(boolean from_partner);
+    public abstract FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner);
     public abstract void second_phase_commit();
 
     public abstract void add_signal_call(SignalFunction signaler);

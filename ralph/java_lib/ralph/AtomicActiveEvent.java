@@ -22,7 +22,7 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-
+import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
 public class AtomicActiveEvent extends ActiveEvent
 {
@@ -370,8 +370,9 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         return false;
     }
-	
-    public boolean begin_first_phase_commit()
+
+    @Override
+    public FirstPhaseCommitResponseCode begin_first_phase_commit()
     {
         return begin_first_phase_commit(false);
     }
@@ -381,13 +382,14 @@ public class AtomicActiveEvent extends ActiveEvent
         
      * @param from_partner
      */
-    public boolean begin_first_phase_commit(boolean from_partner)
+    @Override    
+    public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
     {
         _lock();
         if (atomic_reference_counts > 0)
         {
             _unlock();
-            return false;
+            return FirstPhaseCommitResponseCode.SKIP;
         }
 
         if (state != State.STATE_RUNNING)
@@ -399,7 +401,7 @@ public class AtomicActiveEvent extends ActiveEvent
             //# etc. as soon as we backed out telling them that they
             //# should also back out.  Do not need to send the same
             //# message again.
-            return true;
+            return FirstPhaseCommitResponseCode.FAILED;
         }
         
         //# transition into first phase commit state        
@@ -429,7 +431,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //     "\nMust check that returning false will automatically begin " +
         //     "process of backing out this event as well.\n");
         if (! can_commit)
-            return false;
+            return FirstPhaseCommitResponseCode.FAILED;
         
 
         //# do not need to acquire locks on other_endpoints_contacted
@@ -443,7 +445,7 @@ public class AtomicActiveEvent extends ActiveEvent
             //# forward commit to partner.
             partner_contacted && (! get_network_failure()),
             this);
-        return true;
+        return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
 
 

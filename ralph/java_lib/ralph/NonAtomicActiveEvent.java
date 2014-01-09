@@ -22,7 +22,7 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-
+import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
 
 public class NonAtomicActiveEvent extends ActiveEvent
@@ -99,12 +99,12 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return false;
     }
 
-	
-    public boolean begin_first_phase_commit()
+    @Override
+    public FirstPhaseCommitResponseCode begin_first_phase_commit()
     {
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
-        return true;
+        return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
 
     
@@ -113,7 +113,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
         
      * @param from_partner
      */
-    public boolean begin_first_phase_commit(boolean from_partner)
+    @Override
+    public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
     {
         return begin_first_phase_commit();
     }

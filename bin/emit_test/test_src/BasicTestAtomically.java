@@ -35,6 +35,7 @@ public class BasicTestAtomically
                     return false;
             }
 
+
             // check that can use two atomic statements in same
             // ActiveEvent.
             endpt.double_atomically();

@@ -44,6 +44,8 @@ import ralph_protobuffs.VariablesProto.Variables;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
+import RalphCallResults.RootCallResult;
 
 public class %s
 {
@@ -1107,31 +1109,46 @@ def emit_statement(emit_ctx,statement_node):
         
         return '''
 {
-    _active_event = _active_event.clone_atomic();
+    // atomically clause
     while(true)
     {
-// what to actually execute inside of atomic block
+        _active_event = _active_event.clone_atomic();
+
+        // what to actually execute inside of atomic block
 %s
-        if (_active_event.begin_first_phase_commit())
+
+        // FIXME: may want to mangle this further
+        FirstPhaseCommitResponseCode __ralph_internal_resp_code =
+            _active_event.begin_first_phase_commit();
+        if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
+            break;
+        else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
         {
+            // means that the call to 
             try {
-                ((RootEventParent)_active_event.event_parent).event_complete_queue.take();
+                // FIXME: should properly mangle __op_result__
+                RootCallResult.ResultType __op_result__ =
+                    ((RootEventParent)_active_event.event_parent).event_complete_queue.take();
+                if (__op_result__ == RootCallResult.ResultType.COMPLETE)
+                    break;
             } catch (InterruptedException _ex) {
                 // TODO Auto-generated catch block
+                // FIXME: handle InterruptedException?
                 _ex.printStackTrace();
             }
-            // FIXME: should actually check that the commit went through
-            // before breaking.
-            break;
         }
-        System.out.println("\\nWARNING: do not know how to handle failed first commit.\\n");
-        int __tmp__ = 1/0; // forces throwing an exception.
+
+        // if got here, means that this was the first atomic statement and it failed so
+        // we must retry: restore to previous nonatomicactiveevent and clone again
+        _active_event = _active_event.restore_from_atomic();
     }
     _active_event = _active_event.restore_from_atomic();
 }
 ''' % atomic_logic
 
-    
+
+
+
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
         emit_ctx.set_lhs_of_assign(True)
