@@ -105,14 +105,21 @@ def emit_struct_data_wrapper_constructor(struct_type):
     data_wrapper_type_text = (
         'ValueTypeDataWrapperFactory<%s,%s>' %
         (internal_struct_name,internal_struct_name))
-    
+
+    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
+        struct_name)
     data_wrapper_constructor_text = '''
 final static %s
-    %s_type_data_wrapper_constructor =
+    %s = 
     new %s();
-''' % (data_wrapper_type_text,struct_name,data_wrapper_type_text)
+''' % (
+        data_wrapper_type_text,data_wrapper_constructor_name,
+        data_wrapper_type_text)
     return data_wrapper_constructor_text
     
+def struct_data_wrapper_constructor_name(struct_name):
+    return '%s_type_data_wrapper_constructor' % struct_name
+
 
 def emit_struct_map_wrapper(struct_type):
     struct_name = struct_type.struct_name
@@ -161,6 +168,8 @@ def emit_struct_wrapper(struct_type):
 public static class %s extends AtomicValueVariable<%s,%s>
 {''' % (struct_name, internal_struct_name, internal_struct_name)
 
+    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
+        struct_name)
     
     external_struct_definition_constructor = '''
 public %s (String _host_uuid, boolean _peered)
@@ -169,8 +178,7 @@ public %s (String _host_uuid, boolean _peered)
         "_host_uuid",_peered,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
-        new %s(),new %s(),
-        %s_type_data_wrapper_constructor);
+        new %s(),new %s(),%s);
 }
 
 public void serialize_as_rpc_arg(
@@ -181,7 +189,8 @@ public void serialize_as_rpc_arg(
     Util.logger_assert(
         "Have not defined serializing structs as rpc arguments.");
 }
-''' % (struct_name, internal_struct_name, internal_struct_name,struct_name)
+''' % (struct_name, internal_struct_name, internal_struct_name,
+       data_wrapper_constructor_name)
     # FIXME: should define rpc serialization for structs.
 
 
@@ -198,12 +207,9 @@ public %s (
         "_host_uuid",_peered,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
-        internal_val,internal_val,
-        %s_type_data_wrapper_constructor);
+        internal_val,internal_val,%s);
 }
-''' % (struct_name,internal_struct_name,struct_name)
-    # FIXME: maybe use a method to map struct name to its data wrapper
-    # constructor
+''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
 
     external_struct_definition_text += indent_string(
         external_struct_definition_constructor +
