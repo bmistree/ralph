@@ -166,6 +166,14 @@
       <arg line="StructLibUser"/>
     </exec>
 
+    <echo message="${line.separator}Emitting interrupted_atomically.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/interrupted_atomically.rph"/>
+      <arg line="${ralph_emitted.dir}/InterruptedAtomically.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="InterruptedAtomically"/>
+    </exec>
     
   </target>
 
@@ -211,7 +219,7 @@
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
-         run_StructLibraries">
+         run_StructLibraries,run_InterruptedAtomically">
   </target>
 
   
@@ -377,6 +385,7 @@
     </java>
   </target>
 
+  <!-- Struct libraries -->
   <target
       name="run_StructLibraries"
       depends="compile_ralph_tests"
@@ -389,6 +398,21 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+  <!-- Run interrupted atomically -->
+  <target
+      name="run_InterruptedAtomically"
+      depends="compile_ralph_tests"
+      description="Tests that handles atomic events' being interrupted.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.InterruptedTestAtomically"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   
   

@@ -1,0 +1,34 @@
+
+Endpoint InterruptedAtomic
+{
+    TVar List (element: Number) atomic_list;
+
+    // To increase likelihood of getting a conflict, perform many reads on
+    // atomic_list, and then perform a write.
+    long_event_and_append() returns Number
+    {
+        // if these are different at end of simulation, it means that the event
+        // was interrupted.
+        Number non_atomic_k = 0;
+        TVar Number atomic_k = 0;
+        atomically
+        {
+            for (Number i in atomic_list)
+            {
+                for (Number j in atomic_list)
+                {
+                    non_atomic_k = non_atomic_k + i + j;
+                    atomic_k = atomic_k + i + j;
+                }
+            }
+            atomic_list.append(1);
+        }
+
+        return non_atomic_k - atomic_k;
+    }
+
+    list_size() returns Number
+    {
+        return atomic_list.size();
+    }
+}
