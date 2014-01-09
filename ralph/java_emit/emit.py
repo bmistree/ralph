@@ -1029,8 +1029,8 @@ def emit_internal_type(type_object):
         elif typer is None:
             return 'void'
 
-    # FIXME: construct useful type from type object
-    return '/** Fixme: must fill in emit_type method.*/'
+    raise InternalEmitException(
+        'Unknown type in emit_internal_type')
 
 # indices are labels; values are operators should compile to.
 NUMERICAL_ONLY_BINARY_LABELS_DICT = {
