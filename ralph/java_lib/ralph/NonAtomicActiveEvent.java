@@ -57,14 +57,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return true;
     }
 
-
-    public ActiveEvent create_new_event_for_retry(
-        RootEventParent rep, ActiveEventMap act_event_map)
-    {
-        Util.logger_assert("Retry is not currently defined for non-atomics.");
-        return null;
-    }
-    
     /**
      * @param new_priority
      */

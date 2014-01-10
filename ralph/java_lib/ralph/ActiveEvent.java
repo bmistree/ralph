@@ -31,15 +31,6 @@ public abstract class ActiveEvent
     public abstract ActiveEvent restore_from_atomic();
 
     /**
-       If an event fails and is going to be retried, we clone relevant
-       internal state using this method into a new ActiveEvent.
-
-       Note: only retrying for AtomicActiveEvents.
-     */
-    public abstract ActiveEvent create_new_event_for_retry(
-        RootEventParent rep, ActiveEventMap act_event_map);
-    
-    /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
      read or a write on a Waldo object, if this event has not
      previously performed a read or write on that object, then we

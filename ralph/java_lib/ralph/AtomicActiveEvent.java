@@ -155,16 +155,6 @@ public class AtomicActiveEvent extends ActiveEvent
     */
     private boolean _network_failure = false;
 
-    /**
-     *  # If this is a root event and it gets backed out, we want to
-     # reuse the current root event's priority/uuid.  when we
-     # backout then, we ask the active event map to generate a new
-     # root event with the correct uuid for us.  we put that event
-     # in retry_event so that it can be acccessed by emitted code.
-
-    */
-    public AtomicActiveEvent retry_event = null;
-
     
     /**
        @param {ActiveEvent} _to_restore_from_atomic --- We frequently
@@ -184,24 +174,6 @@ public class AtomicActiveEvent extends ActiveEvent
         to_restore_from_atomic = _to_restore_from_atomic;
     }
 
-
-    /**
-       Use this constructor internally from
-       create_new_event_for_retry.  Whenever we have to backout of our
-       last transaction, create a replacement of AtomicActiveEvent
-       that copies reference_counts and to_restore_from.
-     */
-    private AtomicActiveEvent (
-        EventParent _event_parent, ActiveEventMap _event_map,
-        int _atomic_reference_counts, ActiveEvent _to_restore_from_atomic)
-    {
-        event_parent = _event_parent;
-        event_map = _event_map;
-		
-        uuid = event_parent.get_uuid();
-        to_restore_from_atomic = _to_restore_from_atomic;
-        atomic_reference_counts = _atomic_reference_counts;
-    }
 
     private void _lock()
     {
@@ -237,20 +209,6 @@ public class AtomicActiveEvent extends ActiveEvent
         _unlock();
         return still_running;
     }
-
-    /**
-       The atomic part of this event failed, we've got to create a new
-       event to retry it.  This new event should preserve
-       atomic_reference_count and to_restore_from_atomic.
-     */
-    public ActiveEvent create_new_event_for_retry(
-        RootEventParent event_parent, ActiveEventMap act_event_map)
-    {
-        return new AtomicActiveEvent (
-            event_parent, act_event_map, atomic_reference_counts,
-            to_restore_from_atomic);
-    }
-    
 
     
     /**
@@ -487,7 +445,7 @@ public class AtomicActiveEvent extends ActiveEvent
         complete_commit_local();
         _unlock();
 
-        event_map.remove_event(uuid,false);
+        event_map.remove_event(uuid);
         
         //# FIXME: which should happen first, notifying others or
         //# releasing locks locally?
@@ -610,13 +568,8 @@ public class AtomicActiveEvent extends ActiveEvent
         //# 3
         rollback_unblock_waiting_queues(stop_request);
 
-        //# 4 ignore the first return arguemnt.  Second return argument
-        //# is either None (if this is not a root event) or a new root
-        //# event (if this is a root event).  @see comments on
-        //# retry_event in constructor.
-        ActiveEventTwoTuple event_map_remove_result =
-            event_map.remove_event(uuid,true);
-        retry_event = (AtomicActiveEvent)event_map_remove_result.b;
+        //# 4 remove the event.
+        event_map.remove_event(uuid);
         
         //# 5
         //# do not need to acquire locks on other_endpoints_contacted

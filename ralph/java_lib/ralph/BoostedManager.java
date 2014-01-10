@@ -75,24 +75,14 @@ public class BoostedManager
 	
     /**
        @param {UUID} completed_event_uuid
-
-       @param {bool} retry --- If the event that we are removing is
-       being removed because backout was called, we want to generate
-       a new event with a successor UUID (the same high-level bits
-       that control priority/precedence, but different low-level
-       version bits)
         
        Whenever any root event completes, this method gets called.
        If this event had been a boosted event, then we boost the next
        waiting event.  Otherwise, we remove it from the list of
        waiting uuids.
 
-       @returns {null/ActiveEvent} --- If retry is True, we
-       return a new event with successor uuid.  Otherwise, return
-       null. 
     */
-    public ActiveEvent complete_root_event(
-        String completed_event_uuid, boolean retry)
+    public void complete_root_event(String completed_event_uuid)
     {
         int counter = 0;
         int remove_counter = -1;
@@ -116,69 +106,17 @@ public class BoostedManager
         }
         /// END DEBUG
 
-        ActiveEvent replacement_event = null;
-        if (retry)
+        /*
+          we are not retrying this event: remove the event from
+          the list and if there are any other outstanding events,
+          check if they should be promoted to boosted status.
+        */
+        event_list.remove(counter);
+        if (counter == 0)
         {
-            String replacement_priority = "";
-            /*
-              in certain cases, we do not actually promote each
-              event's priority to boosted.  For instance, if the event
-              is already in process of committing.  However, if that
-              commit goes awry and we backout, we want the replacement
-              event generated to use a boosted event priority, rather
-              than its original priority.
-            */
-            if (counter == 0)
-            {
-                // new event should be boosted.
-            	
-                if( ! EventPriority.is_boosted_priority(completed_event.get_priority()))
-                {
-                    /* 
-                     * if it wasn't already boosted, that means that we
-                     tried to promote it while it was in the midst of
-                     its commit and we ignored the promotion.
-                     Therefore, we want to apply the promotion on
-                     retry.
-                    */
-                    replacement_priority =
-                        EventPriority.generate_boosted_priority(last_boosted_complete);
-                }
-                else
-                {
-                    // it was already boosted, just reuse it
-                    replacement_priority = completed_event.get_priority();
-                }
-            }
-            else
-            {
-                // it was not boosted, just increment the version number
-                replacement_priority = completed_event.get_priority();
-            }
-
-            RootEventParent rep = new RootEventParent(
-                act_event_map.local_endpoint,Util.generate_uuid(),
-                replacement_priority);
-            
-            replacement_event =
-                completed_event.create_new_event_for_retry(rep,act_event_map);
-            event_list.set(counter, replacement_event);
+            last_boosted_complete = clock.get_timestamp();
+            promote_first_to_boosted();
         }
-        else
-        {
-            /*
-              we are not retrying this event: remove the event from
-              the list and if there are any other outstanding events,
-              check if they should be promoted to boosted status.
-            */
-            event_list.remove(counter);
-            if (counter == 0)
-            {
-                last_boosted_complete = clock.get_timestamp();
-                promote_first_to_boosted();
-            }
-        }
-        return replacement_event;
     }
     
         

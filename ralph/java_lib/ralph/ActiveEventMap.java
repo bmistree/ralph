@@ -129,31 +129,17 @@ public class ActiveEventMap
     /**
      * 
      * @param event_uuid
-     * @param retry --- If retry is true, when we remove the
-     event, we create another root event whose uuid is either:
-     1) Boosted and/or
-           
-     2) Has the same highlevel bits in its uuid as the removed
-     event.  (The high level bits hold the time stamp that
-     the event began as well as whether the event is
-     boosted.)
-
-     This way, if we are removing an event because the event is
-     retrying, the event will not lose its priority in the event
-     map on retry.
-
      * 
      *  @returns --- @see remove_event_if_exists' return statement 
      */
-    public ActiveEventTwoTuple remove_event(String event_uuid, boolean retry)
+    public ActiveEvent remove_event(String event_uuid)
     {
-        return remove_event_if_exists(event_uuid, retry);
+        return remove_event_if_exists(event_uuid);
     }
 
     /**
      * 
      * @param event_uuid 
-     * @param retry --- @see remove_event
      * @return ----
      a {Event or None} --- If an event existed in the map, then
      we return it.  Otherwise, return None.
@@ -164,7 +150,7 @@ public class ActiveEventMap
      Otherwise, return None.
 
     */
-    public ActiveEventTwoTuple remove_event_if_exists(String event_uuid, boolean retry)
+    public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
         _lock();
         
@@ -174,9 +160,7 @@ public class ActiveEventMap
         if ((to_remove != null) &&
             RootEventParent.class.isInstance(to_remove.event_parent))
         {
-            successor_event = boosted_manager.complete_root_event(event_uuid,retry);
-            if (successor_event != null)
-                map.put(successor_event.uuid, successor_event);
+            boosted_manager.complete_root_event(event_uuid);
         }
 
         boolean fire_stop_complete_callback = false;
@@ -189,10 +173,10 @@ public class ActiveEventMap
         if (fire_stop_complete_callback)
             stop_callback.run();
 
-        ActiveEventTwoTuple to_return = new ActiveEventTwoTuple(to_remove,successor_event);
-        return to_return;
+        return to_remove;
     }
 
+    
     /**
      * @returns {None,_ActiveEvent} --- None if event with name uuid
      is not in map.  Otherwise, reutrns the _ActiveEvent in the
@@ -244,11 +228,6 @@ public class ActiveEventMap
         ActiveEvent to_return = map.get(uuid);
         _unlock();
         return to_return;
-    }
-
-    public ActiveEventTwoTuple remove_event(String uuid_to_remove)
-    {
-        return remove_event(uuid_to_remove,false);
     }
 
     /**
