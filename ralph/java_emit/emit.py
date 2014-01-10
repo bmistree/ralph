@@ -1384,6 +1384,8 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.set_val_on_key'
         elif right_hand_side_method == MapType.REMOVE_METHOD_NAME:
             to_return += '.remove'
+        elif right_hand_side_method == MapType.CLEAR_METHOD_NAME:
+            to_return += '.clear'            
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -1409,6 +1411,8 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.insert'
         elif right_hand_side_method == ListType.REMOVE_METHOD_NAME:
             to_return += '.remove'
+        elif right_hand_side_method == ListType.CLEAR_METHOD_NAME:
+            to_return += '.clear'
         #### DEBUG
         else:
             raise InternalEmitException(
