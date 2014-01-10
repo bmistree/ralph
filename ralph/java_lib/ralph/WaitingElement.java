@@ -23,11 +23,11 @@ public class WaitingElement <T,D>
     private boolean read;
     DataWrapperFactory<T,D> data_wrapper_constructor;
 	
-    // Acquire write lock and acquire read lock block reading this queu
-    // if they cannot instantly acquire the write/read lock
-    //# when add a waiting element, that waiting element's read or
-    //# write blocks.  The way that it blocks is by listening at a
-    //# threadsafe queue.  This is that queue.
+    // Acquire write lock and acquire read lock block reading this
+    // queue if they cannot instantly acquire the write/read lock #
+    // when add a waiting element, that waiting element's read or #
+    // write blocks.  The way that it blocks is by listening at a #
+    // threadsafe queue.  This is that queue.
     public ArrayBlockingQueue<DataWrapper<T,D>> queue = 
         new ArrayBlockingQueue<DataWrapper<T,D>>(Util.QUEUE_CAPACITIES);
 	
@@ -92,6 +92,7 @@ public class WaitingElement <T,D>
             multi_threaded_obj.dirty_val = 
                 data_wrapper_constructor.construct(
                     (T)multi_threaded_obj.val.val,log_changes);
+            queue.add(multi_threaded_obj.dirty_val);
         }
     }
     
