@@ -12,8 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class InterruptedTestAtomically
 {
-    final static int NUM_THREADS = 50;
-    final static int NUM_TIMES_TO_TRY_TO_FORCE = 500;
+    final static int NUM_THREADS = 10;
+    final static int NUM_TIMES_TO_TRY_TO_FORCE = 50;
+    final static int NUM_TO_INITIALLY_APPEND = 50;
+    final static int NUM_MS_TO_WAIT_TO_COMPLETE = 400* 1000;
     static AtomicBoolean was_interrupted = new AtomicBoolean(false);
     static AtomicBoolean had_exception = new AtomicBoolean(false);
     static AtomicInteger num_completed = new AtomicInteger(0);
@@ -47,14 +49,13 @@ public class InterruptedTestAtomically
                 dummy_host_uuid,
                 new SingleSideConnection());
 
-            int NUM_TO_INITIALLY_APPEND = 500;
             for (int i = 0; i < NUM_TO_INITIALLY_APPEND; ++i)
             {
                 double diff = endpt.long_event_and_append().doubleValue();
                 if (diff != 0.)
                     return ReturnCode.FAILURE;
             }
-
+            
             if (! endpt.list_size().equals((double)NUM_TO_INITIALLY_APPEND))
                 return ReturnCode.FAILURE;
 
@@ -76,17 +77,29 @@ public class InterruptedTestAtomically
             for (int i = 0; i < NUM_TIMES_TO_TRY_TO_FORCE; ++i)
                 executor.execute(tti);
 
+            int i = 0;
+            int ms_to_sleep = 500;
             while (num_completed.get() != NUM_TIMES_TO_TRY_TO_FORCE)
-                Thread.sleep(1000);
-            
+            {
+                i++;
+                // System.out.println(
+                //     Integer.toString(num_completed.get()) + " of " +
+                //     Integer.toString(NUM_TIMES_TO_TRY_TO_FORCE));
+                Thread.sleep(ms_to_sleep);
+                int time_slept_ms = ms_to_sleep * i;
+                if (time_slept_ms > NUM_MS_TO_WAIT_TO_COMPLETE)
+                    break;
+            }
 
-            if (endpt.list_size() != ((double) (NUM_TO_INITIALLY_APPEND + NUM_TIMES_TO_TRY_TO_FORCE)))
-                return ReturnCode.FAILURE;                
+            executor.shutdownNow();
 
             if (had_exception.get())
                 return ReturnCode.FAILURE;
-
-            if (was_interrupted.get())
+            
+            if (endpt.list_size() != ((double) (NUM_TO_INITIALLY_APPEND + NUM_TIMES_TO_TRY_TO_FORCE)))
+                return ReturnCode.FAILURE;
+            
+            if (! was_interrupted.get())
                 return ReturnCode.UNKNOWN;
             
         }
@@ -109,9 +122,9 @@ public class InterruptedTestAtomically
 
         public void run()
         {
-            num_completed.getAndIncrement();
             try {
                 double diff = endpt.long_event_and_append().doubleValue();
+                num_completed.getAndIncrement();
                 if (diff != 0.)
                     was_interrupted.set(true);
             } catch (Exception ex)
