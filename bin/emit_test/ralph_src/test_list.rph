@@ -17,6 +17,11 @@ Endpoint ListEndpoint
         return number_list.get(index);
     }
 
+    clear_list()
+    {
+        number_list.clear();
+    }
+
     remove(Number index_to_remove)
     {
         number_list.remove(index_to_remove);

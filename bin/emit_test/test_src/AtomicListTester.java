@@ -98,6 +98,11 @@ public class AtomicListTester
             if (int_list_size != 19)
                 return false;
 
+            // test clear list
+            endpt.clear_list();
+            list_size = endpt.get_size().doubleValue();
+            if (list_size != 0.)
+                return false;
             
             return true;
         }

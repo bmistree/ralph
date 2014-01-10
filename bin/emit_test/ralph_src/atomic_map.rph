@@ -12,6 +12,11 @@ Endpoint TVarMapEndpoint
         return number_map.get(index);
     }
 
+    clear_map()
+    {
+        number_map.clear();
+    }
+    
     contains_index(Number index) returns TrueFalse
     {
         return number_map.contains(index);

@@ -72,6 +72,12 @@ public class MapTester
             endpt.remove(index);
             if (endpt.contains_index(index).booleanValue())
                 return false;
+
+            // test clear map
+            endpt.clear_map();
+            map_size = endpt.get_size().doubleValue();
+            if (map_size != 0.)
+                return false;
             
             return true;
         }

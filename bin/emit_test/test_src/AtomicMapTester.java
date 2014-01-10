@@ -26,7 +26,7 @@ public class AtomicMapTester
                 new SingleSideConnection());
 
             double map_size = endpt.get_size().doubleValue();
-            if (map_size != 0)
+            if (map_size != 0.)
                 return false;
 
             for (int i = 0; i < 20; ++i)
@@ -70,6 +70,12 @@ public class AtomicMapTester
             // test remove
             endpt.remove(index);
             if (endpt.contains_index(index).booleanValue())
+                return false;
+
+            // test clear map
+            endpt.clear_map();
+            map_size = endpt.get_size().doubleValue();
+            if (map_size != 0.)
                 return false;
             
             return true;
