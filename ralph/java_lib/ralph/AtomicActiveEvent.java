@@ -464,6 +464,8 @@ public class AtomicActiveEvent extends ActiveEvent
 
         if (should_reraise)
             throw be;
+        else
+            put_exception(be);
     }
 
     
