@@ -31,4 +31,39 @@ Endpoint InterruptedAtomic
     {
         return atomic_list.size();
     }
+
+
+    clear_list()
+    {
+        atomic_list.clear();
+    }
+
+    // want to test to ensure that backout and retry works for
+    // atomically statements nested in the same method.
+    nested_long_event_and_append() returns Number
+    {
+        // if these are different at end of simulation, it means that the event
+        // was interrupted.
+        Number non_atomic_k = 0;
+        TVar Number atomic_k = 0;
+        atomically
+        {
+            for (Number i in atomic_list)
+            {
+                atomically
+                {
+                    for (Number j in atomic_list)
+                    {
+                        non_atomic_k = non_atomic_k + i + j;
+                        atomic_k = atomic_k + i + j;
+                    }
+                }
+            }
+            atomic_list.append(1);
+        }
+
+        return non_atomic_k - atomic_k;
+
+    }
+    
 }
