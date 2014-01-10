@@ -191,4 +191,10 @@ public class NonAtomicInternalMap<K,V,D>
     {
         return internal_map.contains_val_called(active_event,contains_val);
     }
+
+    @Override
+    public void clear(ActiveEvent active_event) throws BackoutException
+    {
+        internal_map.clear(active_event);
+    }        
 }

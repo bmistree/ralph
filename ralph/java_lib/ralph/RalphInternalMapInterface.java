@@ -52,4 +52,6 @@ public interface RalphInternalMapInterface<K,V,D>
     public boolean contains_val_called(
         ActiveEvent active_event,
         V contains_val) throws BackoutException;
+
+    public void clear(ActiveEvent active_event) throws BackoutException;
 }

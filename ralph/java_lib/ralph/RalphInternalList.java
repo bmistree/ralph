@@ -264,4 +264,12 @@ public class RalphInternalList<V,D>
         check_immediate_commit(active_event);
         return false;
     }
+
+    @Override
+    public void clear(ActiveEvent active_event) throws BackoutException
+    {
+        ListTypeDataWrapper<V,D> wrapped_val = get_val_write(active_event);
+        wrapped_val.val.clear();
+        check_immediate_commit(active_event);
+    }
 }

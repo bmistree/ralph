@@ -235,4 +235,12 @@ public class RalphInternalMap<K,V,D>
         check_immediate_commit(active_event);
         return to_return;
     }
+
+    @Override
+    public void clear(ActiveEvent active_event) throws BackoutException
+    {
+        MapTypeDataWrapper<K,V,D> wrapped_val = get_val_write(active_event);
+        wrapped_val.val.clear();
+        check_immediate_commit(active_event);
+    }    
 }
