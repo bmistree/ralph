@@ -2,7 +2,7 @@ import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType
-from ralph.parse.type import MapType,StructType,ListType
+from ralph.parse.type import MapType,StructType,ListType,EndpointType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -25,6 +25,8 @@ import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph.Variables.NonAtomicMapVariable;
 import ralph.Variables.AtomicMapVariable;
+import ralph.Variables.NonAtomicEndpointVariable;
+import ralph.Variables.AtomicEndpointVariable;
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
 
@@ -348,6 +350,15 @@ def convert_args_text_for_dispatch(method_declaration_node):
                 '%s %s = ((%s) %s).get_val(active_event);' %
                 (internal_struct_type, arg_name, struct_type_name,
                  arg_vec_to_read_from))
+        elif isinstance(method_declaration_arg_node.type, EndpointType):
+            # note: unable to dispatch for rpc for methods that
+            # requires endpoint argument because cannot pass endpoint
+            # references through network.  Currently, just setting
+            # endpoint to null.
+            endpoint_alias = method_declaration_arg_node.type.alias_name
+            single_arg_string = ('''
+%s %s = null; /** WARN: cannot receive partner request with endpoint arg.*/'''
+                                 % (endpoint_alias,arg_name))
         else:
             locked_type,java_type = get_method_arg_type_as_locked(
             method_declaration_arg_node)
@@ -748,6 +759,12 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     if isinstance(type_object,StructType):
         return type_object.struct_name
 
+    # emit for endpoints
+    if isinstance(type_object,EndpointType):
+        if type_object.is_tvar and (not force_single_threaded):
+            return 'AtomicEndpointVariable'
+        return 'NonAtomicEndpointVariable'
+
     # emit for others
     if isinstance(type_object,BasicType):
         typer = type_object.basic_type
@@ -859,6 +876,19 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 'new  %s("_host_uuid",false)' % struct_name)
 
         return to_return
+    
+    elif isinstance(type_object,EndpointType):
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+            to_return = (
+                'new  %s("_host_uuid",false,%s)' % (java_type_text,initializer_text))
+        else:
+            to_return = (
+                'new  %s("_host_uuid",false)' % java_type_text)
+
+        return to_return
+
     
     #### DEBUG
     else:
@@ -1013,6 +1043,10 @@ def emit_internal_type(type_object):
         # emit for struct type
         if isinstance(type_object,StructType):
             return emit_internal_struct_type(type_object)
+
+        # emit for endpoints
+        if isinstance(type_object,EndpointType):
+            return type_object.alias_name
         
         # emit for basic types
         if isinstance(type_object,BasicType):
