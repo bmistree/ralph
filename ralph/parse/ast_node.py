@@ -118,8 +118,12 @@ class AliasStatementNode(_AstNode):
         self.to_alias_to_string = to_alias_to_string_node.value
 
     def type_check_alias_pass(self,alias_ctx):
-        alias_ctx.add_struct_alias(
-            self.to_alias_string,self.to_alias_to_string)
+        if self.for_struct:
+            alias_ctx.add_struct_alias(
+                self.to_alias_string,self.to_alias_to_string)
+        else:
+            alias_ctx.add_endpoint_alias(
+                self.to_alias_string,self.to_alias_to_string)
     
 class StructDefinitionNode(_AstNode):
 

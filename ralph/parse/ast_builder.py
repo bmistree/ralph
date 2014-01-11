@@ -38,11 +38,17 @@ def p_AliasList(p):
 def p_AliasStatement(p):
     '''
     AliasStatement : ALIAS STRUCT_TYPE Identifier AS String SEMI_COLON
+                   | ALIAS ENDPOINT Identifier AS String SEMI_COLON
     '''
     line_number = p.lineno(1)
     identifier_node = p[3]
     to_alias_to_string_node = p[5]
-    for_struct = True
+
+    for_struct = False
+    endpoint_or_struct_token = p[2]
+    if endpoint_or_struct_token == STRUCT_TYPE_TOKEN:
+        for_struct = True
+    
     p[0] = AliasStatementNode(
         for_struct,identifier_node,to_alias_to_string_node,line_number)
     
