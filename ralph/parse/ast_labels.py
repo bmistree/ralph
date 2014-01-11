@@ -44,6 +44,8 @@ NOT_EQUALS = 'not_equals'
 AND = 'and'
 OR = 'or'
 
+ALIAS = 'alias'
+
 IN = 'in'
 NOT_IN = 'not_in'
 
@@ -71,6 +73,8 @@ ELSE = 'else'
 
 STRUCT_LIST_NODE = 'struct_list_node'
 STRUCT_BODY = 'struct_body'
+
+ALIAS_LIST_NODE = 'alias_list_node'
 
 ### types ###
 BOOL_TYPE = 'TrueFalse'

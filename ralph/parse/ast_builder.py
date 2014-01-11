@@ -13,13 +13,40 @@ lexer = None
 
 def p_RootStatement(p):
     '''
-    RootStatement : StructList EndpointList
+    RootStatement : AliasList StructList EndpointList
     '''
-    struct_list_node = p[1]
-    endpoint_list_node = p[2]
-    p[0] = RootStatementNode(struct_list_node,endpoint_list_node)
+    alias_list_node = p[1]
+    struct_list_node = p[2]
+    endpoint_list_node = p[3]
+    p[0] = RootStatementNode(
+        alias_list_node,struct_list_node,endpoint_list_node)
     
+def p_AliasList(p):
+    '''
+    AliasList : AliasList AliasStatement
+              | Empty
+    '''
+    if len(p) == 2:
+        alias_list_node = AliasListNode()
+    else:
+        alias_list_node = p[1]
+        alias_statement_node = p[2]
+        alias_list_node.add_alias_node(alias_statement_node)
+        
+    p[0] = alias_list_node
 
+def p_AliasStatement(p):
+    '''
+    AliasStatement : ALIAS STRUCT_TYPE Identifier AS String SEMI_COLON
+    '''
+    line_number = p.lineno(1)
+    identifier_node = p[3]
+    to_alias_to_string_node = p[5]
+    for_struct = True
+    p[0] = AliasStatementNode(
+        for_struct,identifier_node,to_alias_to_string_node,line_number)
+    
+    
 def p_StructList(p):
     '''
     StructList : StructList StructDefinition

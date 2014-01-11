@@ -22,16 +22,29 @@ class _FixupObject(object):
         self.field_struct_to_fixup = field_struct_to_fixup
         self.struct_name_to_fixup_with = struct_name_to_fixup_with
 
+class AliasContext(object):
+    def __init__(self):
+        self.struct_names_to_alias_names_dict = {}
+        self.endpoint_names_to_alias_names_dict = {}
+    def add_struct_alias(self,struct_name, struct_alias):
+        self.struct_names_to_alias_names_dict[struct_name] = struct_alias
+    def add_endpoint_alias(self,endpoint_name, endpoint_alias):
+        self.endpoint_names_to_alias_names_dict[endpiont_name] = endpoint_alias
+    def get_struct_alias(self,struct_name):
+        return self.struct_names_to_alias_names_dict.get(struct_name,None)
+        
+        
     
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.
     """
     
-    def __init__(self):
+    def __init__(self,alias_ctx):
         self.name_to_type_obj_dict = {}
         # each element is a FixupObject
         self.list_to_fixup = []
-        
+        self.alias_ctx = alias_ctx
+
     def to_fixup(
         self,struct_to_fixup_name,field_struct_to_fixup,
         struct_name_to_fixup_with):

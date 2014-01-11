@@ -21,6 +21,9 @@ class StructType(object):
             self.update_struct_type(
                 name_to_field_type_dict,is_tvar,alias_name)
 
+    def set_alias_name(self,new_alias_name):
+        self.alias_name = new_alias_name
+            
     def update_struct_type(
             self,name_to_field_type_dict,is_tvar,alias_name):
         self.name_to_field_type_dict = name_to_field_type_dict

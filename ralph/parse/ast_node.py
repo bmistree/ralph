@@ -4,7 +4,7 @@ import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
-
+from ralph.parse.type_check_context import AliasContext
 # Type check is broken into two passes:
 #
 #   Pass one:
@@ -59,7 +59,7 @@ class _AstNode(object):
 
     
 class RootStatementNode(_AstNode):
-    def __init__(self,struct_node_list,endpoint_node_list):
+    def __init__(self,alias_list_node,struct_node_list,endpoint_node_list):
         super(RootStatementNode,self).__init__(
             ast_labels.ROOT_STATEMENT,0,None)
         
@@ -69,6 +69,7 @@ class RootStatementNode(_AstNode):
                 'RootStatementNode requires endpoint list statement node')
         #### END DEBUG
 
+        self.alias_node_list = alias_list_node.to_list()
         self.endpoint_node_list = list(endpoint_node_list)
         self.struct_node_list = struct_node_list.to_list()
 
@@ -79,8 +80,12 @@ class RootStatementNode(_AstNode):
             StructTypesContext object that maps from struct names to
             field values.
         '''
+        alias_ctx = AliasContext()
+        for alias_node in self.alias_node_list:
+            alias_node.type_check_alias_pass(alias_ctx)
+
         # notate all user-defined struct types.
-        struct_types_ctx = StructTypesContext()
+        struct_types_ctx = StructTypesContext(alias_ctx)
         for struct_node in self.struct_node_list:
             to_fixup = struct_node.add_struct_type(struct_types_ctx)
         struct_types_ctx.perform_fixups()
@@ -93,7 +98,7 @@ class RootStatementNode(_AstNode):
             type_check_ctx.push_scope()
             struct_node.type_check_pass_one(struct_types_ctx)
             struct_node.type_check_pass_two(type_check_ctx)
-            
+
         for endpt_node in self.endpoint_node_list:
             endpt_node.type_check_pass_one(struct_types_ctx)
             type_check_ctx = TypeCheckContext(endpt_node.name,struct_types_ctx)
@@ -102,6 +107,19 @@ class RootStatementNode(_AstNode):
 
         return struct_types_ctx
 
+    
+class AliasStatementNode(_AstNode):
+    def __init__(
+        self,for_struct,identifier_node,to_alias_to_string_node,line_number):
+        super(AliasStatementNode,self).__init__(
+            ast_labels.ALIAS,line_number)
+        self.for_struct = for_struct
+        self.to_alias_string = identifier_node.value
+        self.to_alias_to_string = to_alias_to_string_node.value
+
+    def type_check_alias_pass(self,alias_ctx):
+        alias_ctx.add_struct_alias(
+            self.to_alias_string,self.to_alias_to_string)
     
 class StructDefinitionNode(_AstNode):
 
@@ -127,6 +145,10 @@ class StructDefinitionNode(_AstNode):
             self.struct_name,name_to_types_dict,False,alias_name)
 
     def add_struct_type(self,struct_types_ctx):
+        alias_name = (
+            struct_types_ctx.alias_ctx.get_struct_alias(self.struct_name))
+        self.type.set_alias_name(alias_name)
+        
         struct_types_ctx.add_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
         
@@ -1106,6 +1128,17 @@ class StructListNode(_AstNode):
     def to_list(self):
         return list(self.children)
     
+
+class AliasListNode(_AstNode):
+    def __init__(self):
+        super(AliasListNode,self).__init__(ast_labels.ALIAS_LIST_NODE,0)
+        
+    def add_alias_node(self,alias_node):
+        self._append_child(alias_node)
+        
+    def to_list(self):
+        return list(self.children)
+
     
 class StructBodyNode(_AstNode):
     def __init__(self):

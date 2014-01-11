@@ -1,4 +1,6 @@
-Struct SomeStruct alias 'StructLib.SomeStruct'
+alias Struct SomeStruct as 'StructLib.SomeStruct';
+
+Struct SomeStruct
 {
     Text internal_text;
 }

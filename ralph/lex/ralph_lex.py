@@ -40,7 +40,8 @@ reserved = {
     'partner': 'PARTNER',
     'List': 'LIST_TYPE',
     'element': 'ELEMENT',
-    'alias': 'ALIAS'
+    'alias': 'ALIAS',
+    'as': 'AS'
     }
 
 
