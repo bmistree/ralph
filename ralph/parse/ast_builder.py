@@ -63,22 +63,13 @@ def p_StructList(p):
 def p_StructDefinition(p):
     '''
     StructDefinition : STRUCT_TYPE Identifier CURLY_LEFT StructBody CURLY_RIGHT
-    StructDefinition : STRUCT_TYPE Identifier ALIAS String CURLY_LEFT StructBody CURLY_RIGHT
     '''
     line_number = p.lineno(1)
     struct_name_node = p[2]
-    if len(p) == 6:
-        # non-aliased version
-        struct_body_node = p[4]
-        alias_name = None
-    else:
-        struct_body_node = struct_body_node = p[6]
-        # should contain just a regular python string
-        alias_name_node = p[4]
-        alias_name = alias_name_node.value
-
+    # non-aliased version
+    struct_body_node = p[4]
     p[0] = StructDefinitionNode(
-        struct_name_node,struct_body_node,alias_name,line_number)
+        struct_name_node,struct_body_node,line_number)
 
     
 def p_StructBody(p):

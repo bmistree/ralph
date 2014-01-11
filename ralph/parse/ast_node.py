@@ -124,14 +124,8 @@ class AliasStatementNode(_AstNode):
 class StructDefinitionNode(_AstNode):
 
     def __init__(
-        self,struct_name_identifier_node,struct_body_node,
-        alias_name,line_number):
-        """
-        Args:
-            alias_name: {String or None} If it is non-None, then do
-            not emit the definition of the node and instead just use
-            the alias as the name of the struct.
-        """
+        self,struct_name_identifier_node,struct_body_node,line_number):
+        
         super(StructDefinitionNode,self).__init__(
             ast_labels.STRUCT_DEFINITION,line_number)
 
@@ -142,7 +136,7 @@ class StructDefinitionNode(_AstNode):
         # type astnodes) associated with each field.
         name_to_types_dict,self.to_fixup = struct_body_node.get_field_dict()
         self.type = StructType(
-            self.struct_name,name_to_types_dict,False,alias_name)
+            self.struct_name,name_to_types_dict,False)
 
     def add_struct_type(self,struct_types_ctx):
         alias_name = (
