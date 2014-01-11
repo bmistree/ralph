@@ -10,7 +10,8 @@ class Type(object):
         """
         return {}
 
-class EndpointType(object):
+    
+class EndpointType(Type):
     def __init__(
             self,endpoint_name,is_tvar,alias_name):
         '''@see constructor for map type
@@ -28,7 +29,7 @@ class EndpointType(object):
             'Endpoint %s %s' % (tvar_string,self.endpoint_name))
         
     
-class StructType(object):
+class StructType(Type):
     def __init__(
             self,struct_name,name_to_field_type_dict=None,is_tvar=None,
             alias_name=None):
