@@ -10,6 +10,23 @@ class Type(object):
         """
         return {}
 
+class EndpointType(object):
+    def __init__(
+            self,endpoint_name,is_tvar,alias_name):
+        '''@see constructor for map type
+        '''
+        self.endpoint_name = struct_name
+        self.alias_name = alias_name
+
+    def __str__(self):
+        tvar_string = 'TVar'
+        if not self.is_tvar:
+            tvar_string = ''
+            
+        return (
+            'Endpoint %s %s' % (tvar_string,self.endpoint_name))
+        
+    
 class StructType(object):
     def __init__(
             self,struct_name,name_to_field_type_dict=None,is_tvar=None,

@@ -1,5 +1,6 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer
 from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
+from ralph.lex.ralph_lex import ENDPOINT_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -673,8 +674,10 @@ def p_VariableType(p):
                  
                  | STRUCT_TYPE Identifier
                  | TVAR STRUCT_TYPE Identifier
-    '''
 
+                 | ENDPOINT Identifier
+                 | TVAR ENDPOINT IDENTIFIER
+    '''
     if len(p) >= 11:
         # It's a map
         if len(p) == 11:
@@ -706,8 +709,9 @@ def p_VariableType(p):
         list_element_type_node = p[list_element_type_index]
         p[0] = ListVariableTypeNode(
             list_element_type_node,is_tvar,line_number)
-
-    elif (len(p) == 4) or (p[1] == STRUCT_TYPE_TOKEN):
+    elif (
+        (p[1] == STRUCT_TYPE_TOKEN) or
+        ((len(p) >= 3) and (p[2] == STRUCT_TYPE_TOKEN))):
         # emitting a struct type
         is_tvar = False
         struct_name_node_index = 2
@@ -719,6 +723,21 @@ def p_VariableType(p):
         struct_name_node = p[struct_name_node_index]
         p[0] = StructVariableTypeNode(
             struct_name_node,is_tvar,line_number)
+
+    elif (
+        (p[1] == ENDPOINT_TOKEN) or
+        ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN))):
+        # emitting a struct type
+        is_tvar = False
+        endpoint_name_node_index = 2
+        if len(p) == 4:
+            # endpoint is a tvar
+            is_tvar = True
+            endpoint_name_node_index = 3
+        line_number = p.lineno(1)
+        endpoint_name_node = p[endpoint_name_node_index]
+        p[0] = EndpointVariableTypeNode(
+            endpoint_name_node,is_tvar,line_number)
     else:
         # basic type or tvar type
         basic_type_index = 1

@@ -32,7 +32,10 @@ class AliasContext(object):
         self.endpoint_names_to_alias_names_dict[endpiont_name] = endpoint_alias
     def get_struct_alias(self,struct_name):
         return self.struct_names_to_alias_names_dict.get(struct_name,None)
-        
+    def get_endpoint_alias(self,endpoint_name):
+        return self.endpoint_names_to_alias_names_dict.get(
+            endpoint_name,None)
+                                                           
         
     
 class StructTypesContext(object):

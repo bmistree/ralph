@@ -893,7 +893,31 @@ class StructVariableTypeNode(VariableTypeNode):
         
     def type_check_pass_two(self,type_check_ctx):
         pass
+
+class EndpointVariableTypeNode(VariableTypeNode):
+    def __init__(self,endpiont_name_identifier_node,is_tvar,line_number):
+        super(EndpointVariableTypeNode,self).__init__(
+            ast_labels.ENDPOINT_VARIABLE_TYPE,line_number)
+        self.endpoint_name = endpoint_name_identifier_node.value
+        self.is_tvar = is_tvar
         
+    def type_check_pass_one(self,struct_types_ctx):
+
+        self.alias_name = struct_types_ctx.alias_ctx.get_endpoint_alias(
+            self.endpoint_name)
+
+        if self.alias_name is None:
+            raise TypeCheckException(
+                self.line_number,
+                'Require alias definition for endpoint.' % self.endpoint_name)
+
+        self.type = EndpointType(
+            self.endpoint_name,self.is_tvar,self.alias_name)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+
+    
 class _BinaryExpressionNode(_AstNode):
     def __init__(
         self,label,lhs_expression_node,rhs_expression_node):
