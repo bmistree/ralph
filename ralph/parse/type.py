@@ -16,6 +16,7 @@ class EndpointType(object):
         '''@see constructor for map type
         '''
         self.endpoint_name = endpoint_name
+        self.is_tvar = is_tvar
         self.alias_name = alias_name
 
     def __str__(self):
