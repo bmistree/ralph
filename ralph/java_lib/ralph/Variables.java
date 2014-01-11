@@ -9,7 +9,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.NumberTypeDataWrapperFactory;
 import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
-
+import RalphDataWrappers.EndpointTypeDataWrapperFactory;
 
 public class Variables {
     final static NumberTypeDataWrapperFactory
@@ -29,7 +29,14 @@ public class Variables {
     
     final static Boolean default_tf = false;
 	
-	
+    final static EndpointTypeDataWrapperFactory
+        endpoint_value_type_data_wrapper_factory = 
+        new EndpointTypeDataWrapperFactory();
+    
+    final static Endpoint default_endpoint = null;
+    
+
+    
     public static class AtomicNumberVariable
         extends AtomicValueVariable<Double,Double>
     {
@@ -116,6 +123,33 @@ public class Variables {
     }
 	
 
+    public static class AtomicEndpointVariable
+        extends AtomicValueVariable<Endpoint,Endpoint>
+    {
+        public AtomicEndpointVariable(
+            String _host_uuid, boolean _log_changes,Object init_val)
+        {
+            super(
+                _host_uuid,_log_changes,(Endpoint)init_val,default_endpoint,
+                endpoint_value_type_data_wrapper_factory);		
+        }
+        public AtomicEndpointVariable(String _host_uuid, boolean _log_changes)
+        {
+            super(
+                _host_uuid,_log_changes,default_endpoint,default_endpoint,
+                endpoint_value_type_data_wrapper_factory);
+        }
+        
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Util.logger_assert(
+                "Cannot pass reference to endpoint across network.");
+        }
+    }
+	
+    
     public static class NonAtomicNumberVariable
         extends NonAtomicValueVariable<Double,Double>
     {
@@ -207,6 +241,36 @@ public class Variables {
         }
     }
 
+
+    public static class NonAtomicEndpointVariable
+        extends NonAtomicValueVariable<Endpoint,Endpoint>
+    {
+        public NonAtomicEndpointVariable(
+            String _host_uuid, boolean _dummy_log_changes, Endpoint init_val)
+        {
+            super(
+                _host_uuid,init_val,default_endpoint,
+                endpoint_value_type_data_wrapper_factory);
+        }
+
+        public NonAtomicEndpointVariable(
+            String _host_uuid, boolean _dummy_log_changes)
+        {
+            super(
+                _host_uuid,default_endpoint,default_endpoint,
+                endpoint_value_type_data_wrapper_factory);
+        }
+
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            Util.logger_assert(
+                "Cannot pass endpoint reference over network.");
+        }
+    }
+
+    
     /************ Handling maps ********/
     //non-atomic
     public static class NonAtomicMapVariable <K,V,D>
