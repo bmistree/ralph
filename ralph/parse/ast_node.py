@@ -2,7 +2,7 @@ from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
-from ralph.parse.type import ListType, Type, EndpointType
+from ralph.parse.type import ListType, Type, EndpointType, WildcardType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 # Type check is broken into two passes:
@@ -543,6 +543,12 @@ class AssignmentNode(_AstNode):
         self.rhs_node.type_check_pass_two(type_check_ctx)
         
         if self.lhs_node.type != self.rhs_node.type:
+            # endpoint method calls return wildcard types, which match
+            # any left-hand type.
+            if not isinstance(self.rhs_node.type,WildcardType):
+                return
+            
+            # check return type of method node
             if (isinstance(self.rhs_node.type,MethodType) and
                 (self.lhs_node.type != self.rhs_node.type.returns_type)):
                     raise TypeCheckException(
@@ -698,7 +704,6 @@ class DotNode(_AstNode):
         
     def type_check_pass_two(self,type_check_ctx):
         self.left_of_dot_node.type_check_pass_two(type_check_ctx)
-
         # for dots, need to ensure that right hand of dot exists/is
         # available.
         if self.right_of_dot_node.label == ast_labels.METHOD_CALL:
@@ -730,6 +735,8 @@ class DotNode(_AstNode):
                         'Unknown field %s on lhs of type %s' %
                         (identifier_name,str(self.left_of_dot_node.type)))
                 self.right_of_dot_node.type = dict_dot_fields[identifier_name]
+            else:
+                self.right_of_dot_node.type = WildcardType()
         else:
             raise TypeCheckException(
                 self.line_number,
@@ -754,19 +761,23 @@ class MethodCallNode(_AstNode):
 
     def type_check_pass_two(self,type_check_ctx):
         self.method_node.type_check_pass_two(type_check_ctx)
-
         self.type = self.method_node.type
-        if self.type.num_arguments() != len(self.args_list):
-            method_name = self.method_node.value
-            raise TypeCheckException(
-                self.line_number,
-                'Type check error on method call: incorrect number ' +
-                'of arguments passed in to method %s.' % method_name)
+
+        if not isinstance(self.type, WildcardType):
+            # wildcards are returned from endpoint calls, do not have
+            # program src to build correct number of arguments:
+            # ignoring checkin that num arguments match.
+            if self.type.num_arguments() != len(self.args_list):
+                method_name = self.method_node.value
+                raise TypeCheckException(
+                    self.line_number,
+                    'Type check error on method call: incorrect number ' +
+                    'of arguments passed in to method %s.' % method_name)
         
         # type check each argument passed in
         for arg_node in self.args_list:
             arg_node.type_check_pass_two(type_check_ctx)
-        
+
 class RangeExpressionNode(_AstNode):
     def __init__(
         self,start_expression_node,increment_expression_node,

@@ -10,6 +10,17 @@ class Type(object):
         """
         return {}
 
+class WildcardType(Type):
+    '''
+    Unfortunately, without proper library mechanisms, when a service
+    calls one of an endpoint's methods, we do not know the type that
+    that method returns.  To deal with this, allowing an endpoint
+    method call to return a "WildcardType."  A WildcardType can match
+    anything, and it's up to the programmer to ensure that types match
+    appropriately.
+    '''
+    pass
+
     
 class EndpointType(Type):
     def __init__(

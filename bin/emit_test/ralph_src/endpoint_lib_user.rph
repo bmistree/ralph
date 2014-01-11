@@ -13,8 +13,9 @@ Endpoint EndpointUser
 
     get_number() returns Number
     {
-       //return local_end.get_number();
-        return 3;
+        Number to_return;
+        to_return = local_end.get_number();
+        return to_return;
     }
 
 }
