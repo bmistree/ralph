@@ -2,7 +2,7 @@ from ralph.parse.parse_util import InternalParseException,ParseException
 from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
-from ralph.parse.type import ListType, Type
+from ralph.parse.type import ListType, Type, EndpointType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 # Type check is broken into two passes:
@@ -720,14 +720,16 @@ class DotNode(_AstNode):
             self.right_of_dot_node.type_check_pass_two(type_check_ctx)
         elif self.right_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
             identifier_name = self.right_of_dot_node.value
-            dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
 
-            if identifier_name not in dict_dot_fields:
-                raise TypeCheckException(
-                    self.line_number,
-                    'Unknown field %s on lhs of type %s' %
-                    (identifier_name,str(self.left_of_dot_node.type)))
-            self.right_of_dot_node.type = dict_dot_fields[identifier_name]
+            if not isinstance(self.left_of_dot_node.type,EndpointType):
+                dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
+
+                if identifier_name not in dict_dot_fields:
+                    raise TypeCheckException(
+                        self.line_number,
+                        'Unknown field %s on lhs of type %s' %
+                        (identifier_name,str(self.left_of_dot_node.type)))
+                self.right_of_dot_node.type = dict_dot_fields[identifier_name]
         else:
             raise TypeCheckException(
                 self.line_number,
@@ -752,6 +754,7 @@ class MethodCallNode(_AstNode):
 
     def type_check_pass_two(self,type_check_ctx):
         self.method_node.type_check_pass_two(type_check_ctx)
+
         self.type = self.method_node.type
         if self.type.num_arguments() != len(self.args_list):
             method_name = self.method_node.value
@@ -895,7 +898,7 @@ class StructVariableTypeNode(VariableTypeNode):
         pass
 
 class EndpointVariableTypeNode(VariableTypeNode):
-    def __init__(self,endpiont_name_identifier_node,is_tvar,line_number):
+    def __init__(self,endpoint_name_identifier_node,is_tvar,line_number):
         super(EndpointVariableTypeNode,self).__init__(
             ast_labels.ENDPOINT_VARIABLE_TYPE,line_number)
         self.endpoint_name = endpoint_name_identifier_node.value

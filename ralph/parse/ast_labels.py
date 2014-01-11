@@ -59,6 +59,7 @@ METHOD_CALL = 'method_call'
 RANGE = 'range'
 
 STRUCT_DEFINITION = 'struct_definition'
+ENDPOINT_VARIABLE_TYPE = 'endpoint_variable'
 
 
 ### intermediate ast nodes that get removed from tree ###
@@ -80,5 +81,6 @@ ALIAS_LIST_NODE = 'alias_list_node'
 BOOL_TYPE = 'TrueFalse'
 STRING_TYPE = 'Text'
 NUMBER_TYPE = 'Number'
+
 
 BASIC_TYPES_LIST = [BOOL_TYPE,STRING_TYPE,NUMBER_TYPE]

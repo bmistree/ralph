@@ -29,7 +29,7 @@ class AliasContext(object):
     def add_struct_alias(self,struct_name, struct_alias):
         self.struct_names_to_alias_names_dict[struct_name] = struct_alias
     def add_endpoint_alias(self,endpoint_name, endpoint_alias):
-        self.endpoint_names_to_alias_names_dict[endpiont_name] = endpoint_alias
+        self.endpoint_names_to_alias_names_dict[endpoint_name] = endpoint_alias
     def get_struct_alias(self,struct_name):
         return self.struct_names_to_alias_names_dict.get(struct_name,None)
     def get_endpoint_alias(self,endpoint_name):

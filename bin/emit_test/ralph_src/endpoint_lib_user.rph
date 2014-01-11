@@ -1,0 +1,19 @@
+alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+
+
+Endpoint EndpointUser
+{
+    //Endpoint BasicSetterGetter local_end;
+
+
+    // set_endpoint(Endpoint BasicSetterGetter to_set_to)
+    // {
+    //     local_end = to_set_to;
+    // }
+
+    get_number() returns Number
+    {
+       //return local_end.get_number();
+    }
+
+}
