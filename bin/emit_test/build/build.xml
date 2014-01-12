@@ -422,7 +422,7 @@
   <!-- Run interrupted atomically -->
   <target
       name="run_InterruptedAtomically"
-      depends="compile_ralph_tests"  
+      depends="compile_ralph_tests"
       description="Tests that handles atomic events' being interrupted.">
     <java
         dir="${build.dir}"

@@ -441,10 +441,23 @@ public class AtomicActiveEvent extends ActiveEvent
     	}
 
         state = State.STATE_SECOND_PHASE_COMMITTED;
-        // # complete commit on each individual object that we touched
-        complete_commit_local();
         _unlock();
 
+        // complete commit on each individual object that we touched
+        // note that by the time we get here, we know that we will not
+        // be modifying touched_objs dict (event has completed), and
+        // therefore can call this from outside of lock.  Similarly,
+        // because changed state to STATE_SECOND_PHASE_COMMITTED, we
+        // know that an AtomicObject will not succeed in backing out
+        // this event, because can_backout_and_hold will return false.
+        // It is important that this complete_commit occurs outside of
+        // holding this lock however because the complete_commit call
+        // to each of the objects in touched_objs attempts to acquire
+        // the lock of each AtomicObject.
+        for (AtomicObject obj : touched_objs.values())
+            obj.complete_commit(this);
+
+        
         event_map.remove_event(uuid);
         
         //# FIXME: which should happen first, notifying others or
@@ -471,40 +484,6 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         signal_queue.add(signaler);
     }
-
-	
-    /**
-       ASSUMES ALREADY WITHIN _LOCK
-        
-       Runs through all touched objects and calls their
-       complete_commit methods.  These just remove this event from
-       list of lock holders, and, if we wrote, to the object,
-       exchanges the dirty cell holding the write with a clean cell.
-    */
-    private void complete_commit_local()
-    {
-        //# note that by the time we get here, we know that we will not
-        //# be modifying touched_objs dict.  Therefore, we do not need
-        //# to take any locks.
-        for (AtomicObject obj : touched_objs.values())
-            obj.complete_commit(this);
-
-        _touched_objs_lock();
-        touched_objs = new HashMap<String,AtomicObject>();
-        _touched_objs_unlock();        
-        
-        if (signal_queue != null)
-        {
-            while (true)
-            {
-                SignalFunction signaler = signal_queue.poll();
-                if (signaler == null)
-                    break;
-                event_parent.local_endpoint._signal_queue.add(signaler);
-            }
-        }
-    }
-
 
     /**
        MUST BE CALLED FROM WITHIN LOCK
