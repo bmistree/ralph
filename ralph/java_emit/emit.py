@@ -1,7 +1,7 @@
 import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
-from ralph.parse.type import BasicType,MethodType
+from ralph.parse.type import BasicType,MethodType,WildcardType
 from ralph.parse.type import MapType,StructType,ListType,EndpointType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
@@ -663,8 +663,10 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     if method_signature_node.type is not None:
         return_type = emit_internal_type(method_signature_node.type)
 
+    # this method is public so that can make calls into endpoints for
+    # other endpoints and services.
     to_return = (
-        'private %s %s (' % (return_type, method_signature_node.method_name) )
+        'public %s %s (' % (return_type, method_signature_node.method_name) )
     to_return += 'ExecutingEventContext _ctx, ActiveEvent _active_event'
     
     argument_name_text_list = []
@@ -1225,12 +1227,17 @@ def emit_statement(emit_ctx,statement_node):
         if not emit_ctx.get_lhs_of_assign():
             # if not in lhs of assign, then actually get internal
             # value of variable.  (So can perform action on it.)
+            if isinstance(statement_node.type,EndpointType):
+                # must cast endpoint object to expected aliased
+                # endpoint type so that can call its correct methods
+                # on it.  
+                aliased_endpoint_name = statement_node.type.alias_name
+                internal_var_name = (
+                    '((%s) %s.get_val(_active_event))' %
+                    (aliased_endpoint_name, internal_var_name))
+            else:
+                internal_var_name += '.get_val(_active_event)'
 
-            # for maps, explicitly need to call get_val and set_val in
-            # methods.  (This is because need to be able to call
-            # clone_for_args method directly on external maps rather
-            # than the internal map that they are wrapping.)
-            internal_var_name += '.get_val(_active_event)'
         return internal_var_name
 
     elif statement_node.label == ast_labels.FOR:
@@ -1242,15 +1249,23 @@ def emit_statement(emit_ctx,statement_node):
             # statement_node.method node is an identifier or dot node
             statement_node.method_node)
 
-        # dot statements should not take in ExecutingEventContexts.
-        # Eg., calling .size on a map should not call .get_len on
-        # internal map and pass in a _ctx.  It should just pass in
-        # _active_event.
+        # dot statements should only take in ExecutingEventContexts if
+        # they are calls to endpoint objects.  Otherwise, they are
+        # likely calls to map, list, etc., objects.  Calling .size on
+        # a map should not call .get_len on internal map and pass in a
+        # _ctx.  It should just pass in _active_event.
         if statement_node.method_node.label != ast_labels.DOT:
             method_text += '(_ctx,_active_event'
         else:
-            method_text += '(_active_event'
             
+            if isinstance(statement_node.method_node.type,WildcardType):
+                # means that calling dot on endpoint node
+                method_text += '(_ctx,_active_event'
+            else:
+                # means that calling dot on map/list/etc.
+                method_text += '(_active_event'
+
+                
         for arg_node in statement_node.args_list:
             arg_text = emit_statement(emit_ctx,arg_node)
                 
@@ -1469,7 +1484,10 @@ def emit_dot_statement(emit_ctx,dot_node):
         if not in_lhs_of_assign:
             rhs_node_text += '.get_val(_active_event)'
         to_return += rhs_node_text
-        
+
+    elif isinstance(left_of_dot_node.type,EndpointType):
+        right_hand_side_method = right_of_dot_node.value
+        to_return += '.' + right_hand_side_method
     else:
         raise InternalEmitException(
             'Unknown dot statement: not dot on map or struct.')
