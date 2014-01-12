@@ -54,9 +54,6 @@ public abstract class Endpoint
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
 	
-    public ArrayBlockingQueue<SignalFunction> _signal_queue = 
-        new ArrayBlockingQueue<SignalFunction>(Util.QUEUE_CAPACITIES);
-
     private boolean _this_side_ready_bool = false;
     private boolean _other_side_ready_bool = false;
 	
@@ -273,17 +270,6 @@ public abstract class Endpoint
 
         if (set_ready)
             _set_ready();
-    }
-	
-    public void service_signal()
-    {
-        while (true)
-        {
-            SignalFunction signaler = _signal_queue.poll();
-            if (signaler == null)
-                break;
-            signaler.fire(this);
-        }
     }
 
     /**

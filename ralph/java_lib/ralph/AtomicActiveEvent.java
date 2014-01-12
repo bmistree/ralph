@@ -138,14 +138,6 @@ public class AtomicActiveEvent extends ActiveEvent
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
 
     /**
-     * # keeps a list of functions that we should exec when we
-     # complete.  Starts as None, because unlikely to use.  If we
-     # do use, then turn it into a proper Queue.Queue().  
-     # self.signal_queue = Queue.Queue()
-    */
-    private ArrayBlockingQueue<SignalFunction>signal_queue = null;
-
-    /**
      *  # Before we attempt to request a commit after a sequence, we need
      # to keep track of whether or not the network has failed; if it has
      # we will not be able to forward a request commit message to our 
@@ -472,18 +464,7 @@ public class AtomicActiveEvent extends ActiveEvent
             other_endpoints_contacted,partner_contacted);
         
     }
-	
 
-    public void add_signal_call(SignalFunction signaler)
-    {
-        if (signal_queue == null)
-        {
-            signal_queue =
-                new ArrayBlockingQueue<SignalFunction>(
-                    Util.MEDIUM_QUEUE_CAPACITIES);
-        }
-        signal_queue.add(signaler);
-    }
 
     /**
        MUST BE CALLED FROM WITHIN LOCK

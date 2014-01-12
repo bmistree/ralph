@@ -123,12 +123,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // nothing to do because non-atomic does not need to commit.
     }
 
-    public void add_signal_call(SignalFunction signaler)
-    {
-        Util.logger_assert(
-            "Non-atomic statements cannot have signals.");
-    }
-
     /**
      * Called from a separate thread in waldoServiceActions.  Runs
      through all touched objects and backs out of them.

@@ -85,7 +85,6 @@ public abstract class ActiveEvent
     public abstract FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner);
     public abstract void second_phase_commit();
 
-    public abstract void add_signal_call(SignalFunction signaler);
     /**
      * Called from a separate thread in waldoServiceActions.  Runs
      * through all touched objects and backs out of them.
