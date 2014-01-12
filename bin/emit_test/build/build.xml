@@ -184,6 +184,14 @@
       <arg line="EndpointLibUser"/>
     </exec>
 
+    <echo message="${line.separator}Emitting interrupted_endpoint_atomically.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
+      <arg line="${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="InterruptedEndpointAtomically"/>
+    </exec>
     
   </target>
 
@@ -229,7 +237,8 @@
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
-         run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls">
+         run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
+         run_InterruptedEndpointCallAtomically">
   </target>
 
   
@@ -439,6 +448,19 @@
     </java>
   </target>
   
+  <!-- Run interrupted endpoint calls -->
+  <target
+      name="run_InterruptedEndpointCallAtomically"
+      depends="compile_ralph_tests"  
+      description="Tests ensure atomically wrapper between endpoint calls works.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.InterruptedEndpointCallAtomically"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

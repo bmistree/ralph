@@ -1,0 +1,45 @@
+alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+
+/**
+   Tests to ensure that when an atomically event is backed out, all of its
+   endpoint calls are as well.
+ */
+
+Endpoint InterruptedAtomicEndpoint
+{
+    Endpoint BasicSetterGetter endpt;
+
+    set_endpt(Endpoint BasicSetterGetter to_set_to)
+    {
+        endpt = to_set_to;
+    }
+
+    set_internal_numbers(Number to_set_to)
+    {
+        endpt.set_number(to_set_to);
+    }
+    
+    /**
+       Acquire read locks on endpt's internal_number.  Wait (presumably while
+       other events are also acquiring read locks).  Then try to acquire write
+       lock.  Some events that acquired read locks while we were waiting will be
+       aborted.
+
+       if there is a difference between non_atomic_returner and atomic_returner,
+       means that there was an event that had to be backed out.  
+     */
+    long_event_increment() returns Number
+    {
+        Number non_atomic_returner = 0;
+        TVar Number atomic_returner = 0;
+        atomically
+        {
+            non_atomic_returner = non_atomic_returner + endpt.get_number();
+            atomic_returner = atomic_returner + endpt.get_number();
+            verbatim('try{Thread.sleep(100);}catch(InterruptedException _ex){}');
+            endpt.set_number(atomic_returner + 1);
+        }
+
+        return non_atomic_returner - atomic_returner;
+    }
+}
