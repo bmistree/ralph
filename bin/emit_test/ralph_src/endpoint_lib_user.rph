@@ -17,4 +17,29 @@ Endpoint EndpointUser
         return to_return;
     }
 
+    set_number(Number new_number)
+    {
+        local_end.set_number(new_number);
+    }
+    
+    get_text() returns Text
+    {
+        return local_end.get_text();
+    }
+
+    set_text(Text new_text)
+    {
+        local_end.set_text(new_text);
+    }
+
+    get_tf() returns TrueFalse
+    {
+        return local_end.get_tf();
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        local_end.set_tf(new_tf);
+    }
+    
 }

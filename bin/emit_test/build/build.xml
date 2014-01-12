@@ -229,7 +229,7 @@
          run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
-         run_StructLibraries,run_InterruptedAtomically">
+         run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls">
   </target>
 
   
@@ -425,6 +425,19 @@
   </target>
 
   
+  <!-- Run endpoint calls -->
+  <target
+      name="run_EndpointCalls"
+      depends="compile_ralph_tests"  
+      description="Tests issue endpoint calls from within ralph.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.EndpointCalls"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   <!-- Delete the build directories -->
