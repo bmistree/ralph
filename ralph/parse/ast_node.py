@@ -323,6 +323,27 @@ class PrintCallNode(_AstNode):
 
     def type_check_pass_two(self,type_check_ctx):
         self.print_arg_node.type_check_pass_two(type_check_ctx)
+
+class VerbatimCallNode(_AstNode):
+    def __init__(self,method_args_node,line_number):
+        super(VerbatimCallNode,self).__init__(
+            ast_labels.VERBATIM_CALL,line_number)
+
+        verbatim_call_args_list = method_args_node.get_args_list()
+        if len(verbatim_call_args_list) != 1:
+            raise TypeCheckException(
+                self.line_number,
+                ('Verbatim requires 1 argument, not %s.' %
+                 len(verbatim_call_args_list)))
+        
+        self.verbatim_arg_node = verbatim_call_args_list[0]
+        
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.verbatim_arg_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.verbatim_arg_node.type_check_pass_two(type_check_ctx)
         
 
 class MethodDeclarationNode(_AstNode):

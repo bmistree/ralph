@@ -22,6 +22,7 @@ DOT = 'dot'
 BRACKET = 'bracket'
 PARTNER_METHOD_CALL = 'partner_call'
 PRINT_CALL = 'print_call'
+VERBATIM_CALL = 'verbatim_call'
 
 TEXT_LITERAL = 'text_literal'
 NUMBER_LITERAL = 'number_literal'

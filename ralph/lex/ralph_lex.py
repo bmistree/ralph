@@ -5,6 +5,7 @@ _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
 ENDPOINT_TOKEN = 'Endpoint'
 PRINT_TYPE_TOKEN = 'print'
+VERBATIM_TOKEN = 'verbatim'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Method': 'METHOD',
@@ -42,7 +43,8 @@ reserved = {
     'List': 'LIST_TYPE',
     'element': 'ELEMENT',
     'alias': 'ALIAS',
-    'as': 'AS'
+    'as': 'AS',
+    'verbatim': 'VERBATIM'
     }
 
 
