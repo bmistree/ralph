@@ -84,16 +84,16 @@ public class ActiveEventMap
     }
     
 
-    public ActiveEvent create_root_atomic_event(ActiveEvent event_parent)
+    public AtomicActiveEvent create_root_atomic_event(ActiveEvent event_parent)
         throws RalphExceptions.StoppedException
     {
-        return create_root_event(true,event_parent);
+        return (AtomicActiveEvent)create_root_event(true,event_parent);
     }
 
-    public ActiveEvent create_root_non_atomic_event()
+    public NonAtomicActiveEvent create_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        return create_root_event(false,null);
+        return (NonAtomicActiveEvent)create_root_event(false,null);
     }
     
 

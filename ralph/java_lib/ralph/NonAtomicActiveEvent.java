@@ -28,6 +28,19 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 public class NonAtomicActiveEvent extends ActiveEvent
 {
     public ActiveEventMap event_map = null;
+
+    /**
+       Root AtomicActiveEvents can only be created by root
+       NonAtomicActiveEvents.  That means that a root
+       AtomicActiveEvent will never receive a promotion message
+       directly from boosted manager.  Instead, it's parent
+       NonAtomicActiveEvent will.  Therefore, to do priorities
+       correctly, we forward on promotion messages from a
+       NonAtomicActiveEvent to its child AtomicActiveEvent.  To do
+       this properly, keep track of atomic_child.
+     */
+    private AtomicActiveEvent atomic_child = null;
+    private ReentrantLock _atomic_child_mutex = new ReentrantLock();
     
     HashMap<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
@@ -57,19 +70,44 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return true;
     }
 
+
+    private void atomic_child_lock()
+    {
+        _atomic_child_mutex.lock();
+    }
+    private void atomic_child_unlock()
+    {
+        _atomic_child_mutex.unlock();
+    }
+    
     /**
      * @param new_priority
      */
     public void promote_boosted(String new_priority)
     {
-        // likely want to forward them on to 
-        Util.logger_warn(
-            "Must handle non-atomic promotion messages still.");
-    }
+        // see promote_boosted in AtomicActiveEvent.  Do not want
+        // cycles in promotion messages.
+        if (! event_parent.set_new_priority(new_priority))
+            return;
 
+        // Copying child atomic to avoid any deadlock when promote
+        // boosted.  Doesn't matter if get a new AtomicActiveEvent
+        // after copied old one, because new one will have updated
+        // priority (set new priority in line above).
+        AtomicActiveEvent atomic_child_copy = null;
+        atomic_child_lock();
+        atomic_child_copy = atomic_child;
+        atomic_child_unlock();
+        if (atomic_child_copy != null)
+            atomic_child_copy.promote_boosted(new_priority);
+    }
+    
     public ActiveEvent clone_atomic() throws StoppedException
     {
-        return event_map.create_root_atomic_event(this);
+        atomic_child_lock();
+        atomic_child = event_map.create_root_atomic_event(this);
+        atomic_child_unlock();
+        return atomic_child;
     }
     public ActiveEvent restore_from_atomic()
     {
