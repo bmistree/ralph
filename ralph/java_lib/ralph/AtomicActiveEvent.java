@@ -766,10 +766,21 @@ public class AtomicActiveEvent extends ActiveEvent
                 }
             }
 
+
+            // changed to have rpc semantics: this means that if it's not
+            // the first message, then it is a reply to another message.
+            // if it is a first message, then should not be replying to
+            // anything.
+            String replying_to = null;
+            if (! first_msg)
+                replying_to = ctx.get_to_reply_with();
+
+
+            
             // request endpoint to send message to partner
             event_parent.local_endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
-                ctx.get_to_reply_with(),this,serialized_arguments,
+                replying_to,this,serialized_arguments,
                 first_msg,true);
 
         }
