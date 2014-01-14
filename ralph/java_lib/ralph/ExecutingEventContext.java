@@ -45,7 +45,7 @@ public class ExecutingEventContext
        the reply_to field to index into a map of message listening
        queues in waldoActiveEvent._ActiveEvent.
     */
-    String to_reply_with_uuid = null;
+    private String to_reply_with_uuid = null;
 
     /**
        If this context was created from an rpc call from another
@@ -112,8 +112,12 @@ public class ExecutingEventContext
     {
         to_reply_with_uuid = _to_reply_with_uuid;
     }
-	
+    public String get_to_reply_with()
+    {
+        return to_reply_with_uuid;
+    }
 
+    
     /**
      *  Each time we finish a message sequence, we reset
      set_to_reply_with.  This is so that if we start any new

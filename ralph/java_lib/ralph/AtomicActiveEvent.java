@@ -769,7 +769,7 @@ public class AtomicActiveEvent extends ActiveEvent
             // request endpoint to send message to partner
             event_parent.local_endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
-                ctx.to_reply_with_uuid,this,serialized_arguments,
+                ctx.get_to_reply_with(),this,serialized_arguments,
                 first_msg,true);
 
         }
