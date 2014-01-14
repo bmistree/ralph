@@ -34,9 +34,27 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             boolean atomic = partner_request_block_msg.getTransaction();
             String uuid = partner_request_block_msg.getEventUuid().getData();
             String priority = partner_request_block_msg.getPriority().getData();
-            ralph.ActiveEvent evt =
-                local_endpoint._act_event_map.get_or_create_partner_event(
+            ralph.ActiveEvent evt = null;
+
+            if (partner_request_block_msg.hasReplyToUuid())
+            {
+                // means that this message was a response to an rpc
+                // issued from an ActiveEvent on local endpoint.
+                // Importantly, that ActiveEvent (if it was atomic)
+                // may have been backed out by the time we got the
+                // response.  in this case, we can just drop the
+                // response instead of creating a new active event to
+                // service it.
+                evt = local_endpoint._act_event_map.get_event(uuid);
+
+                if (evt == null)
+                    return;
+            }
+            else
+            {
+                evt = local_endpoint._act_event_map.get_or_create_partner_event(
                     uuid,priority,atomic);
+            }
             
             evt.recv_partner_sequence_call_msg(partner_request_block_msg);
         }

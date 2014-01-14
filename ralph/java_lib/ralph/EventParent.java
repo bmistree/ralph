@@ -260,10 +260,8 @@ public abstract class EventParent
         }
 		
         //# tell partner to backout its changes too
-        if (partner_contacted &&
-            (backout_requester_endpoint_uuid != local_endpoint._partner_uuid))
+        if (partner_contacted)
             local_endpoint._forward_backout_request_partner(uuid);
-		
     }
 }
 	
