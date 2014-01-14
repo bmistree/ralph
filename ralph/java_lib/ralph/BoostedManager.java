@@ -46,16 +46,25 @@ public class BoostedManager
         String evt_uuid = Util.generate_uuid();
         
         String evt_priority;
-        if (event_list.isEmpty())
+
+        if (atomic_parent != null)
         {
-            evt_priority =
-                EventPriority.generate_boosted_priority(last_boosted_complete);
+            // atomic should inherit parent's priority.
+            evt_priority = atomic_parent.event_parent.get_priority();
         }
         else
         {
-            evt_priority =
-                EventPriority.generate_timed_priority(
-                    clock.get_and_increment_timestamp());
+            if (event_list.isEmpty())
+            {
+                evt_priority =
+                    EventPriority.generate_boosted_priority(last_boosted_complete);
+            }
+            else
+            {
+                evt_priority =
+                    EventPriority.generate_timed_priority(
+                        clock.get_and_increment_timestamp());
+            }
         }
 
         RootEventParent rep = 
