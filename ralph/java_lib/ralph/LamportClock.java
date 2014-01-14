@@ -34,8 +34,8 @@ public class LamportClock
         if (comparison > counter)
         {
             counter = comparison;
-            Util.logger_warn(
-                "Warning: may want to push Lamport clock timestamp update.");
+            // Util.logger_warn(
+            //     "Warning: may want to push Lamport clock timestamp update.");
         }
     }
 }
