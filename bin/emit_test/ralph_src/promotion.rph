@@ -1,0 +1,41 @@
+
+/**
+   Want to ensure that get quality of service amongst endpoints.  Way to test
+   this is to create two, connected LongAndWrite endpoints, A and B.  Issue a
+   bunch of call_from_external calls on A (with arg true).  Before these
+   complete, issue a bunch of call_from_external calls on B (with arg false).
+
+   This means that we'll increment my_number a bunch on A and decrement
+   my_number a bunch on B.  
+
+   Put results of each call into a threadsafe array.  After all events are run,
+   look through the array.  If promotion is set up correctly, then should get a
+   positive number in array, then a negative number in array, then a positive
+   number, etc.  (All positives should be strictly increasing; all negatives
+   should be strictly decreasing.)
+ */
+Endpoint PromoterEndpoint
+{
+    TVar Number my_number = 0;
+    call_from_partner()
+    {
+        // forces a write lock on my_number
+        my_number = my_number;
+    }
+
+    call_from_external(TrueFalse increment) returns Number
+    {
+        Number to_return = 0;
+        Number delta = -1;
+        if (increment)
+            delta = 1;
+        atomically
+        {
+            @partner.call_from_partner();
+            my_number = my_number + delta;
+            to_return = my_number;
+            verbatim('try{Thread.sleep(100);}catch(InterruptedException _ex){}');
+        }
+        return to_return;
+    }
+}

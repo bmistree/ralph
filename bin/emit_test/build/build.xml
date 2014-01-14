@@ -192,6 +192,16 @@
       <arg line="emit_test_package"/>
       <arg line="InterruptedEndpointAtomically"/>
     </exec>
+
+    <echo message="${line.separator}Emitting promotion.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/promotion.rph"/>
+      <arg line="${ralph_emitted.dir}/Promotion.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="Promotion"/>
+    </exec>
+
     
   </target>
 
@@ -238,7 +248,7 @@
          run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
          run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
-         run_InterruptedEndpointCallAtomically">
+         run_InterruptedEndpointCallAtomically,run_PromotionTest">
   </target>
 
   
@@ -461,6 +471,22 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+  <!-- Run promotion test -->
+  <!-- depends="ralph_to_byte_code"   -->
+  <target
+      name="run_PromotionTest"
+      depends="compile_ralph_tests"
+      description="Tests quality of service through promotions.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.PromotionTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
