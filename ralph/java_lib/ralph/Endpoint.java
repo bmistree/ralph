@@ -531,7 +531,6 @@ public abstract class Endpoint
                 "in _receive_msg_from_partner.");
         }
         //#### END DEBUG
-
     }
 	
     public void _receive_promotion(String event_uuid, String new_priority)
@@ -1039,7 +1038,7 @@ public abstract class Endpoint
             PartnerBackoutCommitRequest.newBuilder();
     	UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
     	event_uuid_builder.setData(active_event_uuid);
-    	
+        backout_commit_request.setEventUuid(event_uuid_builder);
     	general_message.setBackoutCommitRequest(backout_commit_request);
     	_conn_obj.write(general_message.build(),this);
     }
