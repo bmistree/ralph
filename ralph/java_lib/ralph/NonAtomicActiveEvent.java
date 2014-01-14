@@ -134,8 +134,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
     {
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
+        // remove non-atomic's uuid from event map.
+        event_map.remove_event(uuid);
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
+
 
     @Override
     public void handle_backout_exception(BackoutException be)
