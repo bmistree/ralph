@@ -1291,10 +1291,14 @@ def emit_statement(emit_ctx,statement_node):
                 emit_statement(emit_ctx,rpc_arg_node))
             rpc_args.append(rpc_arg_text)
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
+
+        array_list_arg = ''
+        if len(rpc_args) != 0:
+            array_list_arg = 'Arrays.asList(%s)' % ','.join(rpc_args)
             
         rpc_args_list_text = (
-            'new ArrayList<RPCArgObject>( Arrays.asList(%s))' %
-            ','.join(rpc_args))
+            'new ArrayList<RPCArgObject>( %s)' % array_list_arg)
+
         
         partner_call_text = '''
 _ctx.hide_partner_call(
