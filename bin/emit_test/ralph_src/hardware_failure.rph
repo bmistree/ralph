@@ -1,0 +1,45 @@
+
+Struct PieceOfHardware
+{
+    TVar List (element: Number) list;
+}
+
+Endpoint HardwareOwner
+{
+    TVar Map (from: Number, to: Struct PieceOfHardware) hardware_map;
+
+    add_piece_of_hardware (Number hardware_id, Struct PieceOfHardware to_add)
+    {
+        atomically {
+            hardware_map.set(hardware_id,to_add);
+        }
+    }
+
+    remove_piece_of_hardware(Number hardware_id)
+    {
+        atomically {
+            hardware_map.remove(hardware_id);
+        }
+    }
+
+    num_pieces_of_hardware() returns Number
+    {
+        return hardware_map.size();
+    }
+    
+    append_num_to_hardware(Number hardware_id, Number to_append) returns TrueFalse
+    {
+        TrueFalse to_return;
+        atomically {
+            to_return = False;
+            if (hardware_map.contains(hardware_id))
+            {
+                to_return = True;
+                Struct PieceOfHardware hardware = hardware_map.get(hardware_id);
+                hardware.list.append(to_append);
+            }
+        }
+        return to_return;
+    }
+        
+}
