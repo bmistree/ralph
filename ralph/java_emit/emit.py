@@ -49,6 +49,8 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import RalphCallResults.RootCallResult;
 
+import ralph.EventPriority.IsSuperFlag;
+
 public class %s
 {
 ''' % (package_name,program_name)
@@ -567,19 +569,20 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     return external_method_text + internal_method_text
 
 
-def emit_external_facing_method(emit_ctx,method_signature_node):
-    """Methods can be called from both code within ralph and code
-    external to ralph.  The external facing code requires different
-    arguments and just calls into the internal code.
-    """
-    # creating method signature
+def emit_external_signature(emit_ctx,method_signature_node,with_super_arg):
+    '''Have two externally-facing signatures.  One explicitly requires
+    user to pass in a flag as to whether running the event should
+    execute with super priority, or just standard/boosted priority.
+    The other doesn't have this option, and just defaults to
+    using standard/boosted priorities.
+    '''
     return_type = 'void'
     void_return_type = True
 
     if method_signature_node.type.returns_type is not None:
         return_type = emit_internal_type(method_signature_node.type)
         void_return_type = False
-        
+
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
     argument_text_list = []
@@ -594,12 +597,48 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
         # for putting arguments into internal function call
         argument_name_text_list.append(argument_name_text)
 
+    if with_super_arg:
+        # note do not append to argument_name_text_list because do not
+        # pass superflag on to internal calls.
+        argument_text_list.append(
+            'IsSuperFlag ' + super_flag_argument())
+        
     # finish method signature
-    to_return += ','.join(argument_text_list) + ') throws Exception {\n'
+    to_return += ','.join(argument_text_list) + ') throws Exception '
+    return to_return,return_type,void_return_type,argument_name_text_list
+    
+def super_flag_argument():
+    return '__is_super_flag_arg___'
+
+def emit_external_method_body(
+    emit_ctx,method_signature_node,with_super_arg,
+    return_type, void_return_type, argument_name_text_list):
+    '''
+    All these arguments should pretty much been produced by
+    emit_external_signature.
+    
+    @param{list} argument_name_text_list --- Note: does not include
+    super argument in list.  
+    '''
+
+    # finish method signature
+    to_return = ' {\n'
 
     # call the internal version of the function
     method_body_text = 'ExecutingEventContext ctx = create_context();\n'
-    method_body_text += '''
+
+    if with_super_arg:
+        # check if should create the root active event as an active
+        # event with super priority.
+        method_body_text += '''
+ActiveEvent active_event = null;
+if (%s == IsSuperFlag.SUPER)
+    active_event = _act_event_map.create_super_root_non_atomic_event();
+else
+    active_event = _act_event_map.create_root_non_atomic_event();
+''' % super_flag_argument()
+    else:
+        method_body_text += '''
 ActiveEvent active_event = _act_event_map.create_root_non_atomic_event();
 '''
     
@@ -634,6 +673,38 @@ try {
     to_return += indent_string(method_body_text) + '\n}\n' 
     return to_return
 
+
+def emit_external_facing_method(emit_ctx,method_signature_node):
+    """Methods can be called from both code within ralph and code
+    external to ralph.  The external facing code requires different
+    arguments and just calls into the internal code.
+
+    There are two versions of external facing methods: one passes in
+    an additional ralph.EventPriority.IsSuperFlag.  Using this
+    signature, a programmer can start a potentially super transaction.
+    Using the other signature, will always create standard/boosted
+    transactions.
+    """
+    super_signature, return_type,void_return_type, argument_name_text_list = (
+        emit_external_signature(emit_ctx,method_signature_node,True))
+
+    super_body = emit_external_method_body(
+        emit_ctx,method_signature_node,True,
+        return_type, void_return_type, argument_name_text_list)
+
+    super_method = super_signature + super_body
+
+
+    non_super_signature, return_type,void_return_type, argument_name_text_list = (
+        emit_external_signature(emit_ctx,method_signature_node,False))
+
+    non_super_body = emit_external_method_body(
+        emit_ctx,method_signature_node,False,
+        return_type, void_return_type, argument_name_text_list)
+
+    non_super_method = non_super_signature + non_super_body
+    return super_method + '\n' + non_super_method
+    
 
 def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     '''

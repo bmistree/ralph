@@ -18,6 +18,11 @@ import java.util.UUID;
  */
 public class EventPriority 
 {
+    public enum IsSuperFlag
+    {
+        SUPER, NOT_SUPER
+    }
+    
     private final static char SUPER_PREFIX = '0';
     private final static char BOOSTED_PREFIX = '1';
     private final static char STANDARD_PREFIX = '2';
