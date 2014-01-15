@@ -59,6 +59,10 @@ public class HardwareFailureTest
 
             if (endpt.num_pieces_of_hardware().doubleValue() != 1.0)
                 return false;
+
+            // should be able to add a number one time to internal list
+            if (!endpt.append_num_to_hardware(hardware_id,1.0).booleanValue())
+                return false;
         }
         catch (Exception _ex)
         {
@@ -82,7 +86,7 @@ public class HardwareFailureTest
         private boolean next_time_fail_commit = false;
         // after hardware fails, cannot perform any more operations on
         // piece of hardware.
-        private boolean hardware_failed = true;
+        private boolean hardware_failed = false;
 
         public ExtendedInternalHardwareList()
         {
