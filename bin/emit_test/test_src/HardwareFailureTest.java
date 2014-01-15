@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class HardwareFailureTest
 {
     final static AtomicBoolean problem = new AtomicBoolean(false);
+    final static AtomicBoolean undo_changes_called = new AtomicBoolean(false);
     
     public static void main(String [] args)
     {
@@ -73,6 +74,10 @@ public class HardwareFailureTest
 
             if (problem.get())
                 return false;
+
+            Thread.sleep(50);
+            if (!undo_changes_called.get())
+                return false;
             
         }
         catch (Exception _ex)
@@ -94,7 +99,6 @@ public class HardwareFailureTest
         extends ExtendedInternalAtomicList<Double,Double>
         implements Runnable
     {
-        public boolean undo_changes_called = false;
         private boolean next_time_fail_commit = false;
         // after hardware fails, cannot perform any more operations on
         // piece of hardware.
@@ -164,7 +168,7 @@ public class HardwareFailureTest
         protected void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> to_undo)
         {
-            undo_changes_called = true;
+            undo_changes_called.set(true);
         }
 
         @Override
