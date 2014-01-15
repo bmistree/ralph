@@ -37,7 +37,7 @@ public class EventPriority
         int comparison = prioritya.compareTo(priorityb);
         return comparison <= 0;
     }
-	
+    
     public static String generate_boosted_priority(String timestamp_last_boosted_completed)
     {
         // FIXME: This is an ugly, inefficient way to generate random strings
@@ -50,10 +50,5 @@ public class EventPriority
         // FIXME: This is an ugly, inefficient way to generate random strings
         String uuid = UUID.randomUUID().toString();				
         return '1' + current_timestamp + uuid.substring(0,8);
-    }
-
-    public static boolean is_boosted_priority(String priority)
-    {
-        return (priority.charAt(0) == '0');
     }
 }
