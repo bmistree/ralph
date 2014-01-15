@@ -354,8 +354,6 @@ public class AtomicActiveEvent extends ActiveEvent
             return FirstPhaseCommitResponseCode.FAILED;
         }
         
-        //# transition into first phase commit state        
-        state = State.STATE_FIRST_PHASE_COMMIT;
 
 
         // for any objects that require pushing changes to hardware,
@@ -369,19 +367,27 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         _touched_objs_unlock();
 
-        
+
+        if (can_commit)
+        {
+            //# transition into first phase commit state        
+            state = State.STATE_FIRST_PHASE_COMMIT;
+        }
         // Placed above inside _lock because do not want to backout
         // (eg., if another host issued backout call until pushed
         // changes to hardware) until push changes to hardware.
         _unlock();
 
-        // Added issue #12 for checking that this active event will be
-        // handled correctly on hardware failure.
-        // Util.logger_warn(
-        //     "\nMust check that returning false will automatically begin " +
-        //     "process of backing out this event as well.\n");
         if (! can_commit)
+        {
+            // if we could not commit, then add a job to back this
+            // event out.
+            ServiceAction service_action =
+                new RalphServiceActions.BackoutAtomicEventAction(this);
+            event_parent.local_endpoint._thread_pool.add_service_action(
+                service_action);
             return FirstPhaseCommitResponseCode.FAILED;
+        }
         
 
         //# do not need to acquire locks on other_endpoints_contacted
