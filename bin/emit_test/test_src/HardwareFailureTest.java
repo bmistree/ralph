@@ -11,16 +11,17 @@ import ralph.Variables.AtomicListVariable;
 import ralph.AtomicInternalList;
 import ralph.ActiveEvent;
 import RalphExceptions.BackoutException;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ThreadFactory;
+import ralph.EventPriority.IsSuperFlag;
 import RalphAtomicWrappers.BaseAtomicWrappers;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 
 public class HardwareFailureTest
 {
+    final static AtomicBoolean problem = new AtomicBoolean(false);
+    
     public static void main(String [] args)
     {
         if (HardwareFailureTest.run_test())
@@ -29,11 +30,12 @@ public class HardwareFailureTest
             System.out.println("\nFAILURE in HardwareFailureTest\n");
     }
 
-    public static _InternalPieceOfHardware produce_two_op_fail_hardware()
+    public static _InternalPieceOfHardware produce_two_op_fail_hardware(
+        double hardware_id, HardwareOwner endpt)
     {
         _InternalPieceOfHardware to_return = new _InternalPieceOfHardware();
         ExtendedInternalHardwareList internal_hardware_list =
-            new ExtendedInternalHardwareList();
+            new ExtendedInternalHardwareList(hardware_id,endpt);
         
         to_return.list =
             new AtomicListVariable<Double,Double>(
@@ -53,8 +55,9 @@ public class HardwareFailureTest
                 dummy_host_uuid,
                 new SingleSideConnection());
 
-            _InternalPieceOfHardware hardware_to_add = produce_two_op_fail_hardware();
             double hardware_id = 1.0;
+            _InternalPieceOfHardware hardware_to_add =
+                produce_two_op_fail_hardware(hardware_id,endpt);
             endpt.add_piece_of_hardware(hardware_id,hardware_to_add);
 
             if (endpt.num_pieces_of_hardware().doubleValue() != 1.0)
@@ -63,6 +66,14 @@ public class HardwareFailureTest
             // should be able to add a number one time to internal list
             if (!endpt.append_num_to_hardware(hardware_id,1.0).booleanValue())
                 return false;
+
+            // second time append number should fail
+            if (endpt.append_num_to_hardware(hardware_id,1.0).booleanValue())
+                return false;
+
+            if (problem.get())
+                return false;
+            
         }
         catch (Exception _ex)
         {
@@ -81,16 +92,22 @@ public class HardwareFailureTest
      */
     private static class ExtendedInternalHardwareList
         extends ExtendedInternalAtomicList<Double,Double>
+        implements Runnable
     {
         public boolean undo_changes_called = false;
         private boolean next_time_fail_commit = false;
         // after hardware fails, cannot perform any more operations on
         // piece of hardware.
         private boolean hardware_failed = false;
-
-        public ExtendedInternalHardwareList()
+        private double hardware_id;
+        private HardwareOwner endpt;
+        
+        
+        public ExtendedInternalHardwareList(double _hardware_id, HardwareOwner _endpt)
         {
             super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+            endpt = _endpt;
+            hardware_id = _hardware_id;
         }
 
         /**
@@ -135,6 +152,8 @@ public class HardwareFailureTest
             if (next_time_fail_commit)
             {
                 hardware_failed = true;
+                Thread t = new Thread(this);
+                t.start();
                 return false;
             }
 
@@ -146,6 +165,18 @@ public class HardwareFailureTest
             ListTypeDataWrapper<Double,Double> to_undo)
         {
             undo_changes_called = true;
+        }
+
+        @Override
+        public void run()
+        {
+            // cleans up the crashed piece of hardware
+            try {
+                endpt.remove_piece_of_hardware(hardware_id,IsSuperFlag.SUPER);
+            } catch (Exception _ex) {
+                _ex.printStackTrace();
+                problem.set(true);
+            }
         }
     }
 }

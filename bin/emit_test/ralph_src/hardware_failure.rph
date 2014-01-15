@@ -18,7 +18,8 @@ Endpoint HardwareOwner
     remove_piece_of_hardware(Number hardware_id)
     {
         atomically {
-            hardware_map.remove(hardware_id);
+            if (hardware_map.contains(hardware_id))
+                hardware_map.remove(hardware_id);
         }
     }
 
