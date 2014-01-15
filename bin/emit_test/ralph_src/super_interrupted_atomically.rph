@@ -1,0 +1,25 @@
+
+Endpoint SuperInterruptedAtomic
+{
+    TVar Number atomic_num = 0;
+
+    /**
+       Returns true if this event was interrupted.
+     */
+    long_event(Number to_increment_by) returns TrueFalse
+    {
+        Number num_times_run = 0;
+        atomically
+        {
+            num_times_run = num_times_run + 1;
+            atomic_num = atomic_num + to_increment_by;
+            verbatim('try{Thread.sleep(500);}catch(InterruptedException _ex){}');
+        }
+        return (num_times_run > 1);
+    }
+
+    get_num () returns Number
+    {
+        return atomic_num;
+    }
+}
