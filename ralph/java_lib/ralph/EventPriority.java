@@ -52,7 +52,7 @@ public class EventPriority
     /**
        Returns a standard priority.
      */
-    public static String generate_timed_priority(String current_timestamp)
+    public static String generate_standard_priority(String current_timestamp)
     {
         return generate_priority_from_timestamp(
             current_timestamp,STANDARD_PREFIX);
@@ -72,9 +72,15 @@ public class EventPriority
         return preceding_character + current_timestamp + uuid.substring(0,8);
     }
     
-    public static String generate_timed_super_priority(String current_timestamp)
+    public static String generate_super_priority(String current_timestamp)
     {
         return generate_priority_from_timestamp(
             current_timestamp,SUPER_PREFIX);
     }
+
+    public static boolean is_super_priority(String priority)
+    {
+        return  (priority.charAt(0) == SUPER_PREFIX);
+    }
+    
 }

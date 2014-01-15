@@ -87,27 +87,50 @@ public class ActiveEventMap
     public AtomicActiveEvent create_root_atomic_event(ActiveEvent event_parent)
         throws RalphExceptions.StoppedException
     {
-        return (AtomicActiveEvent)create_root_event(true,event_parent);
+        return (AtomicActiveEvent)create_root_event(true,event_parent,false);
     }
 
     public NonAtomicActiveEvent create_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        return (NonAtomicActiveEvent)create_root_event(false,null);
+        return (NonAtomicActiveEvent)create_root_event(false,null,false);
     }
     
+    /**
+       Can only create supers for non atomic events.  Further, cannot
+       change from being super to anything else.  Cannot change from
+       anything else to becoming super.
+     */
+    public NonAtomicActiveEvent create_super_root_non_atomic_event()
+        throws RalphExceptions.StoppedException
+    {
+        return (NonAtomicActiveEvent)create_root_event(false,null,true);
+    }
+
 
     /**
        @param {boolean} atomic --- True if root event that we create
        should be atomic instead of non-atomic.  False for non-atomics.
+
+       @param{boolean} super_priority --- True if should create the
+       event to have a super priority.  Note: cannot create super
+       atomic root events directly through this interface.  Atomics
+       can only inherit super priority from their super non-atomic
+       parents.
        
        Generates a new active event for events that were begun on this
        endpoint and returns it.
      */
     private ActiveEvent create_root_event(
-        boolean atomic, ActiveEvent event_parent)
+        boolean atomic, ActiveEvent event_parent, boolean super_priority)
         throws RalphExceptions.StoppedException
     {
+        // DEBUG
+        if (super_priority && atomic)
+            Util.logger_assert(
+                "Can only create non-atomic super root events.\n");
+        // END DEBUG
+        
         _lock();
         if (in_stop_phase)
         {
@@ -119,7 +142,7 @@ public class ActiveEventMap
         if (atomic)
             root_event = boosted_manager.create_root_atomic_event(event_parent);
         else
-            root_event = boosted_manager.create_root_non_atomic_event();
+            root_event = boosted_manager.create_root_non_atomic_event(super_priority);
 
         map.put(root_event.uuid,root_event);
         _unlock();

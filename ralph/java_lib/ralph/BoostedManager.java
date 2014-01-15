@@ -14,6 +14,9 @@ public class BoostedManager
        Each element is a root event.  the closer to zero index an
        event is in this list, the older it is.  The oldest event in
        this list should be made a boosted event.
+
+       Note that super events are not inserted into this list.  This
+       is to prevent them from being promoted.
     */
     private ArrayList<ActiveEvent> event_list =
         new ArrayList<ActiveEvent>();
@@ -32,19 +35,38 @@ public class BoostedManager
 
     public ActiveEvent create_root_atomic_event(ActiveEvent atomic_parent)
     {
-        return create_root_event(true,atomic_parent);
+        return create_root_event(true,atomic_parent,false);
     }
 
-    public ActiveEvent create_root_non_atomic_event()
+    /**
+       @param {boolean} super_priority --- True if non atomic active
+       event should have a super priority.
+     */
+    public ActiveEvent create_root_non_atomic_event(boolean super_priority)
     {
-        return create_root_event(false,null);
+        return create_root_event(false,null,super_priority);
     }
-    
+
+
+    /**
+       @param {boolean} super_priority --- true if non atomic active
+       event should have a super priority.  false otherwise.  Note:
+       cannot create an atomic event directly with super priority.
+       Atomics can only inherit super priority from their super
+       non-atomic parents.  Will throw error if try to create atomic
+       directly with super priority.
+     */
     private ActiveEvent create_root_event(
-        boolean atomic,ActiveEvent atomic_parent)
+        boolean atomic,ActiveEvent atomic_parent,boolean super_priority)
     {
-        String evt_uuid = Util.generate_uuid();
+        // DEBUG
+        if (super_priority && atomic)
+            Util.logger_assert(
+                "Can only create non-atomic super root events.\n");
+        // END DEBUG
+
         
+        String evt_uuid = Util.generate_uuid();
         String evt_priority;
 
         if (atomic_parent != null)
@@ -52,19 +74,25 @@ public class BoostedManager
             // atomic should inherit parent's priority.
             evt_priority = atomic_parent.event_parent.get_priority();
         }
+        else if (super_priority)
+        {
+            // super priority
+            evt_priority =
+                EventPriority.generate_super_priority(
+                    clock.get_and_increment_timestamp());
+        }
+        else if (event_list.isEmpty())
+        {
+            // boosted priority
+            evt_priority =
+                EventPriority.generate_boosted_priority(last_boosted_complete);
+        }
         else
         {
-            if (event_list.isEmpty())
-            {
-                evt_priority =
-                    EventPriority.generate_boosted_priority(last_boosted_complete);
-            }
-            else
-            {
-                evt_priority =
-                    EventPriority.generate_timed_priority(
-                        clock.get_and_increment_timestamp());
-            }
+            // standard priority
+            evt_priority =
+                EventPriority.generate_standard_priority(
+                    clock.get_and_increment_timestamp());
         }
 
         RootEventParent rep = 
@@ -77,8 +105,13 @@ public class BoostedManager
             root_event = new AtomicActiveEvent(rep,act_event_map,atomic_parent);
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
+
+        // do not insert supers into event list: event list is a queue
+        // that keeps track of which root event to promote to boosted.
+        // We cannot boost supers, so do not insert it.
+        if (!EventPriority.is_super_priority(evt_priority))
+            event_list.add(root_event);
         
-        event_list.add(root_event);
         return root_event;
     }
 	
@@ -107,13 +140,15 @@ public class BoostedManager
             counter += 1;
         }
 
-        /// DEBUG
+        
         if (remove_counter == -1)
         {
-            Util.logger_assert(
-                "Completing a root event that does not exist");
+            // note: not inserting super events into event_list.  This
+            // is because we never want to promote them: supers are
+            // always supers.  Therefore, may not have an event in
+            // event list with completed_event_uuid if it's super.
+            return;
         }
-        /// END DEBUG
 
         /*
           we are not retrying this event: remove the event from
