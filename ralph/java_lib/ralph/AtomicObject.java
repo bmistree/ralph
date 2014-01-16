@@ -60,7 +60,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     /**
      * Used by 
      */
-    protected class EventCachedPriorityObj
+    protected static class EventCachedPriorityObj
         implements Comparable <EventCachedPriorityObj>
     {
     	String cached_priority = "";
@@ -79,6 +79,15 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         {
             return ob.cached_priority.compareTo(ob.cached_priority);
         }
+
+
+        public static final Comparator<EventCachedPriorityObj> UUID_DESCENDING_COMPARATOR =
+            new Comparator<EventCachedPriorityObj>() {
+            public int compare(EventCachedPriorityObj a, EventCachedPriorityObj b)
+            {
+                return b.event.uuid.compareTo(a.event.uuid);
+            }
+        };
     }
 	
 	
@@ -654,7 +663,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# through their lists.
         ArrayList<EventCachedPriorityObj> read_lock_holder_event_cached_priorities =
             new ArrayList<EventCachedPriorityObj>(read_lock_holders.values());
-        Collections.sort(read_lock_holder_event_cached_priorities);
+        Collections.sort(
+            read_lock_holder_event_cached_priorities,
+            EventCachedPriorityObj.UUID_DESCENDING_COMPARATOR);
 
         ArrayList<ActiveEvent> to_backout_list =
             new ArrayList<ActiveEvent>();
