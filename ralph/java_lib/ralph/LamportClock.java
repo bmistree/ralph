@@ -3,7 +3,9 @@ package ralph;
 public class LamportClock
 {
     protected AllEndpoints all_endpoints = null;
-    long counter = 0;
+    private long counter = 0;
+
+    private final static String CLOCK_FORMAT_STRING = "%08d";
 	
     public LamportClock(AllEndpoints _all_endpoints)
     {
@@ -17,7 +19,8 @@ public class LamportClock
      */
     synchronized public String get_timestamp()
     {
-        return String.valueOf(counter);
+        // FIXME: decide on how high the clock can get.
+        return String.format(CLOCK_FORMAT_STRING,counter);
     }
 	
     synchronized public long get_int_timestamp()
@@ -26,8 +29,9 @@ public class LamportClock
     }
 	
     synchronized public String get_and_increment_timestamp()
-    {		
-        return String.valueOf(counter++);
+    {
+        // FIXME: decide on how high the clock can get.
+        return String.format(CLOCK_FORMAT_STRING,++counter);
     }
     synchronized public void check_update_timestamp(long comparison)
     {
