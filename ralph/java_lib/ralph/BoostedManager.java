@@ -158,7 +158,7 @@ public class BoostedManager
         event_list.remove(counter);
         if (counter == 0)
         {
-            last_boosted_complete = clock.get_timestamp();
+            last_boosted_complete = clock.get_and_increment_timestamp();
             promote_first_to_boosted();
         }
     }
@@ -177,6 +177,7 @@ public class BoostedManager
     	
         String boosted_priority =
             EventPriority.generate_boosted_priority(last_boosted_complete);
+
         ServiceAction service_action = new PromoteBoostedAction(
             event_list.get(0),boosted_priority);
         
