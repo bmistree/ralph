@@ -77,9 +77,14 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
          */
         public int compareTo(EventCachedPriorityObj ob)
         {
-            return ob.cached_priority.compareTo(ob.cached_priority);
-        }
+            if (ob.cached_priority.equals(cached_priority))
+                return 0;
 
+            if (EventPriority.gte_priority(cached_priority,ob.cached_priority))
+                 return -1;
+
+            return 1;
+        }
 
         public static final Comparator<EventCachedPriorityObj> UUID_DESCENDING_COMPARATOR =
             new Comparator<EventCachedPriorityObj>() {
