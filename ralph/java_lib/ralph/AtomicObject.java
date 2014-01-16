@@ -37,7 +37,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
     //# read_lock_holders maps from uuids to EventCachedPriorityObj.
-    private HashMap<String, EventCachedPriorityObj>read_lock_holders =
+    private HashMap<String,EventCachedPriorityObj>read_lock_holders =
         new HashMap<String,EventCachedPriorityObj>();
     
     //# write_lock_holder is EventCachedPriorityObj
@@ -46,7 +46,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     
     //# A dict of event uuids to WaitingEventTypes
     private HashMap<String,WaitingElement<T,D>>waiting_events =
-        new HashMap<String, WaitingElement<T,D>>();
+        new HashMap<String,WaitingElement<T,D>>();
 
     //# In try_next, can cause events to backout.  If we do cause
     //# other events to backout, then backout calls try_next.  This
@@ -377,7 +377,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         _lock();        
         boolean may_require_update = false;
-
+        
         if ((write_lock_holder != null) && 
             (write_lock_holder.event.uuid.equals(uuid)))
         {
@@ -395,7 +395,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             waiting_events.get(uuid).cached_priority = new_priority;
             may_require_update = true;
         }
-
         _unlock();
         
         if (may_require_update)
@@ -653,7 +652,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# before iterating through them.  This is so that we can
         //# prevent deadlock when two different objects are iterating
         //# through their lists.
-		
         ArrayList<EventCachedPriorityObj> read_lock_holder_event_cached_priorities =
             new ArrayList<EventCachedPriorityObj>(read_lock_holders.values());
         Collections.sort(read_lock_holder_event_cached_priorities);
@@ -907,18 +905,17 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        scheduled on the Waldo object are in the self.waiting_events
        dict.
 
-       #1: Sort all waiting events by uuid (part of time/wait
-       algo).
+       #1: Sort all waiting events by priority
 
        #2: Keep grabbing elements from the sorted list and trying
        to apply them until:
 
-       a) We hit a write (we know that reads+writes cannot
-       function simultaneously) or
+           a) We hit a write (we know that reads+writes cannot
+              function simultaneously) or
 
-       b) The waiting event that we try to schedule fails to
-       schedule.  (Eg., it is blocked by a higher-priority
-       event that is holding a write lock.)
+           b) The waiting event that we try to schedule fails to
+              schedule.  (Eg., it is blocked by a higher-priority
+              event that is holding a write lock.)
     */
     private void try_next()
     {
@@ -938,9 +935,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
         in_try_next = true;
 
-        
         //# Phase 1 from above:
-        //# sort event uuids from high to low to determine if should add
+        //# sort event priorities from high to low to determine if should add
         //# them.
         ArrayList<WaitingElement<T,D>> _waiting_events =
             new ArrayList<WaitingElement<T,D>>(waiting_events.values());
@@ -949,7 +945,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# Phase 2 from above
         //# Run through all waiting events.  If the waiting event is a
         //# write, first check that
-
         for (WaitingElement<T,D> waiting_event : _waiting_events)
         {
             if (waiting_event.is_write())
