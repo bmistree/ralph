@@ -317,7 +317,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
 
         //# case 1 above
-        if ((write_lock_holder != null) && 
+        if ((write_lock_holder == null) && 
             read_lock_holders.isEmpty())
         {
             dirty_val = data_wrapper_constructor.construct(val.val, log_changes);
@@ -375,9 +375,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     */
     public void update_event_priority(String uuid, String new_priority)
     {
-        _lock();
+        _lock();        
         boolean may_require_update = false;
-        
+
         if ((write_lock_holder != null) && 
             (write_lock_holder.event.uuid.equals(uuid)))
         {
