@@ -252,7 +252,7 @@ public abstract class EventParent
             Endpoint endpoint_to_rollback =
                 subscribed_elements_to_rollback.endpoint_object;
 			
-            if (endpoint_to_rollback._uuid != backout_requester_endpoint_uuid)
+            if (!endpoint_to_rollback._uuid.equals(backout_requester_endpoint_uuid))
             {
                 endpoint_to_rollback._receive_request_backout(
                     uuid,local_endpoint);

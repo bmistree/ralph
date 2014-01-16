@@ -84,7 +84,7 @@ public class ExtendedVariables
             // in midst of commit, know that these values cannot
             // change.
             if ((write_lock_holder == null) ||
-                (active_event.uuid != write_lock_holder.event.uuid))
+                (! active_event.uuid.equals(write_lock_holder.event.uuid)))
             {
                 // never made a write to this variable: do not need to
                 // ensure that hardware is up (for now).  May want to

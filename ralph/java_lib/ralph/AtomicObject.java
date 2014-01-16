@@ -664,7 +664,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         {
             ActiveEvent read_event = event_cached_priority_obj.event;
             String read_uuid = read_event.uuid;
-            if (read_uuid != event_to_not_backout_uuid)
+            if (! read_uuid.equals(event_to_not_backout_uuid))
             {
                 if (read_event.can_backout_and_hold_lock())
                     to_backout_list.add(read_event);
@@ -941,7 +941,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         ArrayList<WaitingElement<T,D>> _waiting_events =
             new ArrayList<WaitingElement<T,D>>(waiting_events.values());
     	Collections.sort(_waiting_events);
-        
+
         //# Phase 2 from above
         //# Run through all waiting events.  If the waiting event is a
         //# write, first check that
