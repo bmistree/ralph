@@ -98,6 +98,12 @@ public class WaitingElement <T,D>
     
     public int compareTo(WaitingElement<T,D> o2) 
     {
-        return cached_priority.compareTo(o2.cached_priority);
+        if (o2.cached_priority.equals(cached_priority))
+            return 0;
+
+        if (EventPriority.gte_priority(cached_priority,o2.cached_priority))
+            return -1;
+
+        return 1;
     }
 }
