@@ -1127,7 +1127,11 @@ def emit_internal_type(type_object):
         elif isinstance(type_object,MethodType):
             typer = type_object.returns_type
             if typer is not None:
+                # FIXME: Ugly, hackish way to return lists
+                if isinstance(typer,ListType):
+                    return emit_internal_type(typer)
                 typer = typer.basic_type
+
                 
         if typer == BOOL_TYPE:
             return 'Boolean'
