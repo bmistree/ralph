@@ -1,0 +1,11 @@
+Endpoint ListEndpoint
+{
+    test_return_list() returns List(element: Text)
+    {
+        List(element: Text) to_return;
+        to_return.append('hello');
+        to_return.append('hi');
+        to_return.append('how are you');
+        return to_return;
+    }
+}

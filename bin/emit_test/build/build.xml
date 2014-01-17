@@ -220,6 +220,14 @@
       <arg line="HardwareFailure"/>
     </exec>
 
+    <echo message="${line.separator}Emitting return_list.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/return_list.rph"/>
+      <arg line="${ralph_emitted.dir}/ReturnList.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="ReturnList"/>
+    </exec>
     
   </target>
 
@@ -267,7 +275,7 @@
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
          run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
          run_InterruptedEndpointCallAtomically,run_PromotionTest,
-         run_SuperInterruptedAtomically,run_HardwareFailure">
+         run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList">
   </target>
 
   
@@ -532,9 +540,21 @@
         <arg line="${args}"/>
     </java>
   </target>
-  
-  
-  
+
+  <!-- Run return list -->
+  <target
+      name="run_ReturnList"
+      depends="compile_ralph_tests"
+      description="Tests that can return a list.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ReturnListTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
