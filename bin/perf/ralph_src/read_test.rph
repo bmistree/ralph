@@ -30,8 +30,7 @@ Endpoint Tester
     {
         atomically
         {
-            map.contains(3);
+            atomic_map.contains(3);
         }
     }
-
 }

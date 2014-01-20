@@ -99,6 +99,56 @@
         <arg line="10000"/>
     </java>
   </target>
+
+
+
+  <!-- Write test -->
+  <target name="run_write_test" depends="init,compile_libs,compile_utils">
+
+    <!-- Translate source for read test into java -->
+    <echo message="${line.separator}Write test${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src_dir}/write_test.rph"/>
+      <arg line="${ralph_emitted_dir}/WriteTest.java"/>
+      <arg line="${perf_package}"/>
+      <arg line="WriteTest"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="WriteTest.java" />
+    </javac>
+
+    <!-- Compile performance test for variable writes -->
+    <javac
+        srcdir="${test_src_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${build_dir}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="WriteTestPerf.java" />
+    </javac>
+
+    <!-- Run the write test -->
+    <java
+        dir="${build_dir}"
+        classname="${perf_package}.WriteTestPerf"
+        fork="yes"
+        classpath="${lib_class_path}:${build_dir}">
+        <arg line="10000"/>
+    </java>
+  </target>
+
+
+
   
 
   <!-- Delete the build directories -->
