@@ -33,6 +33,14 @@ public class WriteTestPerf
                 dummy_host_uuid,
                 new SingleSideConnection());
 
+            for (int i = 0; i < num_writes_to_perform; ++i)
+            {
+                endpt.write_number();
+                endpt.write_atomic_number();
+                endpt.write_map();
+                endpt.write_atomic_map();
+            }
+            
 
             // non-atomic number writes
             clock.tic();

@@ -33,7 +33,15 @@ public class ReadTestPerf
                 dummy_host_uuid,
                 new SingleSideConnection());
 
-
+            // warm up 
+            for (int i = 0; i < num_reads_to_perform; ++i)
+            {
+                endpt.read_number();
+                endpt.read_atomic_number();
+                endpt.read_map();
+                endpt.read_atomic_map();
+            }
+            
             // non-atomic number reads
             clock.tic();
             for (int i = 0; i < num_reads_to_perform; ++i)
