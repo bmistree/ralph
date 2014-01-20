@@ -105,7 +105,7 @@
   <!-- Write test -->
   <target name="run_write_test" depends="init,compile_libs,compile_utils">
 
-    <!-- Translate source for read test into java -->
+    <!-- Translate source for write test into java -->
     <echo message="${line.separator}Write test${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
@@ -149,8 +149,53 @@
 
 
 
-  
+    <!-- Write test -->
+  <target name="run_nested_struct_test" depends="init,compile_libs,compile_utils">
 
+    <!-- Translate source for nested struct test into java -->
+    <echo message="${line.separator}Nested struct test${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src_dir}/nested_structs.rph"/>
+      <arg line="${ralph_emitted_dir}/NestedStructs.java"/>
+      <arg line="${perf_package}"/>
+      <arg line="NestedStructs"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="NestedStructs.java" />
+    </javac>
+
+    <!-- Compile performance test for variable writes -->
+    <javac
+        srcdir="${test_src_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${build_dir}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="NestedStructsPerf.java" />
+    </javac>
+
+    <!-- Run the write test -->
+    <java
+        dir="${build_dir}"
+        classname="${perf_package}.NestedStructsPerf"
+        fork="yes"
+        classpath="${lib_class_path}:${build_dir}">
+        <arg line="10000"/>
+    </java>
+  </target>
+
+
+  
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build_dir}"/>
