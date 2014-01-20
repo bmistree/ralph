@@ -1,0 +1,97 @@
+<project name="PerformanceTests" default="compile" basedir=".">
+  
+  <description>
+    Run some performanceTests
+  </description>
+
+  <dirname
+    property="perf_test_dir"
+    file="${ant.file.PerformanceTests}"
+  />
+
+  <!-- global properties for this build file -->
+  <property name="build_dir" location="${perf_test_dir}/classes"/>
+  <property name="ralph_src_dir" location="${perf_test_dir}/../ralph_src"/>
+  <property name="ralph_emitted_dir" location="${perf_test_dir}/../ralph_emitted"/>
+  <property name="test_src_dir" location="${perf_test_dir}/../src"/>
+  <property
+      name="lib_build_path"
+      location="${perf_test_dir}/../../../ralph/java_lib/build"/>
+  <property
+      name="lib_class_path" location="${lib_build_path}/classes/"/>
+  <property
+      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  <property name="ralph_compiler_py" location="${perf_test_dir}/../../emit_file.py"/>
+
+  <property
+      name="perf_package"
+      value="performance"/>
+
+  
+  <!-- set up build directories for test -->
+  <target name="init" description="setup build directories">
+    <echo message="Setting up build directories for tests"/>
+    <mkdir dir="${build_dir}"/>
+    <mkdir dir="${ralph_emitted_dir}"/>
+  </target>
+
+
+  <!-- COMPILING -->
+  <!-- compile java libraries -->
+  <target name="compile_libs" depends="init" description="compile library files">
+    <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
+  </target>
+
+  <target name="run_read_test" depends="init,compile_libs">
+
+    <!-- Translate source for read test into java -->
+    <echo message="${line.separator}Read test${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src_dir}/read_test.rph"/>
+      <arg line="${ralph_emitted_dir}/ReadTest.java"/>
+      <arg line="${perf_package}"/>
+      <arg line="ReadTest"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="ReadTest.java" />
+    </javac>
+
+    <!-- Compile performance test for variable reads -->
+    <javac
+        srcdir="${test_src_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${build_dir}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="ReadTestPerf.java" />
+    </javac>
+
+    <!-- Run the read test -->
+    <java
+        dir="${build_dir}"
+        classname="${perf_package}.ReadTestPerf"
+        fork="yes"
+        classpath="${lib_class_path}:${build_dir}">
+        <arg line="10000"/>
+    </java>
+  </target>
+  
+
+  <!-- Delete the build directories -->
+  <target name="clean" description="get rid of build dir">
+    <delete dir="${build_dir}"/>
+    <delete dir="${ralph_emitted_dir}"/>
+  </target>
+
+  
+</project>

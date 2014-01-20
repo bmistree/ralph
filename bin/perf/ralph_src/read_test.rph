@@ -1,0 +1,37 @@
+Endpoint Tester
+{
+    Map (from: Number, to: Number) map;
+    TVar Map (from: Number, to: Number) atomic_map;
+
+    Number number = 0;
+    TVar Number atomic_number = 0;
+
+    read_number() returns Number
+    {
+        return number;
+    }
+
+    read_atomic_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = atomic_number;
+        }
+        return to_return;
+    }
+
+    read_map()
+    {
+        map.contains(3);
+    }
+
+    read_atomic_map()
+    {
+        atomically
+        {
+            map.contains(3);
+        }
+    }
+
+}
