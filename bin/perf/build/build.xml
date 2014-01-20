@@ -149,7 +149,7 @@
 
 
 
-    <!-- Write test -->
+  <!-- Nested struct test -->
   <target name="run_nested_struct_test" depends="init,compile_libs,compile_utils">
 
     <!-- Translate source for nested struct test into java -->
@@ -194,7 +194,52 @@
     </java>
   </target>
 
+  <!-- pronghorn test -->
+  <target name="run_pronghorn_perf_test" depends="init,compile_libs,compile_utils">
 
+    <!-- Translate source for nested struct test into java -->
+    <echo message="${line.separator}Pronghorn test${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src_dir}/pronghorn_instance.rph"/>
+      <arg line="${ralph_emitted_dir}/PronghornInstance.java"/>
+      <arg line="${perf_package}"/>
+      <arg line="PronghornInstance"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="PronghornInstance.java" />
+    </javac>
+
+    <!-- Compile performance test for variable writes -->
+    <javac
+        srcdir="${test_src_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${build_dir}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="PronghornTestPerf.java" />
+    </javac>
+
+    <!-- Run the write test -->
+    <java
+        dir="${build_dir}"
+        classname="${perf_package}.PronghornTestPerf"
+        fork="yes"
+        classpath="${lib_class_path}:${build_dir}">
+        <arg line="10000"/>
+    </java>
+  </target>
+
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
