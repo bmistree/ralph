@@ -42,7 +42,21 @@
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
 
-  <target name="run_read_test" depends="init,compile_libs">
+  <!-- compile utils (needed by all tests) -->
+  <target name="compile_utils">
+      <javac
+            srcdir="${test_src_dir}/"
+            destdir="${build_dir}"
+            classpath="${lib_class_path}:${build_dir}"
+            debug="true"
+            debuglevel="lines,vars,source"
+            includeantruntime="false">
+          <include name="PerfUtil.java" />
+        </javac>
+  </target>
+
+  
+  <target name="run_read_test" depends="init,compile_libs,compile_utils">
 
     <!-- Translate source for read test into java -->
     <echo message="${line.separator}Read test${line.separator}"/>
