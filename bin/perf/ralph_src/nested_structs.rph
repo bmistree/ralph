@@ -1,0 +1,37 @@
+Struct InternalStruct
+{
+    Number some_number;
+    Text some_text;
+}
+
+Struct ExternalStruct
+{
+    Text id;
+    TVar List(element: Struct InternalStruct) internal_list;
+}
+
+
+Endpoint Tester
+{
+    TVar Map (from: Number, to: Struct ExternalStruct) atomic_map;
+    Number to_insert_index = 0;
+    
+    create_external_struct()
+    {
+        atomically
+        {
+            Struct ExternalStruct ext_struct;
+            ext_struct.id = 'hello';
+        }
+    }
+
+    map_insert()
+    {
+        atomically
+        {
+            Struct ExternalStruct ext_struct;
+            ext_struct.id = 'hello';
+            atomic_map.set(to_insert_index,ext_struct);
+        }
+    }
+}
