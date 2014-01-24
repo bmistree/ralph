@@ -80,7 +80,7 @@ public class WoundWaitTest
             // wait a bit so that those tasks can get good and
             // started.
             
-            Thread.sleep(50);
+            Thread.sleep(150);
             // put a bunch of tasks rooted at B into system.
             for (int i = 0; i < NUM_EXTERNAL_CALLS; ++i)
                 executor_b.execute(task_b);

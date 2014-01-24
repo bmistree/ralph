@@ -30,7 +30,7 @@ Endpoint PromoterEndpoint
             @partner.call_from_partner();
             // force a write lock on my_number
             my_number = 1;            
-            verbatim('try{Thread.sleep(50);}catch(InterruptedException _ex){}');
+            verbatim('try{Thread.sleep(150);}catch(InterruptedException _ex){}');
         }
         return to_return;
     }
