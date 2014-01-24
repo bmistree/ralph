@@ -20,16 +20,29 @@ public class BoostedManager
     */
     private ArrayList<ActiveEvent> event_list =
         new ArrayList<ActiveEvent>();
-	
-	
+
+    /**
+       Allow programmer to choose type of deadlock avoidance algorithm
+       to use.
+     */
+    public enum DeadlockAvoidanceAlgorithm {
+        BOOSTED, WOUND_WAIT
+    }
+
+    private DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
+    
+    
     /**
      * @param _act_event_map
      * @param _clock --- Host's global clock.
      */
-    public BoostedManager(ActiveEventMap _act_event_map, LamportClock _clock)
+    public BoostedManager(
+        ActiveEventMap _act_event_map, LamportClock _clock,
+        DeadlockAvoidanceAlgorithm _deadlock_avoidance_algorithm)
     {
         act_event_map = _act_event_map;
         clock = _clock;
+        deadlock_avoidance_algorithm = _deadlock_avoidance_algorithm;
         last_boosted_complete = clock.get_timestamp();		
     }
 
@@ -67,7 +80,7 @@ public class BoostedManager
 
         
         String evt_uuid = Util.generate_uuid();
-        String evt_priority;
+        String evt_priority = null;
 
         if (atomic_parent != null)
         {
@@ -83,9 +96,22 @@ public class BoostedManager
         }
         else if (event_list.isEmpty())
         {
-            // boosted priority
-            evt_priority =
-                EventPriority.generate_boosted_priority(last_boosted_complete);
+            if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
+            {
+                // boosted priority
+                evt_priority =
+                    EventPriority.generate_boosted_priority(last_boosted_complete);
+            }
+            else if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.WOUND_WAIT)
+            {
+                evt_priority =
+                    EventPriority.generate_standard_priority(
+                        clock.get_and_increment_timestamp());
+            }
+            // DEBUG
+            else
+                Util.logger_assert("Unknown deadlock avoidance algo selected");
+            // END DEBUG
         }
         else
         {
@@ -172,6 +198,10 @@ public class BoostedManager
     */
     public void promote_first_to_boosted()
     {
+        // perform no promotions if not using boosted.
+        if (deadlock_avoidance_algorithm != DeadlockAvoidanceAlgorithm.BOOSTED)
+            return;
+        
     	if (event_list.isEmpty())
             return;
     	

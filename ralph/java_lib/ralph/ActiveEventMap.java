@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import RalphExceptions.StoppedException;
 
 
@@ -18,10 +19,12 @@ public class ActiveEventMap
     private StopCallback stop_callback = null;
     private BoostedManager boosted_manager = null;
     
-    public ActiveEventMap(Endpoint _local_endpoint, LamportClock clock)
+    public ActiveEventMap(
+        Endpoint _local_endpoint, LamportClock clock,
+        DeadlockAvoidanceAlgorithm daa)
     {
         local_endpoint = _local_endpoint;
-        boosted_manager = new BoostedManager(this, clock);    	
+        boosted_manager = new BoostedManager(this,clock,daa);
     }
 
     private void _lock()

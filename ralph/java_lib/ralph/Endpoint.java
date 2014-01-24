@@ -102,7 +102,7 @@ public abstract class Endpoint
     private ReentrantLock _ready_lock_ = new ReentrantLock();
     
     /**
-       @param {dict} waldo_classes --- Contains common utilities
+       @param {RalphGlobals} ralph_globals --- Contains common utilities
        needed by emitted code, such as WaldoNumVariable
         
        @param {uuid} host_uuid --- The uuid of the host this endpoint
@@ -117,18 +117,20 @@ public abstract class Endpoint
        only make calls on them.
     */
     public Endpoint (
-        RalphGlobals waldo_classes,String host_uuid,
+        RalphGlobals ralph_globals,String host_uuid,
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
-        _clock = waldo_classes.clock;
-        _act_event_map = new ActiveEventMap(this,_clock);
+        _clock = ralph_globals.clock;
+        _act_event_map =
+            new ActiveEventMap(
+                this,_clock,ralph_globals.deadlock_avoidance_algorithm);
         _conn_obj = conn_obj;
 
         global_var_stack.push(global_var_store);
         
-        _thread_pool = waldo_classes.thread_pool;
-        _all_endpoints = waldo_classes.all_endpoints;
+        _thread_pool = ralph_globals.thread_pool;
+        _all_endpoints = ralph_globals.all_endpoints;
         _all_endpoints.add_endpoint(this);
 
         _host_uuid = host_uuid;
