@@ -275,7 +275,8 @@
          run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
          run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
          run_InterruptedEndpointCallAtomically,run_PromotionTest,
-         run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList">
+         run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
+         run_WoundWait">
   </target>
 
   
@@ -555,6 +556,21 @@
     </java>
   </target>
 
+  <!-- Run wound wait test -->
+  <target
+      name="run_WoundWait"
+      depends="compile_ralph_tests"
+      description="Tests that wound/wait works.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.WoundWaitTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
