@@ -27,9 +27,9 @@ Endpoint PromoterEndpoint
             to_return = 1;
         atomically
         {
-            // force a write lock on my_number
-            my_number = 1;
             @partner.call_from_partner();
+            // force a write lock on my_number
+            my_number = 1;            
             verbatim('try{Thread.sleep(50);}catch(InterruptedException _ex){}');
         }
         return to_return;
