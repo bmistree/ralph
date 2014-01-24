@@ -94,13 +94,17 @@ public class WoundWaitTest
 
             // scan through array: all of one endpoint's events should
             // execute before the other's.
-            int running_sum = 0;
-            for (Double d : tsafe_queue)
+            for (int i =0; i < NUM_EXTERNAL_CALLS; ++i)
             {
-                System.out.println(d);
-                // running_sum += d.intValue();
-                // if (Math.abs(running_sum) > 1)
-                //     return false;
+                Double d = tsafe_queue.poll();
+                if (! d.equals(1.0))
+                    return false;
+            }
+            for (int i =0; i < NUM_EXTERNAL_CALLS; ++i)
+            {
+                Double d = tsafe_queue.poll();
+                if (! d.equals(-1.0))
+                    return false;
             }
 
             if (had_exception.get())
