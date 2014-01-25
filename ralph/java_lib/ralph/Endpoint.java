@@ -124,6 +124,9 @@ public abstract class Endpoint
 
         _conn_obj.register_endpoint(this);
 
+        // tell other side my uuid... skip initialization.
+        _notify_partner_ready();
+        
         // FIXME: See issues #13 and #14 in Github.  Should have
         // ready-wait and heartbeat code in Endpoint constructor.
         // Util.logger_warn("Must add heartbeat code back in.");
@@ -457,7 +460,7 @@ public abstract class Endpoint
         _thread_pool.add_service_action(promotion_action);
     }
         
-    public void _receive_partner_ready(String partner_uuid)
+    private void _receive_partner_ready(String partner_uuid)
     {
         _set_partner_uuid(partner_uuid);
     }
@@ -465,7 +468,7 @@ public abstract class Endpoint
     /**
      * Tell partner endpoint that I have completed my onReady action.
      */
-    public void _notify_partner_ready()
+    private void _notify_partner_ready()
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
         general_message.setTimestamp(_clock.get_int_timestamp());
