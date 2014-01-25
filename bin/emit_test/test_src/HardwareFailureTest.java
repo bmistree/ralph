@@ -15,6 +15,7 @@ import ralph.EventPriority.IsSuperFlag;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Future;
 
 
 
@@ -106,7 +107,6 @@ public class HardwareFailureTest
         private double hardware_id;
         private HardwareOwner endpt;
         
-        
         public ExtendedInternalHardwareList(double _hardware_id, HardwareOwner _endpt)
         {
             super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
@@ -150,7 +150,7 @@ public class HardwareFailureTest
            Can apply commit one time.  Second time try to commit, fails.
          */
         @Override
-        protected boolean apply_changes_to_hardware(
+        protected Future<Boolean> apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
         {
             if (next_time_fail_commit)
@@ -158,18 +158,18 @@ public class HardwareFailureTest
                 hardware_failed = true;
                 Thread t = new Thread(this);
                 t.start();
-                return false;
+                return ALWAYS_FALSE_FUTURE;
             }
 
             next_time_fail_commit = true;
-            return true;
+            return ALWAYS_TRUE_FUTURE;
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> to_undo)
         {
             undo_changes_called.set(true);
-        }
+         }
 
         @Override
         public void run()

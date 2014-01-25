@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import RalphExceptions.BackoutException;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import RalphExceptions.BackoutException;
 import RalphDataWrappers.DataWrapperFactory;
 import RalphDataWrappers.DataWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
@@ -526,9 +528,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        up and running, and the changes have been pushed, then, return
        true, otherwise, return false.
      */
-    public boolean first_phase_commit(ActiveEvent active_event)
+    public Future<Boolean> first_phase_commit(ActiveEvent active_event)
     {
-        return true;
+        return ALWAYS_TRUE_FUTURE;
     }
 
     
@@ -1022,8 +1024,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        * @param active_event
        * @return
        */
-
-
     private boolean insert_in_touched_objs(ActiveEvent active_event)
     {
         if (active_event.immediate_complete())
@@ -1036,5 +1036,58 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
-    
+
+
+
+    /**
+       AtomicActiveEvents request AtomicObjects to enter first phase
+       commit.  This triggers atomic objects to perform any work they
+       need to ensure their changes are valid/can be pushed.
+
+       Return a future, which the AtomicActiveEvent can check to
+       ensure that the change went through.  The future below will
+       always return true.  Subclasses, when they override this object
+       may override to use a different future that actually does work.
+     */
+    protected static class FutureAlwaysValue implements Future<Boolean>
+    {
+        private static final Boolean TRUE_BOOLEAN = new Boolean(true);
+        private static final Boolean FALSE_BOOLEAN = new Boolean(false);
+
+        private Boolean what_to_return = null;
+        public FutureAlwaysValue(boolean _what_to_return)
+        {
+            if (_what_to_return)
+                what_to_return = TRUE_BOOLEAN;
+            else
+                what_to_return = FALSE_BOOLEAN;
+        }
+            
+        public Boolean get()
+        {
+            return what_to_return;
+        }
+
+        public Boolean get(long timeout, TimeUnit unit)
+        {
+            return get();
+        }
+
+ 	public boolean isCancelled()
+        {
+            return false;
+        }
+        public boolean isDone()
+        {
+            return true;
+        }
+        public boolean cancel(boolean mayInterruptIfRunning)
+        {
+            return false;
+        }
+    }
+    protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
+        new FutureAlwaysValue(true);
+    protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
+        new FutureAlwaysValue(false);
 }

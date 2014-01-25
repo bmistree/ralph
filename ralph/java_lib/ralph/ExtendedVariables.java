@@ -1,5 +1,6 @@
 package ralph;
 import java.util.ArrayList;
+import java.util.concurrent.Future;
 
 import ralph.Variables;
 import RalphExceptions.BackoutException;
@@ -32,29 +33,10 @@ public class ExtendedVariables
                 _locked_wrapper);
         }
 
-        protected abstract boolean apply_changes_to_hardware(
+        protected abstract Future<Boolean> apply_changes_to_hardware(
             ListTypeDataWrapper<T,D> dirty);
         protected abstract void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<T,D> to_undo);
-            
-        // protected boolean apply_changes_to_hardware(ListTypeDataWrapper<T,D> dirty)
-        // {
-        //     // run through all the changes made by latest active event
-        //     // and push them to the hardware.
-        //     ArrayList<ListTypeDataWrapper<T,D>.OpTuple> event_changes =
-        //         dirty.partner_change_log;
-        //     for (ListTypeDataWrapper<T,D>.OpTuple change : event_changes)
-        //         System.out.println("\nApplying change to hardware\n");
-        //     return true;
-        // }
-
-        // protected void undo_dirty_changes_to_hardware(
-        //     ListTypeDataWrapper<T,D> to_undo)
-        // {
-        //     for (ListTypeDataWrapper.OpTuple change : to_undo.partner_change_log)
-        //         System.out.println("\nUndoing change to hardware\n");
-        // }
-
         
         @Override
         public void complete_commit(ActiveEvent active_event)
@@ -74,9 +56,10 @@ public class ExtendedVariables
             dirty_op_tuples_on_hardware = null;
             super.backout(active_event);
         }
-        
+
+
         @Override
-        public boolean first_phase_commit(ActiveEvent active_event)
+        public Future<Boolean> first_phase_commit(ActiveEvent active_event)
         {
             // do not need to take locks here because know that this
             // method will only be called from AtomicActiveEvent
@@ -89,7 +72,7 @@ public class ExtendedVariables
                 // never made a write to this variable: do not need to
                 // ensure that hardware is up (for now).  May want to
                 // add read checks as well.
-                return true;
+                return ALWAYS_TRUE_FUTURE;
             }
             
             // log that any changes that we are making will need to be

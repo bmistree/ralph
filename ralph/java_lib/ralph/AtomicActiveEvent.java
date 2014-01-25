@@ -2,7 +2,11 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
 import RalphServiceActions.ServiceAction;
 
@@ -358,15 +362,40 @@ public class AtomicActiveEvent extends ActiveEvent
 
         // for any objects that require pushing changes to hardware,
         // ensure that they can before reporting success.
-        boolean can_commit = true;
+        Set<Future<Boolean>> obj_could_commit =
+            new HashSet<Future<Boolean>>();
         _touched_objs_lock();
         {
             // Added issue #11: May want to perform this call in parallel
             for (AtomicObject obj : touched_objs.values())
-                can_commit = can_commit && obj.first_phase_commit(this);
+                obj_could_commit.add(obj.first_phase_commit(this));
         }
         _touched_objs_unlock();
 
+        boolean can_commit = true;
+        for (Future<Boolean> could_commit : obj_could_commit)
+        {
+            try {
+                // note ordering below: this ensures that all
+                // sub-objects will have tried to push their changes
+                // before we return whether or not we could apply
+                // those changes.
+                can_commit = could_commit.get().booleanValue() && can_commit;
+            } catch (InterruptedException _ex) {
+                // FIXME: should add logic to handle this case.  See
+                // issue #34.
+                _ex.printStackTrace();
+                Util.logger_assert(
+                    "Did not consider getting interrupted " +
+                    "while committing values.");
+            } catch (ExecutionException _ex) {
+                // FIXME: can this case ever happen?
+                _ex.printStackTrace();
+                Util.logger_assert(
+                    "Did not consider execution exception " +
+                    "while committing values.");
+            }
+        }
 
         if (can_commit)
         {

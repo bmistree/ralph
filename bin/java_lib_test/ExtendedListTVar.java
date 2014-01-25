@@ -11,6 +11,8 @@ import RalphCallResults.RootCallResult.ResultType;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
 
+import java.util.concurrent.Future;
+
 /**
    Can create an extended version of a list: one that allows us to
    subclass it and perform operations as it is trying to commit its
@@ -42,17 +44,17 @@ public class ExtendedListTVar
         {
             super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
         }
-        protected boolean apply_changes_to_hardware(
+        protected Future<Boolean> apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
         {
             global_number_times_apply_changes_to_hardware_called += 1.0;
-            return true;
+            return ALWAYS_TRUE_FUTURE;
         }
         protected void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> to_undo)
-        {
-        }
+        { }
     }
+
     
     public static AtomicListVariable<Double,Double> create_extended_list()
     {
