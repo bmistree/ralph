@@ -276,7 +276,7 @@
          run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
          run_InterruptedEndpointCallAtomically,run_PromotionTest,
          run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
-         run_WoundWait">
+         run_WoundWait,run_TCPPartnerCall">
   </target>
 
   
@@ -343,7 +343,21 @@
     </java>
   </target>
   
+  <!-- TCP partner call -->
+  <target
+      name="run_TCPPartnerCall"
+      depends="compile_ralph_tests"
+      description="Test calling partner methods over TCP.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.TCPPartnerCall"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
 
+  
   <!-- MapTesting -->
   <target
       name="run_MapTest"
