@@ -543,10 +543,6 @@ public abstract class Endpoint
         _thread_pool.add_service_action(promotion_action);
     }
         
-    public void _receive_partner_ready()
-    {
-        _receive_partner_ready(null);
-    }
     public void _receive_partner_ready(String partner_uuid)
     {
         _set_partner_uuid(partner_uuid);
