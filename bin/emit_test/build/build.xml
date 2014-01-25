@@ -299,7 +299,9 @@
       description="Single side setter getter test.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.BasicSetterGetter" fork="yes">
+        classname="emit_test_harnesses.BasicSetterGetter"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
@@ -311,7 +313,9 @@
       description="Setters and getters on struct fields test.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.StructSetterGetter" fork="yes">
+        classname="emit_test_harnesses.StructSetterGetter"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
@@ -323,7 +327,9 @@
       description="Single side internal method call.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.BasicInternalMethodCall" fork="yes">
+        classname="emit_test_harnesses.BasicInternalMethodCall"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
@@ -335,7 +341,9 @@
       description="Test nested atomically-s.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.BasicTestAtomically" fork="yes">
+        classname="emit_test_harnesses.BasicTestAtomically"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>

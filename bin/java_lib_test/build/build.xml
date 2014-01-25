@@ -63,7 +63,9 @@
       description="Run stack tests.">
     <java
         dir="${build.dir}"
-        classname="java_lib_test.WriteReadVarStack" fork="yes">
+        classname="java_lib_test.WriteReadVarStack"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
@@ -74,7 +76,9 @@
       description="Run tvar tests.">
     <java
         dir="${build.dir}"
-        classname="java_lib_test.WriteReadTVar" fork="yes">
+        classname="java_lib_test.WriteReadTVar"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
