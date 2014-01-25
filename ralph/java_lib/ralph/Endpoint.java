@@ -54,14 +54,6 @@ public abstract class Endpoint
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
 	
-    private boolean _this_side_ready_bool = false;
-    private boolean _other_side_ready_bool = false;
-	
-    private ReentrantLock _ready_waiting_list_mutex = new ReentrantLock();
-	
-	
-    private ArrayList<ArrayBlockingQueue<Object>> _ready_waiting_list =
-        new ArrayList<ArrayBlockingQueue<Object>>();
 	
     private ReentrantLock _stop_mutex = new ReentrantLock();
 	
@@ -95,11 +87,6 @@ public abstract class Endpoint
      */
     public String _partner_uuid = null;
 	
-    /**
-       # both sides should run their onCreate methods to entirety
-       # before we can execute any additional calls.
-    */
-    private ReentrantLock _ready_lock_ = new ReentrantLock();
     
     /**
        @param {RalphGlobals} ralph_globals --- Contains common utilities
@@ -148,7 +135,6 @@ public abstract class Endpoint
           self._heartbeat.start()
           _send_clock_update();
         */
-        
     }
 
     /**
@@ -184,16 +170,6 @@ public abstract class Endpoint
     private void _stop_unlock()
     {
         _stop_mutex.unlock();
-    }
-
-    private void _ready_waiting_list_lock()
-    {
-        _ready_waiting_list_mutex.lock();
-    }
-
-    private void _ready_waiting_list_unlock()
-    {
-        _ready_waiting_list_mutex.unlock();
     }
 
     /**
@@ -240,69 +216,6 @@ public abstract class Endpoint
 
 
     /**
-     * Returns True if both sides are initialized.  Otherwise, blocks
-     until initialization is complete
-    */
-    public boolean _block_ready()
-    {
-        Util.logger_warn("Not waiting on ready.");
-        return true;
-    }
-        
-    private void _ready_lock()
-    {
-        _ready_lock_.lock();
-    }
-	
-    private void _ready_unlock()
-    {
-        _ready_lock_.unlock();
-    }
-
-    /**
-       Gets called when the other side sends a message that its
-       ready.
-    */
-    public void _other_side_ready()
-    {
-        _ready_lock();
-        _other_side_ready_bool = true;
-        boolean set_ready = (_this_side_ready_bool && _other_side_ready_bool);
-        _ready_unlock();
-
-        if (set_ready)
-            _set_ready();
-    }
-
-    /**
-     * Gets called when this side finishes its initialization
-     * @return
-     */
-    public void _this_side_ready()
-    {
-        _ready_lock();
-        _this_side_ready_bool = true;
-        boolean set_ready = (_this_side_ready_bool && _other_side_ready_bool);
-        _ready_unlock();
-
-        //# send message to the other side that we are ready
-        _notify_partner_ready();
-        
-        if (set_ready)
-            _set_ready();
-    }
-
-    public boolean _swapped_in_block_ready()
-    {
-        return true;
-    }
-            
-    private void _set_ready()
-    {
-        Util.logger_warn("Must fill in set_ready method");
-    }
-
-    /**
      * @see noe above _partner_uuid.
      * @param uuid
      */
@@ -311,6 +224,7 @@ public abstract class Endpoint
         _partner_uuid = uuid;
     }
 
+    
     /**
        @param {uuid} uuid --- The uuid of the _ActiveEvent that we
        want to backout.
@@ -546,9 +460,6 @@ public abstract class Endpoint
     public void _receive_partner_ready(String partner_uuid)
     {
         _set_partner_uuid(partner_uuid);
-        RalphServiceActions.ServiceAction service_action =
-            new RalphServiceActions.ReceivePartnerReadyAction(this);
-        _thread_pool.add_service_action(service_action);        
     }
 	
     /**
