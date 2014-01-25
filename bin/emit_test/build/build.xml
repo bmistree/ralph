@@ -287,7 +287,7 @@
          run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
          run_InterruptedEndpointCallAtomically,run_PromotionTest,
          run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
-         run_WoundWait,run_TCPPartnerCall">
+         run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall">
   </target>
 
   
@@ -594,6 +594,22 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+
+  <!-- Run atomic partner call -->
+  <target
+      name="run_AtomicPartnerCall"
+      depends="compile_ralph_tests"
+      description="Tests that can make atomic partner calls.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.AtomicPartnerCall"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
 
   
   <!-- Delete the build directories -->
