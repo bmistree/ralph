@@ -80,7 +80,7 @@ public class RandomFailureExtendedList
         extends ExtendedInternalAtomicList<Double,Double>
     {
         public List<Double> synchronized_list = new ArrayList<Double>();
-        
+        private boolean return_false = true;
 
         public SynchronizedNumberInternalList()
         {
@@ -104,9 +104,9 @@ public class RandomFailureExtendedList
                         op_tuple.what_added_or_removed;
                     int index = op_tuple.key;
                     try {
-                        synchronized_list.add(
-                            index,
-                            new Double(what_added.get_val(null)));
+                        Double java_what_added =
+                            new Double(what_added.get_val(null));
+                        synchronized_list.add(index,java_what_added);
                     } catch (Exception _ex) {
                         _ex.printStackTrace();
                         had_other_issue.set(true);
@@ -115,7 +115,7 @@ public class RandomFailureExtendedList
                 else if (dirty.is_delete_key_tuple(op_tuple))
                 {
                     int index = op_tuple.key;
-                    synchronized_list.remove(index);
+                    Double what_removed = synchronized_list.remove(index);
                 }
                 else
                 {
@@ -127,17 +127,49 @@ public class RandomFailureExtendedList
                 }
             }
 
-            // FIXME: experiment with returning false
-            // if (Math.random() > .5)
-            //     return ALWAYS_FALSE_FUTURE;
-            
+            if (Math.random() > .5)
+                return ALWAYS_FALSE_FUTURE;
             return ALWAYS_TRUE_FUTURE;
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> to_undo)
         {
-            // FIXME: fill in the undo method
+            // go backwards through list and do the opposite of the op
+            // tuple
+            for (int i = to_undo.partner_change_log.size() -1; i >= 0; --i)
+            {
+                ListTypeDataWrapper.OpTuple op_tuple =
+                    to_undo.partner_change_log.get(i);
+                if (to_undo.is_add_key_tuple(op_tuple))
+                {
+                    int index = op_tuple.key;
+                    Double undo_add = synchronized_list.remove(index);
+                }
+                else if (to_undo.is_delete_key_tuple(op_tuple))
+                {
+                    int index = op_tuple.key;
+                    RalphObject<Double,Double> what_removed =
+                        op_tuple.what_added_or_removed;
+                    try {
+                        Double what_re_adding =
+                            new Double(what_removed.get_val(null));
+                        synchronized_list.add(index,what_re_adding);
+                            
+                    } catch (Exception _ex) {
+                        _ex.printStackTrace();
+                        had_other_issue.set(true);
+                    }
+                }
+                else
+                {
+                    System.out.println(
+                        "\nNot currently handling writes, " +
+                        "just inserts and deletes.\n");
+                    had_other_issue.set(true);
+                    assert(false);
+                }                
+            }
         }
     }
 }
