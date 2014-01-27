@@ -1,0 +1,31 @@
+Endpoint TVarListEndpoint
+{
+    TVar List(element: Number) number_list;
+
+    set_number_list(TVar List (element: Number) to_set_to)
+    {
+        number_list = to_set_to;
+    }
+
+    atomically_do_many_ops()
+    {
+        atomically {
+            number_list.append(3);
+            number_list.append(2);
+            number_list.append(4);
+            number_list.remove(0);
+            number_list.append(5);
+            number_list.remove(2);
+            number_list.append(10);
+        }
+    }
+    get_list_size() returns Number
+    {
+        return number_list.size();
+    }
+    
+    get_entry_at_index(Number index) returns Number
+    {
+        return number_list.get(index);
+    }
+}
