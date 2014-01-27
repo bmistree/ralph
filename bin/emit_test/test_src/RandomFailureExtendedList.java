@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RandomFailureExtendedList
 {
-    private static final int NUM_TIMES_TO_RUN = 100;
+    private static final int NUM_TIMES_TO_RUN = 200;
     private static final AtomicBoolean had_other_issue =
         new AtomicBoolean(false);
     
@@ -52,7 +52,7 @@ public class RandomFailureExtendedList
             List<Double> synchronized_list =
                 synchronized_internal_list.synchronized_list;
             int internal_list_size = endpt.get_list_size().intValue();
-            
+
             if (synchronized_list.size() != internal_list_size)
                 return false;
             for (int i = 0; i < internal_list_size; ++i)

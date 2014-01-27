@@ -33,9 +33,18 @@ public class AtomicActiveEvent extends ActiveEvent
     private enum State 
     {
         STATE_RUNNING, STATE_FIRST_PHASE_COMMIT,
-        STATE_SECOND_PHASE_COMMITTED, STATE_BACKED_OUT
+        // enters this state from state_running (either when it fails
+        // pushing its changes to its objects or if it is told to
+        // backout because the overall active event was being backed
+        // out).  while in this state cannot be preempted.  Leaves
+        // this state after calls backout on all touched objects.
+        STATE_BACKING_OUT,
+        STATE_SECOND_PHASE_COMMITTED,
+        // enters this state only after all touched objects have been
+        // backed out.
+        STATE_BACKED_OUT
     }
-	
+
     public ActiveEventMap event_map = null;
 
 
@@ -59,6 +68,11 @@ public class AtomicActiveEvent extends ActiveEvent
 	
     private ReentrantLock _nfmutex = new ReentrantLock();
 
+    /**
+       See note in _backout: can get a call to _backout twice.
+     */
+    private boolean received_backout_already = false;
+    
     /**
      //# a dict containing all local objects that this event has
      //# touched while executing.  On commit, must run through each
@@ -402,6 +416,11 @@ public class AtomicActiveEvent extends ActiveEvent
             //# transition into first phase commit state        
             state = State.STATE_FIRST_PHASE_COMMIT;
         }
+        else
+        {
+            // while in this state, cannot be preempted
+            state = State.STATE_BACKING_OUT;
+        }
         // Placed above inside _lock because do not want to backout
         // (eg., if another host issued backout call until pushed
         // changes to hardware) until push changes to hardware.
@@ -533,7 +552,7 @@ public class AtomicActiveEvent extends ActiveEvent
     private void _backout(String backout_requester_endpoint_uuid, boolean stop_request)
     {
         //# 0
-        if (state == State.STATE_BACKED_OUT)
+        if (received_backout_already)
         {
             //# Can get multiple backout requests if, for instance,
             //# multiple partner endpoints get preempted and forward
@@ -542,8 +561,10 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         
         //# 1
-        state = State.STATE_BACKED_OUT;
-
+        received_backout_already = true;
+        // transition to backout completed in backout_touched_objects.
+        state = State.STATE_BACKING_OUT;
+        
         
         //# 2: Using a separate thread to backout from objects.  This is
         //# because: 1) does not violate any correctness guarantees to
@@ -589,6 +610,10 @@ public class AtomicActiveEvent extends ActiveEvent
         
         for (AtomicObject touched_obj : copied_touched_objs.values())
             touched_obj.backout(this);
+
+        _lock();
+        state = State.STATE_BACKED_OUT;
+        _unlock();
     }
 
     /**
