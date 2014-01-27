@@ -246,8 +246,6 @@
       <arg line="emit_test_package"/>
       <arg line="ManyOpsAtomicListFail"/>
     </exec>
-
-    
     
   </target>
 
@@ -297,7 +295,7 @@
          run_InterruptedEndpointCallAtomically,run_PromotionTest,
          run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
-         run_AtomicTCPPartnerCall">
+         run_AtomicTCPPartnerCall,run_RandomFailureExtendedList">
   </target>
   
   
@@ -642,6 +640,22 @@
     </java>
   </target>
 
+
+  <!-- Run RandomFailureExtendedList -->
+  <target
+      name="run_RandomFailureExtendedList"
+      depends="compile_ralph_tests"
+      description="Tests that can make atomic partner calls over TCP.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.RandomFailureExtendedList"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   
   
   <!-- Delete the build directories -->

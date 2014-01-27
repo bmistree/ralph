@@ -169,7 +169,7 @@ public class HardwareFailureTest
             ListTypeDataWrapper<Double,Double> to_undo)
         {
             undo_changes_called.set(true);
-         }
+        }
 
         @Override
         public void run()
