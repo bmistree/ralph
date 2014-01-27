@@ -27,10 +27,13 @@ public class ListTypeDataWrapper<T,D>
 		
         public int type;
         public Integer key;
-        public OpTuple(int _type, Integer _key)
+        public RalphObject<T,D> what_added_or_removed = null;
+        public OpTuple(
+            int _type, Integer _key, RalphObject<T,D> _what_added_or_removed)
         {
             type = _type;
             key = _key;
+            what_added_or_removed = _what_added_or_removed;
         }		
 		
     }
@@ -105,14 +108,10 @@ public class ListTypeDataWrapper<T,D>
         ActiveEvent active_event, Integer key_to_delete,
         boolean incorporating_deltas)
     {
-    	/*
-          if self.log_changes and (not incorporating_deltas):
-          self.partner_change_log.append(delete_key_tuple(key_to_delete))            
-          del self.val[key_to_delete]
-        */
+        RalphObject<T,D> what_removed =
+            val.remove(key_to_delete.intValue());
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(delete_key_tuple(key_to_delete));
-        val.remove(key_to_delete.intValue());
+            partner_change_log.add(delete_key_tuple(key_to_delete,what_removed));
     }
     
     public void del_key(ActiveEvent active_event,Integer key_to_delete)
@@ -126,7 +125,7 @@ public class ListTypeDataWrapper<T,D>
     {
         Integer key_added = new Integer(val.size());        
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(add_key_tuple(key_added));
+            partner_change_log.add(add_key_tuple(key_added,new_object));
     	val.add(key_added,new_object);        
     }
     
@@ -151,7 +150,7 @@ public class ListTypeDataWrapper<T,D>
     {
         Integer key_added = new Integer(val.size());
         if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(add_key_tuple(key_added));
+            partner_change_log.add(add_key_tuple(key_added,new_val));
     	val.add(where_to_insert,new_val);
     }
     
@@ -162,18 +161,18 @@ public class ListTypeDataWrapper<T,D>
     	insert(active_event,where_to_insert,new_val,false);
     }
 
-    public OpTuple delete_key_tuple(Integer _key)
+    public OpTuple delete_key_tuple(Integer _key, RalphObject<T,D> what_removed)
     {
-        return new OpTuple(OpTuple.DELETE_FLAG,_key);
+        return new OpTuple(OpTuple.DELETE_FLAG,_key,what_removed);
     }
     public boolean is_delete_key_tuple(OpTuple opt)
     {
         return opt.type == OpTuple.DELETE_FLAG;
     }
 
-    public OpTuple add_key_tuple(Integer _key)
+    public OpTuple add_key_tuple(Integer _key, RalphObject<T,D> what_added)
     {
-        return new OpTuple(OpTuple.ADD_FLAG,_key);
+        return new OpTuple(OpTuple.ADD_FLAG,_key,what_added);
     }
     public boolean is_add_key_tuple(OpTuple opt)
     {
@@ -182,7 +181,7 @@ public class ListTypeDataWrapper<T,D>
 	
     public OpTuple write_key_tuple(Integer _key)
     {
-        return new OpTuple(OpTuple.WRITE_FLAG,_key);
+        return new OpTuple(OpTuple.WRITE_FLAG,_key,null);
     }
     public boolean is_write_key(OpTuple opt)
     {
