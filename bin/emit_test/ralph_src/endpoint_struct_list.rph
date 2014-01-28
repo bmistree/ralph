@@ -18,6 +18,20 @@ Endpoint EndpointUser
         all_wrapped_endpoints.append(wrapped_to_append);
     }
 
+    add_numbers_on_all_indices() returns Number
+    {
+        Number result;
+        atomically {
+            result = 0;
+            for (Struct EndpointWrapper endpt_wrapper in all_wrapped_endpoints)
+            {
+                Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+                result = result + endpt.get_number();
+            }
+        }
+        return result;
+    }
+    
     get_list_size() returns Number
     {
         return all_wrapped_endpoints.size();
