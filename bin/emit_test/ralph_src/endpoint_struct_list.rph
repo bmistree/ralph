@@ -27,7 +27,8 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Number to_return = endpt_wrapper.local_end.get_number();
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Number to_return = endpt.get_number();
         return to_return;
     }
 
@@ -35,35 +36,40 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper=
             all_wrapped_endpoints.get(index);
-        endpt_wrapper.local_end.set_number(new_number);
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        endpt.set_number(new_number);
     }
     
     get_text_on_index(Number index) returns Text
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        return endpt_wrapper.local_end.get_text();
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        return endpt.get_text();
     }
 
     set_text_on_index(Number index, Text new_text)
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        endpt_wrapper.local_end.set_text(new_text);
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        endpt.set_text(new_text);
     }
 
     get_tf_on_index(Number index) returns TrueFalse
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        return endpt_wrapper.local_end.get_tf();
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        return endpt.get_tf();
     }
 
     set_tf_on_index(Number index, TrueFalse new_tf)
     {
         Struct EndpointWrapper endpt_wrapper =
-            all_wrapped_endpoints.get(index);        
-        endpt_wrapper.local_end.set_tf(new_tf);
+            all_wrapped_endpoints.get(index);
+        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        endpt.set_tf(new_tf);
     }
     
 }
