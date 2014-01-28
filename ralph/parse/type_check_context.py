@@ -177,6 +177,10 @@ class TypeCheckContext(object):
         self.scope_stack.pop()
 
     def add_var_name(self,ralph_var_name,ast_node):
+        '''
+        @param {AstNode} ast_node --- Either a declaration node or a
+        type node.
+        '''
         last_valid_index = len(self.scope_stack) - 1
         top_scope = self.scope_stack[last_valid_index]
         top_scope.add_var(ralph_var_name,ast_node)

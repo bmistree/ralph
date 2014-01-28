@@ -474,15 +474,15 @@ class ForNode(_AstNode):
         self.variable_node.type_check_pass_one(struct_types_ctx)
         self.in_what_node.type_check_pass_one(struct_types_ctx)
         self.statement_node.type_check_pass_one(struct_types_ctx)
-        
+
     def type_check_pass_two(self,type_check_ctx):
         type_check_ctx.push_scope()
         type_check_ctx.add_var_name(
             #variable node is an identifier
             self.variable_node.value,
-            self.variable_node)
+            self.variable_type_node)
         self.variable_type_node.type_check_pass_two(type_check_ctx)
-
+        
         self.variable_node.type_check_pass_two(type_check_ctx)
         self.in_what_node.type_check_pass_two(type_check_ctx)
         self.statement_node.type_check_pass_two(type_check_ctx)
