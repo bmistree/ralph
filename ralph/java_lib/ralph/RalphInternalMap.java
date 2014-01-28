@@ -69,17 +69,7 @@ public class RalphInternalMap<K,V,D>
 
         Object to_return = null;        
         if (internal_key_val.return_internal_val_from_container())
-        {
-            try {
-                to_return = internal_key_val.get_val(active_event);
-            } catch (BackoutException e) {
-                // TODO Auto-generated catch block
-                to_return = internal_key_val;
-                e.printStackTrace();
-                Util.logger_assert(
-                    "Unexpected backout from internal map");
-            }
-        }
+            to_return = internal_key_val.get_val(active_event);
         else
             to_return = internal_key_val;
         
