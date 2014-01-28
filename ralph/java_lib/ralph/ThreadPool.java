@@ -12,8 +12,7 @@ public class ThreadPool
 	
     public ThreadPool(int num_threads)
     {
-        executor = Executors.newFixedThreadPool(
-            num_threads,
+        executor = Executors.newCachedThreadPool(
             new ThreadFactory()
             {
                 // each thread created is a daemon
