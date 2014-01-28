@@ -31,6 +31,9 @@ class EndpointType(Type):
         self.is_tvar = is_tvar
         self.alias_name = alias_name
 
+    def clone(self,is_tvar):
+        return EndpointType(self.endpoint_name,is_tvar,self.alias_name)
+        
     def __str__(self):
         tvar_string = 'TVar'
         if not self.is_tvar:

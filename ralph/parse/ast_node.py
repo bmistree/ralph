@@ -5,6 +5,7 @@ from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type, EndpointType, WildcardType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
+from ralph.parse.type_check_context import FixupableObject
 # Type check is broken into two passes:
 #
 #   Pass one:
@@ -88,7 +89,12 @@ class RootStatementNode(_AstNode):
         struct_types_ctx = StructTypesContext(alias_ctx)
         for struct_node in self.struct_node_list:
             to_fixup = struct_node.add_struct_type(struct_types_ctx)
+
+        for struct_node in self.struct_node_list:
+            struct_node.register_struct_endpoint_fields(struct_types_ctx)
+            
         struct_types_ctx.perform_fixups()
+
             
         # in case any of the structs have maps/lists/structs in them,
         # will need to resolve those.
@@ -142,19 +148,28 @@ class StructDefinitionNode(_AstNode):
         self.type = StructType(
             self.struct_name,name_to_types_dict,False)
 
+        
+    def register_struct_endpoint_fields(self,struct_types_ctx):
+        '''
+        Run through all fields of struct and ask any endpoints in
+        those fields to perform their alias operations.
+        '''
+        self.struct_body_node.register_struct_endpoint_fields(struct_types_ctx)
+
+        
     def add_struct_type(self,struct_types_ctx):
         alias_name = (
             struct_types_ctx.alias_ctx.get_struct_alias(self.struct_name))
         self.type.set_alias_name(alias_name)
         
-        struct_types_ctx.add_type_obj_for_name(
+        struct_types_ctx.add_struct_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
-        
+
         # for structs that have fields that point to other structs.
         for field_name_to_fixup in self.to_fixup:
             to_fixup_with = self.to_fixup[field_name_to_fixup]
             struct_types_ctx.to_fixup(
-                self.struct_name, field_name_to_fixup,to_fixup_with)
+                self.struct_name,field_name_to_fixup,to_fixup_with)
 
 
     def type_check_pass_one(self,struct_types_ctx):
@@ -915,9 +930,18 @@ class StructVariableTypeNode(VariableTypeNode):
             ast_labels.STRUCT_VARIABLE_TYPE,line_number)
         self.struct_name = struct_name_identifier_node.value
         self.is_tvar = is_tvar
+
+        self.fixupable_object = FixupableObject(
+            FixupableObject.FIXUPABLE_TYPE_STRUCT,
+            self.struct_name,self.is_tvar)
+
+    def get_fixupable_object(self):
+        return self.fixupable_object
+
+        
     def type_check_pass_one(self,struct_types_ctx):
         struct_type_obj = (
-            struct_types_ctx.get_type_obj_from_name(
+            struct_types_ctx.get_type_obj_from_struct_name(
                 self.struct_name))
         if struct_type_obj is None:
             raise TypeCheckException(
@@ -935,12 +959,19 @@ class EndpointVariableTypeNode(VariableTypeNode):
             ast_labels.ENDPOINT_VARIABLE_TYPE,line_number)
         self.endpoint_name = endpoint_name_identifier_node.value
         self.is_tvar = is_tvar
-        
-    def type_check_pass_one(self,struct_types_ctx):
 
+        self.alias_name = None
+        self.fixupable_object = FixupableObject(
+            FixupableObject.FIXUPABLE_TYPE_ENDPOINT,
+            self.endpoint_name,self.is_tvar)
+
+    def get_fixupable_object(self):
+        return self.fixupable_object
+        
+    def setup_type_from_alias(self,struct_types_ctx):
         self.alias_name = struct_types_ctx.alias_ctx.get_endpoint_alias(
             self.endpoint_name)
-
+        
         if self.alias_name is None:
             raise TypeCheckException(
                 self.line_number,
@@ -948,6 +979,14 @@ class EndpointVariableTypeNode(VariableTypeNode):
 
         self.type = EndpointType(
             self.endpoint_name,self.is_tvar,self.alias_name)
+
+        struct_types_ctx.add_endpoint_type_obj_for_name(
+            self.endpoint_name,self.type,self.line_number)
+        
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        if self.alias_name is None:
+            self.setup_type_from_alias(struct_types_ctx)
         
     def type_check_pass_two(self,type_check_ctx):
         pass
@@ -1205,6 +1244,14 @@ class StructBodyNode(_AstNode):
     def add_struct_field(self,declaration_statement_node):
         self._append_child(declaration_statement_node)
 
+    def register_struct_endpoint_fields(self,struct_types_ctx):
+        for declaration_statement_node in self.children:
+            if isinstance(declaration_statement_node.type_node,EndpointVariableTypeNode):
+                # tell the endpoint variable what its alias is if it
+                # needs one
+                declaration_statement_node.type_node.setup_type_from_alias(
+                    struct_types_ctx)
+        
     def get_field_dict(self):
         '''
         Returns:
@@ -1221,11 +1268,12 @@ class StructBodyNode(_AstNode):
             field_dict[field_name] = declaration_statement_node.type_node.type
             
             if field_dict[field_name] is None:
-                # means that it's a pointer to a struct that we may
-                # have to fixup later
+                # means that it's a pointer to a struct or endpoint
+                # that we may have to fixup later
                 to_fixup[field_name] = (
-                    declaration_statement_node.type_node.struct_name)
-            
+                    declaration_statement_node.type_node.get_fixupable_object())
+
+                
         return field_dict, to_fixup
 
     def type_check_pass_one(self,struct_types_ctx):

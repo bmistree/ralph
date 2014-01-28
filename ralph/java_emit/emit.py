@@ -59,7 +59,7 @@ public class %s
     prog_txt += indent_string(
         '/*********** STRUCT DEFINITIONS ******/\n')
     for struct_name in struct_types_ctx:
-        struct_type = struct_types_ctx.get_type_obj_from_name(struct_name)
+        struct_type = struct_types_ctx.get_type_obj_from_struct_name(struct_name)
         prog_txt += indent_string(
             emit_struct_definition(struct_name,struct_type))
         prog_txt += '\n'

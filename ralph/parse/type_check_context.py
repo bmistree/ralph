@@ -1,4 +1,5 @@
 from ralph.parse.parse_util import TypeCheckException
+from ralph.parse.parse_util import InternalTypeCheckException
 
 class Scope(object):
     def __init__(self):
@@ -17,10 +18,17 @@ class Scope(object):
 class _FixupObject(object):
     def __init__(
         self,struct_to_fixup_name,field_struct_to_fixup,
-        struct_name_to_fixup_with):
+        to_fixup_with_fixupable_object):
+        '''
+        @param {FixupableObject} to_fixup_with_fixupable_object ---
+        Keeps track of whether the field we're trying to fixup is for
+        an endpoint or a struct and what that endpoint'/struct's name
+        is.        
+        '''
         self.struct_to_fixup_name = struct_to_fixup_name
         self.field_struct_to_fixup = field_struct_to_fixup
-        self.struct_name_to_fixup_with = struct_name_to_fixup_with
+        self.to_fixup_with_fixupable_object = to_fixup_with_fixupable_object
+
 
 class AliasContext(object):
     def __init__(self):
@@ -36,6 +44,34 @@ class AliasContext(object):
         return self.endpoint_names_to_alias_names_dict.get(
             endpoint_name,None)
                                                            
+
+class FixupableObject(object):
+    FIXUPABLE_TYPE_STRUCT = 0
+    FIXUPABLE_TYPE_ENDPOINT = 1
+    
+    def __init__(self,fixupable_type, fixupable_name,is_tvar):
+        self.fixupable_type = fixupable_type
+        self.fixupable_name = fixupable_name
+        self.is_tvar = is_tvar
+
+    def perform_fixup(self,struct_types_ctx):
+        '''Return a cloned type object associated with this fixupable
+        object.
+        '''
+        if self.fixupable_type == FixupableObject.FIXUPABLE_TYPE_STRUCT:
+            type_to_fixup_with = (
+                struct_types_ctx.struct_name_to_type_obj_dict[self.fixupable_name])
+        elif self.fixupable_type == FixupableObject.FIXUPABLE_TYPE_ENDPOINT:
+            type_to_fixup_with = (
+                struct_types_ctx.endpoint_name_to_type_obj_dict[self.fixupable_name])
+        #### DEBUG
+        else:
+            raise InternalTypeCheckException(
+                'Unknown fixupable object type when performing fixups.')
+        #### END DEBUG
+
+        return type_to_fixup_with.clone(self.is_tvar)
+
         
     
 class StructTypesContext(object):
@@ -43,14 +79,15 @@ class StructTypesContext(object):
     """
     
     def __init__(self,alias_ctx):
-        self.name_to_type_obj_dict = {}
+        self.struct_name_to_type_obj_dict = {}
+        self.endpoint_name_to_type_obj_dict = {}
         # each element is a FixupObject
         self.list_to_fixup = []
         self.alias_ctx = alias_ctx
 
     def to_fixup(
         self,struct_to_fixup_name,field_struct_to_fixup,
-        struct_name_to_fixup_with):
+        to_fixup_with_fixupable_object):
         '''When a struct contains another struct, sometimes cannot
         specify the full type of the struct because the other struct
         isn't defined.  Eg.,
@@ -67,42 +104,53 @@ class StructTypesContext(object):
 
         Cannot fix full type of Struct Outer until have defined
         Struct Inner.
+
+
+        @param {FixupableObject} to_fixup_with_fixupable_object ---
+        Keeps track of whether the field we're trying to fixup is for
+        an endpoint or a struct and what that endpoint'/struct's name
+        is.
         '''
         self.list_to_fixup.append(
             _FixupObject(
                 struct_to_fixup_name,field_struct_to_fixup,
-                struct_name_to_fixup_with))
+                to_fixup_with_fixupable_object))
 
     def perform_fixups(self):
         for fixup_obj in self.list_to_fixup:
             struct_type_to_fixup = (
-                self.name_to_type_obj_dict[fixup_obj.struct_to_fixup_name])
+                self.struct_name_to_type_obj_dict[fixup_obj.struct_to_fixup_name])
 
-            struct_type_to_fixup_with = (
-                self.name_to_type_obj_dict[fixup_obj.struct_name_to_fixup_with])
-
+            type_to_fixup_with = (
+                fixup_obj.to_fixup_with_fixupable_object.perform_fixup(self))
+            
             to_fixup_field_type_dict = struct_type_to_fixup.name_to_field_type_dict
             to_fixup_field_type_dict[fixup_obj.field_struct_to_fixup] = (
-                struct_type_to_fixup_with)
+                type_to_fixup_with)
         self.list_to_fixup = []
 
         
-    def get_type_obj_from_name(self,name):
+    def get_type_obj_from_struct_name(self,name):
         '''
         Returns:
            TypeObject or None (if type name does not exist).
         '''
-        return self.name_to_type_obj_dict.get(name,None)
+        return self.struct_name_to_type_obj_dict.get(name,None)
     
-    def add_type_obj_for_name(self,name,type_obj,line_number):
-        if name in self.name_to_type_obj_dict:
+    def add_struct_type_obj_for_name(self,name,type_obj,line_number):
+        if name in self.struct_name_to_type_obj_dict:
             raise TypeCheckException(
                 line_number,
                 'Already have a type named %s' % name)
-        self.name_to_type_obj_dict[name] = type_obj
+        self.struct_name_to_type_obj_dict[name] = type_obj
 
+    def add_endpoint_type_obj_for_name(self,name,type_obj,line_number):
+        self.endpoint_name_to_type_obj_dict[name] = type_obj
+    def get_endpoint_type_obj_for_name(self,name,type_obj,line_number):
+        return self.endpoint_name_to_type_obj_dict[name] 
+        
     def __iter__(self):
-        return iter(self.name_to_type_obj_dict.keys())
+        return iter(self.struct_name_to_type_obj_dict.keys())
         
     
 class TypeCheckContext(object):

@@ -22,3 +22,9 @@ class TypeCheckException(CompilerException):
     def __str__(self):
         return 'Error on line %i:%s' % (self.line_number,self.msg)
 
+class InternalTypeCheckException(CompilerException):
+    def __init__(self,msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
