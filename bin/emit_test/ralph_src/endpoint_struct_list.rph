@@ -1,0 +1,69 @@
+alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+
+
+Struct EndpointWrapper
+{
+    Endpoint BasicSetterGetter local_end;
+}
+
+
+Endpoint EndpointUser
+{
+    List(element : Struct EndpointWrapper) all_wrapped_endpoints;
+
+    add_endpoint(Endpoint BasicSetterGetter to_append)
+    {
+        Struct EndpointWrapper wrapped_to_append;
+        wrapped_to_append.local_end = to_append;
+        all_wrapped_endpoints.append(wrapped_to_append);
+    }
+
+    get_list_size() returns Number
+    {
+        return all_wrapped_endpoints.size();
+    }
+
+    get_number_on_index(Number index) returns Number
+    {
+        Struct EndpointWrapper endpt_wrapper =
+            all_wrapped_endpoints.get(index);
+        Number to_return = endpt_wrapper.local_end.get_number();
+        return to_return;
+    }
+
+    set_number_on_index(Number index,Number new_number)
+    {
+        Struct EndpointWrapper endpt_wrapper=
+            all_wrapped_endpoints.get(index);
+        endpt_wrapper.local_end.set_number(new_number);
+    }
+    
+    get_text_on_index(Number index) returns Text
+    {
+        Struct EndpointWrapper endpt_wrapper =
+            all_wrapped_endpoints.get(index);
+        return endpt_wrapper.local_end.get_text();
+    }
+
+    set_text_on_index(Number index, Text new_text)
+    {
+        Struct EndpointWrapper endpt_wrapper =
+            all_wrapped_endpoints.get(index);
+        endpt_wrapper.local_end.set_text(new_text);
+    }
+
+    get_tf_on_index(Number index) returns TrueFalse
+    {
+        Struct EndpointWrapper endpt_wrapper =
+            all_wrapped_endpoints.get(index);
+        return endpt_wrapper.local_end.get_tf();
+    }
+
+    set_tf_on_index(Number index, TrueFalse new_tf)
+    {
+        Struct EndpointWrapper endpt_wrapper =
+            all_wrapped_endpoints.get(index);        
+        endpt_wrapper.local_end.set_tf(new_tf);
+    }
+    
+}

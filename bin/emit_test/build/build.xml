@@ -256,6 +256,15 @@
       <arg line="AtomicListAppend"/>
     </exec>
 
+    <echo message="${line.separator}Emitting endpoint_struct_list${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/endpoint_struct_list.rph"/>
+      <arg line="${ralph_emitted.dir}/EndpointStructList.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="EndpointStructList"/>
+    </exec>
+    
     
   </target>
 
