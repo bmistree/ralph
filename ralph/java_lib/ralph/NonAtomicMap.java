@@ -154,6 +154,8 @@ public abstract class NonAtomicMap<K,V,D>
             } catch (BackoutException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                Util.logger_assert(
+                    "Did not consider effect of backout when loading");                
             }
         }
     }

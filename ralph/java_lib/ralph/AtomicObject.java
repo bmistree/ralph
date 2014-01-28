@@ -282,6 +282,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Util.logger_assert(
+                "Did not consider effect of interruption while waiting");
         }
         return to_return;
     }
@@ -381,6 +383,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Util.logger_assert(
+                "Did not consider effect of interruption while waiting");            
         }
         return to_return;
     }

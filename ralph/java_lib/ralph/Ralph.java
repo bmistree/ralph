@@ -136,6 +136,8 @@ public class Ralph {
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected interruption in tcp accept");
         }
 
         //# the user can call stop directly on the returned object, but we

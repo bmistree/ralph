@@ -261,6 +261,8 @@ public class ExecutingEventContext
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Util.logger_assert(
+                "Did not consider effect of interruption while waiting");            
         }
     	if (queue_elem.result_type ==
             MessageCallResultObject.ResultType.BACKOUT_BEFORE_RECEIVE_MESSAGE)
@@ -346,6 +348,8 @@ public class ExecutingEventContext
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            Util.logger_assert(
+                "Did not consider effect of interruption while waiting");            
         }
 
         if (ApplicationExceptionEndpointCallResult.class.isInstance(queue_elem))

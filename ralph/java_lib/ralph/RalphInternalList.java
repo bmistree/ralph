@@ -100,6 +100,8 @@ public class RalphInternalList<V,D>
                 // TODO Auto-generated catch block
                 to_return = internal_key_val;
                 e.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected backout from internal list");
             }
         }
         else
