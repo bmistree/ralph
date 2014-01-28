@@ -1,0 +1,22 @@
+Endpoint TVarListEndpoint
+{
+    TVar List(element: Number) number_list;
+
+    append_number(Number to_append)
+    {
+        atomically
+        {
+            number_list.append(to_append);
+        }
+    }
+
+    get_size() returns Number
+    {
+        return number_list.size();
+    }
+
+    get_val_at_index(Number index) returns Number
+    {
+        return number_list.get(index);
+    }
+}

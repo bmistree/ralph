@@ -246,6 +246,16 @@
       <arg line="emit_test_package"/>
       <arg line="ManyOpsAtomicListFail"/>
     </exec>
+
+    <echo message="${line.separator}Emitting atomic_list_append${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/atomic_list_append.rph"/>
+      <arg line="${ralph_emitted.dir}/AtomicListAppend.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="AtomicListAppend"/>
+    </exec>
+
     
   </target>
 
@@ -655,6 +665,20 @@
     </java>
   </target>
 
+  <!-- Run AtomicListAppendTest -->
+  <target
+      name="run_AtomicListAppend"
+      depends="compile_ralph_tests"
+      description="Ensures append works on atomic lists.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.AtomicListAppendTester"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+  
   
   
   
