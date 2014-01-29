@@ -117,16 +117,20 @@ public class RootEventParent extends EventParent {
     {
         // # note that we should not wait on ourselves to commit
     	_lock_endpoints_waiting_on_commit();
-    	endpoints_waiting_on_commit.put(local_endpoint._uuid, true);
 
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             endpoints_waiting_on_commit.put(endpt._partner_uuid, false);
-    		
+        
     	for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
             endpoints_waiting_on_commit.put(waiting_on_uuid, false);
     	
         //# not waiting on self.
         endpoints_waiting_on_commit.put(local_endpoint._uuid, true);
+
+        // we know that all local endpoints should be able to commit
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+            endpoints_waiting_on_commit.put(endpt._uuid, true);
+        
         _unlock_endpoints_waiting_on_commit();
 
         super.first_phase_transition_success(
@@ -211,7 +215,6 @@ public class RootEventParent extends EventParent {
             }
             _unlock_endpoints_waiting_on_commit();
     	}
-    	
     	if (may_transition)
             check_transition();
     }
