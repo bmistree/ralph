@@ -39,22 +39,35 @@ public class ExtendedVariables
             ListTypeDataWrapper<T,D> to_undo);
         
         @Override
-        public void complete_commit(ActiveEvent active_event)
+        protected boolean internal_complete_commit(ActiveEvent active_event)
         {
-            // do not need a lock 
-            dirty_op_tuples_on_hardware = null;
-            super.complete_commit(active_event);
+            _lock();
+            boolean write_lock_holder_completed =
+                super.internal_complete_commit(active_event);
+
+            if (write_lock_holder_completed)
+                dirty_op_tuples_on_hardware = null;
+            _unlock();
+            return write_lock_holder_completed;
         }
+
+
         
         @Override
-        public void backout (ActiveEvent active_event)
+        protected boolean internal_backout (ActiveEvent active_event)
         {
-            // if there were dirty values that we had pushed to the
-            // hardware, we need to undo them.
-            if (dirty_op_tuples_on_hardware != null)
-                undo_dirty_changes_to_hardware(dirty_op_tuples_on_hardware);
-            dirty_op_tuples_on_hardware = null;
-            super.backout(active_event);
+            _lock();
+            boolean write_lock_holder_preempted = super.internal_backout(active_event);
+            if (write_lock_holder_preempted)
+            {
+                // if there were dirty values that we had pushed to the
+                // hardware, we need to undo them.
+                if (dirty_op_tuples_on_hardware != null)
+                    undo_dirty_changes_to_hardware(dirty_op_tuples_on_hardware);
+                dirty_op_tuples_on_hardware = null;
+            }
+            _unlock();
+            return write_lock_holder_preempted;
         }
 
 

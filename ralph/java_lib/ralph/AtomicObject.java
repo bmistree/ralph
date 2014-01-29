@@ -547,10 +547,20 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     */
     public void complete_commit(ActiveEvent active_event)
     {
+        internal_complete_commit(active_event);
+        //# FIXME: may want to actually check whether the change could
+        //# have caused another read/write to be scheduled.
+        try_next();
+    }
+    protected boolean internal_complete_commit(ActiveEvent active_event)
+    {
+        boolean write_lock_holder_completed = false;
+        
         _lock();
         if ((write_lock_holder != null) &&
             active_event.uuid.equals(write_lock_holder.event.uuid))
         {
+            write_lock_holder_completed = true;
             val.write(dirty_val.val);
             write_lock_holder= null;
             read_lock_holders =
@@ -569,10 +579,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             //#### END DEBUG
         }
         _unlock();
-
-        //# FIXME: may want to actually check whether the change could
-        //# have caused another read/write to be scheduled.
-        try_next();
+        return write_lock_holder_completed;
     }
 
     /**
@@ -584,7 +591,20 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        events
     */
     public void backout (ActiveEvent active_event)
-    {        
+    {
+        internal_backout(active_event);
+        //# check if removal might have freed up preforming another
+        //# operation that had blocked on it.
+
+        //# FIXME: may want to actually check whether the change could
+        //# have caused another read/write to be scheduled.
+        try_next();
+    }
+    
+    protected boolean internal_backout (ActiveEvent active_event)
+    {
+        boolean write_lock_holder_backed_out = false;
+        
         //# FIXME: Are there chances that could process a stale backout?
         //# I think so.
         _lock();
@@ -594,6 +614,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if ((write_lock_holder != null) &&
             write_lock_holder.event.uuid.equals(active_event.uuid))
         {
+            write_lock_holder_backed_out = true;
             write_lock_holder = null;
         }
 
@@ -605,13 +626,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             waiting_event.unwait(this);
 
         _unlock();
-        
-        //# check if removal might have freed up preforming another
-        //# operation that had blocked on it.
-
-        //# FIXME: may want to actually check whether the change could
-        //# have caused another read/write to be scheduled.
-        try_next();
+        return write_lock_holder_backed_out;
     }
 
 	
