@@ -263,10 +263,12 @@ public abstract class EventParent
                     uuid,local_endpoint);
             }
         }
-        
+
         //# tell partners to backout their changes too
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+        {
             endpt._forward_backout_request_partner(uuid);
+        }
     }
 }
 	

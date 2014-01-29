@@ -51,7 +51,9 @@ public class PartnerEventParent extends EventParent {
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
 	        
-    {		
+    {
+        // add local endpoint to endpoints to roll back.
+        local_endpoints_whose_partners_contacted.add(local_endpoint);
         super.rollback(
             backout_requester_endpoint_uuid,same_host_endpoints_contacted_dict,
             local_endpoints_whose_partners_contacted,stop_request);
