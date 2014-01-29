@@ -5,12 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public class RalphGlobals {
     public LamportClock clock;
     public AllEndpoints all_endpoints;
     public ThreadPool thread_pool;
     public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
         DeadlockAvoidanceAlgorithm.BOOSTED;
+
+    public final ConcurrentHashMap<String,ActiveEvent> all_events =
+        new ConcurrentHashMap<String,ActiveEvent>();
     
     private List<Stoppable> stoppable_list =
         Collections.synchronizedList(new ArrayList<Stoppable>());

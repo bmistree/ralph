@@ -147,6 +147,7 @@ public class ActiveEventMap
         else
             root_event = boosted_manager.create_root_non_atomic_event(super_priority);
 
+        local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
         map.put(root_event.uuid,root_event);
         _unlock();
         return root_event;
@@ -179,7 +180,7 @@ public class ActiveEventMap
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
         _lock();
-        
+        local_endpoint.ralph_globals.all_events.remove(event_uuid);
         ActiveEvent to_remove = map.remove(event_uuid);
         ActiveEvent successor_event = null;
         
@@ -211,7 +212,9 @@ public class ActiveEventMap
     public ActiveEvent get_event(String uuid)
     {
         _lock();
-        ActiveEvent to_return = map.get(uuid);
+        // ActiveEvent to_return = map.get(uuid);
+        ActiveEvent to_return =
+            local_endpoint.ralph_globals.all_events.get(uuid);
         _unlock();
         return to_return;
     }
@@ -230,8 +233,9 @@ public class ActiveEventMap
         String uuid, String priority,boolean atomic) throws StoppedException
     {
         _lock();
-		
-        if (! map.containsKey(uuid))
+
+        ActiveEvent to_return = local_endpoint.ralph_globals.all_events.get(uuid);
+        if (to_return == null)
         {
             if (in_stop_phase)
             {
@@ -248,10 +252,10 @@ public class ActiveEventMap
                 else
                     new_event = new NonAtomicActiveEvent(pep,this);
                 map.put(uuid, new_event);
+                local_endpoint.ralph_globals.all_events.put(uuid,new_event);
+                to_return = new_event;
             }
         }
-
-        ActiveEvent to_return = map.get(uuid);
         _unlock();
         return to_return;
     }

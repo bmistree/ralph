@@ -86,7 +86,8 @@ public abstract class Endpoint
      //# handshake instead.
      */
     public String _partner_uuid = null;
-	
+
+    public RalphGlobals ralph_globals = null;
     
     /**
        @param {RalphGlobals} ralph_globals --- Contains common utilities
@@ -108,6 +109,8 @@ public abstract class Endpoint
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
+        this.ralph_globals = ralph_globals;
+        
         _clock = ralph_globals.clock;
         _act_event_map =
             new ActiveEventMap(
