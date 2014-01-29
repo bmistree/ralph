@@ -1,0 +1,19 @@
+alias Endpoint SideA as 'emit_test_package.BasicPartner.SideA';
+
+
+Endpoint SingleSidedHolder
+{
+    Endpoint SideA endpt;
+
+    set_endpoint(Endpoint SideA to_set_to)
+    {
+        endpt = to_set_to;
+    }
+
+    issue_call()
+    {
+        atomically {
+            endpt.increment_other_side_number(1.0);
+        }
+    }
+}
