@@ -163,7 +163,7 @@ public abstract class ActiveEvent
        method on itself.
     */
     public abstract boolean issue_partner_sequence_block_call(
-        ExecutingEventContext ctx, String func_name,
+        Endpoint endpt,ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,ArrayList<RPCArgObject>args);
 

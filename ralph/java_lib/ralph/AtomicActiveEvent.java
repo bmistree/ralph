@@ -767,7 +767,7 @@ public class AtomicActiveEvent extends ActiveEvent
        method on itself.
     */
     public boolean issue_partner_sequence_block_call(
-        ExecutingEventContext ctx, String func_name,
+        Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,ArrayList<RPCArgObject>args)
     {
@@ -835,10 +835,9 @@ public class AtomicActiveEvent extends ActiveEvent
             if (! first_msg)
                 replying_to = ctx.get_to_reply_with();
 
-
             
             // request endpoint to send message to partner
-            event_parent.local_endpoint._send_partner_message_sequence_block_request(
+            endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
                 replying_to,this,serialized_arguments,
                 first_msg,true);

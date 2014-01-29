@@ -240,8 +240,8 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                this, func_name, threadsafe_unblock_queue, first_msg,args);
-        
+                endpoint,this, func_name, threadsafe_unblock_queue, first_msg,args);
+
     	if (! partner_call_requested)
     	{
             //# already backed out.  did not schedule message.  raise

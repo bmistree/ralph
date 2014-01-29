@@ -315,7 +315,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        method on itself.
     */
     public boolean issue_partner_sequence_block_call(
-        ExecutingEventContext ctx, String func_name,
+        Endpoint endpt, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,ArrayList<RPCArgObject>args)
     {
@@ -375,7 +375,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
         
         // request endpoint to send message to partner
-        event_parent.local_endpoint._send_partner_message_sequence_block_request(
+        endpt._send_partner_message_sequence_block_request(
             func_name,uuid,get_priority(),reply_with_uuid,
             replying_to,this,serialized_arguments,
             first_msg,false);
