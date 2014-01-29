@@ -8,7 +8,7 @@ import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 public class Ralph {
 
-    private static RalphGlobals all_globals = new RalphGlobals();
+    //private static RalphGlobals all_globals = new RalphGlobals();
     private static String host_uuid = Util.generate_uuid();
 	
 
@@ -23,7 +23,7 @@ public class Ralph {
      * @param constructor
      */
     public static Endpoint no_partner_create(
-        EndpointConstructorObj constructor)
+        EndpointConstructorObj constructor, RalphGlobals all_globals)
     {
         return constructor.construct(
             all_globals,host_uuid,
@@ -55,7 +55,8 @@ public class Ralph {
      * @throws IOException 
      */
     public static Endpoint tcp_connect(
-        EndpointConstructorObj constructor_obj, String host, int port)
+        EndpointConstructorObj constructor_obj, String host, int port,
+        RalphGlobals all_globals)
         throws IOException
     {
         RalphConnObj.TCPConnectionObj tcp_connection_obj = 
@@ -96,9 +97,10 @@ public class Ralph {
        stop instantly, but probably within the next second or two.
     */
     public static Stoppable tcp_accept(
-        EndpointConstructorObj constructor_obj, String host, int port)
+        EndpointConstructorObj constructor_obj, String host, int port,
+        RalphGlobals all_globals)
     {
-        return tcp_accept(constructor_obj,host,port, null);
+        return tcp_accept(constructor_obj,host,port, null,all_globals);
     }
 
     /**
@@ -111,7 +113,7 @@ public class Ralph {
      */
     public static Stoppable tcp_accept(
         EndpointConstructorObj constructor_obj, String host, int port,
-        SignalFunction connected_callback)
+        SignalFunction connected_callback, RalphGlobals all_globals)
     {
         //# TCP listenener starts in a separate thread.  We must wait for
         //# the calling thread to actually be listening for connections
@@ -146,5 +148,4 @@ public class Ralph {
         all_globals.add_stoppable(stoppable);
         return stoppable;
     }
-	
 }

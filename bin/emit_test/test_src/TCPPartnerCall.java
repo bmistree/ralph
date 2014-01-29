@@ -37,13 +37,15 @@ public class TCPPartnerCall
         try
         {
             Ralph.tcp_accept(
-                SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT);
+                SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
+                new RalphGlobals());
 
             // wait for the other side to ensure that it's listening
             Thread.sleep(1000);
             try {
                 side_a = (SideA)Ralph.tcp_connect(
-                    SIDE_A_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT);
+                    SIDE_A_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
+                    new RalphGlobals());
             } catch (IOException e) {
                 e.printStackTrace();
                 assert(false);
