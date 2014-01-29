@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.RootCallResult;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
-
+import java.util.Set;
 
 public class RootEventParent extends EventParent {
 
@@ -68,18 +68,19 @@ public class RootEventParent extends EventParent {
     	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
     }
     
-        
+    
     /**
      * @see second_phase_transition_success in EventParent
      */
     public void second_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,    		
-        boolean partner_contacted)
+        Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
     	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
 
     	super.second_phase_transition_success(
-            same_host_endpoints_contacted_dict, partner_contacted);
+            same_host_endpoints_contacted_dict,
+            local_endpoints_whose_partners_contacted);
     }
 
     /**
@@ -111,14 +112,15 @@ public class RootEventParent extends EventParent {
     @Override
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, ActiveEvent _event)
+        Set<Endpoint> local_endpoints_whose_partners_contacted,
+        ActiveEvent _event)
     {
         // # note that we should not wait on ourselves to commit
     	_lock_endpoints_waiting_on_commit();
     	endpoints_waiting_on_commit.put(local_endpoint._uuid, true);
-    	
-    	if (partner_contacted)
-            endpoints_waiting_on_commit.put(local_endpoint._partner_uuid, false);
+
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+            endpoints_waiting_on_commit.put(endpt._partner_uuid, false);
     		
     	for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
             endpoints_waiting_on_commit.put(waiting_on_uuid, false);
@@ -128,7 +130,8 @@ public class RootEventParent extends EventParent {
         _unlock_endpoints_waiting_on_commit();
 
         super.first_phase_transition_success(
-            same_host_endpoints_contacted_dict, partner_contacted, _event);
+            same_host_endpoints_contacted_dict,
+            local_endpoints_whose_partners_contacted, _event);
 
         //# after first phase has completed, should check if can
         //# transition directly to second phase (ie, no other endpoints
@@ -161,11 +164,12 @@ public class RootEventParent extends EventParent {
     public void rollback(
         String backout_requester_endpoint_uuid, 
         HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
-        boolean partner_contacted, boolean stop_request)
+        Set<Endpoint> local_endpoints_whose_partners_contacted,
+        boolean stop_request)
     {
         super.rollback(
             backout_requester_endpoint_uuid, same_host_endpoints_contacted_dict,
-            partner_contacted,stop_request);
+            local_endpoints_whose_partners_contacted,stop_request);
     
 
         //# put val to read into event_complete_queue so can know

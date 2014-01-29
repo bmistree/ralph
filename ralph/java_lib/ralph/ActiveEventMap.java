@@ -255,49 +255,4 @@ public class ActiveEventMap
         _unlock();
         return to_return;
     }
-
-    /**
-       @param {Endpoint object} endpoint --- The endpoint that made
-       the endpoint call onto us.
-       * @throws StoppedException 
-
-       @see description above get_or_create_partner_event
-    
-       Create an event because received an endpoint call
-    */
-	
-    public ActiveEvent get_or_create_endpoint_called_event(
-        Endpoint endpoint_calling, String event_uuid, String priority,
-        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue,
-        boolean atomic)
-        throws StoppedException 
-    {
-        _lock();
-        if (! map.containsKey(event_uuid))
-        {
-            if (in_stop_phase)
-            {
-                _unlock();
-                throw new RalphExceptions.StoppedException();
-            }
-
-            
-            EndpointEventParent eep =
-                new EndpointEventParent(
-                    event_uuid,endpoint_calling, local_endpoint,result_queue,priority);
-            ActiveEvent new_event = null;
-            if (atomic)
-                new_event = new AtomicActiveEvent(eep,this,null);
-            else
-                new_event = new NonAtomicActiveEvent(eep,this);
-            
-            map.put(event_uuid, new_event);
-        }
-        ActiveEvent to_return = map.get(event_uuid);
-		
-        _unlock();
-        return to_return;
-	
-    }
-
 }

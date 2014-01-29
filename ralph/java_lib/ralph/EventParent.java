@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
+import java.util.Set;
 
 /**
  *  
@@ -92,13 +93,13 @@ public abstract class EventParent
        uuids, values are EventSubscribedTo
     */
     public void send_promotion_messages(
-        boolean copied_partner_contacted,
+        Set<Endpoint> local_endpoints_whose_partners_contacted,
         HashMap<String,EventSubscribedTo> copied_other_endpoints_contacted,
         String new_priority)
     {
-        if (copied_partner_contacted)
-            local_endpoint._forward_promotion_message(uuid,new_priority);
-		
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+            endpt._forward_promotion_message(uuid,new_priority);
+        
         for (EventSubscribedTo evt_subscribed_to :
                  copied_other_endpoints_contacted.values())
         {
@@ -163,16 +164,17 @@ public abstract class EventParent
     */
     public void first_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted, ActiveEvent _event)
+        Set<Endpoint> local_endpoints_whose_partners_contacted,
+        ActiveEvent _event)
     {
         event = _event;
         //# first keep track of all events that we are waiting on
         //# hearing that first phase commit succeeded.
-        if (partner_contacted)
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
         {
             //# send message to partner telling it to enter first phase
             //# commit
-            local_endpoint._forward_commit_request_partner(uuid);
+            endpt._forward_commit_request_partner(uuid);
         }
             
         for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
@@ -205,7 +207,8 @@ public abstract class EventParent
     */
     public void second_phase_transition_success(
         HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
-        boolean partner_contacted)
+        Set<Endpoint> local_endpoints_whose_partners_contacted)
+
     {
             
         //# tell any endpoints that we had called endpoint methods on to
@@ -215,8 +218,9 @@ public abstract class EventParent
         {
             endpoint_to_second_phase_commit.endpoint_object._receive_request_complete_commit(uuid);
         }
-        if (partner_contacted)
-            local_endpoint._forward_complete_commit_request_partner(uuid);
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+            endpt._forward_complete_commit_request_partner(uuid);
+
     }
 
 	
@@ -241,7 +245,8 @@ public abstract class EventParent
     public void rollback(
         String backout_requester_endpoint_uuid, 
         HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
-        boolean partner_contacted, boolean stop_request)
+        Set<Endpoint> local_endpoints_whose_partners_contacted,
+        boolean stop_request)
     {
         //# tell any endpoints that we had called endpoint methods on to
         //# back out their changes.
@@ -258,10 +263,10 @@ public abstract class EventParent
                     uuid,local_endpoint);
             }
         }
-		
-        //# tell partner to backout its changes too
-        if (partner_contacted)
-            local_endpoint._forward_backout_request_partner(uuid);
+        
+        //# tell partners to backout their changes too
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+            endpt._forward_backout_request_partner(uuid);
     }
 }
 	

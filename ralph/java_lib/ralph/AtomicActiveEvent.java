@@ -99,15 +99,24 @@ public class AtomicActiveEvent extends ActiveEvent
      //# issued commands to while executing as well as the queues
      //# they may be waiting on to free.  On commit, must run through
      //# each and tell it to enter first phase commit.
-     * 
+     *  FIXME: Should get rid of
      */
     private HashMap<String,EventSubscribedTo> other_endpoints_contacted = 
         new HashMap<String,EventSubscribedTo>();
 
-    private boolean partner_contacted = false;
+    /**
+       This active event makes calls to other endpoints' partners.
+       This contains all the endpoints we do that for so that we can
+       forward promotion, abort, and two phase commit messages.
+
+       NOTE: it deprecates other_endpoints_contacted.
+     */
+    private Set<Endpoint> local_endpoints_whose_partners_contacted =
+        new HashSet<Endpoint>();
+    
     
     /**
-     //# using a separate lock for partner_contaced and
+     //# using a separate lock for partner_contacted and
      //# other_endpoints_contacted so that if we are holding the
      //# commit lock on this event, we can still access
      //# other_endpoints_contaced and partner_contacted (for
@@ -275,13 +284,16 @@ public class AtomicActiveEvent extends ActiveEvent
             obj.update_event_priority(uuid, new_priority);
 
         _others_contacted_lock();
-        boolean copied_partner_contacted = partner_contacted;
+        Set<Endpoint> copied_local_other_endpoints_contacted = new HashSet<Endpoint>(
+            local_endpoints_whose_partners_contacted);
+            
         HashMap<String,EventSubscribedTo> copied_other_endpoints_contacted = 
             new HashMap<String,EventSubscribedTo>(other_endpoints_contacted);
         _others_contacted_unlock();
 		
         event_parent.send_promotion_messages(
-            copied_partner_contacted,copied_other_endpoints_contacted,new_priority);
+            copied_local_other_endpoints_contacted,
+            copied_other_endpoints_contacted,new_priority);
     }
 
     /**
@@ -445,10 +457,10 @@ public class AtomicActiveEvent extends ActiveEvent
         //# affirmatively replies that now in first pahse of commit.
         event_parent.first_phase_transition_success(
             other_endpoints_contacted,
-            //# If we had a network failure, then we shouldn't try to
-            //# forward commit to partner.
-            partner_contacted && (! get_network_failure()),
+            local_endpoints_whose_partners_contacted,
             this);
+
+        // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
 
@@ -515,7 +527,8 @@ public class AtomicActiveEvent extends ActiveEvent
         
         // # notify other endpoints to also complete their commits
         event_parent.second_phase_transition_success(
-            other_endpoints_contacted,partner_contacted);
+            other_endpoints_contacted,
+            local_endpoints_whose_partners_contacted);
         
     }
 
@@ -594,7 +607,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //# access to variable.
         event_parent.rollback(
             backout_requester_endpoint_uuid,other_endpoints_contacted,
-            partner_contacted,stop_request);
+            local_endpoints_whose_partners_contacted,stop_request);
     }
 
     /**
@@ -778,7 +791,7 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             partner_call_requested = true;
             _others_contacted_lock();
-            partner_contacted = true;
+            local_endpoints_whose_partners_contacted.add(endpoint);
             _others_contacted_unlock();
             //# code is listening on threadsafe result_queue.  when we
             //# receive a response, put it inside of the result queue.
@@ -846,88 +859,6 @@ public class AtomicActiveEvent extends ActiveEvent
         
         _unlock();
         return partner_call_requested;
-    }
-
-    /**
-       @param {Endpoint object} endpoint_calling --- The endpoint to
-       execute the endpoint object call on.
-	
-       @param {String} func_name --- The name of the function to
-       execute on the endpoint object.
-	
-       @param {Queue.Queue} result_queue --- Threadsafe queue that
-       stores the result 
-	    
-       @returns {bool} --- True if the endpoint object call could go
-       through (ie, we were not already requested to backout the
-       event).  False otherwise.
-	
-       Adds endpoint as an Endpoint object that we are subscribed to.
-       (We need to keep track of all the endpoint objects that we are
-       subscribed to [ie, have requested endpoint object calls on] so
-       that we know who to forward our commit requests and backout
-       requests to.)
-
-    */
-    public boolean issue_endpoint_object_call(
-        Endpoint endpoint_calling,String func_name,
-        ArrayBlockingQueue<EndpointCallResultObject>result_queue,
-        Object...args)            
-    {
-
-        boolean endpoint_call_requested = false;
-        _lock();
-    
-        //#### DEBUG
-        if ((state == State.STATE_FIRST_PHASE_COMMIT) ||
-            (state == State.STATE_SECOND_PHASE_COMMITTED))
-        {
-            //# when we have been requested to commit, it means that all
-            //# events should have run to completion.  Therefore, it
-            //# would not make sense to receive an endpoint call when we
-            //# were in the request commit state (it would mean that all
-            //# events had not run to completion).
-            Util.logger_assert(
-                "Should not be requesting to issue an endpoint " +
-                "object call when in request commit phase.");
-        }
-        //#### END DEBUG
-
-        if (state == State.STATE_RUNNING)
-        {
-            //# we can only execute endpoint object calls if we are
-            //# currently running.  Note: we may issue an endpoint call
-            //# when we are in the backout phase (if, for instance, we
-            //# detected a conflict early and wanted to backout).  In
-            //# this case, do not make additional endpoint calls.  
-            
-            endpoint_call_requested = true;
-
-            //# perform the actual endpoint function call.  note that this
-            //# does not block until it completes.  It just schedules the 
-            endpoint_calling._receive_endpoint_call(
-                event_parent.local_endpoint,uuid,
-                event_parent.get_priority(),func_name,result_queue,
-                args);
-
-            _others_contacted_lock();
-            //# add the endpoint to subscribed to
-            if (! other_endpoints_contacted.containsKey(endpoint_calling._uuid))
-            {
-                other_endpoints_contacted.put(
-                    endpoint_calling._uuid, 
-                    new EventSubscribedTo(endpoint_calling,result_queue));
-            }
-            else
-            {
-                other_endpoints_contacted.get(endpoint_calling._uuid).add_result_queue(
-                    result_queue);
-            }
-            
-            _others_contacted_unlock();
-        } 
-        _unlock();
-        return endpoint_call_requested;
     }
 
     public String get_priority()

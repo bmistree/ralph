@@ -383,58 +383,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return true;
     }
 
-    /**
-       @param {Endpoint object} endpoint_calling --- The endpoint to
-       execute the endpoint object call on.
-	
-       @param {String} func_name --- The name of the function to
-       execute on the endpoint object.
-	
-       @param {Queue.Queue} result_queue --- Threadsafe queue that
-       stores the result 
-	    
-       @returns {bool} --- True if the endpoint object call could go
-       through (ie, we were not already requested to backout the
-       event).  False otherwise.
-	
-       Adds endpoint as an Endpoint object that we are subscribed to.
-       (We need to keep track of all the endpoint objects that we are
-       subscribed to [ie, have requested endpoint object calls on] so
-       that we know who to forward our commit requests and backout
-       requests to.)
-
-    */
-    public boolean issue_endpoint_object_call(
-        Endpoint endpoint_calling,String func_name,
-        ArrayBlockingQueue<EndpointCallResultObject>result_queue,
-        Object...args)
-    {
-        
-        //# perform the actual endpoint function call.  note that this
-        //# does not block until it completes.  It just schedules the 
-        endpoint_calling._receive_endpoint_call(
-            event_parent.local_endpoint,uuid,
-            event_parent.get_priority(),func_name,result_queue,
-            args);
-
-        Util.logger_warn(
-            "When issuing non-atomic endpoint call, must add endpoint to queue.");
-        // //# add the endpoint to subscribed to
-        // if (! other_endpoints_contacted.containsKey(endpoint_calling._uuid))
-        // {
-        //     other_endpoints_contacted.put(
-        //         endpoint_calling._uuid, 
-        //         new EventSubscribedTo(endpoint_calling,result_queue));
-        // }
-        // else
-        // {
-        //     other_endpoints_contacted.get(endpoint_calling._uuid).add_result_queue(
-        //         result_queue);
-        // }
-        // return endpoint_call_requested;
-        return true;
-    }
-
     public String get_priority()
     {
         return event_parent.get_priority();

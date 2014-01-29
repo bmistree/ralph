@@ -330,56 +330,6 @@ public class ExecutingEventContext
         }
     }
 
-    public Object hide_endpoint_call( 
-        ActiveEvent active_event,
-        ExecutingEventContext context, Endpoint endpoint_obj, String method_name,
-        Object...args) throws BackoutException, NetworkException, ApplicationException
-    {
-    	ArrayBlockingQueue<EndpointCallResultObject> threadsafe_result_queue = 
-            new ArrayBlockingQueue<EndpointCallResultObject>(Util.SMALL_QUEUE_CAPACITIES);
-
-    	active_event.issue_endpoint_object_call(
-            endpoint_obj,method_name,threadsafe_result_queue,args);
-
-    	EndpointCallResultObject queue_elem = null;
-    	
-        try {
-            queue_elem = threadsafe_result_queue.take();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Util.logger_assert(
-                "Did not consider effect of interruption while waiting");            
-        }
-
-        if (ApplicationExceptionEndpointCallResult.class.isInstance(queue_elem))
-        {
-            ApplicationExceptionEndpointCallResult casted = 
-                (ApplicationExceptionEndpointCallResult)queue_elem;
-            throw new ApplicationException(casted.get_trace());
-        }
-        else if (NetworkFailureEndpointCallResult.class.isInstance(queue_elem))
-        {
-            NetworkFailureEndpointCallResult casted = 
-                (NetworkFailureEndpointCallResult)queue_elem;
-            throw new NetworkException("Network failure");
-        }
-        
-        //# FIXME: there may be other errors that are not from
-        //# backout...we shouldn't treat all cases of not getting a
-        //# result as a backout exception
-        else if (! EndpointCompleteCallResult.class.isInstance(queue_elem))
-        {
-            throw new BackoutException();
-        }
-
-        EndpointCompleteCallResult casted = 
-            (EndpointCompleteCallResult) queue_elem;
-        
-        return casted.result;
-    }
-    
-
     /**
        Takes variables and returns their deserialized forms as a map.
        Index of map is variable name; value of map is object.

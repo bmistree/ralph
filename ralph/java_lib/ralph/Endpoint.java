@@ -663,59 +663,6 @@ public abstract class Endpoint
 
     
     /**
-       @param{_Endpoint object} endpoint_making_call --- The endpoint
-       that made the endpoint call into this endpoint.
-
-       @param {uuid} event_uuid --- 
-
-       @param {priority} priority
-        
-       @param {string} func_name --- The name of the Public function
-       to execute (in the Waldo source file).
-
-       @param {Queue.Queue} result_queue --- When the function
-       returns, wrap it in a
-       waldoEndpointCallResult._EndpointCallResult object and put it
-       into this threadsafe queue.  The endpoint that made the call
-       is blocking waiting for the result of the call. 
-
-       @param {*args} *args --- additional arguments that the
-       function requires.
-
-       Called by another endpoint on this endpoint (not called by
-       external non-Waldo code).
-        
-       Non-blocking.  Requests the endpoint_service_thread to perform
-       the endpoint function call listed as func_name.
-
-    */
-    public void _receive_endpoint_call(
-        Endpoint endpoint_making_call,String event_uuid,
-        String priority,String func_name,
-        ArrayBlockingQueue<RalphCallResults.EndpointCallResultObject>result_queue,
-        Object...args)
-    {
-        _stop_lock();
-        //# check if should short-circuit processing 
-        if (_stop_called)
-        {
-            result_queue.add(
-                new RalphCallResults.StopAlreadyCalledEndpointCallResult());
-            _stop_unlock();
-            return;
-        }
-        
-        _stop_unlock();
-        
-        RalphServiceActions.ServiceAction endpt_call_action =
-            new RalphServiceActions.ReceiveEndpointCallAction(
-                this,endpoint_making_call,event_uuid,priority,
-                func_name,result_queue,args);
-        
-        _thread_pool.add_service_action(endpt_call_action);
-    }
-    
-    /**
        One of the endpoints, with uuid endpoint_uuid, that we are
        subscribed to was able to complete first phase commit for
        event with uuid event_uuid.
