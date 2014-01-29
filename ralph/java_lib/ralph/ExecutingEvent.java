@@ -28,6 +28,7 @@ public class ExecutingEvent
     private ArrayBlockingQueue<EndpointCallResultObject> result_queue;
     private Object[] to_exec_args;
     private boolean takes_args;
+    private Endpoint endpt_to_run_on = null;
 	
     /**
        @param {String} to_exec_internal_name --- The internal
@@ -55,25 +56,27 @@ public class ExecutingEvent
        get passed to the closure to be executed.
     */
     public ExecutingEvent(
+        Endpoint _endpt_to_run_on,
         String _to_exec_internal_name,ActiveEvent _active_event,
         ExecutingEventContext _ctx,
         ArrayBlockingQueue<EndpointCallResultObject> _result_queue,
         boolean _takes_args,// sequence calls do not take arguments
         Object..._to_exec_args)
     {
+        endpt_to_run_on = _endpt_to_run_on;
         to_exec_internal_name = _to_exec_internal_name;
         active_event = _active_event;
         takes_args = _takes_args;
         ctx = _ctx;
         result_queue = _result_queue;
         to_exec_args = _to_exec_args;
-        
     }
 	
     /**
      * @see arguments to constructor.
      */
     public static void static_run(
+        Endpoint endpt_to_run_on,
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         ArrayBlockingQueue<EndpointCallResultObject> result_queue,
@@ -81,7 +84,6 @@ public class ExecutingEvent
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
     {
-        Endpoint endpt_to_run_on = active_event.event_parent.local_endpoint;
         endpt_to_run_on.handle_rpc_call(
             to_exec_internal_name,active_event,
             ctx,result_queue,to_exec_args);
@@ -92,6 +94,7 @@ public class ExecutingEvent
         StoppedException
     {
         static_run(
+            endpt_to_run_on,
             to_exec_internal_name,active_event,ctx,
             result_queue,takes_args,to_exec_args);
     }

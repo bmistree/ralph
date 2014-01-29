@@ -56,7 +56,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                     uuid,priority,atomic);
             }
             
-            evt.recv_partner_sequence_call_msg(partner_request_block_msg);
+            evt.recv_partner_sequence_call_msg(local_endpoint,partner_request_block_msg);
         }
         catch (RalphExceptions.StoppedException stopped_excep)
         {

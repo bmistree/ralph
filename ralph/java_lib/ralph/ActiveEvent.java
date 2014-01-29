@@ -231,6 +231,7 @@ public abstract class ActiveEvent
         boolean stop_request);
     
     public abstract void recv_partner_sequence_call_msg(
+        Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException;

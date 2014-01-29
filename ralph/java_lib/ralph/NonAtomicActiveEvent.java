@@ -497,7 +497,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
        thread.
     */
     private ExecutingEvent handle_first_sequence_msg_from_partner(
-        PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
+        Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
+        String name_of_block_to_exec_next)
     {
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
@@ -518,8 +519,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // and keeps track of which arguments need to be returned as
         // references.
         ExecutingEventContext ctx =
-            event_parent.local_endpoint.create_context_for_recv_rpc(
-                args);
+            endpt_recvd_msg_on.create_context_for_recv_rpc(args);
         
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
@@ -532,6 +532,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         boolean takes_args = args.size() != 0;
 
         ExecutingEvent to_return = new ExecutingEvent (
+            endpt_recvd_msg_on,
             name_of_block_to_exec_next,this,ctx,
             // using null here means that we do not need to bother
             // with waiting for modified peered-s to update.
@@ -545,7 +546,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
 
     public void recv_partner_sequence_call_msg(
-        PartnerRequestSequenceBlock msg)
+        Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
     {
@@ -565,12 +566,12 @@ public class NonAtomicActiveEvent extends ActiveEvent
         if (! msg.hasReplyToUuid())
         {
             exec_event = handle_first_sequence_msg_from_partner(
-                msg,name_of_block_to_exec_next);
+                endpt_recvd_msg_on,msg,name_of_block_to_exec_next);
         }
         else
         {
             handle_non_first_sequence_msg_from_partner(
-                msg,name_of_block_to_exec_next);
+                endpt_recvd_msg_on,msg,name_of_block_to_exec_next);
         }
         
         if (exec_event != null)
@@ -591,7 +592,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
      * 
      */
     private void handle_non_first_sequence_msg_from_partner(
-        PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
+        Endpoint endpoint_recvd_msg_on,PartnerRequestSequenceBlock msg,
+        String name_of_block_to_exec_next)
     {
         String reply_to_uuid = msg.getReplyToUuid().getData();
 		

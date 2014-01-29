@@ -969,6 +969,7 @@ public class AtomicActiveEvent extends ActiveEvent
        thread.
     */
     private ExecutingEvent handle_first_sequence_msg_from_partner(
+        Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
@@ -988,14 +989,13 @@ public class AtomicActiveEvent extends ActiveEvent
         // grab all arguments from message
         ArrayList <RPCArgObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
-                msg.getArguments(),event_parent.local_endpoint._host_uuid);
+                msg.getArguments(),endpt_recvd_on._host_uuid);
         
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.
         ExecutingEventContext ctx =
-            event_parent.local_endpoint.create_context_for_recv_rpc(
-                args);
+            endpt_recvd_on.create_context_for_recv_rpc(args);
         
         // know how to reply to this message.
         ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
@@ -1004,9 +1004,10 @@ public class AtomicActiveEvent extends ActiveEvent
         Object [] rpc_call_arg_array = new Object[args.size()];
         for (int i = 0; i < args.size(); ++i)
             rpc_call_arg_array[i] = args.get(i).arg_to_pass;
-        
+
         boolean takes_args = args.size() != 0;
         ExecutingEvent to_return = new ExecutingEvent (
+            endpt_recvd_on,
             name_of_block_to_exec_next,this,ctx,
             // using null here means that we do not need to bother
             // with waiting for modified peered-s to update.
@@ -1027,11 +1028,13 @@ public class AtomicActiveEvent extends ActiveEvent
      *
      * @param msg
      */
+    @Override
     public void recv_partner_sequence_call_msg(
-        PartnerRequestSequenceBlock msg)
+        Endpoint endpt_recvd_on,PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
     {
+        
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its
         //# last message sequence action)
@@ -1049,12 +1052,12 @@ public class AtomicActiveEvent extends ActiveEvent
         if (! msg.hasReplyToUuid())
         {
             exec_event = handle_first_sequence_msg_from_partner(
-                msg,name_of_block_to_exec_next);
+                endpt_recvd_on,msg,name_of_block_to_exec_next);
         }
         else
         {
             handle_non_first_sequence_msg_from_partner(
-                msg,name_of_block_to_exec_next);
+                endpt_recvd_on,msg,name_of_block_to_exec_next);
         }
         _unlock();
         
@@ -1076,7 +1079,7 @@ public class AtomicActiveEvent extends ActiveEvent
      * 
      */
     private void handle_non_first_sequence_msg_from_partner(
-        PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
+        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
     {
         String reply_to_uuid = msg.getReplyToUuid().getData();
 

@@ -299,7 +299,7 @@ public class ExecutingEventContext
         ArrayList<RalphObject> returned_variables =
             ExecutingEventContext.deserialize_variables_list(
                 variables,true,
-                active_event.event_parent.local_endpoint._host_uuid);
+                endpoint._host_uuid);
 
         // step 3: actually overwrite local variables
         for (int i = 0; i < returned_variables.size(); ++i)
@@ -316,9 +316,9 @@ public class ExecutingEventContext
         
         //# send more messages
         String to_exec_next = queue_elem.to_exec_next_name_msg_field;
-        
+
         if (to_exec_next != null)
-            ExecutingEvent.static_run(to_exec_next, active_event, this, null,false);
+            ExecutingEvent.static_run(endpoint,to_exec_next, active_event, this, null,false);
         else
         {
             //# end of sequence: reset to_reply_with_uuid in context.  we do
