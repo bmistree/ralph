@@ -816,6 +816,17 @@ public abstract class Endpoint
             reply_to_uuid_msg.setData(reply_to_uuid);
             request_sequence_block_msg.setReplyToUuid(reply_to_uuid_msg);
     	}
+        else if (block_name == null)
+        {
+            try{
+                throw new Exception("\nRight here\n");
+            } catch (Exception _ex) {
+                System.out.println("\n\n\n\nTHIS IS HOW IT HAPPENeD\n");
+                _ex.printStackTrace();
+                System.out.println("\n\n\n\n");
+            }
+        }
+
         
         request_sequence_block_msg.setArguments(rpc_variables);
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);

@@ -978,6 +978,12 @@ public class AtomicActiveEvent extends ActiveEvent
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
         {
+            System.out.println(
+                "\nThis was message that's causing issues: " + msg + "\n");
+            System.out.println(event_parent);
+            System.out.println("\n");
+            
+            
             Util.logger_assert(
                 "Error in _ActiveEvent.  Should not receive the " +
                 "beginning of a sequence message without some " +
