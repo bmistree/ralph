@@ -21,6 +21,8 @@ import RalphCallResults.ApplicationExceptionEndpointCallResult;
 import RalphCallResults.NetworkFailureEndpointCallResult;
 import RalphCallResults.EndpointCompleteCallResult;
 
+import java.util.Stack;
+
 public class ExecutingEventContext
 {
     /**
@@ -45,8 +47,9 @@ public class ExecutingEventContext
        the reply_to field to index into a map of message listening
        queues in waldoActiveEvent._ActiveEvent.
     */
-    private String to_reply_with_uuid = null;
+    private java.util.Stack<String> to_reply_with_uuid = new java.util.Stack<String>();
 
+    
     /**
        If this context was created from an rpc call from another
        endpoint, then we keep track of the RalphObjects that were
@@ -110,11 +113,11 @@ public class ExecutingEventContext
     */
     public void set_to_reply_with (String _to_reply_with_uuid)
     {
-        to_reply_with_uuid = _to_reply_with_uuid;
+        to_reply_with_uuid.push(_to_reply_with_uuid);
     }
     public String get_to_reply_with()
     {
-        return to_reply_with_uuid;
+        return to_reply_with_uuid.peek();
     }
 
     
@@ -127,7 +130,8 @@ public class ExecutingEventContext
     */
     public void reset_to_reply_with()
     {
-        set_to_reply_with(null);
+        if (! to_reply_with_uuid.empty())
+            to_reply_with_uuid.pop();
     }
      
     /**
