@@ -19,16 +19,10 @@ Endpoint LinkedConnectionEndpoint
     request_increment_from_instance()
     {
         @partner.request_increment_from_partner();
-        print ('Returning from ');
-        print (name);
-        print ('\n');
     }
 
     request_increment_from_partner()
     {
         instance_endpt.increment_and_request_others_to_increment();
-        print ('Returning from ');
-        print (name);
-        print ('\n');
     }
 }

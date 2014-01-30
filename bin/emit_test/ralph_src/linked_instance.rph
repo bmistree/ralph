@@ -39,9 +39,6 @@ Endpoint LinkedInstanceEndpoint
                 Endpoint LinkedConnectionEndpoint endpt = wrapper.child;
                 endpt.request_increment_from_instance();
             }
-            print ('Returning from ');
-            print (name);
-            print ('\n');
         }
     }
 }
