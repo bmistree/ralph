@@ -15,7 +15,9 @@ Endpoint LinkedInstanceEndpoint
     {
         atomically
         {
-            children.append(to_add);
+            Struct ConnectionWrapper wrapper;
+            wrapper.child = to_add;
+            children.append(wrapper);
         }
     }
 

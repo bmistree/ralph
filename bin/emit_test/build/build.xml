@@ -342,7 +342,7 @@
          run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
-         run_WrappedPartnerTCPCall">
+         run_WrappedPartnerTCPCall,run_LinkedTests">
   </target>
   
   
@@ -730,6 +730,18 @@
   </target>
 
 
+  <target
+      name="run_LinkedTests"
+      depends="compile_ralph_tests"
+      description="Can make a mixture of endpoint and partner calls and still complete.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.LinkedTests"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   
