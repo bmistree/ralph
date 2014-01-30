@@ -213,10 +213,9 @@ public class RootEventParent extends EventParent {
                 endpoints_waiting_on_commit.put(end_uuid, false);
                 may_transition = false;
             }
-            _unlock_endpoints_waiting_on_commit();
     	}
+        _unlock_endpoints_waiting_on_commit();
     	if (may_transition)
             check_transition();
     }
-
 }
