@@ -1,0 +1,35 @@
+alias Endpoint LinkedConnectionEndpoint as 'LinkedConnection.LinkedConnectionEndpoint';
+
+Struct ConnectionWrapper
+{
+    Endpoint LinkedConnectionEndpoint child;
+}
+
+
+Endpoint LinkedInstanceEndpoint
+{
+    TVar Number to_increment = 0;
+    TVar List(element : Struct ConnectionWrapper) children;
+    
+    add_child(Endpoint LinkedConnectionEndpoint to_add)
+    {
+        atomically
+        {
+            children.append(to_add);
+        }
+    }
+
+    increment_and_request_others_to_increment()
+    {
+        atomically
+        {
+            to_increment = to_increment + 1;
+
+            for (Struct ConnectionWrapper wrapper in children)
+            {
+                Endpoint LinkedConnectionEndpoint endpt = wrapper.child;
+                endpt.request_increment_from_instance();
+            }
+        }
+    }
+}

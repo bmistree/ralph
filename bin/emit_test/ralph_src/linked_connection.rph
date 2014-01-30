@@ -1,0 +1,21 @@
+alias Endpoint LinkedInstanceEndpoint as 'LinkedInstance.LinkedInstanceEndpoint';
+
+Endpoint LinkedConnectionEndpoint
+{
+    Endpoint LinkedInstanceEndpoint instance_endpt;
+
+    set_instance_endpoint(Endpoint LinkedInstanceEndpoint to_set_to)
+    {
+        instance_endpt = to_set_to;
+    }
+
+    request_increment_from_instance()
+    {
+        @partner.request_increment_from_partner();
+    }
+
+    request_increment_from_partner()
+    {
+        instance_endpt.increment_and_request_others_to_increment();
+    }
+}
