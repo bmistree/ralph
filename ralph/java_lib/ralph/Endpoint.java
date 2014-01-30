@@ -451,6 +451,9 @@ public abstract class Endpoint
             Util.logger_assert(
                 "Do not know how to convert message to event action " +
                 "in _receive_msg_from_partner.");
+
+            System.out.println(general_msg);
+            System.out.println("\n");
         }
         //#### END DEBUG
     }
