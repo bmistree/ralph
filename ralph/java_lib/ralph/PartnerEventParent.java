@@ -40,8 +40,22 @@ public class PartnerEventParent extends EventParent {
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             children_endpoints.add(endpt._partner_uuid);
 
+
         local_endpoint._forward_first_phase_commit_successful(
             uuid,local_endpoint._uuid,children_endpoints);
+
+        // FIXME: Would be much better to batch this message with the
+        // other.
+
+        // also forward for all local endpoints whose partners were
+        // contacted: each host now only has a single event per all
+        // its endpoints.
+        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
+        {
+            local_endpoint._forward_first_phase_commit_successful(
+                uuid,endpt._uuid,children_endpoints);
+        }
+        
     }
 	
     @Override
@@ -104,7 +118,6 @@ public class PartnerEventParent extends EventParent {
         local_endpoint._forward_first_phase_commit_successful(
             uuid, msg_originator_endpoint_uuid, children_event_endpoint_uuids);
     }
-
 }
 
         
