@@ -4,6 +4,13 @@ Endpoint LinkedConnectionEndpoint
 {
     Endpoint LinkedInstanceEndpoint instance_endpt;
 
+    Text name;
+
+    set_name(Text new_name)
+    {
+        name = new_name;
+    }
+    
     set_instance_endpoint(Endpoint LinkedInstanceEndpoint to_set_to)
     {
         instance_endpt = to_set_to;
@@ -12,10 +19,16 @@ Endpoint LinkedConnectionEndpoint
     request_increment_from_instance()
     {
         @partner.request_increment_from_partner();
+        print ('Returning from ');
+        print (name);
+        print ('\n');
     }
 
     request_increment_from_partner()
     {
         instance_endpt.increment_and_request_others_to_increment();
+        print ('Returning from ');
+        print (name);
+        print ('\n');
     }
 }
