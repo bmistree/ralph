@@ -1063,6 +1063,10 @@ public abstract class Endpoint
         Object...args)
         throws ApplicationException, BackoutException, NetworkException,StoppedException
     {
+        System.out.println("\nThis is message name: ");
+        System.out.println(to_exec_internal_name);
+        System.out.println("\n\n");
+        
         try
         {
             _handle_rpc_call(
