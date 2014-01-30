@@ -110,6 +110,13 @@ public class ExecutingEventContext
     */
     public void set_to_reply_with (String _to_reply_with_uuid)
     {
+        if (to_reply_with_uuid != null)
+        {
+            System.out.println(
+                "\n\n**************I just blew away my previous to reply with*******************\n\n");
+
+        }
+        
         to_reply_with_uuid = _to_reply_with_uuid;
     }
     public String get_to_reply_with()
@@ -117,7 +124,7 @@ public class ExecutingEventContext
         return to_reply_with_uuid;
     }
 
-    
+
     /**
      *  Each time we finish a message sequence, we reset
      set_to_reply_with.  This is so that if we start any new

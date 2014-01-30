@@ -847,7 +847,6 @@ public class AtomicActiveEvent extends ActiveEvent
             String replying_to = null;
             if (! first_msg)
                 replying_to = ctx.get_to_reply_with();
-
             
             // request endpoint to send message to partner
             endpoint._send_partner_message_sequence_block_request(
