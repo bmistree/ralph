@@ -1084,6 +1084,9 @@ public abstract class Endpoint
             //# ApplicationExceptions should be backed
             //# out and the partner should be
             //# notified
+            System.out.println("\nHere was exception");
+            _ex.printStackTrace();
+            System.out.println("\n");
             active_event.put_exception(_ex);
             // FIXME: fill in backtrace for application exception.
             throw new ApplicationException("Caught application exception");
