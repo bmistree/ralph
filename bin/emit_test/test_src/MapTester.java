@@ -18,12 +18,8 @@ public class MapTester
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             MapEndpoint endpt = new MapEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             double map_size = endpt.get_size().doubleValue();
             if (map_size != 0)

@@ -43,19 +43,14 @@ public class InterruptedEndpointCallAtomically
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             SetterGetter internal_endpt = new SetterGetter(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(), new SingleSideConnection());
 
             double original_internal_number = 15;
             internal_endpt.set_number(new Double(original_internal_number));
             
             InterruptedAtomicEndpoint endpt = new InterruptedAtomicEndpoint(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             endpt.set_endpt(internal_endpt);

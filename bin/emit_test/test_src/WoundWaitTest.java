@@ -60,10 +60,10 @@ public class WoundWaitTest
             SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = new PromoterEndpoint(
                 new RalphGlobals(DeadlockAvoidanceAlgorithm.WOUND_WAIT),
-                "a_host_uuid",conn_obj);
+                conn_obj);
             PromoterEndpoint side_b = new PromoterEndpoint(
                 new RalphGlobals(DeadlockAvoidanceAlgorithm.WOUND_WAIT),
-                "b_host_uuid",conn_obj);
+                conn_obj);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();

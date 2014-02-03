@@ -19,12 +19,8 @@ public class ReturnListTest
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             NonAtomicInternalList<String,String> result =
                 endpt.test_return_list();

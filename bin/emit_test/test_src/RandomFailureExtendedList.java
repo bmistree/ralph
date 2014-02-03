@@ -32,12 +32,8 @@ public class RandomFailureExtendedList
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             TVarListEndpoint endpt = new TVarListEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             // set endpoint's internal list from SynchronizedNumberList
             SynchronizedNumberInternalList synchronized_internal_list =

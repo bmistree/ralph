@@ -18,12 +18,8 @@ public class ListTester
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             double list_size = endpt.get_size().doubleValue();
             if (list_size != 0)

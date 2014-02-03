@@ -34,12 +34,8 @@ public class SuperInterruptedTestAtomically
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             SuperInterruptedAtomic endpt = new SuperInterruptedAtomic(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             for (int i=0; i < NUM_TIMES_TO_RUN; ++i)
                 single_run(endpt);

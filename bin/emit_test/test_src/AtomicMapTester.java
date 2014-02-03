@@ -18,11 +18,8 @@ public class AtomicMapTester
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             TVarMapEndpoint endpt = new TVarMapEndpoint(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             double map_size = endpt.get_size().doubleValue();

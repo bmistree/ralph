@@ -18,11 +18,8 @@ public class BasicSetterGetter
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             SetterGetter endpt = new SetterGetter(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             // testing numbers

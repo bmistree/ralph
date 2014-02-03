@@ -71,9 +71,9 @@ public class PromotionTest
         {
             SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = new PromoterEndpoint(
-                new RalphGlobals(),"a_host_uuid",conn_obj);
+                new RalphGlobals(),conn_obj);
             PromoterEndpoint side_b = new PromoterEndpoint(
-                new RalphGlobals(),"b_host_uuid",conn_obj);
+                new RalphGlobals(),conn_obj);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();

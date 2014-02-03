@@ -20,11 +20,8 @@ public class AtomicListAppendTester
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             TVarListEndpoint endpt = new TVarListEndpoint(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             for (int i = 0; i < NUM_APPENDS_TO_RUN; ++i)

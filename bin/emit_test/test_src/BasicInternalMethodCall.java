@@ -18,11 +18,8 @@ public class BasicInternalMethodCall
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             InternalMethodCaller endpt = new InternalMethodCaller(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             // testing numbers

@@ -46,35 +46,35 @@ public class LinkedTests
 
             // a
             LinkedInstanceEndpoint a = new LinkedInstanceEndpoint(
-                ab_globals,"", new SingleSideConnection());
+                ab_globals,new SingleSideConnection());
             a.set_name("A");
 
             // connect b and c
             SameHostConnection bc_conn = new SameHostConnection();
             LinkedConnectionEndpoint b = new LinkedConnectionEndpoint(
-                ab_globals,"",bc_conn);
+                ab_globals,bc_conn);
             LinkedConnectionEndpoint c = new LinkedConnectionEndpoint(
-                cde_globals,"",bc_conn);
+                cde_globals,bc_conn);
             b.set_name("B");
             c.set_name("C");
             
             // d
             LinkedInstanceEndpoint d = new LinkedInstanceEndpoint(
-                cde_globals,"", new SingleSideConnection());
+                cde_globals, new SingleSideConnection());
             d.set_name("D");
             
             // connect e and f
             SameHostConnection ef_conn = new SameHostConnection();
             LinkedConnectionEndpoint e = new LinkedConnectionEndpoint(
-                cde_globals,"",ef_conn);
+                cde_globals,ef_conn);
             LinkedConnectionEndpoint f = new LinkedConnectionEndpoint(
-                fg_globals,"",ef_conn);
+                fg_globals,ef_conn);
             e.set_name("E");
             f.set_name("F");
 
             // create g
             LinkedInstanceEndpoint g = new LinkedInstanceEndpoint(
-                fg_globals,"", new SingleSideConnection());
+                fg_globals,new SingleSideConnection());
             g.set_name("G");
             
             

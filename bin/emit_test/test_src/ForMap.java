@@ -18,12 +18,8 @@ public class ForMap
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             MapEndpoint endpt = new MapEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             /** Check on non-atomic map */
             // insert number in map

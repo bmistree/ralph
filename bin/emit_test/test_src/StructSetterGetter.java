@@ -18,12 +18,8 @@ public class StructSetterGetter
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             SetterGetter endpt = new SetterGetter(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             // initialize struct on endpoint
             endpt.initialize_internal_struct(

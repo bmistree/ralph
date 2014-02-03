@@ -18,11 +18,8 @@ public class BasicTestAtomically
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             TestAtomically endpt = new TestAtomically(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             for (int i = 0; i < 30; ++i)

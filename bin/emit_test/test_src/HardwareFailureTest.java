@@ -51,11 +51,8 @@ public class HardwareFailureTest
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
             HardwareOwner endpt = new HardwareOwner(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(), new SingleSideConnection());
 
             double hardware_id = 1.0;
             _InternalPieceOfHardware hardware_to_add =

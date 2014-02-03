@@ -18,12 +18,8 @@ public class ForList
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             /** Check on non-atomic list */
             // append to end of list

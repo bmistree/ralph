@@ -79,13 +79,13 @@ public class AtomicTCPPartnerCall
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, String host_uuid,
+            RalphGlobals globals, 
             RalphConnObj.ConnectionObj conn_obj)
         {
             Endpoint to_return = null;
 
             try {
-                to_return = new SideA(globals,host_uuid,conn_obj);
+                to_return = new SideA(globals,conn_obj);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
                 assert(false);
@@ -98,11 +98,11 @@ public class AtomicTCPPartnerCall
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, String host_uuid,
+            RalphGlobals globals,
             RalphConnObj.ConnectionObj conn_obj)
         {
             try {
-                side_b = new SideB(globals,host_uuid,conn_obj);
+                side_b = new SideB(globals,conn_obj);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
             }

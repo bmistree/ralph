@@ -43,12 +43,8 @@ public class InterruptedTestAtomically
         ReturnCode status = ReturnCode.SUCCESS;
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             InterruptedAtomic endpt = new InterruptedAtomic(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             // failure report takes precedence over unknown report
             // takes precedence over success report

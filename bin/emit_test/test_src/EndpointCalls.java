@@ -19,17 +19,13 @@ public class EndpointCalls
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
+            RalphGlobals ralph_globals = new RalphGlobals();
+            
             SetterGetter internal_endpt = new SetterGetter(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                ralph_globals,new SingleSideConnection());
 
             EndpointUser endpt = new EndpointUser(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                ralph_globals,new SingleSideConnection());
 
             endpt.set_endpoint(internal_endpt);
             

@@ -21,12 +21,8 @@ public class NestedStructs
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             End endpt = new End(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             ArrayList<Double> nums_to_insert = new ArrayList(
                 Arrays.asList(

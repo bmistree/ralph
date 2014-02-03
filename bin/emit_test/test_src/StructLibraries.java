@@ -18,12 +18,8 @@ public class StructLibraries
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-
             StructUser endpt = new StructUser(
-                new RalphGlobals(),
-                dummy_host_uuid,
-                new SingleSideConnection());
+                new RalphGlobals(),new SingleSideConnection());
 
             // testing numbers
             String text_to_set = "hello";

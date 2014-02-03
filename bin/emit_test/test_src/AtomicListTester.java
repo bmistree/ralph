@@ -18,11 +18,8 @@ public class AtomicListTester
     {
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
-            
             TVarListEndpoint endpt = new TVarListEndpoint(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             double list_size = endpt.get_size().doubleValue();
