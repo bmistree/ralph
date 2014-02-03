@@ -63,11 +63,11 @@ public class TestClassUtil
         
         
         public DefaultEndpoint(
-            RalphGlobals ralph_globals,String host_uuid,
+            RalphGlobals ralph_globals,
             ConnectionObj conn_obj,VariableStore vstore)
         {
-            super(ralph_globals,host_uuid,conn_obj,vstore);
-        }        
+            super(ralph_globals,conn_obj,vstore);
+        }
 
         protected void _handle_rpc_call(
             String to_exec_internal_name,ActiveEvent active_event,
@@ -188,7 +188,6 @@ public class TestClassUtil
         
         DefaultEndpoint to_return = new DefaultEndpoint(
             new RalphGlobals(),
-            dummy_host_uuid,
             conn_obj,
             vstore);
 

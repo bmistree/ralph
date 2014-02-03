@@ -88,7 +88,7 @@ public class PartnersNoConflict
             ActiveEvent root_event =
                 endpta._act_event_map.create_root_atomic_event(null);
             ExecutingEventContext ctx = endpta.create_context();
-
+                        
             // grab num object from base scope
             RalphObject<Double,Double> num_obj =
                 (RalphObject<Double,Double>)endpta.global_var_stack.get_var_if_exists(
@@ -113,20 +113,18 @@ public class PartnersNoConflict
             
             endpta.global_var_stack.add_var(bool_var_name,bool_var);
             endpta.global_var_stack.add_var(string_var_name,string_var);
-
+            
             // Issue rpc call to partner
             // set up rpc arguments: pass all as references
             ArrayList<RPCArgObject> arg_list = new ArrayList<RPCArgObject>();
             arg_list.add(new RPCArgObject(num_obj,num_arg_ref));
             arg_list.add(new RPCArgObject(bool_var,bool_arg_ref));
             arg_list.add(new RPCArgObject(string_var,string_arg_ref));
-
             
             // actually make call with arguments on partner endpoint
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_args_method",true,
                 arg_list);
-
             
             // check that commit worked
             root_event.begin_first_phase_commit();
@@ -214,11 +212,13 @@ public class PartnersNoConflict
                 new ArrayList<RPCArgObject> ());
 
             root_event.begin_first_phase_commit();
+            
             RootEventParent root_event_parent =
                 (RootEventParent)root_event.event_parent;
+
             ResultType commit_resp =
                 root_event_parent.event_complete_queue.take();
-            
+
             if (commit_resp != ResultType.COMPLETE)
                 return false;
         }
