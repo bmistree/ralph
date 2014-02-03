@@ -281,9 +281,9 @@ def emit_endpt(endpt_node):
 
 def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
-public %s ( RalphGlobals ralph_globals,String host_uuid,
-            ConnectionObj conn_obj) throws Exception {
-    super(ralph_globals,host_uuid,conn_obj,new VariableStore(false));
+public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) throws Exception
+{
+    super(ralph_globals,conn_obj,new VariableStore(false));
 }
 ''' % endpt_node.name
     return constructor_text
