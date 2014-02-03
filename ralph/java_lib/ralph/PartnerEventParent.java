@@ -38,24 +38,12 @@ public class PartnerEventParent extends EventParent {
             new ArrayList<String>(same_host_endpoints_contacted_dict.keySet());
 
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            children_endpoints.add(endpt._partner_uuid);
+            children_endpoints.add(endpt._partner_host_uuid);
 
 
         local_endpoint._forward_first_phase_commit_successful(
-            uuid,local_endpoint._uuid,children_endpoints);
+            uuid,local_endpoint._host_uuid,children_endpoints);
 
-        // FIXME: Would be much better to batch this message with the
-        // other.
-
-        // also forward for all local endpoints whose partners were
-        // contacted: each host now only has a single event per all
-        // its endpoints.
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-        {
-            local_endpoint._forward_first_phase_commit_successful(
-                uuid,endpt._uuid,children_endpoints);
-        }
-        
     }
 	
     @Override

@@ -183,7 +183,7 @@ public abstract class EventParent
             //# send message to all other endpoints that we made direct
             //# endpoint calls on that they should attempt first phase
             //# commit
-            if (local_endpoint._uuid.equals(waiting_on_uuid))
+            if (local_endpoint._host_uuid.equals(waiting_on_uuid))
                 continue;
 
             EventSubscribedTo evt_subscribed_to =
@@ -251,14 +251,16 @@ public abstract class EventParent
     {
         //# tell any endpoints that we had called endpoint methods on to
         //# back out their changes.
-		
+
+        // FIXME: do I really need to rollback each endpoint separately here?
+        
         for (EventSubscribedTo subscribed_elements_to_rollback :
                  same_host_endpoints_contacted_dict.values())
         {
             Endpoint endpoint_to_rollback =
                 subscribed_elements_to_rollback.endpoint_object;
 			
-            if (!endpoint_to_rollback._uuid.equals(backout_requester_endpoint_uuid))
+            if (!endpoint_to_rollback._host_uuid.equals(backout_requester_endpoint_uuid))
             {
                 endpoint_to_rollback._receive_request_backout(
                     uuid,local_endpoint);

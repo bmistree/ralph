@@ -8,10 +8,6 @@ import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 public class Ralph {
 
-    //private static RalphGlobals all_globals = new RalphGlobals();
-    private static String host_uuid = Util.generate_uuid();
-	
-
     /**
      *  Creates an endpoint without its partner.
 
@@ -26,8 +22,7 @@ public class Ralph {
         EndpointConstructorObj constructor, RalphGlobals all_globals)
     {
         return constructor.construct(
-            all_globals,host_uuid,
-            new RalphConnObj.SingleSideConnection());
+            all_globals, new RalphConnObj.SingleSideConnection());
     }
         
 	
@@ -61,7 +56,7 @@ public class Ralph {
     {
         RalphConnObj.TCPConnectionObj tcp_connection_obj = 
             new RalphConnObj.TCPConnectionObj(host,port);
-        return constructor_obj.construct(all_globals,host_uuid,tcp_connection_obj);
+        return constructor_obj.construct(all_globals,tcp_connection_obj);
     }
 
 
@@ -79,9 +74,6 @@ public class Ralph {
        connections on.
 
        port(int): The TCP port to listen for connections on.
-
-       *args(*args): Any arguments that should get passed to
-       the endpoint's onCreate method for initialization.
 
        Kwargs:
 
@@ -103,6 +95,7 @@ public class Ralph {
         return tcp_accept(constructor_obj,host,port, null,all_globals);
     }
 
+    
     /**
      * 
      * @param constructor_obj
@@ -126,7 +119,6 @@ public class Ralph {
         TCPAcceptThread accept_thread = new 
             TCPAcceptThread(stoppable,constructor_obj,
                             all_globals,host,port,connected_callback,
-                            host_uuid,
                             synchronization_listening_queue);
 		
         accept_thread.start();

@@ -120,18 +120,14 @@ public class RootEventParent extends EventParent {
     	_lock_endpoints_waiting_on_commit();
 
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            endpoints_waiting_on_commit.put(endpt._partner_uuid, false);
+            endpoints_waiting_on_commit.put(endpt._partner_host_uuid, false);
         
     	for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
             endpoints_waiting_on_commit.put(waiting_on_uuid, false);
     	
         //# not waiting on self.
-        endpoints_waiting_on_commit.put(local_endpoint._uuid, true);
+        endpoints_waiting_on_commit.put(local_endpoint._host_uuid, true);
 
-        // we know that all local endpoints should be able to commit
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            endpoints_waiting_on_commit.put(endpt._uuid, true);
-        
         _unlock_endpoints_waiting_on_commit();
 
         super.first_phase_transition_success(

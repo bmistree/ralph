@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RalphGlobals {
     public LamportClock clock;
+    public final String host_uuid = Util.generate_uuid();
+    
     public AllEndpoints all_endpoints;
     public ThreadPool thread_pool;
     public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =

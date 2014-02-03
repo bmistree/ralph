@@ -41,7 +41,6 @@ import RalphExceptions.StoppedException;
  */
 public abstract class Endpoint 
 {
-    public String _uuid = Util.generate_uuid();
     public String _host_uuid = null;
 	
     private LamportClock _clock = null;
@@ -53,7 +52,8 @@ public abstract class Endpoint
 	
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
-	
+
+    public final String _uuid = Util.generate_uuid();
 	
     private ReentrantLock _stop_mutex = new ReentrantLock();
 	
@@ -78,14 +78,14 @@ public abstract class Endpoint
 	
     /**
      //# When go through first phase of commit, may need to forward
-     //# partner's endpoint uuid back to the root, so the endpoint
-     //# needs to keep track of its partner's uuid.  FIXME: right
-     //# now, manually setting partner uuids in connection object.
-     //# And not checking to ensure that the partner endpoint is set
-     //# before doing additional work. should create a proper
+     //# partner's host's endpoint uuid back to the root, so the
+     //# endpoint needs to keep track of its partner's uuid.  FIXME:
+     //# right now, manually setting partner uuids in connection
+     //# object.  And not checking to ensure that the partner endpoint
+     //# is set before doing additional work. should create a proper
      //# handshake instead.
      */
-    public String _partner_uuid = null;
+    public String _partner_host_uuid = null;
 
     public RalphGlobals ralph_globals = null;
     
@@ -105,7 +105,7 @@ public abstract class Endpoint
        only make calls on them.
     */
     public Endpoint (
-        RalphGlobals ralph_globals,String host_uuid,
+        RalphGlobals ralph_globals,
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
@@ -123,7 +123,7 @@ public abstract class Endpoint
         _all_endpoints = ralph_globals.all_endpoints;
         _all_endpoints.add_endpoint(this);
 
-        _host_uuid = host_uuid;
+        _host_uuid = ralph_globals.host_uuid;
 
         _conn_obj.register_endpoint(this);
 
@@ -225,9 +225,9 @@ public abstract class Endpoint
      * @see noe above _partner_uuid.
      * @param uuid
      */
-    public void _set_partner_uuid(String uuid)
+    public void _set_partner_host_uuid(String uuid)
     {
-        _partner_uuid = uuid;
+        _partner_host_uuid = uuid;
     }
 
     
@@ -332,7 +332,7 @@ public abstract class Endpoint
         UUID.Builder msg_evt_uuid = UUID.newBuilder();
         msg_evt_uuid.setData(event_uuid);
         UUID.Builder msg_host_uuid = UUID.newBuilder();
-        msg_host_uuid.setData(_uuid);
+        msg_host_uuid.setData(_host_uuid);
 		
         error.setEventUuid(msg_evt_uuid);
         error.setHostUuid(msg_host_uuid);
@@ -372,8 +372,8 @@ public abstract class Endpoint
 
         if (general_msg.hasNotifyReady())
         {
-            String endpoint_uuid = general_msg.getNotifyReady().getEndpointUuid().getData();
-            _receive_partner_ready(endpoint_uuid);
+            String partner_host_uuid = general_msg.getNotifyReady().getHostUuid().getData();
+            _receive_partner_ready(partner_host_uuid);
         }
         else if (general_msg.hasRequestSequenceBlock())
         {
@@ -390,21 +390,25 @@ public abstract class Endpoint
         {
             PartnerFirstPhaseResultMessage fpr = general_msg.getFirstPhaseResult();
             String event_uuid = fpr.getEventUuid().getData();
-            String endpoint_uuid = fpr.getSendingEndpointUuid().getData();
+            String result_initiator_host_uuid = fpr.getSendingHostUuid().getData();
             if (general_msg.getFirstPhaseResult().getSuccessful())
             {	
-                ArrayList<String> children_event_endpoint_uuids = new ArrayList<String>();
-                for (int i = 0; i < fpr.getChildrenEventEndpointUuidsCount(); ++i)
+                ArrayList<String> children_event_host_uuids = new ArrayList<String>();
+                for (int i = 0; i < fpr.getChildrenEventHostUuidsCount(); ++i)
                 {
-                    String child_event_uuid = fpr.getChildrenEventEndpointUuids(i).getData();
-                    children_event_endpoint_uuids.add(child_event_uuid);
+                    String child_event_uuid = fpr.getChildrenEventHostUuids(i).getData();
+                    children_event_host_uuids.add(child_event_uuid);
                 }
         		
                 _receive_first_phase_commit_successful(
-                    event_uuid,endpoint_uuid,children_event_endpoint_uuids);
+                    event_uuid,result_initiator_host_uuid,
+                    children_event_host_uuids);
             }
             else
-                _receive_first_phase_commit_unsuccessful(event_uuid,endpoint_uuid);
+            {
+                _receive_first_phase_commit_unsuccessful(
+                    event_uuid,result_initiator_host_uuid);
+            }
         }
         else if (general_msg.hasPromotion())
         {
@@ -463,9 +467,9 @@ public abstract class Endpoint
         _thread_pool.add_service_action(promotion_action);
     }
         
-    private void _receive_partner_ready(String partner_uuid)
+    private void _receive_partner_ready(String partner_host_uuid)
     {
-        _set_partner_uuid(partner_uuid);
+        _set_partner_host_uuid(partner_host_uuid);
     }
 	
     /**
@@ -482,9 +486,9 @@ public abstract class Endpoint
 		
         UtilProto.UUID.Builder endpoint_uuid_builder =
             UtilProto.UUID.newBuilder();
-        endpoint_uuid_builder.setData(_uuid);
-		
-        partner_notify_ready.setEndpointUuid(endpoint_uuid_builder);
+        endpoint_uuid_builder.setData(_host_uuid);
+        
+        partner_notify_ready.setHostUuid(endpoint_uuid_builder);
 		
         general_message.setNotifyReady(partner_notify_ready);
 
@@ -536,7 +540,6 @@ public abstract class Endpoint
 	
     /**
        @param {uuid} event_uuid
-       @param {uuid} endpoint_uuid
     
        Partner endpoint is subscriber of event on this endpoint with
        uuid event_uuid.  Send to partner a message that the first
@@ -545,7 +548,7 @@ public abstract class Endpoint
        should roll back their commits).
     */
     public void _forward_first_phase_commit_unsuccessful(
-        String event_uuid, String endpoint_uuid)
+        String event_uuid, String host_uuid)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
         general_message.setTimestamp(_clock.get_int_timestamp());
@@ -555,13 +558,13 @@ public abstract class Endpoint
         UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
         event_uuid_msg.setData(event_uuid);
 		
-        UtilProto.UUID.Builder sending_endpoint_uuid_msg =
+        UtilProto.UUID.Builder sending_host_uuid_msg =
             UtilProto.UUID.newBuilder();
-        sending_endpoint_uuid_msg.setData(endpoint_uuid);
+        sending_host_uuid_msg.setData(host_uuid);
 		
         first_phase_result.setSuccessful(false);
         first_phase_result.setEventUuid(event_uuid_msg);
-        first_phase_result.setSendingEndpointUuid(sending_endpoint_uuid_msg);
+        first_phase_result.setSendingHostUuid(sending_host_uuid_msg);
 		
         general_message.setFirstPhaseResult(first_phase_result);
 		
@@ -603,7 +606,7 @@ public abstract class Endpoint
 		
         first_phase_result_msg.setSuccessful(true);
         first_phase_result_msg.setEventUuid(event_uuid_msg);
-        first_phase_result_msg.setSendingEndpointUuid(
+        first_phase_result_msg.setSendingHostUuid(
             sending_endpoint_uuid_msg);
 		
         for (String child_event_uuid : children_event_endpoint_uuids)
@@ -611,7 +614,7 @@ public abstract class Endpoint
             UtilProto.UUID.Builder child_event_uuid_msg =
                 UtilProto.UUID.newBuilder();
             child_event_uuid_msg.setData(child_event_uuid);
-            first_phase_result_msg.addChildrenEventEndpointUuids(
+            first_phase_result_msg.addChildrenEventHostUuids(
                 child_event_uuid_msg);
         }
 
@@ -995,26 +998,6 @@ public abstract class Endpoint
 
     
     //# Builtin Endpoint methods
-    
-    /**
-     * Builtin id method. Returns the endpoint's uuid.
-
-     For use within Waldo code.
-    */
-    private String _endpoint_func_call_prefix__waldo__id(Object...args)
-    {
-        return _uuid;
-    }
-
-    /**
-       Builtin id method. Returns the endpoint's uuid.
-
-       For use on endpoints within Python code.
-    */
-    private String id()
-    {
-    	return _uuid;
-    }
 
     /**
        This method takes in a name for a method to execute on a local

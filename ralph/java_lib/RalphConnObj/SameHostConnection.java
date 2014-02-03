@@ -44,8 +44,8 @@ public class SameHostConnection implements Runnable, ConnectionObj {
         {
             // now have both endpoints
             endpoint2 = endpoint;
-            endpoint1._set_partner_uuid(endpoint2._uuid);
-            endpoint2._set_partner_uuid(endpoint1._uuid);
+            endpoint1._set_partner_host_uuid(endpoint2._host_uuid);
+            endpoint2._set_partner_host_uuid(endpoint1._host_uuid);
             Thread to_start = new Thread(this);
             to_start.setDaemon(true);
             to_start.start();
@@ -96,7 +96,7 @@ public class SameHostConnection implements Runnable, ConnectionObj {
         	
             Endpoint msg_sender_endpt = q_elem.endpoint;
             Endpoint msg_recvr_endpt = endpoint1;
-            if (msg_sender_endpt._uuid.equals(endpoint1._uuid))
+            if (msg_sender_endpt._host_uuid.equals(endpoint1._host_uuid))
                 msg_recvr_endpt = endpoint2;
 
             msg_recvr_endpt._receive_msg_from_partner(msg);

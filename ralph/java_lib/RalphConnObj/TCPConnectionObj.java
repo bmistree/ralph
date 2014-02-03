@@ -131,7 +131,6 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         private String host_listen_on ;
         private int port_listen_on;
         private SignalFunction cb = null;
-        private String host_uuid;
         ArrayBlockingQueue<Boolean> synchronization_listening_queue = null;
 		
 		
@@ -155,9 +154,6 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
          execute the callback, passing in a new Endpoint object in its
          callback.  
 
-         @param{UUID} host_uuid ---
-
-	        
          @param {Queue.Queue} synchronization_listening_queue --- The
          thread that began this thread blocks waiting for a value on
          this queue so that it does not return before this thread has
@@ -166,7 +162,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         public TCPAcceptThread(
             Stoppable _stoppable, ralph.EndpointConstructorObj _endpoint_constructor,
             ralph.RalphGlobals _ralph_globals, String _host_listen_on,
-            int _port_listen_on, SignalFunction _cb, String _host_uuid, 
+            int _port_listen_on, SignalFunction _cb, 
             ArrayBlockingQueue<Boolean> _synchronization_listening_queue)
         {
             stoppable = _stoppable;
@@ -175,7 +171,6 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
             host_listen_on = _host_listen_on;
             port_listen_on = _port_listen_on;
             cb = _cb;
-            host_uuid = _host_uuid;
             synchronization_listening_queue = _synchronization_listening_queue;
             setDaemon(true);
         }
@@ -209,7 +204,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 TCPConnectionObj tcp_conn_obj = new TCPConnectionObj(client_conn);
 				
                 Endpoint created_endpoint =
-                    endpoint_constructor.construct(ralph_globals, host_uuid, tcp_conn_obj);
+                    endpoint_constructor.construct(ralph_globals, tcp_conn_obj);
                 
                 if (cb != null)
                     cb.fire(created_endpoint);
