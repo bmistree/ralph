@@ -11,7 +11,7 @@
 
   <!-- global properties for this build file -->
   <property name="build.dir" location="${lib_test_dir}/classes"/>
-  <property name="src.dir" location="${lib_test_dir}/.."/>
+  <property name="src.dir" location="${lib_test_dir}/../test_src"/>
   <property
       name="lib_build_path"
       location="${lib_test_dir}/../../../ralph/java_lib/build"/>
