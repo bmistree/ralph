@@ -11,10 +11,10 @@ public final class PartnerNotifyReadyProto {
   public interface PartnerNotifyReadyOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required .UUID endpoint_uuid = 1;
-    boolean hasEndpointUuid();
-    ralph_protobuffs.UtilProto.UUID getEndpointUuid();
-    ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder();
+    // required .UUID host_uuid = 1;
+    boolean hasHostUuid();
+    ralph_protobuffs.UtilProto.UUID getHostUuid();
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder();
   }
   public static final class PartnerNotifyReady extends
       com.google.protobuf.GeneratedMessage
@@ -45,32 +45,32 @@ public final class PartnerNotifyReadyProto {
     }
     
     private int bitField0_;
-    // required .UUID endpoint_uuid = 1;
-    public static final int ENDPOINT_UUID_FIELD_NUMBER = 1;
-    private ralph_protobuffs.UtilProto.UUID endpointUuid_;
-    public boolean hasEndpointUuid() {
+    // required .UUID host_uuid = 1;
+    public static final int HOST_UUID_FIELD_NUMBER = 1;
+    private ralph_protobuffs.UtilProto.UUID hostUuid_;
+    public boolean hasHostUuid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public ralph_protobuffs.UtilProto.UUID getEndpointUuid() {
-      return endpointUuid_;
+    public ralph_protobuffs.UtilProto.UUID getHostUuid() {
+      return hostUuid_;
     }
-    public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder() {
-      return endpointUuid_;
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
+      return hostUuid_;
     }
     
     private void initFields() {
-      endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasEndpointUuid()) {
+      if (!hasHostUuid()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getEndpointUuid().isInitialized()) {
+      if (!getHostUuid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -82,7 +82,7 @@ public final class PartnerNotifyReadyProto {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, endpointUuid_);
+        output.writeMessage(1, hostUuid_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -95,7 +95,7 @@ public final class PartnerNotifyReadyProto {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, endpointUuid_);
+          .computeMessageSize(1, hostUuid_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -213,7 +213,7 @@ public final class PartnerNotifyReadyProto {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getEndpointUuidFieldBuilder();
+          getHostUuidFieldBuilder();
         }
       }
       private static Builder create() {
@@ -222,10 +222,10 @@ public final class PartnerNotifyReadyProto {
       
       public Builder clear() {
         super.clear();
-        if (endpointUuidBuilder_ == null) {
-          endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
         } else {
-          endpointUuidBuilder_.clear();
+          hostUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
@@ -269,10 +269,10 @@ public final class PartnerNotifyReadyProto {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        if (endpointUuidBuilder_ == null) {
-          result.endpointUuid_ = endpointUuid_;
+        if (hostUuidBuilder_ == null) {
+          result.hostUuid_ = hostUuid_;
         } else {
-          result.endpointUuid_ = endpointUuidBuilder_.build();
+          result.hostUuid_ = hostUuidBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -290,19 +290,19 @@ public final class PartnerNotifyReadyProto {
       
       public Builder mergeFrom(ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady other) {
         if (other == ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance()) return this;
-        if (other.hasEndpointUuid()) {
-          mergeEndpointUuid(other.getEndpointUuid());
+        if (other.hasHostUuid()) {
+          mergeHostUuid(other.getHostUuid());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
-        if (!hasEndpointUuid()) {
+        if (!hasHostUuid()) {
           
           return false;
         }
-        if (!getEndpointUuid().isInitialized()) {
+        if (!getHostUuid().isInitialized()) {
           
           return false;
         }
@@ -334,11 +334,11 @@ public final class PartnerNotifyReadyProto {
             }
             case 10: {
               ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasEndpointUuid()) {
-                subBuilder.mergeFrom(getEndpointUuid());
+              if (hasHostUuid()) {
+                subBuilder.mergeFrom(getHostUuid());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setEndpointUuid(subBuilder.buildPartial());
+              setHostUuid(subBuilder.buildPartial());
               break;
             }
           }
@@ -347,94 +347,94 @@ public final class PartnerNotifyReadyProto {
       
       private int bitField0_;
       
-      // required .UUID endpoint_uuid = 1;
-      private ralph_protobuffs.UtilProto.UUID endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      // required .UUID host_uuid = 1;
+      private ralph_protobuffs.UtilProto.UUID hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> endpointUuidBuilder_;
-      public boolean hasEndpointUuid() {
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> hostUuidBuilder_;
+      public boolean hasHostUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public ralph_protobuffs.UtilProto.UUID getEndpointUuid() {
-        if (endpointUuidBuilder_ == null) {
-          return endpointUuid_;
+      public ralph_protobuffs.UtilProto.UUID getHostUuid() {
+        if (hostUuidBuilder_ == null) {
+          return hostUuid_;
         } else {
-          return endpointUuidBuilder_.getMessage();
+          return hostUuidBuilder_.getMessage();
         }
       }
-      public Builder setEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
-        if (endpointUuidBuilder_ == null) {
+      public Builder setHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (hostUuidBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          endpointUuid_ = value;
+          hostUuid_ = value;
           onChanged();
         } else {
-          endpointUuidBuilder_.setMessage(value);
+          hostUuidBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder setEndpointUuid(
+      public Builder setHostUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
-        if (endpointUuidBuilder_ == null) {
-          endpointUuid_ = builderForValue.build();
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = builderForValue.build();
           onChanged();
         } else {
-          endpointUuidBuilder_.setMessage(builderForValue.build());
+          hostUuidBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder mergeEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
-        if (endpointUuidBuilder_ == null) {
+      public Builder mergeHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (hostUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              endpointUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
-            endpointUuid_ =
-              ralph_protobuffs.UtilProto.UUID.newBuilder(endpointUuid_).mergeFrom(value).buildPartial();
+              hostUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            hostUuid_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(hostUuid_).mergeFrom(value).buildPartial();
           } else {
-            endpointUuid_ = value;
+            hostUuid_ = value;
           }
           onChanged();
         } else {
-          endpointUuidBuilder_.mergeFrom(value);
+          hostUuidBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
-      public Builder clearEndpointUuid() {
-        if (endpointUuidBuilder_ == null) {
-          endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      public Builder clearHostUuid() {
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
           onChanged();
         } else {
-          endpointUuidBuilder_.clear();
+          hostUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
-      public ralph_protobuffs.UtilProto.UUID.Builder getEndpointUuidBuilder() {
+      public ralph_protobuffs.UtilProto.UUID.Builder getHostUuidBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
-        return getEndpointUuidFieldBuilder().getBuilder();
+        return getHostUuidFieldBuilder().getBuilder();
       }
-      public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder() {
-        if (endpointUuidBuilder_ != null) {
-          return endpointUuidBuilder_.getMessageOrBuilder();
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
+        if (hostUuidBuilder_ != null) {
+          return hostUuidBuilder_.getMessageOrBuilder();
         } else {
-          return endpointUuid_;
+          return hostUuid_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-          getEndpointUuidFieldBuilder() {
-        if (endpointUuidBuilder_ == null) {
-          endpointUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getHostUuidFieldBuilder() {
+        if (hostUuidBuilder_ == null) {
+          hostUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
-                  endpointUuid_,
+                  hostUuid_,
                   getParentForChildren(),
                   isClean());
-          endpointUuid_ = null;
+          hostUuid_ = null;
         }
-        return endpointUuidBuilder_;
+        return hostUuidBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:PartnerNotifyReady)
@@ -462,10 +462,10 @@ public final class PartnerNotifyReadyProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030partnerNotifyReady.proto\032\nutil.proto\"2" +
-      "\n\022PartnerNotifyReady\022\034\n\rendpoint_uuid\030\001 " +
-      "\002(\0132\005.UUIDB+\n\020ralph_protobuffsB\027PartnerN" +
-      "otifyReadyProto"
+      "\n\030partnerNotifyReady.proto\032\nutil.proto\"." +
+      "\n\022PartnerNotifyReady\022\030\n\thost_uuid\030\001 \002(\0132" +
+      "\005.UUIDB+\n\020ralph_protobuffsB\027PartnerNotif" +
+      "yReadyProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -477,7 +477,7 @@ public final class PartnerNotifyReadyProto {
           internal_static_PartnerNotifyReady_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerNotifyReady_descriptor,
-              new java.lang.String[] { "EndpointUuid", },
+              new java.lang.String[] { "HostUuid", },
               ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.class,
               ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.Builder.class);
           return null;

@@ -16,23 +16,23 @@ public final class PartnerFirstPhaseResultMessageProto {
     ralph_protobuffs.UtilProto.UUID getEventUuid();
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
     
-    // required .UUID sending_endpoint_uuid = 2;
-    boolean hasSendingEndpointUuid();
-    ralph_protobuffs.UtilProto.UUID getSendingEndpointUuid();
-    ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingEndpointUuidOrBuilder();
+    // required .UUID sending_host_uuid = 2;
+    boolean hasSendingHostUuid();
+    ralph_protobuffs.UtilProto.UUID getSendingHostUuid();
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder();
     
     // required bool successful = 3;
     boolean hasSuccessful();
     boolean getSuccessful();
     
-    // repeated .UUID children_event_endpoint_uuids = 4;
+    // repeated .UUID children_event_host_uuids = 4;
     java.util.List<ralph_protobuffs.UtilProto.UUID> 
-        getChildrenEventEndpointUuidsList();
-    ralph_protobuffs.UtilProto.UUID getChildrenEventEndpointUuids(int index);
-    int getChildrenEventEndpointUuidsCount();
+        getChildrenEventHostUuidsList();
+    ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index);
+    int getChildrenEventHostUuidsCount();
     java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-        getChildrenEventEndpointUuidsOrBuilderList();
-    ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventEndpointUuidsOrBuilder(
+        getChildrenEventHostUuidsOrBuilderList();
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
         int index);
   }
   public static final class PartnerFirstPhaseResultMessage extends
@@ -77,17 +77,17 @@ public final class PartnerFirstPhaseResultMessageProto {
       return eventUuid_;
     }
     
-    // required .UUID sending_endpoint_uuid = 2;
-    public static final int SENDING_ENDPOINT_UUID_FIELD_NUMBER = 2;
-    private ralph_protobuffs.UtilProto.UUID sendingEndpointUuid_;
-    public boolean hasSendingEndpointUuid() {
+    // required .UUID sending_host_uuid = 2;
+    public static final int SENDING_HOST_UUID_FIELD_NUMBER = 2;
+    private ralph_protobuffs.UtilProto.UUID sendingHostUuid_;
+    public boolean hasSendingHostUuid() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public ralph_protobuffs.UtilProto.UUID getSendingEndpointUuid() {
-      return sendingEndpointUuid_;
+    public ralph_protobuffs.UtilProto.UUID getSendingHostUuid() {
+      return sendingHostUuid_;
     }
-    public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingEndpointUuidOrBuilder() {
-      return sendingEndpointUuid_;
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder() {
+      return sendingHostUuid_;
     }
     
     // required bool successful = 3;
@@ -100,32 +100,32 @@ public final class PartnerFirstPhaseResultMessageProto {
       return successful_;
     }
     
-    // repeated .UUID children_event_endpoint_uuids = 4;
-    public static final int CHILDREN_EVENT_ENDPOINT_UUIDS_FIELD_NUMBER = 4;
-    private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventEndpointUuids_;
-    public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventEndpointUuidsList() {
-      return childrenEventEndpointUuids_;
+    // repeated .UUID children_event_host_uuids = 4;
+    public static final int CHILDREN_EVENT_HOST_UUIDS_FIELD_NUMBER = 4;
+    private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventHostUuids_;
+    public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventHostUuidsList() {
+      return childrenEventHostUuids_;
     }
     public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-        getChildrenEventEndpointUuidsOrBuilderList() {
-      return childrenEventEndpointUuids_;
+        getChildrenEventHostUuidsOrBuilderList() {
+      return childrenEventHostUuids_;
     }
-    public int getChildrenEventEndpointUuidsCount() {
-      return childrenEventEndpointUuids_.size();
+    public int getChildrenEventHostUuidsCount() {
+      return childrenEventHostUuids_.size();
     }
-    public ralph_protobuffs.UtilProto.UUID getChildrenEventEndpointUuids(int index) {
-      return childrenEventEndpointUuids_.get(index);
+    public ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index) {
+      return childrenEventHostUuids_.get(index);
     }
-    public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventEndpointUuidsOrBuilder(
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
         int index) {
-      return childrenEventEndpointUuids_.get(index);
+      return childrenEventHostUuids_.get(index);
     }
     
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
-      sendingEndpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       successful_ = false;
-      childrenEventEndpointUuids_ = java.util.Collections.emptyList();
+      childrenEventHostUuids_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -136,7 +136,7 @@ public final class PartnerFirstPhaseResultMessageProto {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSendingEndpointUuid()) {
+      if (!hasSendingHostUuid()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -148,12 +148,12 @@ public final class PartnerFirstPhaseResultMessageProto {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getSendingEndpointUuid().isInitialized()) {
+      if (!getSendingHostUuid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      for (int i = 0; i < getChildrenEventEndpointUuidsCount(); i++) {
-        if (!getChildrenEventEndpointUuids(i).isInitialized()) {
+      for (int i = 0; i < getChildrenEventHostUuidsCount(); i++) {
+        if (!getChildrenEventHostUuids(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -169,13 +169,13 @@ public final class PartnerFirstPhaseResultMessageProto {
         output.writeMessage(1, eventUuid_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, sendingEndpointUuid_);
+        output.writeMessage(2, sendingHostUuid_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBool(3, successful_);
       }
-      for (int i = 0; i < childrenEventEndpointUuids_.size(); i++) {
-        output.writeMessage(4, childrenEventEndpointUuids_.get(i));
+      for (int i = 0; i < childrenEventHostUuids_.size(); i++) {
+        output.writeMessage(4, childrenEventHostUuids_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -192,15 +192,15 @@ public final class PartnerFirstPhaseResultMessageProto {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, sendingEndpointUuid_);
+          .computeMessageSize(2, sendingHostUuid_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(3, successful_);
       }
-      for (int i = 0; i < childrenEventEndpointUuids_.size(); i++) {
+      for (int i = 0; i < childrenEventHostUuids_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, childrenEventEndpointUuids_.get(i));
+          .computeMessageSize(4, childrenEventHostUuids_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -319,8 +319,8 @@ public final class PartnerFirstPhaseResultMessageProto {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getEventUuidFieldBuilder();
-          getSendingEndpointUuidFieldBuilder();
-          getChildrenEventEndpointUuidsFieldBuilder();
+          getSendingHostUuidFieldBuilder();
+          getChildrenEventHostUuidsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -335,19 +335,19 @@ public final class PartnerFirstPhaseResultMessageProto {
           eventUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
-        if (sendingEndpointUuidBuilder_ == null) {
-          sendingEndpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        if (sendingHostUuidBuilder_ == null) {
+          sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
         } else {
-          sendingEndpointUuidBuilder_.clear();
+          sendingHostUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         successful_ = false;
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          childrenEventEndpointUuids_ = java.util.Collections.emptyList();
+        if (childrenEventHostUuidsBuilder_ == null) {
+          childrenEventHostUuids_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000008);
         } else {
-          childrenEventEndpointUuidsBuilder_.clear();
+          childrenEventHostUuidsBuilder_.clear();
         }
         return this;
       }
@@ -398,23 +398,23 @@ public final class PartnerFirstPhaseResultMessageProto {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        if (sendingEndpointUuidBuilder_ == null) {
-          result.sendingEndpointUuid_ = sendingEndpointUuid_;
+        if (sendingHostUuidBuilder_ == null) {
+          result.sendingHostUuid_ = sendingHostUuid_;
         } else {
-          result.sendingEndpointUuid_ = sendingEndpointUuidBuilder_.build();
+          result.sendingHostUuid_ = sendingHostUuidBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
         result.successful_ = successful_;
-        if (childrenEventEndpointUuidsBuilder_ == null) {
+        if (childrenEventHostUuidsBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            childrenEventEndpointUuids_ = java.util.Collections.unmodifiableList(childrenEventEndpointUuids_);
+            childrenEventHostUuids_ = java.util.Collections.unmodifiableList(childrenEventHostUuids_);
             bitField0_ = (bitField0_ & ~0x00000008);
           }
-          result.childrenEventEndpointUuids_ = childrenEventEndpointUuids_;
+          result.childrenEventHostUuids_ = childrenEventHostUuids_;
         } else {
-          result.childrenEventEndpointUuids_ = childrenEventEndpointUuidsBuilder_.build();
+          result.childrenEventHostUuids_ = childrenEventHostUuidsBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -435,35 +435,35 @@ public final class PartnerFirstPhaseResultMessageProto {
         if (other.hasEventUuid()) {
           mergeEventUuid(other.getEventUuid());
         }
-        if (other.hasSendingEndpointUuid()) {
-          mergeSendingEndpointUuid(other.getSendingEndpointUuid());
+        if (other.hasSendingHostUuid()) {
+          mergeSendingHostUuid(other.getSendingHostUuid());
         }
         if (other.hasSuccessful()) {
           setSuccessful(other.getSuccessful());
         }
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          if (!other.childrenEventEndpointUuids_.isEmpty()) {
-            if (childrenEventEndpointUuids_.isEmpty()) {
-              childrenEventEndpointUuids_ = other.childrenEventEndpointUuids_;
+        if (childrenEventHostUuidsBuilder_ == null) {
+          if (!other.childrenEventHostUuids_.isEmpty()) {
+            if (childrenEventHostUuids_.isEmpty()) {
+              childrenEventHostUuids_ = other.childrenEventHostUuids_;
               bitField0_ = (bitField0_ & ~0x00000008);
             } else {
-              ensureChildrenEventEndpointUuidsIsMutable();
-              childrenEventEndpointUuids_.addAll(other.childrenEventEndpointUuids_);
+              ensureChildrenEventHostUuidsIsMutable();
+              childrenEventHostUuids_.addAll(other.childrenEventHostUuids_);
             }
             onChanged();
           }
         } else {
-          if (!other.childrenEventEndpointUuids_.isEmpty()) {
-            if (childrenEventEndpointUuidsBuilder_.isEmpty()) {
-              childrenEventEndpointUuidsBuilder_.dispose();
-              childrenEventEndpointUuidsBuilder_ = null;
-              childrenEventEndpointUuids_ = other.childrenEventEndpointUuids_;
+          if (!other.childrenEventHostUuids_.isEmpty()) {
+            if (childrenEventHostUuidsBuilder_.isEmpty()) {
+              childrenEventHostUuidsBuilder_.dispose();
+              childrenEventHostUuidsBuilder_ = null;
+              childrenEventHostUuids_ = other.childrenEventHostUuids_;
               bitField0_ = (bitField0_ & ~0x00000008);
-              childrenEventEndpointUuidsBuilder_ = 
+              childrenEventHostUuidsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getChildrenEventEndpointUuidsFieldBuilder() : null;
+                   getChildrenEventHostUuidsFieldBuilder() : null;
             } else {
-              childrenEventEndpointUuidsBuilder_.addAllMessages(other.childrenEventEndpointUuids_);
+              childrenEventHostUuidsBuilder_.addAllMessages(other.childrenEventHostUuids_);
             }
           }
         }
@@ -476,7 +476,7 @@ public final class PartnerFirstPhaseResultMessageProto {
           
           return false;
         }
-        if (!hasSendingEndpointUuid()) {
+        if (!hasSendingHostUuid()) {
           
           return false;
         }
@@ -488,12 +488,12 @@ public final class PartnerFirstPhaseResultMessageProto {
           
           return false;
         }
-        if (!getSendingEndpointUuid().isInitialized()) {
+        if (!getSendingHostUuid().isInitialized()) {
           
           return false;
         }
-        for (int i = 0; i < getChildrenEventEndpointUuidsCount(); i++) {
-          if (!getChildrenEventEndpointUuids(i).isInitialized()) {
+        for (int i = 0; i < getChildrenEventHostUuidsCount(); i++) {
+          if (!getChildrenEventHostUuids(i).isInitialized()) {
             
             return false;
           }
@@ -535,11 +535,11 @@ public final class PartnerFirstPhaseResultMessageProto {
             }
             case 18: {
               ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasSendingEndpointUuid()) {
-                subBuilder.mergeFrom(getSendingEndpointUuid());
+              if (hasSendingHostUuid()) {
+                subBuilder.mergeFrom(getSendingHostUuid());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setSendingEndpointUuid(subBuilder.buildPartial());
+              setSendingHostUuid(subBuilder.buildPartial());
               break;
             }
             case 24: {
@@ -550,7 +550,7 @@ public final class PartnerFirstPhaseResultMessageProto {
             case 34: {
               ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
-              addChildrenEventEndpointUuids(subBuilder.buildPartial());
+              addChildrenEventHostUuids(subBuilder.buildPartial());
               break;
             }
           }
@@ -649,94 +649,94 @@ public final class PartnerFirstPhaseResultMessageProto {
         return eventUuidBuilder_;
       }
       
-      // required .UUID sending_endpoint_uuid = 2;
-      private ralph_protobuffs.UtilProto.UUID sendingEndpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      // required .UUID sending_host_uuid = 2;
+      private ralph_protobuffs.UtilProto.UUID sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> sendingEndpointUuidBuilder_;
-      public boolean hasSendingEndpointUuid() {
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> sendingHostUuidBuilder_;
+      public boolean hasSendingHostUuid() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public ralph_protobuffs.UtilProto.UUID getSendingEndpointUuid() {
-        if (sendingEndpointUuidBuilder_ == null) {
-          return sendingEndpointUuid_;
+      public ralph_protobuffs.UtilProto.UUID getSendingHostUuid() {
+        if (sendingHostUuidBuilder_ == null) {
+          return sendingHostUuid_;
         } else {
-          return sendingEndpointUuidBuilder_.getMessage();
+          return sendingHostUuidBuilder_.getMessage();
         }
       }
-      public Builder setSendingEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
-        if (sendingEndpointUuidBuilder_ == null) {
+      public Builder setSendingHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (sendingHostUuidBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          sendingEndpointUuid_ = value;
+          sendingHostUuid_ = value;
           onChanged();
         } else {
-          sendingEndpointUuidBuilder_.setMessage(value);
+          sendingHostUuidBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder setSendingEndpointUuid(
+      public Builder setSendingHostUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
-        if (sendingEndpointUuidBuilder_ == null) {
-          sendingEndpointUuid_ = builderForValue.build();
+        if (sendingHostUuidBuilder_ == null) {
+          sendingHostUuid_ = builderForValue.build();
           onChanged();
         } else {
-          sendingEndpointUuidBuilder_.setMessage(builderForValue.build());
+          sendingHostUuidBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder mergeSendingEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
-        if (sendingEndpointUuidBuilder_ == null) {
+      public Builder mergeSendingHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (sendingHostUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              sendingEndpointUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
-            sendingEndpointUuid_ =
-              ralph_protobuffs.UtilProto.UUID.newBuilder(sendingEndpointUuid_).mergeFrom(value).buildPartial();
+              sendingHostUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            sendingHostUuid_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(sendingHostUuid_).mergeFrom(value).buildPartial();
           } else {
-            sendingEndpointUuid_ = value;
+            sendingHostUuid_ = value;
           }
           onChanged();
         } else {
-          sendingEndpointUuidBuilder_.mergeFrom(value);
+          sendingHostUuidBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder clearSendingEndpointUuid() {
-        if (sendingEndpointUuidBuilder_ == null) {
-          sendingEndpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      public Builder clearSendingHostUuid() {
+        if (sendingHostUuidBuilder_ == null) {
+          sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
           onChanged();
         } else {
-          sendingEndpointUuidBuilder_.clear();
+          sendingHostUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      public ralph_protobuffs.UtilProto.UUID.Builder getSendingEndpointUuidBuilder() {
+      public ralph_protobuffs.UtilProto.UUID.Builder getSendingHostUuidBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
-        return getSendingEndpointUuidFieldBuilder().getBuilder();
+        return getSendingHostUuidFieldBuilder().getBuilder();
       }
-      public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingEndpointUuidOrBuilder() {
-        if (sendingEndpointUuidBuilder_ != null) {
-          return sendingEndpointUuidBuilder_.getMessageOrBuilder();
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder() {
+        if (sendingHostUuidBuilder_ != null) {
+          return sendingHostUuidBuilder_.getMessageOrBuilder();
         } else {
-          return sendingEndpointUuid_;
+          return sendingHostUuid_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-          getSendingEndpointUuidFieldBuilder() {
-        if (sendingEndpointUuidBuilder_ == null) {
-          sendingEndpointUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getSendingHostUuidFieldBuilder() {
+        if (sendingHostUuidBuilder_ == null) {
+          sendingHostUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
-                  sendingEndpointUuid_,
+                  sendingHostUuid_,
                   getParentForChildren(),
                   isClean());
-          sendingEndpointUuid_ = null;
+          sendingHostUuid_ = null;
         }
-        return sendingEndpointUuidBuilder_;
+        return sendingHostUuidBuilder_;
       }
       
       // required bool successful = 3;
@@ -760,190 +760,190 @@ public final class PartnerFirstPhaseResultMessageProto {
         return this;
       }
       
-      // repeated .UUID children_event_endpoint_uuids = 4;
-      private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventEndpointUuids_ =
+      // repeated .UUID children_event_host_uuids = 4;
+      private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventHostUuids_ =
         java.util.Collections.emptyList();
-      private void ensureChildrenEventEndpointUuidsIsMutable() {
+      private void ensureChildrenEventHostUuidsIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          childrenEventEndpointUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(childrenEventEndpointUuids_);
+          childrenEventHostUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(childrenEventHostUuids_);
           bitField0_ |= 0x00000008;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> childrenEventEndpointUuidsBuilder_;
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> childrenEventHostUuidsBuilder_;
       
-      public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventEndpointUuidsList() {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(childrenEventEndpointUuids_);
+      public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventHostUuidsList() {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(childrenEventHostUuids_);
         } else {
-          return childrenEventEndpointUuidsBuilder_.getMessageList();
+          return childrenEventHostUuidsBuilder_.getMessageList();
         }
       }
-      public int getChildrenEventEndpointUuidsCount() {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          return childrenEventEndpointUuids_.size();
+      public int getChildrenEventHostUuidsCount() {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          return childrenEventHostUuids_.size();
         } else {
-          return childrenEventEndpointUuidsBuilder_.getCount();
+          return childrenEventHostUuidsBuilder_.getCount();
         }
       }
-      public ralph_protobuffs.UtilProto.UUID getChildrenEventEndpointUuids(int index) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          return childrenEventEndpointUuids_.get(index);
+      public ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index) {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          return childrenEventHostUuids_.get(index);
         } else {
-          return childrenEventEndpointUuidsBuilder_.getMessage(index);
+          return childrenEventHostUuidsBuilder_.getMessage(index);
         }
       }
-      public Builder setChildrenEventEndpointUuids(
+      public Builder setChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID value) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
+        if (childrenEventHostUuidsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.set(index, value);
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.set(index, value);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.setMessage(index, value);
+          childrenEventHostUuidsBuilder_.setMessage(index, value);
         }
         return this;
       }
-      public Builder setChildrenEventEndpointUuids(
+      public Builder setChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.set(index, builderForValue.build());
+        if (childrenEventHostUuidsBuilder_ == null) {
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.set(index, builderForValue.build());
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.setMessage(index, builderForValue.build());
+          childrenEventHostUuidsBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
-      public Builder addChildrenEventEndpointUuids(ralph_protobuffs.UtilProto.UUID value) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
+      public Builder addChildrenEventHostUuids(ralph_protobuffs.UtilProto.UUID value) {
+        if (childrenEventHostUuidsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.add(value);
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.add(value);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.addMessage(value);
+          childrenEventHostUuidsBuilder_.addMessage(value);
         }
         return this;
       }
-      public Builder addChildrenEventEndpointUuids(
+      public Builder addChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID value) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
+        if (childrenEventHostUuidsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.add(index, value);
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.add(index, value);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.addMessage(index, value);
+          childrenEventHostUuidsBuilder_.addMessage(index, value);
         }
         return this;
       }
-      public Builder addChildrenEventEndpointUuids(
+      public Builder addChildrenEventHostUuids(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.add(builderForValue.build());
+        if (childrenEventHostUuidsBuilder_ == null) {
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.add(builderForValue.build());
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.addMessage(builderForValue.build());
+          childrenEventHostUuidsBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
-      public Builder addChildrenEventEndpointUuids(
+      public Builder addChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.add(index, builderForValue.build());
+        if (childrenEventHostUuidsBuilder_ == null) {
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.add(index, builderForValue.build());
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.addMessage(index, builderForValue.build());
+          childrenEventHostUuidsBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
-      public Builder addAllChildrenEventEndpointUuids(
+      public Builder addAllChildrenEventHostUuids(
           java.lang.Iterable<? extends ralph_protobuffs.UtilProto.UUID> values) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          ensureChildrenEventEndpointUuidsIsMutable();
-          super.addAll(values, childrenEventEndpointUuids_);
+        if (childrenEventHostUuidsBuilder_ == null) {
+          ensureChildrenEventHostUuidsIsMutable();
+          super.addAll(values, childrenEventHostUuids_);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.addAllMessages(values);
+          childrenEventHostUuidsBuilder_.addAllMessages(values);
         }
         return this;
       }
-      public Builder clearChildrenEventEndpointUuids() {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          childrenEventEndpointUuids_ = java.util.Collections.emptyList();
+      public Builder clearChildrenEventHostUuids() {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          childrenEventHostUuids_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000008);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.clear();
+          childrenEventHostUuidsBuilder_.clear();
         }
         return this;
       }
-      public Builder removeChildrenEventEndpointUuids(int index) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          ensureChildrenEventEndpointUuidsIsMutable();
-          childrenEventEndpointUuids_.remove(index);
+      public Builder removeChildrenEventHostUuids(int index) {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          ensureChildrenEventHostUuidsIsMutable();
+          childrenEventHostUuids_.remove(index);
           onChanged();
         } else {
-          childrenEventEndpointUuidsBuilder_.remove(index);
+          childrenEventHostUuidsBuilder_.remove(index);
         }
         return this;
       }
-      public ralph_protobuffs.UtilProto.UUID.Builder getChildrenEventEndpointUuidsBuilder(
+      public ralph_protobuffs.UtilProto.UUID.Builder getChildrenEventHostUuidsBuilder(
           int index) {
-        return getChildrenEventEndpointUuidsFieldBuilder().getBuilder(index);
+        return getChildrenEventHostUuidsFieldBuilder().getBuilder(index);
       }
-      public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventEndpointUuidsOrBuilder(
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
           int index) {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          return childrenEventEndpointUuids_.get(index);  } else {
-          return childrenEventEndpointUuidsBuilder_.getMessageOrBuilder(index);
+        if (childrenEventHostUuidsBuilder_ == null) {
+          return childrenEventHostUuids_.get(index);  } else {
+          return childrenEventHostUuidsBuilder_.getMessageOrBuilder(index);
         }
       }
       public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-           getChildrenEventEndpointUuidsOrBuilderList() {
-        if (childrenEventEndpointUuidsBuilder_ != null) {
-          return childrenEventEndpointUuidsBuilder_.getMessageOrBuilderList();
+           getChildrenEventHostUuidsOrBuilderList() {
+        if (childrenEventHostUuidsBuilder_ != null) {
+          return childrenEventHostUuidsBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(childrenEventEndpointUuids_);
+          return java.util.Collections.unmodifiableList(childrenEventHostUuids_);
         }
       }
-      public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventEndpointUuidsBuilder() {
-        return getChildrenEventEndpointUuidsFieldBuilder().addBuilder(
+      public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventHostUuidsBuilder() {
+        return getChildrenEventHostUuidsFieldBuilder().addBuilder(
             ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
       }
-      public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventEndpointUuidsBuilder(
+      public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventHostUuidsBuilder(
           int index) {
-        return getChildrenEventEndpointUuidsFieldBuilder().addBuilder(
+        return getChildrenEventHostUuidsFieldBuilder().addBuilder(
             index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
       }
       public java.util.List<ralph_protobuffs.UtilProto.UUID.Builder> 
-           getChildrenEventEndpointUuidsBuilderList() {
-        return getChildrenEventEndpointUuidsFieldBuilder().getBuilderList();
+           getChildrenEventHostUuidsBuilderList() {
+        return getChildrenEventHostUuidsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
-          getChildrenEventEndpointUuidsFieldBuilder() {
-        if (childrenEventEndpointUuidsBuilder_ == null) {
-          childrenEventEndpointUuidsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+          getChildrenEventHostUuidsFieldBuilder() {
+        if (childrenEventHostUuidsBuilder_ == null) {
+          childrenEventHostUuidsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
-                  childrenEventEndpointUuids_,
+                  childrenEventHostUuids_,
                   ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
                   isClean());
-          childrenEventEndpointUuids_ = null;
+          childrenEventHostUuids_ = null;
         }
-        return childrenEventEndpointUuidsBuilder_;
+        return childrenEventHostUuidsBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:PartnerFirstPhaseResultMessage)
@@ -972,12 +972,12 @@ public final class PartnerFirstPhaseResultMessageProto {
   static {
     java.lang.String[] descriptorData = {
       "\n$partnerFirstPhaseResultMessage.proto\032\n" +
-      "util.proto\"\243\001\n\036PartnerFirstPhaseResultMe" +
-      "ssage\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUID\022$\n\025send" +
-      "ing_endpoint_uuid\030\002 \002(\0132\005.UUID\022\022\n\nsucces" +
-      "sful\030\003 \002(\010\022,\n\035children_event_endpoint_uu" +
-      "ids\030\004 \003(\0132\005.UUIDB7\n\020ralph_protobuffsB#Pa" +
-      "rtnerFirstPhaseResultMessageProto"
+      "util.proto\"\233\001\n\036PartnerFirstPhaseResultMe" +
+      "ssage\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUID\022 \n\021send" +
+      "ing_host_uuid\030\002 \002(\0132\005.UUID\022\022\n\nsuccessful" +
+      "\030\003 \002(\010\022(\n\031children_event_host_uuids\030\004 \003(" +
+      "\0132\005.UUIDB7\n\020ralph_protobuffsB#PartnerFir" +
+      "stPhaseResultMessageProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -989,7 +989,7 @@ public final class PartnerFirstPhaseResultMessageProto {
           internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerFirstPhaseResultMessage_descriptor,
-              new java.lang.String[] { "EventUuid", "SendingEndpointUuid", "Successful", "ChildrenEventEndpointUuids", },
+              new java.lang.String[] { "EventUuid", "SendingHostUuid", "Successful", "ChildrenEventHostUuids", },
               ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.class,
               ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder.class);
           return null;

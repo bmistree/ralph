@@ -22,18 +22,16 @@ message PartnerFirstPhaseResultMessage
 
     The first phase was either successful or not successful.
     
-    If it was successful, we also pass back a list of endpoint uuids.
-    Each of these correspond to endpoints that the root must wait on
+    If it was successful, we also pass back a list of host uuids.
+    Each of these correspond to hosts that the root must wait on
     before transitioning to second phase of commit.
     */
-
-
     
     required UUID event_uuid = 1;
     /*
-      The uuid of the endpoint that originated the response message.
+      The uuid of the host that originated the response message.
      */
-    required UUID sending_endpoint_uuid = 2;
+    required UUID sending_host_uuid = 2;
 
     /*
       True if the message was successful, False otherwise.
@@ -45,6 +43,6 @@ message PartnerFirstPhaseResultMessage
       list.  There may also be no elements in this list if the
       respondent did not issue a partner or endpoint call.)
      */
-    repeated UUID children_event_endpoint_uuids = 4;
+    repeated UUID children_event_host_uuids = 4;
 
 }

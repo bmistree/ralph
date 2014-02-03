@@ -6,5 +6,5 @@ option java_outer_classname = "PartnerNotifyReadyProto";
 
 message PartnerNotifyReady
 {
-    required UUID endpoint_uuid = 1;
+    required UUID host_uuid = 1;
 }
