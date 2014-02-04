@@ -18,7 +18,8 @@ public abstract class ActiveEvent
 {
     public String uuid = null;
     public EventParent event_parent = null;
-
+    protected ThreadPool thread_pool = null;
+    
     /**
        When we enter an atomic block from a non-atomic block, we
        create a new atomic active event and return it.  The new atomic

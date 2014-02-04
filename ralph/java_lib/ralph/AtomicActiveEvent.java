@@ -47,7 +47,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
     public ActiveEventMap event_map = null;
 
-
+    
     /**
        When we are inside of one atomic event and encounter another
        atomic block, we increase our reference count.  We decrement
@@ -170,10 +170,12 @@ public class AtomicActiveEvent extends ActiveEvent
        to_restore_from_atomic.
      */
     public AtomicActiveEvent(
-        EventParent _event_parent, ActiveEventMap _event_map,
+        EventParent _event_parent, ThreadPool _thread_pool,
+        ActiveEventMap _event_map,
         ActiveEvent _to_restore_from_atomic)
     {
         event_parent = _event_parent;
+        thread_pool = _thread_pool;
         event_map = _event_map;
 		
         uuid = event_parent.get_uuid();
@@ -428,7 +430,7 @@ public class AtomicActiveEvent extends ActiveEvent
             // event out.
             ServiceAction service_action =
                 new RalphServiceActions.BackoutAtomicEventAction(this);
-            event_parent.local_endpoint._thread_pool.add_service_action(
+            thread_pool.add_service_action(
                 service_action);
             return FirstPhaseCommitResponseCode.FAILED;
         }
@@ -573,7 +575,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //# separate thread instead.
         ServiceAction service_action =
             new RalphServiceActions.EventBackoutTouchedObjs(this);
-        event_parent.local_endpoint._thread_pool.add_service_action(
+        thread_pool.add_service_action(
             service_action);
             
         //# 3

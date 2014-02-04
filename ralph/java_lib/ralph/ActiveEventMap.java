@@ -245,10 +245,14 @@ public class ActiveEventMap
             else 
             {
                 PartnerEventParent pep =
-                    new PartnerEventParent(local_endpoint,uuid,priority);
+                    new PartnerEventParent(
+                        local_endpoint._host_uuid,local_endpoint,uuid,priority);
                 ActiveEvent new_event = null;
                 if (atomic)
-                    new_event = new AtomicActiveEvent(pep,this,null);
+                {
+                    new_event = new AtomicActiveEvent(
+                        pep,local_endpoint._thread_pool,this,null);
+                }
                 else
                     new_event = new NonAtomicActiveEvent(pep,this);
                 map.put(uuid, new_event);

@@ -8,11 +8,13 @@ import RalphCallResults.MessageCallResultObject;
 
 public class PartnerEventParent extends EventParent {
 
+    private Endpoint local_endpoint = null;
+    
     public PartnerEventParent(
-        Endpoint _local_endpoint, String _uuid , String _priority)
+        String _host_uuid, Endpoint local_endpoint, String _uuid , String _priority)
     {
-        super(_local_endpoint,_uuid,_priority);
-		
+        super(_host_uuid,_uuid,_priority);
+        this.local_endpoint = local_endpoint;
     }
 
     @Override
@@ -35,7 +37,6 @@ public class PartnerEventParent extends EventParent {
         ArrayList<String> children_hosts = new ArrayList<String>();
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             children_hosts.add(endpt._partner_host_uuid);
-
 
         local_endpoint._forward_first_phase_commit_successful(
             uuid,local_endpoint._host_uuid,children_hosts);

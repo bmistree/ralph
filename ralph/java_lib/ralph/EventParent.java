@@ -18,7 +18,8 @@ import java.util.Set;
  */
 public abstract class EventParent
 {
-    public Endpoint local_endpoint = null;
+    protected String host_uuid = null;
+    
     public String uuid = null;
     private String priority = null;
     private ReentrantLock _priority_mutex = new ReentrantLock();
@@ -27,9 +28,9 @@ public abstract class EventParent
     private boolean has_been_boosted = false;
 	
 	
-    public EventParent(Endpoint _local_endpoint,String _uuid, String _priority)
+    public EventParent(String _host_uuid,String _uuid, String _priority)
     {
-        local_endpoint = _local_endpoint;
+        host_uuid = _host_uuid;
         uuid = _uuid;
 		
         if (uuid == null)

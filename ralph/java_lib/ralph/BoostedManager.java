@@ -123,12 +123,17 @@ public class BoostedManager
 
         RootEventParent rep = 
             new RootEventParent(
-                act_event_map.local_endpoint,evt_uuid,evt_priority);
+                act_event_map.local_endpoint._host_uuid,evt_uuid,evt_priority);
         
         ActiveEvent root_event = null;
-
         if (atomic)
-            root_event = new AtomicActiveEvent(rep,act_event_map,atomic_parent);
+        {
+            root_event =
+                new AtomicActiveEvent(
+                    rep,
+                    act_event_map.local_endpoint._thread_pool,
+                    act_event_map,atomic_parent);
+        }
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
 
