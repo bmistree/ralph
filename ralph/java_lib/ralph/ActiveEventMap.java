@@ -10,7 +10,6 @@ import RalphExceptions.StoppedException;
 
 public class ActiveEventMap
 {
-    private HashMap<String,ActiveEvent> map = new HashMap<String,ActiveEvent>();
     private java.util.concurrent.locks.ReentrantLock _mutex = 
         new java.util.concurrent.locks.ReentrantLock();
     public Endpoint local_endpoint = null;
@@ -27,6 +26,16 @@ public class ActiveEventMap
         boosted_manager = new BoostedManager(this,clock,daa);
     }
 
+    /**
+       Using mutex so that can only create one event for a particular
+       uuid.  As an example of what could go wrong if did not:
+
+         1) Receive partner rpc request: start creating partner event
+         
+         2) While creating partner event, get a notification to
+            backout partner.  (That event isn't yet in map, so do
+            nothing.)
+     */
     private void _lock()
     {    	
         _mutex.lock();
@@ -43,27 +52,7 @@ public class ActiveEventMap
      */
     public void initiate_stop(boolean skip_partner)
     {
-        _lock();
-        if (in_stop_phase)
-        {
-            // can happen if simultaneously attempt to stop connection
-            // on both ends or if programmer calls stop twice.
-            _unlock();
-            return;
-        }
-        
-        // note that when we stop events, they may try to remove
-        // themselves from the map.  To prevent invalidating the map as
-        // we iterate over it, we first copy all the elements into a
-        // list, then iterate.
-        ArrayList<ActiveEvent> evt_list =
-            new ArrayList<ActiveEvent>(map.values());
-        
-        in_stop_phase = true;
-        _unlock();
-        
-        for (ActiveEvent evt : evt_list)
-            evt.stop(skip_partner);        
+        Util.logger_assert("Stop has been deprecated");
     }
 
     public void inform_events_of_network_failure()
@@ -75,15 +64,7 @@ public class ActiveEventMap
     
     public void callback_when_stopped(StopCallback stop_callback_)
     {
-        _lock();
-        in_stop_complete_phase = true;
-        stop_callback = stop_callback_;
-        int len_map = map.size();
-        _unlock();
-        
-        // handles case where we called stop when we had no outstanding events.
-        if (len_map == 0)
-            stop_callback.run();
+        Util.logger_assert("Stop has been deprecated");
     }
     
 
@@ -148,7 +129,6 @@ public class ActiveEventMap
             root_event = boosted_manager.create_root_non_atomic_event(super_priority);
 
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
-        map.put(root_event.uuid,root_event);
         _unlock();
         return root_event;
     }
@@ -180,8 +160,7 @@ public class ActiveEventMap
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
         _lock();
-        local_endpoint.ralph_globals.all_events.remove(event_uuid);
-        ActiveEvent to_remove = map.remove(event_uuid);
+        ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
         ActiveEvent successor_event = null;
         
         if ((to_remove != null) &&
@@ -190,16 +169,7 @@ public class ActiveEventMap
             boosted_manager.complete_root_event(event_uuid);
         }
 
-        boolean fire_stop_complete_callback = false;
-        
-        if ((map.isEmpty()) && (in_stop_complete_phase))
-            fire_stop_complete_callback = true;
-        
         _unlock();
-        
-        if (fire_stop_complete_callback)
-            stop_callback.run();
-
         return to_remove;
     }
 
@@ -212,7 +182,6 @@ public class ActiveEventMap
     public ActiveEvent get_event(String uuid)
     {
         _lock();
-        // ActiveEvent to_return = map.get(uuid);
         ActiveEvent to_return =
             local_endpoint.ralph_globals.all_events.get(uuid);
         _unlock();
@@ -255,7 +224,7 @@ public class ActiveEventMap
                 }
                 else
                     new_event = new NonAtomicActiveEvent(pep,this);
-                map.put(uuid, new_event);
+                
                 local_endpoint.ralph_globals.all_events.put(uuid,new_event);
                 to_return = new_event;
             }
