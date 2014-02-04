@@ -243,7 +243,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
 
     /**
-       @param {uuid or None} backout_requester_endpoint_uuid --- If
+       @param {uuid or None} backout_requester_host_uuid --- If
        None, means that the call to backout originated on local
        endpoint.  Otherwise, means that call to backout was made by
        either endpoint's partner, an endpoint that we called an
@@ -252,7 +252,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        * @param stop_request
        */
     public void backout(
-        String backout_requester_endpoint_uuid, boolean stop_request)
+        String backout_requester_host_uuid, boolean stop_request)
     {
         Util.logger_assert(
             "Should not call backout on non-atomic active event.");
@@ -396,18 +396,18 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
        In this case, received a message from endpoint that this
        active event is subscribed to that endpoint with uuid
-       msg_originator_endpoint_uuid was able to commit.  If we have
+       msg_originator_host_uuid was able to commit.  If we have
        not been told to backout, then forward this message on to the
        root.  (Otherwise, no point in sending it further and doing
        wasted work: can just drop it.)
 
        * @param event_uuid
-       * @param msg_originator_endpoint_uuid
-       * @param children_event_endpoint_uuids
+       * @param msg_originator_host_uuid
+       * @param children_event_host_uuids
        */
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids)
+        String event_uuid, String msg_originator_host_uuid,
+        ArrayList<String> children_event_host_uuids)
     {
         Util.logger_assert(
             "Non-atomic should not receive first phase commit.");
@@ -622,7 +622,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
-        String msg_originator_endpoint_uuid) 
+        String msg_originator_host_uuid) 
     {
         Util.logger_assert(
             "Non-atomic active event should never receive " +

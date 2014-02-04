@@ -163,13 +163,13 @@ public class RootEventParent extends EventParent {
 	
     @Override
     public void rollback(
-        String backout_requester_endpoint_uuid, 
+        String backout_requester_host_uuid, 
         HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
     {
         super.rollback(
-            backout_requester_endpoint_uuid, same_host_endpoints_contacted_dict,
+            backout_requester_host_uuid, same_host_endpoints_contacted_dict,
             local_endpoints_whose_partners_contacted,stop_request);
     
 
@@ -196,13 +196,13 @@ public class RootEventParent extends EventParent {
     */
     @Override
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids)
+        String event_uuid, String msg_originator_host_uuid,
+        ArrayList<String> children_event_host_uuids)
     {
     	_lock_endpoints_waiting_on_commit();
-    	endpoints_waiting_on_commit.put(msg_originator_endpoint_uuid, true);
+    	endpoints_waiting_on_commit.put(msg_originator_host_uuid, true);
     	boolean may_transition = true;
-    	for (String end_uuid : children_event_endpoint_uuids)
+    	for (String end_uuid : children_event_host_uuids)
     	{
             Boolean val = endpoints_waiting_on_commit.get(end_uuid);
             if (val == null)

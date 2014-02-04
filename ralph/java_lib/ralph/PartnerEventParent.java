@@ -48,7 +48,7 @@ public class PartnerEventParent extends EventParent {
 	
     @Override
     public void rollback(
-        String backout_requester_endpoint_uuid,
+        String backout_requester_host_uuid,
         HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
@@ -57,7 +57,7 @@ public class PartnerEventParent extends EventParent {
         // add local endpoint to endpoints to roll back.
         local_endpoints_whose_partners_contacted.add(local_endpoint);
         super.rollback(
-            backout_requester_endpoint_uuid,same_host_endpoints_contacted_dict,
+            backout_requester_host_uuid,same_host_endpoints_contacted_dict,
             local_endpoints_whose_partners_contacted,stop_request);
     }
         
@@ -79,7 +79,7 @@ public class PartnerEventParent extends EventParent {
 	
 	
     /**
-     *  Informs the partner that an exception has occured at runtime
+     * Informs the partner that an exception has occured at runtime
      (thus the event should be backed out).
      * @param error
      * @param message_listening_queues_map
@@ -100,11 +100,11 @@ public class PartnerEventParent extends EventParent {
      */
     @Override
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids) 
+        String event_uuid, String msg_originator_host_uuid,
+        ArrayList<String> children_event_host_uuids) 
     {
         local_endpoint._forward_first_phase_commit_successful(
-            uuid, msg_originator_endpoint_uuid, children_event_endpoint_uuids);
+            uuid, msg_originator_host_uuid, children_event_host_uuids);
     }
 }
 

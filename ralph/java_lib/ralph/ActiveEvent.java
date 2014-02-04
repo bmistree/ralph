@@ -93,7 +93,7 @@ public abstract class ActiveEvent
     public abstract void put_exception(Exception error);
     public abstract void stop(boolean skip_partner);
     public abstract void backout(
-        String backout_requester_endpoint_uuid, boolean stop_request);
+        String backout_requester_host_uuid, boolean stop_request);
 
     /**
        Either this or obj_request_no_backout_and_release_lock
@@ -178,18 +178,18 @@ public abstract class ActiveEvent
 
        In this case, received a message from endpoint that this
        active event is subscribed to that endpoint with uuid
-       msg_originator_endpoint_uuid was able to commit.  If we have
+       msg_originator_host_uuid was able to commit.  If we have
        not been told to backout, then forward this message on to the
        root.  (Otherwise, no point in sending it further and doing
        wasted work: can just drop it.)
 
        * @param event_uuid
-       * @param msg_originator_endpoint_uuid
-       * @param children_event_endpoint_uuids
+       * @param msg_originator_host_uuid
+       * @param children_event_host_uuids
        */
     public abstract void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids);
+        String event_uuid, String msg_originator_host_uuid,
+        ArrayList<String> children_event_host_uuids);
 
 
     /**
@@ -239,5 +239,5 @@ public abstract class ActiveEvent
 
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
-        String msg_originator_endpoint_uuid);
+        String msg_originator_host_uuid);
 }

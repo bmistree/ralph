@@ -484,11 +484,11 @@ public abstract class Endpoint
             PartnerNotifyReady.newBuilder();
 		
 		
-        UtilProto.UUID.Builder endpoint_uuid_builder =
+        UtilProto.UUID.Builder host_uuid_builder =
             UtilProto.UUID.newBuilder();
-        endpoint_uuid_builder.setData(_host_uuid);
+        host_uuid_builder.setData(_host_uuid);
         
-        partner_notify_ready.setHostUuid(endpoint_uuid_builder);
+        partner_notify_ready.setHostUuid(host_uuid_builder);
 		
         general_message.setNotifyReady(partner_notify_ready);
 
@@ -544,7 +544,7 @@ public abstract class Endpoint
        Partner endpoint is subscriber of event on this endpoint with
        uuid event_uuid.  Send to partner a message that the first
        phase of the commit was unsuccessful on endpoint with uuid
-       endpoint_uuid (and therefore, it and everything along the path
+       host_uuid (and therefore, it and everything along the path
        should roll back their commits).
     */
     public void _forward_first_phase_commit_unsuccessful(
@@ -575,21 +575,21 @@ public abstract class Endpoint
     /**
      * @param {uuid} event_uuid
 
-     @param {uuid} endpoint_uuid
+     @param {uuid} host_uuid
         
-     @param {array} children_event_endpoint_uuids --- 
+     @param {array} children_event_host_uuids --- 
         
      Partner endpoint is subscriber of event on this endpoint with
      uuid event_uuid.  Send to partner a message that the first
      phase of the commit was successful for the endpoint with uuid
-     endpoint_uuid, and that the root can go on to second phase of
+     host_uuid, and that the root can go on to second phase of
      commit when all endpoints with uuids in
-     children_event_endpoint_uuids have confirmed that they are
+     children_event_host_uuids have confirmed that they are
      clear to commit.
     */
     public void _forward_first_phase_commit_successful(
-        String event_uuid,String endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids)
+        String event_uuid,String host_uuid,
+        ArrayList<String> children_event_host_uuids)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
         general_message.setTimestamp(_clock.get_int_timestamp());
@@ -600,16 +600,16 @@ public abstract class Endpoint
             UtilProto.UUID.newBuilder();
         event_uuid_msg.setData(event_uuid);
 		
-        UtilProto.UUID.Builder sending_endpoint_uuid_msg =
+        UtilProto.UUID.Builder sending_host_uuid_msg =
             UtilProto.UUID.newBuilder();
-        sending_endpoint_uuid_msg.setData(endpoint_uuid);
+        sending_host_uuid_msg.setData(host_uuid);
 		
         first_phase_result_msg.setSuccessful(true);
         first_phase_result_msg.setEventUuid(event_uuid_msg);
         first_phase_result_msg.setSendingHostUuid(
-            sending_endpoint_uuid_msg);
+            sending_host_uuid_msg);
 		
-        for (String child_event_uuid : children_event_endpoint_uuids)
+        for (String child_event_uuid : children_event_host_uuids)
         {
             UtilProto.UUID.Builder child_event_uuid_msg =
                 UtilProto.UUID.newBuilder();
@@ -669,7 +669,7 @@ public abstract class Endpoint
 
     
     /**
-       One of the endpoints, with uuid endpoint_uuid, that we are
+       One of the endpoints, with uuid host_uuid, that we are
        subscribed to was able to complete first phase commit for
        event with uuid event_uuid.
 
@@ -677,14 +677,14 @@ public abstract class Endpoint
        with this message.  (Used to index into local endpoint's
        active event map.)
     
-       @param {uuid} endpoint_uuid --- The uuid of the endpoint that
+       @param {uuid} host_uuid --- The uuid of the endpoint that
        was able to complete the first phase of the commit.  (Note:
        this may not be the same uuid as that for the endpoint that
        called _receive_first_phase_commit_successful on this
        endpoint.  We only keep track of the endpoint that originally
        committed.)
 
-       @param {None or list} children_event_endpoint_uuids --- None
+       @param {None or list} children_event_host_uuids --- None
        if successful is False.  Otherwise, a set of uuids.  The root
        endpoint should not transition from being in first phase of
        commit to completing commit until it has received a first
@@ -694,13 +694,13 @@ public abstract class Endpoint
        Forward the message on to the root.
     */    
     public void  _receive_first_phase_commit_successful(
-        String event_uuid,String endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids)
+        String event_uuid,String host_uuid,
+        ArrayList<String> children_event_host_uuids)
     {
       
         RalphServiceActions.ServiceAction service_action = 
             new RalphServiceActions.ReceiveFirstPhaseCommitMessage(
-                this,event_uuid,endpoint_uuid,true,children_event_endpoint_uuids);
+                this,event_uuid,host_uuid,true,children_event_host_uuids);
         
         _thread_pool.add_service_action(service_action);
     }
@@ -711,16 +711,16 @@ public abstract class Endpoint
        with this message.  (Used to index into local endpoint's
        active event map.)
 
-       @param {uuid} endpoint_uuid --- The endpoint
+       @param {uuid} host_uuid --- The endpoint
        that tried to perform the first phase of the commit.  (Other
        endpoints may have forwarded the result on to us.)
     */
     public void _receive_first_phase_commit_unsuccessful(
-        String event_uuid,String endpoint_uuid)
+        String event_uuid,String host_uuid)
     {
     	RalphServiceActions.ServiceAction service_action = 
             new RalphServiceActions.ReceiveFirstPhaseCommitMessage(
-                this, event_uuid,endpoint_uuid,false,null);
+                this, event_uuid,host_uuid,false,null);
                 
         _thread_pool.add_service_action(service_action);
     }

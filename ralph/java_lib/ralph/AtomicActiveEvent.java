@@ -536,7 +536,7 @@ public class AtomicActiveEvent extends ActiveEvent
     /**
        MUST BE CALLED FROM WITHIN LOCK
         
-       @param {uuid or None} backout_requester_endpoint_uuid --- If
+       @param {uuid or None} backout_requester_host_uuid --- If
        None, means that the call to backout originated on local
        endpoint.  Otherwise, means that call to backout was made by
        either endpoint's partner, an endpoint that we called an
@@ -559,10 +559,10 @@ public class AtomicActiveEvent extends ActiveEvent
        5) Forward messages to all other endpoints in event to roll
        back.
 
-       * @param backout_requester_endpoint_uuid
+       * @param backout_requester_host_uuid
        * @param stop_request
        */
-    private void _backout(String backout_requester_endpoint_uuid, boolean stop_request)
+    private void _backout(String backout_requester_host_uuid, boolean stop_request)
     {
         //# 0
         if (received_backout_already)
@@ -606,7 +606,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //# already holding _lock.  Therefore, we already have exclusive
         //# access to variable.
         event_parent.rollback(
-            backout_requester_endpoint_uuid,other_endpoints_contacted,
+            backout_requester_host_uuid,other_endpoints_contacted,
             local_endpoints_whose_partners_contacted,stop_request);
     }
 
@@ -698,19 +698,18 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
     /**
-       @param {uuid or None} backout_requester_endpoint_uuid --- If
-       None, means that the call to backout originated on local
-       endpoint.  Otherwise, means that call to backout was made by
-       either endpoint's partner, an endpoint that we called an
-       endpoint method on, or an endpoint that called an endpoint
-       method on us.
+       @param {uuid or None} backout_requester_host_uuid --- If None,
+       means that the call to backout originated on local endpoint.
+       Otherwise, means that call to backout was made by either
+       endpoint's partner, an endpoint that we called an endpoint
+       method on, or an endpoint that called an endpoint method on us.
        * @param stop_request
        */
     public void backout(
-        String backout_requester_endpoint_uuid, boolean stop_request)
+        String backout_requester_host_uuid, boolean stop_request)
     {
         _lock();
-        _backout(backout_requester_endpoint_uuid,stop_request);
+        _backout(backout_requester_host_uuid,stop_request);
         _unlock();
     }
         
@@ -874,22 +873,22 @@ public class AtomicActiveEvent extends ActiveEvent
 
        In this case, received a message from endpoint that this
        active event is subscribed to that endpoint with uuid
-       msg_originator_endpoint_uuid was able to commit.  If we have
+       msg_originator_host_uuid was able to commit.  If we have
        not been told to backout, then forward this message on to the
        root.  (Otherwise, no point in sending it further and doing
        wasted work: can just drop it.)
 
        * @param event_uuid
-       * @param msg_originator_endpoint_uuid
-       * @param children_event_endpoint_uuids
+       * @param msg_originator_host_uuid
+       * @param children_event_host_uuids
        */
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_endpoint_uuid,
-        ArrayList<String> children_event_endpoint_uuids)
+        String event_uuid, String msg_originator_host_uuid,
+        ArrayList<String> children_event_host_uuids)
     {
         event_parent.receive_successful_first_phase_commit_msg(
-            event_uuid,msg_originator_endpoint_uuid,
-            children_event_endpoint_uuids);
+            event_uuid,msg_originator_host_uuid,
+            children_event_host_uuids);
     }
 
     /**
@@ -1193,7 +1192,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
-        String msg_originator_endpoint_uuid) 
+        String msg_originator_host_uuid) 
     {
         forward_backout_request_and_backout_self();
     }

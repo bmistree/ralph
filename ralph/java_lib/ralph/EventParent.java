@@ -129,18 +129,18 @@ public abstract class EventParent
 
        In this case, received a message from endpoint that this
        active event is subscribed to that endpoint with uuid
-       msg_originator_endpoint_uuid was able to commit.  If we have
+       msg_originator_host_uuid was able to commit.  If we have
        not been told to backout, then forward this message on to the
        root.  (Otherwise, no point in sending it further and doing
        wasted work: can just drop it.)
        * @param event_uuid
-       * @param msg_originator_endpoint_uuid
-       * @param children_event_endpoint_uuids
+       * @param msg_originator_host_uuid
+       * @param children_event_host_uuids
        */
 	
     public abstract void receive_successful_first_phase_commit_msg(
-        String event_uuid,String msg_originator_endpoint_uuid,
-        ArrayList<String>children_event_endpoint_uuids);
+        String event_uuid,String msg_originator_host_uuid,
+        ArrayList<String>children_event_host_uuids);
 
 
     /**
@@ -226,12 +226,10 @@ public abstract class EventParent
 
 	
     /**
-       @param {uuid or None} backout_requester_endpoint_uuid --- If
+       @param {uuid or None} backout_requester_host_uuid --- If
        None, means that the call to backout originated on local
        endpoint.  Otherwise, means that call to backout was made by
-       either endpoint's partner, an endpoint that we called an
-       endpoint method on, or an endpoint that called an endpoint
-       method on us.
+       a remote host.
 
        @param {dict} same_host_endpoints_contacted_dict --- Keys are
        uuids.  Values are EventSubscribedTo objects (which wrap
@@ -244,7 +242,7 @@ public abstract class EventParent
        events as well.  
     */
     public void rollback(
-        String backout_requester_endpoint_uuid, 
+        String backout_requester_host_uuid, 
         HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
@@ -260,7 +258,7 @@ public abstract class EventParent
             Endpoint endpoint_to_rollback =
                 subscribed_elements_to_rollback.endpoint_object;
 			
-            if (!endpoint_to_rollback._host_uuid.equals(backout_requester_endpoint_uuid))
+            if (!endpoint_to_rollback._host_uuid.equals(backout_requester_host_uuid))
             {
                 endpoint_to_rollback._receive_request_backout(
                     uuid,local_endpoint);
