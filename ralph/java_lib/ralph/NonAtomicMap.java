@@ -37,7 +37,6 @@ public abstract class NonAtomicMap<K,V,D>
     D>
 {
     public NonAtomicMap(
-        String _host_uuid,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -47,7 +46,6 @@ public abstract class NonAtomicMap<K,V,D>
         
         NonAtomicInternalMap<K,V,D> init_val = new NonAtomicInternalMap<K,V,D>();
         init_val.init(
-            _host_uuid,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
@@ -55,14 +53,13 @@ public abstract class NonAtomicMap<K,V,D>
         
         NonAtomicInternalMap<K,V,D> default_val = new NonAtomicInternalMap<K,V,D>();
         default_val.init(
-            _host_uuid,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
 
         init_non_atomic_value_variable(
-            _host_uuid, init_val,default_val,
+            init_val,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
     }
 
@@ -72,7 +69,6 @@ public abstract class NonAtomicMap<K,V,D>
        This constructor is for this.
      */
     public NonAtomicMap(
-        String _host_uuid,
         NonAtomicInternalMap<K,V,D> internal_val,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
@@ -82,19 +78,17 @@ public abstract class NonAtomicMap<K,V,D>
         NonAtomicInternalMap<K,V,D> default_val =
             new NonAtomicInternalMap<K,V,D>();
         default_val.init(
-            _host_uuid,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
         
         init_non_atomic_value_variable(
-            _host_uuid,internal_val,default_val,
+            internal_val,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
     }
 
     public NonAtomicMap(
-        String _host_uuid,
         HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper)
@@ -105,7 +99,6 @@ public abstract class NonAtomicMap<K,V,D>
         
         NonAtomicInternalMap<K,V,D> init_val_2 = new NonAtomicInternalMap<K,V,D>();
         init_val_2.init(
-            _host_uuid,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
@@ -113,14 +106,13 @@ public abstract class NonAtomicMap<K,V,D>
         
         NonAtomicInternalMap<K,V,D> default_val = new NonAtomicInternalMap<K,V,D>();
         default_val.init(
-            _host_uuid,
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
 
         init_non_atomic_value_variable(
-            _host_uuid, init_val_2,default_val,
+            init_val_2,default_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

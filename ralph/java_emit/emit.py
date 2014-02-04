@@ -138,8 +138,7 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
     public RalphObject<%s,%s> ensure_atomic_object(
         %s object_to_ensure)
     {
-        return new %s(
-            "host_uuid",false,object_to_ensure);
+        return new %s(false,object_to_ensure);
     }
 }
 ''' % (struct_name,internal_struct_name,internal_struct_name,
@@ -178,10 +177,10 @@ public static class %s extends AtomicValueVariable<%s,%s>
         struct_name)
     
     external_struct_definition_constructor = '''
-public %s (String _host_uuid, boolean _peered)
+public %s (boolean log_operations)
 {
     super(
-        "_host_uuid",_peered,
+        log_operations,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
         new %s(),new %s(),%s);
@@ -204,13 +203,11 @@ public void serialize_as_rpc_arg(
     # wrapper to have pass-by-reference semantics.
     clone_for_args_method_constructor_text = '''
 /** Constructor for cloning into args */
-public %s (
-    String _host_uuid, boolean _peered,
-    %s internal_val)
+public %s (boolean log_operations,%s internal_val)
 
 {
     super(
-        "_host_uuid",_peered,
+        log_operations,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
         internal_val,internal_val,%s);
@@ -780,22 +777,22 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
         if isinstance(argument_type,MapType):
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s,%s.index_type,%s.locked_wrapper)'
+                'new %s (false,%s,%s.index_type,%s.locked_wrapper)'
                 %
                 (java_type_statement,argument_name,argument_name,argument_name))
         elif isinstance(argument_type,ListType):
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s,%s.locked_wrapper)'
+                'new %s (false,%s,%s.locked_wrapper)'
                 %
                 (java_type_statement,argument_name,argument_name))
 
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s)' %
+                'new %s (false,%s)' %
                 (java_type_statement,argument_name))
         else:
             new_ralph_variable = (
-                'new %s ("_host_uuid",false,%s)' %
+                'new %s (false,%s)' %
                 (java_type_statement,argument_name))
 
         internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
@@ -887,8 +884,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_text is None:
-            return 'new %s ("_host_uuid",false)' % java_type_text
-        return 'new %s ("_host_uuid",false,%s)' % (java_type_text,initializer_text)
+            return 'new %s (false)' % java_type_text
+        return 'new %s (false,%s)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
         java_type_text = emit_ralph_wrapped_type(type_object)
         
@@ -918,7 +915,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         value_type = type_object.to_type_node.type
         value_type_wrapper = list_map_wrappers(value_type)
         to_return = (
-            'new %s("_host_uuid",false,%s,%s)' %
+            'new %s(false,%s,%s)' %
             (java_type_text,java_map_index_type_text,value_type_wrapper))
         return to_return
 
@@ -934,7 +931,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         element_type = type_object.element_type_node.type
         element_type_wrapper = list_map_wrappers(element_type)
         to_return = (
-            'new %s("_host_uuid",false,%s)' %
+            'new %s(false,%s)' %
             (java_type_text,element_type_wrapper))
         return to_return
     
@@ -943,10 +940,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
-                'new  %s("_host_uuid",false,%s)' % (struct_name,initializer_text))
+                'new  %s(false,%s)' % (struct_name,initializer_text))
         else:
             to_return = (
-                'new  %s("_host_uuid",false)' % struct_name)
+                'new  %s(false)' % struct_name)
 
         return to_return
     
@@ -955,10 +952,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
-                'new  %s("_host_uuid",false,%s)' % (java_type_text,initializer_text))
+                'new  %s(false,%s)' % (java_type_text,initializer_text))
         else:
             to_return = (
-                'new  %s("_host_uuid",false)' % java_type_text)
+                'new  %s(false)' % java_type_text)
 
         return to_return
 
@@ -1605,7 +1602,7 @@ def emit_for_loop_cast_line_map(
         variable_type_node.type)
     internal_type = emit_internal_type(variable_type_node.type)
     return (
-        '%s %s = new %s("",false,(%s)__%s); ' %
+        '%s %s = new %s(false,(%s)__%s); ' %
         (java_type_statement_text,internal_var_name_text,
          java_type_statement_text,internal_type,
          internal_var_name_text))

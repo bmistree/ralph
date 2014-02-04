@@ -19,18 +19,16 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
 	
     public String uuid = Util.generate_uuid();
-    public String host_uuid = null;
     private DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
 	
     public NonAtomicObject(){}
 	
     public void init(
-        ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
+        ValueTypeDataWrapperFactory<T,D> vtdwc,
         T init_val)
     {
         data_wrapper_constructor = vtdwc;
-        host_uuid = _host_uuid;
         val = data_wrapper_constructor.construct(init_val,false);
     }
 	

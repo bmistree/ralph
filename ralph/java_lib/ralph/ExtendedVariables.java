@@ -27,8 +27,7 @@ public class ExtendedVariables
         {
             super();
             init_multithreaded_list_container(
-                "",true,
-                new ListTypeDataWrapperFactory<T,D>(),
+                true,new ListTypeDataWrapperFactory<T,D>(),
                 new ArrayList<RalphObject<T,D>>(),
                 _locked_wrapper);
         }

@@ -66,7 +66,6 @@ public class WriteReadVarStack
      */
     public static boolean run_test()
     {
-        String dummy_host_uuid = "hello";
         String var_name = "a";
         String var_name_b = "b";
         Double root_a_init_val = new Double(5);
@@ -75,15 +74,12 @@ public class WriteReadVarStack
 
         /** Create new variables */
         NonAtomicNumberVariable root_a =
-            new NonAtomicNumberVariable(
-                dummy_host_uuid,false,root_a_init_val);
+            new NonAtomicNumberVariable(false,root_a_init_val);
         NonAtomicNumberVariable higher_a =
-            new NonAtomicNumberVariable(
-                dummy_host_uuid,false,higher_a_init_val);        
+            new NonAtomicNumberVariable(false,higher_a_init_val);        
 
         NonAtomicNumberVariable root_b =
-            new NonAtomicNumberVariable(
-                dummy_host_uuid,false,root_b_init_val);        
+            new NonAtomicNumberVariable(false,root_b_init_val);        
 
         
         /** Push new variables to stack */

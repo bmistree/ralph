@@ -29,7 +29,6 @@ import RalphDataWrappers.ListTypeDataWrapper;
 public abstract class AtomicObject<T,D> extends RalphObject<T,D> 
 {
     public String uuid = Util.generate_uuid();
-    public String host_uuid = null;
     public boolean log_changes;
     protected DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
@@ -101,31 +100,28 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public AtomicObject(){}
 	
     public void init_multithreaded_locked_object(
-        ValueTypeDataWrapperFactory<T,D> vtdwc, String _host_uuid,
+        ValueTypeDataWrapperFactory<T,D> vtdwc,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = vtdwc;
-        host_uuid = _host_uuid;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
     }
 
     public void init_multithreaded_locked_object(
-        MapTypeDataWrapperFactory rtdwc, String _host_uuid,
+        MapTypeDataWrapperFactory rtdwc,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = rtdwc;
-        host_uuid = _host_uuid;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
     }
 
     public void init_multithreaded_locked_object(
-        ListTypeDataWrapperFactory rtdwc, String _host_uuid,
+        ListTypeDataWrapperFactory rtdwc,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = rtdwc;
-        host_uuid = _host_uuid;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
     }

@@ -17,13 +17,13 @@ public abstract class AtomicInternalListReference <V,D>
     D>
 {
     public AtomicInternalListReference(
-        String _host_uuid, boolean _peered, 
+        boolean _peered, 
         AtomicInternalList<V,D> init_val, 
         AtomicInternalList<V,D> default_value,
         // using value type here: treating internal reference as value
         ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>vtdwc)
     {
-        super(_host_uuid,_peered,init_val,default_value,vtdwc);
+        super(_peered,init_val,default_value,vtdwc);
     }
 	
 	

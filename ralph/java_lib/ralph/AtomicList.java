@@ -36,27 +36,26 @@ public abstract class AtomicList<V,D>
     D>
 {
     public AtomicList(
-        String _host_uuid, boolean _log_changes,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper)
     {
         super();
         
         AtomicInternalList<V,D> init_val = new AtomicInternalList<V,D>();
         init_val.init_multithreaded_list_container(
-            _host_uuid, _log_changes,
+            _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
         default_val.init_multithreaded_list_container(
-            _host_uuid, _log_changes,
+            _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _log_changes, init_val,default_val,
+            _log_changes, init_val,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
     
@@ -67,7 +66,7 @@ public abstract class AtomicList<V,D>
        This constructor is for this.
      */
     public AtomicList(
-        String _host_uuid, boolean _log_changes,
+        boolean _log_changes,
         AtomicInternalList<V,D> internal_val,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -75,19 +74,19 @@ public abstract class AtomicList<V,D>
         
         AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
         default_val.init_multithreaded_list_container(
-            _host_uuid, _log_changes,
+            _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _log_changes, internal_val,default_val,
+            _log_changes, internal_val,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
 
     
     public AtomicList(
-        String _host_uuid, boolean _log_changes,
+        boolean _log_changes,
         ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
         EnsureAtomicWrapper<V,D> locked_wrapper)
     {
@@ -95,20 +94,20 @@ public abstract class AtomicList<V,D>
 
         AtomicInternalList<V,D> init_val_2 = new AtomicInternalList<V,D>();
         init_val_2.init_multithreaded_list_container(
-            _host_uuid, _log_changes,
+            _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
         default_val.init_multithreaded_list_container(
-            _host_uuid, _log_changes,
+            _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
         init_atomic_value_variable(
-            _host_uuid, _log_changes, init_val_2,default_val,
+            _log_changes, init_val_2,default_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

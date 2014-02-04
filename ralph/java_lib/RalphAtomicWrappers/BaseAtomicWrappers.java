@@ -24,7 +24,7 @@ public class BaseAtomicWrappers
             Double object_to_ensure)
         {
             return new Variables.NonAtomicNumberVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
 
@@ -35,7 +35,7 @@ public class BaseAtomicWrappers
             Boolean object_to_ensure)
         {
             return new Variables.NonAtomicTrueFalseVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
     
@@ -46,7 +46,7 @@ public class BaseAtomicWrappers
             String object_to_ensure)
         {
             return new Variables.NonAtomicTextVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
 
@@ -58,7 +58,7 @@ public class BaseAtomicWrappers
             Double object_to_ensure)
         {
             return new Variables.AtomicNumberVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
 
@@ -69,7 +69,7 @@ public class BaseAtomicWrappers
             Boolean object_to_ensure)
         {
             return new Variables.AtomicTrueFalseVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
     
@@ -80,7 +80,7 @@ public class BaseAtomicWrappers
             String object_to_ensure)
         {
             return new Variables.AtomicTextVariable(
-                "host_uuid",false,object_to_ensure);
+                false,object_to_ensure);
         }
     }
 }

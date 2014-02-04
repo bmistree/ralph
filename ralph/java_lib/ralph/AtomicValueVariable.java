@@ -8,20 +8,20 @@ import RalphDataWrappers.DataWrapper;
 public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D> 
 {
     public AtomicValueVariable(
-        String _host_uuid, boolean _log_changes, T init_val,T default_value,
+        boolean _log_changes, T init_val,T default_value,
         ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
         super();
-        init_multithreaded_locked_object(vtdwc,_host_uuid,_log_changes,init_val);
+        init_multithreaded_locked_object(vtdwc,_log_changes,init_val);
     }
 
     public AtomicValueVariable(){}
 
     public void init_atomic_value_variable(
-        String _host_uuid, boolean _log_changes, T init_val,T default_value,
+        boolean _log_changes, T init_val,T default_value,
         ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
-        init_multithreaded_locked_object(vtdwc,_host_uuid,_log_changes,init_val);
+        init_multithreaded_locked_object(vtdwc,_log_changes,init_val);
     }
     
     

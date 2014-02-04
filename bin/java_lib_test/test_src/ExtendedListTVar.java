@@ -65,7 +65,7 @@ public class ExtendedListTVar
         // wrap the internal extended list
         AtomicListVariable<Double,Double> to_return =
             new AtomicListVariable<Double,Double>(
-                "dummy_host_uuid",false,
+                false,
                 extended_internal_list,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
         return to_return;

@@ -105,11 +105,11 @@ public class PartnersNoConflict
             
             Variables.NonAtomicTrueFalseVariable bool_var =
                 new Variables.NonAtomicTrueFalseVariable(
-                    endpta._host_uuid, false, init_boolean_value);
+                    false, init_boolean_value);
             
             Variables.NonAtomicTextVariable string_var =
                 new Variables.NonAtomicTextVariable(
-                    endpta._host_uuid, false, init_string_value);
+                    false, init_string_value);
             
             endpta.global_var_stack.add_var(bool_var_name,bool_var);
             endpta.global_var_stack.add_var(string_var_name,string_var);

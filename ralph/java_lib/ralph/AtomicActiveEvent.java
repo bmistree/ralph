@@ -989,7 +989,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // grab all arguments from message
         ArrayList <RPCArgObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
-                msg.getArguments(),endpt_recvd_on._host_uuid);
+                msg.getArguments());
         
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as

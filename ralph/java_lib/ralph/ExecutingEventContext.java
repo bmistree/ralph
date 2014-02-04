@@ -302,8 +302,7 @@ public class ExecutingEventContext
         // step 2: deserialize message variables
         ArrayList<RalphObject> returned_variables =
             ExecutingEventContext.deserialize_variables_list(
-                variables,true,
-                endpoint._host_uuid);
+                variables,true);
 
         // step 3: actually overwrite local variables
         for (int i = 0; i < returned_variables.size(); ++i)
@@ -339,7 +338,7 @@ public class ExecutingEventContext
        Index of map is variable name; value of map is object.
      */
     public static HashMap<String,RalphObject> deserialize_variables_map(
-        VariablesProto.Variables variables,boolean references_only,String host_uuid)
+        VariablesProto.Variables variables,boolean references_only)
     {
         HashMap<String,RalphObject> to_return =
             new HashMap<String,RalphObject>();
@@ -354,7 +353,7 @@ public class ExecutingEventContext
                 continue;
             
             String var_name = variable.getVarName();
-            RalphObject lo = deserialize_any(variable,host_uuid);
+            RalphObject lo = deserialize_any(variable);
             to_return.put(var_name,lo);
         }
 
@@ -362,14 +361,14 @@ public class ExecutingEventContext
     }
 
     public static ArrayList<RPCArgObject> deserialize_rpc_args_list(
-        VariablesProto.Variables variables,String host_uuid)
+        VariablesProto.Variables variables)
     {
         ArrayList<RPCArgObject> to_return = new ArrayList<RPCArgObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
-            RalphObject lo = deserialize_any(variable,host_uuid);
+            RalphObject lo = deserialize_any(variable);
             boolean is_reference = variable.getReference();
             to_return.add(new RPCArgObject(lo,is_reference));
         }
@@ -385,7 +384,7 @@ public class ExecutingEventContext
        put null values in for the non-references.
      */
     public static ArrayList<RalphObject> deserialize_variables_list(
-        VariablesProto.Variables variables,boolean references_only,String host_uuid)
+        VariablesProto.Variables variables,boolean references_only)
     {
         ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
 
@@ -398,7 +397,7 @@ public class ExecutingEventContext
             if ((references_only &&  is_reference) ||
                 (! references_only))
             {
-                lo = deserialize_any(variable,host_uuid);
+                lo = deserialize_any(variable);
             }
             to_return.add(lo);
         }
@@ -414,24 +413,24 @@ public class ExecutingEventContext
        non-passed-by-reference argument.
      */
     public static RalphObject deserialize_any(
-        VariablesProto.Variables.Any variable, String host_uuid)
+        VariablesProto.Variables.Any variable)
     {
         RalphObject lo = null;
 
         if (variable.hasNum())
         {
             lo = new NonAtomicNumberVariable(
-                host_uuid,false,new Double(variable.getNum()));
+                false,new Double(variable.getNum()));
         }
         else if (variable.hasText())
         {
             lo = new NonAtomicTextVariable(
-                host_uuid,false,variable.getText());
+                false,variable.getText());
         }
         else if (variable.hasTrueFalse())
         {
             lo = new NonAtomicTrueFalseVariable(
-                host_uuid,false,new Boolean(variable.getTrueFalse()));
+                false,new Boolean(variable.getTrueFalse()));
         }
         else if (variable.hasList())
         {

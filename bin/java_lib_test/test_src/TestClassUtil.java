@@ -161,28 +161,26 @@ public class TestClassUtil
     private static DefaultEndpoint build_default_endpoint(
         ConnectionObj conn_obj)
     {
-        String dummy_host_uuid = "dummy_host_uuid";
-
         VariableStore vstore = new VariableStore(false);
         
         // adding a number tvar
         vstore.add_var(
             DefaultEndpoint.NUM_TVAR_NAME,
             new AtomicNumberVariable(
-                dummy_host_uuid,false,
+                false,
                 DefaultEndpoint.NUM_TVAR_INIT_VAL));
 
         vstore.add_var(
             DefaultEndpoint.MAP_TVAR_NAME,
             new AtomicMapVariable<Double,Double,Double>(
-                dummy_host_uuid,false,
+                false,
                 NonAtomicInternalMap.IndexType.DOUBLE,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
             new AtomicListVariable<Double,Double>(
-                dummy_host_uuid,false,
+                false,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
 
         

@@ -57,8 +57,7 @@ public class PartnersModifyRemoteState
                 expected_value += 1;
 
                 Variables.NonAtomicNumberVariable num_var =
-                    new Variables.NonAtomicNumberVariable(
-                        endpta._host_uuid, false);
+                    new Variables.NonAtomicNumberVariable(false);
 
                 
                 ActiveEvent root_event =

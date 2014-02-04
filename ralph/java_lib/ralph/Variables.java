@@ -41,17 +41,17 @@ public class Variables {
         extends AtomicValueVariable<Double,Double>
     {
         public AtomicNumberVariable(
-            String _host_uuid, boolean _log_changes,Object init_val)
+            boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_log_changes,
+                _log_changes,
                 new Double(((Number) init_val).doubleValue()),
                 default_number,number_value_type_data_wrapper_factory);		
         }
-        public AtomicNumberVariable(String _host_uuid, boolean _log_changes)
+        public AtomicNumberVariable(boolean _log_changes)
         {
             super(
-                _host_uuid,_log_changes,default_number,default_number,
+                _log_changes,default_number,default_number,
                 number_value_type_data_wrapper_factory);		
         }
         
@@ -69,17 +69,16 @@ public class Variables {
     public static class AtomicTextVariable
         extends AtomicValueVariable<String,String>
     {
-        public AtomicTextVariable(
-            String _host_uuid, boolean _log_changes,Object init_val)
+        public AtomicTextVariable(boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_log_changes,(String)init_val,default_text,
+                _log_changes,(String)init_val,default_text,
                 text_value_type_data_wrapper_factory);		
         }
-        public AtomicTextVariable(String _host_uuid, boolean _log_changes)
+        public AtomicTextVariable(boolean _log_changes)
         {
             super(
-                _host_uuid,_log_changes,default_text,default_text,
+                _log_changes,default_text,default_text,
                 text_value_type_data_wrapper_factory);            
         }
         public void serialize_as_rpc_arg(
@@ -97,17 +96,16 @@ public class Variables {
     public static class AtomicTrueFalseVariable
         extends AtomicValueVariable<Boolean,Boolean>
     {
-        public AtomicTrueFalseVariable(
-            String _host_uuid, boolean _log_changes,Object init_val)
+        public AtomicTrueFalseVariable(boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_log_changes,(Boolean)init_val,default_tf,
+                _log_changes,(Boolean)init_val,default_tf,
                 true_false_value_type_data_wrapper_factory);		
         }
-        public AtomicTrueFalseVariable(String _host_uuid, boolean _log_changes)
+        public AtomicTrueFalseVariable(boolean _log_changes)
         {
             super(
-                _host_uuid,_log_changes,default_tf,default_tf,
+                _log_changes,default_tf,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
         
@@ -126,17 +124,16 @@ public class Variables {
     public static class AtomicEndpointVariable
         extends AtomicValueVariable<Endpoint,Endpoint>
     {
-        public AtomicEndpointVariable(
-            String _host_uuid, boolean _log_changes,Object init_val)
+        public AtomicEndpointVariable(boolean _log_changes,Object init_val)
         {
             super(
-                _host_uuid,_log_changes,(Endpoint)init_val,default_endpoint,
+                _log_changes,(Endpoint)init_val,default_endpoint,
                 endpoint_value_type_data_wrapper_factory);		
         }
-        public AtomicEndpointVariable(String _host_uuid, boolean _log_changes)
+        public AtomicEndpointVariable(boolean _log_changes)
         {
             super(
-                _host_uuid,_log_changes,default_endpoint,default_endpoint,
+                _log_changes,default_endpoint,default_endpoint,
                 endpoint_value_type_data_wrapper_factory);
         }
         
@@ -154,18 +151,17 @@ public class Variables {
         extends NonAtomicValueVariable<Double,Double>
     {
         public NonAtomicNumberVariable(
-            String _host_uuid, boolean _dummy_log_changes, Double init_val)
+            boolean _dummy_log_changes, Double init_val)
         {
             super(
-                _host_uuid,init_val,default_number,
+                init_val,default_number,
                 number_value_type_data_wrapper_factory);
         }
 
-        public NonAtomicNumberVariable(
-            String _host_uuid, boolean _dummy_log_changes)
+        public NonAtomicNumberVariable(boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,default_number,default_number,
+                default_number,default_number,
                 number_value_type_data_wrapper_factory);			
         }
         
@@ -184,18 +180,17 @@ public class Variables {
         extends NonAtomicValueVariable<String,String>
     {
         public NonAtomicTextVariable(
-            String _host_uuid, boolean _dummy_log_changes,String init_val)
+            boolean _dummy_log_changes,String init_val)
         {
             super(
-                _host_uuid,init_val,default_text,
+                init_val,default_text,
                 text_value_type_data_wrapper_factory);
         }
 		
-        public NonAtomicTextVariable(
-            String _host_uuid, boolean _dummy_log_changes)
+        public NonAtomicTextVariable(boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,default_text,default_text,
+                default_text,default_text,
                 text_value_type_data_wrapper_factory);
         }
         
@@ -215,18 +210,17 @@ public class Variables {
         extends NonAtomicValueVariable<Boolean,Boolean>
     {
         public NonAtomicTrueFalseVariable(
-            String _host_uuid, boolean _dummy_log_changes, Boolean init_val)
+            boolean _dummy_log_changes, Boolean init_val)
         {
             super(
-                _host_uuid,init_val,default_tf,
+                init_val,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
 
-        public NonAtomicTrueFalseVariable(
-            String _host_uuid, boolean _dummy_log_changes)
+        public NonAtomicTrueFalseVariable(boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,default_tf,default_tf,
+                default_tf,default_tf,
                 true_false_value_type_data_wrapper_factory);
         }
 
@@ -246,18 +240,17 @@ public class Variables {
         extends NonAtomicValueVariable<Endpoint,Endpoint>
     {
         public NonAtomicEndpointVariable(
-            String _host_uuid, boolean _dummy_log_changes, Endpoint init_val)
+            boolean _dummy_log_changes, Endpoint init_val)
         {
             super(
-                _host_uuid,init_val,default_endpoint,
+                init_val,default_endpoint,
                 endpoint_value_type_data_wrapper_factory);
         }
 
-        public NonAtomicEndpointVariable(
-            String _host_uuid, boolean _dummy_log_changes)
+        public NonAtomicEndpointVariable(boolean _dummy_log_changes)
         {
             super(
-                _host_uuid,default_endpoint,default_endpoint,
+                default_endpoint,default_endpoint,
                 endpoint_value_type_data_wrapper_factory);
         }
 
@@ -277,22 +270,20 @@ public class Variables {
         extends NonAtomicMap<K,V,D>
     {
         public NonAtomicMapVariable(
-            String _host_uuid, boolean _dummy_log_changes,
+            boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_index_type,locked_wrapper);
+            super(_index_type,locked_wrapper);
         }
 
         public NonAtomicMapVariable(
-            String _host_uuid, boolean _dummy_log_changes,
+            boolean _dummy_log_changes,
             NonAtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(
-                _host_uuid, internal_val,_index_type,
-                locked_wrapper);
+            super(internal_val,_index_type,locked_wrapper);
         }
     }
 
@@ -301,22 +292,21 @@ public class Variables {
         extends AtomicMap<K,V,D>
     {
         public AtomicMapVariable(
-            String _host_uuid, boolean _log_changes,
+            boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_log_changes,_index_type,locked_wrapper);
+            super(_log_changes,_index_type,locked_wrapper);
         }
 
         public AtomicMapVariable(
-            String _host_uuid, boolean _log_changes,
+            boolean _log_changes,
             AtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
             super(
-                _host_uuid, _log_changes,internal_val,_index_type,
-                locked_wrapper);
+                _log_changes,internal_val,_index_type,locked_wrapper);
         }
     }
     
@@ -325,21 +315,17 @@ public class Variables {
         extends AtomicList<V,D>
     {
         public AtomicListVariable(
-            String _host_uuid, boolean _log_changes,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,_log_changes,locked_wrapper);
+            super(_log_changes,locked_wrapper);
         }
 
 
         public AtomicListVariable(
-            String _host_uuid, boolean _log_changes,
-            AtomicInternalList<V,D> internal_val,
+            boolean _log_changes,AtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(
-                _host_uuid, _log_changes,internal_val,
-                locked_wrapper);
+            super(_log_changes,internal_val,locked_wrapper);
         }
     }
 
@@ -347,19 +333,17 @@ public class Variables {
         extends NonAtomicList<V,D>
     {
         public NonAtomicListVariable(
-            String _host_uuid, boolean _dummy_log_changes,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            boolean _dummy_log_changes, EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(_host_uuid,locked_wrapper);
+            super(locked_wrapper);
         }
 
         public NonAtomicListVariable(
-            String _host_uuid, boolean _dummy_log_changes,
+            boolean _dummy_log_changes,
             NonAtomicInternalList<V,D> internal_val,
             EnsureAtomicWrapper<V,D> locked_wrapper)
         {
-            super(
-                _host_uuid,internal_val,locked_wrapper);
+            super(internal_val,locked_wrapper);
         }
     }
 }

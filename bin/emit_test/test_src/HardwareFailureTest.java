@@ -41,7 +41,7 @@ public class HardwareFailureTest
         
         to_return.list =
             new AtomicListVariable<Double,Double>(
-                "",false,internal_hardware_list,
+                false,internal_hardware_list,
                 BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
 
         return to_return;
