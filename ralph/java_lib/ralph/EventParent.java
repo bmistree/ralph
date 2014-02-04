@@ -88,24 +88,13 @@ public abstract class EventParent
 
     /**
        @param {bool} copied_partner_contacted --- True if
-
-       @param {dict} copied_other_endpoints_contacted --- indices are
-       uuids, values are EventSubscribedTo
     */
     public void send_promotion_messages(
         Set<Endpoint> local_endpoints_whose_partners_contacted,
-        HashMap<String,EventSubscribedTo> copied_other_endpoints_contacted,
         String new_priority)
     {
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             endpt._forward_promotion_message(uuid,new_priority);
-        
-        for (EventSubscribedTo evt_subscribed_to :
-                 copied_other_endpoints_contacted.values())
-        {
-            evt_subscribed_to.endpoint_object._receive_promotion(uuid,new_priority);
-        }
-		
     }
                 
 
@@ -144,10 +133,6 @@ public abstract class EventParent
 
 
     /**
-       @param {dict} same_host_endpoints_contacted_dict --- Keys are
-       uuids.  Values are EventSubscribedTo objects (which wrap
-       endpoint objects).
-
        @param {bool} partner_contacted --- True if the event has sent
        a message as part of a sequence to partner.  False otherwise.
 
@@ -163,7 +148,6 @@ public abstract class EventParent
        each of them to enter first phase commit as well.
     */
     public void first_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event)
     {
@@ -176,29 +160,10 @@ public abstract class EventParent
             //# commit
             endpt._forward_commit_request_partner(uuid);
         }
-
-            
-        for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
-        {
-            //# send message to all other endpoints that we made direct
-            //# endpoint calls on that they should attempt first phase
-            //# commit
-            if (local_endpoint._host_uuid.equals(waiting_on_uuid))
-                continue;
-
-            EventSubscribedTo evt_subscribed_to =
-                same_host_endpoints_contacted_dict.get(waiting_on_uuid);
-            Endpoint endpoint = evt_subscribed_to.endpoint_object;
-            endpoint._receive_request_commit(uuid,local_endpoint);
-        }
     }
 
 	
     /**
-       @param {dict} same_host_endpoints_contacted_dict --- Keys are
-       uuids.  Values are EventSubscribedTo objects (which wrap
-       endpoint objects).
-
        @param {bool} partner_contacted --- True if the event has sent
        a message as part of a sequence to partner.  False otherwise.
 
@@ -207,21 +172,10 @@ public abstract class EventParent
        them to enter complete commit.
     */
     public void second_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted)
-
     {
-            
-        //# tell any endpoints that we had called endpoint methods on to
-        //# run second phase of commit
-        for (EventSubscribedTo endpoint_to_second_phase_commit :
-                 same_host_endpoints_contacted_dict.values())
-        {
-            endpoint_to_second_phase_commit.endpoint_object._receive_request_complete_commit(uuid);
-        }
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             endpt._forward_complete_commit_request_partner(uuid);
-
     }
 
 	
@@ -231,10 +185,6 @@ public abstract class EventParent
        endpoint.  Otherwise, means that call to backout was made by
        a remote host.
 
-       @param {dict} same_host_endpoints_contacted_dict --- Keys are
-       uuids.  Values are EventSubscribedTo objects (which wrap
-       endpoint objects).
-
        @param {bool} partner_contacted --- True if the event has sent
        a message as part of a sequence to partner.  False otherwise.
 
@@ -243,28 +193,9 @@ public abstract class EventParent
     */
     public void rollback(
         String backout_requester_host_uuid, 
-        HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
     {
-        //# tell any endpoints that we had called endpoint methods on to
-        //# back out their changes.
-
-        // FIXME: do I really need to rollback each endpoint separately here?
-        
-        for (EventSubscribedTo subscribed_elements_to_rollback :
-                 same_host_endpoints_contacted_dict.values())
-        {
-            Endpoint endpoint_to_rollback =
-                subscribed_elements_to_rollback.endpoint_object;
-			
-            if (!endpoint_to_rollback._host_uuid.equals(backout_requester_host_uuid))
-            {
-                endpoint_to_rollback._receive_request_backout(
-                    uuid,local_endpoint);
-            }
-        }
-
         //# tell partners to backout their changes too
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
         {

@@ -94,22 +94,9 @@ public class AtomicActiveEvent extends ActiveEvent
     private ReentrantLock _touched_objs_mutex = new ReentrantLock(); 
 
     /**
-     //# a dict.  keys are uuids, values are EventSubscribedTo
-     //# objects, which contain all endpoints that this event has
-     //# issued commands to while executing as well as the queues
-     //# they may be waiting on to free.  On commit, must run through
-     //# each and tell it to enter first phase commit.
-     *  FIXME: Should get rid of
-     */
-    private HashMap<String,EventSubscribedTo> other_endpoints_contacted = 
-        new HashMap<String,EventSubscribedTo>();
-
-    /**
        This active event makes calls to other endpoints' partners.
        This contains all the endpoints we do that for so that we can
        forward promotion, abort, and two phase commit messages.
-
-       NOTE: it deprecates other_endpoints_contacted.
      */
     private Set<Endpoint> local_endpoints_whose_partners_contacted =
         new HashSet<Endpoint>();
@@ -287,13 +274,10 @@ public class AtomicActiveEvent extends ActiveEvent
         Set<Endpoint> copied_local_other_endpoints_contacted = new HashSet<Endpoint>(
             local_endpoints_whose_partners_contacted);
             
-        HashMap<String,EventSubscribedTo> copied_other_endpoints_contacted = 
-            new HashMap<String,EventSubscribedTo>(other_endpoints_contacted);
         _others_contacted_unlock();
 		
         event_parent.send_promotion_messages(
-            copied_local_other_endpoints_contacted,
-            copied_other_endpoints_contacted,new_priority);
+            copied_local_other_endpoints_contacted,new_priority);
     }
 
     /**
@@ -450,13 +434,12 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         
 
-        //# do not need to acquire locks on other_endpoints_contacted
-        //# and partner_contacted because once enter first phase commit,
-        //# these are immutable.
-        //#forwards message on to others and
+        //# do not need to acquire locks on
+        //# local_endpoints_whose_partners_contacted and
+        //# because once enter first phase commit,
+        //# these are immutable.  forwards message on to others and
         //# affirmatively replies that now in first pahse of commit.
         event_parent.first_phase_transition_success(
-            other_endpoints_contacted,
             local_endpoints_whose_partners_contacted,
             this);
 
@@ -522,12 +505,11 @@ public class AtomicActiveEvent extends ActiveEvent
         //# releasing locks locally?
 
         //# do not need to acquire locks for partner_contacted and
-        //# other_endpoints_contacted because once entered commit, these
-        //# values are immutable.
+        //# local_endpoints_whose_partners_contacted because once
+        //# entered commit, these values are immutable.
         
         // # notify other endpoints to also complete their commits
         event_parent.second_phase_transition_success(
-            other_endpoints_contacted,
             local_endpoints_whose_partners_contacted);
         
     }
@@ -601,12 +583,13 @@ public class AtomicActiveEvent extends ActiveEvent
         event_map.remove_event(uuid);
         
         //# 5
-        //# do not need to acquire locks on other_endpoints_contacted
-        //# because the only place that it can be written to is when
-        //# already holding _lock.  Therefore, we already have exclusive
-        //# access to variable.
+        //# do not need to acquire locks on
+        //# local_endpoints_whose_partners_contacted because the only
+        //# place that it can be written to is when already holding
+        //# _lock.  Therefore, we already have exclusive access to
+        //# variable.
         event_parent.rollback(
-            backout_requester_host_uuid,other_endpoints_contacted,
+            backout_requester_host_uuid,
             local_endpoints_whose_partners_contacted,stop_request);
     }
 
@@ -674,26 +657,6 @@ public class AtomicActiveEvent extends ActiveEvent
                     MessageCallResultObject.backout_before_receive_message();
             }
             msg_queue_to_unblock.add(queue_feeder);
-        }
-
-        //# do not need to acquire locks on other_endpoints_contacted
-        //# because the only place that it can be written to is when
-        //# already holding _lock.  Therefore, we already have exclusive
-        //# access to variable.
-
-        for (EventSubscribedTo subscribed_to_element :
-                 other_endpoints_contacted.values())
-        {
-            for (ArrayBlockingQueue<EndpointCallResultObject> res_queue :
-                     subscribed_to_element.result_queues)
-            {	
-                EndpointCallResultObject queue_feeder;
-                if (stop_request)
-                    queue_feeder = new StopAlreadyCalledEndpointCallResult();
-                else
-                    queue_feeder = new BackoutBeforeEndpointCallResult();
-                res_queue.add(queue_feeder);
-            }
         }
     }
 

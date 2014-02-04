@@ -17,13 +17,11 @@ public class PartnerEventParent extends EventParent {
 
     @Override
     public void first_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event)
     {
         //# forwards the message to others
         super.first_phase_transition_success(
-            same_host_endpoints_contacted_dict,
             // FIXME: Previous logic stated:
             //# using false for partner contacted, because we know that
             //# we do not have to forward the commit request back to
@@ -34,22 +32,18 @@ public class PartnerEventParent extends EventParent {
         //# tell parent endpoint that first phase has gone well and that
         //# it should wait on receiving responses from all the following
         //# endpoint uuids before entering second phase
-        ArrayList<String> children_endpoints =
-            new ArrayList<String>(same_host_endpoints_contacted_dict.keySet());
-
+        ArrayList<String> children_hosts = new ArrayList<String>();
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            children_endpoints.add(endpt._partner_host_uuid);
+            children_hosts.add(endpt._partner_host_uuid);
 
 
         local_endpoint._forward_first_phase_commit_successful(
-            uuid,local_endpoint._host_uuid,children_endpoints);
-
+            uuid,local_endpoint._host_uuid,children_hosts);
     }
 	
     @Override
     public void rollback(
         String backout_requester_host_uuid,
-        HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
 	        
@@ -57,19 +51,16 @@ public class PartnerEventParent extends EventParent {
         // add local endpoint to endpoints to roll back.
         local_endpoints_whose_partners_contacted.add(local_endpoint);
         super.rollback(
-            backout_requester_host_uuid,same_host_endpoints_contacted_dict,
+            backout_requester_host_uuid,
             local_endpoints_whose_partners_contacted,stop_request);
     }
         
 	
     @Override
     public void second_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
         super.second_phase_transition_success(
-            same_host_endpoints_contacted_dict,
-
             // FIXME: Previous logic stated:
             //# using false for partner contacted, because we know that
             //# we do not have to forward the commit request back to

@@ -74,13 +74,11 @@ public class RootEventParent extends EventParent {
      * @see second_phase_transition_success in EventParent
      */
     public void second_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,    		
         Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
     	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
 
     	super.second_phase_transition_success(
-            same_host_endpoints_contacted_dict,
             local_endpoints_whose_partners_contacted);
     }
 
@@ -112,7 +110,6 @@ public class RootEventParent extends EventParent {
      */
     @Override
     public void first_phase_transition_success(
-        HashMap<String,EventSubscribedTo>same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event)
     {
@@ -121,9 +118,6 @@ public class RootEventParent extends EventParent {
 
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             endpoints_waiting_on_commit.put(endpt._partner_host_uuid, false);
-        
-    	for (String waiting_on_uuid : same_host_endpoints_contacted_dict.keySet())
-            endpoints_waiting_on_commit.put(waiting_on_uuid, false);
     	
         //# not waiting on self.
         endpoints_waiting_on_commit.put(local_endpoint._host_uuid, true);
@@ -131,7 +125,6 @@ public class RootEventParent extends EventParent {
         _unlock_endpoints_waiting_on_commit();
 
         super.first_phase_transition_success(
-            same_host_endpoints_contacted_dict,
             local_endpoints_whose_partners_contacted, _event);
 
         //# after first phase has completed, should check if can
@@ -164,12 +157,11 @@ public class RootEventParent extends EventParent {
     @Override
     public void rollback(
         String backout_requester_host_uuid, 
-        HashMap<String,EventSubscribedTo> same_host_endpoints_contacted_dict,
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         boolean stop_request)
     {
         super.rollback(
-            backout_requester_host_uuid, same_host_endpoints_contacted_dict,
+            backout_requester_host_uuid,
             local_endpoints_whose_partners_contacted,stop_request);
     
 
