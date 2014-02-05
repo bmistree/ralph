@@ -50,6 +50,7 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import RalphCallResults.RootCallResult;
 
 import ralph.EventPriority.IsSuperFlag;
+import ralph.EndpointConstructorObj;
 
 public class %s
 {
@@ -259,8 +260,9 @@ def emit_endpt(endpt_node):
     '''
     emit_ctx = EmitContext()
     emit_ctx.push_scope()    
-    endpt_class_signature = (
-        'public static class %s extends Endpoint { \n' % endpt_node.name)
+    endpt_class_signature = '''
+public static class %s extends Endpoint {
+''' % endpt_node.name
     
     endpt_class_body = emit_endpt_variable_declarations(
         emit_ctx,endpt_node.body_node.variable_declaration_nodes)
@@ -275,14 +277,25 @@ def emit_endpt(endpt_node):
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
 
 
-
 def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
-public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) throws Exception
+public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
 {
     super(ralph_globals,conn_obj,new VariableStore(false));
 }
-''' % endpt_node.name
+
+private static class %s_ConstructorObj implements EndpointConstructorObj
+{
+    @Override
+    public Endpoint construct (RalphGlobals ralph_globals, ConnectionObj conn_obj)
+    {
+        return new %s(ralph_globals,conn_obj);
+    }
+}
+
+public final static EndpointConstructorObj constructor = new %s_ConstructorObj();
+
+''' % (endpt_node.name,endpt_node.name,endpt_node.name,endpt_node.name)
     return constructor_text
 
 def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
