@@ -3,6 +3,7 @@ from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType,WildcardType
 from ralph.parse.type import MapType,StructType,ListType,EndpointType
+from ralph.parse.type import ServiceFactoryType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -27,6 +28,9 @@ import ralph.Variables.NonAtomicMapVariable;
 import ralph.Variables.AtomicMapVariable;
 import ralph.Variables.NonAtomicEndpointVariable;
 import ralph.Variables.AtomicEndpointVariable;
+import ralph.Variables.NonAtomicServiceFactoryVariable;
+import ralph.Variables.AtomicServiceFactoryVariable;
+
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
 
@@ -51,6 +55,7 @@ import RalphCallResults.RootCallResult;
 
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
+
 
 public class %s
 {
@@ -293,7 +298,7 @@ private static class %s_ConstructorObj implements EndpointConstructorObj
     }
 }
 
-public final static EndpointConstructorObj constructor = new %s_ConstructorObj();
+public final static EndpointConstructorObj factory = new %s_ConstructorObj();
 
 ''' % (endpt_node.name,endpt_node.name,endpt_node.name,endpt_node.name)
     return constructor_text
@@ -352,6 +357,11 @@ def convert_args_text_for_dispatch(method_declaration_node):
                 '%s %s = (%s) %s;' %
                 (map_type, arg_name, map_type, arg_vec_to_read_from))
 
+        elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
+            ## FIXME: Allow serializing service factories.
+            single_arg_string = (
+                'InternalServiceFactory %s = null;' % arg_name)
+            
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
                 method_declaration_arg_node.type)
@@ -825,7 +835,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     void (eg., in method signature).
 
     @returns{String} --- Java-ized version of wrapped Ralph type: eg.,
-    AtomicNumberVarialbe, etc.
+    AtomicNumberVariable, etc.
     '''    
     if type_object is None:
         return 'void'
@@ -848,6 +858,12 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
             return 'AtomicEndpointVariable'
         return 'NonAtomicEndpointVariable'
 
+    # emit for service factories
+    if isinstance(type_object,ServiceFactoryType):
+        if type_object.is_tvar and (not force_single_threaded):
+            return 'AtomicServiceFactoryVariable'
+        return 'NonAtomicServiceFactoryVariable'
+    
     # emit for others
     if isinstance(type_object,BasicType):
         typer = type_object.basic_type
@@ -856,6 +872,8 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         typer = type_object.returns_type
         is_tvar = False
 
+    
+        
     if typer == BOOL_TYPE:
         if is_tvar and (not force_single_threaded):
             return 'AtomicTrueFalseVariable'
@@ -972,6 +990,17 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         return to_return
 
+    elif isinstance(type_object,ServiceFactoryType):
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+            to_return = (
+                'new  %s(false,%s)' % (java_type_text,initializer_text))
+        else:
+            to_return = (
+                'new  %s(false)' % java_type_text)
+
+        return to_return
     
     #### DEBUG
     else:
@@ -1130,6 +1159,10 @@ def emit_internal_type(type_object):
         # emit for endpoints
         if isinstance(type_object,EndpointType):
             return type_object.alias_name
+
+        # emit for ServiceFactories
+        if isinstance(type_object,ServiceFactoryType):
+            return 'InternalServiceFactory'
         
         # emit for basic types
         if isinstance(type_object,BasicType):
@@ -1579,6 +1612,20 @@ def emit_dot_statement(emit_ctx,dot_node):
     elif isinstance(left_of_dot_node.type,EndpointType):
         right_hand_side_method = right_of_dot_node.value
         to_return += '.' + right_hand_side_method
+
+    elif isinstance(left_of_dot_node.type,ServiceFactoryType):
+        if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
+            raise InternalEmitException(
+                'Expected identifier to the right of %s' %
+                statement_node.value)
+        right_hand_side_method = right_of_dot_node.value
+        if right_hand_side_method == ServiceFactoryType.CONSTRUCT_METHOD_NAME:
+            to_return += '.construct'
+        #### DEBUG
+        else:
+            raise InternalEmitException(
+                'Unknown identifier on rhs of dot for service factory.')
+        #### END DEBUG
     else:
         raise InternalEmitException(
             'Unknown dot statement: not dot on map or struct.')
