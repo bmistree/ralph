@@ -681,7 +681,8 @@ def p_VariableType(p):
                  | TVAR STRUCT_TYPE Identifier
 
                  | ENDPOINT Identifier
-                 | TVAR ENDPOINT IDENTIFIER
+                 | TVAR ENDPOINT Identifier
+                 
     '''
     if len(p) >= 11:
         # It's a map
