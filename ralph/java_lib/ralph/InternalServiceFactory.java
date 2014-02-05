@@ -1,20 +1,26 @@
 package ralph;
 
+import RalphConnObj.SingleSideConnection;
+
 /**
    Should cast to whatever type expect outside of construct.
  */
 public class InternalServiceFactory
 {
-    private EndpointConstructorObj endpt_constructor;
+    private EndpointConstructorObj endpt_constructor = null;
+    private RalphGlobals ralph_globals = null;
+
     
-    public InternalServiceFactory(EndpointConstructorObj endpt_constructor)
+    public InternalServiceFactory(
+        EndpointConstructorObj endpt_constructor,RalphGlobals ralph_globals)
     {
         this.endpt_constructor = endpt_constructor;
+        this.ralph_globals = ralph_globals;
     }
 
-    public Endpoint construct(
-        RalphGlobals ralph_globals, RalphConnObj.ConnectionObj conn_obj)
+    public Endpoint construct(ActiveEvent active_event)
     {
-        return this.endpt_constructor.construct(ralph_globals,conn_obj);
+        SingleSideConnection ssc = new SingleSideConnection();
+        return this.endpt_constructor.construct(ralph_globals,ssc);
     }
 }
