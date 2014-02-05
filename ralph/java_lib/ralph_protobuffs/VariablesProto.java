@@ -1497,6 +1497,10 @@ public final class VariablesProto {
       boolean hasStruct();
       ralph_protobuffs.VariablesProto.Variables.Map getStruct();
       ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructOrBuilder();
+      
+      // optional bytes service_factory = 9;
+      boolean hasServiceFactory();
+      com.google.protobuf.ByteString getServiceFactory();
     }
     public static final class Any extends
         com.google.protobuf.GeneratedMessage
@@ -1660,6 +1664,16 @@ public final class VariablesProto {
         return struct_;
       }
       
+      // optional bytes service_factory = 9;
+      public static final int SERVICE_FACTORY_FIELD_NUMBER = 9;
+      private com.google.protobuf.ByteString serviceFactory_;
+      public boolean hasServiceFactory() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      public com.google.protobuf.ByteString getServiceFactory() {
+        return serviceFactory_;
+      }
+      
       private void initFields() {
         varName_ = "";
         reference_ = false;
@@ -1669,6 +1683,7 @@ public final class VariablesProto {
         list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         struct_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
+        serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1732,6 +1747,9 @@ public final class VariablesProto {
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
           output.writeMessage(8, struct_);
         }
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          output.writeBytes(9, serviceFactory_);
+        }
         getUnknownFields().writeTo(output);
       }
       
@@ -1772,6 +1790,10 @@ public final class VariablesProto {
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(8, struct_);
+        }
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(9, serviceFactory_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -1928,6 +1950,8 @@ public final class VariablesProto {
             structBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000080);
+          serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
+          bitField0_ = (bitField0_ & ~0x00000100);
           return this;
         }
         
@@ -2010,6 +2034,10 @@ public final class VariablesProto {
           } else {
             result.struct_ = structBuilder_.build();
           }
+          if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+            to_bitField0_ |= 0x00000100;
+          }
+          result.serviceFactory_ = serviceFactory_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -2049,6 +2077,9 @@ public final class VariablesProto {
           }
           if (other.hasStruct()) {
             mergeStruct(other.getStruct());
+          }
+          if (other.hasServiceFactory()) {
+            setServiceFactory(other.getServiceFactory());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -2157,6 +2188,11 @@ public final class VariablesProto {
                 }
                 input.readMessage(subBuilder, extensionRegistry);
                 setStruct(subBuilder.buildPartial());
+                break;
+              }
+              case 74: {
+                bitField0_ |= 0x00000100;
+                serviceFactory_ = input.readBytes();
                 break;
               }
             }
@@ -2568,6 +2604,30 @@ public final class VariablesProto {
             struct_ = null;
           }
           return structBuilder_;
+        }
+        
+        // optional bytes service_factory = 9;
+        private com.google.protobuf.ByteString serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
+        public boolean hasServiceFactory() {
+          return ((bitField0_ & 0x00000100) == 0x00000100);
+        }
+        public com.google.protobuf.ByteString getServiceFactory() {
+          return serviceFactory_;
+        }
+        public Builder setServiceFactory(com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+          serviceFactory_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearServiceFactory() {
+          bitField0_ = (bitField0_ & ~0x00000100);
+          serviceFactory_ = getDefaultInstance().getServiceFactory();
+          onChanged();
+          return this;
         }
         
         // @@protoc_insertion_point(builder_scope:Variables.Any)
@@ -3132,17 +3192,18 @@ public final class VariablesProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017variables.proto\032\nutil.proto\"\336\002\n\tVariab" +
+      "\n\017variables.proto\032\nutil.proto\"\367\002\n\tVariab" +
       "les\022\034\n\004vars\030\001 \003(\0132\016.Variables.Any\032+\n\004Lis" +
       "t\022#\n\013list_values\030\001 \003(\0132\016.Variables.Any\032N" +
       "\n\003Map\022#\n\013map_indices\030\001 \003(\0132\016.Variables.A" +
-      "ny\022\"\n\nmap_values\030\002 \003(\0132\016.Variables.Any\032\265" +
+      "ny\022\"\n\nmap_values\030\002 \003(\0132\016.Variables.Any\032\316" +
       "\001\n\003Any\022\020\n\010var_name\030\001 \002(\t\022\021\n\treference\030\002 " +
       "\002(\010\022\013\n\003num\030\003 \001(\001\022\014\n\004text\030\004 \001(\t\022\022\n\ntrue_f" +
       "alse\030\005 \001(\010\022\035\n\004list\030\006 \001(\0132\017.Variables.Lis" +
       "t\022\033\n\003map\030\007 \001(\0132\016.Variables.Map\022\036\n\006struct" +
-      "\030\010 \001(\0132\016.Variables.MapB\"\n\020ralph_protobuf",
-      "fsB\016VariablesProto"
+      "\030\010 \001(\0132\016.Variables.Map\022\027\n\017service_factor",
+      "y\030\t \001(\014B\"\n\020ralph_protobuffsB\016VariablesPr" +
+      "oto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3178,7 +3239,7 @@ public final class VariablesProto {
           internal_static_Variables_Any_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Any_descriptor,
-              new java.lang.String[] { "VarName", "Reference", "Num", "Text", "TrueFalse", "List", "Map", "Struct", },
+              new java.lang.String[] { "VarName", "Reference", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", },
               ralph_protobuffs.VariablesProto.Variables.Any.class,
               ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
           return null;

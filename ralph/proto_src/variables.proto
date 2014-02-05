@@ -32,6 +32,7 @@ message Variables
         optional List list = 6;
         optional Map map = 7;
         optional Map struct = 8;
+        optional bytes service_factory = 9;
     }
 
     repeated Any vars = 1;
