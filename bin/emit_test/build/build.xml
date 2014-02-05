@@ -302,7 +302,15 @@
       <arg line="SingleSideServiceFactory"/>
     </exec>
 
-    
+    <echo message="${line.separator}partner_service_factory.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/partner_service_factory.rph"/>
+      <arg line="${ralph_emitted.dir}/PartnerServiceFactory.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="PartnerServiceFactory"/>
+    </exec>
+
   </target>
 
   
@@ -352,7 +360,8 @@
          run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
-         run_WrappedPartnerTCPCall,run_LinkedTests">
+         run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
+         run_PartnerServiceFactory">
   </target>
   
   
@@ -768,7 +777,20 @@
         <arg line="${args}"/>
     </java>
   </target>
-  
+
+  <!-- Run PartnerServiceFactory -->
+  <target
+      name="run_PartnerServiceFactory"
+      depends="compile_ralph_tests"
+      description="Run partner service factory">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.PartnerSendServiceFactoryTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   
   <!-- Delete the build directories -->

@@ -1,0 +1,11 @@
+/**
+   Should be partnered with Endpoint ServiceReceiver in
+   single_side_service_factory.rph
+ */
+Endpoint ServiceFactorySender
+{
+    send_service_factory_to_partner(ServiceFactory to_send)
+    {
+        @partner.set_service_factory(to_send);
+    }
+}
