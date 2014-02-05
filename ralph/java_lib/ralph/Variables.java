@@ -10,7 +10,7 @@ import RalphDataWrappers.NumberTypeDataWrapperFactory;
 import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
 import RalphDataWrappers.EndpointTypeDataWrapperFactory;
-import RalphDataWrappers.CodePackTypeDataWrapperFactory;
+import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 
 public class Variables {
     final static NumberTypeDataWrapperFactory
@@ -37,11 +37,11 @@ public class Variables {
     final static Endpoint default_endpoint = null;
 
 
-    final static CodePackTypeDataWrapperFactory
-        code_pack_value_type_data_wrapper_factory = 
-        new CodePackTypeDataWrapperFactory();
+    final static ServiceFactoryTypeDataWrapperFactory
+        service_factory_value_type_data_wrapper_factory = 
+        new ServiceFactoryTypeDataWrapperFactory();
 
-    final static InternalCodePack default_code_pack = null;
+    final static InternalServiceFactory default_service_factory = null;
 
     
     
@@ -154,20 +154,20 @@ public class Variables {
         }
     }
 
-    public static class AtomicCodePackVariable
-        extends AtomicValueVariable<InternalCodePack,InternalCodePack>
+    public static class AtomicServiceFactoryVariable
+        extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
-        public AtomicCodePackVariable(boolean _log_changes,Object init_val)
+        public AtomicServiceFactoryVariable(boolean _log_changes,Object init_val)
         {
             super(
-                _log_changes,(InternalCodePack)init_val,default_code_pack,
-                code_pack_value_type_data_wrapper_factory);		
+                _log_changes,(InternalServiceFactory)init_val,default_service_factory,
+                service_factory_value_type_data_wrapper_factory);		
         }
-        public AtomicCodePackVariable(boolean _log_changes)
+        public AtomicServiceFactoryVariable(boolean _log_changes)
         {
             super(
-                _log_changes,default_code_pack,default_code_pack,
-                code_pack_value_type_data_wrapper_factory);
+                _log_changes,default_service_factory,default_service_factory,
+                service_factory_value_type_data_wrapper_factory);
         }
         
         public void serialize_as_rpc_arg(
@@ -298,20 +298,20 @@ public class Variables {
     }
 
 
-    public static class NonAtomicCodePackVariable
-        extends NonAtomicValueVariable<InternalCodePack,InternalCodePack>
+    public static class NonAtomicServiceFactoryVariable
+        extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
-        public NonAtomicCodePackVariable(boolean _log_changes,InternalCodePack init_val)
+        public NonAtomicServiceFactoryVariable(boolean _log_changes,InternalServiceFactory init_val)
         {
             super(
-                init_val,default_code_pack,
-                code_pack_value_type_data_wrapper_factory);		
+                init_val,default_service_factory,
+                service_factory_value_type_data_wrapper_factory);		
         }
-        public NonAtomicCodePackVariable(boolean _dummy_log_changes)
+        public NonAtomicServiceFactoryVariable(boolean _dummy_log_changes)
         {
             super(
-                default_code_pack,default_code_pack,
-                code_pack_value_type_data_wrapper_factory);
+                default_service_factory,default_service_factory,
+                service_factory_value_type_data_wrapper_factory);
         }
         
         public void serialize_as_rpc_arg(

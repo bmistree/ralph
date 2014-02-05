@@ -3,11 +3,11 @@ package ralph;
 /**
    Should cast to whatever type expect outside of construct.
  */
-public class InternalCodePack
+public class InternalServiceFactory
 {
     private EndpointConstructorObj endpt_constructor;
     
-    public InternalCodePack(EndpointConstructorObj endpt_constructor)
+    public InternalServiceFactory(EndpointConstructorObj endpt_constructor)
     {
         this.endpt_constructor = endpt_constructor;
     }
