@@ -325,7 +325,8 @@ public class Variables {
     public static class NonAtomicServiceFactoryVariable
         extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
-        public NonAtomicServiceFactoryVariable(boolean _log_changes,InternalServiceFactory init_val)
+        public NonAtomicServiceFactoryVariable(
+            boolean _log_changes,InternalServiceFactory init_val)
         {
             super(
                 init_val,default_service_factory,

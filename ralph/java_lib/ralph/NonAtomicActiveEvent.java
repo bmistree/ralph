@@ -513,7 +513,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // grab all arguments from message
         ArrayList <RPCArgObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
-                msg.getArguments());
+                msg.getArguments(),endpt_recvd_msg_on.ralph_globals);
         
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as

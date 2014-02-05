@@ -3,6 +3,10 @@ package ralph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Stack;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+
 import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphExceptions.ApplicationException;
@@ -12,6 +16,7 @@ import RalphExceptions.StoppedException;
 import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicNumberVariable;
 import ralph.Variables.NonAtomicTrueFalseVariable;
+import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph_protobuffs.VariablesProto;
 
 import RalphCallResults.MessageCallResultObject;
@@ -21,7 +26,7 @@ import RalphCallResults.ApplicationExceptionEndpointCallResult;
 import RalphCallResults.NetworkFailureEndpointCallResult;
 import RalphCallResults.EndpointCompleteCallResult;
 
-import java.util.Stack;
+
 
 public class ExecutingEventContext
 {
@@ -48,7 +53,6 @@ public class ExecutingEventContext
        queues in waldoActiveEvent._ActiveEvent.
     */
     private java.util.Stack<String> to_reply_with_uuid = new java.util.Stack<String>();
-
     
     /**
        If this context was created from an rpc call from another
@@ -302,7 +306,7 @@ public class ExecutingEventContext
         // step 2: deserialize message variables
         ArrayList<RalphObject> returned_variables =
             ExecutingEventContext.deserialize_variables_list(
-                variables,true);
+                variables,true,endpoint.ralph_globals);
 
         // step 3: actually overwrite local variables
         for (int i = 0; i < returned_variables.size(); ++i)
@@ -338,11 +342,11 @@ public class ExecutingEventContext
        Index of map is variable name; value of map is object.
      */
     public static HashMap<String,RalphObject> deserialize_variables_map(
-        VariablesProto.Variables variables,boolean references_only)
+        VariablesProto.Variables variables,boolean references_only,
+        RalphGlobals ralph_globals)
     {
         HashMap<String,RalphObject> to_return =
             new HashMap<String,RalphObject>();
-        
         
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList() )
@@ -353,7 +357,7 @@ public class ExecutingEventContext
                 continue;
             
             String var_name = variable.getVarName();
-            RalphObject lo = deserialize_any(variable);
+            RalphObject lo = deserialize_any(variable,ralph_globals);
             to_return.put(var_name,lo);
         }
 
@@ -361,14 +365,14 @@ public class ExecutingEventContext
     }
 
     public static ArrayList<RPCArgObject> deserialize_rpc_args_list(
-        VariablesProto.Variables variables)
+        VariablesProto.Variables variables,RalphGlobals ralph_globals)
     {
         ArrayList<RPCArgObject> to_return = new ArrayList<RPCArgObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
-            RalphObject lo = deserialize_any(variable);
+            RalphObject lo = deserialize_any(variable,ralph_globals);
             boolean is_reference = variable.getReference();
             to_return.add(new RPCArgObject(lo,is_reference));
         }
@@ -384,7 +388,8 @@ public class ExecutingEventContext
        put null values in for the non-references.
      */
     public static ArrayList<RalphObject> deserialize_variables_list(
-        VariablesProto.Variables variables,boolean references_only)
+        VariablesProto.Variables variables,boolean references_only,
+        RalphGlobals ralph_globals)
     {
         ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
 
@@ -397,7 +402,7 @@ public class ExecutingEventContext
             if ((references_only &&  is_reference) ||
                 (! references_only))
             {
-                lo = deserialize_any(variable);
+                lo = deserialize_any(variable,ralph_globals);
             }
             to_return.add(lo);
         }
@@ -413,7 +418,7 @@ public class ExecutingEventContext
        non-passed-by-reference argument.
      */
     public static RalphObject deserialize_any(
-        VariablesProto.Variables.Any variable)
+        VariablesProto.Variables.Any variable,RalphGlobals ralph_globals)
     {
         RalphObject lo = null;
 
@@ -444,7 +449,30 @@ public class ExecutingEventContext
         {
             Util.logger_assert("Skipping locked structs.");
         }
+        else if (variable.hasServiceFactory())
+        {
+            EndpointConstructorObj constructor_obj = null;
+            try {
+                byte [] byte_array = variable.getServiceFactory().toByteArray();
+                ByteArrayInputStream array_stream =
+                    new ByteArrayInputStream(byte_array);
+                ObjectInputStream in = new ObjectInputStream(array_stream);
+                Class<EndpointConstructorObj> constructor_class =
+                    (Class<EndpointConstructorObj>) in.readObject();
+                in.close();
+                array_stream.close();
+                constructor_obj = constructor_class.newInstance();
+            } catch (Exception ex) {
+                // FIXME: should catch deserialization error and backout.
+                ex.printStackTrace();
+                Util.logger_assert("Issue deserializing service factory");
+            }
+
+            InternalServiceFactory internal_service_factory =
+                new InternalServiceFactory(constructor_obj,ralph_globals);
+            lo = new NonAtomicServiceFactoryVariable(
+                false,internal_service_factory);
+        }
         return lo;
     }
-    
 }
