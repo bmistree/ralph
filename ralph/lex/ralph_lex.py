@@ -4,6 +4,7 @@ from ralph.common.compiler_exceptions import CompilerException
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
 ENDPOINT_TOKEN = 'Endpoint'
+SERVICE_FACTORY_TOKEN = 'ServiceFactory'
 PRINT_TYPE_TOKEN = 'print'
 VERBATIM_TOKEN = 'verbatim'
 reserved = {
@@ -44,7 +45,8 @@ reserved = {
     'element': 'ELEMENT',
     'alias': 'ALIAS',
     'as': 'AS',
-    'verbatim': 'VERBATIM'
+    'verbatim': 'VERBATIM',
+    'ServiceFactory' : 'SERVICE_FACTORY'
     }
 
 

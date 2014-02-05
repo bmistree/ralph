@@ -3,6 +3,7 @@ from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type, EndpointType, WildcardType
+from ralph.parse.type import ServiceFactoryType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 from ralph.parse.type_check_context import FixupableObject
@@ -991,7 +992,20 @@ class EndpointVariableTypeNode(VariableTypeNode):
     def type_check_pass_two(self,type_check_ctx):
         pass
 
+class ServiceFactoryVariableTypeNode(VariableTypeNode):
+    def __init__(self,is_tvar,line_number):
+        super(ServiceFactoryVariableTypeNode,self).__init__(
+            ast_labels.SERVICE_FACTORY_TYPE,line_number)
+
+        self.is_tvar = is_tvar
+        self.type = ServiceFactoryType(self.is_tvar)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
     
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+        
 class _BinaryExpressionNode(_AstNode):
     def __init__(
         self,label,lhs_expression_node,rhs_expression_node):

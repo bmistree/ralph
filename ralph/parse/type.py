@@ -41,7 +41,13 @@ class EndpointType(Type):
             
         return (
             'Endpoint %s %s' % (tvar_string,self.endpoint_name))
-        
+
+# When call .construct on ServiceFactory, it produces a generic
+# endpoint (ie., not a Endpoint SomeEndpoint).  Use these to represent
+# those types.
+GENERIC_TVAR_ENDPOINT_TYPE = EndpointType('Endpoint', True, 'Endpoint')
+GENERIC_ENDPOINT_TYPE = GENERIC_TVAR_ENDPOINT_TYPE.clone(False)
+    
     
 class StructType(Type):
     def __init__(
@@ -141,6 +147,8 @@ class BasicType(Type):
         return prefix + str(self.basic_type)
 
 
+
+    
 class ListType(Type):
     SIZE_METHOD_NAME = 'size'
     GET_METHOD_NAME = 'get'
@@ -365,3 +373,21 @@ class MethodType(Type):
             raise InternalParseException('Cannot get dot methods on None')
         
         return self.returns_type.dict_dot_methods()
+
+
+class ServiceFactoryType(Type):
+    CONSTRUCT_METHOD_NAME = 'construct'
+
+    SERVICE_FACTORY_DOT_DICT_METHODS = {
+        CONSTRUCT_METHOD_NAME : MethodType(
+            # returns Endpoint
+            GENERIC_ENDPOINT_TYPE,
+            # takes no arguments
+            [])
+        }
+    
+    def __init__(self,is_tvar):
+        self.is_tvar = is_tvar
+        
+    def dict_dot_fields(self):
+        return ServiceFactoryType.SERVICE_FACTORY_DOT_DICT_METHODS

@@ -1,6 +1,7 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer
 from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
 from ralph.lex.ralph_lex import ENDPOINT_TOKEN, VERBATIM_TOKEN
+from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -682,7 +683,9 @@ def p_VariableType(p):
 
                  | ENDPOINT Identifier
                  | TVAR ENDPOINT Identifier
-                 
+
+                 | SERVICE_FACTORY
+                 | TVAR SERVICE_FACTORY
     '''
     if len(p) >= 11:
         # It's a map
@@ -733,7 +736,7 @@ def p_VariableType(p):
     elif (
         (p[1] == ENDPOINT_TOKEN) or
         ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN))):
-        # emitting a struct type
+        # emitting an endpoint type
         is_tvar = False
         endpoint_name_node_index = 2
         if len(p) == 4:
@@ -744,6 +747,18 @@ def p_VariableType(p):
         endpoint_name_node = p[endpoint_name_node_index]
         p[0] = EndpointVariableTypeNode(
             endpoint_name_node,is_tvar,line_number)
+
+    elif (
+        (p[1] == SERVICE_FACTORY_TOKEN) or
+        ((len(p) >= 3) and (p[2] == SERVICE_FACTORY_TOKEN))):
+        # emitting a service factory type
+        is_tvar = False
+        if len(p) == 3:
+            # service factory is a tvar
+            is_tvar = True
+        line_number = p.lineno(1)
+        p[0] = ServiceFactoryVariableTypeNode(is_tvar,line_number)
+        
     else:
         # basic type or tvar type
         basic_type_index = 1

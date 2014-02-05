@@ -82,6 +82,7 @@ ALIAS_LIST_NODE = 'alias_list_node'
 BOOL_TYPE = 'TrueFalse'
 STRING_TYPE = 'Text'
 NUMBER_TYPE = 'Number'
+SERVICE_FACTORY_TYPE = 'ServiceFactory'
 
 
 BASIC_TYPES_LIST = [BOOL_TYPE,STRING_TYPE,NUMBER_TYPE]
