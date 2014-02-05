@@ -2,6 +2,8 @@ package ralph;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.io.IOException;
+
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -169,16 +171,38 @@ public class Variables {
                 _log_changes,default_service_factory,default_service_factory,
                 service_factory_value_type_data_wrapper_factory);
         }
-        
+
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
-            Util.logger_assert(
-                "FIXME: Should allow serializing code pack objects.");
+            InternalServiceFactory internal_val = get_val(active_event);
+            serialize_service_factory(internal_val,any_builder,is_reference);
+        }
+
+        /**
+           Can be used by both atomic and non-atomic service factories.
+         */
+        public static void serialize_service_factory (
+            InternalServiceFactory internal_val,
+            VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            any_builder.setVarName("");
+            any_builder.setReference(is_reference);
+            try {
+                any_builder.setServiceFactory(
+                    com.google.protobuf.ByteString.copyFrom(
+                        internal_val.convert_constructor_to_byte_array()));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "\nUnhandled IOException when serializing " +
+                    "service factory.\n");
+            }
         }
     }
-
     
     
     public static class NonAtomicNumberVariable
@@ -313,13 +337,15 @@ public class Variables {
                 default_service_factory,default_service_factory,
                 service_factory_value_type_data_wrapper_factory);
         }
-        
+
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
-            Util.logger_assert(
-                "FIXME: Should allow serializing code pack objects.");
+            InternalServiceFactory internal_val = get_val(active_event);
+            AtomicServiceFactoryVariable.serialize_service_factory(
+                internal_val,any_builder,is_reference);
         }
     }
 

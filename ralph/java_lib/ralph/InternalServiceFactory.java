@@ -1,5 +1,10 @@
 package ralph;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+
+
 import RalphConnObj.SingleSideConnection;
 
 /**
@@ -18,6 +23,21 @@ public class InternalServiceFactory
         this.ralph_globals = ralph_globals;
     }
 
+    byte [] convert_constructor_to_byte_array() throws IOException
+    {
+        ByteArrayOutputStream byte_array_output_stream =
+            new ByteArrayOutputStream();
+        ObjectOutputStream out =
+            new ObjectOutputStream(byte_array_output_stream);
+        out.writeObject(endpt_constructor.getClass());
+        out.close();
+
+        out.writeObject(endpt_constructor.getClass());
+        byte[] to_return = byte_array_output_stream.toByteArray();
+        byte_array_output_stream.close();
+        return to_return;
+    }
+    
     public Endpoint construct(ActiveEvent active_event)
     {
         SingleSideConnection ssc = new SingleSideConnection();
