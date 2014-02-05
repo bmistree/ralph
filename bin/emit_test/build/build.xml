@@ -292,6 +292,16 @@
       <arg line="emit_test_package"/>
       <arg line="LinkedConnection"/>
     </exec>
+
+    <echo message="${line.separator}single_side_service_factory.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/single_side_service_factory.rph"/>
+      <arg line="${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="SingleSideServiceFactory"/>
+    </exec>
+
     
   </target>
 
@@ -715,7 +725,8 @@
         <arg line="${args}"/>
     </java>
   </target>
-  
+
+  <!-- Run WrappedPartnerTCPCall   -->
   <target
       name="run_WrappedPartnerTCPCall"
       depends="compile_ralph_tests"
@@ -729,7 +740,7 @@
     </java>
   </target>
 
-
+  <!-- Run LinkedTests -->
   <target
       name="run_LinkedTests"
       depends="compile_ralph_tests"
@@ -737,6 +748,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.LinkedTests"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
+  <!-- Run SingleSideServiceFactory -->
+  <target
+      name="run_SingleSideServiceFactory"
+      depends="compile_ralph_tests"
+      description="Run service factory">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SingleSideServiceFactoryTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

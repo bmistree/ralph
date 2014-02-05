@@ -1,0 +1,38 @@
+alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+
+Endpoint ServiceReceiver
+{
+    ServiceFactory sf;
+    Endpoint BasicSetterGetter endpt;
+    
+    set_service_factory(ServiceFactory to_set_to)
+    {
+        sf = to_set_to;
+    }
+
+    construct_endpt()
+    {
+        endpt = sf.construct();
+    }
+    
+    set_endpt_number(Number to_set_to)
+    {
+        endpt.set_number(to_set_to);
+    }
+
+    get_endpt_number() returns Number
+    {
+        return endpt.get_number();
+    }
+    
+    increment_endpt_number(Number to_increment_by) returns Number
+    {
+        Number to_return;
+        atomically {
+            Number internal_number = endpt.get_number();
+            endpt.set_number(internal_number + to_increment_by);
+            to_return = endpt.get_number();
+        }
+        return to_return;
+    }
+}
