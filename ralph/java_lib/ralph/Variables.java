@@ -10,6 +10,7 @@ import RalphDataWrappers.NumberTypeDataWrapperFactory;
 import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
 import RalphDataWrappers.EndpointTypeDataWrapperFactory;
+import RalphDataWrappers.CodePackTypeDataWrapperFactory;
 
 public class Variables {
     final static NumberTypeDataWrapperFactory
@@ -34,8 +35,15 @@ public class Variables {
         new EndpointTypeDataWrapperFactory();
     
     final static Endpoint default_endpoint = null;
-    
 
+
+    final static CodePackTypeDataWrapperFactory
+        code_pack_value_type_data_wrapper_factory = 
+        new CodePackTypeDataWrapperFactory();
+
+    final static InternalCodePack default_code_pack = null;
+
+    
     
     public static class AtomicNumberVariable
         extends AtomicValueVariable<Double,Double>
@@ -145,7 +153,33 @@ public class Variables {
                 "Cannot pass reference to endpoint across network.");
         }
     }
-	
+
+    public static class AtomicCodePackVariable
+        extends AtomicValueVariable<InternalCodePack,InternalCodePack>
+    {
+        public AtomicCodePackVariable(boolean _log_changes,Object init_val)
+        {
+            super(
+                _log_changes,(InternalCodePack)init_val,default_code_pack,
+                code_pack_value_type_data_wrapper_factory);		
+        }
+        public AtomicCodePackVariable(boolean _log_changes)
+        {
+            super(
+                _log_changes,default_code_pack,default_code_pack,
+                code_pack_value_type_data_wrapper_factory);
+        }
+        
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Util.logger_assert(
+                "FIXME: Should allow serializing code pack objects.");
+        }
+    }
+
+    
     
     public static class NonAtomicNumberVariable
         extends NonAtomicValueVariable<Double,Double>
@@ -263,7 +297,33 @@ public class Variables {
         }
     }
 
-    
+
+    public static class NonAtomicCodePackVariable
+        extends NonAtomicValueVariable<InternalCodePack,InternalCodePack>
+    {
+        public NonAtomicCodePackVariable(boolean _log_changes,InternalCodePack init_val)
+        {
+            super(
+                init_val,default_code_pack,
+                code_pack_value_type_data_wrapper_factory);		
+        }
+        public NonAtomicCodePackVariable(boolean _dummy_log_changes)
+        {
+            super(
+                default_code_pack,default_code_pack,
+                code_pack_value_type_data_wrapper_factory);
+        }
+        
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Util.logger_assert(
+                "FIXME: Should allow serializing code pack objects.");
+        }
+    }
+
+        
     /************ Handling maps ********/
     //non-atomic
     public static class NonAtomicMapVariable <K,V,D>

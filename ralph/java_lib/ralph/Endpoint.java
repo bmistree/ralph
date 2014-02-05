@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-import RalphConnObj.SingleSideConnection;
-
 import ralph_protobuffs.PromotionProto.Promotion;
 import ralph_protobuffs.UtilProto;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
