@@ -45,7 +45,40 @@ public class Variables {
 
     final static InternalServiceFactory default_service_factory = null;
 
+    /** Speculative variables */
+    public static class SpeculativeAtomicNumberVariable
+        extends SpeculativeAtomicValueVariable<Double,Double>
+    {
+        public SpeculativeAtomicNumberVariable(
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,
+                new Double(((Number) init_val).doubleValue()),
+                default_number,number_value_type_data_wrapper_factory,
+                ralph_globals);		
+        }
+        public SpeculativeAtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,default_number,default_number,
+                number_value_type_data_wrapper_factory,ralph_globals);
+        }
+        
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Double internal_val = get_val(active_event);
+            any_builder.setVarName("");
+            any_builder.setNum(internal_val.doubleValue());
+            any_builder.setReference(is_reference);
+        }
+    }
+
     
+
+    /** Atomics */
     
     public static class AtomicNumberVariable
         extends AtomicValueVariable<Double,Double>

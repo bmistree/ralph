@@ -94,7 +94,7 @@ public abstract class ActiveEvent
     public abstract void stop(boolean skip_partner);
     public abstract void backout(
         String backout_requester_host_uuid, boolean stop_request);
-
+    
     /**
        Either this or obj_request_no_backout_and_release_lock
        are called after can_backout_and_hold_lock returns
