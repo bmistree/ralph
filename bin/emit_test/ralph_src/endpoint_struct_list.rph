@@ -1,9 +1,9 @@
-alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+alias Service BasicSetterGetter as 'BasicRalph.SetterGetter';
 
 
 Struct EndpointWrapper
 {
-    Endpoint BasicSetterGetter local_end;
+    Service BasicSetterGetter local_end;
 }
 
 
@@ -11,7 +11,7 @@ Endpoint EndpointUser
 {
     List(element : Struct EndpointWrapper) all_wrapped_endpoints;
 
-    add_endpoint(Endpoint BasicSetterGetter to_append)
+    add_endpoint(Service BasicSetterGetter to_append)
     {
         Struct EndpointWrapper wrapped_to_append;
         wrapped_to_append.local_end = to_append;
@@ -25,7 +25,7 @@ Endpoint EndpointUser
             result = 0;
             for (Struct EndpointWrapper endpt_wrapper in all_wrapped_endpoints)
             {
-                Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+                Service BasicSetterGetter endpt = endpt_wrapper.local_end;
                 result = result + endpt.get_number();
             }
         }
@@ -41,7 +41,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         Number to_return = endpt.get_number();
         return to_return;
     }
@@ -50,7 +50,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper=
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         endpt.set_number(new_number);
     }
     
@@ -58,7 +58,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         return endpt.get_text();
     }
 
@@ -66,7 +66,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         endpt.set_text(new_text);
     }
 
@@ -74,7 +74,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         return endpt.get_tf();
     }
 
@@ -82,7 +82,7 @@ Endpoint EndpointUser
     {
         Struct EndpointWrapper endpt_wrapper =
             all_wrapped_endpoints.get(index);
-        Endpoint BasicSetterGetter endpt = endpt_wrapper.local_end;
+        Service BasicSetterGetter endpt = endpt_wrapper.local_end;
         endpt.set_tf(new_tf);
     }
     

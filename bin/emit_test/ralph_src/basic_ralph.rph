@@ -1,5 +1,5 @@
 
-Endpoint SetterGetter
+Service SetterGetter
 {
     TVar Number internal_number = 15;
     Text internal_text = 'hello';

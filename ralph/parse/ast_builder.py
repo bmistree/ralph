@@ -1,6 +1,7 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer
 from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
 from ralph.lex.ralph_lex import ENDPOINT_TOKEN, VERBATIM_TOKEN
+from ralph.lex.ralph_lex import SERVICE_TOKEN
 from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
@@ -41,6 +42,7 @@ def p_AliasStatement(p):
     '''
     AliasStatement : ALIAS STRUCT_TYPE Identifier AS String SEMI_COLON
                    | ALIAS ENDPOINT Identifier AS String SEMI_COLON
+                   | ALIAS SERVICE Identifier AS String SEMI_COLON
     '''
     line_number = p.lineno(1)
     identifier_node = p[3]
@@ -119,6 +121,7 @@ def p_EndpointList(p):
 def p_EndpointDefinition(p):
     '''
     EndpointDefinition : ENDPOINT Identifier CURLY_LEFT EndpointBody CURLY_RIGHT
+                       | SERVICE Identifier CURLY_LEFT EndpointBody CURLY_RIGHT
     '''
     line_number = p.lineno(1)
     endpoint_name_identifier_node = p[2]
@@ -684,6 +687,9 @@ def p_VariableType(p):
                  | ENDPOINT Identifier
                  | TVAR ENDPOINT Identifier
 
+                 | SERVICE Identifier
+                 | TVAR SERVICE Identifier
+                 
                  | SERVICE_FACTORY
                  | TVAR SERVICE_FACTORY
     '''
@@ -733,9 +739,12 @@ def p_VariableType(p):
         p[0] = StructVariableTypeNode(
             struct_name_node,is_tvar,line_number)
 
-    elif (
-        (p[1] == ENDPOINT_TOKEN) or
-        ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN))):
+    elif (((p[1] == ENDPOINT_TOKEN) or
+           ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN)))
+          or 
+          ((p[1] == SERVICE_TOKEN) or
+           ((len(p) >= 3) and (p[2] == SERVICE_TOKEN)))):
+
         # emitting an endpoint type
         is_tvar = False
         endpoint_name_node_index = 2

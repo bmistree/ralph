@@ -4,11 +4,13 @@ from ralph.common.compiler_exceptions import CompilerException
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
 ENDPOINT_TOKEN = 'Endpoint'
+SERVICE_TOKEN = 'Service'
 SERVICE_FACTORY_TOKEN = 'ServiceFactory'
 PRINT_TYPE_TOKEN = 'print'
 VERBATIM_TOKEN = 'verbatim'
 reserved = {
     'Endpoint' : 'ENDPOINT',
+    'Service' : 'SERVICE',
     'Method': 'METHOD',
     'in': 'IN',
     'return': 'RETURN_OPERATOR',
