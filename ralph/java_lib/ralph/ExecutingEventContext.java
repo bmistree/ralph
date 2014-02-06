@@ -21,12 +21,6 @@ import ralph_protobuffs.VariablesProto;
 
 import RalphCallResults.MessageCallResultObject;
 
-import RalphCallResults.EndpointCallResultObject;
-import RalphCallResults.ApplicationExceptionEndpointCallResult;
-import RalphCallResults.NetworkFailureEndpointCallResult;
-import RalphCallResults.EndpointCompleteCallResult;
-
-
 
 public class ExecutingEventContext
 {
@@ -325,7 +319,10 @@ public class ExecutingEventContext
         String to_exec_next = queue_elem.to_exec_next_name_msg_field;
 
         if (to_exec_next != null)
-            ExecutingEvent.static_run(endpoint,to_exec_next, active_event, this, null,false);
+        {
+            ExecutingEvent.static_run(
+                endpoint,to_exec_next, active_event, this,false);
+        }
         else
         {
             //# end of sequence: reset to_reply_with_uuid in context.  we do

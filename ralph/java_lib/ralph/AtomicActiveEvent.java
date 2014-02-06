@@ -16,11 +16,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
-import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.BackoutException;
 import RalphExceptions.StoppedException;
-import RalphCallResults.StopAlreadyCalledEndpointCallResult;
-import RalphCallResults.BackoutBeforeEndpointCallResult;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -973,9 +970,6 @@ public class AtomicActiveEvent extends ActiveEvent
         ExecutingEvent to_return = new ExecutingEvent (
             endpt_recvd_on,
             name_of_block_to_exec_next,this,ctx,
-            // using null here means that we do not need to bother
-            // with waiting for modified peered-s to update.
-            null,
             // whether has arguments
             takes_args,
             // what those arguments are.

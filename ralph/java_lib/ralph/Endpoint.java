@@ -19,7 +19,6 @@ import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.VariablesProto;
-import RalphCallResults.EndpointCallResultObject;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -1029,7 +1028,6 @@ public abstract class Endpoint
     protected abstract void _handle_rpc_call(
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
-        ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         Object...to_exec_args)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException;
@@ -1040,15 +1038,13 @@ public abstract class Endpoint
     public void handle_rpc_call(
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
-        ArrayBlockingQueue<EndpointCallResultObject> result_queue,
         Object...args)
         throws ApplicationException, BackoutException, NetworkException,StoppedException
     {
         try
         {
             _handle_rpc_call(
-                to_exec_internal_name,active_event, ctx,
-                result_queue,args);
+                to_exec_internal_name,active_event, ctx,args);
         }
         catch (BackoutException _ex)
         {

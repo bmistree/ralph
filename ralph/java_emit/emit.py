@@ -42,9 +42,7 @@ import RalphExceptions.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 import ralph.Util;
-import RalphCallResults.EndpointCallResultObject;
 import java.util.concurrent.ArrayBlockingQueue;
-import RalphCallResults.EndpointCompleteCallResult;
 import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
 import RalphAtomicWrappers.BaseAtomicWrappers;
@@ -509,7 +507,6 @@ else
 protected void _handle_rpc_call(
     String to_exec_internal_name,ActiveEvent active_event,
     ExecutingEventContext ctx,
-    ArrayBlockingQueue<EndpointCallResultObject> result_queue,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException,
     StoppedException
@@ -518,10 +515,6 @@ protected void _handle_rpc_call(
 
 %s
 
-    if (result_queue == null)
-        return;
-
-    result_queue.add(new EndpointCompleteCallResult(result));
 }
 ''' % indent_string(rpc_text_for_methods,1)
 

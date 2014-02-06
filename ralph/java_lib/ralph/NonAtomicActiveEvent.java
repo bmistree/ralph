@@ -12,11 +12,8 @@ import ralph_protobuffs.VariablesProto;
 import RalphCallResults.MessageCallResultObject;
 import java.util.concurrent.locks.ReentrantLock;
 
-import RalphCallResults.EndpointCallResultObject;
 import RalphExceptions.BackoutException;
 import RalphExceptions.StoppedException;
-import RalphCallResults.StopAlreadyCalledEndpointCallResult;
-import RalphCallResults.BackoutBeforeEndpointCallResult;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -218,28 +215,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
             }
             msg_queue_to_unblock.add(queue_feeder);
         }
-
-        //# do not need to acquire locks on other_endpoints_contacted
-        //# because the only place that it can be written to is when
-        //# already holding _lock.  Therefore, we already have exclusive
-        //# access to variable.
-
-        Util.logger_warn(
-            "Need to unblock waiting queues for subscribed to events.");
-        // for (EventSubscribedTo subscribed_to_element :
-        //          other_endpoints_contacted.values())
-        // {
-        //     for (ArrayBlockingQueue<EndpointCallResultObject> res_queue :
-        //              subscribed_to_element.result_queues)
-        //     {	
-        //         EndpointCallResultObject queue_feeder;
-        //         if (stop_request)
-        //             queue_feeder = new StopAlreadyCalledEndpointCallResult();
-        //         else
-        //             queue_feeder = new BackoutBeforeEndpointCallResult();
-        //         res_queue.add(queue_feeder);
-        //     }
-        // }
     }
 
     /**
@@ -534,9 +509,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         ExecutingEvent to_return = new ExecutingEvent (
             endpt_recvd_msg_on,
             name_of_block_to_exec_next,this,ctx,
-            // using null here means that we do not need to bother
-            // with waiting for modified peered-s to update.
-            null,
             // whether has arguments
             takes_args,
             // what those arguments are.
