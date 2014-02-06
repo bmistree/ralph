@@ -289,7 +289,7 @@ public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj)
     super(ralph_globals,conn_obj,new VariableStore(false));
 }
 
-private static class %s_ConstructorObj implements EndpointConstructorObj
+public static class %s_ConstructorObj implements EndpointConstructorObj
 {
     @Override
     public Endpoint construct (RalphGlobals ralph_globals, ConnectionObj conn_obj)
