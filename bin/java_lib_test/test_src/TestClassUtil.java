@@ -13,10 +13,7 @@ import RalphConnObj.SameHostConnection;
 import RalphConnObj.ConnectionObj;
 
 import ralph.Util;
-import RalphCallResults.BackoutBeforeEndpointCallResult;
-import RalphCallResults.EndpointCompleteCallResult;
 import java.util.concurrent.ArrayBlockingQueue;
-import RalphCallResults.EndpointCallResultObject;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -72,7 +69,6 @@ public class TestClassUtil
         protected void _handle_rpc_call(
             String to_exec_internal_name,ActiveEvent active_event,
             ExecutingEventContext ctx,
-            ArrayBlockingQueue<EndpointCallResultObject> result_queue,
             Object...args)
             throws ApplicationException, BackoutException, NetworkException,
             StoppedException
@@ -109,10 +105,6 @@ public class TestClassUtil
                     "Error handling rpc call: unknown method " +
                     to_exec_internal_name);
             }
-
-            if (result_queue == null)
-                return;
-            result_queue.add(new EndpointCompleteCallResult(result));
         }
 
         
