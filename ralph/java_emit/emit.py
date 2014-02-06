@@ -360,7 +360,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
             single_arg_string = (
-                'InternalServiceFactory %s = null;' % arg_name)
+                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(active_event);\n''' % (arg_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
