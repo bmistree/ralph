@@ -39,11 +39,13 @@ public abstract class AtomicMap<K,V,D>
     public AtomicMap(
         boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,
+        RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
 
-        AtomicInternalMap<K,V,D> init_val = new AtomicInternalMap<K,V,D>();
+        AtomicInternalMap<K,V,D> init_val =
+            new AtomicInternalMap<K,V,D>(ralph_globals);
         init_val.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
@@ -51,7 +53,8 @@ public abstract class AtomicMap<K,V,D>
             index_type,
             locked_wrapper);
 
-        AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
+        AtomicInternalMap<K,V,D> default_val =
+            new AtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
@@ -74,11 +77,12 @@ public abstract class AtomicMap<K,V,D>
         boolean _log_changes,
         AtomicInternalMap<K,V,D> internal_val,
         NonAtomicInternalMap.IndexType index_type,        
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
         
-        AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
+        AtomicInternalMap<K,V,D> default_val =
+            new AtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
@@ -96,11 +100,12 @@ public abstract class AtomicMap<K,V,D>
         boolean _log_changes,
         HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
 
-        AtomicInternalMap<K,V,D> init_val_2 = new AtomicInternalMap<K,V,D>();
+        AtomicInternalMap<K,V,D> init_val_2 =
+            new AtomicInternalMap<K,V,D>(ralph_globals);
         init_val_2.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),
@@ -108,7 +113,8 @@ public abstract class AtomicMap<K,V,D>
             index_type,
             locked_wrapper);
 
-        AtomicInternalMap<K,V,D> default_val = new AtomicInternalMap<K,V,D>();
+        AtomicInternalMap<K,V,D> default_val =
+            new AtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<K,V,D>(),

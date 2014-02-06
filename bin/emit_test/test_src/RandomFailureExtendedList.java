@@ -37,7 +37,7 @@ public class RandomFailureExtendedList
 
             // set endpoint's internal list from SynchronizedNumberList
             SynchronizedNumberInternalList synchronized_internal_list =
-                new SynchronizedNumberInternalList();
+                new SynchronizedNumberInternalList(endpt.ralph_globals);
             endpt.set_number_list(synchronized_internal_list);
 
             // run many times
@@ -78,9 +78,9 @@ public class RandomFailureExtendedList
         public List<Double> synchronized_list = new ArrayList<Double>();
         private boolean return_false = true;
 
-        public SynchronizedNumberInternalList()
+        public SynchronizedNumberInternalList(RalphGlobals ralph_globals)
         {
-            super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+            super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,ralph_globals);
         }
         
         /**

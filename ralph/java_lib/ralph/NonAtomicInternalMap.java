@@ -39,10 +39,10 @@ public class NonAtomicInternalMap<K,V,D>
     // and deserializing data.
     public IndexType index_type;
     
-    public NonAtomicInternalMap()
+    public NonAtomicInternalMap(RalphGlobals ralph_globals)
     {
-        super();
-        internal_map = new RalphInternalMap<K,V,D>();
+        super(ralph_globals);
+        internal_map = new RalphInternalMap<K,V,D>(ralph_globals);
     }
     public void init(
         MapTypeDataWrapperFactory<K,V,D> mtdwf,

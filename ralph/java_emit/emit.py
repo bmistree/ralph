@@ -140,9 +140,9 @@ def emit_struct_map_wrapper(struct_type):
 public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
 {
     public RalphObject<%s,%s> ensure_atomic_object(
-        %s object_to_ensure)
+        %s object_to_ensure, RalphGlobals ralph_globals)
     {
-        return new %s(false,object_to_ensure);
+        return new %s(false,object_to_ensure,ralph_globals);
     }
 }
 ''' % (struct_name,internal_struct_name,internal_struct_name,
@@ -181,13 +181,13 @@ public static class %s extends AtomicValueVariable<%s,%s>
         struct_name)
     
     external_struct_definition_constructor = '''
-public %s (boolean log_operations)
+public %s (boolean log_operations, RalphGlobals ralph_globals)
 {
     super(
         log_operations,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
-        new %s(),new %s(),%s);
+        new %s(ralph_globals),new %s(ralph_globals),%s,ralph_globals);
 }
 
 public void serialize_as_rpc_arg(
@@ -207,14 +207,13 @@ public void serialize_as_rpc_arg(
     # wrapper to have pass-by-reference semantics.
     clone_for_args_method_constructor_text = '''
 /** Constructor for cloning into args */
-public %s (boolean log_operations,%s internal_val)
-
+public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
 {
     super(
         log_operations,
         // FIXME: unclear what the difference should be
         // between internal value and default value.
-        internal_val,internal_val,%s);
+        internal_val,internal_val,%s,ralph_globals);
 }
 ''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
 
@@ -239,16 +238,31 @@ public static class %s
 {
 ''' % internal_struct_name
 
+    # emit struct's fields
     emit_ctx = None
     internal_struct_body_text = ''
     for field_name in struct_type.name_to_field_type_dict:
         field_type = struct_type.name_to_field_type_dict[field_name]
         internal_struct_body_text += (
-            'public %s %s = %s;\n' %
-            (emit_ralph_wrapped_type(field_type),
-             field_name,
-             construct_new_expression(field_type,None,emit_ctx)))
+            'public %s %s = null;\n' %
+            (emit_ralph_wrapped_type(field_type),field_name))
 
+    # emit constructor for struct
+    internal_struct_body_text += (
+        'public %s (RalphGlobals ralph_globals)\n' %
+        internal_struct_name)
+    internal_struct_body_text += '{\n'
+
+    internal_constructor_text = ''
+    for field_name in struct_type.name_to_field_type_dict:
+        field_type = struct_type.name_to_field_type_dict[field_name]
+        internal_constructor_text += (
+            '%s = %s;\n' %
+            (field_name,
+             construct_new_expression(field_type,None,emit_ctx)))
+    internal_struct_body_text += indent_string(internal_constructor_text)
+    internal_struct_body_text += '}\n'
+        
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'
@@ -793,22 +807,22 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
 
         if isinstance(argument_type,MapType):
             new_ralph_variable = (
-                'new %s (false,%s,%s.index_type,%s.locked_wrapper)'
+                'new %s (false,%s,%s.index_type,%s.locked_wrapper,ralph_globals)'
                 %
                 (java_type_statement,argument_name,argument_name,argument_name))
         elif isinstance(argument_type,ListType):
             new_ralph_variable = (
-                'new %s (false,%s,%s.locked_wrapper)'
+                'new %s (false,%s,%s.locked_wrapper,ralph_globals)'
                 %
                 (java_type_statement,argument_name,argument_name))
 
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
-                'new %s (false,%s)' %
+                'new %s (false,%s,ralph_globals)' %
                 (java_type_statement,argument_name))
         else:
             new_ralph_variable = (
-                'new %s (false,%s)' %
+                'new %s (false,%s,ralph_globals)' %
                 (java_type_statement,argument_name))
 
         internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
@@ -908,8 +922,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_text is None:
-            return 'new %s (false)' % java_type_text
-        return 'new %s (false,%s)' % (java_type_text,initializer_text)
+            return 'new %s (false,ralph_globals)' % java_type_text
+        return 'new %s (false,%s,ralph_globals)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
         java_type_text = emit_ralph_wrapped_type(type_object)
         
@@ -939,7 +953,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         value_type = type_object.to_type_node.type
         value_type_wrapper = list_map_wrappers(value_type)
         to_return = (
-            'new %s(false,%s,%s)' %
+            'new %s(false,%s,%s,ralph_globals)' %
             (java_type_text,java_map_index_type_text,value_type_wrapper))
         return to_return
 
@@ -955,7 +969,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         element_type = type_object.element_type_node.type
         element_type_wrapper = list_map_wrappers(element_type)
         to_return = (
-            'new %s(false,%s)' %
+            'new %s(false,%s,ralph_globals)' %
             (java_type_text,element_type_wrapper))
         return to_return
     
@@ -964,10 +978,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
-                'new  %s(false,%s)' % (struct_name,initializer_text))
+                'new  %s(false,%s,ralph_globals)' % (struct_name,initializer_text))
         else:
             to_return = (
-                'new  %s(false)' % struct_name)
+                'new  %s(false,ralph_globals)' % struct_name)
 
         return to_return
     
@@ -976,10 +990,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
-                'new  %s(false,%s)' % (java_type_text,initializer_text))
+                'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
             to_return = (
-                'new  %s(false)' % java_type_text)
+                'new  %s(false,ralph_globals)' % java_type_text)
 
         return to_return
 
@@ -988,10 +1002,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
-                'new  %s(false,%s)' % (java_type_text,initializer_text))
+                'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
             to_return = (
-                'new  %s(false)' % java_type_text)
+                'new  %s(false,ralph_globals)' % java_type_text)
 
         return to_return
     
@@ -1655,7 +1669,7 @@ def emit_for_loop_cast_line_map(
         variable_type_node.type)
     internal_type = emit_internal_type(variable_type_node.type)
     return (
-        '%s %s = new %s(false,(%s)__%s); ' %
+        '%s %s = new %s(false,(%s)__%s,ralph_globals); ' %
         (java_type_statement_text,internal_var_name_text,
          java_type_statement_text,internal_type,
          internal_var_name_text))

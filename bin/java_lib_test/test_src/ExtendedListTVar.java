@@ -10,7 +10,7 @@ import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
-
+import ralph.RalphGlobals;
 import java.util.concurrent.Future;
 
 /**
@@ -40,9 +40,10 @@ public class ExtendedListTVar
     public static class TestExtendedInternalAtomicNumberList
         extends ExtendedInternalAtomicList<Double,Double>
     {
-        public TestExtendedInternalAtomicNumberList()
+        public TestExtendedInternalAtomicNumberList(
+            RalphGlobals ralph_globals)
         {
-            super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
+            super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
         }
         protected Future<Boolean> apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
@@ -56,28 +57,29 @@ public class ExtendedListTVar
     }
 
     
-    public static AtomicListVariable<Double,Double> create_extended_list()
+    public static AtomicListVariable<Double,Double> create_extended_list(
+        RalphGlobals ralph_globals)
     {
         // generate an internal extended list
         TestExtendedInternalAtomicNumberList extended_internal_list =
-            new TestExtendedInternalAtomicNumberList();
+            new TestExtendedInternalAtomicNumberList(ralph_globals);
 
         // wrap the internal extended list
         AtomicListVariable<Double,Double> to_return =
             new AtomicListVariable<Double,Double>(
                 false,
                 extended_internal_list,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER);
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
         return to_return;
     }
     
     public static boolean run_test()
     {
-        AtomicListVariable<Double,Double> extended_list_tvar =
-            create_extended_list();
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-        endpt.global_var_stack.add_var(EXTENDED_LIST_NAME,extended_list_tvar);
 
+        AtomicListVariable<Double,Double> extended_list_tvar =
+            create_extended_list(endpt.ralph_globals);
+        endpt.global_var_stack.add_var(EXTENDED_LIST_NAME,extended_list_tvar);
         
         // Populate a few values in map.
         if (! ListTVarConflict.test_add_values(endpt,extended_list_tvar))

@@ -51,18 +51,19 @@ public class Variables {
         extends AtomicValueVariable<Double,Double>
     {
         public AtomicNumberVariable(
-            boolean _log_changes,Object init_val)
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,
                 new Double(((Number) init_val).doubleValue()),
-                default_number,number_value_type_data_wrapper_factory);		
+                default_number,number_value_type_data_wrapper_factory,
+                ralph_globals);		
         }
-        public AtomicNumberVariable(boolean _log_changes)
+        public AtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_number,default_number,
-                number_value_type_data_wrapper_factory);		
+                number_value_type_data_wrapper_factory,ralph_globals);
         }
         
         public void serialize_as_rpc_arg(
@@ -79,17 +80,19 @@ public class Variables {
     public static class AtomicTextVariable
         extends AtomicValueVariable<String,String>
     {
-        public AtomicTextVariable(boolean _log_changes,Object init_val)
+        public AtomicTextVariable(
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(String)init_val,default_text,
-                text_value_type_data_wrapper_factory);		
+                text_value_type_data_wrapper_factory,ralph_globals);
         }
-        public AtomicTextVariable(boolean _log_changes)
+        public AtomicTextVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_text,default_text,
-                text_value_type_data_wrapper_factory);            
+                text_value_type_data_wrapper_factory,ralph_globals);
         }
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -106,17 +109,19 @@ public class Variables {
     public static class AtomicTrueFalseVariable
         extends AtomicValueVariable<Boolean,Boolean>
     {
-        public AtomicTrueFalseVariable(boolean _log_changes,Object init_val)
+        public AtomicTrueFalseVariable(
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(Boolean)init_val,default_tf,
-                true_false_value_type_data_wrapper_factory);		
+                true_false_value_type_data_wrapper_factory,ralph_globals);
         }
-        public AtomicTrueFalseVariable(boolean _log_changes)
+        public AtomicTrueFalseVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_tf,default_tf,
-                true_false_value_type_data_wrapper_factory);
+                true_false_value_type_data_wrapper_factory,ralph_globals);
         }
         
         public void serialize_as_rpc_arg(
@@ -134,17 +139,19 @@ public class Variables {
     public static class AtomicEndpointVariable
         extends AtomicValueVariable<Endpoint,Endpoint>
     {
-        public AtomicEndpointVariable(boolean _log_changes,Object init_val)
+        public AtomicEndpointVariable(
+            boolean _log_changes,Object init_val, RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(Endpoint)init_val,default_endpoint,
-                endpoint_value_type_data_wrapper_factory);		
+                endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
-        public AtomicEndpointVariable(boolean _log_changes)
+        public AtomicEndpointVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_endpoint,default_endpoint,
-                endpoint_value_type_data_wrapper_factory);
+                endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
         
         public void serialize_as_rpc_arg(
@@ -159,17 +166,19 @@ public class Variables {
     public static class AtomicServiceFactoryVariable
         extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
-        public AtomicServiceFactoryVariable(boolean _log_changes,Object init_val)
+        public AtomicServiceFactoryVariable(
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(InternalServiceFactory)init_val,default_service_factory,
-                service_factory_value_type_data_wrapper_factory);		
+                service_factory_value_type_data_wrapper_factory,ralph_globals);
         }
-        public AtomicServiceFactoryVariable(boolean _log_changes)
+        public AtomicServiceFactoryVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_service_factory,default_service_factory,
-                service_factory_value_type_data_wrapper_factory);
+                service_factory_value_type_data_wrapper_factory,ralph_globals);
         }
 
         @Override
@@ -209,18 +218,21 @@ public class Variables {
         extends NonAtomicValueVariable<Double,Double>
     {
         public NonAtomicNumberVariable(
-            boolean _dummy_log_changes, Double init_val)
+            boolean _dummy_log_changes, Double init_val,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,default_number,
-                number_value_type_data_wrapper_factory);
+                number_value_type_data_wrapper_factory,
+                ralph_globals);
         }
 
-        public NonAtomicNumberVariable(boolean _dummy_log_changes)
+        public NonAtomicNumberVariable(
+            boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
                 default_number,default_number,
-                number_value_type_data_wrapper_factory);			
+                number_value_type_data_wrapper_factory,ralph_globals);
         }
         
         public void serialize_as_rpc_arg(
@@ -238,18 +250,20 @@ public class Variables {
         extends NonAtomicValueVariable<String,String>
     {
         public NonAtomicTextVariable(
-            boolean _dummy_log_changes,String init_val)
+            boolean _dummy_log_changes,String init_val,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,default_text,
-                text_value_type_data_wrapper_factory);
+                text_value_type_data_wrapper_factory,ralph_globals);
         }
 		
-        public NonAtomicTextVariable(boolean _dummy_log_changes)
+        public NonAtomicTextVariable(
+            boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
                 default_text,default_text,
-                text_value_type_data_wrapper_factory);
+                text_value_type_data_wrapper_factory,ralph_globals);
         }
         
         public void serialize_as_rpc_arg(
@@ -268,18 +282,20 @@ public class Variables {
         extends NonAtomicValueVariable<Boolean,Boolean>
     {
         public NonAtomicTrueFalseVariable(
-            boolean _dummy_log_changes, Boolean init_val)
+            boolean _dummy_log_changes, Boolean init_val,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,default_tf,
-                true_false_value_type_data_wrapper_factory);
+                true_false_value_type_data_wrapper_factory,ralph_globals);
         }
 
-        public NonAtomicTrueFalseVariable(boolean _dummy_log_changes)
+        public NonAtomicTrueFalseVariable(
+            boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
                 default_tf,default_tf,
-                true_false_value_type_data_wrapper_factory);
+                true_false_value_type_data_wrapper_factory,ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -298,18 +314,21 @@ public class Variables {
         extends NonAtomicValueVariable<Endpoint,Endpoint>
     {
         public NonAtomicEndpointVariable(
-            boolean _dummy_log_changes, Endpoint init_val)
+            boolean _dummy_log_changes, Endpoint init_val,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,default_endpoint,
-                endpoint_value_type_data_wrapper_factory);
+                endpoint_value_type_data_wrapper_factory,
+                ralph_globals);
         }
 
-        public NonAtomicEndpointVariable(boolean _dummy_log_changes)
+        public NonAtomicEndpointVariable(
+            boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
                 default_endpoint,default_endpoint,
-                endpoint_value_type_data_wrapper_factory);
+                endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -326,17 +345,21 @@ public class Variables {
         extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
         public NonAtomicServiceFactoryVariable(
-            boolean _log_changes,InternalServiceFactory init_val)
+            boolean _log_changes,InternalServiceFactory init_val,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,default_service_factory,
-                service_factory_value_type_data_wrapper_factory);		
+                service_factory_value_type_data_wrapper_factory,
+                ralph_globals);
         }
-        public NonAtomicServiceFactoryVariable(boolean _dummy_log_changes)
+        public NonAtomicServiceFactoryVariable(
+            boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
                 default_service_factory,default_service_factory,
-                service_factory_value_type_data_wrapper_factory);
+                service_factory_value_type_data_wrapper_factory,
+                ralph_globals);
         }
 
         @Override
@@ -359,18 +382,20 @@ public class Variables {
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(_index_type,locked_wrapper);
+            super(_index_type,locked_wrapper,ralph_globals);
         }
 
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(internal_val,_index_type,locked_wrapper);
+            super(internal_val,_index_type,locked_wrapper,ralph_globals);
         }
     }
 
@@ -381,19 +406,22 @@ public class Variables {
         public AtomicMapVariable(
             boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(_log_changes,_index_type,locked_wrapper);
+            super(_log_changes,_index_type,locked_wrapper,ralph_globals);
         }
 
         public AtomicMapVariable(
             boolean _log_changes,
             AtomicInternalMap<K,V,D> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,internal_val,_index_type,locked_wrapper);
+                _log_changes,internal_val,_index_type,locked_wrapper,
+                ralph_globals);
         }
     }
     
@@ -402,17 +430,19 @@ public class Variables {
         extends AtomicList<V,D>
     {
         public AtomicListVariable(
-            boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper)
+            boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(_log_changes,locked_wrapper);
+            super(_log_changes,locked_wrapper,ralph_globals);
         }
 
 
         public AtomicListVariable(
             boolean _log_changes,AtomicInternalList<V,D> internal_val,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(_log_changes,internal_val,locked_wrapper);
+            super(_log_changes,internal_val,locked_wrapper,ralph_globals);
         }
     }
 
@@ -420,17 +450,19 @@ public class Variables {
         extends NonAtomicList<V,D>
     {
         public NonAtomicListVariable(
-            boolean _dummy_log_changes, EnsureAtomicWrapper<V,D> locked_wrapper)
+            boolean _dummy_log_changes, EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(locked_wrapper);
+            super(locked_wrapper,ralph_globals);
         }
 
         public NonAtomicListVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalList<V,D> internal_val,
-            EnsureAtomicWrapper<V,D> locked_wrapper)
+            EnsureAtomicWrapper<V,D> locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super(internal_val,locked_wrapper);
+            super(internal_val,locked_wrapper,ralph_globals);
         }
     }
 }

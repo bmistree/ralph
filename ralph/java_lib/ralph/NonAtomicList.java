@@ -34,19 +34,21 @@ public abstract class NonAtomicList<V,D>
     D>
 {
     public NonAtomicList(
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
-        super();
+        super(ralph_globals);
         
-        NonAtomicInternalList<V,D> init_val = new NonAtomicInternalList<V,D>();
+        NonAtomicInternalList<V,D> init_val =
+            new NonAtomicInternalList<V,D>(ralph_globals);
         init_val.init(
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
-        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        NonAtomicInternalList<V,D> default_val =
+            new NonAtomicInternalList<V,D>(ralph_globals);
         default_val.init(
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
@@ -64,11 +66,12 @@ public abstract class NonAtomicList<V,D>
      */
     public NonAtomicList(
         NonAtomicInternalList<V,D> internal_val,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
         
-        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        NonAtomicInternalList<V,D> default_val =
+            new NonAtomicInternalList<V,D>(ralph_globals);
         default_val.init(
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
@@ -83,19 +86,21 @@ public abstract class NonAtomicList<V,D>
     
     public NonAtomicList(
         ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			        
-        super();
+        super(ralph_globals);
         
-        NonAtomicInternalList<V,D> init_val_2 = new NonAtomicInternalList<V,D>();
+        NonAtomicInternalList<V,D> init_val_2 =
+            new NonAtomicInternalList<V,D>(ralph_globals);
         init_val_2.init(
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
-        NonAtomicInternalList<V,D> default_val = new NonAtomicInternalList<V,D>();
+        NonAtomicInternalList<V,D> default_val =
+            new NonAtomicInternalList<V,D>(ralph_globals);
         default_val.init(
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),

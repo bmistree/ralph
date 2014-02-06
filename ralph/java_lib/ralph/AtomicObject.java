@@ -18,6 +18,8 @@ import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 
+import RalphServiceActions.AtomicObjectTryNextAction;
+
 /**
  * 
  * @author bmistree
@@ -44,6 +46,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     //# write_lock_holder is EventCachedPriorityObj
     protected EventCachedPriorityObj write_lock_holder = null; 
 
+    private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
     private HashMap<String,WaitingElement<T,D>>waiting_events =
@@ -57,6 +60,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     //# out immediately from future try_next calls.
     private boolean in_try_next = false;
     
+
+    private RalphGlobals ralph_globals = null;
     
     /**
      * Used by 
@@ -96,8 +101,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         };
     }
 	
-	
-    public AtomicObject(){}
+    public AtomicObject(RalphGlobals ralph_globals)
+    {
+        try_next_action = new AtomicObjectTryNextAction(this);
+        this.ralph_globals = ralph_globals;
+    }
 	
     public void init_multithreaded_locked_object(
         ValueTypeDataWrapperFactory<T,D> vtdwc,
@@ -402,9 +410,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
 
         if (read_lock_holders.containsKey(uuid))
-        {
             read_lock_holders.get(uuid).cached_priority = new_priority;
-        }
 
         if (waiting_events.containsKey(uuid))
         {
@@ -412,18 +418,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             may_require_update = true;
         }
         _unlock();
-        
+
         if (may_require_update)
-        {
-            // start anonymous thread to try next
-            new Thread()
-            {
-                public void run()
-                {
-                    try_next();
-                }        		
-            }.start();
-        }
+            ralph_globals.thread_pool.add_service_action(try_next_action);
     }
 	
     public D de_waldoify(ActiveEvent active_event) throws BackoutException
@@ -950,7 +947,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
               schedule.  (Eg., it is blocked by a higher-priority
               event that is holding a write lock.)
     */
-    private void try_next()
+    public void try_next()
     {
         _lock();
 

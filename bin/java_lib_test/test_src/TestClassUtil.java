@@ -154,30 +154,34 @@ public class TestClassUtil
         ConnectionObj conn_obj)
     {
         VariableStore vstore = new VariableStore(false);
+        RalphGlobals ralph_globals = new RalphGlobals();
         
         // adding a number tvar
         vstore.add_var(
             DefaultEndpoint.NUM_TVAR_NAME,
             new AtomicNumberVariable(
                 false,
-                DefaultEndpoint.NUM_TVAR_INIT_VAL));
+                DefaultEndpoint.NUM_TVAR_INIT_VAL,
+                ralph_globals));
 
         vstore.add_var(
             DefaultEndpoint.MAP_TVAR_NAME,
             new AtomicMapVariable<Double,Double,Double>(
                 false,
                 NonAtomicInternalMap.IndexType.DOUBLE,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                ralph_globals));
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
             new AtomicListVariable<Double,Double>(
                 false,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER));
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                ralph_globals));
 
         
         DefaultEndpoint to_return = new DefaultEndpoint(
-            new RalphGlobals(),
+            ralph_globals,
             conn_obj,
             vstore);
 

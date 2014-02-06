@@ -28,10 +28,10 @@ public class NonAtomicInternalList<V,D>
     private RalphInternalList<V,D> internal_list = null;
     public EnsureAtomicWrapper<V,D> locked_wrapper = null;
     
-    public NonAtomicInternalList()
+    public NonAtomicInternalList(RalphGlobals ralph_globals)
     {
-        super();
-        internal_list = new RalphInternalList<V,D>();
+        super(ralph_globals);
+        internal_list = new RalphInternalList<V,D>(ralph_globals);
     }
     public void init(
         ListTypeDataWrapperFactory<V,D> ltdwf,

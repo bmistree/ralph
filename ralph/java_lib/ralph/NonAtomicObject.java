@@ -21,8 +21,9 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
     public String uuid = Util.generate_uuid();
     private DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
-	
-    public NonAtomicObject(){}
+    
+    public NonAtomicObject(RalphGlobals ralph_globals)
+    {}
 	
     public void init(
         ValueTypeDataWrapperFactory<T,D> vtdwc,

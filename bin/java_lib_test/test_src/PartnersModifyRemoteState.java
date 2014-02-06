@@ -57,8 +57,8 @@ public class PartnersModifyRemoteState
                 expected_value += 1;
 
                 Variables.NonAtomicNumberVariable num_var =
-                    new Variables.NonAtomicNumberVariable(false);
-
+                    new Variables.NonAtomicNumberVariable(
+                        false,endpta.ralph_globals);
                 
                 ActiveEvent root_event =
                     endpta._act_event_map.create_root_atomic_event(null);

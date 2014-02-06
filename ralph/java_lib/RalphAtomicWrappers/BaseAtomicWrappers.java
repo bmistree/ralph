@@ -1,6 +1,7 @@
 package RalphAtomicWrappers;
 import ralph.RalphObject;
 import ralph.Variables;
+import ralph.RalphGlobals;
 
 public class BaseAtomicWrappers
 {
@@ -21,10 +22,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<Double,Double>
     {
         public RalphObject<Double,Double> ensure_atomic_object(
-            Double object_to_ensure)
+            Double object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicNumberVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
 
@@ -32,10 +33,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<Boolean,Boolean>
     {
         public RalphObject<Boolean,Boolean>ensure_atomic_object(
-            Boolean object_to_ensure)
+            Boolean object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicTrueFalseVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
     
@@ -43,10 +44,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<String,String>
     {
         public RalphObject<String,String>ensure_atomic_object(
-            String object_to_ensure)
+            String object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicTextVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
 
@@ -55,10 +56,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<Double,Double>
     {
         public RalphObject<Double,Double> ensure_atomic_object(
-            Double object_to_ensure)
+            Double object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicNumberVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
 
@@ -66,10 +67,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<Boolean,Boolean>
     {
         public RalphObject<Boolean,Boolean>ensure_atomic_object(
-            Boolean object_to_ensure)
+            Boolean object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicTrueFalseVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
     
@@ -77,10 +78,10 @@ public class BaseAtomicWrappers
         implements EnsureAtomicWrapper<String,String>
     {
         public RalphObject<String,String>ensure_atomic_object(
-            String object_to_ensure)
+            String object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicTextVariable(
-                false,object_to_ensure);
+                false,object_to_ensure,ralph_globals);
         }
     }
 }

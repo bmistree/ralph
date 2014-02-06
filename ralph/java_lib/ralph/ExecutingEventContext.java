@@ -422,17 +422,17 @@ public class ExecutingEventContext
         if (variable.hasNum())
         {
             lo = new NonAtomicNumberVariable(
-                false,new Double(variable.getNum()));
+                false,new Double(variable.getNum()),ralph_globals);
         }
         else if (variable.hasText())
         {
             lo = new NonAtomicTextVariable(
-                false,variable.getText());
+                false,variable.getText(),ralph_globals);
         }
         else if (variable.hasTrueFalse())
         {
             lo = new NonAtomicTrueFalseVariable(
-                false,new Boolean(variable.getTrueFalse()));
+                false,new Boolean(variable.getTrueFalse()),ralph_globals);
         }
         else if (variable.hasList())
         {
@@ -468,7 +468,7 @@ public class ExecutingEventContext
             InternalServiceFactory internal_service_factory =
                 new InternalServiceFactory(constructor_obj,ralph_globals);
             lo = new NonAtomicServiceFactoryVariable(
-                false,internal_service_factory);
+                false,internal_service_factory,ralph_globals);
         }
         return lo;
     }

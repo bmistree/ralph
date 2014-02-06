@@ -38,20 +38,22 @@ public abstract class NonAtomicMap<K,V,D>
 {
     public NonAtomicMap(
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			
-        super();
+        super(ralph_globals);
         
-        NonAtomicInternalMap<K,V,D> init_val = new NonAtomicInternalMap<K,V,D>();
+        NonAtomicInternalMap<K,V,D> init_val =
+            new NonAtomicInternalMap<K,V,D>(ralph_globals);
         init_val.init(
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
         
-        NonAtomicInternalMap<K,V,D> default_val = new NonAtomicInternalMap<K,V,D>();
+        NonAtomicInternalMap<K,V,D> default_val =
+            new NonAtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init(
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
@@ -71,12 +73,13 @@ public abstract class NonAtomicMap<K,V,D>
     public NonAtomicMap(
         NonAtomicInternalMap<K,V,D> internal_val,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,
+        RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
         
         NonAtomicInternalMap<K,V,D> default_val =
-            new NonAtomicInternalMap<K,V,D>();
+            new NonAtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init(
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
@@ -91,20 +94,22 @@ public abstract class NonAtomicMap<K,V,D>
     public NonAtomicMap(
         HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         // FIXME: I'm pretty sure that the type signature for the locked object above
         // is incorrect: it shouldn't be D, right?			        
-        super();
+        super(ralph_globals);
         
-        NonAtomicInternalMap<K,V,D> init_val_2 = new NonAtomicInternalMap<K,V,D>();
+        NonAtomicInternalMap<K,V,D> init_val_2 =
+            new NonAtomicInternalMap<K,V,D>(ralph_globals);
         init_val_2.init(
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),
             index_type,
             locked_wrapper);
         
-        NonAtomicInternalMap<K,V,D> default_val = new NonAtomicInternalMap<K,V,D>();
+        NonAtomicInternalMap<K,V,D> default_val =
+            new NonAtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init(
             new MapTypeDataWrapperFactory<K,V,D>(),
             new HashMap<K,RalphObject<V,D>>(),

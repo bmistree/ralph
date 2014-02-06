@@ -35,14 +35,16 @@ public class HardwareFailureTest
     public static _InternalPieceOfHardware produce_two_op_fail_hardware(
         double hardware_id, HardwareOwner endpt)
     {
-        _InternalPieceOfHardware to_return = new _InternalPieceOfHardware();
+        _InternalPieceOfHardware to_return =
+            new _InternalPieceOfHardware(endpt.ralph_globals);
         ExtendedInternalHardwareList internal_hardware_list =
             new ExtendedInternalHardwareList(hardware_id,endpt);
         
         to_return.list =
             new AtomicListVariable<Double,Double>(
                 false,internal_hardware_list,
-                BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
+                endpt.ralph_globals);
 
         return to_return;
     }
@@ -103,10 +105,13 @@ public class HardwareFailureTest
         private boolean hardware_failed = false;
         private double hardware_id;
         private HardwareOwner endpt;
-        
-        public ExtendedInternalHardwareList(double _hardware_id, HardwareOwner _endpt)
+
+        public ExtendedInternalHardwareList(
+            double _hardware_id, HardwareOwner _endpt)
         {
-            super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+            super(
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
+                _endpt.ralph_globals);
             endpt = _endpt;
             hardware_id = _hardware_id;
         }

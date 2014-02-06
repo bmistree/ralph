@@ -20,6 +20,13 @@ public class RalphInternalList<V,D>
     private EnsureAtomicWrapper<V,D>locked_wrapper;
     private ListTypeDataWrapperSupplier<V,D> data_wrapper_supplier;
     private ImmediateCommitSupplier immediate_commit_supplier;
+
+    private RalphGlobals ralph_globals = null;
+
+    public RalphInternalList(RalphGlobals ralph_globals)
+    {
+        this.ralph_globals = ralph_globals;
+    }
     
     public void init_ralph_internal_list(
         EnsureAtomicWrapper<V,D>_locked_wrapper,
@@ -64,7 +71,7 @@ public class RalphInternalList<V,D>
         throws BackoutException
     {
         RalphObject<V,D> wrapped_to_insert =
-            locked_wrapper.ensure_atomic_object(what_to_insert);
+            locked_wrapper.ensure_atomic_object(what_to_insert,ralph_globals);
         insert(active_event,index_to_insert_in,wrapped_to_insert);
     }
     @Override
@@ -106,7 +113,7 @@ public class RalphInternalList<V,D>
         throws BackoutException
     {
         RalphObject<V,D> wrapped_to_insert =
-            locked_wrapper.ensure_atomic_object(what_to_insert);
+            locked_wrapper.ensure_atomic_object(what_to_insert,ralph_globals);
 
         ListTypeDataWrapper<V,D> wrapped_val =
             get_val_write(active_event);
@@ -132,7 +139,7 @@ public class RalphInternalList<V,D>
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException
     {
         RalphObject<V,D> wrapped_to_write =
-            locked_wrapper.ensure_atomic_object(to_write);
+            locked_wrapper.ensure_atomic_object(to_write,ralph_globals);
         set_val_on_key(active_event,key,wrapped_to_write);
     }
     

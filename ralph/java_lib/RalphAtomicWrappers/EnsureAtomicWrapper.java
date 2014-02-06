@@ -1,6 +1,7 @@
 package RalphAtomicWrappers;
 
 import ralph.RalphObject;
+import ralph.RalphGlobals;
 
 /**
    When setting_val_on_key for a map, pass in internal value of
@@ -26,5 +27,6 @@ import ralph.RalphObject;
  */
 public interface EnsureAtomicWrapper<V,D>
 {
-    public RalphObject<V,D> ensure_atomic_object(V object_to_ensure);
+    public RalphObject<V,D> ensure_atomic_object(
+        V object_to_ensure,RalphGlobals ralph_globals);
 }

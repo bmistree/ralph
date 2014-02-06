@@ -3,6 +3,7 @@ package java_lib_test;
 import ralph.VariableStack;
 import ralph.Variables.NonAtomicNumberVariable;
 import ralph.RalphObject;
+import ralph.RalphGlobals;
 
 public class WriteReadVarStack
 {
@@ -72,15 +73,19 @@ public class WriteReadVarStack
         Double root_b_init_val = new Double(38);
         Double higher_a_init_val = new Double(root_a_init_val + 30);
 
+        RalphGlobals ralph_globals = new RalphGlobals();
+        
         /** Create new variables */
         NonAtomicNumberVariable root_a =
-            new NonAtomicNumberVariable(false,root_a_init_val);
+            new NonAtomicNumberVariable(
+                false,root_a_init_val,ralph_globals);
         NonAtomicNumberVariable higher_a =
-            new NonAtomicNumberVariable(false,higher_a_init_val);        
+            new NonAtomicNumberVariable(
+                false,higher_a_init_val,ralph_globals);
 
         NonAtomicNumberVariable root_b =
-            new NonAtomicNumberVariable(false,root_b_init_val);        
-
+            new NonAtomicNumberVariable(
+                false,root_b_init_val,ralph_globals);
         
         /** Push new variables to stack */
         VariableStack vstack = new VariableStack();

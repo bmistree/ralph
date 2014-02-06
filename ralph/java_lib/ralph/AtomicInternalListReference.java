@@ -21,9 +21,10 @@ public abstract class AtomicInternalListReference <V,D>
         AtomicInternalList<V,D> init_val, 
         AtomicInternalList<V,D> default_value,
         // using value type here: treating internal reference as value
-        ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>vtdwc)
+        ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>vtdwc,
+        RalphGlobals ralph_globals)
     {
-        super(_peered,init_val,default_value,vtdwc);
+        super(_peered,init_val,default_value,vtdwc,ralph_globals);
     }
 	
 	

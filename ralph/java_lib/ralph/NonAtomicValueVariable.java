@@ -5,15 +5,18 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 
 public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
 {
-    public NonAtomicValueVariable()
+    public NonAtomicValueVariable(RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
     }
 
     public NonAtomicValueVariable(
         T init_val, T DEFAULT_VALUE,
-        ValueTypeDataWrapperFactory<T,D> vtdwc)
+        ValueTypeDataWrapperFactory<T,D> vtdwc,
+        RalphGlobals ralph_globals)
     {
+        super (ralph_globals);
+        
         if (init_val == null)
             init_val = DEFAULT_VALUE;
         init(vtdwc,init_val);

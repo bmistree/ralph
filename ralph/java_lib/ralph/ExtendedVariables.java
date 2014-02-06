@@ -23,9 +23,10 @@ public class ExtendedVariables
         private ListTypeDataWrapper<T,D> dirty_op_tuples_on_hardware = null;
         
         public ExtendedInternalAtomicList(
-            EnsureAtomicWrapper<T,D>_locked_wrapper)
+            EnsureAtomicWrapper<T,D>_locked_wrapper,
+            RalphGlobals ralph_globals)
         {
-            super();
+            super(ralph_globals);
             init_multithreaded_list_container(
                 true,new ListTypeDataWrapperFactory<T,D>(),
                 new ArrayList<RalphObject<T,D>>(),

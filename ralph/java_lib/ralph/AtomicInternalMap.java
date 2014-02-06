@@ -37,10 +37,10 @@ public class AtomicInternalMap<K,V,D>
     private RalphInternalMap<K,V,D> internal_map = null;
     public EnsureAtomicWrapper<V,D> locked_wrapper = null;
     
-    public AtomicInternalMap()
+    public AtomicInternalMap(RalphGlobals ralph_globals)
     {
-        super();
-        internal_map = new RalphInternalMap<K,V,D>();
+        super(ralph_globals);
+        internal_map = new RalphInternalMap<K,V,D>(ralph_globals);
     }
 
     

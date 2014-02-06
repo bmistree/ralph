@@ -28,13 +28,17 @@ public class RalphInternalMap<K,V,D>
     private EnsureAtomicWrapper<V,D>locked_wrapper;
     private MapTypeDataWrapperSupplier<K,V,D> data_wrapper_supplier;
     private ImmediateCommitSupplier immediate_commit_supplier;
+    private RalphGlobals ralph_globals = null;
     
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     public IndexType index_type;
     
-    public RalphInternalMap()
-    { }
+    public RalphInternalMap(RalphGlobals ralph_globals)
+    {
+        this.ralph_globals = ralph_globals;
+    }
+    
     public void init_ralph_internal_map(
         EnsureAtomicWrapper<V,D>_locked_wrapper,
         MapTypeDataWrapperSupplier<K,V,D>_data_wrapper_supplier,
@@ -138,7 +142,7 @@ public class RalphInternalMap<K,V,D>
         ActiveEvent active_event, K key, V to_write) throws BackoutException
     {
         RalphObject<V,D> wrapped_to_write =
-            locked_wrapper.ensure_atomic_object(to_write);
+            locked_wrapper.ensure_atomic_object(to_write,ralph_globals);
         set_val_on_key(active_event,key,wrapped_to_write);
     }
 

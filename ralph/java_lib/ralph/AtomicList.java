@@ -36,18 +36,21 @@ public abstract class AtomicList<V,D>
     D>
 {
     public AtomicList(
-        boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper)
+        boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper,
+        RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
         
-        AtomicInternalList<V,D> init_val = new AtomicInternalList<V,D>();
+        AtomicInternalList<V,D> init_val =
+            new AtomicInternalList<V,D>(ralph_globals);
         init_val.init_multithreaded_list_container(
             _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
-        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        AtomicInternalList<V,D> default_val =
+            new AtomicInternalList<V,D>(ralph_globals);
         default_val.init_multithreaded_list_container(
             _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
@@ -68,11 +71,12 @@ public abstract class AtomicList<V,D>
     public AtomicList(
         boolean _log_changes,
         AtomicInternalList<V,D> internal_val,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
         
-        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        AtomicInternalList<V,D> default_val =
+            new AtomicInternalList<V,D>(ralph_globals);
         default_val.init_multithreaded_list_container(
             _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
@@ -88,18 +92,20 @@ public abstract class AtomicList<V,D>
     public AtomicList(
         boolean _log_changes,
         ArrayList<RalphObject<V,D>> init_val,boolean incorporating_deltas,
-        EnsureAtomicWrapper<V,D> locked_wrapper)
+        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
-        super();
+        super(ralph_globals);
 
-        AtomicInternalList<V,D> init_val_2 = new AtomicInternalList<V,D>();
+        AtomicInternalList<V,D> init_val_2 =
+            new AtomicInternalList<V,D>(ralph_globals);
         init_val_2.init_multithreaded_list_container(
             _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
-        AtomicInternalList<V,D> default_val = new AtomicInternalList<V,D>();
+        AtomicInternalList<V,D> default_val =
+            new AtomicInternalList<V,D>(ralph_globals);
         default_val.init_multithreaded_list_container(
             _log_changes,
             new ListTypeDataWrapperFactory<V,D>(),
