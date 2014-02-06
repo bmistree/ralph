@@ -14,12 +14,6 @@ import RalphExceptions.StoppedException;
 
 public class ExecutingEvent 
 {
-
-    private static Class[] param_types_args =
-        {ActiveEvent.class, ExecutingEventContext.class, Object[].class};
-    private static Class[] param_types_no_args =
-        {ActiveEvent.class, ExecutingEventContext.class};
-	
     private String to_exec_internal_name;
     private ActiveEvent active_event;
     private ExecutingEventContext ctx;
@@ -30,7 +24,6 @@ public class ExecutingEvent
     /**
        @param {String} to_exec_internal_name --- The internal
        name of the method to execute on this endpoint. 
-    
 
        @param {_ActiveEvent object} active_event --- The active event
        object that to_exec should use for accessing endpoint data.
