@@ -58,13 +58,22 @@ public class Variables {
                 default_number,number_value_type_data_wrapper_factory,
                 ralph_globals);		
         }
-        public SpeculativeAtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
+        public SpeculativeAtomicNumberVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_number,default_number,
                 number_value_type_data_wrapper_factory,ralph_globals);
         }
-        
+
+        @Override
+        protected SpeculativeAtomicObject<Double,Double>
+            duplicate_for_speculation(Double to_speculate_on)
+        {
+            return new SpeculativeAtomicNumberVariable(
+                log_changes,to_speculate_on,ralph_globals);
+        }
+
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException

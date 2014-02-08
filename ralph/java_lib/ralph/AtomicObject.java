@@ -49,7 +49,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
-    private HashMap<String,WaitingElement<T,D>>waiting_events =
+    protected HashMap<String,WaitingElement<T,D>>waiting_events =
         new HashMap<String,WaitingElement<T,D>>();
 
     //# In try_next, can cause events to backout.  If we do cause
@@ -61,7 +61,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private boolean in_try_next = false;
     
 
-    private RalphGlobals ralph_globals = null;
+    protected RalphGlobals ralph_globals = null;
     
     /**
      * Used by 
@@ -143,7 +143,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         _mutex.unlock();
     }
-	
+
 	
     /**
      * 
@@ -420,9 +420,14 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _unlock();
 
         if (may_require_update)
-            ralph_globals.thread_pool.add_service_action(try_next_action);
+            schedule_try_next();
     }
-	
+
+    protected void schedule_try_next()
+    {
+        ralph_globals.thread_pool.add_service_action(try_next_action);
+    }
+    
     public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
         DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
@@ -1036,7 +1041,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        * @param active_event
        * @return
        */
-    private boolean insert_in_touched_objs(ActiveEvent active_event)
+    protected boolean insert_in_touched_objs(ActiveEvent active_event)
     {
         if (active_event.immediate_complete())
             return true;
