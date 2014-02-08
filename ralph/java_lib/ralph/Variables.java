@@ -70,8 +70,11 @@ public class Variables {
         protected SpeculativeAtomicObject<Double,Double>
             duplicate_for_speculation(Double to_speculate_on)
         {
-            return new SpeculativeAtomicNumberVariable(
-                log_changes,to_speculate_on,ralph_globals);
+            SpeculativeAtomicObject<Double,Double> to_return =
+                new SpeculativeAtomicNumberVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived();
+            return to_return;
         }
 
         public void serialize_as_rpc_arg(

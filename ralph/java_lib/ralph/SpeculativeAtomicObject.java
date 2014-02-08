@@ -18,12 +18,33 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     private List<SpeculativeAtomicObject<T,D>> speculated_entries =
         new ArrayList<SpeculativeAtomicObject<T,D>>();
     private SpeculativeAtomicObject<T,D> speculating_on = null;
+    
+    /**
+       If speculative object B derives from speculative object A (ie,
+       B is speculating on one of A's dirty values), then B should not
+       commit before A is done.  Therefore we distinugish root
+       speculatives (A) from derived speculatives (B) to keep track of
+       whether a SpeculativeObject can commit when asked.
 
+       Can change to derived via set_derived, which should be called
+       almost immediately after duplicate_for_speculation.
+     */
+    private boolean root_speculative = true;
+    
     public SpeculativeAtomicObject(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
     }
 
+    /**
+       See note above root_speculative.  Should be called immediately
+       after duplicate_for_speculation.
+     */
+    protected void set_derived()
+    {
+        root_speculative = false;
+    }
+    
     protected abstract SpeculativeAtomicObject<T,D>
         duplicate_for_speculation(T to_speculate_on);
     
