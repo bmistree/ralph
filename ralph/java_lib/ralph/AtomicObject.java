@@ -40,7 +40,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
     //# read_lock_holders maps from uuids to EventCachedPriorityObj.
-    private HashMap<String,EventCachedPriorityObj>read_lock_holders =
+    protected HashMap<String,EventCachedPriorityObj>read_lock_holders =
         new HashMap<String,EventCachedPriorityObj>();
     
     //# write_lock_holder is EventCachedPriorityObj

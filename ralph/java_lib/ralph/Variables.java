@@ -73,7 +73,7 @@ public class Variables {
             SpeculativeAtomicObject<Double,Double> to_return =
                 new SpeculativeAtomicNumberVariable(
                     log_changes,to_speculate_on,ralph_globals);
-            to_return.set_derived();
+            to_return.set_derived(this);
             return to_return;
         }
 

@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Future;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.TimeUnit;
 
 public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 {
@@ -18,6 +21,39 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     private List<SpeculativeAtomicObject<T,D>> speculated_entries =
         new ArrayList<SpeculativeAtomicObject<T,D>>();
     private SpeculativeAtomicObject<T,D> speculating_on = null;
+
+    /**
+       Derived speculative atomic objects cannot commit until their
+       predecessors do.  Therefore, if a derived speculative object
+       receives a request to commit from an event that is holding read
+       or read/write locks on it, we store the future response in this
+       map.  We do this so that if the speculative object we are
+       deriving from cannot commit, we can notify all the Futures to
+       return False, ie, that the commit could not take effect.  If
+       the root speculativeatomicobjects could commit, then we try to
+       apply the changes of this speculativeatomicobject and continue.
+
+       Note: this map is only necessary for derived objects.
+       Therefore, we only initialize it in set_derived.
+     */
+    private Map<String,SpeculativeFuture> outstanding_commit_requests = null;
+    private SpeculationState speculation_state = SpeculationState.RUNNING;
+
+    private enum SpeculationState
+    {
+        RUNNING,  // objects derived from are still running
+        FAILED,   // one of speculatives we were speculating on failed.
+        SUCCEEDED // all objects we derived from commit successfully.
+    }
+
+    /**
+       Root object will always be null for speculative objects that
+       are not derived from any other object.  All derived speculative
+       objects point to their root object.  Value gets set in
+       set_derived.
+     */
+    private SpeculativeAtomicObject<T,D> root_object = null;
+
     
     /**
        If speculative object B derives from speculative object A (ie,
@@ -40,9 +76,11 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        See note above root_speculative.  Should be called immediately
        after duplicate_for_speculation.
      */
-    protected void set_derived()
+    protected void set_derived(SpeculativeAtomicObject<T,D> root_object)
     {
+        this.root_object = root_object;
         root_speculative = false;
+        outstanding_commit_requests = new HashMap<String,SpeculativeFuture> ();
     }
     
     protected abstract SpeculativeAtomicObject<T,D>
@@ -149,7 +187,144 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _unlock();
     }
 
+    @Override
+    public Future<Boolean> first_phase_commit(ActiveEvent active_event)
+    {
+        // This is the base element that is trying to commit.  Just
+        // try to commit normally.
+        if (root_speculative)
+            return super.first_phase_commit(active_event);
 
+        _lock();
+        if (speculation_state == SpeculationState.FAILED)
+        {
+            // means that one of the objects that we were speculating
+            // on failed/was backed out.  Any event that operated on
+            // values derived from the event that failed should not be
+            // able to commit.
+            _unlock();
+            return ALWAYS_FALSE_FUTURE;
+        }
+
+        if (speculation_state == SpeculationState.SUCCEEDED)
+        {
+            // all derived objects succeeded.  We already updated
+            // the root object so that it would get a notification
+            // to also receive first_phase_commit from committing
+            // active event.  Rely on that one to sort things out.
+            _unlock();
+            return root_object.first_phase_commit(active_event);
+        }
+
+        if (speculation_state == SpeculationState.RUNNING)
+        {
+            // wait on objects that we are deriving from before trying to
+            // commit.
+            SpeculativeFuture to_return = new SpeculativeFuture();
+            outstanding_commit_requests.put(active_event.uuid,to_return);
+            _unlock();
+            return to_return;
+        }
+
+
+        Util.logger_assert(
+            "Unknown speculation state in first_phase_commit.");
+        return null;
+    }
+
+    /**
+       One of the objects that this speculativeatomicobject derived
+       from failed.  Must unroll all objects that speculated.
+     */
+    protected void derived_from_failed()
+    {
+        _lock();
+        // change speculation state to failed: any future event that
+        // tries to commit will be backed out.
+        speculation_state = SpeculationState.FAILED;        
+        _unlock();
+
+        // run through all events that did try to commit to this
+        // speculative object and tell them that they will need to
+        // backout.
+        for (SpeculativeFuture sf : outstanding_commit_requests.values())
+            sf.failed();
+
+        for (EventCachedPriorityObj cached_priority_obj :
+                 read_lock_holders.values())
+        {
+            cached_priority_obj.event.backout(null,false);
+        }
+
+        for (WaitingElement<T,D> we : waiting_events.values())
+        {
+            we.event.backout(null,false);
+            we.unwait(this);
+        }
+    }
+
+    /**
+       Only wrinkle is that if the objects this object derived from
+       succeeded, we should forward all messages (in this case,
+       backout) to root.
+     */
+    @Override
+    public void backout (ActiveEvent active_event)
+    {
+        _lock();
+
+        if (speculation_state == SpeculationState.SUCCEEDED)
+        {
+            // root_object should be in charge of handling backouts.
+            _unlock();
+            root_object.backout(active_event);
+            return;
+        }
+
+        internal_backout(active_event);
+        _unlock();
+        try_next();
+    }
+
+    
+    /**
+       Should only be called by root_object.
+       
+       All of the objects that this object derived from succeeded in
+       pushing their commits.  We should transfer all of our relevant
+       internal state to the root object.
+
+       Note: Assumes already holding lock on root_object.
+
+       @returns --- Either null or a map.  If a map, the values of the
+       map contain references to ActiveEvents that have attempted to
+       commit themselves and are waiting on a response to finish
+       commit.
+     */
+    protected Map<String,SpeculativeFuture> transfer_to_root()
+    {
+        _lock();
+
+        // in this speculation state, all requests to this object will
+        // now be forwarded on to root object, who will deal with
+        // them.
+        speculation_state = SpeculationState.SUCCEEDED;
+        
+
+        // copy all outstanding state to root_object.  this object
+        // forwards any messages from ActiveEvent (eg., commit,
+        // backout, etc.) to root.
+        root_object.read_lock_holders = read_lock_holders;
+        root_object.write_lock_holder = write_lock_holder;
+        root_object.waiting_events = waiting_events;
+        root_object.dirty_val = dirty_val;
+
+        _unlock();
+        
+        return outstanding_commit_requests;
+    }
+    
+    
     /**
        Speculative objects should be able to get and set waiting
        events on one of their sub-objects (ie, objects that we're
@@ -227,5 +402,88 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             _unlock();
         }
     }
+
+
+    protected class SpeculativeFuture implements Future<Boolean>
+    {
+        private final ReentrantLock rlock = new ReentrantLock();
+        private final Condition cond = rlock.newCondition();
+        private boolean has_been_set = false;
+        private boolean to_return = false;
+
+        public void failed()
+        {
+            set(false);
+        }
+
+        public void succeeded()
+        {
+            set(true);
+        }
+        
+        private void set(boolean to_set_to)
+        {
+            rlock.lock();
+            has_been_set = true;
+            to_return = to_set_to;
+            cond.signalAll();
+            rlock.unlock();
+        }
+
+        @Override
+        public Boolean get()
+        {
+            rlock.lock();
+            while(! has_been_set)
+            {
+                try
+                {
+                    cond.await();
+                }
+                catch (InterruptedException ex)
+                {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "\nShould be handling interrupted exception\n");
+                }
+            }
+            rlock.unlock();
+            return to_return;
+        }
+
+        @Override
+        public Boolean get(long timeout, TimeUnit unit)
+        {
+            Util.logger_assert(
+                "SpeculativeFuture does not support timed gets");
+            return null;
+        }
+
+        @Override
+        public boolean isCancelled()
+        {
+            Util.logger_assert(
+                "SpeculativeFuture does not support isCancelled");
+            return false;
+        }
+
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning)
+        {
+            Util.logger_assert(
+                "SpeculativeFuture does not support cancel");
+            return false;
+        }
+        
+        @Override
+        public boolean isDone()
+        {
+            boolean to_return;
+            rlock.lock();
+            to_return = has_been_set;
+            rlock.unlock();
+            return to_return;
+        }
+        
+    }
 }
-    
