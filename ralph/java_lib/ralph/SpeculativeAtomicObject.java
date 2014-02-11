@@ -364,6 +364,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 SpeculativeAtomicObject<T,D> eldest_spec =
                     speculated_entries.remove(0);
                 
+                // if the eldest entry was also the only entry, then
+                // we should no longer be speculating.
+                if (speculated_entries.isEmpty())
+                    speculating_on = null;
+                else
+                    speculating_on = speculated_entries.get(0);
+                
                 Map<String,SpeculativeFuture> waiting_on_commit =
                     eldest_spec.transfer_to_root();
 
