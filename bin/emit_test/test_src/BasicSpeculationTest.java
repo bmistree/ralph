@@ -32,18 +32,15 @@ public class BasicSpeculationTest
             long speculation_on_ms = back_to_back_events_time_ms(
                 endpt,true,amt_to_inc_by);
             
-
-            System.out.println("\n\nTime:");
-            System.out.println(speculation_off_ms - speculation_on_ms);
-            System.out.println("\n\n");
-            
-            return true;
+            if ((speculation_off_ms - speculation_on_ms) < 400)
+                return false;
         }
         catch(Exception _ex)
         {
             _ex.printStackTrace();
             return false;
         }
+        return true;
     }
 
     private static class SingleOp extends Thread
