@@ -45,21 +45,6 @@ public class Variables {
 
     final static InternalServiceFactory default_service_factory = null;
 
-    /** Speculative variables */
-    public static class SpeculativeAtomicListVariable <V,D>
-        extends SpeculativeAtomicList<V,D>
-    {
-        public SpeculativeAtomicListVariable(
-            boolean log_changes,SpeculativeAtomicInternalList<V,D> internal_val,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
-            RalphGlobals ralph_globals)
-        {
-            super(log_changes,internal_val,locked_wrapper,ralph_globals);
-        }
-    }
-
-
-    
 
     /** Atomics */
     
