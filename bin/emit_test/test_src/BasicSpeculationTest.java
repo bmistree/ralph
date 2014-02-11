@@ -5,6 +5,9 @@ import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class BasicSpeculationTest
 {
@@ -27,14 +30,18 @@ public class BasicSpeculationTest
      */
     public static boolean speculation_interrupted()
     {
-        return speculation_test(true,2);
+        
+        return speculation_test(true,2) &&
+            speculation_test(true,4) &&
+            speculation_test(true,8);
     }
 
     public static boolean speculation_uninterrupted()
     {
-        return speculation_test(false,2);
+        return speculation_test(false,2) &&
+            speculation_test(false,4) &&
+            speculation_test(false,8);
     }
-
 
     public static boolean speculation_test(
         boolean interrupt_speculation, int num_events_in_pipeline)
@@ -50,12 +57,16 @@ public class BasicSpeculationTest
 
             // just check pipeline without speculation
             double amt_to_inc_by = 35.0;
-            long speculation_off_ms = back_to_back_events_time_ms(
-                endpt,false,amt_to_inc_by,interrupt_speculation,
-                num_events_in_pipeline);
-            long speculation_on_ms = back_to_back_events_time_ms(
-                endpt,true,amt_to_inc_by,interrupt_speculation,
-                num_events_in_pipeline);
+
+            List<Boolean> interrupt_speculation_pattern =
+                new ArrayList<Boolean>();
+            for (int i = 0; i < num_events_in_pipeline; ++i)
+                interrupt_speculation_pattern.add(interrupt_speculation);
+            
+            long speculation_off_ms = pipelined_events_time_ms(
+                endpt,false,amt_to_inc_by,interrupt_speculation_pattern);
+            long speculation_on_ms = pipelined_events_time_ms(
+                endpt,true,amt_to_inc_by,interrupt_speculation_pattern);
 
             if (! interrupt_speculation)
             {
@@ -115,19 +126,26 @@ public class BasicSpeculationTest
             }
         }
     }
-    
-    private static long back_to_back_events_time_ms(
-        SpeculativeEndpoint endpt,boolean speculate,
-        double amt_to_inc_by,boolean interrupt_speculation,
-        int num_events_in_pipeline) throws Exception
+
+
+    /**
+       @param interrupted_test_pattern --- Run a separate thread for each
+       element in this list.  If the element is true, then run a pipeline
+       interrupted test.  If it is false, then run just a pipeline test.
+     */
+    private static long pipelined_events_time_ms(
+        SpeculativeEndpoint endpt, boolean speculate,
+        double amt_to_inc_by,
+        List<Boolean> interrupt_speculation_pattern)
+        throws Exception
     {
         long start = System.currentTimeMillis();
-
         Set<SingleOp> all_threads = new HashSet<SingleOp>();
-        for (int i = 0; i < num_events_in_pipeline; ++i)
+        for (Boolean interrupt_speculation : interrupt_speculation_pattern)
         {
-            SingleOp t =   new SingleOp(
-                endpt,amt_to_inc_by,speculate,interrupt_speculation);
+            SingleOp t = new SingleOp(
+                endpt,amt_to_inc_by,speculate,
+                interrupt_speculation.booleanValue());
             all_threads.add(t);
             t.start();
             Thread.sleep(10);
