@@ -25,7 +25,7 @@ Service SpeculativeEndpoint
         return to_return;
     }
 
-    pipeline_fail(
+    pipeline_interrupted(
         Number amount_to_change_internal_by, TrueFalse speculate_on)
         returns Number
     {
