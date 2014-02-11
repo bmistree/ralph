@@ -362,13 +362,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _lock();
         try
         {
-            if (speculating_on != null)
-            {
-                to_return =
-                    speculating_on.get_val(active_event,_mutex);
-            }
-            else
+            // an event can still make local accesses to a variable
+            // even after it requests us to speculate.
+            if (read_lock_holders.containsKey(active_event.uuid))
                 to_return = super.get_val(active_event,_mutex);
+            else
+            {
+                if (speculating_on != null)
+                {
+                    to_return =
+                        speculating_on.get_val(active_event,_mutex);
+                }
+                else
+                    to_return = super.get_val(active_event,_mutex);
+            }
         }
         catch (BackoutException ex)
         {
@@ -384,10 +391,28 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _lock();
         try
         {
-            if (speculating_on != null)
-                speculating_on.set_val(active_event,new_val,_mutex);
-            else
+            // an event can still make local accesses to a variable
+            // even after it requests us to speculate.
+            if (read_lock_holders.containsKey(active_event.uuid))
+            {
                 super.set_val(active_event,new_val,_mutex);
+
+                if (speculating_on != null)
+                {
+                    // FIXME
+                    Util.logger_assert(
+                        "FIXME: performing a write on a root object " +
+                        "while speculating on top of it, should cause " +
+                        "derived classes to rollback.");
+                }
+            }
+            else
+            {
+                if (speculating_on != null)
+                    speculating_on.set_val(active_event,new_val,_mutex);
+                else
+                    super.set_val(active_event,new_val,_mutex);
+            }
         }
         catch (BackoutException ex)
         {
