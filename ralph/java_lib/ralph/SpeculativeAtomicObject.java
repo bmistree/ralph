@@ -437,6 +437,26 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
         return to_return;
     }
+
+    /**
+       Assumes already within lock.
+
+       All objects that derived their values from this one are
+       notified to backout any events that used their derived value.
+     */
+    protected void invalidate_all_derivative_objects()
+    {
+        // FIXME: derived objects should keep track of all
+        // objects that derive from them so that they can
+        // invalidate them.
+        for (SpeculativeAtomicObject<T,D> spec_on :
+                 speculated_entries)
+        {
+            spec_on.derived_from_failed();
+        }
+        speculated_entries.clear();
+        speculating_on = null;
+    }
     
     @Override
     public void set_val(ActiveEvent active_event,T new_val)
@@ -450,18 +470,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (read_lock_holders.containsKey(active_event.uuid))
             {
                 super.set_val(active_event,new_val,_mutex);
-
-                if (speculating_on != null)
-                {
-                    // FIXME: derived objects should keep track of all
-                    // objects that derive from them so that they can
-                    // invalidate them.
-                    for (SpeculativeAtomicObject<T,D> spec_on :
-                             speculated_entries)
-                    {
-                        spec_on.derived_from_failed();
-                    }
-                }
+                invalidate_all_derivative_objects();
             }
             else
             {
