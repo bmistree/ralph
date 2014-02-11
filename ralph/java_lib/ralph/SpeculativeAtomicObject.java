@@ -126,7 +126,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 object.
             
      */
-    protected void speculate(T to_speculate_on,String evt_waiting_on_uuid)
+    public void speculate(T to_speculate_on)
     {
         _lock();
 

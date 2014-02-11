@@ -1265,6 +1265,22 @@ def emit_statement(emit_ctx,statement_node):
         print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
         return 'System.out.print(%s)' % print_arg_statement
 
+    elif statement_node.label == ast_labels.SPECULATE_CALL:
+        to_return = ''
+        prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+        emit_ctx.set_lhs_of_assign(True)
+        for to_speculate_on in statement_node.speculate_call_args_list:
+            emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
+            to_return += (
+                '%s.speculate(%s.get_val(_active_event));\n' %
+                (emitted_to_speculate_on,emitted_to_speculate_on))
+        emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
+        return to_return
+        
+    elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
+        raise InternalEmitException(
+            'FIXME: still must allow speculate_all call')
+    
     elif statement_node.label == ast_labels.VERBATIM_CALL:
         return statement_node.verbatim_arg_node.value
     
