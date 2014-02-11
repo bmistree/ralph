@@ -271,7 +271,7 @@ def p_MethodCall(p):
         p[0] = SpeculateCallNode(method_args_node,line_number)
     elif p[1] == SPECULATE_ALL_TYPE_TOKEN:
         line_number = p.lineno(1)
-        p[0] = SpeculateCallNode(None,line_number)
+        p[0] = SpeculateAllCallNode(line_number)
     else:
         method_name_node = p[1]
         method_args_node = p[3]
