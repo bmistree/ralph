@@ -361,7 +361,7 @@
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
-         run_PartnerServiceFactory">
+         run_PartnerServiceFactory,run_EndpointStructListTest">
   </target>
   
   
@@ -791,7 +791,20 @@
         <arg line="${args}"/>
     </java>
   </target>
-  
+
+  <!-- Run EndpointStructListTest -->
+  <target
+      name="run_EndpointStructListTest"
+      depends="compile_ralph_tests"
+      description="Run endpoint struct list test">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.EndpointStructListTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
