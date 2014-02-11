@@ -34,6 +34,14 @@ public class BasicSpeculationTest
             
             if ((speculation_off_ms - speculation_on_ms) < 400)
                 return false;
+
+            
+            double new_internal_number = endpt.get_number().doubleValue();
+            double expected_internal_number =
+                original_internal_number + 4*amt_to_inc_by;
+            
+            if (new_internal_number != expected_internal_number)
+                return false;
         }
         catch(Exception _ex)
         {
