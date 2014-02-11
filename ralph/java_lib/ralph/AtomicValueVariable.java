@@ -5,7 +5,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.DataWrapper;
 
-public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D> 
+public abstract class AtomicValueVariable<T,D> extends SpeculativeAtomicObject<T,D> 
 {
     public AtomicValueVariable(
         boolean _log_changes, T init_val,T default_value,

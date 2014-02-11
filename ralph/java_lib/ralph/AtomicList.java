@@ -26,7 +26,7 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  *     ArrayList<Number,ArrayList<Number>>>
  * 
  */
-public abstract class AtomicList<V,D>
+public class AtomicList<V,D>
     extends AtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return AtomicListContainer.
@@ -35,11 +35,14 @@ public abstract class AtomicList<V,D>
     // what will return when call de_waldoify.
     D>
 {
+    private EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    
     public AtomicList(
         boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
+        this.locked_wrapper = locked_wrapper;
         
         AtomicInternalList<V,D> init_val =
             new AtomicInternalList<V,D>(ralph_globals);
@@ -62,6 +65,22 @@ public abstract class AtomicList<V,D>
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
     
+
+    @Override
+    protected SpeculativeAtomicObject<AtomicInternalList<V,D>, D>
+        duplicate_for_speculation(AtomicInternalList<V,D> to_speculate_on)
+    {
+        SpeculativeAtomicObject<AtomicInternalList<V,D>, D> to_return =
+            new AtomicList(
+                log_changes,
+                to_speculate_on,
+                locked_wrapper,
+                ralph_globals);
+        
+        to_return.set_derived(this);
+        return to_return;
+    }
+
     
     /**
        When pass an argument into a method call, should unwrap
@@ -74,6 +93,7 @@ public abstract class AtomicList<V,D>
         EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         super(ralph_globals);
+        this.locked_wrapper = locked_wrapper;
         
         AtomicInternalList<V,D> default_val =
             new AtomicInternalList<V,D>(ralph_globals);
@@ -95,7 +115,8 @@ public abstract class AtomicList<V,D>
         EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-
+        this.locked_wrapper = locked_wrapper;
+        
         AtomicInternalList<V,D> init_val_2 =
             new AtomicInternalList<V,D>(ralph_globals);
         init_val_2.init_multithreaded_list_container(

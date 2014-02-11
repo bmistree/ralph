@@ -49,7 +49,7 @@ public class Variables {
     /** Atomics */
     
     public static class AtomicNumberVariable
-        extends SpeculativeAtomicValueVariable<Double,Double>
+        extends AtomicValueVariable<Double,Double>
     {
         public AtomicNumberVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -117,6 +117,17 @@ public class Variables {
             any_builder.setText(internal_val);
             any_builder.setReference(is_reference);
         }
+        
+        @Override
+        protected SpeculativeAtomicObject<String,String>
+            duplicate_for_speculation(String to_speculate_on)
+        {
+            SpeculativeAtomicObject<String,String> to_return =
+                new AtomicTextVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
     }
 	
     public static class AtomicTrueFalseVariable
@@ -146,6 +157,17 @@ public class Variables {
             any_builder.setTrueFalse(internal_val.booleanValue());
             any_builder.setReference(is_reference);
         }
+        
+        @Override
+        protected SpeculativeAtomicObject<Boolean,Boolean>
+            duplicate_for_speculation(Boolean to_speculate_on)
+        {
+            SpeculativeAtomicObject<Boolean,Boolean> to_return =
+                new AtomicTrueFalseVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
     }
 	
 
@@ -165,6 +187,17 @@ public class Variables {
             super(
                 _log_changes,default_endpoint,default_endpoint,
                 endpoint_value_type_data_wrapper_factory,ralph_globals);
+        }
+
+        @Override
+        protected SpeculativeAtomicObject<Endpoint,Endpoint>
+            duplicate_for_speculation(Endpoint to_speculate_on)
+        {
+            SpeculativeAtomicObject<Endpoint,Endpoint> to_return =
+                new AtomicEndpointVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
         }
         
         public void serialize_as_rpc_arg(
@@ -194,6 +227,18 @@ public class Variables {
                 service_factory_value_type_data_wrapper_factory,ralph_globals);
         }
 
+        @Override
+        protected SpeculativeAtomicObject<InternalServiceFactory,InternalServiceFactory>
+            duplicate_for_speculation(InternalServiceFactory to_speculate_on)
+        {
+            SpeculativeAtomicObject<InternalServiceFactory,InternalServiceFactory> to_return =
+                new AtomicServiceFactoryVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
+
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
@@ -435,7 +480,7 @@ public class Variables {
             super(
                 _log_changes,internal_val,_index_type,locked_wrapper,
                 ralph_globals);
-        }
+        }        
     }
     
     /************ Handling Lists ********/

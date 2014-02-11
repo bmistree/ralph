@@ -198,9 +198,23 @@ public void serialize_as_rpc_arg(
     Util.logger_assert(
         "Have not defined serializing structs as rpc arguments.");
 }
+
 ''' % (struct_name, internal_struct_name, internal_struct_name,
        data_wrapper_constructor_name)
     # FIXME: should define rpc serialization for structs.
+
+
+    external_struct_definition_constructor += '''
+@Override
+protected SpeculativeAtomicObject<%s, %s>
+      duplicate_for_speculation(%s to_speculate_on)
+{
+    ///FIXME: must finish speculation for user-defined structs
+    Util.logger_assert(
+        "Have not finished duplicate_for_speculation for structs.");
+    return null;
+}
+''' % (internal_struct_name,internal_struct_name,internal_struct_name)
 
 
     # when pass a struct into a method, should clone the struct's
