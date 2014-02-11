@@ -311,6 +311,15 @@
       <arg line="PartnerServiceFactory"/>
     </exec>
 
+    <echo message="${line.separator}basic_speculation.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/basic_speculation.rph"/>
+      <arg line="${ralph_emitted.dir}/BasicSpeculation.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="BasicSpeculation"/>
+    </exec>
+    
   </target>
 
   
@@ -361,7 +370,7 @@
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
-         run_PartnerServiceFactory">
+         run_PartnerServiceFactory,run_BasicSpeculation">
   </target>
   
   
@@ -792,6 +801,20 @@
     </java>
   </target>
   
+  <!-- Run BasicSpeculation -->
+  <target
+      name="run_BasicSpeculation"
+      depends="compile_ralph_tests"
+      description="Run basic speculation test.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.BasicSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

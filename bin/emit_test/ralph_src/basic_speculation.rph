@@ -1,0 +1,27 @@
+
+Service SpeculativeEndpoint
+{
+    TVar Number internal_number = 15;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+
+    pipeline(
+        Number amount_to_change_internal_by, TrueFalse speculate_on)
+        returns Number
+    {
+        Number to_return = -1;
+        atomically
+        {
+            internal_number = internal_number + amount_to_change_internal_by;
+            if (speculate_on)
+                speculate(internal_number);
+            verbatim(
+                'try{Thread.sleep(500);}catch(InterruptedException _ex){}');
+            to_return = internal_number;
+        }
+        return to_return;
+    }
+}
