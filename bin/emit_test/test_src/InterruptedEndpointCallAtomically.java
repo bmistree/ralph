@@ -43,15 +43,15 @@ public class InterruptedEndpointCallAtomically
     {
         try
         {
+            RalphGlobals ralph_globals = new RalphGlobals();
             SetterGetter internal_endpt = new SetterGetter(
-                new RalphGlobals(), new SingleSideConnection());
+                ralph_globals, new SingleSideConnection());
 
             double original_internal_number = 15;
             internal_endpt.set_number(new Double(original_internal_number));
             
             InterruptedAtomicEndpoint endpt = new InterruptedAtomicEndpoint(
-                new RalphGlobals(),
-                new SingleSideConnection());
+                ralph_globals,new SingleSideConnection());
 
             endpt.set_endpt(internal_endpt);
 
