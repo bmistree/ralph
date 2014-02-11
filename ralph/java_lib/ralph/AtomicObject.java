@@ -579,13 +579,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        from holding a lock and check if any other events can be
        scheduled.
     */
-    public void complete_commit(ActiveEvent active_event)
-    {
-        internal_complete_commit(active_event);
-        //# FIXME: may want to actually check whether the change could
-        //# have caused another read/write to be scheduled.
-        try_next();
-    }
+    public abstract void complete_commit(ActiveEvent active_event);
+
     protected boolean internal_complete_commit(ActiveEvent active_event)
     {
         boolean write_lock_holder_completed = false;
