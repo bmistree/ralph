@@ -37,20 +37,8 @@ public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D>
     }
     
     @Override
-    public void write_if_different(
-        ActiveEvent active_event,
-        Object new_val) throws BackoutException 
-    {
-        DataWrapper<T, D> to_write_on = acquire_write_lock(active_event);
-        to_write_on.write((T)new_val,true);		
-    }
-
-	
-    @Override
     public boolean return_internal_val_from_container() 
     {
         return true;
     }
-	
-	
 }

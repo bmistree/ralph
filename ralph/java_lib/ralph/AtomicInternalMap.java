@@ -60,14 +60,6 @@ public class AtomicInternalMap<K,V,D>
     }
 
     @Override
-    public void write_if_different(
-        ActiveEvent active_event, HashMap<K,RalphObject<V,D>> new_val)
-        throws BackoutException
-    {
-        Util.logger_assert(
-            "Must fill in write_if_different in AtomicInternalMap.");
-    }
-    @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException

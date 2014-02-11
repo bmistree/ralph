@@ -47,14 +47,6 @@ public class AtomicInternalList<V,D>
     }
 
     @Override
-    public void write_if_different(
-        ActiveEvent active_event, ArrayList<RalphObject<V,D>> new_val)
-        throws BackoutException
-    {
-        Util.logger_assert(
-            "Must fill in write_if_different in NonAtomicInternalList.");
-    }
-    @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException

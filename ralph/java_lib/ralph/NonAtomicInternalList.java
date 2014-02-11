@@ -46,14 +46,7 @@ public class NonAtomicInternalList<V,D>
             (ListTypeDataWrapper<V, D>)ltdwf.construct(init_val, false); 
         val = reference_type_val;		
     }
-    
-    @Override
-    public void write_if_different(
-        ActiveEvent active_event, ArrayList<RalphObject<V,D>> new_val)
-    {
-        Util.logger_assert(
-            "Must fill in write_if_different in NonAtomicInternalList.");
-    }
+
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
@@ -62,8 +55,6 @@ public class NonAtomicInternalList<V,D>
         Util.logger_assert(
             "Must fill in write_if_different in NonAtomicInternalList.");
     }
-
-    
     
     /** ImmediateCommitSupplier interface*/
     @Override

@@ -39,12 +39,6 @@ public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
         this.set_val(active_event,(T)to_swap_with.get_val(active_event));
     }
     
-	
-    public void write_if_different(ActiveEvent active_event,T data)
-    {
-        val.write(data,true);
-    }
-	
     public boolean return_internal_val_from_container()
     {
         return true;

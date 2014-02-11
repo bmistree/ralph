@@ -48,9 +48,6 @@ public abstract class RalphObject<T,D>
         boolean is_reference) throws BackoutException;
 
 	
-    public abstract void write_if_different(
-        ActiveEvent active_event, T new_val) throws BackoutException;
-	
     /**
      * 
      Called when an event with uuid "uuid" is promoted to boosted

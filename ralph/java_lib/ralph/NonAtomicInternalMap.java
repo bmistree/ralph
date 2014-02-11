@@ -68,16 +68,6 @@ public class NonAtomicInternalMap<K,V,D>
         Util.logger_assert(
             "Still must define swap method for NonAtomicInternalMap.");
     }
-
-    @Override
-    public void write_if_different(
-        ActiveEvent active_event,
-        HashMap<K, RalphObject<V,D>> new_val)
-    {
-        // should only call this method on a value type
-        Util.logger_assert("Unable to call write if different on container");
-    }
-
     
     /** ImmediateCommitSupplier interface*/
     @Override
