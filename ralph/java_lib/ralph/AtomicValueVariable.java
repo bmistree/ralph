@@ -41,7 +41,7 @@ public abstract class AtomicValueVariable<T,D> extends AtomicObject<T,D>
         ActiveEvent active_event,
         Object new_val) throws BackoutException 
     {
-        DataWrapper<T, D> to_write_on = acquire_write_lock(active_event);
+        DataWrapper<T, D> to_write_on = acquire_write_lock(active_event,null);
         to_write_on.write((T)new_val,true);		
     }
 

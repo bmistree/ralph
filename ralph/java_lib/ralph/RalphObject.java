@@ -2,6 +2,7 @@ package ralph;
 
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 
@@ -63,9 +64,25 @@ public abstract class RalphObject<T,D>
 
     public abstract T get_val(
         ActiveEvent active_event) throws BackoutException;
+    /**
+       to_unlock may be null, in which case ignore it.  Otherwise,
+       should unlock to_unlock before returning (and probably at same
+       time as unlock my internal lock)
+     */
+    protected abstract T get_val(
+        ActiveEvent active_event,ReentrantLock to_unlock)
+        throws BackoutException;
 
     public abstract void set_val(
         ActiveEvent active_event, T new_val) throws BackoutException;
+    /**
+       to_unlock may be null, in which case ignore it.  Otherwise,
+       should unlock to_unlock before returning (and probably at same
+       time as unlock my internal lock)
+     */
+    protected abstract void set_val(
+        ActiveEvent active_event, T new_val, ReentrantLock to_unlock)
+        throws BackoutException;
 
     /**
      * @returns {bool} --- True if when call get_val_from_key on a

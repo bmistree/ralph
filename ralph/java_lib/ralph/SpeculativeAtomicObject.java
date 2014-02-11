@@ -365,22 +365,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (speculating_on != null)
             {
                 to_return =
-                    speculating_on.get_val(active_event);
+                    speculating_on.get_val(active_event,_mutex);
             }
             else
-                to_return = super.get_val(active_event);
+                to_return = super.get_val(active_event,_mutex);
         }
         catch (BackoutException ex)
         {
             throw ex;
         }
-        finally
-        {
-            _unlock();
-        }
         return to_return;
     }
-
+    
     @Override
     public void set_val(ActiveEvent active_event,T new_val)
         throws BackoutException
@@ -389,17 +385,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         try
         {
             if (speculating_on != null)
-                speculating_on.set_val(active_event,new_val);
+                speculating_on.set_val(active_event,new_val,_mutex);
             else
-                super.set_val(active_event,new_val);
+                super.set_val(active_event,new_val,_mutex);
         }
         catch (BackoutException ex)
         {
             throw ex;
-        }
-        finally
-        {
-            _unlock();
         }
     }
 
