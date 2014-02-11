@@ -42,6 +42,5 @@ Service SpeculativeEndpoint
             to_return = internal_number;
         }
         return to_return;
-    }   
-    
+    }
 }
