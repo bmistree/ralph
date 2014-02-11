@@ -7,6 +7,8 @@ ENDPOINT_TOKEN = 'Endpoint'
 SERVICE_TOKEN = 'Service'
 SERVICE_FACTORY_TOKEN = 'ServiceFactory'
 PRINT_TYPE_TOKEN = 'print'
+SPECULATE_TYPE_TOKEN = 'speculate'
+SPECULATE_ALL_TYPE_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 reserved = {
     'Endpoint' : 'ENDPOINT',
@@ -26,6 +28,8 @@ reserved = {
     'and': 'AND',
     'or': 'OR',
     'print': 'PRINT',
+    'speculate': 'SPECULATE',
+    'speculate_all': 'SPECULATE_ALL',
     'while': 'WHILE',
     'for': 'FOR',
     'range': 'RANGE',
