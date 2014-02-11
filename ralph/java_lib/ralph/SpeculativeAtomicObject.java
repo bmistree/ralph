@@ -309,7 +309,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // now be forwarded on to root object, who will deal with
         // them.
         speculation_state = SpeculationState.SUCCEEDED;
-        
 
         // copy all outstanding state to root_object.  this object
         // forwards any messages from ActiveEvent (eg., commit,
@@ -323,7 +322,52 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         
         return outstanding_commit_requests;
     }
-    
+
+    @Override
+    public void complete_commit(ActiveEvent active_event)
+    {
+        _lock();
+        internal_complete_commit(active_event);
+        try_promote_speculated();
+
+        if (speculation_state == SpeculationState.SUCCEEDED)
+            root_object.complete_commit(active_event);
+        
+        _unlock();
+        //# FIXME: may want to actually check whether the change could
+        //# have caused another read/write to be scheduled.
+        try_next();
+        
+    }
+
+    /**
+       Assumes already holding lock
+     */
+    private void try_promote_speculated()
+    {
+        // check to see if we should promote any object that we
+        // speculated from this root object
+        if (read_lock_holders.isEmpty())
+        {
+            if (! speculated_entries.isEmpty())
+            {
+                SpeculativeAtomicObject<T,D> eldest_spec =
+                    speculated_entries.remove(0);
+                
+                Map<String,SpeculativeFuture> waiting_on_commit =
+                    eldest_spec.transfer_to_root();
+
+                //FIXME: For now, just passing all speculatives through
+                Util.logger_warn(
+                    "Always permitting all speculatives that had been " +
+                    "waiting to complete the first phase of their commits.");
+
+                for (SpeculativeFuture sf : waiting_on_commit.values())
+                    sf.succeeded();
+            }
+        }
+    }
+
     
     /**
        Speculative objects should be able to get and set waiting
@@ -427,7 +471,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         private final Condition cond = rlock.newCondition();
         private boolean has_been_set = false;
         private boolean to_return = false;
-
+        
         public void failed()
         {
             set(false);
