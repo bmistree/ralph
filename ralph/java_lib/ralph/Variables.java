@@ -46,48 +46,6 @@ public class Variables {
     final static InternalServiceFactory default_service_factory = null;
 
     /** Speculative variables */
-    public static class SpeculativeAtomicNumberVariable
-        extends SpeculativeAtomicValueVariable<Double,Double>
-    {
-        public SpeculativeAtomicNumberVariable(
-            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
-        {
-            super(
-                _log_changes,
-                new Double(((Number) init_val).doubleValue()),
-                default_number,number_value_type_data_wrapper_factory,
-                ralph_globals);		
-        }
-        public SpeculativeAtomicNumberVariable(
-            boolean _log_changes,RalphGlobals ralph_globals)
-        {
-            super(
-                _log_changes,default_number,default_number,
-                number_value_type_data_wrapper_factory,ralph_globals);
-        }
-
-        @Override
-        protected SpeculativeAtomicObject<Double,Double>
-            duplicate_for_speculation(Double to_speculate_on)
-        {
-            SpeculativeAtomicObject<Double,Double> to_return =
-                new SpeculativeAtomicNumberVariable(
-                    log_changes,to_speculate_on,ralph_globals);
-            to_return.set_derived(this);
-            return to_return;
-        }
-
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
-        {
-            Double internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setNum(internal_val.doubleValue());
-            any_builder.setReference(is_reference);
-        }
-    }
-
     public static class SpeculativeAtomicListVariable <V,D>
         extends SpeculativeAtomicList<V,D>
     {
@@ -106,7 +64,7 @@ public class Variables {
     /** Atomics */
     
     public static class AtomicNumberVariable
-        extends AtomicValueVariable<Double,Double>
+        extends SpeculativeAtomicValueVariable<Double,Double>
     {
         public AtomicNumberVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -115,8 +73,20 @@ public class Variables {
                 _log_changes,
                 new Double(((Number) init_val).doubleValue()),
                 default_number,number_value_type_data_wrapper_factory,
-                ralph_globals);		
+                ralph_globals);
         }
+        
+        @Override
+        protected SpeculativeAtomicObject<Double,Double>
+            duplicate_for_speculation(Double to_speculate_on)
+        {
+            SpeculativeAtomicObject<Double,Double> to_return =
+                new AtomicNumberVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
+        
         public AtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
