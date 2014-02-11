@@ -242,13 +242,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // change speculation state to failed: any future event that
         // tries to commit will be backed out.
         speculation_state = SpeculationState.FAILED;        
-        _unlock();
 
         // run through all events that did try to commit to this
         // speculative object and tell them that they will need to
         // backout.
         for (SpeculativeFuture sf : outstanding_commit_requests.values())
             sf.failed();
+        outstanding_commit_requests.clear();
+        
+        _unlock();
 
         for (EventCachedPriorityObj cached_priority_obj :
                  read_lock_holders.values())
@@ -278,6 +280,14 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // root_object should be in charge of handling backouts.
             _unlock();
             root_object.backout(active_event);
+            return;
+        }
+
+        if (speculation_state == SpeculationState.FAILED)
+        {
+            // do not have to back anything out because this object
+            // already has gone through backout.
+            _unlock();
             return;
         }
 
@@ -443,11 +453,14 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 
                 if (speculating_on != null)
                 {
-                    // FIXME
-                    Util.logger_assert(
-                        "FIXME: performing a write on a root object " +
-                        "while speculating on top of it, should cause " +
-                        "derived classes to rollback.");
+                    // FIXME: derived objects should keep track of all
+                    // objects that derive from them so that they can
+                    // invalidate them.
+                    for (SpeculativeAtomicObject<T,D> spec_on :
+                             speculated_entries)
+                    {
+                        spec_on.derived_from_failed();
+                    }
                 }
             }
             else
