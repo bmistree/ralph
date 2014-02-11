@@ -26,8 +26,17 @@ public class BasicSpeculationTest
             double original_internal_number = endpt.get_number().doubleValue();
 
             // just check pipeline without speculation
-            endpt.pipeline(13.0,false);
-            endpt.pipeline(13.0,true);
+            double amt_to_inc_by = 35.0;
+            long speculation_off_ms = back_to_back_events_time_ms(
+                endpt,false,amt_to_inc_by);
+            long speculation_on_ms = back_to_back_events_time_ms(
+                endpt,true,amt_to_inc_by);
+            
+
+            System.out.println("\n\nTime:");
+            System.out.println(speculation_off_ms - speculation_on_ms);
+            System.out.println("\n\n");
+            
             return true;
         }
         catch(Exception _ex)
@@ -35,5 +44,56 @@ public class BasicSpeculationTest
             _ex.printStackTrace();
             return false;
         }
+    }
+
+    private static class SingleOp extends Thread
+    {
+        private SpeculativeEndpoint endpt = null;
+        private Double amt_to_inc_by = null;
+        private boolean speculate;
+        public boolean had_exception = false;
+        
+        public SingleOp(
+            SpeculativeEndpoint endpt, Double amt_to_inc_by,
+            boolean speculate)
+        {
+            this.endpt = endpt;
+            this.amt_to_inc_by = amt_to_inc_by;
+            this.speculate = speculate;
+        }
+        public void run()
+        {
+            try
+            {
+                endpt.pipeline(amt_to_inc_by,speculate);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+                had_exception = true;
+            }
+        }
+    }
+    
+    private static long back_to_back_events_time_ms(
+        SpeculativeEndpoint endpt,boolean speculate,
+        double amt_to_inc_by) throws Exception
+    {
+        long start = System.currentTimeMillis();
+        SingleOp t = new SingleOp(endpt,amt_to_inc_by,speculate);
+        t.start();
+        Thread.sleep(10);
+
+        SingleOp t2 = new SingleOp(endpt,amt_to_inc_by,speculate);
+        t2.start();
+
+        t.join();
+        t2.join();
+
+        if ((t.had_exception) || (t2.had_exception))
+            throw new Exception();
+        
+        long end = System.currentTimeMillis();
+        return end-start;
     }
 }
