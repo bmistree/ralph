@@ -52,16 +52,8 @@ public abstract class NonAtomicMap<K,V,D>
             index_type,
             locked_wrapper);
         
-        NonAtomicInternalMap<K,V,D> default_val =
-            new NonAtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init(
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
-
         init_non_atomic_value_variable(
-            init_val,default_val,
+            init_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
     }
 
@@ -78,16 +70,8 @@ public abstract class NonAtomicMap<K,V,D>
     {
         super(ralph_globals);
         
-        NonAtomicInternalMap<K,V,D> default_val =
-            new NonAtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init(
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
-        
         init_non_atomic_value_variable(
-            internal_val,default_val,
+            internal_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
     }
 
@@ -108,16 +92,8 @@ public abstract class NonAtomicMap<K,V,D>
             index_type,
             locked_wrapper);
         
-        NonAtomicInternalMap<K,V,D> default_val =
-            new NonAtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init(
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
-
         init_non_atomic_value_variable(
-            init_val_2,default_val,
+            init_val_2,
             new ValueTypeDataWrapperFactory<NonAtomicInternalMap<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

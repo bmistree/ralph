@@ -57,17 +57,8 @@ public class AtomicMap<K,V,D>
             index_type,
             locked_wrapper);
 
-        AtomicInternalMap<K,V,D> default_val =
-            new AtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init_multithreaded_map_container(
-            _log_changes,
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, init_val,default_val,
+            _log_changes, init_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
     }
 
@@ -101,17 +92,9 @@ public class AtomicMap<K,V,D>
         super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
-        AtomicInternalMap<K,V,D> default_val =
-            new AtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init_multithreaded_map_container(
-            _log_changes,
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
 
         init_atomic_value_variable(
-            _log_changes, internal_val,default_val,
+            _log_changes, internal_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
     }
 
@@ -134,17 +117,8 @@ public class AtomicMap<K,V,D>
             index_type,
             locked_wrapper);
 
-        AtomicInternalMap<K,V,D> default_val =
-            new AtomicInternalMap<K,V,D>(ralph_globals);
-        default_val.init_multithreaded_map_container(
-            _log_changes,
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
-            index_type,
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, init_val_2,default_val,
+            _log_changes, init_val_2,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

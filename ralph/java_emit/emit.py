@@ -185,9 +185,7 @@ public %s (boolean log_operations, RalphGlobals ralph_globals)
 {
     super(
         log_operations,
-        // FIXME: unclear what the difference should be
-        // between internal value and default value.
-        new %s(ralph_globals),new %s(ralph_globals),%s,ralph_globals);
+        new %s(ralph_globals),%s,ralph_globals);
 }
 
 public void serialize_as_rpc_arg(
@@ -199,8 +197,7 @@ public void serialize_as_rpc_arg(
         "Have not defined serializing structs as rpc arguments.");
 }
 
-''' % (struct_name, internal_struct_name, internal_struct_name,
-       data_wrapper_constructor_name)
+''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
     # FIXME: should define rpc serialization for structs.
 
 
@@ -225,9 +222,7 @@ public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
 {
     super(
         log_operations,
-        // FIXME: unclear what the difference should be
-        // between internal value and default value.
-        internal_val,internal_val,%s,ralph_globals);
+        internal_val,%s,ralph_globals);
 }
 ''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
 

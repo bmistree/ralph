@@ -11,23 +11,18 @@ public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
     }
 
     public NonAtomicValueVariable(
-        T init_val, T DEFAULT_VALUE,
+        T init_val,
         ValueTypeDataWrapperFactory<T,D> vtdwc,
         RalphGlobals ralph_globals)
     {
         super (ralph_globals);
-        
-        if (init_val == null)
-            init_val = DEFAULT_VALUE;
         init(vtdwc,init_val);
     }
     
     public void init_non_atomic_value_variable(
-        T init_val, T DEFAULT_VALUE,
+        T init_val,
         ValueTypeDataWrapperFactory<T,D> vtdwc)
     {
-        if (init_val == null)
-            init_val = DEFAULT_VALUE;
         init(vtdwc,init_val);
     }
 

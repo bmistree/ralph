@@ -47,15 +47,8 @@ public abstract class NonAtomicList<V,D>
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
-        NonAtomicInternalList<V,D> default_val =
-            new NonAtomicInternalList<V,D>(ralph_globals);
-        default_val.init(
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-
         init_non_atomic_value_variable(
-            init_val,default_val,
+            init_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
 
@@ -70,15 +63,8 @@ public abstract class NonAtomicList<V,D>
     {
         super(ralph_globals);
         
-        NonAtomicInternalList<V,D> default_val =
-            new NonAtomicInternalList<V,D>(ralph_globals);
-        default_val.init(
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-        
         init_non_atomic_value_variable(
-            internal_val,default_val,
+            internal_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
     }
 
@@ -99,15 +85,8 @@ public abstract class NonAtomicList<V,D>
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
         
-        NonAtomicInternalList<V,D> default_val =
-            new NonAtomicInternalList<V,D>(ralph_globals);
-        default_val.init(
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-
         init_non_atomic_value_variable(
-            init_val_2,default_val,
+            init_val_2,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

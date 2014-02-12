@@ -52,16 +52,8 @@ public class AtomicList<V,D>
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
-        AtomicInternalList<V,D> default_val =
-            new AtomicInternalList<V,D>(ralph_globals);
-        default_val.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, init_val,default_val,
+            _log_changes, init_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
     
@@ -95,16 +87,8 @@ public class AtomicList<V,D>
         super(ralph_globals);
         this.locked_wrapper = locked_wrapper;
         
-        AtomicInternalList<V,D> default_val =
-            new AtomicInternalList<V,D>(ralph_globals);
-        default_val.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, internal_val,default_val,
+            _log_changes, internal_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
     }
 
@@ -125,16 +109,8 @@ public class AtomicList<V,D>
             new ArrayList<RalphObject<V,D>>(),
             locked_wrapper);
 
-        AtomicInternalList<V,D> default_val =
-            new AtomicInternalList<V,D>(ralph_globals);
-        default_val.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<V,D>(),
-            new ArrayList<RalphObject<V,D>>(),
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, init_val_2,default_val,
+            _log_changes, init_val_2,
             new ValueTypeDataWrapperFactory<AtomicInternalList<V,D>,D>());
 
         load_init_vals(init_val,incorporating_deltas);

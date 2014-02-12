@@ -57,7 +57,7 @@ public class Variables {
             super(
                 _log_changes,
                 new Double(((Number) init_val).doubleValue()),
-                default_number,number_value_type_data_wrapper_factory,
+                number_value_type_data_wrapper_factory,
                 ralph_globals);
         }
         
@@ -75,7 +75,7 @@ public class Variables {
         public AtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,default_number,default_number,
+                _log_changes,default_number,
                 number_value_type_data_wrapper_factory,ralph_globals);
         }
         
@@ -97,14 +97,14 @@ public class Variables {
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(String)init_val,default_text,
+                _log_changes,(String)init_val,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
         public AtomicTextVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,default_text,default_text,
+                _log_changes,default_text,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
         public void serialize_as_rpc_arg(
@@ -137,14 +137,14 @@ public class Variables {
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(Boolean)init_val,default_tf,
+                _log_changes,(Boolean)init_val,
                 true_false_value_type_data_wrapper_factory,ralph_globals);
         }
         public AtomicTrueFalseVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,default_tf,default_tf,
+                _log_changes,default_tf,
                 true_false_value_type_data_wrapper_factory,ralph_globals);
         }
         
@@ -178,14 +178,14 @@ public class Variables {
             boolean _log_changes,Object init_val, RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(Endpoint)init_val,default_endpoint,
+                _log_changes,(Endpoint)init_val,
                 endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
         public AtomicEndpointVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,default_endpoint,default_endpoint,
+                _log_changes,default_endpoint,
                 endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
 
@@ -216,14 +216,14 @@ public class Variables {
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(InternalServiceFactory)init_val,default_service_factory,
+                _log_changes,(InternalServiceFactory)init_val,
                 service_factory_value_type_data_wrapper_factory,ralph_globals);
         }
         public AtomicServiceFactoryVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,default_service_factory,default_service_factory,
+                _log_changes,default_service_factory,
                 service_factory_value_type_data_wrapper_factory,ralph_globals);
         }
 
@@ -280,7 +280,7 @@ public class Variables {
             RalphGlobals ralph_globals)
         {
             super(
-                init_val,default_number,
+                init_val,
                 number_value_type_data_wrapper_factory,
                 ralph_globals);
         }
@@ -289,7 +289,7 @@ public class Variables {
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
-                default_number,default_number,
+                default_number,
                 number_value_type_data_wrapper_factory,ralph_globals);
         }
         
@@ -312,7 +312,7 @@ public class Variables {
             RalphGlobals ralph_globals)
         {
             super(
-                init_val,default_text,
+                init_val,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
 		
@@ -320,7 +320,7 @@ public class Variables {
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
-                default_text,default_text,
+                default_text,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
         
@@ -344,7 +344,7 @@ public class Variables {
             RalphGlobals ralph_globals)
         {
             super(
-                init_val,default_tf,
+                init_val,
                 true_false_value_type_data_wrapper_factory,ralph_globals);
         }
 
@@ -352,7 +352,7 @@ public class Variables {
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
-                default_tf,default_tf,
+                default_tf,
                 true_false_value_type_data_wrapper_factory,ralph_globals);
         }
 
@@ -376,7 +376,7 @@ public class Variables {
             RalphGlobals ralph_globals)
         {
             super(
-                init_val,default_endpoint,
+                init_val,
                 endpoint_value_type_data_wrapper_factory,
                 ralph_globals);
         }
@@ -385,7 +385,7 @@ public class Variables {
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                default_endpoint,default_endpoint,
+                default_endpoint,
                 endpoint_value_type_data_wrapper_factory,ralph_globals);
         }
 
@@ -407,7 +407,7 @@ public class Variables {
             RalphGlobals ralph_globals)
         {
             super(
-                init_val,default_service_factory,
+                init_val,
                 service_factory_value_type_data_wrapper_factory,
                 ralph_globals);
         }
@@ -415,7 +415,7 @@ public class Variables {
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
             super(
-                default_service_factory,default_service_factory,
+                default_service_factory,
                 service_factory_value_type_data_wrapper_factory,
                 ralph_globals);
         }
