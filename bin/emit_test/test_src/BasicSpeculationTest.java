@@ -52,6 +52,16 @@ public class BasicSpeculationTest
             if (! every_other_test(num_every_other,false))
                 return false;
         }
+
+        // arbitrary order of events
+        List<Boolean> speculate_interrupted_pattern =
+            new ArrayList<Boolean>(Arrays.asList(false,false,false,true,false,false));
+
+        if (! mixed_speculation_test(speculate_interrupted_pattern,null))
+            return false;
+        
+        speculate_interrupted_pattern =
+            new ArrayList<Boolean>(Arrays.asList(true,true,false,false,true));
         
         return true;
     }
