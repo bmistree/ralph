@@ -22,6 +22,8 @@ DOT = 'dot'
 BRACKET = 'bracket'
 PARTNER_METHOD_CALL = 'partner_call'
 PRINT_CALL = 'print_call'
+SPECULATE_CALL = 'speculate_call'
+SPECULATE_ALL_CALL = 'speculate_all_call'
 VERBATIM_CALL = 'verbatim_call'
 
 TEXT_LITERAL = 'text_literal'

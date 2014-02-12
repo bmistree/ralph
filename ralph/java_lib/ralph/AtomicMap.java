@@ -26,7 +26,7 @@ import RalphDataWrappers.MapTypeDataWrapper;
  *     HashMap<Number,HashMap<String,Number>>>
  * 
  */
-public abstract class AtomicMap<K,V,D>
+public class AtomicMap<K,V,D>
     extends AtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return NonAtomicInternalMap.
@@ -35,7 +35,9 @@ public abstract class AtomicMap<K,V,D>
     // what will return when call de_waldoify.
     D>    
 {
-
+    private NonAtomicInternalMap.IndexType index_type = null;
+    private EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    
     public AtomicMap(
         boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
@@ -43,7 +45,9 @@ public abstract class AtomicMap<K,V,D>
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-
+        this.index_type = index_type;
+        this.locked_wrapper = locked_wrapper;
+        
         AtomicInternalMap<K,V,D> init_val =
             new AtomicInternalMap<K,V,D>(ralph_globals);
         init_val.init_multithreaded_map_container(
@@ -67,6 +71,21 @@ public abstract class AtomicMap<K,V,D>
             new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
     }
 
+    @Override
+    protected SpeculativeAtomicObject<AtomicInternalMap<K,V,D>, D>
+        duplicate_for_speculation(AtomicInternalMap<K,V,D> to_speculate_on)
+    {
+        SpeculativeAtomicObject<AtomicInternalMap<K,V,D>, D> to_return =
+            new AtomicMap(
+                log_changes,
+                to_speculate_on,
+                index_type,
+                locked_wrapper,
+                ralph_globals);
+        
+        to_return.set_derived(this);
+        return to_return;
+    }
     
     /**
        When pass an argument into a method call, should unwrap
@@ -80,7 +99,8 @@ public abstract class AtomicMap<K,V,D>
         EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        
+        this.index_type = index_type;
+        this.locked_wrapper = locked_wrapper;
         AtomicInternalMap<K,V,D> default_val =
             new AtomicInternalMap<K,V,D>(ralph_globals);
         default_val.init_multithreaded_map_container(
@@ -103,7 +123,8 @@ public abstract class AtomicMap<K,V,D>
         EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-
+        this.index_type = index_type;
+        this.locked_wrapper = locked_wrapper;
         AtomicInternalMap<K,V,D> init_val_2 =
             new AtomicInternalMap<K,V,D>(ralph_globals);
         init_val_2.init_multithreaded_map_container(

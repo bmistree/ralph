@@ -7,10 +7,11 @@ import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
+import RalphServiceActions.ServiceAction;
+import java.util.concurrent.ExecutionException;
 
 public class ExtendedVariables
 {
-    //public static class ExtendedInternalAtomicList<T,D>
     public static abstract class ExtendedInternalAtomicList<T,D>
         extends AtomicInternalList<T,D>
     {
@@ -72,7 +73,7 @@ public class ExtendedVariables
 
 
         @Override
-        public Future<Boolean> first_phase_commit(ActiveEvent active_event)
+        protected Future<Boolean> internal_first_phase_commit(ActiveEvent active_event)
         {
             // do not need to take locks here because know that this
             // method will only be called from AtomicActiveEvent
@@ -92,6 +93,58 @@ public class ExtendedVariables
             // undone if the event backs out.
             dirty_op_tuples_on_hardware = (ListTypeDataWrapper<T,D>)dirty_val;
             return apply_changes_to_hardware(dirty_op_tuples_on_hardware);
+        }
+
+
+        protected void internal_first_phase_commit_speculative(
+            SpeculativeFuture sf)
+        {
+
+            ActiveEvent active_event = sf.event;
+            Future<Boolean> bool = internal_first_phase_commit(active_event);
+            ralph_globals.thread_pool.add_service_action(
+                new LinkFutureBooleans(bool,sf));
+        }
+
+        
+        /**
+           Listens for future to return.  Depending on result,
+           speculative future either fails or succeeeds.
+         */
+        private class LinkFutureBooleans extends ServiceAction
+        {
+            private Future<Boolean> internal_boolean = null;
+            private SpeculativeFuture spec_future = null;
+            public LinkFutureBooleans(
+                Future<Boolean> internal_boolean,
+                SpeculativeFuture spec_future)
+            {
+                this.internal_boolean = internal_boolean;
+                this.spec_future = spec_future;
+            }
+
+            public void run()
+            {
+                boolean result = false;
+                try {
+                    result = internal_boolean.get();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Not considering the case of " +
+                        "an interrupted future.");
+                } catch (ExecutionException ex) {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Not considering the case of " +
+                        "an execution exception on future.");
+                }
+                    
+                if (result)
+                    spec_future.succeeded();
+                else
+                    spec_future.failed();
+            }
         }
     }
 }

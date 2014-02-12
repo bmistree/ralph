@@ -34,13 +34,13 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public boolean log_changes;
     protected DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
-    private ReentrantLock _mutex = new ReentrantLock();
+    protected ReentrantLock _mutex = new ReentrantLock();
     public DataWrapper<T,D> dirty_val = null;
 		
     //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
     //# read_lock_holders maps from uuids to EventCachedPriorityObj.
-    private HashMap<String,EventCachedPriorityObj>read_lock_holders =
+    protected HashMap<String,EventCachedPriorityObj>read_lock_holders =
         new HashMap<String,EventCachedPriorityObj>();
     
     //# write_lock_holder is EventCachedPriorityObj
@@ -49,7 +49,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
-    private HashMap<String,WaitingElement<T,D>>waiting_events =
+    protected HashMap<String,WaitingElement<T,D>>waiting_events =
         new HashMap<String,WaitingElement<T,D>>();
 
     //# In try_next, can cause events to backout.  If we do cause
@@ -61,7 +61,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private boolean in_try_next = false;
     
 
-    private RalphGlobals ralph_globals = null;
+    protected RalphGlobals ralph_globals = null;
     
     /**
      * Used by 
@@ -100,7 +100,20 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             }
         };
     }
-	
+
+    /**
+       Called from outside of lock.
+       
+       @returns {boolean} --- True if can commit in first phase, false
+       otherwise.  Note: this method is really only useful for objects
+       that push their changes to other hardware, (eg., a list that
+       propagates its changes to a router).  If the hardware is still
+       up and running, and the changes have been pushed, then, return
+       true, otherwise, return false.
+     */
+    public abstract Future<Boolean> first_phase_commit(ActiveEvent active_event);
+            
+    
     public AtomicObject(RalphGlobals ralph_globals)
     {
         try_next_action = new AtomicObjectTryNextAction(this);
@@ -143,7 +156,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         _mutex.unlock();
     }
-	
+
 	
     /**
      * 
@@ -183,7 +196,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      Blocks until has acquired.
     */
     protected DataWrapper<T,D> acquire_read_lock(
-        ActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event,ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
         //# Each event has a priority associated with it.  This priority
@@ -202,6 +215,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if (! insert_in_touched_objs(active_event))
         {
             _unlock();
+            if (to_unlock != null)
+                to_unlock.unlock();
+            
             throw new RalphExceptions.BackoutException();
         }
 
@@ -210,6 +226,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
             DataWrapper<T,D> to_return = dirty_val;
+            if (to_unlock != null)
+                to_unlock.unlock();            
             _unlock();
             return to_return;
         }
@@ -219,6 +237,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         {
             //# already allowed to read the variable
             DataWrapper<T,D> to_return = val;
+            if (to_unlock != null)
+                to_unlock.unlock();
+            
             _unlock();
             return to_return;
         }
@@ -229,6 +250,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# active_event is cleaned up here.
         if (! insert_in_touched_objs(active_event))
         {
+            if (to_unlock != null)
+                to_unlock.unlock();            
             _unlock();
             throw new RalphExceptions.BackoutException();
         }
@@ -242,6 +265,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             read_lock_holders.put(
             	active_event.uuid,
             	new EventCachedPriorityObj(active_event,cached_priority));
+
+            if (to_unlock != null)
+                to_unlock.unlock();            
             _unlock();
             return to_return;
         }
@@ -265,6 +291,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
                     new EventCachedPriorityObj(active_event,cached_priority));
                 		
                 DataWrapper<T,D> to_return = val;
+                
+                if (to_unlock != null)
+                    to_unlock.unlock();                
                 _unlock();
                 return to_return;
             }
@@ -277,6 +306,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             active_event,cached_priority,true,data_wrapper_constructor,log_changes);
 
         waiting_events.put(active_event.uuid, waiting_element);
+        
+        if (to_unlock != null)
+            to_unlock.unlock();
+        
         _unlock();
 
         
@@ -308,7 +341,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      * @throws BackoutException 
      */
     protected DataWrapper<T,D> acquire_write_lock(
-        ActiveEvent active_event) throws BackoutException
+        ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
         //# Each event has a priority associated with it.  This priority
@@ -325,6 +358,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# active_event is cleaned up here.
         if (! insert_in_touched_objs(active_event))
         {
+            if (to_unlock != null)
+                to_unlock.unlock();
+            
             _unlock();
             throw new RalphExceptions.BackoutException();
         }
@@ -334,6 +370,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
             DataWrapper<T,D> to_return = dirty_val;
+            if (to_unlock != null)
+                to_unlock.unlock();
+            
             _unlock();
             return to_return;
         }
@@ -350,6 +389,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
                 active_event.uuid,
                 new EventCachedPriorityObj(active_event,cached_priority));
             DataWrapper<T,D> to_return = dirty_val;
+            if (to_unlock != null)
+                to_unlock.unlock();
+            
             _unlock();
             return to_return;
         }
@@ -369,6 +411,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
                 dirty_val = data_wrapper_constructor.construct(val.val,log_changes);
                 DataWrapper<T,D> to_return = dirty_val;
+                
+                if (to_unlock != null)
+                    to_unlock.unlock();
+                
                 _unlock();
                 return to_return;
             }
@@ -378,7 +424,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         WaitingElement <T,D> write_waiting_event = new WaitingElement<T,D>(
             active_event,cached_priority,false,data_wrapper_constructor,
             log_changes);
-        waiting_events.put(active_event.uuid, write_waiting_event);        
+        waiting_events.put(active_event.uuid, write_waiting_event);
+        
+        if (to_unlock != null)
+            to_unlock.unlock();
         _unlock();
 
         DataWrapper<T,D> to_return = null;
@@ -420,12 +469,17 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _unlock();
 
         if (may_require_update)
-            ralph_globals.thread_pool.add_service_action(try_next_action);
+            schedule_try_next();
     }
-	
+
+    protected void schedule_try_next()
+    {
+        ralph_globals.thread_pool.add_service_action(try_next_action);
+    }
+    
     public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
-        DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
+        DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event,null);
         return wrapped_val.de_waldoify(active_event);
     }	
 
@@ -515,21 +569,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return has_been_written;
     }
 
-    /**
-       Called from outside of lock.
-       
-       @returns {boolean} --- True if can commit in first phase, false
-       otherwise.  Note: this method is really only useful for objects
-       that push their changes to other hardware, (eg., a list that
-       propagates its changes to a router).  If the hardware is still
-       up and running, and the changes have been pushed, then, return
-       true, otherwise, return false.
-     */
-    public Future<Boolean> first_phase_commit(ActiveEvent active_event)
-    {
-        return ALWAYS_TRUE_FUTURE;
-    }
-
     
     /**
        Both readers and writers can complete commits.  If it's a
@@ -538,13 +577,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        from holding a lock and check if any other events can be
        scheduled.
     */
-    public void complete_commit(ActiveEvent active_event)
-    {
-        internal_complete_commit(active_event);
-        //# FIXME: may want to actually check whether the change could
-        //# have caused another read/write to be scheduled.
-        try_next();
-    }
+    public abstract void complete_commit(ActiveEvent active_event);
+
     protected boolean internal_complete_commit(ActiveEvent active_event)
     {
         boolean write_lock_holder_completed = false;
@@ -846,16 +880,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return true;
     }
 
-    /**
-     * Called as an active event runs code.
-     * @param active_event
-     * @param new_val
-     * @throws BackoutException 
-     */
-    public void set_val(
-        ActiveEvent active_event,T new_val) throws BackoutException
+    @Override
+    protected void set_val(
+        ActiveEvent active_event,T new_val, ReentrantLock to_unlock)
+        throws BackoutException
     {
-        DataWrapper<T,D> to_write_on = acquire_write_lock(active_event);
+        DataWrapper<T,D> to_write_on = acquire_write_lock(active_event,to_unlock);
         to_write_on.write(new_val);
         if (active_event.immediate_complete())
         {
@@ -864,6 +894,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             complete_commit(active_event);
         }
     }
+
     
 
     /**
@@ -995,16 +1026,19 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _unlock();
     }
 
-    public T get_val(ActiveEvent active_event) throws BackoutException
+    @Override
+    protected T get_val(ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
     {
     	if (active_event == null)
     	{
             //# used for debugging: allows python code to read into and
             //# check the value of an external reference.
+            if (to_unlock != null)
+                to_unlock.unlock();
             return val.val;
     	}
 
-        DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event);
+        DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event,to_unlock);
         if (active_event.immediate_complete())
         {
             // non-atomics should immediately commit their changes.  Note:
@@ -1036,7 +1070,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        * @param active_event
        * @return
        */
-    private boolean insert_in_touched_objs(ActiveEvent active_event)
+    protected boolean insert_in_touched_objs(ActiveEvent active_event)
     {
         if (active_event.immediate_complete())
             return true;
@@ -1048,58 +1082,4 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
-
-
-
-    /**
-       AtomicActiveEvents request AtomicObjects to enter first phase
-       commit.  This triggers atomic objects to perform any work they
-       need to ensure their changes are valid/can be pushed.
-
-       Return a future, which the AtomicActiveEvent can check to
-       ensure that the change went through.  The future below will
-       always return true.  Subclasses, when they override this object
-       may override to use a different future that actually does work.
-     */
-    protected static class FutureAlwaysValue implements Future<Boolean>
-    {
-        private static final Boolean TRUE_BOOLEAN = new Boolean(true);
-        private static final Boolean FALSE_BOOLEAN = new Boolean(false);
-
-        private Boolean what_to_return = null;
-        public FutureAlwaysValue(boolean _what_to_return)
-        {
-            if (_what_to_return)
-                what_to_return = TRUE_BOOLEAN;
-            else
-                what_to_return = FALSE_BOOLEAN;
-        }
-            
-        public Boolean get()
-        {
-            return what_to_return;
-        }
-
-        public Boolean get(long timeout, TimeUnit unit)
-        {
-            return get();
-        }
-
- 	public boolean isCancelled()
-        {
-            return false;
-        }
-        public boolean isDone()
-        {
-            return true;
-        }
-        public boolean cancel(boolean mayInterruptIfRunning)
-        {
-            return false;
-        }
-    }
-    protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
-        new FutureAlwaysValue(true);
-    protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
-        new FutureAlwaysValue(false);
 }

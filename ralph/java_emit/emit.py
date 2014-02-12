@@ -198,9 +198,23 @@ public void serialize_as_rpc_arg(
     Util.logger_assert(
         "Have not defined serializing structs as rpc arguments.");
 }
+
 ''' % (struct_name, internal_struct_name, internal_struct_name,
        data_wrapper_constructor_name)
     # FIXME: should define rpc serialization for structs.
+
+
+    external_struct_definition_constructor += '''
+@Override
+protected SpeculativeAtomicObject<%s, %s>
+      duplicate_for_speculation(%s to_speculate_on)
+{
+    ///FIXME: must finish speculation for user-defined structs
+    Util.logger_assert(
+        "Have not finished duplicate_for_speculation for structs.");
+    return null;
+}
+''' % (internal_struct_name,internal_struct_name,internal_struct_name)
 
 
     # when pass a struct into a method, should clone the struct's
@@ -1251,6 +1265,22 @@ def emit_statement(emit_ctx,statement_node):
         print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
         return 'System.out.print(%s)' % print_arg_statement
 
+    elif statement_node.label == ast_labels.SPECULATE_CALL:
+        to_return = ''
+        prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+        emit_ctx.set_lhs_of_assign(True)
+        for to_speculate_on in statement_node.speculate_call_args_list:
+            emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
+            to_return += (
+                '%s.speculate(%s.get_val(_active_event));\n' %
+                (emitted_to_speculate_on,emitted_to_speculate_on))
+        emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
+        return to_return
+        
+    elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
+        raise InternalEmitException(
+            'FIXME: still must allow speculate_all call')
+    
     elif statement_node.label == ast_labels.VERBATIM_CALL:
         return statement_node.verbatim_arg_node.value
     

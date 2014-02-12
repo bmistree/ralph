@@ -15,7 +15,7 @@ import RalphDataWrappers.ListTypeDataWrapperSupplier;
  * dewaldoify into.
  */
 public class AtomicInternalList<V,D> 
-    extends AtomicObject <
+    extends SpeculativeAtomicObject <
     // The internal values that these are holding
     ArrayList<RalphObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
@@ -32,7 +32,24 @@ public class AtomicInternalList<V,D>
         super(ralph_globals);
         internal_list = new RalphInternalList<V,D>(ralph_globals);
     }
-        
+
+    @Override
+    protected SpeculativeAtomicObject<ArrayList<RalphObject<V,D>>,ArrayList<D>>
+        duplicate_for_speculation(ArrayList<RalphObject<V,D>> to_speculate_on)
+    {
+        AtomicInternalList<V,D> to_return = 
+            new AtomicInternalList(ralph_globals);
+        to_return.set_derived(this);
+        to_return.init_multithreaded_list_container(
+            log_changes,
+            (ListTypeDataWrapperFactory<V,D>)data_wrapper_constructor,
+            to_speculate_on,
+            locked_wrapper);
+
+        return to_return;
+    }
+
+    
     public void init_multithreaded_list_container(
         boolean _log_changes,
         ListTypeDataWrapperFactory<V,D> ltdwf,
@@ -77,7 +94,7 @@ public class AtomicInternalList<V,D>
         ActiveEvent active_event) throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val =
-            (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event);
+            (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event,null);
         return wrapped_val;
     }
     @Override    
@@ -85,7 +102,7 @@ public class AtomicInternalList<V,D>
         ActiveEvent active_event) throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val =
-            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
+            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event,null);
         return wrapped_val;
     }
 

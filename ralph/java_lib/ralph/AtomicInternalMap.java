@@ -20,7 +20,7 @@ import RalphDataWrappers.MapTypeDataWrapperSupplier;
  * objects should dewaldoify into
  */
 public class AtomicInternalMap<K,V,D> 
-    extends AtomicObject <
+    extends SpeculativeAtomicObject <
     // The internal values that these are holding
     HashMap<K,RalphObject<V,D>>,
     // When call dewaldoify on this container, what we should get back
@@ -41,6 +41,22 @@ public class AtomicInternalMap<K,V,D>
     {
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,D>(ralph_globals);
+    }
+
+    @Override
+    protected SpeculativeAtomicObject<HashMap<K,RalphObject<V,D>>,HashMap<K,D>>
+        duplicate_for_speculation(HashMap<K,RalphObject<V,D>> to_speculate_on)
+    {
+        AtomicInternalMap <K,V,D> to_return =
+            new AtomicInternalMap(ralph_globals);
+        to_return.set_derived(this);
+        to_return.init_multithreaded_map_container(
+            log_changes,
+            (MapTypeDataWrapperFactory<K,V,D>)data_wrapper_constructor,
+            to_speculate_on,
+            index_type,locked_wrapper);
+
+        return to_return;
     }
 
     
@@ -89,7 +105,7 @@ public class AtomicInternalMap<K,V,D>
         ActiveEvent active_event) throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val =
-            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event,null);
         return wrapped_val;
     }
     @Override    
@@ -97,7 +113,7 @@ public class AtomicInternalMap<K,V,D>
         ActiveEvent active_event) throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val =
-            (MapTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+            (MapTypeDataWrapper<K,V,D>)acquire_write_lock(active_event,null);
         return wrapped_val;
     }
 
