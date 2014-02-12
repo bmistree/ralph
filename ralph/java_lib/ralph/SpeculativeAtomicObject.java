@@ -187,13 +187,38 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _unlock();
     }
 
-    @Override
+    /**
+       Called from outside of lock.
+       
+       @returns {boolean} --- True if can commit in first phase, false
+       otherwise.  Note: this method is really only useful for objects
+       that push their changes to other hardware, (eg., a list that
+       propagates its changes to a router).  If the hardware is still
+       up and running, and the changes have been pushed, then, return
+       true, otherwise, return false.
+     */
+    protected Future<Boolean> internal_first_phase_commit(
+        ActiveEvent active_event)
+    {
+        return ALWAYS_TRUE_FUTURE;
+    }
+    protected void internal_first_phase_commit_speculative(
+        SpeculativeFuture sf)
+    {
+        sf.succeeded();
+    }
+
+    /**
+       Note: generally, subclasses should not override this.  They
+       should override internal_first_phase_commit and
+       internal_first_phase_commit_speculative instead.
+     */
     public Future<Boolean> first_phase_commit(ActiveEvent active_event)
     {
         // This is the base element that is trying to commit.  Just
         // try to commit normally.
         if (root_speculative)
-            return super.first_phase_commit(active_event);
+            return internal_first_phase_commit(active_event);
 
         _lock();
         if (speculation_state == SpeculationState.FAILED)
@@ -375,14 +400,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 }
                 Map<String,SpeculativeFuture> waiting_on_commit =
                     eldest_spec.transfer_to_root();
-                
-                //FIXME: For now, just passing all speculatives through
-                Util.logger_warn(
-                    "Always permitting all speculatives that had been " +
-                    "waiting to complete the first phase of their commits.");
 
                 for (SpeculativeFuture sf : waiting_on_commit.values())
-                    sf.succeeded();
+                    internal_first_phase_commit_speculative(sf);
             }
         }
     }
@@ -643,7 +663,58 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             to_return = has_been_set;
             rlock.unlock();
             return to_return;
-        }
-        
+        }        
     }
+
+    /**
+       AtomicActiveEvents request AtomicObjects to enter first phase
+       commit.  This triggers atomic objects to perform any work they
+       need to ensure their changes are valid/can be pushed.
+
+       Return a future, which the AtomicActiveEvent can check to
+       ensure that the change went through.  The future below will
+       always return true.  Subclasses, when they override this object
+       may override to use a different future that actually does work.
+     */
+    protected static class FutureAlwaysValue implements Future<Boolean>
+    {
+        private static final Boolean TRUE_BOOLEAN = new Boolean(true);
+        private static final Boolean FALSE_BOOLEAN = new Boolean(false);
+
+        private Boolean what_to_return = null;
+        public FutureAlwaysValue(boolean _what_to_return)
+        {
+            if (_what_to_return)
+                what_to_return = TRUE_BOOLEAN;
+            else
+                what_to_return = FALSE_BOOLEAN;
+        }
+            
+        public Boolean get()
+        {
+            return what_to_return;
+        }
+
+        public Boolean get(long timeout, TimeUnit unit)
+        {
+            return get();
+        }
+
+ 	public boolean isCancelled()
+        {
+            return false;
+        }
+        public boolean isDone()
+        {
+            return true;
+        }
+        public boolean cancel(boolean mayInterruptIfRunning)
+        {
+            return false;
+        }
+    }
+    protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
+        new FutureAlwaysValue(true);
+    protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
+        new FutureAlwaysValue(false);
 }

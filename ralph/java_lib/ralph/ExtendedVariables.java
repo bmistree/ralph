@@ -72,7 +72,7 @@ public class ExtendedVariables
 
 
         @Override
-        public Future<Boolean> first_phase_commit(ActiveEvent active_event)
+        public Future<Boolean> internal_first_phase_commit(ActiveEvent active_event)
         {
             // do not need to take locks here because know that this
             // method will only be called from AtomicActiveEvent

@@ -100,7 +100,20 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             }
         };
     }
-	
+
+    /**
+       Called from outside of lock.
+       
+       @returns {boolean} --- True if can commit in first phase, false
+       otherwise.  Note: this method is really only useful for objects
+       that push their changes to other hardware, (eg., a list that
+       propagates its changes to a router).  If the hardware is still
+       up and running, and the changes have been pushed, then, return
+       true, otherwise, return false.
+     */
+    public abstract Future<Boolean> first_phase_commit(ActiveEvent active_event);
+            
+    
     public AtomicObject(RalphGlobals ralph_globals)
     {
         try_next_action = new AtomicObjectTryNextAction(this);
@@ -554,21 +567,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
         _unlock();
         return has_been_written;
-    }
-
-    /**
-       Called from outside of lock.
-       
-       @returns {boolean} --- True if can commit in first phase, false
-       otherwise.  Note: this method is really only useful for objects
-       that push their changes to other hardware, (eg., a list that
-       propagates its changes to a router).  If the hardware is still
-       up and running, and the changes have been pushed, then, return
-       true, otherwise, return false.
-     */
-    public Future<Boolean> first_phase_commit(ActiveEvent active_event)
-    {
-        return ALWAYS_TRUE_FUTURE;
     }
 
     
@@ -1084,58 +1082,4 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
-
-
-
-    /**
-       AtomicActiveEvents request AtomicObjects to enter first phase
-       commit.  This triggers atomic objects to perform any work they
-       need to ensure their changes are valid/can be pushed.
-
-       Return a future, which the AtomicActiveEvent can check to
-       ensure that the change went through.  The future below will
-       always return true.  Subclasses, when they override this object
-       may override to use a different future that actually does work.
-     */
-    protected static class FutureAlwaysValue implements Future<Boolean>
-    {
-        private static final Boolean TRUE_BOOLEAN = new Boolean(true);
-        private static final Boolean FALSE_BOOLEAN = new Boolean(false);
-
-        private Boolean what_to_return = null;
-        public FutureAlwaysValue(boolean _what_to_return)
-        {
-            if (_what_to_return)
-                what_to_return = TRUE_BOOLEAN;
-            else
-                what_to_return = FALSE_BOOLEAN;
-        }
-            
-        public Boolean get()
-        {
-            return what_to_return;
-        }
-
-        public Boolean get(long timeout, TimeUnit unit)
-        {
-            return get();
-        }
-
- 	public boolean isCancelled()
-        {
-            return false;
-        }
-        public boolean isDone()
-        {
-            return true;
-        }
-        public boolean cancel(boolean mayInterruptIfRunning)
-        {
-            return false;
-        }
-    }
-    protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
-        new FutureAlwaysValue(true);
-    protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
-        new FutureAlwaysValue(false);
 }
