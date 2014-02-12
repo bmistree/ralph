@@ -245,7 +245,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         {
             // wait on objects that we are deriving from before trying to
             // commit.
-            SpeculativeFuture to_return = new SpeculativeFuture();
+            SpeculativeFuture to_return = new SpeculativeFuture(active_event);
             outstanding_commit_requests.put(active_event.uuid,to_return);
             _unlock();
             return to_return;
@@ -590,6 +590,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         private final Condition cond = rlock.newCondition();
         private boolean has_been_set = false;
         private boolean to_return = false;
+        public ActiveEvent event = null;
+        
+        public SpeculativeFuture(ActiveEvent event)
+        {
+            this.event = event;
+        }
         
         public void failed()
         {
