@@ -8,9 +8,20 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.Arrays;
 
 public class BasicSpeculationTest
 {
+    private final static int RALPH_INTERNAL_SLEEP_TIME_MS = 250;
+    private final static int RALPH_BETWEEN_EVENTS_SLEEP_TIME_MS = 5;
+    
+    // Given number of events, can calculate how long would expect a series of
+    // events to run if we turn on speculation.  Importantly, due to rounding
+    // error + time it takes to setup and tear down transactions, that might be
+    // a little off.  Using fudge_factor_ms to adjust for these minor variations.
+    private final static int FUDGE_FACTOR_MS = 1;
+
+    
     public static void main(String[] args)
     {
         if (BasicSpeculationTest.run_test())
@@ -28,7 +39,61 @@ public class BasicSpeculationTest
 
     public static boolean all_mixed_speculation_tests()
     {
+        List<Integer> number_every_other_events =
+            new ArrayList<Integer>(Arrays.asList(4,8,16));
+
+        for (int num_every_other : number_every_other_events)
+        {
+            if (! every_other_test(num_every_other,true))
+                return false;
+        }
+        for (int num_every_other : number_every_other_events)
+        {
+            if (! every_other_test(num_every_other,false))
+                return false;
+        }
+        
         return true;
+    }
+
+    /**
+       @param num_every_other --- Runs a test that puts num_every_other events
+       into system.  Alternates between putting in an event in that causes an
+       interruption in derivative events and that doesn't.
+
+       @param first_interrupted --- True: alternate pipeline_interrupted,
+       pipeline, pipeline_interrupted, pipeline, ...  False: alternate
+       pipeline, pipeline_interrupted, pipeline, ...
+       
+       Ie, every_other_test(4) creates a test that creates events that do the
+       following:
+       
+       pipeline(num, false)
+       pipeline_interrupted(num, false)
+       pipeline(num, false)
+       pipeline_interrupted(num, false)
+
+       and then:
+       
+       pipeline(num, true)
+       pipeline_interrupted(num, true)
+       pipeline(num, true)
+       pipeline_interrupted(num, true)
+     */
+    public static boolean every_other_test(
+        int num_every_other, boolean first_interrupted)
+    {
+        List<Boolean> speculate_interrupted_pattern = new ArrayList<Boolean>();
+        for (int i = 0; i < num_every_other; ++i)
+        {
+            int mod_equals = 1;
+            if (first_interrupted)
+                mod_equals = 0;
+            
+            boolean should_interrupt = (i%2 == mod_equals);
+            speculate_interrupted_pattern.add(should_interrupt);
+        }
+        return mixed_speculation_test(speculate_interrupted_pattern,null);
     }
     
     /**
@@ -57,26 +122,28 @@ public class BasicSpeculationTest
         for (int i = 0; i < num_events_in_pipeline; ++i)
             interrupt_speculation_pattern.add(interrupt_speculation);
 
-        AtomicLong speculation_off_ms_runtime = new AtomicLong();
         AtomicLong speculation_on_ms_runtime = new AtomicLong();
 
         boolean worked = mixed_speculation_test(
-            interrupt_speculation_pattern,speculation_off_ms_runtime,
-            speculation_on_ms_runtime);
+            interrupt_speculation_pattern,speculation_on_ms_runtime);
 
         if (! worked)
             return false;
 
         if (! interrupt_speculation)
         {
-            long time_diff =
-                speculation_off_ms_runtime.get() - speculation_on_ms_runtime.get();
-            // each event sleeps for 500 ms we start events staggered by 10 ms.
-            // (pad to 11 to handle minor overheads)
-            if (time_diff < (500 - 11*num_events_in_pipeline))
+            // If we do not interrupt speculation, then we expect that all of
+            // the events can be pipelined.  What this means is that the maximum
+            // amount of time all should take to run is below:
+            int ms_to_run_if_pipelined_correctly = RALPH_INTERNAL_SLEEP_TIME_MS +
+                RALPH_BETWEEN_EVENTS_SLEEP_TIME_MS*num_events_in_pipeline;
+            
+            if (speculation_on_ms_runtime.get() >
+                (ms_to_run_if_pipelined_correctly + FUDGE_FACTOR_MS))
+            {
                 return false;
+            }
         }
-        
         return true;
     }
 
@@ -88,7 +155,6 @@ public class BasicSpeculationTest
      */
     public static boolean mixed_speculation_test(
         List<Boolean> interrupt_speculation_pattern,
-        AtomicLong speculation_off_ms_runtime,
         AtomicLong speculation_on_ms_runtime)
     {
         try
@@ -102,22 +168,17 @@ public class BasicSpeculationTest
 
             // just check pipeline without speculation
             double amt_to_inc_by = 35.0;
-
             
-            long speculation_off_ms = pipelined_events_time_ms(
-                endpt,false,amt_to_inc_by,interrupt_speculation_pattern);
             long speculation_on_ms = pipelined_events_time_ms(
                 endpt,true,amt_to_inc_by,interrupt_speculation_pattern);
 
-            if (speculation_off_ms_runtime != null)
-                speculation_off_ms_runtime.set(speculation_off_ms);
             if (speculation_on_ms_runtime != null)
                 speculation_on_ms_runtime.set(speculation_on_ms);
             
             double new_internal_number = endpt.get_number().doubleValue();
             double expected_internal_number =
                 original_internal_number +
-                2*interrupt_speculation_pattern.size()*amt_to_inc_by;
+                interrupt_speculation_pattern.size()*amt_to_inc_by;
             
             if (new_internal_number != expected_internal_number)
                 return false;
@@ -185,7 +246,7 @@ public class BasicSpeculationTest
                 interrupt_speculation.booleanValue());
             all_threads.add(t);
             t.start();
-            Thread.sleep(10);
+            Thread.sleep(RALPH_BETWEEN_EVENTS_SLEEP_TIME_MS);
         }
 
         for (SingleOp s_op : all_threads)

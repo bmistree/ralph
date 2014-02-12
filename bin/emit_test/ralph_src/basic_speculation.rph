@@ -19,7 +19,7 @@ Service SpeculativeEndpoint
             if (speculate_on)
                 speculate(internal_number);
             verbatim(
-                'try{Thread.sleep(500);}catch(InterruptedException _ex){}');
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
             to_return = internal_number;
         }
         return to_return;
@@ -37,7 +37,7 @@ Service SpeculativeEndpoint
             if (speculate_on)
                 speculate(internal_number);
             verbatim(
-                'try{Thread.sleep(500);}catch(InterruptedException _ex){}');
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
             internal_number = new_val;
             to_return = internal_number;
         }
