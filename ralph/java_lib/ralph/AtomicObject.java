@@ -882,19 +882,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return true;
     }
 
-    /**
-     * Called as an active event runs code.
-     * @param active_event
-     * @param new_val
-     * @throws BackoutException 
-     */
-    @Override
-    public void set_val(
-        ActiveEvent active_event,T new_val) throws BackoutException
-    {
-        set_val(active_event,new_val,null);
-    }
-
     @Override
     protected void set_val(
         ActiveEvent active_event,T new_val, ReentrantLock to_unlock)
@@ -1041,11 +1028,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _unlock();
     }
 
-    @Override
-    public T get_val(ActiveEvent active_event) throws BackoutException
-    {
-        return get_val(active_event,null);
-    }
     @Override
     protected T get_val(ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
     {

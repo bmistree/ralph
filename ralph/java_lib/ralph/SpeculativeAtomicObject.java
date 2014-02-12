@@ -369,11 +369,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 if (speculated_entries.isEmpty())
                     speculating_on = null;
                 else
-                    speculating_on = speculated_entries.get(0);
-                
+                {
+                    speculating_on =
+                        speculated_entries.get(speculated_entries.size() -1);
+                }
                 Map<String,SpeculativeFuture> waiting_on_commit =
                     eldest_spec.transfer_to_root();
-
+                
                 //FIXME: For now, just passing all speculatives through
                 Util.logger_warn(
                     "Always permitting all speculatives that had been " +
@@ -411,7 +413,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _unlock();
     }
     
-    
+
     /**
        If speculating, re-map get_val to get from the object that
        we're speculating on instead.
@@ -423,48 +425,82 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _lock();
         try
         {
-            // an event can still make local accesses to a variable
-            // even after it requests us to speculate.
-            if (read_lock_holders.containsKey(active_event.uuid))
-                to_return = super.get_val(active_event,_mutex);
-            else
+            boolean already_processing = already_processing_event(
+                active_event);
+
+            if (already_processing)
+                return super.get_val(active_event,_mutex);
+
+            for (SpeculativeAtomicObject<T,D> derivative_object :
+                     speculated_entries)
             {
-                if (speculating_on != null)
-                {
-                    to_return =
-                        speculating_on.get_val(active_event,_mutex);
-                }
-                else
-                    to_return = super.get_val(active_event,_mutex);
+                already_processing =
+                    derivative_object.already_processing_event(active_event);
+                if (already_processing)
+                    return  derivative_object.get_val(active_event,_mutex);
             }
+
+            // if we got here, it means that this object and none
+            // of its derivatives have serviced active event before
+            if (speculating_on != null)
+                return speculating_on.get_val(active_event,_mutex);
+            else
+                return super.get_val(active_event,_mutex);
         }
         catch (BackoutException ex)
         {
             throw ex;
         }
-        return to_return;
     }
 
     /**
-       Assumes already within lock.
-
-       All objects that derived their values from this one are
-       notified to backout any events that used their derived value.
+       Basic idea: if a speculative object had already been servicing
+       an active event, we want to continue to permit it to service
+       that active event.  This method checks if this object had
+       already serviced the active event.
      */
-    protected void invalidate_all_derivative_objects()
+    protected boolean already_processing_event(ActiveEvent active_event)
     {
-        // FIXME: derived objects should keep track of all
-        // objects that derive from them so that they can
-        // invalidate them.
-        for (SpeculativeAtomicObject<T,D> spec_on :
-                 speculated_entries)
-        {
-            spec_on.derived_from_failed();
-        }
-        speculated_entries.clear();
-        speculating_on = null;
+        boolean already_processing_event = false;
+        _lock();
+        if (read_lock_holders.containsKey(active_event.uuid) ||
+            waiting_events.containsKey(active_event.uuid))
+            already_processing_event = true;
+        _unlock();
+
+        return already_processing_event;
     }
     
+
+    /**
+       Invalidate all derived objects from index_to_invalidate_from
+       (inclusive) on.
+       
+       Assumes already within lock.
+     */
+    protected void invalidate_derivative_objects(int index_to_invalidate_from)
+    {
+        int end_index = speculated_entries.size();
+        int num_invalidations_to_perform =
+            end_index - index_to_invalidate_from;
+        
+        for (int i = 0; i < num_invalidations_to_perform; ++i)
+        {
+            SpeculativeAtomicObject<T,D> spec_on =
+                speculated_entries.get(index_to_invalidate_from);
+            spec_on.derived_from_failed();
+            speculated_entries.remove(index_to_invalidate_from);
+        }
+
+        if (index_to_invalidate_from == 0)
+            speculating_on = null;
+        else
+        {
+            speculating_on =
+                speculated_entries.get(speculated_entries.size() - 1);
+        }
+    }
+
     @Override
     public void set_val(ActiveEvent active_event,T new_val)
         throws BackoutException
@@ -473,18 +509,53 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         try
         {
             // an event can still make local accesses to a variable
-            // even after it requests us to speculate.
-            if (read_lock_holders.containsKey(active_event.uuid))
+            // even after it requests us to speculate.  First check if
+            // we should be performing the set against our root object
+            boolean already_processing = already_processing_event(
+                active_event);
+
+            if (already_processing)
             {
+                // root object already had record of active event:
+                // invalidate any derivative objects because we
+                // performed the set on it.
+                invalidate_derivative_objects(0);
                 super.set_val(active_event,new_val,_mutex);
-                invalidate_all_derivative_objects();
+                return;
             }
+
+            // check if any of our derivative objects were already
+            // handling this event.
+            for (int i = 0; i < speculated_entries.size(); ++i)
+            {
+                SpeculativeAtomicObject<T,D> derivative_object =
+                    speculated_entries.get(i);
+                
+                already_processing =
+                    derivative_object.already_processing_event(
+                        active_event);
+
+                if (already_processing)
+                {
+                    //we should invalidate all the subsequently
+                    //derived objects and break out of loop
+                    invalidate_derivative_objects(i+1);
+                    derivative_object.set_val(active_event,new_val,_mutex);
+                    return;                        
+                }
+            }
+            
+            // none of the objects that we were speculating on had
+            // interacted with that event before.
+            if (speculating_on != null)
+                speculating_on.set_val(active_event,new_val,_mutex);
             else
             {
-                if (speculating_on != null)
-                    speculating_on.set_val(active_event,new_val,_mutex);
-                else
-                    super.set_val(active_event,new_val,_mutex);
+                // note: do not need to invalidate anything
+                // because cannot get to else of this if-else
+                // block unless we aren't speculating on any
+                // objects.
+                super.set_val(active_event,new_val,_mutex);
             }
         }
         catch (BackoutException ex)
@@ -492,7 +563,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             throw ex;
         }
     }
-
 
     protected class SpeculativeFuture implements Future<Boolean>
     {
