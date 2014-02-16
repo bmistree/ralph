@@ -52,6 +52,7 @@ reserved = {
     'alias': 'ALIAS',
     'as': 'AS',
     'verbatim': 'VERBATIM',
+    'null': 'NULL',
     'ServiceFactory' : 'SERVICE_FACTORY'
     }
 
