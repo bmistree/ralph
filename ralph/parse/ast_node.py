@@ -3,7 +3,7 @@ from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type, EndpointType, WildcardType
-from ralph.parse.type import ServiceFactoryType
+from ralph.parse.type import ServiceFactoryType,NullType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 from ralph.parse.type_check_context import FixupableObject
@@ -907,6 +907,16 @@ class TrueFalseLiteralNode(_LiteralNode):
         super(TrueFalseLiteralNode,self).__init__(
             ast_labels.TRUE_FALSE_LITERAL,true_false,line_number,
             ast_labels.BOOL_TYPE)
+
+class NullLiteralNode(_AstNode):
+    def __init__(self,line_number):
+        super(_AstNode,self).__init__(ast_labels.NULL_TYPE,line_number)
+        self.type = NullType()
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
         
 class VariableTypeNode(_AstNode):
     pass

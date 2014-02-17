@@ -634,6 +634,7 @@ def p_Term(p):
          | Number
          | String
          | Boolean
+         | Null
          | LEFT_PAREN Expression RIGHT_PAREN
          | RangeExpression
          | LenExpression
@@ -674,6 +675,13 @@ def p_Boolean(p):
     line_number = p.lineno(1)
     p[0] = TrueFalseLiteralNode(boolean_literal,line_number)
 
+def p_Null(p):
+    '''
+    Null : NULL
+    '''
+    line_number = p.lineno(1)
+    p[0] = NullLiteralNode(line_number)
+    
     
 def p_VariableType(p):
     '''

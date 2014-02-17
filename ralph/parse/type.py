@@ -21,6 +21,8 @@ class WildcardType(Type):
     '''
     pass
 
+class NullType(Type):
+    pass
     
 class EndpointType(Type):
     def __init__(
