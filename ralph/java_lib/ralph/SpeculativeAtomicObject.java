@@ -361,18 +361,30 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     @Override
     public void complete_commit(ActiveEvent active_event)
     {
+        boolean should_try_next = false;
         _lock();
-        internal_complete_commit(active_event);
-        try_promote_speculated();
-
+        
         if (speculation_state == SpeculationState.SUCCEEDED)
             root_object.complete_commit(active_event);
+        else if (speculation_state == SpeculationState.FAILED)
+        {
+            Util.logger_assert(
+                "Error should never be completing a commit " +
+                "from a failed speculation state.");
+        }
+        else
+        {
+            internal_complete_commit(active_event);
+            try_promote_speculated();
+            should_try_next = true;
+        }
+
         
         _unlock();
         //# FIXME: may want to actually check whether the change could
         //# have caused another read/write to be scheduled.
-        try_next();
-        
+        if (should_try_next)
+            try_next();
     }
 
     /**
