@@ -244,18 +244,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             return to_return;
         }
 
-        //# must be careful to add obj to active_event's touched_objs.
-        //# That way, if active_event needs to backout, we're guaranteed
-        //# that the state we've allocated for accounting the
-        //# active_event is cleaned up here.
-        if (! insert_in_touched_objs(active_event))
-        {
-            if (to_unlock != null)
-                to_unlock.unlock();            
-            _unlock();
-            throw new RalphExceptions.BackoutException();
-        }
-
         //# Check 2 from above
         
         //# check 2a
