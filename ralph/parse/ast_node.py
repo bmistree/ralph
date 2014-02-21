@@ -910,7 +910,7 @@ class TrueFalseLiteralNode(_LiteralNode):
 
 class NullLiteralNode(_AstNode):
     def __init__(self,line_number):
-        super(_AstNode,self).__init__(ast_labels.NULL_TYPE,line_number)
+        super(NullLiteralNode,self).__init__(ast_labels.NULL_TYPE,line_number)
         self.type = NullType()
 
     def type_check_pass_one(self,struct_types_ctx):
