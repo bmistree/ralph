@@ -6,9 +6,11 @@ public class NumberTypeDataWrapperFactory
 {	
     @Override
     public DataWrapper<Double,Double> construct(
-        Double _val, boolean log_changes)
+        Double val, boolean log_changes)
     {
-        return new ValueTypeDataWrapper<Double,Double>(
-            new Double(_val),log_changes);
+        Double new_val = null;
+        if (val != null)
+            new_val = new Double(val);
+        return new ValueTypeDataWrapper<Double,Double>(new_val,log_changes);
     }
 }

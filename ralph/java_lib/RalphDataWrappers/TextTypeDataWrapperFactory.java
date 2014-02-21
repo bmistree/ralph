@@ -5,9 +5,13 @@ public class TextTypeDataWrapperFactory
 {	
     @Override
     public DataWrapper<String,String> construct(
-        String _val, boolean log_changes)
+        String val, boolean log_changes)
     {
+        String new_val = null;
+        if (val != null)
+            new_val = new String(val);
+        
         return new ValueTypeDataWrapper<String,String>(
-            new String(_val),log_changes);
+            new_val,log_changes);
     }
 }

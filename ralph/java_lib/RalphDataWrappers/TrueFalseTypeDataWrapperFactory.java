@@ -5,9 +5,13 @@ public class TrueFalseTypeDataWrapperFactory
 {	
     @Override
     public DataWrapper<Boolean,Boolean> construct(
-        Boolean _val, boolean log_changes)
+        Boolean val, boolean log_changes)
     {
+        Boolean new_val = null;
+        if (val != null)
+            new_val = new Boolean(val);
+        
         return new ValueTypeDataWrapper<Boolean,Boolean>(
-            new Boolean(_val),log_changes);
+            new_val,log_changes);
     }
 }
