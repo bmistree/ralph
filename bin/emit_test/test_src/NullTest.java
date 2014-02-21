@@ -30,5 +30,6 @@ public class NullTest
             ex.printStackTrace();
             return false;
         }
+        return true;
     }
 }

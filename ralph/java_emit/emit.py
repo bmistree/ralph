@@ -1563,6 +1563,10 @@ _ctx.hide_partner_call(
 
     elif statement_node.label == ast_labels.DOT:
         return emit_dot_statement(emit_ctx,statement_node)
+
+    elif statement_node.label == ast_labels.NULL_TYPE:
+        return 'null'
+    
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
         statement_node.label)
