@@ -319,6 +319,16 @@
       <arg line="emit_test_package"/>
       <arg line="BasicSpeculation"/>
     </exec>
+
+    <echo message="${line.separator}null.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="${ralph_src.dir}/null.rph"/>
+      <arg line="${ralph_emitted.dir}/Null.java"/>
+      <arg line="emit_test_package"/>
+      <arg line="Null"/>
+    </exec>
+
     
   </target>
 
@@ -370,7 +380,8 @@
          run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
-         run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation">
+         run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
+         run_NullTest">
   </target>
   
   
@@ -829,6 +840,21 @@
         <arg line="${args}"/>
     </java>
   </target>
+
+  <!-- Run NullTest -->
+  <target
+      name="run_NullTest"
+      depends="compile_ralph_tests"
+      description="Run basic null test.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.NullTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

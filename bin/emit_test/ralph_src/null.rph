@@ -1,0 +1,13 @@
+Service NullService
+{
+    Number some_num = null;
+
+    get_number() returns Number
+    {
+        return some_num;
+    }
+    set_number(Number to_set_to)
+    {
+        some_num = to_set_to;
+    }
+}
