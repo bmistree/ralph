@@ -16,6 +16,7 @@
   <property name="exceptions.dir" location="${real_dir}/../RalphExceptions/"/>
   <property name="ralph.dir" location="${real_dir}/../ralph/"/>  
   <property name="connections.dir" location="${real_dir}/../RalphConnObj/"/>
+  <property name="common_backed_dir" location="${real_dir}/../RalphCommonBacked/"/>
   <property name="atomic_wrappers.dir" location="${real_dir}/../RalphAtomicWrappers/"/>
   <property name="data_wrappers.dir" location="${real_dir}/../RalphDataWrappers/"/>    
   <property name="ralph_call_results.dir" location="${real_dir}/../RalphCallResults/"/>
@@ -50,7 +51,9 @@
       depends="init,compile_proto,compile_exceptions"
       description="compile all libs for project">
     <javac
-        srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:${atomic_wrappers.dir}:${data_wrappers.dir}"
+        srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:
+                ${ralph_service_actions.dir}:${atomic_wrappers.dir}:
+                ${data_wrappers.dir}:${common_backed_dir}"
         destdir="${build.dir}"
         classpath="${build.dir}/ralph_protobuffs/*.class:${protobuf_path}"
         debug="true"
