@@ -453,6 +453,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     @Override
     public T get_val(ActiveEvent active_event) throws BackoutException
     {
+    	if (active_event == null)
+            return super.get_val(active_event,null);
+        
         T to_return = null;
         _lock();
         try
