@@ -24,6 +24,12 @@ public class NullTest
 
             if (service.get_number() != null)
                 return false;
+
+            if (service.get_text() != null)
+                return false;
+
+            if (service.get_tf() != null)
+                return false;
         }
         catch (Exception ex)
         {

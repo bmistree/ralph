@@ -1,7 +1,9 @@
 Service NullService
 {
     Number some_num = null;
-
+    TVar Text some_text = null;
+    TVar TrueFalse some_tf = null;
+        
     get_number() returns Number
     {
         return some_num;
@@ -9,5 +11,24 @@ Service NullService
     set_number(Number to_set_to)
     {
         some_num = to_set_to;
+    }
+
+
+    get_text() returns Text
+    {
+        return some_text;
+    }
+    set_text(Text to_set_to)
+    {
+        some_text = to_set_to;
+    }
+
+    get_tf() returns TrueFalse
+    {
+        return some_tf;
+    }
+    set_tf(TrueFalse to_set_to)
+    {
+        some_tf = to_set_to;
     }
 }
