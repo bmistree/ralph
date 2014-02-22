@@ -3,7 +3,31 @@ Service NullService
     Number some_num = null;
     TVar Text some_text = null;
     TVar TrueFalse some_tf = null;
-        
+
+    Map(from: Number, to: Number) some_map = null;
+
+    get_map() returns Map(from: Number, to: Number)
+    {
+        return some_map;
+    }
+
+    reset_map()
+    {
+        Map(from: Number, to: Number) to_set_to;
+        some_map = to_set_to;
+    }
+
+    set_element(Number index, Number value)
+    {
+        some_map.set(index,value);
+    }
+
+    get_element(Number index) returns Number
+    {
+        return some_map.get(index);
+    }
+    
+    
     get_number() returns Number
     {
         return some_num;
@@ -12,8 +36,7 @@ Service NullService
     {
         some_num = to_set_to;
     }
-
-
+    
     get_text() returns Text
     {
         return some_text;
