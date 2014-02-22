@@ -1303,12 +1303,14 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
-        return '(new Boolean(%s.equals(%s)))' % (lhs,rhs)
+        return ('(new Boolean(%s == null ? %s == %s : %s.equals(%s)))' %
+                (lhs,lhs,rhs,lhs,rhs))
     elif statement_node.label == ast_labels.NOT_EQUALS:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
-        return '(new Boolean(! %s.equals(%s)))' % (lhs,rhs)    
-
+        return ('(new Boolean(! (%s == null ? %s == %s : %s.equals(%s))))'
+                % (lhs,lhs,rhs,lhs,rhs))
+    
     elif statement_node.label == ast_labels.ATOMICALLY:
         atomic_logic = ''
         for statement in statement_node.statement_list:
