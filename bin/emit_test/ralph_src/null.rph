@@ -54,4 +54,9 @@ Service NullService
     {
         some_tf = to_set_to;
     }
+
+    is_null(Number to_test_against) returns TrueFalse
+    {
+        return (to_test_against) == null;
+    }
 }

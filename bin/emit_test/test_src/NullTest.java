@@ -52,8 +52,8 @@ public class NullTest
                 if (! check_set_tf(service,b))
                     return false;
             }
-
-
+            
+            
             /** Test container types */
             if (service.get_map() != null)
                 return false;
@@ -61,6 +61,12 @@ public class NullTest
             Double [] index_list = {3.3, 4.5,null,3.3,null,30.1, 3.3};
             Double [] value_list = {3.3,null,null,3.3,null,30.1,null};
             if (! check_set_map_indices(service,index_list,value_list))
+                return false;
+
+            /** Test null comparison */
+            if (service.is_null(32.).booleanValue())
+                return false;
+            if (! service.is_null(null).booleanValue())
                 return false;
             
         }
