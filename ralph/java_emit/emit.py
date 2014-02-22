@@ -4,7 +4,7 @@ from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType,WildcardType
 from ralph.parse.type import MapType,StructType,ListType,EndpointType
 from ralph.parse.type import ServiceFactoryType
-from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE
+from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE,NULL_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
 def emit(root_node,struct_types_ctx,package_name,program_name):
@@ -940,9 +940,10 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         
         # FIXME: currently, disallowing initializing maps
         if initializer_node is not None:
-            raise InternalEmitException(
-                'Not handling initializers for map types')
-        
+            if initializer_node.label != NULL_TYPE:
+                raise InternalEmitException(
+                    'Not handling initializers for map types')
+            
         index_basic_type = type_object.from_type_node.type.basic_type
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
@@ -963,9 +964,17 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
         value_type_wrapper = list_map_wrappers(value_type)
+
+        internal_val_txt = ''
+        if initializer_node is not None:
+            # internal val should be null
+            internal_val_txt = 'null,'
+
         to_return = (
-            'new %s(false,%s,%s,ralph_globals)' %
-            (java_type_text,java_map_index_type_text,value_type_wrapper))
+            'new %s(false,%s%s,%s,ralph_globals)' %
+            (java_type_text,internal_val_txt,java_map_index_type_text,
+             value_type_wrapper))
+        
         return to_return
 
     elif isinstance(type_object,ListType):
@@ -973,15 +982,22 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         
         # FIXME: currently, disallowing initializing maps
         if initializer_node is not None:
-            raise InternalEmitException(
-                'Not handling initializers for list types')
+            if initializer_node.label != NULL_TYPE:
+                raise InternalEmitException(
+                    'Not handling initializers for list types')
         
         # require EnsureAtomicWrapper object to 
         element_type = type_object.element_type_node.type
         element_type_wrapper = list_map_wrappers(element_type)
+
+        internal_val_txt = ''
+        if initializer_node is not None:
+            # internal val should be null
+            internal_val_txt = 'null,'
+            
         to_return = (
-            'new %s(false,%s,ralph_globals)' %
-            (java_type_text,element_type_wrapper))
+            'new %s(false,%s%s,ralph_globals)' %
+            (java_type_text,internal_val_txt,element_type_wrapper))
         return to_return
     
     elif isinstance(type_object,StructType):
@@ -1190,6 +1206,9 @@ def emit_internal_type(type_object):
             if typer is not None:
                 # FIXME: Ugly, hackish way to return lists
                 if isinstance(typer,ListType):
+                    return emit_internal_type(typer)
+                # FIXME: Ugly, hackish way to return maps
+                if isinstance(typer,MapType):
                     return emit_internal_type(typer)
                 typer = typer.basic_type
 
