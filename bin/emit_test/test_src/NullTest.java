@@ -63,6 +63,14 @@ public class NullTest
             if (! check_set_map_indices(service,index_list,value_list))
                 return false;
 
+            if (! service.is_struct_null().booleanValue())
+                return false;
+            service.reset_struct();
+            if (service.get_internal_val_struct() != null)
+                return false;
+                        
+            
+            
             /** Test null comparison */
             if (service.is_null(32.).booleanValue())
                 return false;

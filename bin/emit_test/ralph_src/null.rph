@@ -1,3 +1,9 @@
+Struct SomeStruct
+{
+    Number internal_num = null;
+}
+
+
 Service NullService
 {
     Number some_num = null;
@@ -6,11 +12,30 @@ Service NullService
 
     Map(from: Number, to: Number) some_map = null;
 
+    Struct SomeStruct some_struct = null;
+
+    is_struct_null() returns TrueFalse
+    {
+        return null == some_struct;
+    }
+
+    reset_struct()
+    {
+        Struct SomeStruct to_set_to;
+        some_struct = to_set_to;
+    }
+
+    get_internal_val_struct() returns Number
+    {
+        return some_struct.internal_num;
+    }
+    
+    
     get_map() returns Map(from: Number, to: Number)
     {
         return some_map;
     }
-
+    
     reset_map()
     {
         Map(from: Number, to: Number) to_set_to;
