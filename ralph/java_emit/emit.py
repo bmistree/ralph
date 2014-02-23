@@ -1301,13 +1301,26 @@ def emit_statement(emit_ctx,statement_node):
         return statement_node.verbatim_arg_node.value
     
     elif statement_node.label == ast_labels.EQUALS:
+        lhs_node = statement_node.lhs_expression_node
+        rhs_node = statement_node.rhs_expression_node
+        
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
+        if ((lhs_node.label == NULL_TYPE) or
+            (rhs_node.label == NULL_TYPE)):
+            return '(new Boolean(%s == %s))' % (lhs,rhs)
         return ('(new Boolean(%s == null ? %s == %s : %s.equals(%s)))' %
                 (lhs,lhs,rhs,lhs,rhs))
+    
     elif statement_node.label == ast_labels.NOT_EQUALS:
+        lhs_node = statement_node.lhs_expression_node
+        rhs_node = statement_node.rhs_expression_node
+        
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
+        if ((lhs_node.label == NULL_TYPE) or
+            (rhs_node.label == NULL_TYPE)):
+            return '(new Boolean(%s != %s))' % (lhs,rhs)
         return ('(new Boolean(! (%s == null ? %s == %s : %s.equals(%s))))'
                 % (lhs,lhs,rhs,lhs,rhs))
     
