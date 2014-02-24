@@ -54,20 +54,22 @@ GENERIC_ENDPOINT_TYPE = GENERIC_TVAR_ENDPOINT_TYPE.clone(False)
 class StructType(Type):
     def __init__(
             self,struct_name,name_to_field_type_dict=None,is_tvar=None,
-            alias_name=None):
+            alias_name=None,name_to_initializer_dict=None):
         '''@see constructor for map type
         '''
         self.struct_name = struct_name
         if name_to_field_type_dict is not None:
             self.update_struct_type(
-                name_to_field_type_dict,is_tvar,alias_name)
+                name_to_field_type_dict,is_tvar,alias_name,
+                name_to_initializer_dict)
 
     def set_alias_name(self,new_alias_name):
         self.alias_name = new_alias_name
-            
-    def update_struct_type(
-            self,name_to_field_type_dict,is_tvar,alias_name):
+        
+    def update_struct_type(self,name_to_field_type_dict,is_tvar,alias_name,
+                           name_to_initializer_dict):
         self.name_to_field_type_dict = name_to_field_type_dict
+        self.name_to_initializer_dict = name_to_initializer_dict
         self.is_tvar = is_tvar
         self.alias_name = alias_name
         if self.alias_name is not None:
@@ -92,8 +94,6 @@ class StructType(Type):
 
         return front + to_prepend + struct_name
 
-
-        
     def clone(self,is_tvar):
         '''Each user-defined struct has one canonical type.  When
         assigning a node this type, use the clone method on that

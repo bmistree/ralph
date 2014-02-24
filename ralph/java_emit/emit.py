@@ -265,15 +265,18 @@ public static class %s
     internal_struct_body_text += '{\n'
 
     internal_constructor_text = ''
+    initializer_dict = struct_type.name_to_initializer_dict
     for field_name in struct_type.name_to_field_type_dict:
         field_type = struct_type.name_to_field_type_dict[field_name]
+
+        initializer_node = initializer_dict.get(field_name,None)
         internal_constructor_text += (
             '%s = %s;\n' %
             (field_name,
-             construct_new_expression(field_type,None,emit_ctx)))
+             construct_new_expression(field_type,initializer_node,emit_ctx)))
     internal_struct_body_text += indent_string(internal_constructor_text)
     internal_struct_body_text += '}\n'
-        
+    
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'

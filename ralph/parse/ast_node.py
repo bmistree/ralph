@@ -146,8 +146,10 @@ class StructDefinitionNode(_AstNode):
         # name of a field in the struct.  Values are type objects (not
         # type astnodes) associated with each field.
         name_to_types_dict,self.to_fixup = struct_body_node.get_field_dict()
+        initializer_dict = struct_body_node.get_initializer_dict()
+        
         self.type = StructType(
-            self.struct_name,name_to_types_dict,False)
+            self.struct_name,name_to_types_dict,False,None,initializer_dict)
 
         
     def register_struct_endpoint_fields(self,struct_types_ctx):
@@ -1310,7 +1312,22 @@ class StructBodyNode(_AstNode):
                 # needs one
                 declaration_statement_node.type_node.setup_type_from_alias(
                     struct_types_ctx)
-        
+
+    def get_initializer_dict(self):
+        '''
+        Returns:
+            {dict} indices are strings; each is the name of a field in
+            the struct.  Values are initializer nodes or None if no
+            initializer is defined.
+        '''
+        initializer_dict = {}
+        for declaration_statement_node in self.children:
+            field_name = declaration_statement_node.var_name
+            initializer_dict[field_name] = (
+                declaration_statement_node.initializer_node)
+
+        return initializer_dict
+
     def get_field_dict(self):
         '''
         Returns:

@@ -14,7 +14,6 @@ start = 'RootStatement'
 #need to have something named lexer for parser to chew into
 lexer = None
 
-
 def p_RootStatement(p):
     '''
     RootStatement : AliasList StructList EndpointList
