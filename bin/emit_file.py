@@ -46,7 +46,9 @@ Args:
 
   program_name --- The name of the class that wraps endpoint classes.
 
-  ... --- A list of dependencies that this program imports from
+  ... --- A list of dependencies that this program imports from.
+  Imports will be resolved backwards: last files will be imported
+  first.
 
 '''
 

@@ -10,6 +10,7 @@ PRINT_TYPE_TOKEN = 'print'
 SPECULATE_TYPE_TOKEN = 'speculate'
 SPECULATE_ALL_TYPE_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
+
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Service' : 'SERVICE',
@@ -59,10 +60,12 @@ reserved = {
 
 tokens = [
     #comments
-    "SINGLE_LINE_COMMENT",
+    'SINGLE_LINE_COMMENT',
     "MULTI_LINE_COMMENT_BEGIN",
     "MULTI_LINE_COMMENT_END",
 
+    'PRE_PROCESSOR', # gets treated as a comment
+    
     "EQUALS",
     "BOOL_EQUALS",
     "BOOL_NOT_EQUALS",
@@ -162,6 +165,8 @@ class LexStateMachine():
             returner.type = SKIP_TOKEN_TYPE
         elif toke_type == "SINGLE_LINE_COMMENT":
             returner.type = SKIP_TOKEN_TYPE
+        elif toke_type == "PRE_PROCESSOR":
+            returner.type = SKIP_TOKEN_TYPE
         elif toke_type == "SPACE":
             returner.type = SKIP_TOKEN_TYPE
         elif toke_type == "TAB":
@@ -202,6 +207,10 @@ class LexStateMachine():
             self.in_multi_line_comment = True
         elif toke_type == "SINGLE_LINE_COMMENT":
             self.in_single_line_comment = True
+        elif toke_type == "PRE_PROCESSOR":
+            # preprocessor is treated same as single line comments:
+            # ignored.
+            self.in_single_line_comment = True            
         elif toke_type == "MULTI_LINE_STRING":
             self.in_multi_line_string = True
             returner.type = SKIP_TOKEN_TYPE
@@ -235,6 +244,11 @@ lex_state_machine = None
 def t_SINGLE_LINE_COMMENT(t):
     '\/\/'
     return lex_state_machine.add_token(t)
+
+def t_PRE_PROCESSOR(t):
+    '\#'
+    return lex_state_machine.add_token(t)
+
 
 def t_MULTI_LINE_COMMENT_BEGIN(t):
     '\/\*'
