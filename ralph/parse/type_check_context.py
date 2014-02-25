@@ -72,15 +72,37 @@ class FixupableObject(object):
 
         return type_to_fixup_with.clone(self.is_tvar)
 
+class FilenameLineNumber(object):
+    def __init__(self,filename,line_number):
+        """A simple wrapper around where structs/endpoints were
+        originally declared.
+
+        Args:
         
+            filename: {String} The name of the file the
+            struct/endpoint was declared in.
+
+            line_number: {int}
+        """
+        self.filename = filename
+        self.line_number = line_number
+    
     
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.
     """
     
-    def __init__(self,alias_ctx):
+    def __init__(self,filename,alias_ctx):
+        self.filename = filename
+        
         self.struct_name_to_type_obj_dict = {}
+        # values are FilenameLineNumber objects
+        self.struct_name_to_decl_point_dict = {}
+        
         self.endpoint_name_to_type_obj_dict = {}
+        # values are FilenameLineNumber objects
+        self.endpoint_name_to_decl_point_dict = {}
+        
         # each element is a FixupObject
         self.list_to_fixup = []
         self.alias_ctx = alias_ctx
@@ -136,16 +158,52 @@ class StructTypesContext(object):
            TypeObject or None (if type name does not exist).
         '''
         return self.struct_name_to_type_obj_dict.get(name,None)
-    
-    def add_struct_type_obj_for_name(self,name,type_obj,line_number):
+
+    def merge_struct_type_context_into_me(self,to_merge_into_me):
+        '''
+        Takes all the endpoint objects and structs from
+
+        Args:
+            to_merge_into_me: {StructTypesContext} Contains the struct
+            and endpoint definitions from another Ralph file.
+        '''
+        for name in to_merge_into_me.struct_name_to_type_obj_dict:
+            struct_type = to_merge_into_me.struct_name_to_type_obj_dict[name]
+            decl_point = to_merge_into_me.struct_name_to_decl_point_dict[name]
+            self.add_struct_type_obj_for_name(
+                name,struct_type,decl_point.line_number,decl_point.filename)
+
+        # FIXME: not merging endpoint types.  This is because not type
+        # checking endpoint calls.
+            
+    def add_struct_type_obj_for_name(self,name,type_obj,line_number,
+                                     decl_filename=None):
+        if decl_filename is None:
+            decl_filename = self.filename
         if name in self.struct_name_to_type_obj_dict:
+            existing_record = self.struct_name_to_decl_point_dict[name]
+            existing_filename = existing_record.filename
+            existing_line_number = existing_record.line_number
+            
             raise TypeCheckException(
                 line_number,
-                'Already have a type named %s' % name)
-        self.struct_name_to_type_obj_dict[name] = type_obj
+                'Redefinition of type %s.  Defined at %s:%i and at %s:%i' %
+                (decl_filename,line_number,existing_filename,existing_line_number))
 
-    def add_endpoint_type_obj_for_name(self,name,type_obj,line_number):
+        
+        self.struct_name_to_type_obj_dict[name] = type_obj
+        self.struct_name_to_decl_point_dict[name] = (
+            FilenameLineNumber(decl_filename,line_number))
+
+    def add_endpoint_type_obj_for_name(self,name,type_obj,line_number,
+                                       decl_filename=None):
+        if decl_filename is None:
+            decl_filename = self.filename
+            
         self.endpoint_name_to_type_obj_dict[name] = type_obj
+        self.endpoint_name_to_decl_point_dict[name] = (
+            FilenameLineNumber(decl_filename,line_number))
+
     def get_endpoint_type_obj_for_name(self,name,type_obj,line_number):
         return self.endpoint_name_to_type_obj_dict[name] 
         

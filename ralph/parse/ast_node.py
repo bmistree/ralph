@@ -76,8 +76,12 @@ class RootStatementNode(_AstNode):
         self.struct_node_list = struct_node_list.to_list()
 
 
-    def type_check(self):
+    def type_check(self,filename):
         '''
+        Args:
+            filename: {String} The name of the file that we are type
+            checking over
+        
         Returns:
             StructTypesContext object that maps from struct names to
             field values.
@@ -87,7 +91,7 @@ class RootStatementNode(_AstNode):
             alias_node.type_check_alias_pass(alias_ctx)
 
         # notate all user-defined struct types.
-        struct_types_ctx = StructTypesContext(alias_ctx)
+        struct_types_ctx = StructTypesContext(filename,alias_ctx)
         for struct_node in self.struct_node_list:
             to_fixup = struct_node.add_struct_type(struct_types_ctx)
 
