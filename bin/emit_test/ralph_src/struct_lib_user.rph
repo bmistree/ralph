@@ -1,10 +1,5 @@
 alias Struct SomeStruct as 'StructLib.SomeStruct';
 
-Struct SomeStruct
-{
-    Text internal_text;
-}
-
 Endpoint StructUser
 {
     Struct SomeStruct internal_struct;

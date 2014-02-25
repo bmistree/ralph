@@ -164,6 +164,8 @@
       <arg line="${ralph_emitted.dir}/StructLibUser.java"/>
       <arg line="emit_test_package"/>
       <arg line="StructLibUser"/>
+      <!-- Testing dependency -->
+      <arg line="${ralph_src.dir}/struct_lib.rph"/>
     </exec>
 
     <echo message="${line.separator}Emitting interrupted_atomically.rph${line.separator}"/>
