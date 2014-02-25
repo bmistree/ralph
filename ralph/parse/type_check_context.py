@@ -107,6 +107,11 @@ class StructTypesContext(object):
         self.list_to_fixup = []
         self.alias_ctx = alias_ctx
 
+    def new_type_check(self,filename,alias_ctx):
+        self.filename = filename
+        self.alias_ctx = alias_ctx
+        self.list_to_fixup = []
+        
     def to_fixup(
         self,struct_to_fixup_name,field_struct_to_fixup,
         to_fixup_with_fixupable_object):
@@ -159,22 +164,6 @@ class StructTypesContext(object):
         '''
         return self.struct_name_to_type_obj_dict.get(name,None)
 
-    def merge_struct_type_context_into_me(self,to_merge_into_me):
-        '''
-        Takes all the endpoint objects and structs from
-
-        Args:
-            to_merge_into_me: {StructTypesContext} Contains the struct
-            and endpoint definitions from another Ralph file.
-        '''
-        for name in to_merge_into_me.struct_name_to_type_obj_dict:
-            struct_type = to_merge_into_me.struct_name_to_type_obj_dict[name]
-            decl_point = to_merge_into_me.struct_name_to_decl_point_dict[name]
-            self.add_struct_type_obj_for_name(
-                name,struct_type,decl_point.line_number,decl_point.filename)
-
-        # FIXME: not merging endpoint types.  This is because not type
-        # checking endpoint calls.
             
     def add_struct_type_obj_for_name(self,name,type_obj,line_number,
                                      decl_filename=None):

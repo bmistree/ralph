@@ -75,10 +75,14 @@ class RootStatementNode(_AstNode):
         self.endpoint_node_list = list(endpoint_node_list)
         self.struct_node_list = struct_node_list.to_list()
 
-
-    def type_check(self,filename):
+        
+    def type_check(self,struct_types_ctx,filename):
         '''
         Args:
+            struct_types_ctx: {StructTypesContext or None} --- If not
+            None, contains user-defined structs from imported
+            libraries.
+        
             filename: {String} The name of the file that we are type
             checking over
         
@@ -91,7 +95,11 @@ class RootStatementNode(_AstNode):
             alias_node.type_check_alias_pass(alias_ctx)
 
         # notate all user-defined struct types.
-        struct_types_ctx = StructTypesContext(filename,alias_ctx)
+        if struct_types_ctx is None:
+            struct_types_ctx = StructTypesContext(filename,alias_ctx)
+        else:
+            struct_types_ctx.new_type_check(filename,alias_ctx)
+            
         for struct_node in self.struct_node_list:
             to_fixup = struct_node.add_struct_type(struct_types_ctx)
 

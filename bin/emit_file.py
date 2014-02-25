@@ -16,16 +16,13 @@ def compile_ralph(input_filename,output_filename,package_name,program_name,
     naming a file that we should link to while generating code for
     input_filename.
     '''
-    struct_types_ctx_list = []
-    for dep_file in dependencies_list:
+    struct_types_ctx = None
+    for dep_file in reversed(dependencies_list):
         dep_root = parse(dep_file)
-        dep_struct_types_ctx = dep_root.type_check(dep_file)
-        struct_types_ctx_list.append(dep_struct_types_ctx)
-    
+        struct_types_ctx = dep_root.type_check(struct_types_ctx,dep_file)
+        
     root_node = parse(input_filename)
-    struct_types_ctx = root_node.type_check(input_filename)
-    for s_types_ctx in struct_types_ctx_list:
-        struct_typs_ctx.merge_struct_type_context_into_me(s_types_ctx)
+    struct_types_ctx = root_node.type_check(struct_types_ctx,input_filename)
     
     emitted_text = emit(root_node,struct_types_ctx,package_name,program_name)
     file_fd = open(output_filename,'w')
