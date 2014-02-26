@@ -177,8 +177,8 @@ class StructTypesContext(object):
             raise TypeCheckException(
                 line_number,
                 'Redefinition of type %s.  Defined at %s:%i and at %s:%i' %
-                (decl_filename,line_number,existing_filename,existing_line_number))
-
+                (name,decl_filename,line_number,existing_filename,
+                 existing_line_number))
         
         self.struct_name_to_type_obj_dict[name] = type_obj
         self.struct_name_to_decl_point_dict[name] = (
