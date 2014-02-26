@@ -92,7 +92,7 @@ class RootStatementNode(_AstNode):
         '''
         alias_ctx = AliasContext()
         for alias_node in self.alias_node_list:
-            alias_node.type_check_alias_pass(alias_ctx)
+            alias_node.type_check_alias_pass(alias_ctx,struct_types_ctx)
 
         # notate all user-defined struct types.
         if struct_types_ctx is None:
@@ -136,10 +136,30 @@ class AliasStatementNode(_AstNode):
         self.to_alias_string = identifier_node.value
         self.to_alias_to_string = to_alias_to_string_node.value
 
-    def type_check_alias_pass(self,alias_ctx):
+    def type_check_alias_pass(self,alias_ctx,struct_types_ctx):
+        '''Register all aliased structs and endpoints.
+
+        Args:
+
+            alias_ctx: {AliasContext} context to register aliased
+            struct/endpoint.
+
+            struct_types_ctx: {StructTypesContext or None} If not
+            None, then check if struct type exists in context.  If it
+            does, then update the type object's alias name.
+            struct_types_ctx may be None if not including any
+            dependent files and will not be None if we have.
+        '''
         if self.for_struct:
             alias_ctx.add_struct_alias(
                 self.to_alias_string,self.to_alias_to_string)
+
+            if struct_types_ctx is not None:
+                type_obj = struct_types_ctx.get_type_obj_from_struct_name(
+                    self.to_alias_string)
+                if type_obj is not None:
+                    type_obj.set_alias_name(self.to_alias_to_string)
+            
         else:
             alias_ctx.add_endpoint_alias(
                 self.to_alias_string,self.to_alias_to_string)

@@ -28,6 +28,11 @@ public class StructLibraries
             // should get out same text put in.
             if (! endpt.get_struct_text().equals(text_to_set))
                 return false;
+
+            double num_times_to_append = 35;
+            endpt.recursive_append_struct_to_list(num_times_to_append);
+            if (!endpt.size_struct_list().equals(num_times_to_append))
+                return false;
         }
         catch(Exception _ex)
         {

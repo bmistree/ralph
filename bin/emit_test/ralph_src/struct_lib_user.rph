@@ -6,6 +6,25 @@ Endpoint StructUser
 {
     Struct SomeStruct internal_struct;
 
+    List(element: Struct SomeStruct) struct_list;
+
+
+    recursive_append_struct_to_list(Number times_to_append)
+    {
+        if (times_to_append <= 0)
+            return;
+
+        Struct SomeStruct to_append;
+        struct_list.append(to_append);
+        recursive_append_struct_to_list(times_to_append - 1);
+    }
+
+    size_struct_list() returns Number
+    {
+        return struct_list.size();
+    }
+    
+    
     set_struct_text(Text new_text)
     {
         internal_struct.internal_text = new_text;
