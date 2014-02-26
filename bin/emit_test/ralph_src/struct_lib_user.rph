@@ -1,3 +1,5 @@
+#include 'struct_lib.rph'
+
 alias Struct SomeStruct as 'StructLib.SomeStruct';
 
 Endpoint StructUser
