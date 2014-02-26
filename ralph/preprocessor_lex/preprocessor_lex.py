@@ -2,12 +2,15 @@ from deps.ply import lex
 from ralph.common.compiler_exceptions import CompilerException
 
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
+_STRUCT_TOKEN = 'STRUCT'
+
 reserved = {
     'include' : 'INCLUDE',
     'alias' : 'ALIAS',
     'as': 'AS',
     'Endpoint': 'ENDPOINT',
-    'Struct': 'STRUCT'
+    'Struct': 'STRUCT',
+    'Service': 'SERVICE'
     }
 
 
@@ -31,8 +34,6 @@ tokens = [
     'ALL_ELSE',
     ] + list(reserved.values())
 
-
-SKIP_TOKEN_TYPE = 'SPACE'
 
 def generate_token_err_msg(toke):
     '''
@@ -76,26 +77,23 @@ class LexStateMachine():
             if toke_type == 'PREPROCESSOR_BEGIN':
                 self.state = LexStates.PREPROCESSOR
 
-            to_return.type = SKIP_TOKEN_TYPE
-            return to_return
+            return None
                 
         if self.state == LexStates.STRING:
             if toke_type == 'SINGLE_LINE_STRING':
                 self.state = LexStates.RUNNING
-            to_return.type = SKIP_TOKEN_TYPE
-            return to_return
+
+            return None
 
         if self.state == LexStates.SINGLE_LINE_COMMENT:
             if toke_type == 'NEWLINE':
                 self.state = LexStates.RUNNING
-            to_return.type = SKIP_TOKEN_TYPE
-            return to_return
+            return None
 
         if self.state == LexStates.MULTI_LINE_COMMENT:
             if toke_type == 'MULTI_LINE_COMMENT_END':
                 self.state = LexStates.RUNNING
-            to_return.type = SKIP_TOKEN_TYPE
-            return to_return
+            return None
 
         if self.state == LexStates.PREPROCESSOR_STRING:
             if toke_type == 'SINGLE_LINE_STRING':
@@ -106,19 +104,19 @@ class LexStateMachine():
             else:
                 self.preprocessor_string += str(toke.value)
 
-            to_return.type = SKIP_TOKEN_TYPE
-            return to_return
+            return None
 
         if self.state == LexStates.PREPROCESSOR:
             if toke_type == 'SINGLE_LINE_STRING':
                 self.state = LexStates.PREPROCESSOR_STRING
-                to_return.type = SKIP_TOKEN_TYPE
-                return to_return
+                return None
 
             if toke_type == 'NEWLINE':
                 self.state = LexStates.RUNNING
-                to_return.type = SKIP_TOKEN_TYPE
-            
+                return None
+            if toke_type in ['SPACE','TAB']:
+                return None
+
             return to_return
         
         print ('Unknown state in preprocessor')
