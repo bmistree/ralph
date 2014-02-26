@@ -40,8 +40,7 @@ def dependencies_list(input_filename,lib_dir_list):
 
     deps_dict = dependencies_dict(fq_input_filename,fq_lib_dir_list)
     fname_depth_pair_list = sorted(
-        deps_dict.values(),
-        key= lambda val: val.depth)
+        deps_dict.values(), key= lambda val: val.depth,reverse=True)
     to_return = map(lambda pair: pair.fname,fname_depth_pair_list)
     return to_return
 
