@@ -43,290 +43,290 @@
     <echo message="${line.separator}Emitting basic_ralph.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/basic_ralph.rph"/>
-      <arg line="${ralph_emitted.dir}/BasicRalph.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="BasicRalph"/>
+      <arg line="-i ${ralph_src.dir}/basic_ralph.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/BasicRalph.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c BasicRalph"/>
     </exec>
 
     <echo message="${line.separator}Emitting internal_method_call.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/internal_method_call.rph"/>
-      <arg line="${ralph_emitted.dir}/InternalMethodCall.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="InternalMethodCall"/>
+      <arg line="-i ${ralph_src.dir}/internal_method_call.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/InternalMethodCall.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c InternalMethodCall"/>
     </exec>
 
     <echo message="${line.separator}Emitting ralph_atomically.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/ralph_atomically.rph"/>
-      <arg line="${ralph_emitted.dir}/RalphAtomically.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="RalphAtomically"/>
+      <arg line="-i ${ralph_src.dir}/ralph_atomically.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/RalphAtomically.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c RalphAtomically"/>
     </exec>
     
     <echo message="${line.separator}Emitting basic_partner.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/basic_partner.rph"/>
-      <arg line="${ralph_emitted.dir}/BasicPartner.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="BasicPartner"/>
+      <arg line="-i ${ralph_src.dir}/basic_partner.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/BasicPartner.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c BasicPartner"/>
     </exec>
     
     <echo message="${line.separator}Emitting test_map.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/test_map.rph"/>
-      <arg line="${ralph_emitted.dir}/MapTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="MapTest"/>
+      <arg line="-i ${ralph_src.dir}/test_map.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/MapTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c MapTest"/>
     </exec>
     
     <echo message="${line.separator}Emitting atomic_map.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/atomic_map.rph"/>
-      <arg line="${ralph_emitted.dir}/AtomicMapTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="AtomicMapTest"/>
+      <arg line="-i ${ralph_src.dir}/atomic_map.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/AtomicMapTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c AtomicMapTest"/>
     </exec>
     
     <echo message="${line.separator}Emitting struct_test.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/struct_test.rph"/>
-      <arg line="${ralph_emitted.dir}/StructTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="StructTest"/>
+      <arg line="-i ${ralph_src.dir}/struct_test.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/StructTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c StructTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting nested_structs.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/nested_structs.rph"/>
-      <arg line="${ralph_emitted.dir}/NestedStructTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="NestedStructTest"/>
+      <arg line="-i ${ralph_src.dir}/nested_structs.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/NestedStructTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c NestedStructTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting test_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/test_list.rph"/>
-      <arg line="${ralph_emitted.dir}/ListTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="ListTest"/>
+      <arg line="-i ${ralph_src.dir}/test_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ListTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ListTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting atomic_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/atomic_list.rph"/>
-      <arg line="${ralph_emitted.dir}/AtomicListTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="AtomicListTest"/>
+      <arg line="-i ${ralph_src.dir}/atomic_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/AtomicListTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c AtomicListTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting for_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/for_list.rph"/>
-      <arg line="${ralph_emitted.dir}/ForListTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="ForListTest"/>
+      <arg line="-i ${ralph_src.dir}/for_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ForListTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ForListTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting for_map.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/for_map.rph"/>
-      <arg line="${ralph_emitted.dir}/ForMapTest.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="ForMapTest"/>
+      <arg line="-i ${ralph_src.dir}/for_map.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ForMapTest.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ForMapTest"/>
     </exec>
 
     <echo message="${line.separator}Emitting struct_lib.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/struct_lib.rph"/>
-      <arg line="${ralph_emitted.dir}/StructLib.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="StructLib"/>
+      <arg line="-i ${ralph_src.dir}/struct_lib.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/StructLib.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c StructLib"/>
     </exec>
 
     <echo message="${line.separator}Emitting struct_lib_user.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/struct_lib_user.rph"/>
-      <arg line="${ralph_emitted.dir}/StructLibUser.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="StructLibUser"/>
+      <arg line="-i ${ralph_src.dir}/struct_lib_user.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/StructLibUser.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c StructLibUser"/>
     </exec>
 
     <echo message="${line.separator}Emitting interrupted_atomically.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/interrupted_atomically.rph"/>
-      <arg line="${ralph_emitted.dir}/InterruptedAtomically.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="InterruptedAtomically"/>
+      <arg line="-i ${ralph_src.dir}/interrupted_atomically.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/InterruptedAtomically.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c InterruptedAtomically"/>
     </exec>
 
     <echo message="${line.separator}Emitting endpoint_lib_user.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/endpoint_lib_user.rph"/>
-      <arg line="${ralph_emitted.dir}/EndpointLibUser.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="EndpointLibUser"/>
+      <arg line="-i ${ralph_src.dir}/endpoint_lib_user.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/EndpointLibUser.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c EndpointLibUser"/>
     </exec>
 
     <echo message="${line.separator}Emitting interrupted_endpoint_atomically.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
-      <arg line="${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="InterruptedEndpointAtomically"/>
+      <arg line="-i ${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c InterruptedEndpointAtomically"/>
     </exec>
 
     <echo message="${line.separator}Emitting promotion.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/promotion.rph"/>
-      <arg line="${ralph_emitted.dir}/Promotion.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="Promotion"/>
+      <arg line="-i ${ralph_src.dir}/promotion.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/Promotion.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c Promotion"/>
     </exec>
 
     <echo message="${line.separator}Emitting super_interrupted_atomically.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/super_interrupted_atomically.rph"/>
-      <arg line="${ralph_emitted.dir}/SuperInterruptedAtomically.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="SuperInterruptedAtomically"/>
+      <arg line="-i ${ralph_src.dir}/super_interrupted_atomically.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SuperInterruptedAtomically.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c SuperInterruptedAtomically"/>
     </exec>
 
     <echo message="${line.separator}Emitting hardware_failure.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/hardware_failure.rph"/>
-      <arg line="${ralph_emitted.dir}/HardwareFailure.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="HardwareFailure"/>
+      <arg line="-i ${ralph_src.dir}/hardware_failure.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/HardwareFailure.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c HardwareFailure"/>
     </exec>
 
     <echo message="${line.separator}Emitting return_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/return_list.rph"/>
-      <arg line="${ralph_emitted.dir}/ReturnList.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="ReturnList"/>
+      <arg line="-i ${ralph_src.dir}/return_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ReturnList.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ReturnList"/>
     </exec>
 
     <echo message="${line.separator}Emitting atomic_partner.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/atomic_partner.rph"/>
-      <arg line="${ralph_emitted.dir}/AtomicPartner.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="AtomicPartner"/>
+      <arg line="-i ${ralph_src.dir}/atomic_partner.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/AtomicPartner.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c AtomicPartner"/>
     </exec>
 
     <echo message="${line.separator}Emitting many_ops_atomic_list_fail.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/many_ops_atomic_list_fail.rph"/>
-      <arg line="${ralph_emitted.dir}/ManyOpsAtomicListFail.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="ManyOpsAtomicListFail"/>
+      <arg line="-i ${ralph_src.dir}/many_ops_atomic_list_fail.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ManyOpsAtomicListFail.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ManyOpsAtomicListFail"/>
     </exec>
 
     <echo message="${line.separator}Emitting atomic_list_append${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/atomic_list_append.rph"/>
-      <arg line="${ralph_emitted.dir}/AtomicListAppend.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="AtomicListAppend"/>
+      <arg line="-i ${ralph_src.dir}/atomic_list_append.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/AtomicListAppend.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c AtomicListAppend"/>
     </exec>
 
     <echo message="${line.separator}Emitting endpoint_struct_list${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/endpoint_struct_list.rph"/>
-      <arg line="${ralph_emitted.dir}/EndpointStructList.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="EndpointStructList"/>
+      <arg line="-i ${ralph_src.dir}/endpoint_struct_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/EndpointStructList.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c EndpointStructList"/>
     </exec>
 
     <echo message="${line.separator}wrapped_partner.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/wrapped_partner.rph"/>
-      <arg line="${ralph_emitted.dir}/WrappedPartner.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="WrappedPartner"/>
+      <arg line="-i ${ralph_src.dir}/wrapped_partner.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/WrappedPartner.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c WrappedPartner"/>
     </exec>
 
     
     <echo message="${line.separator}linked_instanced.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/linked_instance.rph"/>
-      <arg line="${ralph_emitted.dir}/LinkedInstance.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="LinkedInstance"/>
+      <arg line="-i ${ralph_src.dir}/linked_instance.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/LinkedInstance.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c LinkedInstance"/>
     </exec>
 
     <echo message="${line.separator}linked_connection.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/linked_connection.rph"/>
-      <arg line="${ralph_emitted.dir}/LinkedConnection.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="LinkedConnection"/>
+      <arg line="-i ${ralph_src.dir}/linked_connection.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/LinkedConnection.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c LinkedConnection"/>
     </exec>
 
     <echo message="${line.separator}single_side_service_factory.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/single_side_service_factory.rph"/>
-      <arg line="${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="SingleSideServiceFactory"/>
+      <arg line="-i ${ralph_src.dir}/single_side_service_factory.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c SingleSideServiceFactory"/>
     </exec>
 
     <echo message="${line.separator}partner_service_factory.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/partner_service_factory.rph"/>
-      <arg line="${ralph_emitted.dir}/PartnerServiceFactory.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="PartnerServiceFactory"/>
+      <arg line="-i ${ralph_src.dir}/partner_service_factory.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/PartnerServiceFactory.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c PartnerServiceFactory"/>
     </exec>
 
     <echo message="${line.separator}basic_speculation.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/basic_speculation.rph"/>
-      <arg line="${ralph_emitted.dir}/BasicSpeculation.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="BasicSpeculation"/>
+      <arg line="-i ${ralph_src.dir}/basic_speculation.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/BasicSpeculation.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c BasicSpeculation"/>
     </exec>
 
     <echo message="${line.separator}null.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src.dir}/null.rph"/>
-      <arg line="${ralph_emitted.dir}/Null.java"/>
-      <arg line="emit_test_package"/>
-      <arg line="Null"/>
+      <arg line="-i ${ralph_src.dir}/null.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/Null.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c Null"/>
     </exec>
 
     
@@ -860,6 +860,10 @@
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
     <delete dir="${ralph_emitted.dir}"/>
+    <!-- Delete ralph compiler output -->
+    <delete file="parser.out"/>
+    <delete file="parsetab.py"/>
+    
   </target>
 
   <target
