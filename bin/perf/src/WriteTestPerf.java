@@ -27,10 +27,8 @@ public class WriteTestPerf
         
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
             Tester endpt = new Tester(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             for (int i = 0; i < num_writes_to_perform; ++i)

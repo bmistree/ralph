@@ -47,7 +47,7 @@
       <javac
             srcdir="${test_src_dir}/"
             destdir="${build_dir}"
-            classpath="${lib_class_path}:${build_dir}"
+            classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
             debug="true"
             debuglevel="lines,vars,source"
             includeantruntime="false">
@@ -55,6 +55,9 @@
         </javac>
   </target>
 
+
+  <property name="num_ops_to_perform"
+            value="10000"/>
   
   <target name="run_read_test" depends="init,compile_libs,compile_utils">
 
@@ -62,17 +65,17 @@
     <echo message="${line.separator}Read test${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src_dir}/read_test.rph"/>
-      <arg line="${ralph_emitted_dir}/ReadTest.java"/>
-      <arg line="${perf_package}"/>
-      <arg line="ReadTest"/>
+      <arg line="-i ${ralph_src_dir}/read_test.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/ReadTest.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c ReadTest"/>
     </exec>
 
     <!-- Compile java emitted to byte code for test -->
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -83,7 +86,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -95,8 +98,8 @@
         dir="${build_dir}"
         classname="${perf_package}.ReadTestPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}">
-        <arg line="10000"/>
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
 
@@ -109,17 +112,17 @@
     <echo message="${line.separator}Write test${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src_dir}/write_test.rph"/>
-      <arg line="${ralph_emitted_dir}/WriteTest.java"/>
-      <arg line="${perf_package}"/>
-      <arg line="WriteTest"/>
+      <arg line="-i ${ralph_src_dir}/write_test.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/WriteTest.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c WriteTest"/>
     </exec>
 
     <!-- Compile java emitted to byte code for test -->
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -130,7 +133,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -142,8 +145,8 @@
         dir="${build_dir}"
         classname="${perf_package}.WriteTestPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}">
-        <arg line="10000"/>
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
 
@@ -156,17 +159,17 @@
     <echo message="${line.separator}Nested struct test${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src_dir}/nested_structs.rph"/>
-      <arg line="${ralph_emitted_dir}/NestedStructs.java"/>
-      <arg line="${perf_package}"/>
-      <arg line="NestedStructs"/>
+      <arg line="-i ${ralph_src_dir}/nested_structs.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/NestedStructs.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c NestedStructs"/>
     </exec>
 
     <!-- Compile java emitted to byte code for test -->
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -177,7 +180,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -189,8 +192,8 @@
         dir="${build_dir}"
         classname="${perf_package}.NestedStructsPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}">
-        <arg line="10000"/>
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
 
@@ -201,17 +204,17 @@
     <echo message="${line.separator}Pronghorn test${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="${ralph_src_dir}/pronghorn_instance.rph"/>
-      <arg line="${ralph_emitted_dir}/PronghornInstance.java"/>
-      <arg line="${perf_package}"/>
-      <arg line="PronghornInstance"/>
+      <arg line="-i ${ralph_src_dir}/pronghorn_instance.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/PronghornInstance.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c PronghornInstance"/>
     </exec>
 
     <!-- Compile java emitted to byte code for test -->
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -222,7 +225,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -234,8 +237,8 @@
         dir="${build_dir}"
         classname="${perf_package}.PronghornTestPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}">
-        <arg line="10000"/>
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
 
@@ -245,6 +248,10 @@
   <target name="clean" description="get rid of build dir">
     <delete dir="${build_dir}"/>
     <delete dir="${ralph_emitted_dir}"/>
+    <!-- Delete ralph compiler output -->
+    <delete file="parser.out"/>
+    <delete file="parsetab.py"/>
+    
   </target>
 
   

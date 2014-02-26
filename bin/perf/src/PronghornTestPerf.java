@@ -27,10 +27,8 @@ public class PronghornTestPerf
         
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
             Pronghorn endpt = new Pronghorn(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             String switch_id = "some_switch";
@@ -44,8 +42,6 @@ public class PronghornTestPerf
             for (int i = 0; i < num_ops_to_perform; ++i)
                 endpt.single_op(switch_id);
             clock.toc(num_ops_to_perform,"Switch op:\t");
-
-
         }
         catch (Exception _ex)
         {

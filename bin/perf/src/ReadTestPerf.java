@@ -27,10 +27,8 @@ public class ReadTestPerf
         
         try
         {
-            String dummy_host_uuid = "dummy_host_uuid";
             Tester endpt = new Tester(
                 new RalphGlobals(),
-                dummy_host_uuid,
                 new SingleSideConnection());
 
             // warm up 
