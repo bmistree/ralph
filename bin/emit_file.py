@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import os
+import argparse
 
 base_path = os.path.join(
     os.path.realpath(os.path.dirname(__file__)),'..')
@@ -10,11 +11,12 @@ from bin.parse_file import parse
 from bin.produce_dependencies import dependencies_list    
 from ralph.java_emit.emit import emit
             
-def compile_ralph(input_filename,output_filename,package_name,program_name):
+def compile_ralph(input_filename,output_filename,package_name,program_name,
+                  include_dir_list):
     # Each element is a string, naming a file that we should link to
     # while generating code for input_filename.
     # FIXME: actually take in lib_dir_list
-    dep_list = dependencies_list(input_filename,[])
+    dep_list = dependencies_list(input_filename,include_dir_list)
 
     struct_types_ctx = None
     for dep_file in dep_list:
@@ -30,30 +32,44 @@ def compile_ralph(input_filename,output_filename,package_name,program_name):
     file_fd.flush()
     file_fd.close()
 
-def print_usage():
-    print '''
 
-./emit_file.py <input_filename> <output_filename> <pkg_name> <program_name>
+def run_cli():
+    # parser setup
+    description = 'Transcompiler for Ralph.'
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument(
+        '-i','--input',help='Input ralph file',
+        required=True)
+    parser.add_argument(
+        '-o','--output',help='File to emit ralph to',
+        required=True)
+    parser.add_argument(
+        '-p','--pkg-name',
+        help='The Java package name for the new file',
+        required=True)
+    parser.add_argument(
+        '-c','--class-name',
+        help='All structs/endpoints are created as static Java ' +
+        'classes wrapped by a surrounding class of this name.  ' +
+        'Likely should use same name as output file, without ' +
+        'the .java suffix.',
+        required=True)
+    parser.add_argument(
+        '-I','--include-dirs',
+        help='Add directories to list of directories that will be ' +
+        'searched for Ralph files in.  Note, the earlier the listed ' +
+        'directory appears in the command line argument, the higher ' +
+        'priority it will have.  Ie, if two directories contain the same ' +
+        'file, we include the file from the folder listed earlier.',
+        nargs='*',default=[])
 
-Args:
-
-  input_filename --- The name of a ralph file to compile
-
-  output_filename --- The name of a java file to compile to
-
-  pkg_name --- The package that the ralph program should compile into
-
-  program_name --- The name of the class that wraps endpoint classes.
-
-'''
+    # actually run parser and collect user-passed arguments
+    args = parser.parse_args()
+    compile_ralph(
+        args.input,args.output,args.pkg_name,args.class_name,
+        args.include_dirs)
+    
+    
 
 if __name__ == '__main__':
-    if len(sys.argv) != 5:
-        print_usage()
-    else:
-        input_filename = sys.argv[1]
-        output_filename = sys.argv[2]
-        package_name = sys.argv[3]
-        program_name = sys.argv[4]
-        compile_ralph(input_filename,output_filename,package_name,
-                      program_name)
+    run_cli()
