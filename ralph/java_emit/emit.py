@@ -1234,6 +1234,10 @@ def emit_internal_type(type_object):
                 # FIXME: Ugly, hackish way to return maps
                 if isinstance(typer,MapType):
                     return emit_internal_type(typer)
+                # FIXME: Ugly, hackish way to return structs
+                if isinstance(typer,StructType):
+                    return emit_internal_type(typer)
+                
                 typer = typer.basic_type
 
                 
