@@ -40,6 +40,7 @@ import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
 
 import RalphConnObj.ConnectionObj;
+import RalphConnObj.SingleSideConnection;
 import RalphExceptions.*;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -918,7 +919,6 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         'Unknown type to emit in emit_ralph_wrapped_type')
 
 
-
 def construct_new_expression(type_object,initializer_node,emit_ctx):
     """Generates the java new expression that assign a newly-declared
     variable to.
@@ -1033,8 +1033,14 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
+            default_internal_endpoint_text = (
+                'new %s (ralph_globals,new SingleSideConnection())' %
+                type_object.alias_name)
+            
             to_return = (
-                'new  %s(false,ralph_globals)' % java_type_text)
+                'new  %s(false,%s,ralph_globals)' %
+                (java_type_text,default_internal_endpoint_text))
+            
 
         return to_return
 
