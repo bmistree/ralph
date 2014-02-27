@@ -13,7 +13,7 @@ def lex_file(filename):
     prog_file = open(filename,'r')
     prog_text = prog_file.read()
     prog_file.close()
-    lexer = construct_lexer()
+    lexer = construct_lexer(filename)
     lexer.input(prog_text)
 
     while True:

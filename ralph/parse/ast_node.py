@@ -24,7 +24,7 @@ from ralph.parse.type_check_context import FixupableObject
 
 class _AstNode(object):
 
-    def __init__(self,label,line_number,node_type=None):
+    def __init__(self,filename,label,line_number,node_type=None):
         '''
         @param {ast_labels} label --- Eg., whether this node
         corresponds to a for statement, a condition statement, a
@@ -34,6 +34,7 @@ class _AstNode(object):
         types.  And they only get types after type checking has
         completed.
         '''
+        self.filename = filename
         self.label = label
         self.line_number = line_number
         self.type = node_type
@@ -51,23 +52,26 @@ class _AstNode(object):
         """Type check this statement.
         """
         raise InternalParseException(
+            self.filename,self.line_number,
             'Pure virtual type check pass one in AstNode.')
         
     def type_check_pass_two(self,type_check_ctx):
         """Type check this statement.
         """
         raise InternalParseException(
+            self.filename,self.line_number,
             'Pure virtual type check pass two in AstNode.')
 
     
 class RootStatementNode(_AstNode):
-    def __init__(self,alias_list_node,struct_node_list,endpoint_node_list):
+    def __init__(self,filename,alias_list_node,struct_node_list,endpoint_node_list):
         super(RootStatementNode,self).__init__(
-            ast_labels.ROOT_STATEMENT,0,None)
+            filename,ast_labels.ROOT_STATEMENT,0,None)
         
         #### DEBUG
         if endpoint_node_list.label != ast_labels.ENDPOINT_LIST_STATEMENT:
             raise InternalParseException(
+                self.filename,self.line_number,
                 'RootStatementNode requires endpoint list statement node')
         #### END DEBUG
 
@@ -128,10 +132,10 @@ class RootStatementNode(_AstNode):
 
     
 class AliasStatementNode(_AstNode):
-    def __init__(
-        self,for_struct,identifier_node,to_alias_to_string_node,line_number):
+    def __init__(self,filename,for_struct,identifier_node,
+                 to_alias_to_string_node,line_number):
         super(AliasStatementNode,self).__init__(
-            ast_labels.ALIAS,line_number)
+            filename,ast_labels.ALIAS,line_number)
         self.for_struct = for_struct
         self.to_alias_string = identifier_node.value
         self.to_alias_to_string = to_alias_to_string_node.value
@@ -165,12 +169,11 @@ class AliasStatementNode(_AstNode):
                 self.to_alias_string,self.to_alias_to_string)
     
 class StructDefinitionNode(_AstNode):
-
-    def __init__(
-        self,struct_name_identifier_node,struct_body_node,line_number):
+    def __init__(self,filename,struct_name_identifier_node,struct_body_node,
+                 line_number):
         
         super(StructDefinitionNode,self).__init__(
-            ast_labels.STRUCT_DEFINITION,line_number)
+            filename,ast_labels.STRUCT_DEFINITION,line_number)
 
         self.struct_name = struct_name_identifier_node.value
         self.struct_body_node = struct_body_node
@@ -216,9 +219,10 @@ class StructDefinitionNode(_AstNode):
         
         
 class EndpointDefinitionNode(_AstNode):
-    def __init__(self,name_identifier_node,endpoint_body_node,line_number):
+    def __init__(self,filename,name_identifier_node,endpoint_body_node,
+                 line_number):
         super(EndpointDefinitionNode,self).__init__(
-            ast_labels.ENDPOINT_DEFINITION_STATEMENT,line_number)
+            filename,ast_labels.ENDPOINT_DEFINITION_STATEMENT,line_number)
 
         self.name = name_identifier_node.get_value()
         self.body_node = endpoint_body_node
@@ -231,9 +235,9 @@ class EndpointDefinitionNode(_AstNode):
 
 
 class EndpointBodyNode(_AstNode):
-    def __init__(self):
+    def __init__(self,filename):
         super(EndpointBodyNode,self).__init__(
-            ast_labels.ENDPOINT_BODY,0)
+            filename,ast_labels.ENDPOINT_BODY,0)
         self.variable_declaration_nodes = []
         self.method_declaration_nodes = []
         
@@ -269,13 +273,14 @@ class EndpointBodyNode(_AstNode):
             method_declaration_node.type_check_pass_two(type_check_ctx)
 
 class PartnerMethodCallNode(_AstNode):
-    def __init__(self,method_name_node,method_call_args_node,line_number):
+    def __init__(self,filename,method_name_node,method_call_args_node,
+                 line_number):
         """
         Args:
             method_name_node: {IdentifierNode}
         """
         super(PartnerMethodCallNode,self).__init__(
-            ast_labels.PARTNER_METHOD_CALL,line_number)
+            filename,ast_labels.PARTNER_METHOD_CALL,line_number)
 
         self.partner_method_name = method_name_node.value
         self.args_list = method_call_args_node.get_args_list()
@@ -294,7 +299,7 @@ class PartnerMethodCallNode(_AstNode):
             # Doubles, Strings, etc.
             if arg_node.label != ast_labels.IDENTIFIER_EXPRESSION:
                 raise TypeCheckException(
-                    self.line_number,
+                    self.filename,self.line_number,
                     'arg to partner method call must be an identifier ' +
                     'for now.  For now, only permitting putting in ' +
                     'identifiers as arguments to partner method calls.  ' +
@@ -305,9 +310,9 @@ class PartnerMethodCallNode(_AstNode):
 
             
 class IdentifierNode(_AstNode):
-    def __init__(self,value,line_number):
+    def __init__(self,filename,value,line_number):
         super(IdentifierNode,self).__init__(
-            ast_labels.IDENTIFIER_EXPRESSION,line_number)
+            filename,ast_labels.IDENTIFIER_EXPRESSION,line_number)
 
         self.value = value
 
@@ -318,7 +323,7 @@ class IdentifierNode(_AstNode):
         decl_ast_node = type_check_ctx.lookup_internal_ast_node(self.value)
         if decl_ast_node is None:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 ' %s is not declared.' % self.value )
         self.type = decl_ast_node.type
 
@@ -326,12 +331,11 @@ class IdentifierNode(_AstNode):
         return self.value
 
 class DeclarationStatementNode(_AstNode):
-    def __init__(
-        self,var_name_identifier_node,type_node,
-        initializer_node = None):
+    def __init__(self,filename,var_name_identifier_node,type_node,
+                 initializer_node = None):
         
         super(DeclarationStatementNode,self).__init__(
-            ast_labels.DECLARATION_STATEMENT,
+            filename,ast_labels.DECLARATION_STATEMENT,
             type_node.line_number)
 
         self.type_node = type_node
@@ -354,14 +358,14 @@ class DeclarationStatementNode(_AstNode):
             self.initializer_node.type_check_pass_two(type_check_ctx)
 
 class PrintCallNode(_AstNode):
-    def __init__(self,method_args_node,line_number):
+    def __init__(self,filename,method_args_node,line_number):
         super(PrintCallNode,self).__init__(
-            ast_labels.PRINT_CALL,line_number)
+            filename,ast_labels.PRINT_CALL,line_number)
 
         print_call_args_list = method_args_node.get_args_list()
         if len(print_call_args_list) != 1:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 ('Print requires 1 argument, not %s.' %
                  len(print_call_args_list)))
         
@@ -376,16 +380,16 @@ class PrintCallNode(_AstNode):
 
         
 class SpeculateCallNode(_AstNode):
-    def __init__(self,method_args_node,line_number):
+    def __init__(self,filename,method_args_node,line_number):
         super(SpeculateCallNode,self).__init__(
-            ast_labels.SPECULATE_CALL,line_number)
+            filename,ast_labels.SPECULATE_CALL,line_number)
 
         self.speculate_call_args_list = []
         if method_args_node is not None:
             self.speculate_call_args_list = method_args_node.get_args_list()
             if len(self.speculate_call_args_list) == 0:
                 raise TypeCheckException(
-                    self.line_number,
+                    self.filename,self.line_number,
                     'Speculate requires at least one argument.')
         
     def type_check_pass_one(self,struct_types_ctx):
@@ -398,9 +402,9 @@ class SpeculateCallNode(_AstNode):
 
        
 class SpeculateAllCallNode(_AstNode):
-    def __init__(self,line_number):
+    def __init__(self,filename,line_number):
         super(SpeculateAllCallNode,self).__init__(
-            ast_labels.SPECULATE_ALL_CALL,line_number)
+            filename,ast_labels.SPECULATE_ALL_CALL,line_number)
 
     def type_check_pass_one(self,struct_types_ctx):
         pass
@@ -410,14 +414,14 @@ class SpeculateAllCallNode(_AstNode):
         
         
 class VerbatimCallNode(_AstNode):
-    def __init__(self,method_args_node,line_number):
+    def __init__(self,filename,method_args_node,line_number):
         super(VerbatimCallNode,self).__init__(
-            ast_labels.VERBATIM_CALL,line_number)
+            filename,ast_labels.VERBATIM_CALL,line_number)
 
         verbatim_call_args_list = method_args_node.get_args_list()
         if len(verbatim_call_args_list) != 1:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 ('Verbatim requires 1 argument, not %s.' %
                  len(verbatim_call_args_list)))
         
@@ -432,11 +436,10 @@ class VerbatimCallNode(_AstNode):
         
 
 class MethodDeclarationNode(_AstNode):
-    def __init__(
-        self,method_signature_node,scope_body_node ):
+    def __init__(self,filename,method_signature_node,scope_body_node):
 
         super(MethodDeclarationNode,self).__init__(
-            ast_labels.METHOD_DECLARATION,
+            filename,ast_labels.METHOD_DECLARATION,
             method_signature_node.line_number)
 
         self.method_name = method_signature_node.get_method_name()
@@ -472,9 +475,8 @@ class MethodDeclarationNode(_AstNode):
 
         
 class MethodSignatureNode(_AstNode):
-    def __init__(
-        self,method_name_identifier_node,method_declaration_args_node,
-        returns_type_node):
+    def __init__(self,filename,method_name_identifier_node,
+                 method_declaration_args_node, returns_type_node):
         '''
         @params{}
         @params{}
@@ -483,7 +485,7 @@ class MethodSignatureNode(_AstNode):
         anything
         '''
         super(MethodSignatureNode,self).__init__(
-            ast_labels.METHOD_SIGNATURE,
+            filename,ast_labels.METHOD_SIGNATURE,
             method_name_identifier_node.line_number)
 
         self.method_name = method_name_identifier_node.get_value()
@@ -518,14 +520,13 @@ class MethodSignatureNode(_AstNode):
                 method_arg_node.arg_name,method_arg_node)
 
 class ForNode(_AstNode):
-    def __init__(
-        self,variable_type_node,variable_node,in_what_node,
-        statement_node,line_number):
+    def __init__(self,filename,variable_type_node,variable_node,in_what_node,
+                 statement_node,line_number):
 
         # for ( variable_type_node variable_node in in_what_node)
         #    statement_node
         # note: may be None if the variable already existed
-        super(ForNode,self).__init__(ast_labels.FOR,line_number)
+        super(ForNode,self).__init__(filename,ast_labels.FOR,line_number)
 
         self.variable_type_node = variable_type_node
         self.variable_node = variable_node
@@ -533,7 +534,7 @@ class ForNode(_AstNode):
         # for time-being, only allowing single identifiers to be
         if self.variable_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 'For loop requires a single identifier in predicate')
         
         self.in_what_node = in_what_node
@@ -561,9 +562,9 @@ class ForNode(_AstNode):
         
             
 class MethodDeclarationArgNode(_AstNode):
-    def __init__(self, variable_type_node, name_identifier_node):
+    def __init__(self,filename, variable_type_node, name_identifier_node):
         super(MethodDeclarationArgNode,self).__init__(
-            ast_labels.METHOD_DECLARATION_ARG,
+            filename,ast_labels.METHOD_DECLARATION_ARG,
             variable_type_node.line_number)
 
         self.variable_type_node = variable_type_node
@@ -579,10 +580,10 @@ class MethodDeclarationArgNode(_AstNode):
         
 
 class AtomicallyNode(_AstNode):
-    def __init__(self,scope_node):
+    def __init__(self,filename,scope_node):
 
         super(AtomicallyNode,self).__init__(
-            ast_labels.ATOMICALLY,scope_node.line_number)
+            filename,ast_labels.ATOMICALLY,scope_node.line_number)
 
         self.statement_list = scope_node.get_statement_list()
 
@@ -598,9 +599,9 @@ class AtomicallyNode(_AstNode):
         type_check_ctx.pop_scope()
         
 class ScopeNode (_AstNode):
-    def __init__(self,scope_body_node):
+    def __init__(self,filename,scope_body_node):
         super(ScopeNode,self).__init__(
-            ast_labels.SCOPE,scope_body_node.line_number)
+            filename,ast_labels.SCOPE,scope_body_node.line_number)
         self.statement_list = scope_body_node.get_statement_list()
 
     def get_statement_list(self):
@@ -619,9 +620,9 @@ class ScopeNode (_AstNode):
 
         
 class ParallelNode(_AstNode):
-    def __init__(
-        self,to_iter_over_expression_node,lambda_expression_node,line_number):
-        super(ParallelNode,self).__init__(ast_labels.PARALLEL,line_number)
+    def __init__(self,filename,to_iter_over_expression_node,
+                 lambda_expression_node,line_number):
+        super(ParallelNode,self).__init__(filename,ast_labels.PARALLEL,line_number)
         self.to_iter_over_expression_node = to_iter_over_expression_node
         self.lambda_expression_node = lambda_expression_node
 
@@ -634,9 +635,9 @@ class ParallelNode(_AstNode):
         self.lambda_expression_node.type_check_pass_two(type_check_ctx)
         
 class AssignmentNode(_AstNode):
-    def __init__(self,lhs_node,rhs_node):
+    def __init__(self,filename,lhs_node,rhs_node):
         super(AssignmentNode,self).__init__(
-            ast_labels.ASSIGNMENT,lhs_node.line_number)
+            filename,ast_labels.ASSIGNMENT,lhs_node.line_number)
         self.lhs_node = lhs_node
         self.rhs_node = rhs_node
 
@@ -658,15 +659,15 @@ class AssignmentNode(_AstNode):
             if (isinstance(self.rhs_node.type,MethodType) and
                 (self.lhs_node.type != self.rhs_node.type.returns_type)):
                     raise TypeCheckException(
-                        self.line_number,
+                        self.filename,self.line_number,
                         'lhs type of %s does not agree with rhs type of %s' %
                         (str(self.lhs_node.type),str(self.rhs_node.type)))
             
         
 class NotNode(_AstNode):
-    def __init__(self,to_not_node):
+    def __init__(self,filename,to_not_node):
         super(NotNode,self).__init__(
-            ast_labels.NOT,to_not_node.line_number)
+            filename,ast_labels.NOT,to_not_node.line_number)
         
         self.to_not_node = to_not_node
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
@@ -679,9 +680,9 @@ class NotNode(_AstNode):
 
         
 class LenNode(_AstNode):
-    def __init__(self,len_of_node,line_number):
+    def __init__(self,filename,len_of_node,line_number):
         super(LenNode,self).__init__(
-            ast_labels.LEN,line_number)
+            filename,ast_labels.LEN,line_number)
         
         self.len_of_node = len_of_node
         self.type = BasicType(ast_labels.NUMBER_TYPE,False)
@@ -694,8 +695,8 @@ class LenNode(_AstNode):
     
         
 class ReturnNode(_AstNode):
-    def __init__(self,line_number):
-        super(ReturnNode,self).__init__(ast_labels.RETURN,line_number)
+    def __init__(self,filename,line_number):
+        super(ReturnNode,self).__init__(filename,ast_labels.RETURN,line_number)
         self.what_to_return_node = None
     def add_return_expression_node(self,what_to_return_node):
         self.what_to_return_node = what_to_return_node
@@ -712,12 +713,12 @@ class ReturnNode(_AstNode):
             self.type = self.what_to_return_node.type
 
 class ConditionNode(_AstNode):
-    def __init__(self,if_node,elifs_node,else_node):
+    def __init__(self,filename,if_node,elifs_node,else_node):
         '''
         @param {ElseNode} else_node --- Can have a body of None.
         '''
         super(ConditionNode,self).__init__(
-            ast_labels.CONDITION,if_node.line_number)
+            filename,ast_labels.CONDITION,if_node.line_number)
 
         self.if_node = if_node
         self.elifs_list = elifs_node.get_else_if_node_list()
@@ -742,8 +743,8 @@ class ConditionNode(_AstNode):
 
             
 class IfNode(_AstNode):
-    def __init__(self,predicate_node,if_body_node,line_number):
-        super(IfNode,self).__init__(ast_labels.IF,line_number)
+    def __init__(self,filename,predicate_node,if_body_node,line_number):
+        super(IfNode,self).__init__(filename,ast_labels.IF,line_number)
 
         self.predicate_node = predicate_node
         self.body_node = if_body_node
@@ -759,8 +760,8 @@ class IfNode(_AstNode):
 
         
 class ElifNode(_AstNode):
-    def __init__(self,predicate_node,elif_body_node,line_number):
-        super(ElifNode,self).__init__(ast_labels.ELIF,line_number)
+    def __init__(self,filename,predicate_node,elif_body_node,line_number):
+        super(ElifNode,self).__init__(filename,ast_labels.ELIF,line_number)
 
         self.predicate_node = predicate_node
         self.body_node = elif_body_node
@@ -776,13 +777,13 @@ class ElifNode(_AstNode):
 
 
 class BracketNode(_AstNode):
-    def __init__(self,outside_bracket_node,inside_bracket_node):
+    def __init__(self,filename,outside_bracket_node,inside_bracket_node):
         '''
         @param {_AstNode} outside_bracket_node --- variable_node is
         either an identifier node, bracket node, or dot node
         '''
         super(BracketNode,self).__init__(
-            ast_labels.BRACKET,outside_bracket_node.line_number)
+            filename,ast_labels.BRACKET,outside_bracket_node.line_number)
         
         self.outside_bracket_node = outside_bracket_node
         self.inside_bracket_node = inside_bracket_node
@@ -797,9 +798,9 @@ class BracketNode(_AstNode):
         self.type = self.outside_bracket_node.type.value_type
         
 class DotNode(_AstNode):
-    def __init__(self,left_of_dot_node, right_of_dot_node):
+    def __init__(self,filename,left_of_dot_node, right_of_dot_node):
         super(DotNode,self).__init__(
-            ast_labels.DOT,left_of_dot_node.line_number)
+            filename,ast_labels.DOT,left_of_dot_node.line_number)
         
         self.left_of_dot_node = left_of_dot_node
         self.right_of_dot_node = right_of_dot_node
@@ -820,7 +821,7 @@ class DotNode(_AstNode):
 
             if method_name not in dict_dot_fields:
                 raise TypeCheckException(
-                    self.line_number,
+                    self.filename,self.line_number,
                     'Unknown field %s on lhs of type %s' %
                     (method_name,str(self.left_of_dot_node.type)))
 
@@ -837,7 +838,7 @@ class DotNode(_AstNode):
 
                 if identifier_name not in dict_dot_fields:
                     raise TypeCheckException(
-                        self.line_number,
+                        self.filename,self.line_number,
                         'Unknown field %s on lhs of type %s' %
                         (identifier_name,str(self.left_of_dot_node.type)))
                 self.right_of_dot_node.type = dict_dot_fields[identifier_name]
@@ -845,7 +846,7 @@ class DotNode(_AstNode):
                 self.right_of_dot_node.type = WildcardType()
         else:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 'Type check error for dot expression.  Right hand side of ' + 
                 'dot must be an identifier.')
             
@@ -853,9 +854,9 @@ class DotNode(_AstNode):
 
         
 class MethodCallNode(_AstNode):
-    def __init__(self,variable_node,method_call_args_node):
+    def __init__(self,filename,variable_node,method_call_args_node):
         super(MethodCallNode,self).__init__(
-            ast_labels.METHOD_CALL,variable_node.line_number)
+            filename,ast_labels.METHOD_CALL,variable_node.line_number)
         
         self.method_node = variable_node
         self.args_list = method_call_args_node.get_args_list()
@@ -876,7 +877,7 @@ class MethodCallNode(_AstNode):
             if self.type.num_arguments() != len(self.args_list):
                 method_name = self.method_node.value
                 raise TypeCheckException(
-                    self.line_number,
+                    self.filename,self.line_number,
                     'Type check error on method call: incorrect number ' +
                     'of arguments passed in to method %s.' % method_name)
         
@@ -885,12 +886,11 @@ class MethodCallNode(_AstNode):
             arg_node.type_check_pass_two(type_check_ctx)
 
 class RangeExpressionNode(_AstNode):
-    def __init__(
-        self,start_expression_node,increment_expression_node,
-        end_expression_node,line_number):
+    def __init__(self,filename,start_expression_node,increment_expression_node,
+                 end_expression_node,line_number):
         
         super(RangeExpressionNode,self).__init__(
-            ast_labels.RANGE,line_number)
+            filename,ast_labels.RANGE,line_number)
 
         # where range statement starts from
         self.start_expression_node = start_expression_node
@@ -901,9 +901,11 @@ class RangeExpressionNode(_AstNode):
 
     def type_check_pass_one(self,struct_types_ctx):
         raise InternalParseException(
+            self.filename,self.line_number,
             'FIXME: must add type check for range expression')
     def type_check_pass_two(self,type_check_ctx):
         raise InternalParseException(
+            self.filename,self.line_number,
             'FIXME: must add type check for range expression')        
         
 class _LiteralNode(_AstNode):
@@ -911,8 +913,8 @@ class _LiteralNode(_AstNode):
     Parent class of NumberLiteralNode, TextLiteralNode,
     TrueFalseLiteralNode
     '''
-    def __init__(self,label,value,line_number,basic_type):
-        super(_LiteralNode,self).__init__(label,line_number)
+    def __init__(self,filename,label,value,line_number,basic_type):
+        super(_LiteralNode,self).__init__(filename,label,line_number)
         self.line_number = line_number
         self.value = value
         self.basic_type = basic_type
@@ -925,26 +927,27 @@ class _LiteralNode(_AstNode):
 
         
 class NumberLiteralNode(_LiteralNode):
-    def __init__(self,number,line_number):
+    def __init__(self,filename,number,line_number):
         super(NumberLiteralNode,self).__init__(
-            ast_labels.NUMBER_LITERAL,number,line_number,
+            filename,ast_labels.NUMBER_LITERAL,number,line_number,
             ast_labels.NUMBER_TYPE)
 
 class TextLiteralNode(_LiteralNode):
-    def __init__(self,text,line_number):
+    def __init__(self,filename,text,line_number):
         super(TextLiteralNode,self).__init__(
-            ast_labels.TEXT_LITERAL,text,line_number,
+            filename,ast_labels.TEXT_LITERAL,text,line_number,
             ast_labels.STRING_TYPE)
         
 class TrueFalseLiteralNode(_LiteralNode):
-    def __init__(self,true_false,line_number):
+    def __init__(self,filename,true_false,line_number):
         super(TrueFalseLiteralNode,self).__init__(
-            ast_labels.TRUE_FALSE_LITERAL,true_false,line_number,
+            filename,ast_labels.TRUE_FALSE_LITERAL,true_false,line_number,
             ast_labels.BOOL_TYPE)
 
 class NullLiteralNode(_AstNode):
-    def __init__(self,line_number):
-        super(NullLiteralNode,self).__init__(ast_labels.NULL_TYPE,line_number)
+    def __init__(self,filename,line_number):
+        super(NullLiteralNode,self).__init__(
+            filename,ast_labels.NULL_TYPE,line_number)
         self.type = NullType()
 
     def type_check_pass_one(self,struct_types_ctx):
@@ -956,9 +959,9 @@ class VariableTypeNode(_AstNode):
     pass
         
 class BasicTypeNode(VariableTypeNode):
-    def __init__(self,basic_type,is_tvar,line_number):
+    def __init__(self,filename,basic_type,is_tvar,line_number):
         super(VariableTypeNode,self).__init__(
-            ast_labels.VARIABLE_TYPE,line_number)
+            filename,ast_labels.VARIABLE_TYPE,line_number)
 
         self.type = self._build_type(basic_type,is_tvar)
         
@@ -971,9 +974,9 @@ class BasicTypeNode(VariableTypeNode):
         pass
 
 class ListVariableTypeNode(VariableTypeNode):
-    def __init__(self,element_type_node,is_tvar,line_number):
+    def __init__(self,filename,element_type_node,is_tvar,line_number):
         super(ListVariableTypeNode,self).__init__(
-            ast_labels.LIST_VARIABLE_TYPE,line_number)
+            filename,ast_labels.LIST_VARIABLE_TYPE,line_number)
         self.element_type_node = element_type_node
         self.is_tvar = is_tvar
         self.type = ListType()
@@ -987,9 +990,10 @@ class ListVariableTypeNode(VariableTypeNode):
         pass
     
 class MapVariableTypeNode(VariableTypeNode):
-    def __init__(self,from_type_node,to_type_node,is_tvar,line_number):
+    def __init__(self,filename,from_type_node,to_type_node,is_tvar,
+                 line_number):
         super(MapVariableTypeNode,self).__init__(
-            ast_labels.MAP_VARIABLE_TYPE,line_number)
+            filename,ast_labels.MAP_VARIABLE_TYPE,line_number)
         self.from_type_node = from_type_node
         self.to_type_node = to_type_node
         self.is_tvar = is_tvar
@@ -1005,9 +1009,10 @@ class MapVariableTypeNode(VariableTypeNode):
         pass
 
 class StructVariableTypeNode(VariableTypeNode):
-    def __init__(self,struct_name_identifier_node,is_tvar,line_number):
+    def __init__(self,filename,struct_name_identifier_node,is_tvar,
+                 line_number):
         super(StructVariableTypeNode,self).__init__(
-            ast_labels.STRUCT_VARIABLE_TYPE,line_number)
+            filename,ast_labels.STRUCT_VARIABLE_TYPE,line_number)
         self.struct_name = struct_name_identifier_node.value
         self.is_tvar = is_tvar
 
@@ -1025,7 +1030,7 @@ class StructVariableTypeNode(VariableTypeNode):
                 self.struct_name))
         if struct_type_obj is None:
             raise TypeCheckException(
-                self.line_number,
+                self.filename,self.line_number,
                 'Unknown struct named %s.' % self.struct_name)
         # struct_type_obj should be a StructType object
         self.type = struct_type_obj.clone(self.is_tvar)
@@ -1034,9 +1039,10 @@ class StructVariableTypeNode(VariableTypeNode):
         pass
 
 class EndpointVariableTypeNode(VariableTypeNode):
-    def __init__(self,endpoint_name_identifier_node,is_tvar,line_number):
+    def __init__(self,filename,endpoint_name_identifier_node,is_tvar,
+                 line_number):
         super(EndpointVariableTypeNode,self).__init__(
-            ast_labels.ENDPOINT_VARIABLE_TYPE,line_number)
+            filename,ast_labels.ENDPOINT_VARIABLE_TYPE,line_number)
         self.endpoint_name = endpoint_name_identifier_node.value
         self.is_tvar = is_tvar
 
@@ -1054,8 +1060,8 @@ class EndpointVariableTypeNode(VariableTypeNode):
         
         if self.alias_name is None:
             raise TypeCheckException(
-                self.line_number,
-                'Require alias definition for endpoint.' % self.endpoint_name)
+                self.filename,self.line_number,
+                'Require alias definition for endpoint %s.' % self.endpoint_name)
 
         self.type = EndpointType(
             self.endpoint_name,self.is_tvar,self.alias_name)
@@ -1072,9 +1078,9 @@ class EndpointVariableTypeNode(VariableTypeNode):
         pass
 
 class ServiceFactoryVariableTypeNode(VariableTypeNode):
-    def __init__(self,is_tvar,line_number):
+    def __init__(self,filename,is_tvar,line_number):
         super(ServiceFactoryVariableTypeNode,self).__init__(
-            ast_labels.SERVICE_FACTORY_TYPE,line_number)
+            filename,ast_labels.SERVICE_FACTORY_TYPE,line_number)
 
         self.is_tvar = is_tvar
         self.type = ServiceFactoryType(self.is_tvar)
@@ -1086,11 +1092,9 @@ class ServiceFactoryVariableTypeNode(VariableTypeNode):
         pass
         
 class _BinaryExpressionNode(_AstNode):
-    def __init__(
-        self,label,lhs_expression_node,rhs_expression_node):
-
+    def __init__(self,filename,label,lhs_expression_node,rhs_expression_node):
         super (_BinaryExpressionNode,self).__init__(
-            label,lhs_expression_node.line_number)
+            filename,label,lhs_expression_node.line_number)
         self.lhs_expression_node = lhs_expression_node
         self.rhs_expression_node = rhs_expression_node
 
@@ -1117,112 +1121,147 @@ class _LogicalExpressionNode(_BinaryExpressionNode):
         
         
 class MultiplyExpressionNode(_ArithmeticExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(MultiplyExpressionNode,self).__init__(
-            ast_labels.MULTIPLY,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.MULTIPLY,lhs_expression_node,
+            rhs_expression_node)
         
 class DivideExpressionNode(_ArithmeticExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(DivideExpressionNode,self).__init__(
-            ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
         
 class AddExpressionNode(_ArithmeticExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(AddExpressionNode,self).__init__(
-            ast_labels.ADD,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.ADD,lhs_expression_node,rhs_expression_node)
         
 class SubtractExpressionNode(_ArithmeticExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(SubtractExpressionNode,self).__init__(
-            ast_labels.SUBTRACT,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.SUBTRACT,lhs_expression_node,
+            rhs_expression_node)
         
 class GreaterThanExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(GreaterThanExpressionNode,self).__init__(
-            ast_labels.GREATER_THAN,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.GREATER_THAN,lhs_expression_node,
+            rhs_expression_node)
         
 class GreaterThanEqualsExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(GreaterThanEqualsExpressionNode,self).__init__(
-            ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,
+            filename,ast_labels.GREATER_THAN_EQUALS,lhs_expression_node,
             rhs_expression_node)
         
 class LessThanExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(LessThanExpressionNode,self).__init__(
-            ast_labels.LESS_THAN,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.LESS_THAN,lhs_expression_node,
+            rhs_expression_node)
         
 class LessThanEqualsExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(LessThanEqualsExpressionNode,self).__init__(
-            ast_labels.LESS_THAN_EQUALS,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.LESS_THAN_EQUALS,lhs_expression_node,
+            rhs_expression_node)
         
 class EqualsExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(EqualsExpressionNode,self).__init__(
-            ast_labels.EQUALS,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.EQUALS,lhs_expression_node,rhs_expression_node)
         
 class NotEqualsExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(NotEqualsExpressionNode,self).__init__(
-            ast_labels.NOT_EQUALS,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.NOT_EQUALS,lhs_expression_node,
+            rhs_expression_node)
         
 class AndExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(AndExpressionNode,self).__init__(
-            ast_labels.AND,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.AND,lhs_expression_node,rhs_expression_node)
         
 class OrExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(OrExpressionNode,self).__init__(
-            ast_labels.OR,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.OR,lhs_expression_node,rhs_expression_node)
         
 class InExpressionNode(_BinaryExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(InExpressionNode,self).__init__(
-            ast_labels.IN,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.IN,lhs_expression_node,rhs_expression_node)
     def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
 class NotInExpressionNode(_LogicalExpressionNode):
-    def __init__(self,lhs_expression_node,rhs_expression_node):
+    def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(NotInExpressionNode,self).__init__(
-            ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
+            filename,ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
         
         
 def create_binary_expression_node(
     operator,lhs_expression_node,rhs_expression_node):
 
     if operator == '*':
-        return MultiplyExpressionNode(lhs_expression_node,rhs_expression_node)
+        return MultiplyExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '/':
-        return DivideExpressionNode(lhs_expression_node,rhs_expression_node)
+        return DivideExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '+':
-        return AddExpressionNode(lhs_expression_node,rhs_expression_node)    
+        return AddExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '-':
-        return SubtractExpressionNode(lhs_expression_node,rhs_expression_node)
+        return SubtractExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '>':
-        return GreaterThanExpressionNode(lhs_expression_node,rhs_expression_node)
+        return GreaterThanExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '>=':
-        return GreaterThanEqualsExpressionNode(lhs_expression_node,rhs_expression_node)
+        return GreaterThanEqualsExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == '<':
-        return LessThanExpressionNode(lhs_expression_node,rhs_expression_node)    
+        return LessThanExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)    
     elif operator == '<=':
-        return LessThanEqualsExpressionNode(lhs_expression_node,rhs_expression_node)    
+        return LessThanEqualsExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)    
     elif operator == '==':
-        return EqualsExpressionNode(lhs_expression_node,rhs_expression_node)    
+        return EqualsExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)    
     elif operator == '!=':
-        return NotEqualsExpressionNode(lhs_expression_node,rhs_expression_node)
+        return NotEqualsExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == 'and':
-        return AndExpressionNode(lhs_expression_node,rhs_expression_node)
+        return AndExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == 'or':
-        return OrExpressionNode(lhs_expression_node,rhs_expression_node)
+        return OrExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == 'in':
-        return InExpressionNode(lhs_expression_node,rhs_expression_node)
+        return InExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     elif operator == 'not in':
-        return NotInExpressionNode(lhs_expression_node,rhs_expression_node)
+        return NotInExpressionNode(
+            lhs_expression_node.filename,lhs_expression_node,
+            rhs_expression_node)
     
     raise InternalParseException(
+        lhs_expression_node.filename,lhs_expression_node.line_number,
         'Unknown binary operator when creating binary expression')
 
     
@@ -1230,9 +1269,9 @@ def create_binary_expression_node(
 #### Intermediate nodes that get removed from actual AST ####
     
 class EndpointListNode(_AstNode):
-    def __init__(self,endpoint_definition_node):
+    def __init__(self,filename,endpoint_definition_node):
         super(EndpointListNode,self).__init__(
-            ast_labels.ENDPOINT_LIST_STATEMENT,0)
+            filename,ast_labels.ENDPOINT_LIST_STATEMENT,0)
 
         if endpoint_definition_node is not None:
             self._append_child(endpoint_definition_node)
@@ -1244,14 +1283,13 @@ class EndpointListNode(_AstNode):
         return iter(self.children)
 
 class EmptyNode(_AstNode):
-    def __init__(self):
-        super(EmptyNode,self).__init__(
-            ast_labels.EMPTY_STATEMENT,0)
+    def __init__(self,filename):
+        super(EmptyNode,self).__init__(filename,ast_labels.EMPTY_STATEMENT,0)
 
 class MethodDeclarationArgsNode(_AstNode):
-    def __init__(self):
+    def __init__(self,filename,):
         super(MethodDeclarationArgsNode,self).__init__(
-            ast_labels.METHOD_DECLARATION_ARGS,0)
+            filename,ast_labels.METHOD_DECLARATION_ARGS,0)
     def append_method_declaration_arg(self,method_declaration_arg):
         self._append_child(method_declaration_arg)
 
@@ -1259,9 +1297,9 @@ class MethodDeclarationArgsNode(_AstNode):
         return list(self.children)
         
 class ScopeBodyNode(_AstNode):
-    def __init__(self,line_number):
+    def __init__(self,filename,line_number):
         super(ScopeBodyNode,self).__init__(
-            ast_labels.SCOPE_BODY,line_number)
+            filename,ast_labels.SCOPE_BODY,line_number)
         
     def append_statement_node(self,statement_node):
         self._append_child(statement_node)
@@ -1274,9 +1312,9 @@ class ScopeBodyNode(_AstNode):
         return list(self.children)
 
 class MethodCallArgsNode(_AstNode):
-    def __init__(self,line_number):
+    def __init__(self,filename,line_number):
         super(MethodCallArgsNode,self).__init__(
-            ast_labels.METHOD_CALL_ARGS,line_number)
+            filename,ast_labels.METHOD_CALL_ARGS,line_number)
 
     def append_arg(self,expression_node):
         self._append_child(expression_node)
@@ -1285,8 +1323,8 @@ class MethodCallArgsNode(_AstNode):
         return list(self.children)
     
 class ElseIfNodes(_AstNode):
-    def __init__(self):
-        super(ElseIfNodes,self).__init__(ast_labels.ELSE_IFS,0)
+    def __init__(self,filename):
+        super(ElseIfNodes,self).__init__(filename,ast_labels.ELSE_IFS,0)
         # each element of children is an if ndoe
 
     def append_else_if(self,else_if_node):
@@ -1300,16 +1338,17 @@ class ElseIfNodes(_AstNode):
         return list(self.children)
 
 class ElseNode (_AstNode):
-    def __init__(self,line_number):
-        super(ElseNode,self).__init__(ast_labels.ELSE,line_number)
+    def __init__(self,filename,line_number):
+        super(ElseNode,self).__init__(filename,ast_labels.ELSE,line_number)
         self.body_node = None
     def add_else_body_node (self,body_node):
         self.body_node = body_node
         
     
 class StructListNode(_AstNode):
-    def __init__(self):
-        super(StructListNode,self).__init__(ast_labels.STRUCT_LIST_NODE,0)
+    def __init__(self,filename):
+        super(StructListNode,self).__init__(
+            filename,ast_labels.STRUCT_LIST_NODE,0)
         
     def add_struct_definition_node(self,struct_definition_node):
         self._append_child(struct_definition_node)
@@ -1319,8 +1358,9 @@ class StructListNode(_AstNode):
     
 
 class AliasListNode(_AstNode):
-    def __init__(self):
-        super(AliasListNode,self).__init__(ast_labels.ALIAS_LIST_NODE,0)
+    def __init__(self,filename):
+        super(AliasListNode,self).__init__(
+            filename,ast_labels.ALIAS_LIST_NODE,0)
         
     def add_alias_node(self,alias_node):
         self._append_child(alias_node)
@@ -1330,9 +1370,9 @@ class AliasListNode(_AstNode):
 
     
 class StructBodyNode(_AstNode):
-    def __init__(self):
+    def __init__(self,filename):
         super(StructBodyNode,self).__init__(
-            ast_labels.STRUCT_BODY,0)
+            filename,ast_labels.STRUCT_BODY,0)
     
     def add_struct_field(self,declaration_statement_node):
         self._append_child(declaration_statement_node)

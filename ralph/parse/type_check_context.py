@@ -67,6 +67,7 @@ class FixupableObject(object):
         #### DEBUG
         else:
             raise InternalTypeCheckException(
+                'unknown',0,
                 'Unknown fixupable object type when performing fixups.')
         #### END DEBUG
 
@@ -175,7 +176,7 @@ class StructTypesContext(object):
             existing_line_number = existing_record.line_number
             
             raise TypeCheckException(
-                line_number,
+                decl_filename, line_number,
                 'Redefinition of type %s.  Defined at %s:%i and at %s:%i' %
                 (name,decl_filename,line_number,existing_filename,
                  existing_line_number))

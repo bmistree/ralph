@@ -128,7 +128,8 @@ class BasicType(Type):
         if self.basic_type not in ast_labels.BASIC_TYPES_LIST:
             import pdb
             pdb.set_trace()
-            raise InternalParseException('Unknown type in basic type')
+            raise InternalParseException(
+                'unknown',0,'Unknown type in basic type')
         #### END DEBUG
         
         self.is_tvar = is_tvar
@@ -372,7 +373,8 @@ class MethodType(Type):
 
     def dict_dot_fields(self):
         if self.returns_type is None:
-            raise InternalParseException('Cannot get dot methods on None')
+            raise InternalParseException(
+                'unknown',0,'Cannot get dot methods on None')
         
         return self.returns_type.dict_dot_methods()
 

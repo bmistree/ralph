@@ -440,13 +440,18 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
         #### DEBUG
         else:
             raise InternalEmitException(
+                method_declaration_arg_node.filename,
+                method_declaration_arg_node.line_number,
                 'Unknown basic type when emitting.')
         #### END DEBUG
         return ('RalphObject<%s,%s>' % (java_type,java_type)), java_type
     
     #### DEBUG
     else:
-        raise InternalEmitException('Unknown argument type for method.')
+        raise InternalEmitException(
+            method_declaration_arg_node.filename,
+            method_declaration_arg_node.line_number,
+            'Unknown argument type for method.')
     #### END DEBUG
         
 
@@ -909,6 +914,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         return 'NonAtomicTextVariable'
 
     raise InternalEmitException(
+        'unknown',0,
         'Unknown type to emit in emit_ralph_wrapped_type')
 
 
@@ -945,6 +951,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             if initializer_node.label != NULL_TYPE:
                 raise InternalEmitException(
+                    initializer_node.filename,
+                    initializer_node.line_number,
                     'Not handling initializers for map types')
             
         index_basic_type = type_object.from_type_node.type.basic_type
@@ -960,6 +968,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         #### DEBUG
         else:
             raise InternalEmitException(
+                'Unknown',0,
                 'Map only accepts value types for indices')
         #### END DEBUG
         
@@ -987,6 +996,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         if initializer_node is not None:
             if initializer_node.label != NULL_TYPE:
                 raise InternalEmitException(
+                    initializer_node.filename,
+                    initializer_node.line_number,                    
                     'Not handling initializers for list types')
         
         # require EnsureAtomicWrapper object to 
@@ -1042,6 +1053,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
     #### DEBUG
     else:
         raise InternalEmitException(
+            'unknown',0,
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
@@ -1059,7 +1071,7 @@ def list_map_wrappers(element_type):
             element_type_wrapper = 'TRUE_FALSE_WRAPPER'
         #### DEBUG
         else:
-            raise InternalEmitException('Unknown basic type.')
+            raise InternalEmitException('unknown',0,'Unknown basic type.')
         #### END DEBUG
         if not element_type_is_tvar:
             element_type_wrapper = 'NON_ATOMIC_' + element_type_wrapper
@@ -1074,6 +1086,7 @@ def list_map_wrappers(element_type):
         # FIXME: Need to emit wrappers for non-struct/non-basic
         # types.  (Eg., map types, list types.)
         raise InternalEmitException(
+            'unknown',0,
             'FIXME: Still need to emit wrappers for non-basic value types.')
 
     return element_type_wrapper
@@ -1142,6 +1155,7 @@ def emit_map_type(type_object):
         return to_return
     else:
         raise InternalEmitException(
+            'unknown',0,
             'Requires map type in emit_map_type')
 
     
@@ -1166,6 +1180,7 @@ def emit_list_type(type_object):
         return to_return
     else:
         raise InternalEmitException(
+            'unknown',0,
             'Requires list type in emit_list_type')
 
     
@@ -1226,7 +1241,7 @@ def emit_internal_type(type_object):
             return 'void'
 
     raise InternalEmitException(
-        'Unknown type in emit_internal_type')
+        'unknown',0,'Unknown type in emit_internal_type')
 
 # indices are labels; values are operators should compile to.
 NUMERICAL_ONLY_BINARY_LABELS_DICT = {
@@ -1298,6 +1313,8 @@ def emit_statement(emit_ctx,statement_node):
         
     elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
         raise InternalEmitException(
+            statement_node.filename,
+            statement_node.line_number,
             'FIXME: still must allow speculate_all call')
     
     elif statement_node.label == ast_labels.VERBATIM_CALL:
@@ -1413,6 +1430,8 @@ def emit_statement(emit_ctx,statement_node):
             # internal_var_name is not declared in this scope: some
             # type of error.
             raise InternalEmitException(
+                statement_node.filename,
+                statement_node.line_number,
                 'No record of variable named %s' % statement_node.value)
 
         if not emit_ctx.get_lhs_of_assign():
@@ -1619,6 +1638,8 @@ def emit_dot_statement(emit_ctx,dot_node):
     if isinstance(left_of_dot_node.type,MapType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
+                right_of_dot_node.filename,
+                right_of_dot_node.line_number,
                 'Expected identifier to the right of %s' %
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
@@ -1637,11 +1658,15 @@ def emit_dot_statement(emit_ctx,dot_node):
         #### DEBUG
         else:
             raise InternalEmitException(
+                right_of_dot_node.filename,
+                right_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for map.')
         #### END DEBUG
     elif isinstance(left_of_dot_node.type,ListType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
+                left_of_dot_node.filename,
+                left_of_dot_node.line_number,
                 'Expected identifier to the right of %s' %
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
@@ -1664,6 +1689,8 @@ def emit_dot_statement(emit_ctx,dot_node):
         #### DEBUG
         else:
             raise InternalEmitException(
+                left_of_dot_node.filename,
+                left_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for map.')
         #### END DEBUG
     elif isinstance(left_of_dot_node.type,StructType):
@@ -1676,6 +1703,8 @@ def emit_dot_statement(emit_ctx,dot_node):
 
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
+                left_of_dot_node.filename,
+                left_of_dot_node.line_number,
                 'FIXME: Cannot handle accessing struct nested field beyond ' +
                 'two layers.  Eg., a.b is fine, but a.b.c is not.')
         rhs_node_identifier_name = right_of_dot_node.value
@@ -1691,6 +1720,8 @@ def emit_dot_statement(emit_ctx,dot_node):
     elif isinstance(left_of_dot_node.type,ServiceFactoryType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
+                left_of_dot_node.filename,
+                left_of_dot_node.line_number,
                 'Expected identifier to the right of %s' %
                 statement_node.value)
         right_hand_side_method = right_of_dot_node.value
@@ -1699,10 +1730,14 @@ def emit_dot_statement(emit_ctx,dot_node):
         #### DEBUG
         else:
             raise InternalEmitException(
+                left_of_dot_node.filename,
+                left_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for service factory.')
         #### END DEBUG
     else:
         raise InternalEmitException(
+            dot_node.filename,
+            dot_node.line_number,
             'Unknown dot statement: not dot on map or struct.')
         
     return to_return
@@ -1766,6 +1801,8 @@ def emit_for_statement(for_node,emit_ctx):
             internal_var_name_text,for_node.variable_type_node)
     else:
         raise InternalEmitException(
+            for_node.filename,
+            for_node.line_number,
             'Running for loop over non-map/-list is disallowed.')
         
 

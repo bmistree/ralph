@@ -133,7 +133,12 @@ def generate_token_err_msg(toke):
     
 
 class LexStateMachine():
-    def __init__ (self):
+    def __init__ (self,lex_filename):
+        '''
+        Args:
+            lex_filename: {String} name of file that we are lexing.
+        '''
+        self.filename = lex_filename
         self.in_multi_line_comment  = False
         self.in_single_line_comment = False
         self.in_multi_line_string   = False
@@ -392,16 +397,17 @@ def t_ALL_ELSE(t):
 def t_error(t):
     raise LexException(
         t.lexer.lineno,
-        "Unknown text '%s'  at line number '%s'" % (t.value,t.lexer.lineno))
+        "In file %s, unknown text '%s'  at line number '%s'" %
+        (lex_state_machine.filename,t.value,t.lexer.lineno))
 
 
 class LexException(CompilerException):
     pass
 
 
-def construct_lexer():
+def construct_lexer(lex_filename):
     global lex_state_machine
-    lex_state_machine = LexStateMachine()
+    lex_state_machine = LexStateMachine(lex_filename)
     lex.lex()
     return lex
 

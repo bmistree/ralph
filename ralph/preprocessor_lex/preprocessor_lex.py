@@ -56,7 +56,8 @@ class LexStates(object):
         ) = range(0,6)
 
 class LexStateMachine():
-    def __init__ (self):
+    def __init__ (self,lexing_filename):
+        self.filename = lexing_filename
         self.state = LexStates.RUNNING
         self.preprocessor_string = ''
         
@@ -177,15 +178,16 @@ def t_ALL_ELSE(t):
 def t_error(t):
     raise LexException(
         t.lexer.lineno,
-        "'Unknown text '%s'  at line number '%s'" % (t.value,t.lexer.lineno))
+        "In file %s, unknown text '%s'  at line number '%s'" %
+        (lex_state_machine.filename,t.value,t.lexer.lineno))
 
 class LexException(CompilerException):
     pass
 
 
-def construct_lexer():
+def construct_lexer(lexing_filename):
     global lex_state_machine
-    lex_state_machine = LexStateMachine()
+    lex_state_machine = LexStateMachine(lexing_filename)
     lex.lex()
     return lex
 

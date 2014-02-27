@@ -15,7 +15,7 @@ def preprocessor_parse(filename,suppress_warnings=True):
     prog_text = file_fd.read()
     file_fd.close()
 
-    parser = construct_parser(suppress_warnings)
+    parser = construct_parser(suppress_warnings,filename)
     return parser.parse(prog_text)
 
 if __name__ == '__main__':

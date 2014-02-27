@@ -9,6 +9,10 @@ from ralph.preprocessor_parse.preprocessor_node import *
 start = 'PreprocessorRootStatement'
 #need to have something named lexer for parser to chew into
 lexer = None
+# keep track for error messages.  set when initially construct the
+# parser
+global_parsing_filename = 'unknown'
+
 
 def p_PreprocessorRootStatement(p):
     '''
@@ -22,7 +26,8 @@ def p_PreprocessorStatementList(p):
                               | Empty
     '''
     if len(p) == 2:
-        preprocessor_statement_list_node = PreprocessorStatementListNode()
+        preprocessor_statement_list_node = PreprocessorStatementListNode(
+            global_parsing_filename)
     else:
         preprocessor_statement_list_node = p[1]
         preprocessor_statement_node = p[2]
@@ -44,7 +49,9 @@ def p_IncludeStatement(p):
     '''
     line_number = p.lineno(1)
     where_to_include_from_node = p[2]
-    p[0] = IncludeStatementNode(line_number,where_to_include_from_node.get_text())
+    p[0] = IncludeStatementNode(
+        global_parsing_filename,line_number,
+        where_to_include_from_node.get_text())
 
 def p_AliasStatement(p):
     '''
@@ -57,11 +64,11 @@ def p_AliasStatement(p):
     alias_to_text = p[5].get_text()
     if p[2] == _STRUCT_TOKEN:
         alias_statement_node = StructAliasStatementNode(
-            line_number,identifier_text,alias_to_text)
+            global_parsing_filename,line_number,identifier_text,alias_to_text)
     else:
         alias_statement_node = EndpointAliasStatementNode(
-            line_number,identifier_text,alias_to_text)
-    
+            global_parsing_filename,line_number,identifier_text,alias_to_text)
+        
     p[0] = alias_statement_node
 
 def p_Identifier(p):
@@ -70,7 +77,7 @@ def p_Identifier(p):
     '''
     line_number = p.lineno(1)
     value = p[1]
-    p[0] = IdentifierNode(line_number,value)
+    p[0] = IdentifierNode(global_parsing_filename,line_number,value)
     
 def p_String(p):
     '''
@@ -78,7 +85,7 @@ def p_String(p):
     '''
     text_literal = p[1]
     line_number = p.lineno(1)
-    p[0] = TextLiteralNode(line_number,text_literal)
+    p[0] = TextLiteralNode(global_parsing_filename,line_number,text_literal)
 
 def p_Empty(p):
     '''
@@ -88,10 +95,20 @@ def p_Empty(p):
 
 def is_empty(to_test):
     return to_test is None
-    
-def construct_parser(suppress_warnings):
+
+def p_error(p):
+    raise ParseException(
+        global_parsing_filename,p.lineno,
+        'Error parsing token "%s".' % p.value)
+
+
+def construct_parser(suppress_warnings,parsing_filename):
     global lexer
-    lexer = construct_lexer()
+    lexer = construct_lexer(parsing_filename)
+
+    global global_parsing_filename
+    global_parsing_filename = parsing_filename
+
     
     if suppress_warnings:
         returner = yacc.yacc(errorlog=yacc.NullLogger())

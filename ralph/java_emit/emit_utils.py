@@ -1,5 +1,8 @@
 from ralph.common.compiler_exceptions import CompilerException
 
+def format_exception_message(message):
+    return '\n\n************\n' + message + '\n************\n'
+
 def indent_string(string,amt_to_indent=1):
     '''
     @param {String} string -- Each line in this string we will insert
@@ -27,7 +30,11 @@ def indent_string(string,amt_to_indent=1):
 
 
 class InternalEmitException(CompilerException):
-    def __init__(self,msg):
+    def __init__(self,filename,line_number,msg):
+        self.filename = filename
+        self.line_number = line_number
         self.msg = msg
     def __str__(self):
-        return self.msg
+        return format_exception_message(
+            'Error in file %s on line %i: %s' %
+            (self.filename,self.line_number,self.msg))
