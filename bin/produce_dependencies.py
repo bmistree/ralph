@@ -99,20 +99,26 @@ def dependencies_dict(fq_input_filename,lib_dir_list, depth = 0,
             
             # Look first relative to existing file's location, and
             # then relative to other library directories
+            
+            # FIXME: we're making an assumption that we won't
+            # have circular dependencies.
             for folder in [fq_input_dir] + lib_dir_list:
                 fq_next_to_try_to_include = os.path.join(
                     folder,next_to_try_to_include)
             
                 if os.path.exists(fq_next_to_try_to_include):
                     if fq_next_to_try_to_include not in captured_deps_dict:
+                        captured_deps_dict[fq_next_to_try_to_include] = (
+                            FNameDepthPair(fq_next_to_try_to_include,depth))
                         dependencies_dict(
                             fq_next_to_try_to_include,lib_dir_list,depth,
                             captured_deps_dict)
+                    else:
+                        pair = captured_deps_dict[fq_next_to_try_to_include]
+                        if pair.depth < depth:
+                            captured_deps_dict[fq_next_to_try_to_include] = (
+                                FNameDepthPair(fq_next_to_try_to_include,depth))
 
-                    # FIXME: we're making an assumption that we won't
-                    # have circular dependencies.
-                    captured_deps_dict[fq_next_to_try_to_include] = (
-                        FNameDepthPair(fq_next_to_try_to_include,depth))
                     found_dependency = True
                     break
 

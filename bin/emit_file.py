@@ -17,7 +17,7 @@ def compile_ralph(input_filename,output_filename,package_name,program_name,
     # while generating code for input_filename.
     # FIXME: actually take in lib_dir_list
     dep_list = dependencies_list(input_filename,include_dir_list)
-
+    
     struct_types_ctx = None
     for dep_file in dep_list:
         dep_root = parse(dep_file)
