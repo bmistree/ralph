@@ -2,7 +2,7 @@ alias Endpoint LinkedConnectionEndpoint as 'LinkedConnection.LinkedConnectionEnd
 
 Struct ConnectionWrapper
 {
-    Endpoint LinkedConnectionEndpoint child;
+    Endpoint LinkedConnectionEndpoint child = null;
 }
 
 

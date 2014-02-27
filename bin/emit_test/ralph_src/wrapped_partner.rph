@@ -3,7 +3,7 @@ alias Endpoint SideA as 'emit_test_package.BasicPartner.SideA';
 
 Endpoint SingleSidedHolder
 {
-    Endpoint SideA endpt;
+    Endpoint SideA endpt = null;
 
     set_endpoint(Endpoint SideA to_set_to)
     {

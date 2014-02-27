@@ -3,7 +3,7 @@ alias Service BasicSetterGetter as 'BasicRalph.SetterGetter';
 
 Struct EndpointWrapper
 {
-    Service BasicSetterGetter local_end;
+    Service BasicSetterGetter local_end = null;
 }
 
 

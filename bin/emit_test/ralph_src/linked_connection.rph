@@ -2,7 +2,7 @@ alias Endpoint LinkedInstanceEndpoint as 'LinkedInstance.LinkedInstanceEndpoint'
 
 Endpoint LinkedConnectionEndpoint
 {
-    Endpoint LinkedInstanceEndpoint instance_endpt;
+    Endpoint LinkedInstanceEndpoint instance_endpt = null;
 
     Text name;
 

@@ -7,7 +7,7 @@ alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
 
 Endpoint InterruptedAtomicEndpoint
 {
-    Endpoint BasicSetterGetter endpt;
+    Endpoint BasicSetterGetter endpt = null;
 
     set_endpt(Endpoint BasicSetterGetter to_set_to)
     {

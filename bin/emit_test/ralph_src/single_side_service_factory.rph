@@ -2,8 +2,8 @@ alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
 
 Endpoint ServiceReceiver
 {
-    ServiceFactory sf;
-    Endpoint BasicSetterGetter endpt;
+    ServiceFactory sf = null;
+    Endpoint BasicSetterGetter endpt = null;
     
     set_service_factory(ServiceFactory to_set_to)
     {

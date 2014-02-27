@@ -3,7 +3,7 @@ alias Service BasicSetterGetter as 'BasicRalph.SetterGetter';
 
 Endpoint EndpointUser
 {
-    Service BasicSetterGetter local_end;
+    Service BasicSetterGetter local_end = null;
 
     set_endpoint(Service BasicSetterGetter to_set_to)
     {
