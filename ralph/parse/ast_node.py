@@ -378,7 +378,19 @@ class PrintCallNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.print_arg_node.type_check_pass_two(type_check_ctx)
 
+
+class SelfNode(_AstNode):
+    def __init__(self,filename,line_number):
+        super(SelfNode,self).__init__(
+            filename,ast_labels.SELF,line_number,WildcardType())
         
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+
+    
 class SpeculateCallNode(_AstNode):
     def __init__(self,filename,method_args_node,line_number):
         super(SpeculateCallNode,self).__init__(

@@ -26,6 +26,7 @@ SPECULATE_CALL = 'speculate_call'
 SPECULATE_ALL_CALL = 'speculate_all_call'
 VERBATIM_CALL = 'verbatim_call'
 
+SELF = 'self'
 TEXT_LITERAL = 'text_literal'
 NUMBER_LITERAL = 'number_literal'
 TRUE_FALSE_LITERAL = 'true_false_literal'

@@ -1287,7 +1287,7 @@ def emit_statement(emit_ctx,statement_node):
     
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
-
+    
     elif statement_node.label == ast_labels.NOT:
         to_not_text = emit_statement(emit_ctx,statement_node.to_not_node)
         return '(new Boolean( ! %s.booleanValue()))' % to_not_text
@@ -1329,6 +1329,9 @@ def emit_statement(emit_ctx,statement_node):
     
     elif statement_node.label == ast_labels.VERBATIM_CALL:
         return statement_node.verbatim_arg_node.value
+
+    elif statement_node.label == ast_labels.SELF:
+        return '(this)' 
     
     elif statement_node.label == ast_labels.EQUALS:
         lhs_node = statement_node.lhs_expression_node
@@ -1341,7 +1344,7 @@ def emit_statement(emit_ctx,statement_node):
             return '(new Boolean(%s == %s))' % (lhs,rhs)
         return ('(new Boolean(%s == null ? %s == %s : %s.equals(%s)))' %
                 (lhs,lhs,rhs,lhs,rhs))
-    
+
     elif statement_node.label == ast_labels.NOT_EQUALS:
         lhs_node = statement_node.lhs_expression_node
         rhs_node = statement_node.rhs_expression_node

@@ -54,7 +54,8 @@ reserved = {
     'as': 'AS',
     'verbatim': 'VERBATIM',
     'null': 'NULL',
-    'ServiceFactory' : 'SERVICE_FACTORY'
+    'ServiceFactory' : 'SERVICE_FACTORY',
+    'self': 'SELF'
     }
 
 

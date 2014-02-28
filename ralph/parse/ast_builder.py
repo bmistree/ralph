@@ -659,6 +659,7 @@ def p_Term(p):
          | Number
          | String
          | Boolean
+         | Self
          | Null
          | LEFT_PAREN Expression RIGHT_PAREN
          | RangeExpression
@@ -670,6 +671,12 @@ def p_Term(p):
 
     p[0] = term_node
 
+def p_Self(p):
+    '''
+    Self : SELF
+    '''
+    line_number = p.lineno(1)
+    p[0] = SelfNode(global_parsing_filename,line_number)
     
 def p_Number(p):
     '''
