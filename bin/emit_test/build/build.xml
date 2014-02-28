@@ -338,6 +338,16 @@
       <arg line="-p emit_test_package"/>
       <arg line="-c InternalCreateServiceJava"/>
     </exec>
+
+    <echo message="${line.separator}self.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/self.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SelfJava.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c SelfJava"/>
+    </exec>
+
     
   </target>
 
@@ -390,7 +400,7 @@
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
          run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
-         run_NullTest,run_InternalCreateService">
+         run_NullTest,run_InternalCreateService,run_Self">
   </target>
   
   
@@ -872,6 +882,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.InternalCreateServiceTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
+  <!-- Run SelfTest -->
+  <target
+      name="run_Self"
+      depends="compile_ralph_tests"
+      description="Run self.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SelfTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

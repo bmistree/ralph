@@ -1,0 +1,33 @@
+
+// FIXME: It's ugly that I need the alias here.
+alias Service B as 'emit_test_package.SelfJava.B';
+alias Service A as 'emit_test_package.SelfJava.A';
+
+Service A
+{
+    pass_self(Service B b)
+    {
+        b.increment_internal_val();
+    }
+}
+
+Service B
+{
+    TVar Number internal_val = 0;
+
+    create_and_increment() returns Number
+    {
+        atomically
+        {
+            Service A a;
+            a.pass_self(self);
+        }
+        return internal_val;
+    }
+
+    increment_internal_val()
+    {
+        internal_val = internal_val + 1;
+    }
+    
+}
