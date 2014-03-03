@@ -49,6 +49,7 @@ def p_AliasStatement(p):
     AliasStatement : ALIAS STRUCT_TYPE Identifier AS String SEMI_COLON
                    | ALIAS ENDPOINT Identifier AS String SEMI_COLON
                    | ALIAS SERVICE Identifier AS String SEMI_COLON
+                   | ALIAS INTERFACE Identifier AS String SEMI_COLON
     '''
     line_number = p.lineno(1)
     identifier_node = p[3]
