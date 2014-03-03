@@ -5,6 +5,7 @@ _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
 ENDPOINT_TOKEN = 'Endpoint'
 SERVICE_TOKEN = 'Service'
+INTERFACE_TOKEN = 'Service'
 SERVICE_FACTORY_TOKEN = 'ServiceFactory'
 PRINT_TYPE_TOKEN = 'print'
 SPECULATE_TYPE_TOKEN = 'speculate'
@@ -56,7 +57,8 @@ reserved = {
     'null': 'NULL',
     'ServiceFactory' : 'SERVICE_FACTORY',
     'self': 'SELF',
-    'implements': 'IMPLEMENTS'
+    'implements': 'IMPLEMENTS',
+    'Interface': 'INTERFACE'
     }
 
 

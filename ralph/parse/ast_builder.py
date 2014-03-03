@@ -1,12 +1,13 @@
 from ralph.lex.ralph_lex import tokens,construct_lexer
 from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
 from ralph.lex.ralph_lex import ENDPOINT_TOKEN, VERBATIM_TOKEN
-from ralph.lex.ralph_lex import SERVICE_TOKEN
+from ralph.lex.ralph_lex import SERVICE_TOKEN, INTERFACE_TOKEN
 from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_TYPE_TOKEN, SPECULATE_ALL_TYPE_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
+import ralph.parse.ast_labels
 
 #note: global variable used by yacc.  Without this set, otherwise,
 #starts at first rule.
@@ -102,28 +103,77 @@ def p_StructBody(p):
     p[0] = struct_body_node
 
     
-    
 def p_EndpointList(p):
     '''
-    EndpointList : EndpointList EndpointDefinition 
+    EndpointList : EndpointList EndpointDefinition
+                 | EndpointList InterfaceDefinition
                  | EndpointDefinition
+                 | InterfaceDefinition
                  | Empty
     '''
     if len(p) == 2:
-        if is_empty(p[1]):
-            endpoint_definition_node = None
-        else:
-            endpoint_definition_node = p[1]
         endpoint_list_node = EndpointListNode(
-            global_parsing_filename,endpoint_definition_node)
+            global_parsing_filename)
+        if is_empty(p[1]):
+            pass
+        elif is_endpoint_definition_node(p[1]):
+            endpoint_definition_node = p[1]
+            endpoint_list_node.append_endpoint_definition(
+                endpoint_definition_node)
+        else:
+            interface_definition_node = p[1]
+            endpoint_list_node.append_interface_definition(
+                interface_definition_node)
     else:
         endpoint_list_node = p[1]
-        endpoint_definition_node = p[2]
-        endpoint_list_node.append_endpoint_definition(
-            endpoint_definition_node)
+
+        if is_endpoint_definition_node(p[2]):
+            endpoint_definition_node = p[2]
+            endpoint_list_node.append_endpoint_definition(
+                endpoint_definition_node)
+        else:
+            interface_definition_node = p[3]
+            endpoint_list_node.append_interface_definition(
+                interface_definition_node)
         
     p[0] = endpoint_list_node
 
+def p_InterfaceDefinition(p):
+    '''
+    InterfaceDefinition : INTERFACE Identifier CURLY_LEFT InterfaceBody CURLY_RIGHT
+    '''
+    line_number = p.lineno(1)
+    interface_name_identifier_node = p[2]
+    interface_body_node = p[4]
+    p[0] = InterfaceDefinitionNode(
+        global_parsing_filename,interface_name_identifier_node,
+        interface_body_node,line_number)
+
+def p_InterfaceBody(p):
+    '''
+    InterfaceBody : InterfaceMethodDeclaration InterfaceBody
+                  | Empty
+    '''
+    if len(p) == 3:
+        # method declaration statement
+        interface_method_declaration_node = p[1]
+        interface_body_node = p[2]
+        interface_body_node.append_interface_method_declaration_node(
+            interface_method_declaration_node)
+    else:
+        # empty statement
+        interface_body_node = InterfaceBodyNode(global_parsing_filename)
+
+    p[0] = interface_body_node
+    
+def p_InterfaceMethodDeclaration(p):
+    '''
+    InterfaceMethodDeclaration : MethodSignature SEMI_COLON
+    '''
+    method_signature_node = p[1]
+    p[0] = InterfaceMethodDeclarationNode(
+        global_parsing_filename,method_signature_node)
+    
     
 def p_EndpointDefinition(p):
     '''
@@ -770,6 +820,9 @@ def p_VariableType(p):
 
                  | SERVICE Identifier
                  | TVAR SERVICE Identifier
+
+                 | INTERFACE Identifier
+                 | TVAR INTERFACE Identifier
                  
                  | SERVICE_FACTORY
                  | TVAR SERVICE_FACTORY
@@ -826,7 +879,10 @@ def p_VariableType(p):
            ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN)))
           or 
           ((p[1] == SERVICE_TOKEN) or
-           ((len(p) >= 3) and (p[2] == SERVICE_TOKEN)))):
+           ((len(p) >= 3) and (p[2] == SERVICE_TOKEN)))
+          or
+          ((p[1] == INTERFACE_TOKEN) or
+           ((len(p) >= 3) and (p[2] == INTERFACE_TOKEN)))):
 
         # emitting an endpoint type
         is_tvar = False
@@ -889,7 +945,10 @@ def p_Empty(p):
 
 def is_empty(to_test):
     return to_test is None
-    
+
+def is_endpoint_definition_node(to_test):
+    return to_test.label == ast_labels.ENDPOINT_DEFINITION_STATEMENT
+
 def construct_parser(suppress_warnings,parsing_filename):
     global lexer
     lexer = construct_lexer(parsing_filename)

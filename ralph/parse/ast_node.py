@@ -76,7 +76,11 @@ class RootStatementNode(_AstNode):
         #### END DEBUG
 
         self.alias_node_list = alias_list_node.to_list()
-        self.endpoint_node_list = list(endpoint_node_list)
+        self.interface_node_list = list(
+            endpoint_node_list.endpoint_interfaces_node_list())
+        self.endpoint_node_list = list(
+            endpoint_node_list.endpoint_definitions_node_list())
+        
         self.struct_node_list = struct_node_list.to_list()
 
         
@@ -216,7 +220,78 @@ class StructDefinitionNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.struct_body_node.type_check_pass_two(type_check_ctx)
 
-                
+class InterfaceDefinitionNode(_AstNode):
+    def __init__(self,filename,name_identifier_node,interface_body_node,
+                 line_number):
+        super(InterfaceDefinitionNode,self).__init__(
+            filename,ast_labels.INTERFACE_DEFINITION_STATEMENT,line_number)
+        
+        self.name = name_identifier_node.get_value()
+        self.body_node = interface_body_node
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.body_node.type_check_pass_one(struct_types_ctx)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        self.body_node.type_check_pass_two(type_check_ctx)
+
+
+class InterfaceBodyNode(_AstNode):
+    def __init__(self,filename):
+        super(InterfaceBodyNode,self).__init__(
+            filename,ast_labels.INTERFACE_BODY,0)
+
+        # list of interface method declaration nodes
+        self.method_declaration_nodes = []
+        
+    def append_interface_method_declaration_node(self,method_declaration_node):
+        self.method_declaration_nodes.insert(0,method_declaration_node)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        for method_declaration_node in self.method_declaration_nodes:
+            method_declaration_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        # Populate every method signature in ctx
+        for method_declaration_node in self.method_declaration_nodes:
+            method_name = method_declaration_node.method_name
+            method_type = method_declaration_node.method_signature_node.type
+            type_check_ctx.add_var_name(method_name,method_declaration_node)
+            
+
+class InterfaceMethodDeclarationNode(_AstNode):
+    def __init__(self,filename,method_signature_node):
+        super(InterfaceMethodDeclarationNode,self).__init__(
+            filename,ast_labels.INTERFACE_METHOD_DECLARATION,
+            method_signature_node.line_number)
+
+        self.method_name = method_signature_node.get_method_name()
+        self.method_signature_node = method_signature_node
+
+    def returns_value(self):
+        '''
+        Returns:
+           {boolean} True if method actually returns value; false otherwise.
+        '''
+        return self.method_signature_node.type.returns_type is not None
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.method_signature_node.type_check_pass_one(struct_types_ctx)
+        self.type = self.method_signature_node.type
+
+    def type_check_pass_two(self,type_check_ctx):
+        """
+        Note: does not insert type name and signature into
+        type_check_ctx.  Should have already been inserted in
+        EndpointBodyNode.
+        """
+        # each method declaration node has separate var scope
+        type_check_ctx.push_scope()
+        # pushes method arguments into scope
+        self.method_signature_node.type_check_pass_two(type_check_ctx)
+        type_check_ctx.pop_scope()
+
+        
 class EndpointDefinitionNode(_AstNode):
     def __init__(self,filename,name_identifier_node,optional_implements_list_node,
                  endpoint_body_node,line_number):
@@ -1282,19 +1357,25 @@ def create_binary_expression_node(
 #### Intermediate nodes that get removed from actual AST ####
     
 class EndpointListNode(_AstNode):
-    def __init__(self,filename,endpoint_definition_node):
+    def __init__(self,filename):
         super(EndpointListNode,self).__init__(
             filename,ast_labels.ENDPOINT_LIST_STATEMENT,0)
-
-        if endpoint_definition_node is not None:
-            self._append_child(endpoint_definition_node)
-
+        self.endpoint_definition_node_list = []
+        self.interface_definition_node_list = []
+        
     def append_endpoint_definition(self,endpoint_definition_node):
-        self._append_child(endpoint_definition_node)
+        self.endpoint_definition_node_list.append(endpoint_definition_node)
 
-    def __iter__(self):
-        return iter(self.children)
+    def append_interface_definition(self,interface_definition_node):
+        self.interface_definition_node_list.append(interface_definition_node)
 
+    def endpoint_definitions_node_list(self):        
+        return self.endpoint_definition_node_list
+    
+    def endpoint_interfaces_node_list(self):
+        return self.interface_definition_node_list
+
+        
 class EmptyNode(_AstNode):
     def __init__(self,filename):
         super(EmptyNode,self).__init__(filename,ast_labels.EMPTY_STATEMENT,0)
