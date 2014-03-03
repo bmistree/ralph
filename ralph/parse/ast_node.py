@@ -216,17 +216,18 @@ class StructDefinitionNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.struct_body_node.type_check_pass_two(type_check_ctx)
 
-        
-        
+                
 class EndpointDefinitionNode(_AstNode):
-    def __init__(self,filename,name_identifier_node,endpoint_body_node,
-                 line_number):
+    def __init__(self,filename,name_identifier_node,optional_implements_list_node,
+                 endpoint_body_node,line_number):
         super(EndpointDefinitionNode,self).__init__(
             filename,ast_labels.ENDPOINT_DEFINITION_STATEMENT,line_number)
-
+        
         self.name = name_identifier_node.get_value()
         self.body_node = endpoint_body_node
-
+        self.implements_variable_type_node_list = (
+            optional_implements_list_node.to_list())
+        
     def type_check_pass_one(self,struct_types_ctx):
         self.body_node.type_check_pass_one(struct_types_ctx)
         
@@ -1443,3 +1444,14 @@ class StructBodyNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         for child in self.children:
             child.type_check_pass_two(type_check_ctx)
+
+class ImplementsListNode(_AstNode):
+    def __init__(self,filename,line_number):
+        super(ImplementsListNode,self).__init__(
+            filename,ast_labels.IMPLEMENTS_LIST_NODE,line_number)
+
+    def add_variable_type_node(self,variable_type_node):
+        self._append_child(variable_type_node)
+        
+    def to_list(self):
+        return list(self.children)

@@ -55,7 +55,8 @@ reserved = {
     'verbatim': 'VERBATIM',
     'null': 'NULL',
     'ServiceFactory' : 'SERVICE_FACTORY',
-    'self': 'SELF'
+    'self': 'SELF',
+    'implements': 'IMPLEMENTS'
     }
 
 

@@ -127,16 +127,45 @@ def p_EndpointList(p):
     
 def p_EndpointDefinition(p):
     '''
-    EndpointDefinition : ENDPOINT Identifier CURLY_LEFT EndpointBody CURLY_RIGHT
-                       | SERVICE Identifier CURLY_LEFT EndpointBody CURLY_RIGHT
+    EndpointDefinition : ENDPOINT Identifier OptionalImplementsList CURLY_LEFT EndpointBody CURLY_RIGHT
+                       | SERVICE Identifier OptionalImplementsList CURLY_LEFT EndpointBody CURLY_RIGHT
     '''
     line_number = p.lineno(1)
     endpoint_name_identifier_node = p[2]
-    endpoint_body_node = p[4]
-    
+    optional_implements_list_node = p[3]
+    endpoint_body_node = p[5]
+   
     p[0] = EndpointDefinitionNode(
         global_parsing_filename,endpoint_name_identifier_node,
-        endpoint_body_node,line_number)
+        optional_implements_list_node,endpoint_body_node,line_number)
+
+def p_OptionalImplementsList(p):
+    '''
+    OptionalImplementsList : IMPLEMENTS OptionalImplementsList
+                           | OptionalImplementsList COMMA VariableType
+                           | VariableType
+                           | Empty
+    '''
+    if len(p) == 2:
+        implements_list_node = ImplementsListNode(global_parsing_filename,0)
+        if not is_empty(p[1]):
+            variable_type_node = p[1]
+            implements_list_node = ImplementsListNode(
+                global_parsing_filename,variable_type_node.line_number)
+            implements_list_node.add_variable_type_node(variable_type_node)
+    elif len(p) == 3:
+        implements_list_node = p[2]
+    elif len(p) == 4:
+        implements_list_node = p[1]
+        variable_type_node = p[3]
+        implements_list_node.add_variable_type_node(variable_type_node)
+    #### DEBUG
+    else:
+        raise InternalParseException(
+            global_parsing_filename,p.lineno(0),
+            'Incorrect number of tokens in optional implements list')
+    #### END DEBUG
+    p[0] = implements_list_node
 
 
 def p_EndpointBody(p):

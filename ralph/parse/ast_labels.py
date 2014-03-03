@@ -78,6 +78,7 @@ ELSE = 'else'
 
 STRUCT_LIST_NODE = 'struct_list_node'
 STRUCT_BODY = 'struct_body'
+IMPLEMENTS_LIST_NODE = 'implements_list_node'
 
 ALIAS_LIST_NODE = 'alias_list_node'
 
