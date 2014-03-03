@@ -71,6 +71,13 @@ public class %s
             emit_struct_definition(struct_name,struct_type))
         prog_txt += '\n'
 
+    # emit individual interfaces
+    prog_txt += indent_string(
+        '/*********** INTERFACE DEFINITIONS ******/\n')
+    for interface_node in root_node.interface_node_list:
+        prog_txt += indent_string(emit_interface(interface_node))
+        prog_txt += '\n'
+        
     # emit individual endpoints
     prog_txt += indent_string(
         '/*********** ENDPOINT DEFINITIONS ******/\n')
@@ -283,6 +290,41 @@ public static class %s
     internal_struct_definition_text += '\n}'
     return internal_struct_definition_text
 
+def emit_interface(interface_node):
+    emit_ctx = EmitContext()
+    emit_ctx.push_scope()
+    
+    # contains emitted code that actually gets returned
+    interface_signature = '''
+public static interface %s {
+''' % interface_node.name
+
+    interface_body = ''
+    
+    body_node = interface_node.body_node
+    for iface_method_decl_node in body_node.method_declaration_nodes:
+        # internal signature
+        internal_method_text, garbage = emit_internal_method_signature(
+            emit_ctx,iface_method_decl_node.method_signature_node)
+        interface_body += internal_method_text
+        interface_body += ';\n'
+
+        # external signature with super arg
+        signature, garbage, garbage, garbage = emit_external_signature(
+            emit_ctx,iface_method_decl_node.method_signature_node,True)
+        interface_body += signature
+        interface_body += ';\n'
+        # external signature without super arg
+        signature, garbage, garbage, garbage = emit_external_signature(
+            emit_ctx,iface_method_decl_node.method_signature_node,False)
+        interface_body += signature
+        interface_body += ';\n\n\n'
+        
+    interface_signature = (
+        interface_signature + indent_string(interface_body) + '}\n')
+
+    emit_ctx.pop_scope()
+    return interface_signature
 
 def emit_endpt(endpt_node):
     '''
@@ -771,42 +813,18 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         _ctx.var_stack.push(true); // true because function var scope
         _ctx.var_stack.add_var('SomeVar',SomeVar);
     '''
-    # 1: update context with loaded arguments
-    for argument_node in method_signature_node.method_declaration_args:
-        arg_name = argument_node.arg_name
-        emit_ctx.add_var_name(arg_name)
-
-    # 2: construct signature to return
-    return_type = 'void'
-    if method_signature_node.type is not None:
-        return_type = emit_internal_type(method_signature_node.type)
-
-    # this method is public so that can make calls into endpoints for
-    # other endpoints and services.
-    to_return = (
-        'public %s %s (' % (return_type, method_signature_node.method_name) )
-    to_return += 'ExecutingEventContext _ctx, ActiveEvent _active_event'
+    to_return,argument_name_text_list = emit_internal_method_signature(
+        emit_ctx,method_signature_node)
+    to_return += '{\n'
     
-    argument_name_text_list = []
-    for argument_node in method_signature_node.method_declaration_args:
-        # for placing the arguments actually in method signature
-        argument_type_text = emit_internal_type(argument_node.type)
-        argument_name_text = argument_node.arg_name
-        to_return += ', ' + argument_type_text + ' ' + argument_name_text
-
-        # for putting arguments into scope at top of method
-        argument_name_text_list.append(argument_name_text)
-
-
-    to_return += (
-        ') throws ApplicationException, BackoutException, ' +
-        'NetworkException,StoppedException {\n')
+    # (starting at #3, because #1 and #2 are in
+    # emit_internal_method_signature)
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
     to_return += indent_string(
         '_ctx.var_stack.push(true);//true because func scope\n');
-
+    
     # convert each method argument to ralph variable and then add to
     # stack.  Note: skip this step for maps, which caller already
     # cloned for us.
@@ -854,6 +872,46 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
             (internal_arg_name,internal_arg_name))
 
     return to_return
+
+def emit_internal_method_signature(emit_ctx,method_signature_node):
+    '''
+    Emits Java signature of method.
+
+    Returns:
+       2-tuple.  First element is a string containing the signature of
+       the method.  The second element is a list containing strings of
+       arguments.
+    '''
+    # 1: update context with loaded arguments
+    for argument_node in method_signature_node.method_declaration_args:
+        arg_name = argument_node.arg_name
+        emit_ctx.add_var_name(arg_name)
+
+    # 2: construct signature to return
+    return_type = 'void'
+    if method_signature_node.type is not None:
+        return_type = emit_internal_type(method_signature_node.type)
+
+    # this method is public so that can make calls into endpoints for
+    # other endpoints and services.
+    to_return = (
+        'public %s %s (' % (return_type, method_signature_node.method_name) )
+    to_return += 'ExecutingEventContext _ctx, ActiveEvent _active_event'
+    
+    argument_name_text_list = []
+    for argument_node in method_signature_node.method_declaration_args:
+        # for placing the arguments actually in method signature
+        argument_type_text = emit_internal_type(argument_node.type)
+        argument_name_text = argument_node.arg_name
+        to_return += ', ' + argument_type_text + ' ' + argument_name_text
+
+        # for putting arguments into scope at top of method
+        argument_name_text_list.append(argument_name_text)
+
+    to_return += (
+        ') throws ApplicationException, BackoutException, ' +
+        'NetworkException,StoppedException')
+    return to_return, argument_name_text_list
 
 
 def emit_ralph_wrapped_type(type_object,force_single_threaded=False):

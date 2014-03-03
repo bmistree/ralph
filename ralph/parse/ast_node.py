@@ -125,13 +125,20 @@ class RootStatementNode(_AstNode):
             type_check_ctx.push_scope()
             struct_node.type_check_pass_one(struct_types_ctx)
             struct_node.type_check_pass_two(type_check_ctx)
-
+            
+        for interface_node in self.interface_node_list:
+            interface_node.type_check_pass_one(struct_types_ctx)
+            type_check_ctx = TypeCheckContext(interface_node.name,struct_types_ctx)
+            type_check_ctx.push_scope()
+            interface_node.type_check_pass_two(type_check_ctx)
+            
         for endpt_node in self.endpoint_node_list:
             endpt_node.type_check_pass_one(struct_types_ctx)
             type_check_ctx = TypeCheckContext(endpt_node.name,struct_types_ctx)
             type_check_ctx.push_scope()
             endpt_node.type_check_pass_two(type_check_ctx)
 
+            
         return struct_types_ctx
 
     
@@ -284,7 +291,7 @@ class InterfaceMethodDeclarationNode(_AstNode):
         Note: does not insert type name and signature into
         type_check_ctx.  Should have already been inserted in
         EndpointBodyNode.
-        """
+        """        
         # each method declaration node has separate var scope
         type_check_ctx.push_scope()
         # pushes method arguments into scope
