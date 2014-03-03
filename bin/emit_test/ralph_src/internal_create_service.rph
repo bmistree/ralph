@@ -1,0 +1,32 @@
+#include 'basic_ralph.rph'
+alias Service SetterGetter as 'BasicRalph.SetterGetter';
+
+/**
+   Tests that can create a service inside of ralph, rather than having to pass
+   it in directly.
+ */
+Service InternalCreateService
+{
+    Service SetterGetter internal_setter_getter = null;
+
+    is_null() returns TrueFalse
+    {
+        return internal_setter_getter == null;
+    }
+    
+    setup_service()
+    {
+        Service SetterGetter new_internal_setter_getter;
+        internal_setter_getter = new_internal_setter_getter;
+    }
+
+    get_number() returns Number
+    {
+        return internal_setter_getter.get_number();
+    }
+
+    set_number(Number new_number)
+    {
+        internal_setter_getter.set_number(new_number);
+    }
+}
