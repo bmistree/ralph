@@ -1,6 +1,7 @@
 package emit_test_harnesses;
 
 import emit_test_package.StructTest.SetterGetter;
+import emit_test_package.IFaceBasicRalph.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
@@ -18,13 +19,15 @@ public class StructSetterGetter
     {
         try
         {
-            SetterGetter endpt = new SetterGetter(
+            SetterGetter non_iface_endpt = new SetterGetter(
                 new RalphGlobals(),new SingleSideConnection());
 
             // initialize struct on endpoint
-            endpt.initialize_internal_struct(
+            non_iface_endpt.initialize_internal_struct(
                 new Double(0),"",new Boolean(false));
-            
+
+
+            ISetterGetter endpt = non_iface_endpt;
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
             for (int i = 0; i < 20; ++i)
@@ -63,7 +66,7 @@ public class StructSetterGetter
             double new_number = 3.3;
             String new_text = "wow";
             new_boolean = false;
-            endpt.new_struct(
+            non_iface_endpt.new_struct(
                 new Double(new_number), new_text, new Boolean( new_boolean));
 
             double gotten_number = endpt.get_number().doubleValue();

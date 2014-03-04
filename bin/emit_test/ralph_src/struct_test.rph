@@ -1,3 +1,5 @@
+alias Interface ISetterGetter as 'IFaceBasicRalph.ISetterGetter';
+
 Struct BasicStruct
 {
     TVar Number internal_number;
@@ -5,8 +7,7 @@ Struct BasicStruct
     TVar TrueFalse internal_tf;
 }
 
-
-Endpoint SetterGetter
+Endpoint SetterGetter implements Interface ISetterGetter
 {
     Struct BasicStruct struct;
 

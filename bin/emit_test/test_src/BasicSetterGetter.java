@@ -1,6 +1,7 @@
 package emit_test_harnesses;
 
 import emit_test_package.BasicRalph.SetterGetter;
+import emit_test_package.IFaceBasicRalph.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
@@ -18,7 +19,7 @@ public class BasicSetterGetter
     {
         try
         {
-            SetterGetter endpt = new SetterGetter(
+            ISetterGetter endpt = new SetterGetter(
                 new RalphGlobals(),
                 new SingleSideConnection());
 

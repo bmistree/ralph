@@ -1,0 +1,9 @@
+Interface ISetterGetter
+{
+    get_number() returns Number;
+    set_number(Number new_number);
+    get_text() returns Text;
+    set_text(Text new_text);
+    get_tf() returns TrueFalse;
+    set_tf(TrueFalse new_tf);
+}

@@ -1,4 +1,6 @@
-Service SetterGetter
+alias Interface ISetterGetter as 'IFaceBasicRalph.ISetterGetter';
+
+Service SetterGetter implements Interface ISetterGetter
 {
     TVar Number internal_number = 15;
     Text internal_text = 'hello';
