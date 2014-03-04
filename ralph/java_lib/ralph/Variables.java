@@ -11,7 +11,6 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.NumberTypeDataWrapperFactory;
 import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
-import RalphDataWrappers.EndpointTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 
@@ -33,13 +32,6 @@ public class Variables {
     
     final static Boolean default_tf = false;
 	
-    final static EndpointTypeDataWrapperFactory
-        endpoint_value_type_data_wrapper_factory = 
-        new EndpointTypeDataWrapperFactory();
-    
-    final static Endpoint default_endpoint = null;
-
-
     final static ServiceFactoryTypeDataWrapperFactory
         service_factory_value_type_data_wrapper_factory = 
         new ServiceFactoryTypeDataWrapperFactory();
@@ -211,46 +203,6 @@ public class Variables {
         }
     }
     
-    
-
-    public static class AtomicEndpointVariable
-        extends AtomicValueVariable<Endpoint,Endpoint>
-    {
-        public AtomicEndpointVariable(
-            boolean _log_changes,Object init_val, RalphGlobals ralph_globals)
-        {
-            super(
-                _log_changes,(Endpoint)init_val,
-                endpoint_value_type_data_wrapper_factory,ralph_globals);
-        }
-        public AtomicEndpointVariable(
-            boolean _log_changes,RalphGlobals ralph_globals)
-        {
-            super(
-                _log_changes,default_endpoint,
-                endpoint_value_type_data_wrapper_factory,ralph_globals);
-        }
-
-        @Override
-        protected SpeculativeAtomicObject<Endpoint,Endpoint>
-            duplicate_for_speculation(Endpoint to_speculate_on)
-        {
-            SpeculativeAtomicObject<Endpoint,Endpoint> to_return =
-                new AtomicEndpointVariable(
-                    log_changes,to_speculate_on,ralph_globals);
-            to_return.set_derived(this);
-            return to_return;
-        }
-        
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
-        {
-            Util.logger_assert(
-                "Cannot pass reference to endpoint across network.");
-        }
-    }
-
     public static class AtomicServiceFactoryVariable
         extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
@@ -435,42 +387,10 @@ public class Variables {
             boolean is_reference)
         {
             Util.logger_assert(
-                "Cannot pass endpoint reference over network.");
+                "Cannot pass interface reference over network.");
         }
     }
     
-
-    public static class NonAtomicEndpointVariable
-        extends NonAtomicValueVariable<Endpoint,Endpoint>
-    {
-        public NonAtomicEndpointVariable(
-            boolean _dummy_log_changes, Endpoint init_val,
-            RalphGlobals ralph_globals)
-        {
-            super(
-                init_val,
-                endpoint_value_type_data_wrapper_factory,
-                ralph_globals);
-        }
-
-        public NonAtomicEndpointVariable(
-            boolean _dummy_log_changes, RalphGlobals ralph_globals)
-        {
-            super(
-                default_endpoint,
-                endpoint_value_type_data_wrapper_factory,ralph_globals);
-        }
-
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
-        {
-            Util.logger_assert(
-                "Cannot pass endpoint reference over network.");
-        }
-    }
-
-
     public static class NonAtomicServiceFactoryVariable
         extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
