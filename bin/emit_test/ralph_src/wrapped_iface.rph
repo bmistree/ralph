@@ -2,7 +2,7 @@ alias Interface ISetterGetter as 'IFaceBasicRalph.ISetterGetter';
 
 Service Example implements Interface ISetterGetter
 {
-    Interface ISetterGetter internal_setter_getter;
+    Interface ISetterGetter internal_setter_getter = null;
 
     set_interface(Interface ISetterGetter to_set_to)
     {
