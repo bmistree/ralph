@@ -28,8 +28,8 @@ import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph.Variables.NonAtomicMapVariable;
 import ralph.Variables.AtomicMapVariable;
-import ralph.Variables.NonAtomicEndpointVariable;
-import ralph.Variables.AtomicEndpointVariable;
+import ralph.Variables.NonAtomicInterfaceVariable;
+import ralph.Variables.AtomicInterfaceVariable;
 import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph.Variables.AtomicServiceFactoryVariable;
 
@@ -967,8 +967,8 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     # emit for endpoints
     if isinstance(type_object,EndpointType):
         if type_object.is_tvar and (not force_single_threaded):
-            return 'AtomicEndpointVariable'
-        return 'NonAtomicEndpointVariable'
+            return 'AtomicInterfaceVariable<%s>' % type_object.alias_name
+        return 'NonAtomicInterfaceVariable<%s>' % type_object.alias_name
 
     # emit for service factories
     if isinstance(type_object,ServiceFactoryType):
