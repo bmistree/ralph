@@ -12,6 +12,7 @@ import RalphDataWrappers.NumberTypeDataWrapperFactory;
 import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
 import RalphDataWrappers.EndpointTypeDataWrapperFactory;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 
 public class Variables {
@@ -169,7 +170,48 @@ public class Variables {
             return to_return;
         }
     }
-	
+
+    public static class AtomicInterfaceVariable<T>
+        extends AtomicValueVariable<T,T>
+    {
+        public AtomicInterfaceVariable(
+            boolean _log_changes,T init_val, RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,init_val,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
+        public AtomicInterfaceVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,null,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
+
+        @Override
+        protected SpeculativeAtomicObject<T,T>
+            duplicate_for_speculation(T to_speculate_on)
+        {
+            SpeculativeAtomicObject<T,T> to_return =
+                new AtomicInterfaceVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
+        
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            Util.logger_assert(
+                "Cannot pass reference to interface across network.");
+        }
+    }
+    
+    
 
     public static class AtomicEndpointVariable
         extends AtomicValueVariable<Endpoint,Endpoint>
@@ -367,6 +409,36 @@ public class Variables {
         }
     }
 
+    public static class NonAtomicInterfaceVariable<T>
+        extends NonAtomicValueVariable<T,T>
+    {
+        public NonAtomicInterfaceVariable(
+            boolean _dummy_log_changes, T init_val,
+            RalphGlobals ralph_globals)
+        {
+            super(
+                init_val,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
+
+        public NonAtomicInterfaceVariable(
+            boolean _dummy_log_changes, RalphGlobals ralph_globals)
+        {
+            super(
+                null,new ValueTypeDataWrapperFactory<T,T>(),ralph_globals);
+        }
+
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            Util.logger_assert(
+                "Cannot pass endpoint reference over network.");
+        }
+    }
+    
 
     public static class NonAtomicEndpointVariable
         extends NonAtomicValueVariable<Endpoint,Endpoint>
