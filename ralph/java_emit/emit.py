@@ -326,6 +326,28 @@ public static interface %s {
     emit_ctx.pop_scope()
     return interface_signature
 
+def produce_what_implements(variable_type_node_list):
+    '''Adds implement text to end of service/endpoint definition.
+
+    Args:
+        variable_type_node_list: List, each element is a
+        VariableTypeNode.
+
+    Returns:
+    
+        String.  Containing the implements suffix for a class
+        declaration in Java.  Eg., '' if variable_type_node_list is
+        empty, 'implements Something1, Something2' if two elements in
+        variable_type_node_list, etc.
+    '''
+    if len(variable_type_node_list) == 0:
+        return ''
+
+    internal_types_text = map (
+        lambda internal_type_node: emit_internal_type(internal_type_node.type),
+        variable_type_node_list)
+    return 'implements ' + ','.join(internal_types_text)
+
 def emit_endpt(endpt_node):
     '''
     @param {EndpointDefinitionNode} endpt_node
@@ -333,10 +355,15 @@ def emit_endpt(endpt_node):
     @returns {String}
     '''
     emit_ctx = EmitContext()
-    emit_ctx.push_scope()    
+    emit_ctx.push_scope()
+
+    implements_text = produce_what_implements(
+        endpt_node.implements_variable_type_node_list)
+    
     endpt_class_signature = '''
-public static class %s extends Endpoint {
-''' % endpt_node.name
+public static class %s extends Endpoint %s {
+''' % (endpt_node.name, implements_text)
+
     
     endpt_class_body = emit_endpt_variable_declarations(
         emit_ctx,endpt_node.body_node.variable_declaration_nodes)
@@ -1298,7 +1325,6 @@ def emit_internal_type(type_object):
                 
                 typer = typer.basic_type
 
-                
         if typer == BOOL_TYPE:
             return 'Boolean'
         elif typer == NUMBER_TYPE:

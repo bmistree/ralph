@@ -312,11 +312,15 @@ class EndpointDefinitionNode(_AstNode):
         
     def type_check_pass_one(self,struct_types_ctx):
         self.body_node.type_check_pass_one(struct_types_ctx)
-        
+        for variable_type_node in self.implements_variable_type_node_list:
+            variable_type_node.type_check_pass_one(struct_types_ctx)
+                
     def type_check_pass_two(self,type_check_ctx):
         self.body_node.type_check_pass_two(type_check_ctx)
+        for variable_type_node in self.implements_variable_type_node_list:
+            variable_type_node.type_check_pass_two(type_check_ctx)
 
-
+            
 class EndpointBodyNode(_AstNode):
     def __init__(self,filename):
         super(EndpointBodyNode,self).__init__(
