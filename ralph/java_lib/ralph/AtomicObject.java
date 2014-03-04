@@ -32,7 +32,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 {
     public String uuid = Util.generate_uuid();
     public boolean log_changes;
-    protected DataWrapperFactory<T,D> data_wrapper_constructor;
+    public DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     protected ReentrantLock _mutex = new ReentrantLock();
     public DataWrapper<T,D> dirty_val = null;
@@ -70,7 +70,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         implements Comparable <EventCachedPriorityObj>
     {
     	String cached_priority = "";
-    	ActiveEvent event = null;
+    	public final ActiveEvent event;
     	public EventCachedPriorityObj (
             ActiveEvent active_event,String _cached_priority)
     	{
