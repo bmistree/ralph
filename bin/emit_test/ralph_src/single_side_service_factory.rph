@@ -12,7 +12,8 @@ Endpoint ServiceReceiver
 
     construct_endpt()
     {
-        endpt = sf.construct();
+        endpt = dynamic_cast<Endpoint BasicSetterGetter>(
+            sf.construct());
     }
     
     set_endpt_number(Number to_set_to)

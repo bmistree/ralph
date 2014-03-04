@@ -58,7 +58,9 @@ reserved = {
     'ServiceFactory' : 'SERVICE_FACTORY',
     'self': 'SELF',
     'implements': 'IMPLEMENTS',
-    'Interface': 'INTERFACE'
+    'Interface': 'INTERFACE',
+    'dynamic_cast': 'DYNAMIC_CAST'
+    
     }
 
 

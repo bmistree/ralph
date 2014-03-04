@@ -348,6 +348,7 @@ def p_MethodCall(p):
                | SPECULATE LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | SPECULATE_ALL LEFT_PAREN RIGHT_PAREN
                | VERBATIM LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               | DYNAMIC_CAST LESS_THAN VariableType GREATER_THAN LEFT_PAREN MethodCallArgs RIGHT_PAREN
     '''
     if p[1] == PRINT_TYPE_TOKEN:
         line_number = p.lineno(1)
@@ -368,6 +369,16 @@ def p_MethodCall(p):
         line_number = p.lineno(1)
         p[0] = SpeculateAllCallNode(
             global_parsing_filename,line_number)
+
+    elif len(p) == 8:
+        # dynamic cast
+        line_number = p.lineno(1)
+        to_variable_type_node = p[3]
+        method_call_args_node = p[6]
+        p[0] = DynamicCastNode(
+            global_parsing_filename,to_variable_type_node,method_call_args_node,
+            line_number)
+        
     else:
         method_name_node = p[1]
         method_args_node = p[3]
@@ -629,7 +640,7 @@ def p_Expression(p):
     Expression : OrExpression
     '''
     p[0] = p[1]
-    
+
 def p_OrExpression(p):
     '''
     OrExpression : OrExpression OR AndExpression

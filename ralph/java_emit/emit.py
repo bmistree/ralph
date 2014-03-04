@@ -1719,6 +1719,16 @@ _ctx.hide_partner_call(
 
     elif statement_node.label == ast_labels.NULL_TYPE:
         return 'null'
+
+    elif statement_node.label == ast_labels.DYNAMIC_CAST:
+        what_casting_node = statement_node.cast_arg_node
+        what_casting_text = emit_statement(emit_ctx,what_casting_node)
+        
+        casting_to_variable_type_node = statement_node.to_variable_type_node
+        casting_to_type_text = emit_internal_type(
+            casting_to_variable_type_node.type)
+        
+        return '((%s) %s)' % (casting_to_type_text,what_casting_text)
     
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %

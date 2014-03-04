@@ -466,6 +466,35 @@ class PrintCallNode(_AstNode):
         self.print_arg_node.type_check_pass_two(type_check_ctx)
 
 
+class DynamicCastNode(_AstNode):
+    def __init__(self,filename,to_variable_type_node,method_args_node,
+                 line_number):
+        super(DynamicCastNode,self).__init__(
+            filename,ast_labels.DYNAMIC_CAST,line_number)
+
+        # type to cast to
+        self.to_variable_type_node = to_variable_type_node
+
+        # should only be casting one variable at a time.
+        cast_call_args_list = method_args_node.get_args_list()
+        if len(cast_call_args_list) != 1:
+            raise TypeCheckException(
+                self.filename,self.line_number,
+                ('Dynamic cast requires 1 argument, not %s.' %
+                 len(cast_call_args_list)))
+        
+        self.cast_arg_node = cast_call_args_list[0]
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.to_variable_type_node.type_check_pass_one(struct_types_ctx)
+        self.cast_arg_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.to_variable_type_node.type_check_pass_two(type_check_ctx)
+        self.cast_arg_node.type_check_pass_two(type_check_ctx)
+        self.type = self.to_variable_type_node.type
+
+
 class SelfNode(_AstNode):
     def __init__(self,filename,line_number):
         super(SelfNode,self).__init__(
