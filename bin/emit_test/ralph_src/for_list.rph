@@ -9,6 +9,13 @@ Endpoint ListEndpoint
         number_list.append(value);
     }
 
+    copy()
+    {
+        List(element: Number) to_copy_to;
+        for (Number number in number_list)
+            to_copy_to.append(number);
+    }
+    
     sum_list_numbers() returns Number
     {
         Number to_return = 0;
@@ -17,6 +24,29 @@ Endpoint ListEndpoint
         return to_return;
     }
 
+    break_list_numbers() returns Number
+    {
+        Number to_return = 0;
+        for (Number number_val in number_list)
+        {
+            to_return = to_return + number_val;
+            break;
+        }
+        return to_return;
+    }
+
+    continue_list_numbers() returns Number
+    {
+        Number to_return = 0;
+        for (Number number_val in number_list)
+        {
+            if (to_return == 0)
+                continue;
+            to_return = to_return + number_val;
+        }
+        return to_return;
+    }
+    
     atomic_append_number(TVar Number value) 
     {
         atomic_number_list.append(value);

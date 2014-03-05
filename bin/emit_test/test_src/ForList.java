@@ -47,6 +47,14 @@ public class ForList
             // calculate sum
             if (endpt.atomic_sum_list_numbers().doubleValue() != sum_of_values_in_list)
                 return false;
+
+            double value = endpt.break_list_numbers().doubleValue();
+            if (value != 5.0)
+                return false;
+
+            value = endpt.continue_list_numbers().doubleValue();
+            if (value != 0.0)
+                return false;
             
             return true;
         }

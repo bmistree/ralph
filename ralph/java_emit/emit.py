@@ -665,7 +665,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     body = ''
     for statement in method_declaration_node.method_body_statement_list:
         body += emit_statement(emit_ctx,statement)
-        body += ';\n'
+        body += emit_semicolon_line_break(statement)
         
     emit_ctx.pop_scope()
 
@@ -684,6 +684,13 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     
     return external_method_text + internal_method_text
 
+def emit_semicolon_line_break(statement_node):
+    '''
+    If statement node is not a scope, then add a semi-colon on end
+    '''
+    if statement_node.label == ast_labels.SCOPE:
+        return '\n'
+    return ';\n'
 
 def emit_external_signature(emit_ctx,method_signature_node,with_super_arg):
     '''Have two externally-facing signatures.  One explicitly requires
@@ -1410,6 +1417,12 @@ def emit_statement(emit_ctx,statement_node):
             statement_node.filename,
             statement_node.line_number,
             'FIXME: still must allow speculate_all call')
+
+    elif statement_node.label == ast_labels.BREAK:
+        return 'break'
+
+    elif statement_node.label == ast_labels.CONTINUE:
+        return 'continue'
     
     elif statement_node.label == ast_labels.VERBATIM_CALL:
         return statement_node.verbatim_arg_node.value
@@ -1445,7 +1458,8 @@ def emit_statement(emit_ctx,statement_node):
         atomic_logic = ''
         for statement in statement_node.statement_list:
             atomic_logic += emit_statement(emit_ctx,statement)
-            atomic_logic += ';\n'
+            atomic_logic += emit_semicolon_line_break(statement)
+
         atomic_logic = indent_string(atomic_logic,2)
         
         return '''
@@ -1699,19 +1713,25 @@ _ctx.hide_partner_call(
         to_return = '{\n'
         
         scope_body_text = '_ctx.var_stack.push(false);\n'
-
+        scope_body_text += 'try \n {\n'
+        
         # Any variable declared in this scope should be removed after
         # this scope statement: so push on a scope to emit_ctx and
         # after emitting individual statements (ie, at end of for
         # loop, pop off of emit_ctx).
         emit_ctx.push_scope()
         for individual_statement_node in statement_node.statement_list:
-            scope_body_text += emit_statement(emit_ctx,individual_statement_node)
-            scope_body_text += ';\n'
+            scope_body_text += indent_string(
+                emit_statement(emit_ctx,individual_statement_node))
+            scope_body_text += emit_semicolon_line_break(
+                individual_statement_node)
+
         emit_ctx.pop_scope()
 
-        scope_body_text +='\n_ctx.var_stack.pop();'
+        scope_body_text +='}\n'
+        scope_body_text += 'finally { _ctx.var_stack.pop();}\n'
         to_return += indent_string(scope_body_text) + '\n}\n'
+        
         return to_return
 
     elif statement_node.label == ast_labels.DOT:
@@ -1930,17 +1950,25 @@ def emit_for_statement(for_node,emit_ctx):
 // cannot perform cast in for predicate.
 %s;
 // for body
-%s;
+%s%s
 '''  % (cast_line,        
         # for body
-        statement_body_text)
+        statement_body_text,
+        emit_semicolon_line_break(for_node.statement_node))
     
     to_return += '''
 {
-%s
+    try
+    {
+        _ctx.var_stack.push(false);
+        %s
+    }
+    finally
+    {
+        _ctx.var_stack.pop();
+    }
 }
 ''' % indent_string(internal_statement_text)
        
     emit_ctx.pop_scope()
-    to_return += '_ctx.var_stack.pop();\n'
     return to_return
