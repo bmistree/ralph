@@ -417,6 +417,31 @@ class IdentifierNode(_AstNode):
     def get_value(self):
         return self.value
 
+    
+class BreakNode(_AstNode):
+    def __init__(self,filename,line_number):
+        super(BreakNode,self).__init__(
+            filename,ast_labels.BREAK,line_number)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+
+    
+class ContinueNode(_AstNode):
+    def __init__(self,filename,line_number):
+        super(ContinueNode,self).__init__(
+            filename,ast_labels.CONTINUE,line_number)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+    
+    
 class DeclarationStatementNode(_AstNode):
     def __init__(self,filename,var_name_identifier_node,type_node,
                  initializer_node = None):

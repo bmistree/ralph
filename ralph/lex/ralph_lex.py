@@ -59,8 +59,9 @@ reserved = {
     'self': 'SELF',
     'implements': 'IMPLEMENTS',
     'Interface': 'INTERFACE',
-    'dynamic_cast': 'DYNAMIC_CAST'
-    
+    'dynamic_cast': 'DYNAMIC_CAST',
+    'break': 'BREAK',
+    'continue': 'CONTINUE'
     }
 
 

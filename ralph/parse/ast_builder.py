@@ -747,6 +747,8 @@ def p_Term(p):
     Term : Variable
          | MethodCall
          | PartnerMethodCall
+         | Break
+         | Continue
          | Number
          | String
          | Boolean
@@ -762,6 +764,21 @@ def p_Term(p):
 
     p[0] = term_node
 
+def p_Break(p):
+    '''
+    Break : BREAK
+    '''
+    line_number = p.lineno(1)
+    p[0] = BreakNode(global_parsing_filename,line_number)
+
+def p_Continue(p):
+    '''
+    Continue : CONTINUE
+    '''
+    line_number = p.lineno(1)
+    p[0] = ContinueNode(global_parsing_filename,line_number)
+    
+    
 def p_Self(p):
     '''
     Self : SELF
