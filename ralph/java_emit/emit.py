@@ -1472,12 +1472,19 @@ def emit_statement(emit_ctx,statement_node):
         _active_event = _active_event.clone_atomic();
 
         // what to actually execute inside of atomic block
-        try {
+        try
+        {
+            _ctx.var_stack.push(false);
 %s
-        } catch (BackoutException _be) {
-              _active_event.handle_backout_exception(_be);
         }
-
+        catch (BackoutException _be)
+        {
+            _active_event.handle_backout_exception(_be);
+        }
+        finally
+        {
+            _ctx.var_stack.pop();
+        }
 
         // FIXME: may want to mangle this further
         FirstPhaseCommitResponseCode __ralph_internal_resp_code =
