@@ -664,22 +664,15 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
 
     body = ''
     for statement in method_declaration_node.method_body_statement_list:
-        body += emit_statement(emit_ctx,statement)
-        body += emit_semicolon_line_break(statement)
+        body += indent_string(emit_statement(emit_ctx,statement))
+        body += indent_string(emit_semicolon_line_break(statement))
         
     emit_ctx.pop_scope()
 
-    # all return statements already pop from var stacks themselves.
-    # this is because java compiler throws error for unreachable code.
-    # Eg.,
-    #
-    #      _ctx.var_stack.push(true);//true because func scope
-    #      return __internal__0internal_number.get_val(_active_event);
-    #      _ctx.var_stack.pop();
-    #
-    # will throw a compile error becaue could never hit _ctx.var_stack.pop();
-    if method_declaration_node.method_signature_node.type.returns_type is None:
-        body += '_ctx.var_stack.pop();'
+    # all method bodies are defined in try-finally blocks.  At
+    # beginning of try-finally, push to context var stack.  At end,
+    # pop from it.
+    body += '\n} finally {_ctx.var_stack.pop();}'
     internal_method_text = signature_plus_head + indent_string(body) + '\n}'
     
     return external_method_text + internal_method_text
@@ -844,6 +837,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
     {
+        try {
         _ctx.var_stack.push(true); // true because function var scope
         _ctx.var_stack.add_var('SomeVar',SomeVar);
     '''
@@ -856,9 +850,17 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     # 3: emit head section where add to scope stack and push arguments
     # on to scope stack.  Must push arguments on to scope stack so
     # they're available in defer statements
-    to_return += indent_string(
-        '_ctx.var_stack.push(true);//true because func scope\n');
-    
+
+    # note try block gets closed at end of
+    # emit_method_declaration_node, near finally block.
+    to_return += indent_string('''
+try
+{
+    _ctx.var_stack.push(true);//true because func scope
+
+''')
+
+
     # convert each method argument to ralph variable and then add to
     # stack.  Note: skip this step for maps, which caller already
     # cloned for us.
@@ -900,10 +902,10 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         internal_arg_name = emit_ctx.lookup_internal_var_name(argument_name)
         to_return +=indent_string(
             '%s %s = %s;\n' %
-            (java_type_statement,internal_arg_name,new_ralph_variable))
+            (java_type_statement,internal_arg_name,new_ralph_variable),2)
         to_return += indent_string(
             '\n_ctx.var_stack.add_var("%s",%s);\n' %
-            (internal_arg_name,internal_arg_name))
+            (internal_arg_name,internal_arg_name),2)
 
     return to_return
 
@@ -1672,8 +1674,7 @@ _ctx.hide_partner_call(
             declaration_statement + '\n' + context_stack_push_statement)
 
     elif statement_node.label == ast_labels.RETURN:
-        return_text = '_ctx.var_stack.pop();\n'
-        return_text += 'return'
+        return_text = 'return'
         if statement_node.what_to_return_node is not None:
             return_text += ' ' + emit_statement(
                 emit_ctx,statement_node.what_to_return_node)
@@ -1711,9 +1712,10 @@ _ctx.hide_partner_call(
     
     elif statement_node.label == ast_labels.SCOPE:
         to_return = '{\n'
-        
-        scope_body_text = '_ctx.var_stack.push(false);\n'
-        scope_body_text += 'try \n {\n'
+
+        scope_body_text = 'try \n {\n'
+        scope_body_text += indent_string('_ctx.var_stack.push(false);\n')
+
         
         # Any variable declared in this scope should be removed after
         # this scope statement: so push on a scope to emit_ctx and
