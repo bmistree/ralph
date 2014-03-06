@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.TimeUnit;
 
+
 public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 {
     /**
@@ -599,7 +600,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
 
-    protected class SpeculativeFuture implements Future<Boolean>
+    public class SpeculativeFuture implements Future<Boolean>
     {
         private final ReentrantLock rlock = new ReentrantLock();
         private final Condition cond = rlock.newCondition();
