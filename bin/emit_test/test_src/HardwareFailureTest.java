@@ -121,22 +121,18 @@ public class HardwareFailureTest
          */
         @Override
         protected ListTypeDataWrapper<Double,Double>  acquire_read_lock(
-            ActiveEvent active_event,ReentrantLock to_unlock) throws BackoutException
+            ActiveEvent active_event) throws BackoutException
         {
             // if hardware has failed, cannot operate on data anymore:
             // will backout event.  relies on another event that doesn't
             // actually operate on routing table list to remove all
             // references to it.  See discussion above in hardware_failed.
             if (hardware_failed)
-            {
-                if (to_unlock != null)
-                    to_unlock.unlock();
                 throw new BackoutException();
-            }
 
             return
-                (ListTypeDataWrapper<Double,Double>)super.acquire_read_lock(
-                    active_event,to_unlock);
+                (ListTypeDataWrapper<Double,Double>)
+                super.acquire_read_lock(active_event);
         }
 
         /**

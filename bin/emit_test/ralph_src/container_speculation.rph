@@ -21,7 +21,6 @@ Service ContainerSpeculation implements Interface SpeculativeInterface
         Number to_append, TrueFalse speculate_on)
         returns Number
     {
-        print ('\nGot into pipeline\n');
         Number to_return = -1;
         atomically
         {
@@ -34,9 +33,6 @@ Service ContainerSpeculation implements Interface SpeculativeInterface
             barrier.size();
             to_return = get_number();
         }
-        print ('\n');
-        print (to_return);
-        print ('\n');
         return to_return;
     }
 
@@ -56,9 +52,6 @@ Service ContainerSpeculation implements Interface SpeculativeInterface
             barrier.size();
             to_return = get_number();
         }
-        print ('\n');
-        print (to_return);
-        print ('\n');
         return to_return;
     }
     

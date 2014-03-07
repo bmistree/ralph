@@ -39,14 +39,6 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
     {}
 
     @Override
-    protected T get_val(ActiveEvent active_event,ReentrantLock to_unlock)
-    {
-        if (to_unlock != null)
-            to_unlock.unlock();
-        return get_val(active_event);
-    }
-    
-    @Override
     public T get_val(ActiveEvent active_event)
     {
         return val.val;

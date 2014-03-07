@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.TimeUnit;
-
+import RalphDataWrappers.DataWrapper;
 
 public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 {
@@ -446,18 +446,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _unlock();
     }
     
-
     /**
        If speculating, re-map get_val to get from the object that
        we're speculating on instead.
      */
-    @Override
-    public T get_val(ActiveEvent active_event) throws BackoutException
+    protected DataWrapper<T,D> acquire_read_lock(ActiveEvent active_event)
+        throws BackoutException
     {
-    	if (active_event == null)
-            return super.get_val(active_event,null);
-        
-        T to_return = null;
         _lock();
         try
         {
@@ -465,7 +460,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 active_event);
 
             if (already_processing)
-                return super.get_val(active_event,_mutex);
+                return super.internal_acquire_read_lock(active_event,_mutex);
 
             for (SpeculativeAtomicObject<T,D> derivative_object :
                      speculated_entries)
@@ -473,15 +468,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 already_processing =
                     derivative_object.already_processing_event(active_event);
                 if (already_processing)
-                    return  derivative_object.get_val(active_event,_mutex);
+                    return  derivative_object.internal_acquire_read_lock(active_event,_mutex);
             }
 
             // if we got here, it means that this object and none
             // of its derivatives have serviced active event before
             if (speculating_on != null)
-                return speculating_on.get_val(active_event,_mutex);
+                return speculating_on.internal_acquire_read_lock(active_event,_mutex);
             else
-                return super.get_val(active_event,_mutex);
+                return super.internal_acquire_read_lock(active_event,_mutex);
         }
         catch (BackoutException ex)
         {

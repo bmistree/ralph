@@ -157,7 +157,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _mutex.unlock();
     }
 
-	
+    protected abstract DataWrapper<T,D> acquire_read_lock(ActiveEvent active_event)
+        throws BackoutException;
+        
+    
     /**
      * 
      DOES NOT ASSUME ALREADY WITHIN LOCK
@@ -195,7 +198,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
      Blocks until has acquired.
     */
-    protected DataWrapper<T,D> acquire_read_lock(
+    protected DataWrapper<T,D> internal_acquire_read_lock(
         ActiveEvent active_event,ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
@@ -467,7 +470,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     
     public D de_waldoify(ActiveEvent active_event) throws BackoutException
     {
-        DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event,null);
+        DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
         return wrapped_val.de_waldoify(active_event);
     }	
 
@@ -1015,18 +1018,16 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     @Override
-    protected T get_val(ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
+    public T get_val(ActiveEvent active_event) throws BackoutException
     {
     	if (active_event == null)
     	{
             //# used for debugging: allows python code to read into and
             //# check the value of an external reference.
-            if (to_unlock != null)
-                to_unlock.unlock();
             return val.val;
     	}
 
-        DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event,to_unlock);
+        DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event);
         if (active_event.immediate_complete())
         {
             // non-atomics should immediately commit their changes.  Note:

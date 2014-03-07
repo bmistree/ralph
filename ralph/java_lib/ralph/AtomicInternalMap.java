@@ -105,7 +105,7 @@ public class AtomicInternalMap<K,V,D>
         ActiveEvent active_event) throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val =
-            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event,null);
+            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
         return wrapped_val;
     }
     @Override    
