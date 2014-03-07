@@ -532,8 +532,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
 
-    @Override
-    public void set_val(ActiveEvent active_event,T new_val)
+    protected DataWrapper<T,D> acquire_write_lock(ActiveEvent active_event)
         throws BackoutException
     {
         _lock();
@@ -541,7 +540,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         {
             // an event can still make local accesses to a variable
             // even after it requests us to speculate.  First check if
-            // we should be performing the set against our root object
+            // we should be acquiring on root object
             boolean already_processing = already_processing_event(
                 active_event);
 
@@ -549,10 +548,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             {
                 // root object already had record of active event:
                 // invalidate any derivative objects because we
-                // performed the set on it.
+                // performed the acquire on it.
                 invalidate_derivative_objects(0);
-                super.set_val(active_event,new_val,_mutex);
-                return;
+                return super.internal_acquire_write_lock(active_event,_mutex);
             }
 
             // check if any of our derivative objects were already
@@ -571,22 +569,25 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                     //we should invalidate all the subsequently
                     //derived objects and break out of loop
                     invalidate_derivative_objects(i+1);
-                    derivative_object.set_val(active_event,new_val,_mutex);
-                    return;                        
+                    return derivative_object.internal_acquire_write_lock(
+                        active_event,_mutex);
                 }
             }
             
             // none of the objects that we were speculating on had
             // interacted with that event before.
             if (speculating_on != null)
-                speculating_on.set_val(active_event,new_val,_mutex);
+            {
+                return speculating_on.internal_acquire_write_lock(
+                    active_event,_mutex);
+            }
             else
             {
                 // note: do not need to invalidate anything
                 // because cannot get to else of this if-else
                 // block unless we aren't speculating on any
                 // objects.
-                super.set_val(active_event,new_val,_mutex);
+                return super.internal_acquire_write_lock(active_event,_mutex);
             }
         }
         catch (BackoutException ex)

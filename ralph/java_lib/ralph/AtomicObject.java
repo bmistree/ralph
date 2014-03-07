@@ -315,7 +315,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
         return to_return;
     }
-		
+
+    protected abstract DataWrapper<T,D> acquire_write_lock(ActiveEvent active_event)
+        throws BackoutException;
+    
     /**
      * DOES NOT ASSUME ALREADY LOCK
      * 
@@ -331,7 +334,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      * @return
      * @throws BackoutException 
      */
-    protected DataWrapper<T,D> acquire_write_lock(
+    protected DataWrapper<T,D> internal_acquire_write_lock(
         ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
@@ -872,11 +875,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     @Override
-    protected void set_val(
-        ActiveEvent active_event,T new_val, ReentrantLock to_unlock)
+    public void set_val(ActiveEvent active_event,T new_val)
         throws BackoutException
     {
-        DataWrapper<T,D> to_write_on = acquire_write_lock(active_event,to_unlock);
+        DataWrapper<T,D> to_write_on = acquire_write_lock(active_event);
         to_write_on.write(new_val);
         if (active_event.immediate_complete())
         {

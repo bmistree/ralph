@@ -55,15 +55,6 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
         val.write(new_val);
     }
 
-    @Override
-    protected void set_val(
-        ActiveEvent active_event, T new_val, ReentrantLock to_unlock)
-    {
-        if (to_unlock != null)
-            to_unlock.unlock();
-        set_val(active_event,new_val);
-    }
-
     
     @Override
     public boolean return_internal_val_from_container()

@@ -140,18 +140,14 @@ public class HardwareFailureTest
          */
         @Override
         protected ListTypeDataWrapper<Double,Double> acquire_write_lock(
-            ActiveEvent active_event,ReentrantLock to_unlock) throws BackoutException
+            ActiveEvent active_event) throws BackoutException
         {
             if (hardware_failed)
-            {
-                if (to_unlock != null)
-                    to_unlock.unlock();
                 throw new BackoutException();
-            }
 
             return
                 (ListTypeDataWrapper<Double,Double>)super.acquire_write_lock(
-                    active_event,to_unlock);
+                    active_event);
         }
         
         /**

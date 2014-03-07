@@ -102,7 +102,7 @@ public class AtomicInternalList<V,D>
         ActiveEvent active_event) throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val =
-            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event,null);
+            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
         return wrapped_val;
     }
 
