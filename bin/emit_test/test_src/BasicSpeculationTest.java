@@ -1,6 +1,7 @@
 package emit_test_harnesses;
 
 import emit_test_package.BasicSpeculation.SpeculativeEndpoint;
+import emit_test_package.BasicSpeculation.SpeculativeInterface;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.Arrays;
+
 
 public class BasicSpeculationTest
 {
@@ -203,14 +205,14 @@ public class BasicSpeculationTest
 
     private static class SingleOp extends Thread
     {
-        private SpeculativeEndpoint endpt = null;
+        private SpeculativeInterface endpt = null;
         private Double amt_to_inc_by = null;
         private boolean speculate;
         public boolean had_exception = false;
         private boolean interrupt_speculation = false;
         
         public SingleOp(
-            SpeculativeEndpoint endpt, Double amt_to_inc_by,
+            SpeculativeInterface endpt, Double amt_to_inc_by,
             boolean speculate, boolean interrupt_speculation)
         {
             this.endpt = endpt;
@@ -242,7 +244,7 @@ public class BasicSpeculationTest
        interrupted test.  If it is false, then run just a pipeline test.
      */
     private static long pipelined_events_time_ms(
-        SpeculativeEndpoint endpt, boolean speculate,
+        SpeculativeInterface endpt, boolean speculate,
         double amt_to_inc_by,
         List<Boolean> interrupt_speculation_pattern)
         throws Exception

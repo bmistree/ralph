@@ -1,5 +1,31 @@
+alias Interface SpeculativeInterface as 'emit_test_package.BasicSpeculation.SpeculativeInterface';
 
-Service SpeculativeEndpoint
+/**
+   pipleine and pipeline_interrupted increments internal number.
+
+   num = get_number()
+   pipeline(1)
+   pipeline(1)
+   pipeline(1)
+   res = get_number()
+
+   res should equal num+3
+ */
+Interface SpeculativeInterface
+{
+    get_number() returns Number;
+    
+    pipeline(
+        Number amount_to_increment_by, TrueFalse speculate_on)
+        returns Number;
+
+    pipeline_interrupted(
+        Number amount_to_increment_by, TrueFalse speculate_on)
+        returns Number;
+}
+
+
+Service SpeculativeEndpoint implements Interface SpeculativeInterface
 {
     TVar Number internal_number = 15;
 
