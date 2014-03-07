@@ -27,6 +27,7 @@ PARTNER_METHOD_CALL = 'partner_call'
 PRINT_CALL = 'print_call'
 DYNAMIC_CAST = 'dynamic_cast'
 SPECULATE_CALL = 'speculate_call'
+SPECULATE_CONTAINER_INTERNALS_CALL = 'speculate_container_internals'
 SPECULATE_ALL_CALL = 'speculate_all_call'
 VERBATIM_CALL = 'verbatim_call'
 

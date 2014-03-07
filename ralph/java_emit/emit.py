@@ -1402,17 +1402,64 @@ def emit_statement(emit_ctx,statement_node):
         print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
         return 'System.out.print(%s)' % print_arg_statement
 
-    elif statement_node.label == ast_labels.SPECULATE_CALL:
+    elif statement_node.label in [ast_labels.SPECULATE_CALL,
+                                  ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL]:
         to_return = ''
+
+        # If the call is just a specualte call (not specualte
+        # container internals), then we speculate on just the wrapper
+        # of an object.  For instance, for the following code
+        #
+        #    List(element: Number) some_list;
+        #    List(element: Number) some_other_list;
+        #        ...
+        #    some_list = some_other_list;
+        #    speculate(some_list);
+        #
+        # Allows other events to now read/write on top of
+        # some_other_list when accessing some_list.
+        #
+        # However, 
+        #
+        #    List(element: Number) some_list;
+        #    some_list.append(1);
+        #    speculate(some_list);
+        #
+        # does not allow other events to perform basic operations.
+        # Eg.,
+        #
+        #    some_list.size();
+        #
+        # This is because speculate allows us to speculate on the pointer
+        # wrapping the internal list, we cannot speculate on the
+        # contents of that internal list.
+        #
+        # To speculate on the internal value instead, use
+        #
+        #    speculate_container_internals(some_list);
+        #
+        # This method should get the internal container pointed at and
+        # call speculate on it, instead of the external wrapper.
+        # Hence, in code below, if calling
+        # SPECULATE_CONTAINER_INTERNALS_CALL, then first get value of
+        # internal container.
+        suffix_to_speculate_on = ''
+        internal_suffix_to_speculate_on = ''
+        if statement_node.label == ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL:
+            suffix_to_speculate_on = '.get_val(_active_event)'
+            internal_suffix_to_speculate_on = '.get_val(_active_event)'
+        
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for to_speculate_on in statement_node.speculate_call_args_list:
             emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
             to_return += (
-                '%s.speculate(%s.get_val(_active_event));\n' %
-                (emitted_to_speculate_on,emitted_to_speculate_on))
+                '%s%s.speculate(%s.get_val(_active_event)%s);\n' %
+                (emitted_to_speculate_on,suffix_to_speculate_on,
+                 emitted_to_speculate_on,internal_suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
         return to_return
+
         
     elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
         raise InternalEmitException(

@@ -2,8 +2,9 @@ from ralph.lex.ralph_lex import tokens,construct_lexer
 from ralph.lex.ralph_lex import STRUCT_TYPE_TOKEN,PRINT_TYPE_TOKEN
 from ralph.lex.ralph_lex import ENDPOINT_TOKEN, VERBATIM_TOKEN
 from ralph.lex.ralph_lex import SERVICE_TOKEN, INTERFACE_TOKEN
-from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN
-from ralph.lex.ralph_lex import SPECULATE_TYPE_TOKEN, SPECULATE_ALL_TYPE_TOKEN
+from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN,SPECULATE_TOKEN
+from ralph.lex.ralph_lex import SPECULATE_CONTAINER_INTERNALS_TOKEN
+from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -346,6 +347,7 @@ def p_MethodCall(p):
     MethodCall : Variable LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | PRINT LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | SPECULATE LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               | SPECULATE_CONTAINER_INTERNALS LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | SPECULATE_ALL LEFT_PAREN RIGHT_PAREN
                | VERBATIM LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | DYNAMIC_CAST LESS_THAN VariableType GREATER_THAN LEFT_PAREN MethodCallArgs RIGHT_PAREN
@@ -360,12 +362,17 @@ def p_MethodCall(p):
         method_args_node = p[3]
         p[0] = VerbatimCallNode(
             global_parsing_filename,method_args_node,line_number)
-    elif p[1] == SPECULATE_TYPE_TOKEN:
+    elif p[1] == SPECULATE_TOKEN:
         line_number = p.lineno(1)
         method_args_node = p[3]
         p[0] = SpeculateCallNode(
             global_parsing_filename,method_args_node,line_number)
-    elif p[1] == SPECULATE_ALL_TYPE_TOKEN:
+    elif p[1] == SPECULATE_CONTAINER_INTERNALS_TOKEN:
+        line_number = p.lineno(1)
+        method_args_node = p[3]
+        p[0] = SpeculateContainerInternalsCallNode(
+            global_parsing_filename,method_args_node,line_number)
+    elif p[1] == SPECULATE_ALL_TOKEN:
         line_number = p.lineno(1)
         p[0] = SpeculateAllCallNode(
             global_parsing_filename,line_number)

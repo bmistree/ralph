@@ -8,8 +8,9 @@ SERVICE_TOKEN = 'Service'
 INTERFACE_TOKEN = 'Interface'
 SERVICE_FACTORY_TOKEN = 'ServiceFactory'
 PRINT_TYPE_TOKEN = 'print'
-SPECULATE_TYPE_TOKEN = 'speculate'
-SPECULATE_ALL_TYPE_TOKEN = 'speculate_all'
+SPECULATE_TOKEN = 'speculate'
+SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
+SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 
 reserved = {
@@ -31,6 +32,7 @@ reserved = {
     'or': 'OR',
     'print': 'PRINT',
     'speculate': 'SPECULATE',
+    'speculate_container_internals': 'SPECULATE_CONTAINER_INTERNALS',
     'speculate_all': 'SPECULATE_ALL',
     'while': 'WHILE',
     'for': 'FOR',

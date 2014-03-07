@@ -27,7 +27,7 @@ Service ContainerSpeculation implements Interface SpeculativeInterface
             to_return = barrier.size();
             barrier.append(to_append);
             if (speculate_on)
-                speculate(barrier);
+                speculate_container_internals(barrier);
             verbatim(
                 'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
             barrier.size();
@@ -45,7 +45,7 @@ Service ContainerSpeculation implements Interface SpeculativeInterface
         {
             to_return = barrier.size();
             if (speculate_on)
-                speculate(barrier);
+                speculate_container_internals(barrier);
             verbatim(
                 'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
             barrier.append(to_append);

@@ -531,7 +531,28 @@ class SelfNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         pass
 
-    
+class SpeculateContainerInternalsCallNode(_AstNode):
+    def __init__(self,filename,method_args_node,line_number):
+        super(SpeculateContainerInternalsCallNode,self).__init__(
+            filename,ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL,line_number)
+
+        self.speculate_call_args_list = []
+        if method_args_node is not None:
+            self.speculate_call_args_list = method_args_node.get_args_list()
+            if len(self.speculate_call_args_list) == 0:
+                raise TypeCheckException(
+                    self.filename,self.line_number,
+                    'speculate_container_internals requires at least one argument.')
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        for arg in self.speculate_call_args_list:
+            arg.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        for arg in self.speculate_call_args_list:
+            arg.type_check_pass_two(type_check_ctx)
+
+        
 class SpeculateCallNode(_AstNode):
     def __init__(self,filename,method_args_node,line_number):
         super(SpeculateCallNode,self).__init__(
@@ -543,7 +564,7 @@ class SpeculateCallNode(_AstNode):
             if len(self.speculate_call_args_list) == 0:
                 raise TypeCheckException(
                     self.filename,self.line_number,
-                    'Speculate requires at least one argument.')
+                    'speculate requires at least one argument.')
         
     def type_check_pass_one(self,struct_types_ctx):
         for arg in self.speculate_call_args_list:
