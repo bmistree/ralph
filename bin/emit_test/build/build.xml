@@ -366,6 +366,15 @@
       <arg line="-p emit_test_package"/>
       <arg line="-c WrappedIFaceJava"/>
     </exec>
+
+    <echo message="${line.separator}container_speculation.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/container_speculation.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/ContainerSpeculationJava.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c ContainerSpeculationJava"/>
+    </exec>
     
   </target>
 
@@ -418,7 +427,7 @@
          run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
          run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
-         run_NullTest,run_InternalCreateService,run_Self">
+         run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation">
   </target>
   
   
@@ -915,6 +924,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.SelfTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+
+  <!-- Run ContainerSpeculationTest -->
+  <target
+      name="run_ContainerSpeculation"
+      depends="compile_ralph_tests"
+      description="Run container speculation.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ContainerSpeculationTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

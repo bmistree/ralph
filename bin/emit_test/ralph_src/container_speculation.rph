@@ -1,0 +1,65 @@
+alias Interface SpeculativeInterface as 'emit_test_package.BasicSpeculation.SpeculativeInterface';
+
+Service ContainerSpeculation implements Interface SpeculativeInterface
+{
+    TVar List (element: Number) barrier;
+
+    get_number() returns Number
+    {
+        Number to_return = 0;
+        atomically
+        {
+            to_return = 0;
+            for (Number internal_val in barrier)
+                to_return = to_return + internal_val;
+        }
+        return to_return;
+    }
+
+    
+    pipeline(
+        Number to_append, TrueFalse speculate_on)
+        returns Number
+    {
+        print ('\nGot into pipeline\n');
+        Number to_return = -1;
+        atomically
+        {
+            to_return = barrier.size();
+            barrier.append(to_append);
+            if (speculate_on)
+                speculate(barrier);
+            verbatim(
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
+            barrier.size();
+            to_return = get_number();
+        }
+        print ('\n');
+        print (to_return);
+        print ('\n');
+        return to_return;
+    }
+
+    pipeline_interrupted(
+        Number to_append, TrueFalse speculate_on)
+        returns Number
+    {
+        Number to_return = -1;
+        atomically
+        {
+            to_return = barrier.size();
+            if (speculate_on)
+                speculate(barrier);
+            verbatim(
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
+            barrier.append(to_append);
+            barrier.size();
+            to_return = get_number();
+        }
+        print ('\n');
+        print (to_return);
+        print ('\n');
+        return to_return;
+    }
+    
+}
