@@ -4,6 +4,7 @@ import emit_test_package.BasicSpeculation.SpeculativeEndpoint;
 import emit_test_package.BasicSpeculation.SpeculativeInterface;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.EndpointConstructorObj;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -34,24 +35,26 @@ public class BasicSpeculationTest
 
     public static boolean run_test()
     {
-        return all_unmixed_speculation_uninterrupted() &&
-            all_unmixed_speculation_interrupted() &&
-            all_mixed_speculation_tests();
+        EndpointConstructorObj constructor_obj = SpeculativeEndpoint.factory;
+        return all_unmixed_speculation_uninterrupted(constructor_obj) &&
+            all_unmixed_speculation_interrupted(constructor_obj) &&
+            all_mixed_speculation_tests(constructor_obj);
     }
 
-    public static boolean all_mixed_speculation_tests()
+    public static boolean all_mixed_speculation_tests(
+        EndpointConstructorObj constructor_obj)
     {
         List<Integer> number_every_other_events =
             new ArrayList<Integer>(Arrays.asList(4,8,16));
 
         for (int num_every_other : number_every_other_events)
         {
-            if (! every_other_test(num_every_other,true))
+            if (! every_other_test(constructor_obj,num_every_other,true))
                 return false;
         }
         for (int num_every_other : number_every_other_events)
         {
-            if (! every_other_test(num_every_other,false))
+            if (! every_other_test(constructor_obj,num_every_other,false))
                 return false;
         }
 
@@ -59,7 +62,9 @@ public class BasicSpeculationTest
         List<Boolean> speculate_interrupted_pattern =
             new ArrayList<Boolean>(Arrays.asList(false,false,false,true,false,false));
 
-        if (! mixed_speculation_test(speculate_interrupted_pattern,null))
+        boolean mixed_test_succeeded =
+            mixed_speculation_test(constructor_obj,speculate_interrupted_pattern,null);
+        if (! mixed_test_succeeded)
             return false;
         
         speculate_interrupted_pattern =
@@ -93,7 +98,8 @@ public class BasicSpeculationTest
        pipeline_interrupted(num, true)
      */
     public static boolean every_other_test(
-        int num_every_other, boolean first_interrupted)
+        EndpointConstructorObj constructor_obj,int num_every_other,
+        boolean first_interrupted)
     {
         List<Boolean> speculate_interrupted_pattern = new ArrayList<Boolean>();
         for (int i = 0; i < num_every_other; ++i)
@@ -105,28 +111,32 @@ public class BasicSpeculationTest
             boolean should_interrupt = (i%2 == mod_equals);
             speculate_interrupted_pattern.add(should_interrupt);
         }
-        return mixed_speculation_test(speculate_interrupted_pattern,null);
+        return mixed_speculation_test(
+            constructor_obj,speculate_interrupted_pattern,null);
     }
     
     /**
        When speculating, later must backout the speculation.
      */
-    public static boolean all_unmixed_speculation_interrupted()
+    public static boolean all_unmixed_speculation_interrupted(
+        EndpointConstructorObj constructor_obj)
     {
-        return unmixed_speculation_test(true,2) &&
-            unmixed_speculation_test(true,4) &&
-            unmixed_speculation_test(true,8);
+        return unmixed_speculation_test(constructor_obj,true,2) &&
+            unmixed_speculation_test(constructor_obj,true,4) &&
+            unmixed_speculation_test(constructor_obj,true,8);
     }
 
-    public static boolean all_unmixed_speculation_uninterrupted()
+    public static boolean all_unmixed_speculation_uninterrupted(
+        EndpointConstructorObj constructor_obj)
     {
-        return unmixed_speculation_test(false,2) &&
-            unmixed_speculation_test(false,4) &&
-            unmixed_speculation_test(false,8);
+        return unmixed_speculation_test(constructor_obj,false,2) &&
+            unmixed_speculation_test(constructor_obj,false,4) &&
+            unmixed_speculation_test(constructor_obj,false,8);
     }
 
 
     public static boolean unmixed_speculation_test(
+        EndpointConstructorObj constructor_obj,
         boolean interrupt_speculation, int num_events_in_pipeline)
     {
         List<Boolean> interrupt_speculation_pattern =
@@ -137,7 +147,8 @@ public class BasicSpeculationTest
         AtomicLong speculation_on_ms_runtime = new AtomicLong();
 
         boolean worked = mixed_speculation_test(
-            interrupt_speculation_pattern,speculation_on_ms_runtime);
+            constructor_obj,interrupt_speculation_pattern,
+            speculation_on_ms_runtime);
 
         if (! worked)
             return false;
@@ -166,14 +177,16 @@ public class BasicSpeculationTest
        interrupted test.  If it is false, then run just a pipeline test.
      */
     public static boolean mixed_speculation_test(
+        EndpointConstructorObj constructor_obj,
         List<Boolean> interrupt_speculation_pattern,
         AtomicLong speculation_on_ms_runtime)
     {
         try
         {
-            SpeculativeEndpoint endpt = new SpeculativeEndpoint(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            SpeculativeInterface endpt =
+                (SpeculativeInterface) constructor_obj.construct(
+                    new RalphGlobals(),
+                    new SingleSideConnection());
 
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
