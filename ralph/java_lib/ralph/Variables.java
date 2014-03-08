@@ -15,7 +15,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 
 public class Variables {
-    final static NumberTypeDataWrapperFactory
+    public final static NumberTypeDataWrapperFactory
         number_value_type_data_wrapper_factory =
         new NumberTypeDataWrapperFactory();
     final static Double default_number = new Double(0.0);

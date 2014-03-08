@@ -1470,6 +1470,19 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.BREAK:
         return 'break'
 
+    elif statement_node.label == ast_labels.RANGE:
+        start_expression_text = emit_statement(
+            emit_ctx,statement_node.start_expression_node)
+        increment_expression_text = emit_statement(
+            emit_ctx,statement_node.increment_expression_node)
+        end_expression_text = emit_statement(
+            emit_ctx,statement_node.end_expression_node)
+
+        return (
+            'this._produce_range(%s,%s,%s)' %
+            (start_expression_text,increment_expression_text,
+             end_expression_text))
+    
     elif statement_node.label == ast_labels.CONTINUE:
         return 'continue'
     

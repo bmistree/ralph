@@ -25,6 +25,11 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
+import RalphAtomicWrappers.BaseAtomicWrappers;
+
+import RalphDataWrappers.ListTypeDataWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
+
 
 /**
  *
@@ -227,6 +232,30 @@ public abstract class Endpoint
         _partner_host_uuid = uuid;
     }
 
+    protected NonAtomicInternalList<Double,Double> _produce_range(
+        Double start,Double end, Double increment)
+    {
+        NonAtomicInternalList<Double,Double> to_return =
+            new NonAtomicInternalList(ralph_globals);
+        
+        ArrayList<RalphObject<Double,Double>> init_val =
+            new ArrayList<RalphObject<Double,Double>>();
+        for (int i = start.intValue(); i < end.intValue();
+             i = i + increment.intValue())
+        {
+            init_val.add(
+                new Variables.NonAtomicNumberVariable(
+                    false,new Double(i),ralph_globals));
+        }
+        
+        to_return.init(
+            new ListTypeDataWrapperFactory<Double,Double>(),
+            init_val,
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+
+        return to_return;
+    }
+    
     
     /**
        @param {uuid} uuid --- The uuid of the _ActiveEvent that we
