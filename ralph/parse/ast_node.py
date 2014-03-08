@@ -1073,14 +1073,21 @@ class RangeExpressionNode(_AstNode):
         # where to end range expression
         self.end_expression_node = end_expression_node
 
+        # type is a list of numbers
+        number_element_type_node = BasicTypeNode(
+            filename,ast_labels.NUMBER_TYPE,False,line_number)
+        self.type = ListType(number_element_type_node,False)
+        
     def type_check_pass_one(self,struct_types_ctx):
-        raise InternalParseException(
-            self.filename,self.line_number,
-            'FIXME: must add type check for range expression')
+        self.start_expression_node.type_check_pass_one(struct_types_ctx)
+        self.increment_expression_node.type_check_pass_one(struct_types_ctx)
+        self.end_expression_node.type_check_pass_one(struct_types_ctx)
+
     def type_check_pass_two(self,type_check_ctx):
-        raise InternalParseException(
-            self.filename,self.line_number,
-            'FIXME: must add type check for range expression')        
+        self.start_expression_node.type_check_pass_two(type_check_ctx)
+        self.increment_expression_node.type_check_pass_two(type_check_ctx)
+        self.end_expression_node.type_check_pass_two(type_check_ctx)
+
         
 class _LiteralNode(_AstNode):
     '''
