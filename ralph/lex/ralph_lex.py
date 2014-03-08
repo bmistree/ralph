@@ -16,7 +16,6 @@ VERBATIM_TOKEN = 'verbatim'
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Service' : 'SERVICE',
-    'Method': 'METHOD',
     'in': 'IN',
     'return': 'RETURN_OPERATOR',
     'if': 'IF',
