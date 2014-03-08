@@ -1,0 +1,10 @@
+Service RangeTest
+{
+    sum_range(Number first, Number end, Number incrementer) returns Number
+    {
+        Number to_return = 0;
+        for (Number num in range(first,end,incrementer))
+            to_return = to_return + num;
+        return to_return;
+    }
+}

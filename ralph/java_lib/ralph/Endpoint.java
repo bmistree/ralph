@@ -237,7 +237,7 @@ public abstract class Endpoint
     {
         NonAtomicInternalList<Double,Double> to_return =
             new NonAtomicInternalList(ralph_globals);
-        
+
         ArrayList<RalphObject<Double,Double>> init_val =
             new ArrayList<RalphObject<Double,Double>>();
         for (int i = start.intValue(); i < end.intValue();
