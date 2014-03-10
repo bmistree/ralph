@@ -1,0 +1,53 @@
+/**
+   Here's what we're trying to check:
+
+       * evt1 acquires read lock on some_num and then pauses.
+
+       * In that time, evt2 acquires a read lock also on some_num.
+
+       * Then, evt1 calls speculate on some_num.
+
+   evt2 should be able to execute its write concurrently on some_num after
+   speculate is called, meaning that calling evt1, pausing a ms, calling evt2,
+   should run in ~260 ms.  If speculation is not working, then evt2 must wait
+   until evt1 has finished running, and both take ~500 ms to run.
+   
+ */
+Service ReadReadWrite
+{
+    TVar Number some_num = 0;
+
+    get_num() returns Number
+    {
+        return some_num;
+    }
+    
+    evt1() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = some_num;
+            verbatim(
+                'try{Thread.sleep(5);}catch(InterruptedException _ex){}');
+            speculate(some_num);
+            verbatim(
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
+        }
+        return to_return;
+    }
+
+    evt2() returns Number
+    {
+        Number to_return = 0;
+        atomically
+        {
+            some_num = some_num + 1;
+            to_return = some_num;
+            verbatim(
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
+        }
+        return to_return;
+    }
+    
+}
