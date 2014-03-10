@@ -125,9 +125,40 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 can unjam the waiting element's queue and remove the
                 waiting element from the map on the speculative
                 object.
-            
+
+
+                * Note: we also do the same for all read lock holders,
+                * except for the active event that is requesting
+                * speculation.  We do this to handle the following
+                * situation:
+
+                     SpecObj alpha;
+                     Event A, B;
+
+                     A r_locks alpha;
+                     B r_locks alpha;
+
+                     B tries to w_lock alpha.  B is put into alpha's
+                     wait list.
+
+                     A speculates alpha -> alpha'
+                         * B is still an rlock holder of alpha
+                         * B becomes a wlock holder of alpha' when it
+                           is unwaited in alpha'
+
+                     The next time B tries to write, it acquires
+                     alpha's wlock as well because it has already been
+                     processed by alpha (ie, it's still in alpha's
+                     readset).  Now B is a write lock holder on both
+                     alpha and alpha'.  This is bad, because alpha'
+                     must wait for alpha before it can complete its
+                     commit.
+
+              * Solution, for now, is to copy read set out of
+              * speculated object.  Note: this interferes with
+              * fairness guarantees.  Should think about fixing this.
      */
-    public void speculate(T to_speculate_on)
+    public void speculate(ActiveEvent active_event, T to_speculate_on)
     {
         _lock();
 
@@ -139,13 +170,16 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         speculated_entries.add(to_speculate_on_wrapper);
 
         // step 3
-        HashMap<String,WaitingElement<T,D>> prev_waiting_elements =
+        Map<String,WaitingElement<T,D>> prev_waiting_elements =
             null;
+        Map<String,EventCachedPriorityObj> prev_read_events = null;
         if (speculating_on == null)
         {
             //means that we should grab waiting elements from this
             //object's waiting list. (and roll them over to new one)
             prev_waiting_elements = get_and_clear_waiting_events();
+            prev_read_events =
+                get_and_clear_alternate_read_events(active_event);
         }
         else
         {
@@ -154,8 +188,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // new one)
             prev_waiting_elements =
                 speculating_on.get_and_clear_waiting_events();
+            prev_read_events =
+                speculating_on.get_and_clear_alternate_read_events(active_event);
         }
-        to_speculate_on_wrapper.set_waiting_events(prev_waiting_elements);
+        to_speculate_on_wrapper.set_waiting_and_read_events(
+            prev_waiting_elements,prev_read_events);
+
         
         Set<ActiveEvent> aborted_events = new HashSet<ActiveEvent>();
         boolean schedule_try_next = false;
@@ -163,6 +201,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                  prev_waiting_elements.values())
         {
             ActiveEvent act_event = waiting_element.event;
+            if (! to_speculate_on_wrapper.insert_in_touched_objs(act_event))
+                aborted_events.add(act_event);
+            else
+                schedule_try_next = true;
+        }
+        for (EventCachedPriorityObj read_lock_holder :
+                 prev_read_events.values())
+        {
+            ActiveEvent act_event = read_lock_holder.event;
             if (! to_speculate_on_wrapper.insert_in_touched_objs(act_event))
                 aborted_events.add(act_event);
             else
@@ -427,22 +474,47 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        using for speculation).  This is because we need to roll
        waiting events over from one transaction to the next.
      */
-    protected HashMap<String,WaitingElement<T,D>>
+    protected Map<String,WaitingElement<T,D>>
         get_and_clear_waiting_events()
     {
-        HashMap<String, WaitingElement<T,D>> to_return;
+        Map<String, WaitingElement<T,D>> to_return;
         _lock();
         to_return = waiting_events;
         waiting_events = new HashMap<String,WaitingElement<T,D>>();
         _unlock();
         return to_return;
     }
-    
-    protected void set_waiting_events(
-        HashMap<String,WaitingElement<T,D>> waiting_events)
+
+    /**
+       When start speculating on an object, create a new object that
+       has value to speculate on top of.  Copy over read set of the
+       initial object, except for the active event in that object's
+       read set that requested speculation.
+     */
+    protected Map<String, EventCachedPriorityObj> 
+        get_and_clear_alternate_read_events(ActiveEvent active_event)
+    {
+        Map<String, EventCachedPriorityObj> to_return;
+        _lock();
+        to_return = read_lock_holders;
+        read_lock_holders = new HashMap<String,EventCachedPriorityObj>();
+
+        EventCachedPriorityObj ecpo =
+            read_lock_holders.remove(active_event.uuid);
+        if (ecpo != null)
+            read_lock_holders.put(active_event.uuid,ecpo);
+        
+        _unlock();
+        return to_return;
+    }
+
+    protected void set_waiting_and_read_events(
+        Map<String,WaitingElement<T,D>> waiting_events,
+        Map<String,EventCachedPriorityObj> read_lock_holders)
     {
         _lock();
         this.waiting_events = waiting_events;
+        this.read_lock_holders = read_lock_holders;
         _unlock();
     }
     
@@ -476,7 +548,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (speculating_on != null)
                 return speculating_on.internal_acquire_read_lock(active_event,_mutex);
             else
-                return super.internal_acquire_read_lock(active_event,_mutex);
+            {
+                DataWrapper<T,D> to_return = super.internal_acquire_read_lock(active_event,_mutex);
+                return to_return;
+            }
         }
         catch (BackoutException ex)
         {

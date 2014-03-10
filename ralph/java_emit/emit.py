@@ -1454,7 +1454,7 @@ def emit_statement(emit_ctx,statement_node):
         for to_speculate_on in statement_node.speculate_call_args_list:
             emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
             to_return += (
-                '%s%s.speculate(%s.get_val(_active_event)%s);\n' %
+                '%s%s.speculate(_active_event,%s.get_val(_active_event)%s);\n' %
                 (emitted_to_speculate_on,suffix_to_speculate_on,
                  emitted_to_speculate_on,internal_suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)

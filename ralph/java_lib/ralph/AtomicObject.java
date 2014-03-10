@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Future;
@@ -40,7 +41,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
     //# read_lock_holders maps from uuids to EventCachedPriorityObj.
-    protected HashMap<String,EventCachedPriorityObj>read_lock_holders =
+    protected Map<String,EventCachedPriorityObj>read_lock_holders =
         new HashMap<String,EventCachedPriorityObj>();
     
     //# write_lock_holder is EventCachedPriorityObj
@@ -49,7 +50,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
-    protected HashMap<String,WaitingElement<T,D>>waiting_events =
+    protected Map<String,WaitingElement<T,D>>waiting_events =
         new HashMap<String,WaitingElement<T,D>>();
 
     //# In try_next, can cause events to backout.  If we do cause
@@ -262,6 +263,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             _unlock();
             return to_return;
         }
+
 
         //# check 2b
         if (EventPriority.gte_priority(cached_priority, write_lock_holder.cached_priority))
@@ -589,15 +591,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
         else
         {
+            // note: allowed to complete a commit for a missing event.
+            // This can happen if a root object speculates.  Its read
+            // set gets transferred to derivative objects.
             EventCachedPriorityObj read_lock_holder =
                 read_lock_holders.remove(active_event.uuid);
-            //#### DEBUG
-            if (read_lock_holder == null)
-            {
-                Util.logger_assert(
-                    "Should not be completing a commit on a missing event");
-            }
-            //#### END DEBUG
         }
         _unlock();
         return write_lock_holder_completed;
