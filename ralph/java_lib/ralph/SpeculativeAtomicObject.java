@@ -500,10 +500,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         read_lock_holders = new HashMap<String,EventCachedPriorityObj>();
 
         EventCachedPriorityObj ecpo =
-            read_lock_holders.remove(active_event.uuid);
+            to_return.remove(active_event.uuid);
         if (ecpo != null)
             read_lock_holders.put(active_event.uuid,ecpo);
-        
+
         _unlock();
         return to_return;
     }
