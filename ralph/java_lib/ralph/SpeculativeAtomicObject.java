@@ -16,6 +16,14 @@ import RalphDataWrappers.DataWrapper;
 public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 {
     /**
+       Deadlock prevention invariant: a root object can try to acquire
+       locks of speculative children while holding its own.  A
+       speculative child cannot make a call to a root object that
+       acquires root's lock while holding its own locks.
+     */
+
+    
+    /**
        0th index is eldest element that we are speculating on.  Last
        index is most recent.
      */
@@ -425,7 +433,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // speculative?  Don't we need to remove the speculative from
         // the root object's speculative chain?  Do we need to notify
         // all other objects that may have speculated on top of this?
-        
+
         boolean write_backed_out = internal_backout(active_event);
         if (write_backed_out)
         {
@@ -491,7 +499,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         _lock();
         
         if (speculation_state == SpeculationState.SUCCEEDED)
+        {
+            // unlocking here so that maintaining invariant that child
+            // cannot call into root without first releasing its lock.
+            _unlock();
             root_object.complete_commit(active_event);
+            return;
+        }
         else if (speculation_state == SpeculationState.FAILED)
         {
             Util.logger_assert(
