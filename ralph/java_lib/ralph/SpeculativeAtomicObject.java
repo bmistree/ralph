@@ -157,11 +157,66 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
               * Solution, for now, is to copy read set out of
               * speculated object.  Note: this interferes with
               * fairness guarantees.  Should think about fixing this.
+
+
+     @param {T} to_speculate_on --- Can be null, in which case,
+     speculate on existing value associated with active_event.
+
+     @returns --- Returns the dirty value associated with
+     active_event.
      */
-    public void speculate(ActiveEvent active_event, T to_speculate_on)
+    public T speculate(ActiveEvent active_event, T to_speculate_on)
     {
         _lock();
 
+        T to_return = null;
+        // Step 0: find associated to_speculate_on
+        // FIXME: is this safe?
+
+        ArrayList<SpeculativeAtomicObject<T,D>> to_iter_over =
+            new ArrayList(speculated_entries);
+        to_iter_over.add(0,this);
+            
+        for (SpeculativeAtomicObject<T,D> spec_obj : to_iter_over)
+        {
+            try
+            {
+                spec_obj._lock();
+                if (spec_obj.read_lock_holders.containsKey(active_event.uuid))
+                {
+                    if ((spec_obj.write_lock_holder != null) &&
+                        (spec_obj.write_lock_holder.event.uuid.equals(active_event.uuid)))
+                    {
+                        to_return = spec_obj.dirty_val.val;
+                        break;
+                    }
+                        
+                    to_return = spec_obj.val.val;
+                    break;
+                }
+            }
+            finally
+            {
+                spec_obj._unlock();
+            }
+        }
+
+        // FIXME: What happens if specualte gets called on an object
+        // that has never been a read lock holder.
+
+        // FIXME 2: What happens if speculate gets called on an object
+        // after that event has been backed out of all speculative
+        // objects' possible read and read/write sets?
+        if (to_speculate_on == null)
+        {
+            if (to_return != null)
+                to_speculate_on = to_return;
+            else if (dirty_val != null)
+                to_speculate_on = dirty_val.val;
+            else
+                to_speculate_on = val.val;
+        }
+                
         // step 1
         SpeculativeAtomicObject<T,D> to_speculate_on_wrapper =
             duplicate_for_speculation(to_speculate_on);
@@ -233,6 +288,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             speculating_on.schedule_try_next();
 
         _unlock();
+        return to_speculate_on;
     }
 
     /**
@@ -364,6 +420,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             return;
         }
 
+        // FIXME: What happens if an object is backed out of a
+        // speculative?  Don't we need to remove the speculative from
+        // the root object's speculative chain?  Do we need to notify
+        // all other objects that may have speculated on top of this?
         internal_backout(active_event);
         _unlock();
         try_next();
