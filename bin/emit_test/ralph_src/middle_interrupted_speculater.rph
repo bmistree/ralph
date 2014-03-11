@@ -1,0 +1,54 @@
+
+/**
+   Testing speculatives further.  If have a chain of speculated objects:
+
+   a -> b -> c
+
+   where a is the root speculative object, b derives from a's value, and c
+   derives from b's value, then want to ensure that if a is not backed out, but
+   b is then, b gets removed from chain.
+
+   Way testing this is to start three events: first, second, and third.
+   priority(first) > priority(second) > priority(third).
+
+   first eventually invalidates second, which should invalidate third (third has
+   speculated on second).
+ */
+
+Service MiddleInterruptedSpeculater
+{
+    TVar Number num1 = 0;
+    TVar Number num2 = 0;
+
+    run_first()
+    {
+        atomically
+        {
+            num1 = 1;
+            speculate(num1);
+            verbatim(
+                'try{Thread.sleep(30);}catch(InterruptedException _ex){}');
+            num2 = 1;
+        }
+    }
+    
+    run_second()
+    {
+        atomically
+        {
+            // writing on speculated value.
+            num1 = 2;
+            speculate(num1);
+            // not writing on speculated value: will cause to be retried.
+            num2 = 2;
+        }
+    }
+
+    run_third()
+    {
+        atomically
+        {
+            num1 = 3;
+        }
+    }
+}

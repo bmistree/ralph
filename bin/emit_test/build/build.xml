@@ -402,6 +402,15 @@
       <arg line="-p emit_test_package"/>
       <arg line="-c InterruptedSpeculaterJava"/>
     </exec>
+
+    <echo message="${line.separator}middle_interrupted_speculater.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/middle_interrupted_speculater.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/MiddleInterruptedSpeculaterJava.java"/>
+      <arg line="-p emit_test_package"/>
+      <arg line="-c MiddleInterruptedSpeculaterJava"/>
+    </exec>
     
   </target>
 
@@ -455,7 +464,8 @@
          run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
          run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
          run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation,
-         run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest">
+         run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
+         run_MiddleInterruptedSpeculaterTest">
   </target>
   
   
@@ -1016,6 +1026,22 @@
     </java>
   </target>
 
+  <!-- Run InterruptedSpeculater test -->
+  <target
+      name="run_MiddleInterruptedSpeculaterTest"
+      depends="compile_ralph_tests"
+      description="Run a test where an object in middle of speculation chain
+                   gets interrupted.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.MiddleInterruptedSpeculaterTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
