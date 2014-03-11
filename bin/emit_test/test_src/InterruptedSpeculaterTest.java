@@ -33,6 +33,10 @@ public class InterruptedSpeculaterTest
 
             if (run_concurrently(endpt,true) != 1)
                 return false;
+
+            if (had_exception.get())
+                return false;
+            
             return true;
         }
         catch(Exception _ex)
