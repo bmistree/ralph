@@ -420,21 +420,29 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             return;
         }
 
-        // FIXME: If a read lock holder (but not write lock holder) is
-        // backed out, we do not need to actually invalidate all
-        // derived.  Can just promote eldest to root.
-        
-        // Note: we must invalidate derivative objects so that derived
-        // do not use incorrect, speculated on value.
-        // only has an effect if this is a root object.
-        invalidate_all_derivative_objects();
         
         // FIXME: What happens if an object is backed out of a
         // speculative?  Don't we need to remove the speculative from
         // the root object's speculative chain?  Do we need to notify
         // all other objects that may have speculated on top of this?
-        internal_backout(active_event);
         
+        boolean write_backed_out = internal_backout(active_event);
+        if (write_backed_out)
+        {
+            // Note: we must invalidate derivative objects so that derived
+            // do not use incorrect, speculated on value.
+            // only has an effect if this is a root object.
+            invalidate_all_derivative_objects();
+        }
+        else
+        {
+            // we do not need to invalidate derivative objects,
+            // because they speculated on top of the actual current
+            // value.  But we should promote the eldest speculative
+            // object to root so that it can continue.
+            try_promote_speculated();
+        }
+    
         _unlock();
         try_next();
     }
