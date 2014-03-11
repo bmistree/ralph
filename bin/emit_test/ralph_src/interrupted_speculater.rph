@@ -3,7 +3,17 @@
    We want to test that if we have to roll back an event that had called
    speculate on an object, we invalidate events that we had speculated on.
 
-   // could we get livelock here?  probably!  oh no!
+   // could we get livelock here?  probably! FIXME.
+
+   Difference between speculater and read_speculater is that there is
+   no write on num1.  This means that delayed write should be able to
+   continue executing without backing out.  (Ie, running delayed_write
+   and then read_speculater should cause dealyed_write to return 1;
+   running delayed_write and then speculater should cause
+   delayed_write to return >1, because have to backout read/write
+   delayed_write made that was derived from write in speculater.  Note
+   the >1 instead of strictly 2 comes from the fact that can get an
+   instance of repeatedly retrying both speculater and delayed_write.)
  */
 
 Service InterruptedSpeculater
@@ -12,21 +22,25 @@ Service InterruptedSpeculater
     TVar Number num2 = 0;
 
     // should be run before other method so that it has higher priority.
-    delayed_write()
+    delayed_write() returns Number
     {
+        Number num_times_executed = 0;
         atomically
         {
+            num_times_executed = num_times_executed + 1;
             verbatim(
                 'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
             num1 = 2;
             num2 = 2;
         }
+        return num_times_executed;
     }
 
     speculater()
     {
         atomically
         {
+            // assignment here means that 
             num1 = 1;
             speculate(num1);
             num2 = 1;
@@ -36,6 +50,20 @@ Service InterruptedSpeculater
         }
     }
 
+    read_speculater()
+    {
+        atomically
+        {
+            num1;
+            speculate(num1);
+            num2 = 1;
+
+            verbatim(
+                'try{Thread.sleep(350);}catch(InterruptedException _ex){}');
+        }
+    }
+
+    
     simple_reads()
     {
         atomically

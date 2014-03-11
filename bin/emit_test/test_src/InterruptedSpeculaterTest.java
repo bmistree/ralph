@@ -4,6 +4,7 @@ import emit_test_package.InterruptedSpeculaterJava.InterruptedSpeculater;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 
@@ -27,7 +28,11 @@ public class InterruptedSpeculaterTest
                 new RalphGlobals(),
                 new SingleSideConnection());
 
-            run_concurrently(endpt);
+            if (run_concurrently(endpt,false) < 2)
+                return false;
+
+            if (run_concurrently(endpt,true) != 1)
+                return false;
             return true;
         }
         catch(Exception _ex)
@@ -38,8 +43,11 @@ public class InterruptedSpeculaterTest
     }
 
 
-    public static void run_concurrently(final InterruptedSpeculater endpt) throws Exception
+    public static int run_concurrently(
+        final InterruptedSpeculater endpt,final boolean read_speculater) throws Exception
     {
+        final AtomicInteger int_holder = new AtomicInteger(0);
+
         // start evt1 and then an ms later, start evt2
         Thread t_evt1 = new Thread()
         {
@@ -48,7 +56,8 @@ public class InterruptedSpeculaterTest
             {
                 try
                 {
-                    endpt.delayed_write();
+                    int_holder.set(
+                        (int)endpt.delayed_write().doubleValue());
                 }
                 catch (Exception ex)
                 {
@@ -76,7 +85,10 @@ public class InterruptedSpeculaterTest
             {
                 try
                 {
-                    endpt.speculater();
+                    if (read_speculater)
+                        endpt.read_speculater();
+                    else
+                        endpt.speculater();
                 }
                 catch (Exception ex)
                 {
@@ -98,5 +110,7 @@ public class InterruptedSpeculaterTest
             ex.printStackTrace();
             had_exception.set(true);
         }
+
+        return int_holder.get();
     }
 }
