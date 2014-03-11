@@ -1,0 +1,48 @@
+
+/**
+   We want to test that if we have to roll back an event that had called
+   speculate on an object, we invalidate events that we had speculated on.
+
+   // could we get livelock here?  probably!  oh no!
+ */
+
+Service InterruptedSpeculater
+{
+    TVar Number num1 = 0;
+    TVar Number num2 = 0;
+
+    // should be run before other method so that it has higher priority.
+    delayed_write()
+    {
+        atomically
+        {
+            verbatim(
+                'try{Thread.sleep(250);}catch(InterruptedException _ex){}');
+            num1 = 2;
+            num2 = 2;
+        }
+    }
+
+    speculater()
+    {
+        atomically
+        {
+            num1 = 1;
+            speculate(num1);
+            num2 = 1;
+
+            verbatim(
+                'try{Thread.sleep(350);}catch(InterruptedException _ex){}');
+        }
+    }
+
+    simple_reads()
+    {
+        atomically
+        {
+            num1;
+            num2;
+        }
+    }
+    
+}
