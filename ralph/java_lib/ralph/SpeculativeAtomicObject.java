@@ -448,8 +448,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             _unlock();
             return;
         }
-
         
+
+        ICancellableFuture to_cancel =
+            root_outstanding_commit_requests.remove(active_event.uuid);
+        if (to_cancel != null)
+        {
+            // User of this future should not rely on this future's being
+            // loaded with failed, only that it unblocks any waiting
+            // readers.
+            to_cancel.failed();
+        }
+
         boolean write_backed_out = internal_backout(active_event);
         if (write_backed_out)
         {
@@ -601,6 +611,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             should_try_next = true;
         }
 
+        if (root_speculative)
+            root_outstanding_commit_requests.remove(active_event.uuid);
         
         _unlock();
         //# FIXME: may want to actually check whether the change could
