@@ -429,18 +429,34 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
 
         
-        // FIXME: What happens if an object is backed out of a
-        // speculative?  Don't we need to remove the speculative from
-        // the root object's speculative chain?  Do we need to notify
-        // all other objects that may have speculated on top of this?
-
         boolean write_backed_out = internal_backout(active_event);
         if (write_backed_out)
         {
-            // Note: we must invalidate derivative objects so that derived
-            // do not use incorrect, speculated on value.
-            // only has an effect if this is a root object.
-            invalidate_all_derivative_objects();
+            // If an object holding a write lock is backed out of a
+            // speculative, we need to backout all speculatives
+            // derived from that object.  If we are not the root,
+            // then, we ask the root to perform this operation for us
+            // (body of first if).  Otherwise, we are the root and
+            // invalidate all derived objects.
+            if (root_object != null)
+            {
+                // note: we unlock first to maintain invariant that
+                // cannot hold speculative lock and then lock root (to
+                // prevent deadlock).
+                _unlock();
+                root_object.backout_derived_from(this);
+                try_next();
+                // return statement here so that do not duplicate
+                // unlock at end of method.
+                return;
+            }
+            else
+            {
+                // Note: we must invalidate derivative objects so that
+                // derived do not use incorrect, speculated on value.
+                // only has an effect if this is a root object.
+                root_invalidate_all_derivative_objects();
+            }
         }
         else
         {
@@ -455,6 +471,51 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         try_next();
     }
 
+
+    /**
+       Should only be called on root object.
+
+       Called from outside of lock.
+
+       to_backout is a speculative object that held a write lock and
+       was backed out of.  We need to tell all the speculative objects
+       that were derived from to_backout that they are no longer valid.
+
+       Note that because of asynchrony in call to
+       backout_derived_from, we are not guaranteed that to_backout is
+       still in our list of derivative objects.  Similarly, we may end
+       up rolling back derivative objects that derived from the
+       correct value of a derivative object.
+
+       FIXME: check if the above policy could result in livelock.
+     */
+    private void backout_derived_from(SpeculativeAtomicObject<T,D> to_backout)
+    {
+        //// DEBUG: should only be called on root object
+        if (! root_speculative)
+        {
+            Util.logger_assert(
+                "Should only call backout_derived_from on root.");
+        }   
+        //// END DEBUG
+        System.out.println("\nShould be backing out on root");
+        
+        _lock();
+        for (int i =0; i < speculated_entries.size(); ++i)
+        {
+            SpeculativeAtomicObject<T,D> spec_obj = speculated_entries.get(i);
+            if (spec_obj == to_backout)
+            {
+                // remove all derivatives that were based on this
+                // object.
+                System.out.println(
+                    "\nFound matching " + i + " " + speculated_entries.size());
+                root_invalidate_derivative_objects(i+1);
+                break;
+            }
+        }
+        _unlock();
+    }
     
     /**
        Should only be called by root_object.
@@ -673,20 +734,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     /**
        Assumes already within lock.
        
-       @see invalidate_derivative_objects.
+       @see root_invalidate_derivative_objects.
      */
-    private void invalidate_all_derivative_objects()
+    private void root_invalidate_all_derivative_objects()
     {
-        invalidate_derivative_objects(0);
+        root_invalidate_derivative_objects(0);
     }
     
     /**
-       Invalidate all derived objects from index_to_invalidate_from
-       (inclusive) on.
+       Root_Invalidate all derived objects from index_to_root_invalidate_from
+       (inclusive) onwards.
        
        Assumes already within lock.
      */
-    protected void invalidate_derivative_objects(int index_to_invalidate_from)
+    protected void root_invalidate_derivative_objects(int index_to_invalidate_from)
     {
         int end_index = speculated_entries.size();
         int num_invalidations_to_perform =
@@ -726,7 +787,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 // root object already had record of active event:
                 // invalidate any derivative objects because we
                 // performed the acquire on it.
-                invalidate_all_derivative_objects();
+                root_invalidate_all_derivative_objects();
                 return super.internal_acquire_write_lock(active_event,_mutex);
             }
 
@@ -745,7 +806,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 {
                     //we should invalidate all the subsequently
                     //derived objects and break out of loop
-                    invalidate_derivative_objects(i+1);
+                    root_invalidate_derivative_objects(i+1);
                     return derivative_object.internal_acquire_write_lock(
                         active_event,_mutex);
                 }
