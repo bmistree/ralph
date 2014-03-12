@@ -2,7 +2,7 @@ package RalphServiceActions;
 
 import ralph.AtomicActiveEvent;
 import java.util.concurrent.Future;
-import ralph.SpeculativeAtomicObject.SpeculativeFuture;
+import ralph.ICancellableFuture;
 import ralph.Util;
 import java.util.concurrent.ExecutionException;
 
@@ -13,10 +13,10 @@ import java.util.concurrent.ExecutionException;
 public class LinkFutureBooleans extends ServiceAction
 {
     private Future<Boolean> internal_boolean = null;
-    private SpeculativeFuture spec_future = null;
+    private ICancellableFuture spec_future = null;
     public LinkFutureBooleans(
         Future<Boolean> internal_boolean,
-        SpeculativeFuture spec_future)
+        ICancellableFuture spec_future)
     {
         this.internal_boolean = internal_boolean;
         this.spec_future = spec_future;

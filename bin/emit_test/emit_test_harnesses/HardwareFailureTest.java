@@ -12,10 +12,10 @@ import ralph.AtomicInternalList;
 import ralph.ActiveEvent;
 import RalphExceptions.BackoutException;
 import ralph.EventPriority.IsSuperFlag;
+import ralph.ICancellableFuture;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -154,7 +154,7 @@ public class HardwareFailureTest
            Can apply commit one time.  Second time try to commit, fails.
          */
         @Override
-        protected Future<Boolean> apply_changes_to_hardware(
+        protected ICancellableFuture apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
         {
             if (next_time_fail_commit)

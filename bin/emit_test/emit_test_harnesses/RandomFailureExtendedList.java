@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import ralph.RalphObject;
 import RalphAtomicWrappers.BaseAtomicWrappers;
-import java.util.concurrent.Future;
 import RalphDataWrappers.ListTypeDataWrapper;
 import java.util.concurrent.atomic.AtomicBoolean;
+import ralph.ICancellableFuture;
 
 public class RandomFailureExtendedList
 {
@@ -87,7 +87,7 @@ public class RandomFailureExtendedList
            Can apply commit one time.  Second time try to commit, fails.
          */
         @Override
-        protected Future<Boolean> apply_changes_to_hardware(
+        protected ICancellableFuture apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
         {
             // first, apply changes to synchronized list.  Then, following the

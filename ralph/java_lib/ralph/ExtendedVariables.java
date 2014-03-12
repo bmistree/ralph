@@ -35,7 +35,7 @@ public class ExtendedVariables
                 _locked_wrapper);
         }
 
-        protected abstract Future<Boolean> apply_changes_to_hardware(
+        protected abstract ICancellableFuture apply_changes_to_hardware(
             ListTypeDataWrapper<T,D> dirty);
         protected abstract void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<T,D> to_undo);
@@ -74,7 +74,7 @@ public class ExtendedVariables
 
 
         @Override
-        protected Future<Boolean> internal_first_phase_commit(ActiveEvent active_event)
+        protected ICancellableFuture internal_first_phase_commit(ActiveEvent active_event)
         {
             // do not need to take locks here because know that this
             // method will only be called from AtomicActiveEvent
@@ -96,11 +96,10 @@ public class ExtendedVariables
             return apply_changes_to_hardware(dirty_op_tuples_on_hardware);
         }
 
-
+        @Override
         protected void internal_first_phase_commit_speculative(
             SpeculativeFuture sf)
         {
-
             ActiveEvent active_event = sf.event;
             Future<Boolean> bool = internal_first_phase_commit(active_event);
             ralph_globals.thread_pool.add_service_action(

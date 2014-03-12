@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Future;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.TimeUnit;
 import RalphDataWrappers.DataWrapper;
 
@@ -48,6 +46,19 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     private Map<String,SpeculativeFuture> outstanding_commit_requests = null;
     private SpeculationState speculation_state = SpeculationState.RUNNING;
 
+    /**
+       Only used by root objects. Keeps track of all outstanding
+       requests that have been made to the root to commit its changes.
+
+       We keep track of thsese outstanding speculatives because an
+       atomicactive event can tell us to backout before the future has
+       been assigned.  In these cases, we must wake up any thread that
+       had been waiting on the future so that it can keep running.
+     */
+    private Map<String,ICancellableFuture> root_outstanding_commit_requests =
+        new HashMap<String,ICancellableFuture>();
+
+    
     private enum SpeculationState
     {
         RUNNING,  // objects derived from are still running
@@ -309,7 +320,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        up and running, and the changes have been pushed, then, return
        true, otherwise, return false.
      */
-    protected Future<Boolean> internal_first_phase_commit(
+    protected ICancellableFuture internal_first_phase_commit(
         ActiveEvent active_event)
     {
         return ALWAYS_TRUE_FUTURE;
@@ -324,13 +335,23 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        Note: generally, subclasses should not override this.  They
        should override internal_first_phase_commit and
        internal_first_phase_commit_speculative instead.
+
+       After calling first_phase_commit, while still waiting on the
+       future, an event may call backout on this object.  In that
+       case, this object is responsible for ensuring that the future
+       unblocks any listeners.
      */
     public Future<Boolean> first_phase_commit(ActiveEvent active_event)
     {
         // This is the base element that is trying to commit.  Just
         // try to commit normally.
         if (root_speculative)
-            return internal_first_phase_commit(active_event);
+        {
+            // FIXME: Still must empty these outstanding commit requests.
+            ICancellableFuture to_return = internal_first_phase_commit(active_event);
+            root_outstanding_commit_requests.put(active_event.uuid,to_return);
+            return to_return;
+        }
 
         _lock();
         if (speculation_state == SpeculationState.FAILED)
@@ -352,7 +373,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             _unlock();
             return root_object.first_phase_commit(active_event);
         }
-
+        
         if (speculation_state == SpeculationState.RUNNING)
         {
             // wait on objects that we are deriving from before trying to
@@ -383,7 +404,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // run through all events that did try to commit to this
         // speculative object and tell them that they will need to
         // backout.
-        for (SpeculativeFuture sf : outstanding_commit_requests.values())
+        for (ICancellableFuture sf : outstanding_commit_requests.values())
             sf.failed();
         outstanding_commit_requests.clear();
         
@@ -834,94 +855,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
 
-    public class SpeculativeFuture implements Future<Boolean>
-    {
-        private final ReentrantLock rlock = new ReentrantLock();
-        private final Condition cond = rlock.newCondition();
-        private boolean has_been_set = false;
-        private boolean to_return = false;
-        public ActiveEvent event = null;
-        
-        public SpeculativeFuture(ActiveEvent event)
-        {
-            this.event = event;
-        }
-        
-        public void failed()
-        {
-            set(false);
-        }
-
-        public void succeeded()
-        {
-            set(true);
-        }
-        
-        private void set(boolean to_set_to)
-        {
-            rlock.lock();
-            has_been_set = true;
-            to_return = to_set_to;
-            cond.signalAll();
-            rlock.unlock();
-        }
-
-        @Override
-        public Boolean get()
-        {
-            rlock.lock();
-            while(! has_been_set)
-            {
-                try
-                {
-                    cond.await();
-                }
-                catch (InterruptedException ex)
-                {
-                    ex.printStackTrace();
-                    Util.logger_assert(
-                        "\nShould be handling interrupted exception\n");
-                }
-            }
-            rlock.unlock();
-            return to_return;
-        }
-
-        @Override
-        public Boolean get(long timeout, TimeUnit unit)
-        {
-            Util.logger_assert(
-                "SpeculativeFuture does not support timed gets");
-            return null;
-        }
-
-        @Override
-        public boolean isCancelled()
-        {
-            Util.logger_assert(
-                "SpeculativeFuture does not support isCancelled");
-            return false;
-        }
-
-        @Override
-        public boolean cancel(boolean mayInterruptIfRunning)
-        {
-            Util.logger_assert(
-                "SpeculativeFuture does not support cancel");
-            return false;
-        }
-        
-        @Override
-        public boolean isDone()
-        {
-            boolean to_return;
-            rlock.lock();
-            to_return = has_been_set;
-            rlock.unlock();
-            return to_return;
-        }        
-    }
-
     /**
        AtomicActiveEvents request AtomicObjects to enter first phase
        commit.  This triggers atomic objects to perform any work they
@@ -932,12 +865,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        always return true.  Subclasses, when they override this object
        may override to use a different future that actually does work.
      */
-    protected static class FutureAlwaysValue implements Future<Boolean>
+    protected static class FutureAlwaysValue implements ICancellableFuture
     {
         private static final Boolean TRUE_BOOLEAN = new Boolean(true);
         private static final Boolean FALSE_BOOLEAN = new Boolean(false);
 
         private Boolean what_to_return = null;
+        
         public FutureAlwaysValue(boolean _what_to_return)
         {
             if (_what_to_return)
@@ -945,30 +879,50 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             else
                 what_to_return = FALSE_BOOLEAN;
         }
-            
+
+        @Override
+        public void failed()
+        {}
+
+        @Override
+        public void succeeded()
+        {}
+
+        @Override
         public Boolean get()
         {
             return what_to_return;
         }
 
+        @Override
         public Boolean get(long timeout, TimeUnit unit)
         {
             return get();
         }
 
- 	public boolean isCancelled()
-        {
-            return false;
-        }
+        @Override
         public boolean isDone()
         {
             return true;
         }
+
+        @Override
+        public boolean isCancelled()
+        {
+            Util.logger_assert(
+                "FutureAlways does not support isCancelled");
+            return false;
+        }
+
+        @Override
         public boolean cancel(boolean mayInterruptIfRunning)
         {
+            Util.logger_assert(
+                "FutureAlways does not support cancel");
             return false;
         }
     }
+    
     protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
         new FutureAlwaysValue(true);
     protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
