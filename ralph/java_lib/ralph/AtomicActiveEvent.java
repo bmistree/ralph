@@ -29,16 +29,55 @@ public class AtomicActiveEvent extends ActiveEvent
 {
     private enum State 
     {
-        STATE_RUNNING, STATE_FIRST_PHASE_COMMIT,
-        // enters this state from state_running (either when it fails
-        // pushing its changes to its objects or if it is told to
-        // backout because the overall active event was being backed
-        // out).  while in this state cannot be preempted.  Leaves
-        // this state after calls backout on all touched objects.
+        // Non-terminal, initial state.  Can transition to
+        // STATE_BACKING_OUT and STATE_PUSHING_TO_HARDWARE.
+        STATE_RUNNING,
+
+        // Non-terminal state.  Enters this state either from:
+        //  1) STATE_RUNNING --- when it is told to backout
+        //     because the overall active event was being backed
+        //     out)
+        //  2) STATE_PUSHING_TO_HARDWARE --- when it fails pushing
+        //     its changes to its objects or if received a backout
+        //     while pushing changes to hardware).
+        //  3) STATE_FIRST_PHASE_COMMIT --- when told by an event
+        //     on another host that although its changes are
+        //     staged, it should back them out because the other
+        //     host couldn't stage its changes.
+        // While in this state cannot be preempted.  Leaves this
+        // state after calls backout on all touched objects and
+        // enters STATE_BACKED_OUT.
         STATE_BACKING_OUT,
+
+            // FIXME: actually need to define STATE_PUSHING_TO_HARDWARE
+            
+        // Non-terminal state.  Enters this state from
+        // STATE_RUNNING.  Transitions either to
+        // STATE_FIRST_PHASE_COMMIT or to STATE_BACKING_OUT.
+        // While in this state, have submitted requests to objects
+        // to stage changes.  To backout, need to issue commands
+        // to backout all of these changes.
+        STATE_PUSHING_TO_HARDWARE,
+
+        // Non-terminal state.  Enters this state from
+        // STATE_PUSHING_TO_HARDWARE.  Means that changes for all
+        // objects have been staged.  Transitions to
+        // STATE_BACKING_OUT or STATE_SECOND_PHASE_COMMITTED.
+        // While in this state, event cannot be backed out
+        // locally, can only be backed out because another host
+        // processing the same event could not stage its changes.
+        STATE_FIRST_PHASE_COMMIT,
+
+        // Terminal state.  Enters this state only after going
+        // through STATE_RUNNING -> STATE_PUSHING_TO_HARDWRE ->
+        // STATE_FIRST_PHASE_COMMIT, with no intermediate states.
+        // Means that all object updates have been written to
+        // canonical object values.
         STATE_SECOND_PHASE_COMMITTED,
-        // enters this state only after all touched objects have been
-        // backed out.
+
+        // Terminal state.  Enters this state only after all
+        // touched objects have been backed out.  Only set in one
+        // place: _backout_touched_objs.
         STATE_BACKED_OUT
     }
 
@@ -61,7 +100,7 @@ public class AtomicActiveEvent extends ActiveEvent
     //# from serializing data when need to add to touched objects.
     private ReentrantLock mutex = new ReentrantLock();
 	
-    State state = State.STATE_RUNNING;
+    private State state = State.STATE_RUNNING;
 	
     private ReentrantLock _nfmutex = new ReentrantLock();
 
@@ -367,8 +406,6 @@ public class AtomicActiveEvent extends ActiveEvent
             return FirstPhaseCommitResponseCode.FAILED;
         }
         
-
-
         // for any objects that require pushing changes to hardware,
         // ensure that they can before reporting success.
         Set<Future<Boolean>> obj_could_commit =
