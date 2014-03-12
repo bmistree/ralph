@@ -13,7 +13,7 @@
   <property name="build.dir" location="${emit_test_dir}/classes"/>
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
   <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
-  <property name="test_src.dir" location="${emit_test_dir}/../test_src"/>
+  <property name="test_src.dir" location="${emit_test_dir}/../emit_test_harnesses"/>
   <property
       name="lib_build_path"
       location="${emit_test_dir}/../../../ralph/java_lib/build"/>
@@ -23,6 +23,7 @@
       name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
   <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>
 
+  <property name="emitted_package" value="ralph_emitted"/>
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
@@ -45,7 +46,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/iface_basic_ralph.rph"/>
       <arg line="-o ${ralph_emitted.dir}/IFaceBasicRalph.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c IFaceBasicRalph"/>
     </exec>
 
@@ -55,7 +56,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/basic_ralph.rph"/>
       <arg line="-o ${ralph_emitted.dir}/BasicRalph.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c BasicRalph"/>
     </exec>
 
@@ -64,7 +65,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/internal_method_call.rph"/>
       <arg line="-o ${ralph_emitted.dir}/InternalMethodCall.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c InternalMethodCall"/>
     </exec>
 
@@ -73,7 +74,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/ralph_atomically.rph"/>
       <arg line="-o ${ralph_emitted.dir}/RalphAtomically.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c RalphAtomically"/>
     </exec>
     
@@ -82,7 +83,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/basic_partner.rph"/>
       <arg line="-o ${ralph_emitted.dir}/BasicPartner.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c BasicPartner"/>
     </exec>
     
@@ -91,7 +92,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/test_map.rph"/>
       <arg line="-o ${ralph_emitted.dir}/MapTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c MapTest"/>
     </exec>
     
@@ -100,7 +101,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/atomic_map.rph"/>
       <arg line="-o ${ralph_emitted.dir}/AtomicMapTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c AtomicMapTest"/>
     </exec>
     
@@ -109,7 +110,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/struct_test.rph"/>
       <arg line="-o ${ralph_emitted.dir}/StructTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c StructTest"/>
     </exec>
 
@@ -118,7 +119,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/nested_structs.rph"/>
       <arg line="-o ${ralph_emitted.dir}/NestedStructTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c NestedStructTest"/>
     </exec>
 
@@ -127,7 +128,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/test_list.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ListTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ListTest"/>
     </exec>
 
@@ -136,7 +137,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/atomic_list.rph"/>
       <arg line="-o ${ralph_emitted.dir}/AtomicListTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c AtomicListTest"/>
     </exec>
 
@@ -145,7 +146,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/for_list.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ForListTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ForListTest"/>
     </exec>
 
@@ -154,7 +155,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/for_map.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ForMapTest.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ForMapTest"/>
     </exec>
 
@@ -163,7 +164,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/struct_lib.rph"/>
       <arg line="-o ${ralph_emitted.dir}/StructLib.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c StructLib"/>
     </exec>
 
@@ -172,7 +173,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/struct_lib_user.rph"/>
       <arg line="-o ${ralph_emitted.dir}/StructLibUser.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c StructLibUser"/>
     </exec>
 
@@ -181,7 +182,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/interrupted_atomically.rph"/>
       <arg line="-o ${ralph_emitted.dir}/InterruptedAtomically.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c InterruptedAtomically"/>
     </exec>
 
@@ -190,7 +191,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/endpoint_lib_user.rph"/>
       <arg line="-o ${ralph_emitted.dir}/EndpointLibUser.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c EndpointLibUser"/>
     </exec>
 
@@ -199,7 +200,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
       <arg line="-o ${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c InterruptedEndpointAtomically"/>
     </exec>
 
@@ -208,7 +209,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/promotion.rph"/>
       <arg line="-o ${ralph_emitted.dir}/Promotion.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c Promotion"/>
     </exec>
 
@@ -217,7 +218,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/super_interrupted_atomically.rph"/>
       <arg line="-o ${ralph_emitted.dir}/SuperInterruptedAtomically.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c SuperInterruptedAtomically"/>
     </exec>
 
@@ -226,7 +227,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/hardware_failure.rph"/>
       <arg line="-o ${ralph_emitted.dir}/HardwareFailure.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c HardwareFailure"/>
     </exec>
 
@@ -235,7 +236,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/return_list.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ReturnList.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ReturnList"/>
     </exec>
 
@@ -244,7 +245,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/atomic_partner.rph"/>
       <arg line="-o ${ralph_emitted.dir}/AtomicPartner.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c AtomicPartner"/>
     </exec>
 
@@ -253,7 +254,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/many_ops_atomic_list_fail.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ManyOpsAtomicListFail.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ManyOpsAtomicListFail"/>
     </exec>
 
@@ -262,7 +263,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/atomic_list_append.rph"/>
       <arg line="-o ${ralph_emitted.dir}/AtomicListAppend.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c AtomicListAppend"/>
     </exec>
 
@@ -271,7 +272,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/endpoint_struct_list.rph"/>
       <arg line="-o ${ralph_emitted.dir}/EndpointStructList.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c EndpointStructList"/>
     </exec>
 
@@ -280,7 +281,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/wrapped_partner.rph"/>
       <arg line="-o ${ralph_emitted.dir}/WrappedPartner.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c WrappedPartner"/>
     </exec>
 
@@ -290,7 +291,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/linked_instance.rph"/>
       <arg line="-o ${ralph_emitted.dir}/LinkedInstance.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c LinkedInstance"/>
     </exec>
 
@@ -299,7 +300,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/linked_connection.rph"/>
       <arg line="-o ${ralph_emitted.dir}/LinkedConnection.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c LinkedConnection"/>
     </exec>
 
@@ -308,7 +309,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/single_side_service_factory.rph"/>
       <arg line="-o ${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c SingleSideServiceFactory"/>
     </exec>
 
@@ -317,7 +318,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/partner_service_factory.rph"/>
       <arg line="-o ${ralph_emitted.dir}/PartnerServiceFactory.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c PartnerServiceFactory"/>
     </exec>
 
@@ -326,7 +327,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/basic_speculation.rph"/>
       <arg line="-o ${ralph_emitted.dir}/BasicSpeculation.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c BasicSpeculation"/>
     </exec>
 
@@ -335,7 +336,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/null.rph"/>
       <arg line="-o ${ralph_emitted.dir}/Null.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c Null"/>
     </exec>
 
@@ -345,7 +346,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/internal_create_service.rph"/>
       <arg line="-o ${ralph_emitted.dir}/InternalCreateServiceJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c InternalCreateServiceJava"/>
     </exec>
 
@@ -354,7 +355,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/self.rph"/>
       <arg line="-o ${ralph_emitted.dir}/SelfJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c SelfJava"/>
     </exec>
 
@@ -363,7 +364,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/wrapped_iface.rph"/>
       <arg line="-o ${ralph_emitted.dir}/WrappedIFaceJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c WrappedIFaceJava"/>
     </exec>
 
@@ -372,7 +373,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/container_speculation.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ContainerSpeculationJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ContainerSpeculationJava"/>
     </exec>
 
@@ -381,7 +382,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/range_test.rph"/>
       <arg line="-o ${ralph_emitted.dir}/RangeTestJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c RangeTestJava"/>
     </exec>
 
@@ -390,7 +391,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/read_read_write_speculation.rph"/>
       <arg line="-o ${ralph_emitted.dir}/ReadReadWriteSpeculationJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c ReadReadWriteSpeculationJava"/>
     </exec>
 
@@ -399,7 +400,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/interrupted_speculater.rph"/>
       <arg line="-o ${ralph_emitted.dir}/InterruptedSpeculaterJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c InterruptedSpeculaterJava"/>
     </exec>
 
@@ -408,7 +409,7 @@
       <arg line="${ralph_compiler_py}"/>
       <arg line="-i ${ralph_src.dir}/middle_interrupted_speculater.rph"/>
       <arg line="-o ${ralph_emitted.dir}/MiddleInterruptedSpeculaterJava.java"/>
-      <arg line="-p emit_test_package"/>
+      <arg line="-p ${emitted_package}"/>
       <arg line="-c MiddleInterruptedSpeculaterJava"/>
     </exec>
     

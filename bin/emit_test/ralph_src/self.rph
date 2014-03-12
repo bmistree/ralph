@@ -1,7 +1,7 @@
 
 // FIXME: It's ugly that I need the alias here.
-alias Service B as 'emit_test_package.SelfJava.B';
-alias Service A as 'emit_test_package.SelfJava.A';
+alias Service B as 'ralph_emitted.SelfJava.B';
+alias Service A as 'ralph_emitted.SelfJava.A';
 
 Service A
 {

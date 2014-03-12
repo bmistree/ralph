@@ -1,4 +1,4 @@
-alias Interface SpeculativeInterface as 'emit_test_package.BasicSpeculation.SpeculativeInterface';
+alias Interface SpeculativeInterface as 'ralph_emitted.BasicSpeculation.SpeculativeInterface';
 
 Service ContainerSpeculation implements Interface SpeculativeInterface
 {

@@ -1,4 +1,4 @@
-alias Endpoint SideA as 'emit_test_package.BasicPartner.SideA';
+alias Endpoint SideA as 'ralph_emitted.BasicPartner.SideA';
 
 
 Endpoint SingleSidedHolder
