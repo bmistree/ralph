@@ -875,6 +875,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        derived objects and we therefore do not need to invalidate any
        derived objects.
 
+       Should override this method if are pushing changes to hardware.
 
        @see documentation of overridden method.
      */

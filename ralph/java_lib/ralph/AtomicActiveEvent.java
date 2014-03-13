@@ -359,7 +359,8 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         _lock();
         if ((state != State.STATE_RUNNING) &&
-            (state != State.STATE_BACKED_OUT))
+            (state != State.STATE_BACKED_OUT) &&
+            (state != State.STATE_PUSHING_TO_HARDWARE))
         {
             _unlock();
             return false;

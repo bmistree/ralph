@@ -54,6 +54,23 @@ public class ExtendedVariables
         }
 
 
+        /**
+           Already within lock
+         */
+        @Override
+        protected void obj_request_backout_and_release_lock(
+            ActiveEvent active_event)
+        {
+            if ((write_lock_holder != null) &&
+                (active_event.uuid.equals(write_lock_holder.event.uuid)))
+            {
+                // must undo changes pushing to hardware
+                undo_dirty_changes_to_hardware(dirty_op_tuples_on_hardware);
+                dirty_op_tuples_on_hardware = null;
+            }
+            super.obj_request_backout_and_release_lock(active_event);
+        }
+        
         
         @Override
         protected boolean internal_backout (ActiveEvent active_event)
