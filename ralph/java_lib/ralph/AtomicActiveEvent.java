@@ -48,8 +48,6 @@ public class AtomicActiveEvent extends ActiveEvent
         // state after calls backout on all touched objects and
         // enters STATE_BACKED_OUT.
         STATE_BACKING_OUT,
-
-            // FIXME: actually need to define STATE_PUSHING_TO_HARDWARE
             
         // Non-terminal state.  Enters this state from
         // STATE_RUNNING.  Transitions either to
@@ -346,7 +344,8 @@ public class AtomicActiveEvent extends ActiveEvent
         return to_restore_from_atomic;
     }
     
-	
+
+    
     /**
        @returns {bool} --- True if not in the midst of two phase
        commit.  False otherwise.
@@ -365,6 +364,11 @@ public class AtomicActiveEvent extends ActiveEvent
             _unlock();
             return false;
         }
+
+        // note: we are still holding lock here.  The object itself
+        // must tell us to release lock in
+        // obj_request_backout_and_release_lock or
+        // obj_request_no_backout_and_release_lock.
         return true;
     }
     
@@ -387,37 +391,47 @@ public class AtomicActiveEvent extends ActiveEvent
     @Override    
     public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
     {
-        _lock();
-        if (atomic_reference_counts > 0)
-        {
-            _unlock();
-            return FirstPhaseCommitResponseCode.SKIP;
-        }
-
-        if (state != State.STATE_RUNNING)
-        {
-            _unlock();
-            //# note: do not need to respond negatively to first phase
-            //# commit request if we already are backing out.  This is
-            //# because we should have sent a message to all partners,
-            //# etc. as soon as we backed out telling them that they
-            //# should also back out.  Do not need to send the same
-            //# message again.
-            return FirstPhaseCommitResponseCode.FAILED;
-        }
-        
-        // for any objects that require pushing changes to hardware,
-        // ensure that they can before reporting success.
+        // set of objects trying to push to hardware.
         Set<Future<Boolean>> obj_could_commit =
             new HashSet<Future<Boolean>>();
-        _touched_objs_lock();
+        
+        try
         {
-            // Added issue #11: May want to perform this call in parallel
-            for (AtomicObject obj : touched_objs.values())
-                obj_could_commit.add(obj.first_phase_commit(this));
-        }
-        _touched_objs_unlock();
+            _lock();
+            if (atomic_reference_counts > 0)
+                return FirstPhaseCommitResponseCode.SKIP;
+            
+            if (state != State.STATE_RUNNING)
+            {
+                //# note: do not need to respond negatively to first phase
+                //# commit request if we already are backing out.  This is
+                //# because we should have sent a message to all partners,
+                //# etc. as soon as we backed out telling them that they
+                //# should also back out.  Do not need to send the same
+                //# message again.
+                return FirstPhaseCommitResponseCode.FAILED;
+            }
+        
+            // for any objects that require pushing changes to hardware,
+            // ensure that they can before reporting success.
+            _touched_objs_lock();
+            {
+                // Added issue #11: May want to perform this call in parallel
+                for (AtomicObject obj : touched_objs.values())
+                    obj_could_commit.add(obj.first_phase_commit(this));
+            }
+            _touched_objs_unlock();
 
+            state = State.STATE_PUSHING_TO_HARDWARE;
+        }
+        finally
+        {
+            _unlock();
+        }
+
+
+        // After calling backout on an object, it should unwait this
+        // thread calling get on future booleans.
         boolean can_commit = true;
         for (Future<Boolean> could_commit : obj_could_commit)
         {
@@ -443,38 +457,53 @@ public class AtomicActiveEvent extends ActiveEvent
             }
         }
 
-        if (can_commit)
+
+        try
         {
-            //# transition into first phase commit state        
+            _lock();
+            boolean preempted =
+                (state == State.STATE_BACKING_OUT) || (state == State.STATE_BACKED_OUT);
+            if (preempted)
+                return FirstPhaseCommitResponseCode.FAILED;
+
+            //// DEBUG: If not in back-ing/-ed out state, then must be
+            //// in STATE_PUSHING_TO_HARDWARE.
+            if (state != State.STATE_PUSHING_TO_HARDWARE)
+            {
+                Util.logger_assert(
+                    "Incorrect state in first phase commit of AtomicActiveEvent.");
+            }
+            //// END DEBUG
+
+            
+            if (! can_commit)
+            {
+                // event could not push one of the changes to hardware
+                // (was not preempted). Add a job to back this event
+                // out.
+                ServiceAction service_action =
+                    new RalphServiceActions.BackoutAtomicEventAction(this);
+                thread_pool.add_service_action(
+                    service_action);
+                return FirstPhaseCommitResponseCode.FAILED;
+            }
+
+
+            // all changes are staged on objects, can transition
+            // into first phase commit state
             state = State.STATE_FIRST_PHASE_COMMIT;
         }
-        else
+        finally
         {
-            // while in this state, cannot be preempted
-            state = State.STATE_BACKING_OUT;
+            _unlock();
         }
-        // Placed above inside _lock because do not want to backout
-        // (eg., if another host issued backout call until pushed
-        // changes to hardware) until push changes to hardware.
-        _unlock();
 
-        if (! can_commit)
-        {
-            // if we could not commit, then add a job to back this
-            // event out.
-            ServiceAction service_action =
-                new RalphServiceActions.BackoutAtomicEventAction(this);
-            thread_pool.add_service_action(
-                service_action);
-            return FirstPhaseCommitResponseCode.FAILED;
-        }
-        
-
-        //# do not need to acquire locks on
-        //# local_endpoints_whose_partners_contacted and
-        //# because once enter first phase commit,
-        //# these are immutable.  forwards message on to others and
-        //# affirmatively replies that now in first pahse of commit.
+        // should only get here if we were able to enter
+        // first_phase_commit.  do not need to acquire locks on
+        // local_endpoints_whose_partners_contacted and because once
+        // enter first phase commit, these are immutable.  forwards
+        // message on to others and affirmatively replies that now in
+        // first pahse of commit.
         event_parent.first_phase_transition_success(
             local_endpoints_whose_partners_contacted,
             this);
@@ -725,13 +754,17 @@ public class AtomicActiveEvent extends ActiveEvent
     public void obj_request_backout_and_release_lock(
         AtomicObject obj_requesting)
     {
-        //# note that because _backout creates a new thread to run
-        //# through each touched object and back them out separately, we
-        //# backout the requesting object now.
+        // note that because _backout creates a new thread to run
+        // through each touched object and back them out separately,
+        // we remove the requesting object from our map of touched
+        // objects now.  Importantly, obj_requesting itself performs
+        // cleanup on itself.  For instance, removing this event from
+        // its read/write lock holders and unblocking any speculative
+        // futures.
         _touched_objs_lock();
         touched_objs.remove(obj_requesting.uuid);
         _touched_objs_unlock();
-        
+
         _backout(null,false);
         
         //# unlock after method

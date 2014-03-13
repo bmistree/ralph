@@ -477,7 +477,16 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
         return wrapped_val.de_waldoify(active_event);
-    }	
+    }
+
+
+    /**
+       Identical documentation to
+       internal_request_backout_and_release_lock.
+     */
+    protected abstract void obj_request_backout_and_release_lock(
+        ActiveEvent active_event);
+        
 
     /**
        ASSUMES CALLED FROM WITHIN LOCK
@@ -503,9 +512,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        of its waiting element.  Otherwise, the waiting element will
        eventually be scheduled.
 
+       NOTE: SHOULD ONLY BE CALLED FROM overridden
+       request_backout_and_release_lock
+       
        * @param active_event
        */
-    private void obj_request_backout_and_release_lock(
+    protected void internal_obj_request_backout_and_release_lock(
         ActiveEvent active_event)
     {
         active_event.obj_request_backout_and_release_lock(this);
@@ -732,7 +744,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             }
         }
 
-		
         //# Phase 2:
         if (can_backout_all)
         {

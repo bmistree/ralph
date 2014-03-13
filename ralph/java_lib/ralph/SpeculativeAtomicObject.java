@@ -868,6 +868,38 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     }
 
     /**
+       Assumes already within lock.  Gets called any time that this
+       object releases itself from an event that was holding **because
+       another event tries to assume a read or read/write lock on this
+       object.  Note that because this is the case, there can be no
+       derived objects and we therefore do not need to invalidate any
+       derived objects.
+
+
+       @see documentation of overridden method.
+     */
+    @Override
+    protected void obj_request_backout_and_release_lock(
+        ActiveEvent active_event)
+    {
+        if (root_speculative)
+        {
+            ICancellableFuture to_cancel =
+                root_outstanding_commit_requests.remove(active_event.uuid);
+            if (to_cancel != null)
+                to_cancel.failed();
+        }
+        else
+        {
+            SpeculativeFuture to_cancel =
+                outstanding_commit_requests.remove(active_event.uuid);
+            if (to_cancel != null)
+                to_cancel.failed();
+        }
+        super.internal_obj_request_backout_and_release_lock(active_event);
+    }
+    
+    /**
        AtomicActiveEvents request AtomicObjects to enter first phase
        commit.  This triggers atomic objects to perform any work they
        need to ensure their changes are valid/can be pushed.
