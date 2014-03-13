@@ -480,7 +480,17 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // readers.
             to_cancel.failed();
         }
-
+        if (outstanding_commit_requests != null)
+        {
+            // means that this is a derivative object.  Must fail its
+            // own outstanding commit request, because internal
+            // backout and backout_derived_from will only backout
+            // subsequently derived objects.
+            to_cancel = outstanding_commit_requests.remove(active_event.uuid);
+            if (to_cancel != null)
+                to_cancel.failed();
+        }
+        
         boolean write_backed_out = internal_backout(active_event);
         if (write_backed_out)
         {
@@ -801,12 +811,17 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     }
     
     /**
-       Root_Invalidate all derived objects from index_to_root_invalidate_from
-       (inclusive) onwards.
+       Root_Invalidate all derived objects from
+       index_to_root_invalidate_from (inclusive) onwards.  Generally,
+       when a speculated write backs out, it issues a sequence of
+       calls that backs out all of the direved objects after it.  This
+       means that the speculated write itself must do its ownl cleanup
+       (eg., of outstanding_commit_requests.).
        
        Assumes already within lock.
      */
-    protected void root_invalidate_derivative_objects(int index_to_invalidate_from)
+    protected void root_invalidate_derivative_objects(
+        int index_to_invalidate_from)
     {
         int end_index = speculated_entries.size();
         int num_invalidations_to_perform =
