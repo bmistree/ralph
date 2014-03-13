@@ -340,20 +340,40 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        future, an event may call backout on this object.  In that
        case, this object is responsible for ensuring that the future
        unblocks any listeners.
+
+       An event that is not a reader or writer on this object can call
+       this method.  This can happen if an event *had been* a
+       read/writer on this object is backed out by one thread, but is
+       still trying to commit to its touched objects on another.
+       
+       In this case, this method should return a future that will
+       instantly return False.
      */
     public Future<Boolean> first_phase_commit(ActiveEvent active_event)
     {
+        _lock();
+
+        // check if running first because a derivative object that is
+        // not running may not have an up to date read/write set.
+        if ((speculation_state == SpeculationState.RUNNING) &&
+            // cannot be a write lock holder without being a read lock
+            // holder, therefore this check serves for both.
+            (! read_lock_holders.containsKey(active_event.uuid)))
+        {
+            _unlock();
+            return ALWAYS_FALSE_FUTURE;
+        }
+        
         // This is the base element that is trying to commit.  Just
         // try to commit normally.
         if (root_speculative)
         {
-            // FIXME: Still must empty these outstanding commit requests.
             ICancellableFuture to_return = internal_first_phase_commit(active_event);
             root_outstanding_commit_requests.put(active_event.uuid,to_return);
+            _unlock();
             return to_return;
         }
 
-        _lock();
         if (speculation_state == SpeculationState.FAILED)
         {
             // means that one of the objects that we were speculating
@@ -371,19 +391,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // to also receive first_phase_commit from committing
             // active event.  Rely on that one to sort things out.
             _unlock();
-            return root_object.first_phase_commit(active_event);
+            Future<Boolean> to_return = root_object.first_phase_commit(active_event);
+            return to_return;
         }
         
         if (speculation_state == SpeculationState.RUNNING)
         {
-            // wait on objects that we are deriving from before trying to
-            // commit.
+            // wait on objects that we are deriving from before trying
+            // to commit.  Note, while committing, the event still
+            // holds read and read/write locks on
             SpeculativeFuture to_return = new SpeculativeFuture(active_event);
             outstanding_commit_requests.put(active_event.uuid,to_return);
             _unlock();
             return to_return;
         }
-
 
         Util.logger_assert(
             "Unknown speculation state in first_phase_commit.");

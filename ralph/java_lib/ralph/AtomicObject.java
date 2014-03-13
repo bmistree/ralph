@@ -111,6 +111,15 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        propagates its changes to a router).  If the hardware is still
        up and running, and the changes have been pushed, then, return
        true, otherwise, return false.
+
+       An event that is not a reader or writer on this object can call
+       this method.  This can happen if an event *had been* a
+       read/writer on this object is backed out by one thread, but is
+       still trying to commit to its touched objects on another.
+       
+       In this case, this method should return a future that will
+       instantly return False.
+       
      */
     public abstract Future<Boolean> first_phase_commit(ActiveEvent active_event);
             

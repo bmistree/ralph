@@ -2,6 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -396,6 +397,8 @@ public class AtomicActiveEvent extends ActiveEvent
         Set<Future<Boolean>> obj_could_commit =
             new HashSet<Future<Boolean>>();
         
+        Map<String,AtomicObject> touched_objs_copy = null;
+        
         try
         {
             _lock();
@@ -412,44 +415,72 @@ public class AtomicActiveEvent extends ActiveEvent
                 //# message again.
                 return FirstPhaseCommitResponseCode.FAILED;
             }
-        
-            // for any objects that require pushing changes to hardware,
-            // ensure that they can before reporting success.
-            _touched_objs_lock();
-            {
-                // Added issue #11: May want to perform this call in parallel
-                for (AtomicObject obj : touched_objs.values())
-                    obj_could_commit.add(obj.first_phase_commit(this));
-            }
-            _touched_objs_unlock();
-
+            
             state = State.STATE_PUSHING_TO_HARDWARE;
+            
+            // Note: actually pushing individual touched objects
+            // outside of lock.  This is to allow the following
+            // potential sequences:
+            //
+            //    evt1 enters first phase commit, tries to commit to obj,
+            //    acquiring obj's lock.
+            //
+            //    evt2 tries to acquire write lock on obj.  This acquires
+            //    obj's lock as well as evt1's lock.
+            //
+            // if first item was still holding lock on evt1, could get
+            // deadlock (evt1 holds evt1.lock and tries to acquire
+            // obj.lock; evt2 holds obj.lock and tries to acquire
+            // evt1.lock).
+            //
+            // Creating a copy of touched_objs is safe.  By the time
+            // we enter first phase commit, we know that we will never
+            // *add* to touched_objs.  We may remove from touched_objs
+            // (if we are asked to backout while we're in
+            // STATE_PUSHING_TO_HARDWARE).  But speculative objects
+            // will ignore a first_phase_commit request for a
+            // non-reader/non-writer, and so the extra call is safe.
+            _touched_objs_lock();
+            touched_objs_copy = new HashMap<String,AtomicObject> (touched_objs);
+            _touched_objs_unlock();
         }
         finally
         {
             _unlock();
         }
 
+        // first_phase_commit actually initiates pushing changes to
+        // hardware, if necessary.
+        for (AtomicObject obj : touched_objs_copy.values())
+            obj_could_commit.add(obj.first_phase_commit(this));
 
+        
         // After calling backout on an object, it should unwait this
         // thread calling get on future booleans.
         boolean can_commit = true;
         for (Future<Boolean> could_commit : obj_could_commit)
         {
-            try {
-                // note ordering below: this ensures that all
+            try
+            {
+                // FIXME: Is this condition still necessary?  
+                
+                // note ordering of && below: this ensures that all
                 // sub-objects will have tried to push their changes
                 // before we return whether or not we could apply
                 // those changes.
                 can_commit = could_commit.get().booleanValue() && can_commit;
-            } catch (InterruptedException _ex) {
+            }
+            catch (InterruptedException _ex)
+            {
                 // FIXME: should add logic to handle this case.  See
                 // issue #34.
                 _ex.printStackTrace();
                 Util.logger_assert(
                     "Did not consider getting interrupted " +
                     "while committing values.");
-            } catch (ExecutionException _ex) {
+            }
+            catch (ExecutionException _ex)
+            {
                 // FIXME: can this case ever happen?
                 _ex.printStackTrace();
                 Util.logger_assert(
@@ -666,8 +697,8 @@ public class AtomicActiveEvent extends ActiveEvent
     public void _backout_touched_objs()
     {
         _touched_objs_lock();
-        HashMap<String,AtomicObject> copied_touched_objs =
-            new HashMap<String,AtomicObject>(touched_objs);
+        HashMap<String,AtomicObject> copied_touched_objs = touched_objs;
+        touched_objs = new HashMap<String,AtomicObject>();
         _touched_objs_unlock();
         
         for (AtomicObject touched_obj : copied_touched_objs.values())
