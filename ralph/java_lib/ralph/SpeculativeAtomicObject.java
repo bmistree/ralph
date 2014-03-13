@@ -529,7 +529,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 "Should only call backout_derived_from on root.");
         }   
         //// END DEBUG
-        System.out.println("\nShould be backing out on root");
         
         _lock();
         for (int i =0; i < speculated_entries.size(); ++i)
@@ -539,8 +538,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             {
                 // remove all derivatives that were based on this
                 // object.
-                System.out.println(
-                    "\nFound matching " + i + " " + speculated_entries.size());
                 root_invalidate_derivative_objects(i+1);
                 break;
             }
