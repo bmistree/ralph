@@ -51,7 +51,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        requests that have been made to the root to commit its changes.
 
        We keep track of thsese outstanding speculatives because an
-       atomicactive event can tell us to backout before the future has
+       AtomicActiveEvent can tell us to backout before the future has
        been assigned.  In these cases, we must wake up any thread that
        had been waiting on the future so that it can keep running.
      */
@@ -630,7 +630,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
 
         if (root_speculative)
+        {
+            // Note that we do not need to actually fail or succeed
+            // this ICancellableFuture because to get into
+            // complete_commit, the future must have already been
+            // succeeded.  Removing it now simply for garbage
+            // collection.
             root_outstanding_commit_requests.remove(active_event.uuid);
+        }
+
         
         _unlock();
         //# FIXME: may want to actually check whether the change could
