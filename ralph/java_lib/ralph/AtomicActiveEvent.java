@@ -453,7 +453,6 @@ public class AtomicActiveEvent extends ActiveEvent
         for (AtomicObject obj : touched_objs_copy.values())
             obj_could_commit.add(obj.first_phase_commit(this));
 
-        
         // After calling backout on an object, it should unwait this
         // thread calling get on future booleans.
         boolean can_commit = true;

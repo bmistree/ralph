@@ -916,6 +916,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        derived objects and we therefore do not need to invalidate any
        derived objects.
 
+       Note: we do not need to invalidate any derivative objects in
+       this method.  This is because the only way that we can reach
+       here is if we go through acquire_read_lock or
+       acquire_write_lock.  acquire_write_lock takes care of
+       invalidating derivative objects for us.
+       
        Should override this method if are pushing changes to hardware.
 
        @see documentation of overridden method.

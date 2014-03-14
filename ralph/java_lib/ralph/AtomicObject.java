@@ -62,7 +62,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     protected RalphGlobals ralph_globals = null;
     
     /**
-     * Used by 
+     * Used by readlock_holders and write_lock_holder to keep track of
+     * events and their priorities.
      */
     protected static class EventCachedPriorityObj
         implements Comparable <EventCachedPriorityObj>
@@ -90,6 +91,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             return 1;
         }
 
+        
+        /**
+           Compares by descending event uuids.
+         */
         public static final Comparator<EventCachedPriorityObj> UUID_DESCENDING_COMPARATOR =
             new Comparator<EventCachedPriorityObj>() {
             public int compare(EventCachedPriorityObj a, EventCachedPriorityObj b)
