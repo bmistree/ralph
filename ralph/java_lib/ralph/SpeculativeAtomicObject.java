@@ -349,7 +349,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        In this case, this method should return a future that will
        instantly return False.
      */
-    public Future<Boolean> first_phase_commit(ActiveEvent active_event)
+    public ICancellableFuture first_phase_commit(ActiveEvent active_event)
     {
         _lock();
 
@@ -391,7 +391,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // to also receive first_phase_commit from committing
             // active event.  Rely on that one to sort things out.
             _unlock();
-            Future<Boolean> to_return = root_object.first_phase_commit(active_event);
+            ICancellableFuture to_return = root_object.first_phase_commit(active_event);
             return to_return;
         }
         

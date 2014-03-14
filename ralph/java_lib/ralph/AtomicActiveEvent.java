@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 
 import RalphServiceActions.ServiceAction;
@@ -394,8 +393,8 @@ public class AtomicActiveEvent extends ActiveEvent
     public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
     {
         // set of objects trying to push to hardware.
-        Set<Future<Boolean>> obj_could_commit =
-            new HashSet<Future<Boolean>>();
+        Set<ICancellableFuture> obj_could_commit =
+            new HashSet<ICancellableFuture>();
         
         Map<String,AtomicObject> touched_objs_copy = null;
         
@@ -458,7 +457,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // After calling backout on an object, it should unwait this
         // thread calling get on future booleans.
         boolean can_commit = true;
-        for (Future<Boolean> could_commit : obj_could_commit)
+        for (ICancellableFuture could_commit : obj_could_commit)
         {
             try
             {

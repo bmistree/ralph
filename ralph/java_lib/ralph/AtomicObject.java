@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import RalphExceptions.BackoutException;
 import RalphDataWrappers.DataWrapperFactory;
@@ -22,12 +21,10 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphServiceActions.AtomicObjectTryNextAction;
 
 /**
- * 
- * @author bmistree
- *
  * @param <T> --- The java type of the internal data
- * @param <D> --- The type that gets returned from dewaldoify.  Not entirely true
- * If this is an internal container, then contains what each value in map/list would dewaldoify to.
+ * @param <D> --- The type that gets returned from dewaldoify.  Not
+ * entirely true If this is an internal container, then contains what
+ * each value in map/list would dewaldoify to.
  */
 public abstract class AtomicObject<T,D> extends RalphObject<T,D> 
 {
@@ -121,7 +118,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        instantly return False.
        
      */
-    public abstract Future<Boolean> first_phase_commit(ActiveEvent active_event);
+    public abstract ICancellableFuture first_phase_commit(ActiveEvent active_event);
             
     
     public AtomicObject(RalphGlobals ralph_globals)
