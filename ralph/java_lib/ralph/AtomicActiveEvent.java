@@ -25,6 +25,83 @@ import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
+/**
+   Interface between AtomicActiveEvent and SpeculativeAtomicObject:
+
+   Locks in system:
+   
+     touched_objs_lock --- Protects touched_objs map that contains all
+     atomic objects that this event has read or written to.
+     
+     general_lock --- Protects event's state variable (which
+     represents state transition machine).
+     
+   
+   Deadlock prevention invariants:
+     1) Object can hold its internal lock and then try to assume
+        event's general_lock.  Should never hold event's general lock
+        and then try to assume object's lock.
+
+     2) Can hold general_lock and then acquire touched_objs_lock.  Can
+        also acquire touched_objs_lock directly.  If acquire
+        touched_objs_lock, *cannot* then acquire general_lock.
+
+        
+   Preemption from speculative object:
+
+     When:
+     
+     An object can try to preempt an event that is holding a lock on
+     it if another event with higher priority attempts to acquire a
+     conflicting lock on the same object.  The object is not
+     guaranteed to be successful in preempting an event holding its
+     lock.  For instance, if an event has entered
+     state_first_phase_commit (see below), it may refuse preemption.
+
+     How:
+     
+     The preempting object locks itself first.  It then issues
+     can_backout_and_hold_lock requests on all events that hold locks
+     on it.  These assume general_locks on all targetted events,
+     returning whether the event can be preempted or cannot be
+     preempted.  If the event can be preempted, it does not release
+     its general_lock; if it cannot be preempted, it releases its
+     general_lock.  If all events can be preempted, the object calls
+     obj_request_backout_and_release_lock on all events, aborting them
+     and releasing their general_locks.  If any event cannot be
+     preempted, the object calls
+     obj_request_no_backout_and_release_lock on all events that
+     succeeded in response to can_backout_and_hold_lock.  This unlocks
+     the held lock.
+
+         
+   Backout of object from event:
+   
+     When:
+     
+     An event on one host can backout of a lock on an object if its
+     sister event on another host is preempted, if one of the commits
+     it is pushing to hardware cannot be set, or if another object
+     preempts one of its locks.
+
+     How:
+
+     Through some path, backout gets called.  The event acquires
+     general_lock and changes its state (see comments about state
+     transitions below).  It then schedules another service thread to
+     acquire touched_objs_lock, copy touched_objs, release
+     touched_objs_lock, and run through all touched objects and call
+     backout on them individually.  Note: performing a copy here is
+     okay.  We just need to ensure that all objects get backout called
+     on them.  In this case, after transitioning state in backout,
+     will never *add* any new objects to touched_objs (but may remove
+     them if another object tries to preempt this event while it is
+     backing out).
+
+*/
+
+
+
 public class AtomicActiveEvent extends ActiveEvent
 {
     private enum State 
