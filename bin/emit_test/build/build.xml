@@ -8,7 +8,7 @@
     property="emit_test_dir"
     file="${ant.file.RalphJavaLibTest}"
   />
-
+    
   <!-- global properties for this build file -->
   <property name="build.dir" location="${emit_test_dir}/classes"/>
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
@@ -481,6 +481,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -495,6 +496,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
   
@@ -509,6 +511,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -523,6 +526,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
   
@@ -538,6 +542,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
   
@@ -552,6 +557,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -567,6 +573,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
   
@@ -581,6 +588,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -595,6 +603,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -609,6 +618,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -623,6 +633,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -637,6 +648,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -651,6 +663,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -665,6 +678,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -680,6 +694,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -695,6 +710,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
   
@@ -709,6 +725,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -723,6 +740,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -737,6 +755,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -751,6 +770,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -765,6 +785,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -779,6 +800,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -794,6 +816,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -808,6 +831,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -823,6 +847,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -837,6 +862,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -851,6 +877,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -865,6 +892,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -880,6 +908,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -894,6 +923,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -909,6 +939,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>        
   
@@ -923,6 +954,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -937,6 +969,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -951,6 +984,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -966,6 +1000,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -981,6 +1016,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -996,6 +1032,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>        
     </java>
   </target>
   
@@ -1010,6 +1047,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -1024,6 +1062,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
@@ -1039,6 +1078,7 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
+        <jvmarg value="-ea"/>
     </java>
   </target>
 
