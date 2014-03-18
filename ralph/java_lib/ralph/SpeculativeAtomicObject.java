@@ -500,7 +500,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // then, we ask the root to perform this operation for us
             // (body of first if).  Otherwise, we are the root and
             // invalidate all derived objects.
-            if (root_object != null)
+            if (! root_speculative)
             {
                 // note: we unlock first to maintain invariant that
                 // cannot hold speculative lock and then lock root (to
@@ -522,13 +522,24 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
         else
         {
-            // we do not need to invalidate derivative objects,
-            // because they speculated on top of the actual current
-            // value.  But we should promote the eldest speculative
-            // object to root so that it can continue.
-            try_promote_speculated();
+            if (root_speculative)
+            {
+                // we do not need to invalidate derivative objects,
+                // because they speculated on top of the actual current
+                // value.  But we should promote the eldest speculative
+                // object to root so that it can continue.
+                try_promote_speculated();
+            }
+            
+            // note: we do not need to do anything in the else
+            // condition here.  Assume we have a derivative chain A ->
+            // B -> C, where A is the root.  Then if B gets backed
+            // out, if only a single event is holding a read lock on B
+            // and that event got backed out (in this method), there's
+            // no way that any other events will reach B.  We could
+            // either kill it here, or just let A skip over it when it
+            // is promoting.  We do the second.
         }
-    
         _unlock();
         try_next();
     }
@@ -666,7 +677,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // speculated from this root object
         if (read_lock_holders.isEmpty())
         {
-            if (! speculated_entries.isEmpty())
+            while (! speculated_entries.isEmpty())
             {
                 SpeculativeAtomicObject<T,D> eldest_spec =
                     speculated_entries.remove(0);
@@ -685,6 +696,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 
                 for (SpeculativeFuture sf : waiting_on_commit.values())
                     internal_first_phase_commit_speculative(sf);
+
+                // there can be cases where a derived object does not
+                // hold any read or write locks.  (eg., a read lock
+                // holder holds a lock on it, then gets backed out.)
+                // In these cases, no other event can access these
+                // speculative objects and we should just pass through
+                // them.
+                if ( (!waiting_on_commit.isEmpty()) ||
+                     (!read_lock_holders.isEmpty()) ||
+                     (!waiting_events.isEmpty()))
+                {
+                    break;
+                }
+                
             }
         }
     }
