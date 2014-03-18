@@ -98,6 +98,31 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
      them if another object tries to preempt this event while it is
      backing out).
 
+   ------
+   Avoiding deadlock 2:
+
+   Thread 1:
+   
+     In begin_first_phase_commit, event acquires general_lock, then
+     touched_objs lock.  It makes a copy of the map touched_objs,
+     copy_touched_objs, and then releases touched_objs lock and
+     general_lock.
+
+     After releasing, it issues first_phase_commit calls to each
+     object in copy_touched_objs, registering all of their futures in
+     a set.
+
+     Following, we try to read from each objects future.
+
+   Thread 2:
+   
+     If, between the first and second paragraphs of Thread 1, the
+     event backs out, we send a backout message to the object.  The
+     object will not invalidate any future because we have not yet
+     issued first_phase_commit calls to each object.  If the event
+     then issues its first_phase_commit, at this point, the object
+     returns an always false future if doesn't have associated read
+     lock.
 */
 
 
