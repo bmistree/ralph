@@ -265,10 +265,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             prev_read_events =
                 speculating_on.get_and_clear_alternate_read_events(active_event);
         }
-        to_speculate_on_wrapper.set_waiting_and_read_events(
-            prev_waiting_elements,prev_read_events);
 
-        
         Set<ActiveEvent> aborted_events = new HashSet<ActiveEvent>();
         boolean schedule_try_next = false;
         for (WaitingElement<T,D> waiting_element :
@@ -290,6 +287,16 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 schedule_try_next = true;
         }
 
+        // note that it is important for this call to happen after
+        // above aborted sort out.  This is because insert_in_touched
+        // checks if an event is already waiting or a read lock holder
+        // before telling the object to insert into its map of touched
+        // objects
+        to_speculate_on_wrapper.set_waiting_and_read_events(
+            prev_waiting_elements,prev_read_events);
+
+        
+        
         // these events were already aborted, but this object has not
         // yet received a backout request for them.  This object will
         // eventually, but because we removed the event from this
