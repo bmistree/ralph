@@ -13,6 +13,23 @@
 
    first eventually invalidates second, which should invalidate third (third has
    speculated on second).
+
+
+   Note: in general, deadlock can occur if programmers are permitted to call
+   speculate before their events have completed.  Consider two events, One and
+   Two, and two atomic variables A and B.
+
+   One:                          Two:
+     w_lock(A)                     w_lock(B)
+     speculate(A)                  speculate(B)
+     w_lock(B)                     w_lock(A)
+
+   One waits for B to commit before unspeculating A.  Two waits for A
+   to commit before unspeculating B.
+
+   This can happen in this case if run_first is not called before run_second, is
+   not called before run_third.  Must ensure ordering.
+   
  */
 
 Service MiddleInterruptedSpeculater

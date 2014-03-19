@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MiddleInterruptedSpeculaterTest
 {
     final public static AtomicBoolean had_exception = new AtomicBoolean(false);
-    final public static int NUM_TIMES_TO_RUN_TEST = 10;
+    final public static int NUM_TIMES_TO_RUN_TEST = 100;
     
     public static void main(String[] args)
     {
@@ -65,9 +65,9 @@ public class MiddleInterruptedSpeculaterTest
             endpt,MiddleInterruptedSpeculaterThread.WhichToRun.THIRD);
         
         run_first.start();
-        Thread.sleep(1);
+        Thread.sleep(10);
         run_second.start();
-        Thread.sleep(1);
+        Thread.sleep(10);
         run_third.start();
 
         run_first.join();

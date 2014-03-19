@@ -123,6 +123,21 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
      then issues its first_phase_commit, at this point, the object
      returns an always false future if doesn't have associated read
      lock.
+
+  -----------
+  Deadlock + Speculate.
+  
+  Deadlock can occur if programmers are permitted to call speculate
+  before their events have completed.  Consider two events, One and
+  Two, and two atomic variables A and B.
+
+  One:                          Two:
+    w_lock(A)                     w_lock(B)
+    speculate(A)                  speculate(B)
+    w_lock(B)                     w_lock(A)
+
+  One waits for B to commit before unspeculating A.  Two waits for A
+  to commit before unspeculating B.
 */
 
 
