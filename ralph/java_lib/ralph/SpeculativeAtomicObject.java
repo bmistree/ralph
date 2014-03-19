@@ -182,12 +182,27 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      speculate on existing value associated with active_event.
 
      @returns --- Returns the dirty value associated with
-     active_event.
+     active_event.  Note, if speculate is called on object that has no
+     read lock holders, write lock holders, or waiting events (ie,
+     this active event and no other have ever interacted with object),
+     then return null.
      */
     public T speculate(ActiveEvent active_event, T to_speculate_on)
     {
         _lock();
 
+        // No event to speculate on top of: do nothing.  Handles case
+        // of what happens if speculate gets called on an object that
+        // has never been a read lock holder.
+        int root_num_outstanding =
+            waiting_events.size() + read_lock_holders.size() +
+            root_outstanding_commit_requests.size();
+        if (root_num_outstanding == 0)
+        {
+            _unlock();
+            return null;
+        }
+        
         T to_return = null;
         // Step 0: find associated to_speculate_on
         // FIXME: is this safe?
@@ -220,12 +235,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
 
-        // FIXME: What happens if specualte gets called on an object
-        // that has never been a read lock holder.
-
-        // FIXME 2: What happens if speculate gets called on an object
-        // after that event has been backed out of all speculative
-        // objects' possible read and read/write sets?
         if (to_speculate_on == null)
         {
             if (to_return != null)
