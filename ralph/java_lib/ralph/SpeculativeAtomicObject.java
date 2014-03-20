@@ -304,8 +304,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         to_speculate_on_wrapper.set_waiting_and_read_events(
             prev_waiting_elements,prev_read_events);
 
-        
-        
         // these events were already aborted, but this object has not
         // yet received a backout request for them.  This object will
         // eventually, but because we removed the event from this
@@ -326,21 +324,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         return to_speculate_on;
     }
 
-    /**
-       Called from outside of lock.
-       
-       @returns {boolean} --- True if can commit in first phase, false
-       otherwise.  Note: this method is really only useful for objects
-       that push their changes to other hardware, (eg., a list that
-       propagates its changes to a router).  If the hardware is still
-       up and running, and the changes have been pushed, then, return
-       true, otherwise, return false.
-     */
-    protected ICancellableFuture internal_first_phase_commit(
-        ActiveEvent active_event)
-    {
-        return ALWAYS_TRUE_FUTURE;
-    }
     protected void internal_first_phase_commit_speculative(
         SpeculativeFuture sf)
     {
@@ -384,7 +367,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // try to commit normally.
         if (root_speculative)
         {
-            ICancellableFuture to_return = internal_first_phase_commit(active_event);
+            ICancellableFuture to_return =
+                hardware_first_phase_commit_hook(active_event);
+            if (to_return == null)
+                to_return = ALWAYS_TRUE_FUTURE;
             root_outstanding_commit_requests.put(active_event.uuid,to_return);
             _unlock();
             return to_return;
@@ -433,6 +419,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      */
     protected void derived_from_failed()
     {
+        // do not need to call hardware backout because only roots of
+        // speculatives get pushed to hardware.
         _lock();
         // change speculation state to failed: any future event that
         // tries to commit will be backed out.

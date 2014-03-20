@@ -124,7 +124,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        
      */
     public abstract ICancellableFuture first_phase_commit(ActiveEvent active_event);
-            
+
     
     public AtomicObject(RalphGlobals ralph_globals)
     {
@@ -665,6 +665,20 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      */
     protected void hardware_complete_commit_hook(ActiveEvent active_event)
     {}
+
+    /**
+       Should be overridden by hardware.  Called from within lock.
+       
+       @returns --- Can be null, eg., if the object is not backed by
+       hardware.  Otherwise, call to get on future returns true if if
+       can commit in first phase, false otherwise.
+     */
+    protected ICancellableFuture hardware_first_phase_commit_hook(
+        ActiveEvent active_event)
+    {
+        return null;
+    }
+    
 
     /**
        Already presupposes within lock.

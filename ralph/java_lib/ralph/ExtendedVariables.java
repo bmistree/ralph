@@ -69,17 +69,24 @@ public class ExtendedVariables
             }
         }
 
+        /**
+           Called from within lock.
 
+           @returns --- Can be null, eg., if the object is not backed by
+           hardware.  Otherwise, call to get on future returns true if if
+           can commit in first phase, false otherwise.
+         */
         @Override
-        protected ICancellableFuture internal_first_phase_commit(ActiveEvent active_event)
+        protected ICancellableFuture hardware_first_phase_commit_hook(
+            ActiveEvent active_event)
         {
             // do not need to take locks here because know that this
             // method will only be called from AtomicActiveEvent
             // during first_phase_commit. Because AtomicActiveEvent is
             // in midst of commit, know that these values cannot
             // change.
-            if ((write_lock_holder == null) ||
-                (! active_event.uuid.equals(write_lock_holder.event.uuid)))
+            boolean write_lock_holder_being_preempted = is_write_lock_holder(active_event);
+            if (! write_lock_holder_being_preempted)
             {
                 // never made a write to this variable: do not need to
                 // ensure that hardware is up (for now).  May want to
@@ -98,7 +105,7 @@ public class ExtendedVariables
             SpeculativeFuture sf)
         {
             ActiveEvent active_event = sf.event;
-            Future<Boolean> bool = internal_first_phase_commit(active_event);
+            Future<Boolean> bool = hardware_first_phase_commit_hook(active_event);
             ralph_globals.thread_pool.add_service_action(
                 new LinkFutureBooleans(bool,sf));
         }
