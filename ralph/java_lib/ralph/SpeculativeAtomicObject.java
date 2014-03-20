@@ -968,7 +968,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        @see documentation of overridden method.
      */
     @Override
-    protected void obj_request_backout_and_release_lock(
+    final protected void obj_request_backout_and_release_lock(
         ActiveEvent active_event)
     {
         if (root_speculative)

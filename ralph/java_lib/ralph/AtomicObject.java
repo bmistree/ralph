@@ -598,11 +598,18 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     */
     public abstract void complete_commit(ActiveEvent active_event);
 
-    protected boolean internal_complete_commit(ActiveEvent active_event)
+    /**
+       Cannot be overridden by subclassses.  Use
+       hardware_complete_hook instead.
+     */
+    final protected boolean internal_complete_commit(ActiveEvent active_event)
     {
         boolean write_lock_holder_completed = false;
         
         _lock();
+
+        hardware_complete_commit_hook(active_event);
+        
         if ((write_lock_holder != null) &&
             active_event.uuid.equals(write_lock_holder.event.uuid))
         {
@@ -642,14 +649,48 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# have caused another read/write to be scheduled.
         try_next();
     }
+
+    /**
+       Should be overridden by hardware.  Called from within lock,
+       before all read and write lock holders associated with event
+       get removed.
+     */
+    protected void hardware_backout_hook(ActiveEvent active_event)
+    {}
+
+    /**
+       Should be overridden by hardware.  Called from within lock
+       before all read and write lock holders associated with event
+       get removed.
+     */
+    protected void hardware_complete_commit_hook(ActiveEvent active_event)
+    {}
+
+    /**
+       Already presupposes within lock.
+     */
+    protected boolean is_write_lock_holder(ActiveEvent active_event)
+    {
+        if ((write_lock_holder != null) &&
+            write_lock_holder.event.uuid.equals(active_event.uuid))
+            return true;
+
+        return false;
+    }
     
-    protected boolean internal_backout (ActiveEvent active_event)
+    /**
+       Cannot be overriden by subclasses.  Use hardware hooks instead.
+     */
+    final protected boolean internal_backout (ActiveEvent active_event)
     {
         boolean write_lock_holder_backed_out = false;
         
         //# FIXME: Are there chances that could process a stale backout?
         //# I think so.
         _lock();
+
+        hardware_backout_hook(active_event);
+        
         //# note: there are cases where an active event may try to
         //# backout after it's
         read_lock_holders.remove(active_event.uuid);

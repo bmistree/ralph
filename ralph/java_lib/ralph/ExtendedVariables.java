@@ -40,44 +40,26 @@ public class ExtendedVariables
         protected abstract void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<T,D> to_undo);
         
-        @Override
-        protected boolean internal_complete_commit(ActiveEvent active_event)
-        {
-            _lock();
-            boolean write_lock_holder_completed =
-                super.internal_complete_commit(active_event);
-
-            if (write_lock_holder_completed)
-                dirty_op_tuples_on_hardware = null;
-            _unlock();
-            return write_lock_holder_completed;
-        }
-
 
         /**
-           Already within lock
+           Called from within lock.
          */
         @Override
-        protected void obj_request_backout_and_release_lock(
-            ActiveEvent active_event)
+        protected void hardware_complete_commit_hook(ActiveEvent active_event)
         {
-            if ((write_lock_holder != null) &&
-                (active_event.uuid.equals(write_lock_holder.event.uuid)))
-            {
-                // must undo changes pushing to hardware
-                undo_dirty_changes_to_hardware(dirty_op_tuples_on_hardware);
+            boolean write_lock_holder_being_completed = is_write_lock_holder(active_event);
+            if (write_lock_holder_being_completed)
                 dirty_op_tuples_on_hardware = null;
-            }
-            super.obj_request_backout_and_release_lock(active_event);
         }
-        
-        
+
+        /**
+           Called from within lock.
+         */
         @Override
-        protected boolean internal_backout (ActiveEvent active_event)
+        protected void hardware_backout_hook (ActiveEvent active_event)
         {
-            _lock();
-            boolean write_lock_holder_preempted = super.internal_backout(active_event);
-            if (write_lock_holder_preempted)
+            boolean write_lock_holder_being_preempted = is_write_lock_holder(active_event);
+            if (write_lock_holder_being_preempted)
             {
                 // if there were dirty values that we had pushed to the
                 // hardware, we need to undo them.
@@ -85,8 +67,6 @@ public class ExtendedVariables
                     undo_dirty_changes_to_hardware(dirty_op_tuples_on_hardware);
                 dirty_op_tuples_on_hardware = null;
             }
-            _unlock();
-            return write_lock_holder_preempted;
         }
 
 
