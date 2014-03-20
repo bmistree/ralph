@@ -100,14 +100,27 @@ public class ExtendedVariables
             return apply_changes_to_hardware(dirty_op_tuples_on_hardware);
         }
 
+
+        /**
+           Called from within lock.
+
+           When a derived object gets promoted to root object, we need
+           to deal with any events that began committing to the object
+           when it was a derived object.  In our case, we take the
+           changes associated with the speculative future and apply
+           them to hardware.  We link this speculative future with a
+           new future that pushes to hardware.
+         */
         @Override
-        protected void internal_first_phase_commit_speculative(
+        protected boolean hardware_first_phase_commit_speculative_hook(
             SpeculativeFuture sf)
         {
             ActiveEvent active_event = sf.event;
             Future<Boolean> bool = hardware_first_phase_commit_hook(active_event);
             ralph_globals.thread_pool.add_service_action(
                 new LinkFutureBooleans(bool,sf));
+            
+            return true;
         }
     }
 }

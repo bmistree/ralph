@@ -678,8 +678,25 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         return null;
     }
-    
 
+    /**
+       Should be overridden by hardware.  Called from within lock.
+
+       When a derived object gets promoted to root object, we need to
+       deal with any events that began committing to the object when
+       it was a derived object.
+       
+       @returns --- true if subclassed object is handling the
+       speculative future.  false otherwise.
+     */
+    protected boolean hardware_first_phase_commit_speculative_hook(
+        SpeculativeFuture sf)
+    {
+        return false;
+    }
+        
+
+    
     /**
        Already presupposes within lock.
      */

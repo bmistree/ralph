@@ -324,10 +324,22 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         return to_speculate_on;
     }
 
-    protected void internal_first_phase_commit_speculative(
+    /**
+       Called from within lock.
+       
+       When a derived object gets promoted to root object, we need to
+       deal with any events that began committing to the object when
+       it was a derived object.
+
+       Absent hardware specific logic for dealing with these (eg.,
+       pushing to switches, etc.), we just say that the
+       speculative_succeeded.
+     */
+    final protected void internal_first_phase_commit_speculative(
         SpeculativeFuture sf)
     {
-        sf.succeeded();
+        if (! hardware_first_phase_commit_speculative_hook(sf))
+            sf.succeeded();
     }
 
     /**
