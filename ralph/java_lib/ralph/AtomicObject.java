@@ -532,7 +532,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         ActiveEvent active_event)
     {
         active_event.obj_request_backout_and_release_lock(this);
-
+        
+        // Changes may not already be staged.  Subclass that
+        // implements hardware_backout_hook should check read/write
+        // lock holders to see if should revert changes.
+        hardware_backout_hook(active_event);
+        
         //# remove write lock holder if it was one
         read_lock_holders.remove(active_event.uuid);
         if ((write_lock_holder != null) &&
@@ -654,6 +659,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        Should be overridden by hardware.  Called from within lock,
        before all read and write lock holders associated with event
        get removed.
+
+       Note: can receive hardware_backout_hook for changes that will
+       never be staged.  Method that overrides backout hook should
+       check whether changes are staged or not.
      */
     protected void hardware_backout_hook(ActiveEvent active_event)
     {}
