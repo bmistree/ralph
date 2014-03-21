@@ -5,9 +5,15 @@ import ralph_emitted.BackedSpeculationJava._InternalSwitch;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.Variables.AtomicNumberVariable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BackedSpeculationTest
 {
+    private final static int NUM_OPS_PER_THREAD = 100;
+    private final static AtomicBoolean had_exception =
+        new AtomicBoolean(false);
+    
+    
     public static void main(String[] args)
     {
         if (BackedSpeculationTest.run_test())
@@ -28,6 +34,20 @@ public class BackedSpeculationTest
                 create_switch(ralph_globals),
                 create_switch(ralph_globals));
 
+            
+            EventThread event_1 =
+                new EventThread(endpt,false,NUM_OPS_PER_THREAD);
+            EventThread event_2 =
+                new EventThread(endpt,true,NUM_OPS_PER_THREAD);
+
+            event_1.start();
+            event_2.start();
+            event_1.join();
+            event_2.join();
+
+            if (had_exception.get())
+                return false;
+            
             return true;
         }
         catch(Exception _ex)
@@ -37,6 +57,36 @@ public class BackedSpeculationTest
         }
     }
 
+    public static class EventThread extends Thread
+    {
+        private final BackedSpeculation endpt;
+        private final boolean event_one;
+        private final int num_ops;
+        public EventThread(BackedSpeculation _endpt,boolean _event_one,int _num_ops)
+        {
+            endpt = _endpt;
+            event_one = _event_one;
+            num_ops = _num_ops;
+        }
+        public void run()
+        {
+            for (int i = 0; i < num_ops; ++i)
+            {
+                try
+                {
+                    if (event_one)
+                        endpt.event1();
+                    else
+                        endpt.event2();
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    had_exception.set(true);
+                }
+            }
+        }
+    }
 
     public static _InternalSwitch create_switch(RalphGlobals ralph_globals)
     {
