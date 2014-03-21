@@ -1,0 +1,91 @@
+alias Service WrappedSwitch as 'BackedSpeculationJava.WrappedSwitch';
+
+/**
+   An additional speculation test.  list1 and list2 are backed by code that
+   starts speculation when it gets to first phase commit.
+ */
+
+Struct Switch
+{
+    TVar List(element: Number) dummy_flow_table;
+    TVar Number switch_guard;
+}
+
+
+Service WrappedSwitch
+{
+    Struct Switch internal_switch = null;
+
+    set_internal_switch(Struct Switch to_set_to)
+    {
+        internal_switch = to_set_to;
+    }
+    read_lock()
+    {
+        internal_switch.switch_guard;
+    }
+    write_lock()
+    {
+        internal_switch.switch_guard = 4;
+    }
+
+    
+    flow_table_size() returns Number
+    {
+        read_lock();
+        return internal_switch.dummy_flow_table.size();
+    }
+    remove_entry_switch(Number index)
+    {
+        write_lock();
+        internal_switch.dummy_flow_table.remove(index);
+    }
+
+    add_entry_switch(Number to_add)
+    {
+        write_lock();
+        internal_switch.dummy_flow_table.append(to_add);
+    }
+}
+
+
+Service BackedSpeculation
+{
+    Service WrappedSwitch ws1;
+    Service WrappedSwitch ws2;
+    TVar TrueFalse evt1_last_added = False;
+    TVar TrueFalse evt2_last_added = False;
+
+    set_switches(Struct Switch s1, Struct Switch s2)
+    {
+        ws1.set_internal_switch(s1);
+        ws2.set_internal_switch(s2);
+    }
+    
+    event1()
+    {
+        read_and_write(ws1,ws2,not evt1_last_added);
+        evt1_last_added = not evt1_last_added;
+    }
+    
+    event2()
+    {
+        read_and_write(ws2,ws1,not evt2_last_added);
+        evt2_last_added = not evt2_last_added;
+    }
+    
+    read_and_write(
+        Service WrappedSwitch to_read_on,
+        Service WrappedSwitch to_write_to,
+        TrueFalse add_entry)
+    {
+        atomically
+        {
+            to_read_on.flow_table_size();
+            if (add_entry)
+                to_write_to.add_entry_switch(1);
+            else
+                to_write_to.remove_entry_switch(0);
+        }
+    }
+}

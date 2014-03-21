@@ -412,6 +412,15 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c MiddleInterruptedSpeculaterJava"/>
     </exec>
+
+    <echo message="${line.separator}backed_speculation.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/backed_speculation.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/BackedSpeculationJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c BackedSpeculationJava"/>
+    </exec>
     
   </target>
 
