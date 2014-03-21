@@ -1,8 +1,8 @@
 alias Service WrappedSwitch as 'BackedSpeculationJava.WrappedSwitch';
 
 /**
-   An additional speculation test.  list1 and list2 are backed by code that
-   starts speculation when it gets to first phase commit.
+   An additional speculation test.  switch guards backed by code that starts
+   speculation when it gets to first phase commit.
  */
 
 Struct Switch
