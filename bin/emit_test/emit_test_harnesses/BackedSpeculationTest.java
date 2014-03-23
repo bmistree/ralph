@@ -6,6 +6,12 @@ import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.Variables.AtomicNumberVariable;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Future;
+import RalphExtended.ExtendedObjectStateController;
+import RalphServiceActions.LinkFutureBooleans;
+import ralph.ActiveEvent;
+import ralph.SpeculativeFuture;
+import ralph.ICancellableFuture;
 
 public class BackedSpeculationTest
 {
@@ -97,11 +103,67 @@ public class BackedSpeculationTest
     
     public static class InternalSwitchGuard extends AtomicNumberVariable
     {
+        private ExtendedObjectStateController<Double> state_controller =
+            new ExtendedObjectStateController<Double> ();
+        
         public InternalSwitchGuard(RalphGlobals ralph_globals)
         {
             super(false,new Double(0),ralph_globals);
         }
 
+
+        @Override
+        protected ICancellableFuture hardware_first_phase_commit_hook(
+            ActiveEvent active_event)
+        {
+            // FIXME: Ignoring backout.
+            if (is_write_lock_holder(active_event))
+            {
+                state_controller.get_state_hold_lock();
+                state_controller.move_state_pushing_changes(dirty_val.val);
+                state_controller.release_lock();
+            }
+            return ALWAYS_TRUE_FUTURE;
+        }
+
+        @Override
+        protected void hardware_complete_commit_hook(ActiveEvent active_event)
+        {
+            // FIXME: Ignoring backout
+            if (is_write_lock_holder(active_event))
+            {
+                state_controller.get_state_hold_lock();
+                state_controller.move_state_clean();
+                state_controller.release_lock();
+            }
+        }
+
+        @Override
+        protected void hardware_backout_hook(ActiveEvent active_event)
+        {
+            if (is_write_lock_holder(active_event))
+            {
+                state_controller.get_state_hold_lock();
+                state_controller.move_state_removing_changes();
+                state_controller.release_lock();
+            }
+        }
+
+
+        @Override
+        protected boolean hardware_first_phase_commit_speculative_hook(
+            SpeculativeFuture sf)
+        {
+            ActiveEvent active_event = sf.event;
+            Future<Boolean> bool = hardware_first_phase_commit_hook(active_event);
+            ralph_globals.thread_pool.add_service_action(
+                new LinkFutureBooleans(bool,sf));
+
+            return true;
+        }
+
+        
+        
         // FIXME: still must fill in all methods for speculation and hooking to
         // hardware.
     }
