@@ -372,17 +372,6 @@ public class BackedSpeculationTest
 
             // FIXME: For now, always just returning that application is
             // successful.
-
-            try
-            {
-                Thread.sleep(0,rand_ns_to_sleep_for());
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-                assert(false);
-            }
-            
             state_controller.get_state_hold_lock();
             if (! application_successful)
                 state_controller.move_state_failed();
@@ -392,17 +381,33 @@ public class BackedSpeculationTest
                 state_controller.move_state_staged_changes();
             state_controller.release_lock();
 
+            if (undo_changes)
+            {
+                try
+                {
+                    Thread.sleep(1,rand_ns_to_sleep_for());
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    assert(false);
+                }
+            }
+            
             if (application_successful)
                 to_notify_when_complete.succeeded();
             else
                 to_notify_when_complete.failed();
+
         }
 
 
         private int rand_ns_to_sleep_for()
         {
             // 0ns to 1 ms.
-            return rand.nextInt(1000000);
+            int MAX = 1000000;
+            // int MAX = 1000;
+            return rand.nextInt(MAX);
         }
     }
 }
