@@ -20,13 +20,14 @@ import ralph.AtomicInternalList;
 import ralph.SpeculativeFuture;
 import RalphServiceActions.ServiceAction;
 import ralph.Variables.AtomicListVariable;
+import java.util.Random;
 
 public class BackedSpeculationTest
 {
-    private final static int NUM_OPS_PER_THREAD = 100;
+    private final static int NUM_OPS_PER_THREAD = 5000;
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
-    
+    private final static int TIME_TO_SLEEP_MS = 1;
     
     public static void main(String[] args)
     {
@@ -145,22 +146,6 @@ public class BackedSpeculationTest
             return internal_ft_list;
         }
 
-        private AtomicInternalList<Double,Double> get_internal_ft_deltas_list()
-        {
-            // grabbing ft_deltas to actually get changes made to hardware.
-            AtomicListVariable<Double,Double>
-                ft_deltas_list = internal_switch.dummy_ft_deltas;
-            AtomicInternalList<Double,Double>
-                internal_ft_deltas_list = null;
-
-            if (ft_deltas_list.dirty_val != null)
-                internal_ft_deltas_list = ft_deltas_list.dirty_val.val;
-            else
-                internal_ft_deltas_list = ft_deltas_list.val.val;
-
-            return internal_ft_deltas_list;
-        }
-
         @Override
         protected ICancellableFuture hardware_first_phase_commit_hook(
             ActiveEvent active_event)
@@ -186,8 +171,6 @@ public class BackedSpeculationTest
                 // these values so that we can speculate on them.
                 AtomicInternalList<Double,Double>
                     internal_ft_list = get_internal_ft_list();
-                AtomicInternalList<Double,Double>
-                    internal_ft_deltas_list = get_internal_ft_deltas_list();
 
                 ArrayList<RalphObject<Double,Double>>
                     to_push = null;
@@ -195,17 +178,12 @@ public class BackedSpeculationTest
                 if (should_speculate)
                 {
                     internal_ft_list.speculate(active_event,null);
-                    to_push = internal_ft_deltas_list.speculate(
-                        active_event,
-                        // so that resets delta list
-                        new ArrayList<RalphObject<Double,Double>>());
-
                     speculate(active_event,null);
                 }
                 else
                 {
-                    if (is_write_lock_holder(active_event))
-                        to_push = internal_ft_deltas_list.dirty_val.val;
+                    // if wanted to grab value to speculate on, should do it
+                    // here.
                 }
 
 
@@ -374,6 +352,8 @@ public class BackedSpeculationTest
         private final ExtendedObjectStateController state_controller;
         public final SpeculativeFuture to_notify_when_complete =
             new SpeculativeFuture(null);
+
+        private final static Random rand = new Random();
         
         public WrapApplyToHardware(
             Double _to_apply,
@@ -395,7 +375,7 @@ public class BackedSpeculationTest
 
             try
             {
-                Thread.sleep(50);
+                Thread.sleep(0,rand_ns_to_sleep_for());
             }
             catch(Exception ex)
             {
@@ -416,6 +396,13 @@ public class BackedSpeculationTest
                 to_notify_when_complete.succeeded();
             else
                 to_notify_when_complete.failed();
+        }
+
+
+        private int rand_ns_to_sleep_for()
+        {
+            // 0ns to 1 ms.
+            return rand.nextInt(1000000);
         }
     }
 }

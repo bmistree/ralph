@@ -8,7 +8,6 @@ alias Service WrappedSwitch as 'BackedSpeculationJava.WrappedSwitch';
 Struct Switch
 {
     TVar List(element: Number) dummy_flow_table;
-    TVar List(element: Number) dummy_ft_deltas;
     TVar Number switch_guard;
 }
 
