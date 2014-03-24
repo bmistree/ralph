@@ -639,6 +639,44 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         return outstanding_commit_requests;
     }
 
+
+    /**
+       Called when an event with uuid "uuid" is promoted to boosted
+       with priority "priority"
+    */
+    @Override
+    public final void update_event_priority(String uuid, String new_priority)
+    {
+        _lock();
+        // note: doing nothing if this is a derivative object that
+        // has succeeded or failed.  If the derivative object has
+        // succeeded, then root is now managing its read and write
+        // lock holders as well as its waiting events queue.
+        if (speculation_state == SpeculationState.SUCCEEDED)
+        {
+            // unlocking here so that maintaining invariant that child
+            // cannot call into root without first releasing its lock.
+            _unlock();
+            root_object.update_event_priority(uuid,new_priority);
+            return;
+        }
+            
+        if (speculation_state == SpeculationState.FAILED)
+        {
+            // nothing to do here.  We've already failed.
+            _unlock();
+            return;
+        }
+            
+        boolean may_require_update =
+            internal_update_event_priority(uuid,new_priority);
+        _unlock();
+
+        if (may_require_update)
+            schedule_try_next();
+    }
+    
+
     @Override
     public void complete_commit(ActiveEvent active_event)
     {

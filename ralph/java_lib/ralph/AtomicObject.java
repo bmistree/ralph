@@ -449,11 +449,18 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return to_return;
     }
 
+    
     /**
-       Called when an event with uuid "uuid" is promoted to boosted
-       with priority "priority"
+       Called from SpeculativeAtomicObject receives an
+       update_event_priority call from active_event (when an event
+       with uuid "uuid" is promoted to boosted with priority
+       "priority")
+
+       @returns --- true if updating event priority means that we may
+       need to update our waiting events.
     */
-    public void update_event_priority(String uuid, String new_priority)
+    protected final boolean internal_update_event_priority(
+        String uuid, String new_priority)
     {
         _lock();        
         boolean may_require_update = false;
@@ -464,9 +471,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             write_lock_holder.cached_priority = new_priority;
         }
 
-
         if (read_lock_holders.containsKey(uuid))
-            read_lock_holders.get(uuid).cached_priority = new_priority;
+        {
+            EventCachedPriorityObj ecpo = read_lock_holders.get(uuid);
+            ecpo.cached_priority = new_priority;
+        }
 
         if (waiting_events.containsKey(uuid))
         {
@@ -475,8 +484,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
         _unlock();
 
-        if (may_require_update)
-            schedule_try_next();
+        return may_require_update;
     }
 
     protected void schedule_try_next()
