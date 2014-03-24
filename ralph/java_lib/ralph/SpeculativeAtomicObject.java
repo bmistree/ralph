@@ -405,7 +405,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // to also receive first_phase_commit from committing
             // active event.  Rely on that one to sort things out.
             _unlock();
-            ICancellableFuture to_return = root_object.first_phase_commit(active_event);
+            ICancellableFuture to_return =
+                root_object.first_phase_commit(active_event);
             return to_return;
         }
         
@@ -724,9 +725,17 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 
     /**
        Assumes already holding lock
+
+       Should only be called on root.
      */
     private void try_promote_speculated()
     {
+        //// DEBUG
+        if (! root_speculative)
+            Util.logger_assert("Can only call promote on root object.");
+        //// END DEBUG
+        
+        
         // check to see if we should promote any object that we
         // speculated from this root object
         if (read_lock_holders.isEmpty())
@@ -767,7 +776,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
     }
-
     
     /**
        Speculative objects should be able to get and set waiting
