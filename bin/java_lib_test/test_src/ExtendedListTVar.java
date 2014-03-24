@@ -11,6 +11,7 @@ import RalphCallResults.RootCallResult.ResultType;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
 import ralph.RalphGlobals;
+import ralph.ICancellableFuture;
 import java.util.concurrent.Future;
 
 /**
@@ -45,12 +46,14 @@ public class ExtendedListTVar
         {
             super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
         }
-        protected Future<Boolean> apply_changes_to_hardware(
+        @Override
+        protected ICancellableFuture apply_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> dirty)
         {
             global_number_times_apply_changes_to_hardware_called += 1.0;
             return ALWAYS_TRUE_FUTURE;
         }
+        @Override
         protected void undo_dirty_changes_to_hardware(
             ListTypeDataWrapper<Double,Double> to_undo)
         { }
