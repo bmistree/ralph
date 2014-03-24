@@ -355,6 +355,7 @@ public class AtomicActiveEvent extends ActiveEvent
      @returns {bool} --- Returns True if have not already backed
      out.  Returns False otherwise.
     */
+    @Override
     public boolean add_touched_obj(AtomicObject obj)
     {
         _lock();
@@ -369,6 +370,35 @@ public class AtomicActiveEvent extends ActiveEvent
         return still_running;
     }
 
+    /**
+       A speculative object can remove itself from an event's list of
+       touched objects, thereby stopping directly receiving commands
+       from the event (eg., commit, backout, etc.)  This happens when
+       the speculative object calls its speculate method.  In essence,
+       it is telling the event to send all control messages (commit,
+       backout, etc.) to the derived object.  The derived object can
+       decide whether or not to forward the messages back or reply to
+       them itself.
+
+       If the root object did not unsubscribe from commands, it could
+       get into cases where it received duplicate commands from the
+       event (one through derived and one directly).
+     */
+    @Override
+    public boolean remove_touched_obj(AtomicObject obj)
+    {
+        _lock();
+        boolean still_running = (state == State.STATE_RUNNING);
+        if (still_running)
+        {
+            _touched_objs_lock();
+            touched_objs.remove(obj.uuid);
+            _touched_objs_unlock();
+        }
+        _unlock();
+        return still_running;
+    }
+    
     
     /**
      * 

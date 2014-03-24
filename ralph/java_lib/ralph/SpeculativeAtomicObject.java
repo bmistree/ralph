@@ -258,15 +258,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         Map<String,EventCachedPriorityObj> prev_read_events = null;
         if (speculating_on == null)
         {
-            //means that we should grab waiting elements from this
-            //object's waiting list. (and roll them over to new one)
+            // means that we should grab waiting elements from this
+            // object's waiting list. (and roll them over to new one)
             prev_waiting_elements = get_and_clear_waiting_events();
             prev_read_events =
                 get_and_clear_alternate_read_events(active_event);
         }
         else
         {
-            //means that we should grab waiting elements from
+            // means that we should grab waiting elements from
             // speculating_on's waiting_list.  (and roll them over to
             // new one)
             prev_waiting_elements =
@@ -285,7 +285,21 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 aborted_events.add(act_event);
             else
                 schedule_try_next = true;
+
+            // we stop the speculating_on object from receiving
+            // commands from the event (eg., backout, commit, etc.).
+            // This is because from here on out the derived object
+            // will receive commands and can decide whether or not to
+            // forward them on to root.  If we did not remove
+            // speculating_on from act_event's touched objects, then
+            // speculating_on might receive duplicate commands (one
+            // from its derived object and one directly).
+            if (speculating_on != null)
+                act_event.remove_touched_obj(speculating_on);
+            else
+                act_event.remove_touched_obj(this);
         }
+        
         for (EventCachedPriorityObj read_lock_holder :
                  prev_read_events.values())
         {
@@ -294,6 +308,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 aborted_events.add(act_event);
             else
                 schedule_try_next = true;
+
+            // see comment in previous for loop.
+            if (speculating_on != null)
+                act_event.remove_touched_obj(speculating_on);
+            else
+                act_event.remove_touched_obj(this);
         }
 
         // note that it is important for this call to happen after

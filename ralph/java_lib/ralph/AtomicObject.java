@@ -671,6 +671,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        Note: can receive hardware_backout_hook for changes that will
        never be staged.  Method that overrides backout hook should
        check whether changes are staged or not.
+
+       Also note that an object will only receive one
+       hardware_backout_hook call per active_event (we prevent
+       duplicates), which may be forwarded from a derived object to a
+       root or directly in response to an event command (eg., backout,
+       commit, etc.).
      */
     protected void hardware_backout_hook(ActiveEvent active_event)
     {}
@@ -679,6 +685,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        Should be overridden by hardware.  Called from within lock
        before all read and write lock holders associated with event
        get removed.
+
+       Note that an object will only receive one
+       hardware_complete_commit_hook call per active_event (we prevent
+       duplicates), which may be forwarded from a derived object to a
+       root or directly in response to an event command (eg., backout,
+       commit, etc.).
      */
     protected void hardware_complete_commit_hook(ActiveEvent active_event)
     {}
@@ -689,6 +701,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        @returns --- Can be null, eg., if the object is not backed by
        hardware.  Otherwise, call to get on future returns true if if
        can commit in first phase, false otherwise.
+
+       Note that an object will only receive one
+       hardware_first_phase_commit_hook call per active_event (we prevent
+       duplicates), which may be forwarded from a derived object to a
+       root or directly in response to an event command (eg., backout,
+       commit, etc.).
      */
     protected ICancellableFuture hardware_first_phase_commit_hook(
         ActiveEvent active_event)
@@ -705,6 +723,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        
        @returns --- true if subclassed object is handling the
        speculative future.  false otherwise.
+
+       Note that an object will only receive one
+       hardware_first_phase_commit_speculative_hook call per
+       active_event (we prevent duplicates), which may be forwarded
+       from a derived object to a root or directly in response to an
+       event command (eg., backout, commit, etc.).
      */
     protected boolean hardware_first_phase_commit_speculative_hook(
         SpeculativeFuture sf)

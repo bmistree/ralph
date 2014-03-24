@@ -62,11 +62,17 @@ public class NonAtomicActiveEvent extends ActiveEvent
      @returns {bool} --- Returns True if have not already backed
      out.  Returns False otherwise.
     */
+    @Override
     public boolean add_touched_obj(AtomicObject obj)
     {
         return true;
     }
-
+    @Override
+    public boolean remove_touched_obj(AtomicObject obj)
+    {
+        return true;
+    }
+    
 
     private void atomic_child_lock()
     {

@@ -41,6 +41,9 @@ public abstract class ActiveEvent
      out.  Returns False otherwise.
     */
     public abstract boolean add_touched_obj(AtomicObject obj);
+    public abstract boolean remove_touched_obj(AtomicObject obj);
+
+    
     public abstract void promote_boosted(String new_priority);
     /**
        @returns {bool} --- True if not in the midst of two phase
