@@ -739,9 +739,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
     
     /**
-       Already presupposes within lock.
+       Already presupposes within lock!
      */
-    protected boolean is_write_lock_holder(ActiveEvent active_event)
+    public boolean is_write_lock_holder(ActiveEvent active_event)
     {
         if ((write_lock_holder != null) &&
             write_lock_holder.event.uuid.equals(active_event.uuid))

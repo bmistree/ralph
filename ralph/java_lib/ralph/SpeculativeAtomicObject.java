@@ -1136,8 +1136,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
     
-    protected static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
+    public static final FutureAlwaysValue ALWAYS_TRUE_FUTURE =
         new FutureAlwaysValue(true);
-    protected static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
+    public static final FutureAlwaysValue ALWAYS_FALSE_FUTURE =
         new FutureAlwaysValue(false);
 }
