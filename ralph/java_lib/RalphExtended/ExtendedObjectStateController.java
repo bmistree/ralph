@@ -142,7 +142,6 @@ public class ExtendedObjectStateController <T>
         cond.signalAll();
     }
     
-    
     /**
        @see wait_on_states_while_holding_lock_returns_holding_lock for
        state STAGED_CHANGES and state FAILED.
@@ -153,15 +152,6 @@ public class ExtendedObjectStateController <T>
             State.STAGED_CHANGES,State.FAILED);
     }
     
-    /**
-       @see wait_on_states_while_holding_lock_returns_holding_lock for
-       state CLEAN and state FAILED.
-     */
-    public State wait_clean_or_failed_state_while_holding_lock_returns_holding_lock()
-    {
-        return wait_on_states_while_holding_lock_returns_holding_lock(
-            State.CLEAN,State.FAILED);
-    }
 
     /**
        Called while holding lock on state.

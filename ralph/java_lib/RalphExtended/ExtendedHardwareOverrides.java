@@ -69,11 +69,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             // gets released in finally block at bottom
             ExtendedObjectStateController.State current_state =
                 state_controller.get_state_hold_lock();
+
+            // Once an object enters a failed state, cannot perform
+            // any operations on it until it gets cleaned up
+            if (current_state == ExtendedObjectStateController.State.FAILED)
+                return SpeculativeAtomicObject.ALWAYS_FALSE_FUTURE;
+            
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
             {
-                // FIXME: Maybe should also be able to get here from
-                // FAILED state, but should return false.
                 System.out.println(
                     "Should only recieve first phase commit request when in clean state");
                 assert(false);
@@ -115,7 +119,6 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         }
     }
 
-
     public void hardware_complete_commit_hook(ActiveEvent active_event)
     {
         boolean write_lock_holder_being_completed =
@@ -127,28 +130,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 ExtendedObjectStateController.State current_state =
                     state_controller.get_state_hold_lock();
                 //// DEBUG
-                if ((current_state != ExtendedObjectStateController.State.STAGED_CHANGES) &&
-                    (current_state != ExtendedObjectStateController.State.PUSHING_CHANGES))
+                if (current_state != ExtendedObjectStateController.State.STAGED_CHANGES)
                 {
-                    // FIXME: handle failed state.                    
+                    // Note: should never be able to get to
+                    // complete_commit_hook while still in pushing
+                    // changes stage.
                     System.out.println("Cannot complete from failed state or clean state.");
                     assert(false);
                 }
                 //// END DEBUG
-
-                if (current_state == ExtendedObjectStateController.State.PUSHING_CHANGES)
-                {
-                    current_state =
-                        state_controller.wait_staged_or_failed_state_while_holding_lock_returns_holding_lock();
-                }
-
-                if (current_state == ExtendedObjectStateController.State.FAILED)
-                {
-                    // FIXME: Handle being in a failed state.
-                    System.out.println("Handle failed state");
-                    assert(false);
-                }
-
                 state_controller.move_state_clean();
             }
             finally
@@ -168,6 +158,19 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             ExtendedObjectStateController.State current_state =
                 state_controller.get_state_hold_lock();
 
+            // We're in a failed state: we cannot process any state
+            // pushes to hardware (including backout) and will never
+            // transition out of failed state without explicit
+            // intervention from hardware_change_applier.  Note that
+            // this is okay because when we are in failed state we do
+            // not allow any commits on hardware.
+            if (current_state == ExtendedObjectStateController.State.FAILED)
+            {
+                state_controller.release_lock();
+                return;
+            }
+
+            
             // Get backout requests even when runtime has not
             // requested changes to be staged on hardware (eg., if
             // event has been preempted on object).  In these cases,
@@ -179,13 +182,11 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             }
 
             //// DEBUG
-            if ((current_state != ExtendedObjectStateController.State.PUSHING_CHANGES) &&
-                (current_state != ExtendedObjectStateController.State.STAGED_CHANGES))
+            if (current_state == ExtendedObjectStateController.State.REMOVING_CHANGES)
             {
-                // FIXME: Handle failed state.
                 System.out.println(
-                    "Unexpected state when requesting backout " +
-                    current_state);
+                    "Cannot already be in removing_changes state " +
+                    "when requesting backout.");
                 assert(false);
             }
             //// END DEBUG
@@ -196,11 +197,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                     state_controller.wait_staged_or_failed_state_while_holding_lock_returns_holding_lock();
             }
 
+            // while pushing changes, we transitioned into a failed
+            // state.  we cannot apply the undo because the hardware
+            // is now unresponsive.  While in failed state, cannot
+            // apply any changes to hardware.  Relying on
+            // hardware_change_applier to remove and reset hardware element.
             if (current_state == ExtendedObjectStateController.State.FAILED)
             {
-                // FIXME: Must handle being in a failed state.
-                System.out.println("Handle failed state");
-                assert(false);
+                state_controller.release_lock();
+                return;
             }
 
             WrapApplyToHardware<HardwareChangeApplierType> to_undo_wrapper =
@@ -218,10 +223,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             to_undo_wrapper.to_notify_when_complete.get();
 
             // do not need to explicitly transition to clean here;
-            // apply to hardware should for us.;
-
-
-            // FIXME: should check what to do if failed though.
+            // apply to hardware should for us.
         }
     }
 
