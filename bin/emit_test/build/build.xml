@@ -475,7 +475,8 @@
          run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
          run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation,
          run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
-         run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest">
+         run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
+         run_RandomDelaysAlwaysWorksBackedSpeculationTest">
   </target>
   
   
@@ -1107,6 +1108,26 @@
     </java>
   </target>
 
+  <!-- Random delays backed speculation test -->
+  <target
+      name="run_RandomDelaysAlwaysWorksBackedSpeculationTest"
+      depends="compile_ralph_tests"
+      description="Run a test where we try to back a speculative with a
+                   backing code.  Commits to hardware always succeed, but
+                   take random times to commit">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.RandomDelaysAlwaysWorksBackedSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  
+         
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

@@ -22,7 +22,7 @@ public class AlwaysWorksBackedSpeculationTest
     // should be the number of completed events that each switch
     // processes (or NUM_OPS_PER_THREAD*2... x2 because each event
     // hits 2 switches).
-    private final static AtomicInteger num_ops_set_on_hardware =
+    public final static AtomicInteger num_ops_set_on_hardware =
         new AtomicInteger(0);
     
     public static void main(String[] args)
