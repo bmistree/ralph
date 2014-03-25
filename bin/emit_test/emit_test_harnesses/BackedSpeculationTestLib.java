@@ -28,64 +28,8 @@ import RalphExtended.IHardwareStateSupplier;
 import RalphExtended.ISpeculateListener;
 import RalphExtended.ExtendedHardwareOverrides;
 
-
-public class BackedSpeculationTest
+public class BackedSpeculationTestLib
 {
-    private final static int NUM_OPS_PER_THREAD = 5000;
-    private final static int TIME_TO_SLEEP_MS = 1;
-
-    public static void main(String[] args)
-    {
-        if (BackedSpeculationTest.run_test())
-            System.out.println("\nSUCCESS in BackedSpeculationTest\n");
-        else
-            System.out.println("\nFAILURE in BackedSpeculationTest\n");
-    }
-    
-    public static boolean run_test()
-    {
-        try
-        {
-            RalphGlobals ralph_globals = new RalphGlobals();
-            BackedSpeculation endpt = new BackedSpeculation(
-                ralph_globals,new SingleSideConnection());
-
-            _InternalSwitch switch1 =
-                create_switch(
-                    ralph_globals,true,new AlwaysSucceedsOnHardware(),
-                    new AlwaysZeroStateSupplier());
-
-            _InternalSwitch switch2 =
-                create_switch(
-                    ralph_globals,true,new AlwaysSucceedsOnHardware(),
-                    new AlwaysZeroStateSupplier());
-
-            endpt.set_switches(switch1,switch2);
-            
-            AtomicBoolean had_exception = new AtomicBoolean(false);
-
-            EventThread event_1 =
-                new EventThread(endpt,false,NUM_OPS_PER_THREAD,had_exception);
-            EventThread event_2 =
-                new EventThread(endpt,true,NUM_OPS_PER_THREAD,had_exception);
-
-            event_1.start();
-            event_2.start();
-            event_1.join();
-            event_2.join();
-
-            if (had_exception.get())
-                return false;
-            
-            return true;
-        }
-        catch(Exception _ex)
-        {
-            _ex.printStackTrace();
-            return false;
-        }
-    }
-
     public static class EventThread extends Thread
     {
         private final BackedSpeculation endpt;
@@ -138,39 +82,6 @@ public class BackedSpeculationTest
         return to_return;
     }
     
-
-    /**
-       Just ensures that the change always gets applied to hardware.
-     */
-    public static class AlwaysSucceedsOnHardware implements IHardwareChangeApplier<Double>
-    {
-        @Override
-        public boolean apply(Double to_apply)
-        {
-            return true;
-        }
-        @Override
-        public boolean undo(Double to_undo)
-        {
-            // although will not get undo because hardware could not
-            // comply, may get an undo message if preempted by another
-            // event.
-            return true;
-        }
-    }
-
-    /**
-       Always returns zero for state that want to apply.
-     */
-    public static class AlwaysZeroStateSupplier implements IHardwareStateSupplier<Double>
-    {
-        @Override
-        public Double get_state_to_push(ActiveEvent active_event)
-        {
-            return 0.0;
-        }
-    }
-
     public static class SpeculateListener implements ISpeculateListener
     {
         private _InternalSwitch internal_switch = null;

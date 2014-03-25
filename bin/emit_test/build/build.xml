@@ -475,7 +475,7 @@
          run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
          run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation,
          run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
-         run_MiddleInterruptedSpeculaterTest,run_BackedSpeculationTest">
+         run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest">
   </target>
   
   
@@ -1093,13 +1093,13 @@
 
   <!-- Backed speculation test -->
   <target
-      name="run_BackedSpeculationTest"
+      name="run_AlwaysWorksBackedSpeculationTest"
       depends="compile_ralph_tests"
       description="Run a test where we try to back a speculative with a
-                   backing code.">
+                   backing code.  Commits to hardware always succeed.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.BackedSpeculationTest"
+        classname="emit_test_harnesses.AlwaysWorksBackedSpeculationTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
