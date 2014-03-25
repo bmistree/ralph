@@ -32,8 +32,6 @@ import RalphExtended.ExtendedHardwareOverrides;
 public class BackedSpeculationTest
 {
     private final static int NUM_OPS_PER_THREAD = 5000;
-    private final static AtomicBoolean had_exception =
-        new AtomicBoolean(false);
     private final static int TIME_TO_SLEEP_MS = 1;
 
     public static void main(String[] args)
@@ -64,11 +62,12 @@ public class BackedSpeculationTest
 
             endpt.set_switches(switch1,switch2);
             
-            
+            AtomicBoolean had_exception = new AtomicBoolean(false);
+
             EventThread event_1 =
-                new EventThread(endpt,false,NUM_OPS_PER_THREAD);
+                new EventThread(endpt,false,NUM_OPS_PER_THREAD,had_exception);
             EventThread event_2 =
-                new EventThread(endpt,true,NUM_OPS_PER_THREAD);
+                new EventThread(endpt,true,NUM_OPS_PER_THREAD,had_exception);
 
             event_1.start();
             event_2.start();
@@ -92,11 +91,15 @@ public class BackedSpeculationTest
         private final BackedSpeculation endpt;
         private final boolean event_one;
         private final int num_ops;
-        public EventThread(BackedSpeculation _endpt,boolean _event_one,int _num_ops)
+        private final AtomicBoolean had_exception;
+        public EventThread(
+            BackedSpeculation _endpt,boolean _event_one,int _num_ops,
+            AtomicBoolean _had_exception)
         {
             endpt = _endpt;
             event_one = _event_one;
             num_ops = _num_ops;
+            had_exception = _had_exception;
         }
         public void run()
         {
