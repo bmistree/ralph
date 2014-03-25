@@ -56,11 +56,38 @@ Service BackedSpeculation
     TVar TrueFalse evt1_last_added = False;
     TVar TrueFalse evt2_last_added = False;
 
+    /**
+       Will only be called once from external, before any events are called.
+     */
     set_switches(Struct Switch s1, Struct Switch s2)
     {
-        ws1.set_internal_switch(s1);
-        ws2.set_internal_switch(s2);
+        set_switch1(s1);
+        set_switch2(s1);
     }
+
+    /**
+       Can be called multiple times during run from external (eg., if s1 enters
+       a failed state).
+     */
+    set_switch1 (Struct Switch s1)
+    {
+        atomically
+        {
+            ws1.set_internal_switch(s1);
+        }
+    }
+    
+    /**
+       @see set_switch1, except for switch 2.
+     */
+    set_switch2 (Struct Switch s2)
+    {
+        atomically
+        {
+            ws2.set_internal_switch(s2);
+        }
+    }
+    
     
     event1()
     {
