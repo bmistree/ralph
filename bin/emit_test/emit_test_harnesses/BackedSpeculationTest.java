@@ -22,13 +22,17 @@ import RalphServiceActions.ServiceAction;
 import ralph.Variables.AtomicListVariable;
 import java.util.Random;
 
+import RalphExtended.WrapApplyToHardware;
+import RalphExtended.IHardwareChangeApplier;
+
+
 public class BackedSpeculationTest
 {
     private final static int NUM_OPS_PER_THREAD = 5000;
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
     private final static int TIME_TO_SLEEP_MS = 1;
-    
+
     public static void main(String[] args)
     {
         if (BackedSpeculationTest.run_test())
@@ -46,9 +50,9 @@ public class BackedSpeculationTest
                 ralph_globals,new SingleSideConnection());
             
             endpt.set_switches(
-                create_switch(ralph_globals,true),
-                create_switch(ralph_globals,true));
-
+                create_switch(ralph_globals,true,new AlwaysSucceedsOnHardware()),
+                create_switch(ralph_globals,true,new AlwaysSucceedsOnHardware()));
+            
             
             EventThread event_1 =
                 new EventThread(endpt,false,NUM_OPS_PER_THREAD);
@@ -104,31 +108,54 @@ public class BackedSpeculationTest
     }
 
     public static _InternalSwitch create_switch(
-        RalphGlobals ralph_globals,boolean should_speculate)
+        RalphGlobals ralph_globals,boolean should_speculate,
+        IHardwareChangeApplier<Double> hardware_change_applier)
     {
         _InternalSwitch to_return = new _InternalSwitch(ralph_globals);
         to_return.switch_guard =
-            new InternalSwitchGuard(ralph_globals,to_return,should_speculate);
+            new InternalSwitchGuard(
+                ralph_globals,to_return,should_speculate,hardware_change_applier);
         return to_return;
     }
-    
+
+    /**
+       Just ensures that the change always gets applied to hardware.
+     */
+    public static class AlwaysSucceedsOnHardware implements IHardwareChangeApplier<Double>
+    {
+        @Override
+        public boolean apply(Double to_apply)
+        {
+            return true;
+        }
+        @Override
+        public boolean undo(Double to_undo)
+        {
+            // although will not get undo because hardware could not
+            // comply, may get an undo message if preempted by another
+            // event.
+            return true;
+        }
+    }
+
     public static class InternalSwitchGuard extends AtomicNumberVariable
     {
         private final ExtendedObjectStateController<Double> state_controller =
             new ExtendedObjectStateController<Double> ();
 
         private final _InternalSwitch internal_switch;
-        
-
         private final boolean should_speculate;
+        private final IHardwareChangeApplier<Double> hardware_applier;
         
         public InternalSwitchGuard(
             RalphGlobals ralph_globals,_InternalSwitch _internal_switch,
-            boolean _should_speculate)
+            boolean _should_speculate,
+            IHardwareChangeApplier<Double> _hardware_applier)
         {
             super(false,new Double(0),ralph_globals);
             internal_switch = _internal_switch;
             should_speculate = _should_speculate;
+            hardware_applier = _hardware_applier;
         }
 
 
@@ -200,7 +227,7 @@ public class BackedSpeculationTest
                     WrapApplyToHardware to_apply_to_hardware =
                         new WrapApplyToHardware(
                             state_controller.get_dirty_on_hardware(),false,
-                            state_controller);
+                            state_controller,hardware_applier);
 
                     ralph_globals.thread_pool.add_service_action(
                         to_apply_to_hardware);
@@ -309,7 +336,8 @@ public class BackedSpeculationTest
                 WrapApplyToHardware to_undo_wrapper =
                     new WrapApplyToHardware(
                         state_controller.get_dirty_on_hardware(),
-                        true,state_controller);
+                        true,state_controller,hardware_applier);
+
 
                 ralph_globals.thread_pool.add_service_action(to_undo_wrapper);
 
@@ -337,77 +365,6 @@ public class BackedSpeculationTest
                 new LinkFutureBooleans(bool,sf));
 
             return true;
-        }
-
-        // FIXME: still must fill in all methods for speculation and hooking to
-        // hardware.
-    }
-
-
-    public static class WrapApplyToHardware extends ServiceAction
-    {
-        // private List<RalphObject<Double,Double>> to_apply = null;
-        private Double to_apply = null;
-        private final boolean undo_changes;
-        private final ExtendedObjectStateController state_controller;
-        public final SpeculativeFuture to_notify_when_complete =
-            new SpeculativeFuture(null);
-
-        private final static Random rand = new Random();
-        
-        public WrapApplyToHardware(
-            Double _to_apply,
-            boolean _undo_changes, ExtendedObjectStateController _state_controller)
-        {
-            to_apply = _to_apply;
-            undo_changes = _undo_changes;
-            state_controller = _state_controller;
-        }
-
-
-        @Override
-        public void run()
-        {
-            boolean application_successful = true;
-
-            // FIXME: For now, always just returning that application is
-            // successful.
-            state_controller.get_state_hold_lock();
-            if (! application_successful)
-                state_controller.move_state_failed();
-            else if (undo_changes) // undo succeeded
-                state_controller.move_state_clean();
-            else // apply succeeded
-                state_controller.move_state_staged_changes();
-            state_controller.release_lock();
-
-            if (undo_changes)
-            {
-                try
-                {
-                    Thread.sleep(1,rand_ns_to_sleep_for());
-                }
-                catch(Exception ex)
-                {
-                    ex.printStackTrace();
-                    assert(false);
-                }
-            }
-            
-            if (application_successful)
-                to_notify_when_complete.succeeded();
-            else
-                to_notify_when_complete.failed();
-
-        }
-
-
-        private int rand_ns_to_sleep_for()
-        {
-            // 0ns to 1 ms.
-            int MAX = 1000000;
-            // int MAX = 1000;
-            return rand.nextInt(MAX);
         }
     }
 }

@@ -28,9 +28,9 @@ public class WrapApplyToHardware<T> extends ServiceAction
     {
         boolean application_successful = false;
         if (undo_changes)
-            hardware_change_applier.undo(to_apply);
+            application_successful = hardware_change_applier.undo(to_apply);
         else
-            hardware_change_applier.apply(to_apply);
+            application_successful = hardware_change_applier.apply(to_apply);
 
         state_controller.get_state_hold_lock();
         if (! application_successful)
