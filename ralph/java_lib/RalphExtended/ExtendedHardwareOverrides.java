@@ -61,7 +61,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
        @see documentation in SpeculativeAtomicObject for purpose/use
        of this method.
      */
-    protected ICancellableFuture hardware_first_phase_commit_hook(
+    public ICancellableFuture hardware_first_phase_commit_hook(
         ActiveEvent active_event)
     {
         try
@@ -116,7 +116,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     }
 
 
-    protected void hardware_complete_commit_hook(ActiveEvent active_event)
+    public void hardware_complete_commit_hook(ActiveEvent active_event)
     {
         boolean write_lock_holder_being_completed =
             controlling_object.is_write_lock_holder(active_event);
@@ -158,7 +158,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         }
     }
 
-    protected void hardware_backout_hook(ActiveEvent active_event)
+    public void hardware_backout_hook(ActiveEvent active_event)
     {
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
@@ -225,7 +225,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         }
     }
 
-    protected boolean hardware_first_phase_commit_speculative_hook(
+    public boolean hardware_first_phase_commit_speculative_hook(
         SpeculativeFuture sf)
     {
         ActiveEvent active_event = sf.event;

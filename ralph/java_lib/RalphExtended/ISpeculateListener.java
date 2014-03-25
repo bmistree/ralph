@@ -9,5 +9,5 @@ import ralph.ActiveEvent;
  */
 public interface ISpeculateListener
 {
-    void speculate(ActiveEvent active_event);
+    public void speculate(ActiveEvent active_event);
 }

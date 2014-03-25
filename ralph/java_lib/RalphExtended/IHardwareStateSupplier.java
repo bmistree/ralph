@@ -9,5 +9,5 @@ import ralph.ActiveEvent;
  */
 public interface IHardwareStateSupplier <T>
 {
-    T get_state_to_push(ActiveEvent active_event);
+    public T get_state_to_push(ActiveEvent active_event);
 }
