@@ -655,6 +655,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         root_object.waiting_events = waiting_events;
         root_object.dirty_val = dirty_val;
 
+
+        // Once a derived object transfers its events (lock holders
+        // and waiters) to root, root manages them explicitly.
+        // Derived object no longer needs them, and therefore create
+        // empty replicas of them so that root and derived do not
+        // inadvertently perform concurrent accesses on them.  This
+        // takes care of a series of concurrent access bugs that I've
+        // noticed.  For instance, scheduling a try_next, being
+        // transferred to root and then root an try_next operating on
+        // state simultaneously now goes away.
+        read_lock_holders = new HashMap<String,EventCachedPriorityObj>();
+        write_lock_holder = null;
+        waiting_events = new HashMap<String,WaitingElement<T,D>>();
+        
         _unlock();
         
         return outstanding_commit_requests;
