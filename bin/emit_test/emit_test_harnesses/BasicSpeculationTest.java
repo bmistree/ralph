@@ -18,10 +18,13 @@ public class BasicSpeculationTest
     private final static int RALPH_INTERNAL_SLEEP_TIME_MS = 250;
     private final static int RALPH_BETWEEN_EVENTS_SLEEP_TIME_MS = 5;
     
-    // Given number of events, can calculate how long would expect a series of
-    // events to run if we turn on speculation.  Importantly, due to rounding
-    // error + time it takes to setup and tear down transactions, that might be
-    // a little off.  Using fudge_factor_ms to adjust for these minor variations.
+    // Given number of events, can calculate how long would expect a
+    // series of events to run if we turn on speculation.
+    // Importantly, due to rounding error + time it takes to setup and
+    // tear down transactions, that might be a little off.  Using
+    // fudge_factor_ms to adjust for these minor variations.  Multiply
+    // FUDGE_FACTOR_MS by number of events and divide by 1.5 to get
+    // total allowable fudge factor.
     private final static int FUDGE_FACTOR_MS = 1;
 
     
@@ -160,9 +163,12 @@ public class BasicSpeculationTest
             // amount of time all should take to run is below:
             int ms_to_run_if_pipelined_correctly = RALPH_INTERNAL_SLEEP_TIME_MS +
                 RALPH_BETWEEN_EVENTS_SLEEP_TIME_MS*num_events_in_pipeline;
+
+            float pipelined_fudge_factor_ms =
+                ((float)FUDGE_FACTOR_MS*num_events_in_pipeline)/1.5f;
             
             if (speculation_on_ms_runtime.get() >
-                (ms_to_run_if_pipelined_correctly + FUDGE_FACTOR_MS))
+                (ms_to_run_if_pipelined_correctly + pipelined_fudge_factor_ms))
             {
                 return false;
             }
