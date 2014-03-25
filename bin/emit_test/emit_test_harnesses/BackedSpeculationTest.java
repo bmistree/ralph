@@ -222,6 +222,7 @@ public class BackedSpeculationTest
                 new ExtendedHardwareOverrides<Double>(
                     hardware_applier,hardware_state_supplier,speculate_listener,
                     should_speculate,ralph_globals);
+            extended_hardware_overrides.set_controlling_object(this);
         }
 
         @Override
