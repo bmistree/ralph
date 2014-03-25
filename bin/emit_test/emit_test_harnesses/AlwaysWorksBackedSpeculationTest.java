@@ -98,7 +98,8 @@ public class AlwaysWorksBackedSpeculationTest
     /**
        Just ensures that the change always gets applied to hardware.
      */
-    public static class AlwaysSucceedsOnHardware implements IHardwareChangeApplier<Double>
+    public static class AlwaysSucceedsOnHardware
+        implements IHardwareChangeApplier<Double>
     {
         @Override
         public boolean apply(Double to_apply)
@@ -120,7 +121,8 @@ public class AlwaysWorksBackedSpeculationTest
     /**
        Always returns zero for state that want to apply.
      */
-    public static class AlwaysZeroStateSupplier implements IHardwareStateSupplier<Double>
+    public static class AlwaysZeroStateSupplier
+        implements IHardwareStateSupplier<Double>
     {
         @Override
         public Double get_state_to_push(ActiveEvent active_event)
