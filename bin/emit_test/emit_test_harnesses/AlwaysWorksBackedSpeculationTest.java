@@ -1,39 +1,30 @@
 package emit_test_harnesses;
 
-import java.util.List;
-import java.util.ArrayList;
-import ralph.RalphObject;
 import ralph_emitted.BackedSpeculationJava.BackedSpeculation;
 import ralph_emitted.BackedSpeculationJava._InternalSwitch;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
-import ralph.Variables.AtomicNumberVariable;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.Future;
-import RalphExtended.ExtendedObjectStateController;
-import RalphServiceActions.LinkFutureBooleans;
 import ralph.ActiveEvent;
-import ralph.SpeculativeFuture;
-import ralph.ICancellableFuture;
-import RalphExtended.ExtendedObjectStateController;
-import ralph.AtomicInternalList;
-import ralph.SpeculativeFuture;
-import RalphServiceActions.ServiceAction;
-import ralph.Variables.AtomicListVariable;
-import java.util.Random;
 
 import RalphExtended.WrapApplyToHardware;
 import RalphExtended.IHardwareChangeApplier;
 import RalphExtended.IHardwareStateSupplier;
-import RalphExtended.ISpeculateListener;
-import RalphExtended.ExtendedHardwareOverrides;
 import static emit_test_harnesses.BackedSpeculationTestLib.create_switch;
 import static emit_test_harnesses.BackedSpeculationTestLib.EventThread;
 
 public class AlwaysWorksBackedSpeculationTest
 {
     private final static int NUM_OPS_PER_THREAD = 5000;
-
+    // gets incremented each time a switch applies to hardware and
+    // decremented each time a switch undoes.  In aggregate then, this
+    // should be the number of completed events that each switch
+    // processes (or NUM_OPS_PER_THREAD*2... x2 because each event
+    // hits 2 switches).
+    private final static AtomicInteger num_ops_set_on_hardware =
+        new AtomicInteger(0);
+    
     public static void main(String[] args)
     {
         if (AlwaysWorksBackedSpeculationTest.run_test())
@@ -75,6 +66,11 @@ public class AlwaysWorksBackedSpeculationTest
 
             if (had_exception.get())
                 return false;
+
+            // see note on this condition above in documenation for
+            // num_ops_set_on_hardware.
+            if (num_ops_set_on_hardware.get() != (2*NUM_OPS_PER_THREAD))
+                return false;
             
             return true;
         }
@@ -94,6 +90,7 @@ public class AlwaysWorksBackedSpeculationTest
         @Override
         public boolean apply(Double to_apply)
         {
+            num_ops_set_on_hardware.getAndIncrement();
             return true;
         }
         @Override
@@ -102,6 +99,7 @@ public class AlwaysWorksBackedSpeculationTest
             // although will not get undo because hardware could not
             // comply, may get an undo message if preempted by another
             // event.
+            num_ops_set_on_hardware.getAndDecrement();
             return true;
         }
     }
