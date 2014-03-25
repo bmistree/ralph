@@ -32,8 +32,21 @@ public class AlwaysWorksBackedSpeculationTest
         else
             System.out.println("\nFAILURE in AlwaysWorksBackedSpeculationTest\n");
     }
-    
+
+
     public static boolean run_test()
+    {
+        return run_test(
+            new AlwaysSucceedsOnHardware(),new AlwaysSucceedsOnHardware(),
+            new AlwaysZeroStateSupplier(), new AlwaysZeroStateSupplier());
+    }
+    
+    
+    public static boolean run_test(
+        IHardwareChangeApplier<Double> hardware_change_applier_switch1,
+        IHardwareChangeApplier<Double> hardware_change_applier_switch2,
+        IHardwareStateSupplier<Double> hardware_state_supplier_switch1,
+        IHardwareStateSupplier<Double> hardware_state_supplier_switch2)
     {
         try
         {
@@ -43,13 +56,13 @@ public class AlwaysWorksBackedSpeculationTest
 
             _InternalSwitch switch1 =
                 create_switch(
-                    ralph_globals,true,new AlwaysSucceedsOnHardware(),
-                    new AlwaysZeroStateSupplier());
+                    ralph_globals,true,hardware_change_applier_switch1,
+                    hardware_state_supplier_switch1);
 
             _InternalSwitch switch2 =
                 create_switch(
-                    ralph_globals,true,new AlwaysSucceedsOnHardware(),
-                    new AlwaysZeroStateSupplier());
+                    ralph_globals,true,hardware_change_applier_switch2,
+                    hardware_state_supplier_switch2);
 
             endpt.set_switches(switch1,switch2);
 
