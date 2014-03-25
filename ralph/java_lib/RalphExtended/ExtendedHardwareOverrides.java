@@ -7,6 +7,7 @@ import ralph.ICancellableFuture;
 import ralph.SpeculativeFuture;
 import ralph.RalphGlobals;
 import ralph.ActiveEvent;
+import ralph.Util;
 
 import RalphServiceActions.LinkFutureBooleans;
 
@@ -78,9 +79,9 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
             {
-                System.out.println(
-                    "Should only recieve first phase commit request when in clean state");
-                assert(false);
+                Util.logger_assert(
+                    "Should only recieve first phase commit " +
+                    "request when in clean state");
             }
             //// END DEBUG
 
@@ -135,8 +136,8 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                     // Note: should never be able to get to
                     // complete_commit_hook while still in pushing
                     // changes stage.
-                    System.out.println("Cannot complete from failed state or clean state.");
-                    assert(false);
+                    Util.logger_assert(
+                        "Cannot complete from failed state or clean state.");
                 }
                 //// END DEBUG
                 state_controller.move_state_clean();
@@ -184,10 +185,9 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             //// DEBUG
             if (current_state == ExtendedObjectStateController.State.REMOVING_CHANGES)
             {
-                System.out.println(
+                Util.logger_assert(
                     "Cannot already be in removing_changes state " +
                     "when requesting backout.");
-                assert(false);
             }
             //// END DEBUG
 
