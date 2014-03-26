@@ -12,8 +12,8 @@ import RalphServiceActions.ServiceAction;
 import ralph.ActiveEvent;
 import RalphExtended.IHardwareChangeApplier;
 import RalphExtended.IHardwareStateSupplier;
-import static emit_test_harnesses.AlwaysWorksBackedSpeculationTest.AlwaysZeroStateSupplier;
 import static emit_test_harnesses.BackedSpeculationTestLib.create_switch;
+import static emit_test_harnesses.BackedSpeculationTestLib.InternalSwitchGuard;
 import static emit_test_harnesses.BackedSpeculationTestLib.EventThread;
 
 
@@ -48,20 +48,18 @@ public class RandomFailuresBackedSpeculationTest
             BackedSpeculation endpt = new BackedSpeculation(
                 ralph_globals,new SingleSideConnection());
 
-            IHardwareStateSupplier<Double> hardware_state_supplier_switch1
-                = new AlwaysZeroStateSupplier();
-            IHardwareStateSupplier<Double> hardware_state_supplier_switch2
-                = new AlwaysZeroStateSupplier();
+            SwitchGuardStateSupplier hardware_state_supplier_switch1
+                = new SwitchGuardStateSupplier();
+            SwitchGuardStateSupplier hardware_state_supplier_switch2
+                = new SwitchGuardStateSupplier();
 
             RandomFailuresOnHardware hardware_change_applier_switch1 =
                 new RandomFailuresOnHardware(
-                    endpt, ralph_globals,WhichSwitch.SWITCH_ONE,
-                    hardware_state_supplier_switch1);
+                    endpt, ralph_globals,WhichSwitch.SWITCH_ONE);
             RandomFailuresOnHardware hardware_change_applier_switch2 =
                 new RandomFailuresOnHardware(
-                    endpt, ralph_globals,WhichSwitch.SWITCH_TWO,
-                    hardware_state_supplier_switch2);
-
+                    endpt, ralph_globals,WhichSwitch.SWITCH_TWO);
+                    
             
             _InternalSwitch switch1 =
                 create_switch(
@@ -73,6 +71,14 @@ public class RandomFailuresBackedSpeculationTest
                     ralph_globals,true,hardware_change_applier_switch2,
                     hardware_state_supplier_switch2);
 
+            // so that the state supplier can actually read off
+            // internal values of switch guard.
+            hardware_state_supplier_switch1.set_internal_switch_guard(
+                (InternalSwitchGuard)switch1.switch_guard);
+            hardware_state_supplier_switch2.set_internal_switch_guard(
+                (InternalSwitchGuard)switch2.switch_guard);
+
+            // set the switches in ralph
             endpt.set_switches(switch1,switch2);
 
 
@@ -98,6 +104,31 @@ public class RandomFailuresBackedSpeculationTest
         }
     }
 
+
+    /**
+       Reads internal state of switch guard and returns it.
+     */
+    public static class SwitchGuardStateSupplier
+        implements IHardwareStateSupplier<Double>
+    {
+        private InternalSwitchGuard internal_switch_guard = null;
+
+        public void set_internal_switch_guard(
+            InternalSwitchGuard _internal_switch_guard)
+        {
+            internal_switch_guard = _internal_switch_guard;
+        }
+        
+        @Override
+        public Double get_state_to_push(ActiveEvent active_event)
+        {
+            if (internal_switch_guard.is_write_lock_holder(active_event))
+                return internal_switch_guard.dirty_val.val;
+            return internal_switch_guard.val.val;
+        }
+    }
+
+    
     /**
        Just ensures that the change always gets applied to hardware.
      */
@@ -107,17 +138,15 @@ public class RandomFailuresBackedSpeculationTest
         private final BackedSpeculation endpt;
         private final RalphGlobals ralph_globals;
         private final WhichSwitch which_switch;
-        private final IHardwareStateSupplier hardware_state_supplier;
         private boolean failed_while_applying_remove = false;
         
         public RandomFailuresOnHardware(
             BackedSpeculation _endpt, RalphGlobals _ralph_globals,
-            WhichSwitch _which_switch, IHardwareStateSupplier _hardware_state_supplier)
+            WhichSwitch _which_switch)
         {
             endpt = _endpt;
             ralph_globals = _ralph_globals;
             which_switch = _which_switch;
-            hardware_state_supplier = _hardware_state_supplier;
         }
 
         /** IHardwareChangeApplier interface */
@@ -137,15 +166,24 @@ public class RandomFailuresBackedSpeculationTest
         // ourselves and replace with a new switch.  Using super priority.
         public void run()
         {
+            SwitchGuardStateSupplier hardware_state_supplier
+                = new SwitchGuardStateSupplier();
             RandomFailuresOnHardware new_change_applier =
                 new RandomFailuresOnHardware(
-                    endpt,ralph_globals,which_switch,hardware_state_supplier);
+                    endpt,ralph_globals,which_switch);
             
             _InternalSwitch new_internal_switch =
                 create_switch(
                     ralph_globals,true,new_change_applier,
                     hardware_state_supplier);
 
+            // need to push state guard state through to
+            // hardware_state_supplier so that it can read the values
+            // and pass them into RandomFailuresOnHardware class in
+            // apply and undo.
+            hardware_state_supplier.set_internal_switch_guard(
+                (InternalSwitchGuard)new_internal_switch.switch_guard);
+            
             try
             {
                 if (which_switch == WhichSwitch.SWITCH_ONE)
