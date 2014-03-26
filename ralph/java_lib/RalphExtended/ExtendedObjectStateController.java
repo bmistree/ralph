@@ -118,6 +118,15 @@ public class ExtendedObjectStateController <T>
         //// END DEBUG
         
         dirty_on_hardware = new_dirty_on_hardware;
+
+
+        //// DEBUG
+        if (extended_object_state != State.CLEAN)
+        {
+            Util.logger_assert(
+                "Can only update state to pushing changes from clean");
+        }
+        //// END DEBUG
         
         // not providing a wait_pushing method, therefore, do not have
         // to signal.
@@ -125,12 +134,31 @@ public class ExtendedObjectStateController <T>
     }
     public void move_state_staged_changes()
     {
+        //// DEBUG
+        if (extended_object_state != State.PUSHING_CHANGES)
+        {
+            Util.logger_assert(
+                "Can only update state to staged changes from " +
+                "pushing changes");
+        }
+        //// END DEBUG
+        
         extended_object_state = State.STAGED_CHANGES;
         cond.signalAll();
     }
 
     public void move_state_removing_changes()
     {
+        //// DEBUG
+        if (extended_object_state != State.STAGED_CHANGES)
+        {
+            Util.logger_assert(
+                "Can only update state to removing changes from " +
+                "staged changes");
+        }
+        //// END DEBUG
+
+        
         // not providing a wait_removing_changes method, therefore, do
         // not have to signal.
         extended_object_state = State.REMOVING_CHANGES;
@@ -138,6 +166,17 @@ public class ExtendedObjectStateController <T>
 
     public void move_state_failed()
     {
+        //// DEBUG
+        if ((extended_object_state != State.PUSHING_CHANGES) &&
+            (extended_object_state != State.REMOVING_CHANGES))
+        {
+            Util.logger_assert(
+                "Can only update state to failed from " +
+                "removing changes and pushing changes");
+        }
+        //// END DEBUG
+
+        
         extended_object_state = State.FAILED;
         cond.signalAll();
     }
