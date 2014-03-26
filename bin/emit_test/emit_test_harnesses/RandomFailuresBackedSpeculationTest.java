@@ -123,12 +123,12 @@ public class RandomFailuresBackedSpeculationTest
         @Override
         public boolean apply(Double to_apply)
         {
-            return check_application();
+            return check_application(to_apply);
         }
         @Override
         public boolean undo(Double to_undo)
         {
-            return check_application();
+            return check_application(to_undo);
         }
 
         /** ServiceAction interface */
@@ -159,8 +159,12 @@ public class RandomFailuresBackedSpeculationTest
             }
         }
         
-        
-        private boolean check_application()
+        /**
+           @param to_apply --- ==1.0 if failed in the middle of
+           removing from dummy flow table.  ==0.0 if failed in the
+           middle appending to dummy flow table.
+         */
+        private boolean check_application(Double to_apply)
         {
             if (rand.nextFloat() < IND_FAILURE_PROBABILITY)
             {

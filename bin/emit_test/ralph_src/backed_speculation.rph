@@ -24,9 +24,21 @@ Service WrappedSwitch
     {
         internal_switch.switch_guard;
     }
-    write_lock()
+    // using separate values for read and write locks this.  This is because
+    // when hardware fails, we want to know if failed in the middle of an add or
+    // in the middle of a remove.  This is because external events assume that
+    // dummy_flow_table maintains any elements that they've previously added.
+    // The backend hardware state pusher then uses this state to replace a
+    // failed switch with a switch that has an equivalent flowtable.  This is
+    // only required for testing.  A real application should check sizes of flow
+    // tables, etc. before adding and removing entries.
+    remove_write_lock()
     {
-        internal_switch.switch_guard = 4;
+        internal_switch.switch_guard = 1;
+    }
+    add_write_lock()
+    {
+        internal_switch.switch_guard = 2;
     }
 
     
@@ -37,13 +49,13 @@ Service WrappedSwitch
     }
     remove_entry_switch(Number index)
     {
-        write_lock();
+        remove_write_lock();
         internal_switch.dummy_flow_table.remove(index);
     }
 
     add_entry_switch(Number to_add)
     {
-        write_lock();
+        add_write_lock();
         internal_switch.dummy_flow_table.append(to_add);
     }
 }
