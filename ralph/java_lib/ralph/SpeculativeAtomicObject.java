@@ -1,6 +1,5 @@
 package ralph;
 
-import RalphExceptions.BackoutException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
@@ -9,18 +8,83 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import RalphExceptions.BackoutException;
 import RalphDataWrappers.DataWrapper;
 
+
+/**
+   ==Deadlock prevention invariant==
+   A root object can try to acquire locks of speculative children
+   while holding its own.  A speculative child cannot make a call
+   to a root object that acquires root's lock while holding its
+   own locks.
+
+   ==Handling backouts==
+
+   Naive approach
+   ---------------
+   Assume we have a chain of speculative objects:
+
+   A -> B -> C
+   
+   If B backs out a write lock holder, then at end of backout it 1)
+   releases its lock on itself and 2) requests A to invalidate C.  If,
+   before A processes this request, A tries to promote speculateds, it
+   will promote B (preventing C from being invalidated).  Further, if
+   B now has no read or write lock holders, it could even promote to
+   C, which should have been invalidated.
+
+
+   Actual approach
+   ---------------
+   
+   Each derivative object maintains an integer reference counter,
+   derived_backout_derived_ref_count, and a condition variable,
+   derived_condition, based on its lock.  Each time an object requests
+   to backout derived objects, it increments this reference count,
+   while holding its own lock.  When the root object processes this
+   request, it:
+
+      1) Acquires its own lock (which guards speculated_entries)
+      2) Runs through speculated_entries invalidating objects
+      3) Releases its own lock
+      4) Acquires derived requester's lock
+      5) Decrements the requester's reference count
+      6) Signals on derived requester's condition variable
+      7) Releases derived requester's reference count.
+      
+
+   When we try to promote and object to root (in promote speculated)
+   then, we:
+
+
+      1)   Acquire root's lock.
+      1.5) Check if can promote speculated.
+      2)   Acquire eldest derivative's lock.
+      3)   Check if eldest derivative's reference counter is zero.
+           If it is, goto 6.
+      4)   Eldest derivative's reference counter is not zero.  Release
+           root's lock.  Release eldest derivative's lock.  Listen for
+           signal on eldest derivative's condition variable.
+      5)   On signal, release eldest_derivative's lock and goto 1.
+           (Important to go to 1 instead of just acquiring root's
+           lock so that can maintain deadlock prevention invariant
+           that cannot acquire root's _mutex while holding lock on
+           derivative's.
+      6)   transfer_to_root on eldest derivative to root.  Check if
+           there are other objects to transfer.
+
+    Note that once we get to try_promoted, nothing can invalidate and
+    remove eldest derivative.  This means that eventually its
+    reference counter must return to 0.
+      
+
+ */
 public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 {
-    /**
-       Deadlock prevention invariant: a root object can try to acquire
-       locks of speculative children while holding its own.  A
-       speculative child cannot make a call to a root object that
-       acquires root's lock while holding its own locks.
-     */
-
-    
     /**
        0th index is eldest element that we are speculating on.  Last
        index is most recent.
@@ -29,6 +93,17 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         new ArrayList<SpeculativeAtomicObject<T,D>>();
     private SpeculativeAtomicObject<T,D> speculating_on = null;
 
+    /**
+       Note: both of these are only used by derivative objects.
+       (derived_condition is set in set_speculative.)  See notes at
+       top of file about when/how used.
+
+       derived_backout_derived_ref_count can only be modified while
+       holding object mutex.
+     */
+    private Condition derived_condition = null;
+    private int derived_backout_derived_ref_count = 0;
+    
     /**
        Derived speculative atomic objects cannot commit until their
        predecessors do.  Therefore, if a derived speculative object
@@ -101,7 +176,61 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         this.root_object = root_object;
         root_speculative = false;
         outstanding_commit_requests = new HashMap<String,SpeculativeFuture> ();
+        derived_condition = _mutex.newCondition();
     }
+
+    /**
+       Can only be called on derived (non-root) objects.
+
+       Can be called from within or without locks.
+     */
+    private void increment_backout_derived_ref_count()
+    {
+        //// DEBUG
+        if (root_speculative)
+        {
+            Util.logger_assert(
+                "Can only call increment_backout_derived_ref_count on " +
+                "derived objects, not root.");
+        }
+        //// END DEBUG
+        
+        _lock();
+        ++derived_backout_derived_ref_count;
+        _unlock();
+    }
+
+    /**
+       Can only be called on derived (non-root) objects.
+
+       Can be called from within or without locks.
+
+       Also signals if ref count goes to 0.
+     */
+    private void decrement_backout_derived_ref_count()
+    {
+        //// DEBUG
+        if (root_speculative)
+        {
+            Util.logger_assert(
+                "Can only call decrement_backout_derived_ref_count on " +
+                "derived objects, not root.");
+        }
+        //// END DEBUG
+
+        _lock();
+        --derived_backout_derived_ref_count;
+        if (derived_backout_derived_ref_count == 0)
+            derived_condition.signalAll();
+
+        //// DEBUG
+        if (derived_backout_derived_ref_count < 0)
+            Util.logger_assert("Ref count should never be < 0.");
+        //// END DEBUG
+        
+        _unlock();
+    }
+    
     
     protected abstract SpeculativeAtomicObject<T,D>
         duplicate_for_speculation(T to_speculate_on);
@@ -489,6 +618,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     @Override
     public void backout (ActiveEvent active_event)
     {
+        boolean should_try_promote_speculated = false;
         _lock();
 
         if (speculation_state == SpeculationState.SUCCEEDED)
@@ -541,7 +671,14 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             {
                 // note: we unlock first to maintain invariant that
                 // cannot hold speculative lock and then lock root (to
-                // prevent deadlock).
+                // prevent deadlock).  To prevent this object from
+                // being promoted to root before backout_derived_from
+                // takes effect, we increment
+                // derived_backout_derived_ref_count.  When root runs
+                // try_promote_speculated, if this reference count is
+                // non-zero, waits until it becomes zero before
+                // promoting.
+                increment_backout_derived_ref_count();
                 _unlock();
                 root_object.backout_derived_from(this);
                 try_next();
@@ -565,7 +702,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 // because they speculated on top of the actual current
                 // value.  But we should promote the eldest speculative
                 // object to root so that it can continue.
-                try_promote_speculated();
+                should_try_promote_speculated = true;
             }
             
             // note: we do not need to do anything in the else
@@ -578,6 +715,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // is promoting.  We do the second.
         }
         _unlock();
+        
+        if (should_try_promote_speculated)
+            try_promote_speculated();
+        
         try_next();
     }
 
@@ -608,7 +749,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 "Should only call backout_derived_from on root.");
         }   
         //// END DEBUG
-        
         _lock();
         for (int i =0; i < speculated_entries.size(); ++i)
         {
@@ -622,6 +762,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
         _unlock();
+
+        // also signals if ref count goes to 0.  That way, waiter in
+        // promote_speculated receives call.
+        to_backout.decrement_backout_derived_ref_count();
     }
     
     /**
@@ -703,6 +847,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // unlocking here so that maintaining invariant that child
             // cannot call into root without first releasing its lock.
             _unlock();
+
+            // can produce duplicate calls into update_event_priority.
+            // This is okay: will update cached priority with same
+            // value.
             root_object.update_event_priority(uuid,new_priority);
             return;
         }
@@ -746,7 +894,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         else
         {
             internal_complete_commit(active_event);
-            try_promote_speculated();
             should_try_next = true;
         }
 
@@ -765,30 +912,98 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         //# FIXME: may want to actually check whether the change could
         //# have caused another read/write to be scheduled.
         if (should_try_next)
+        {
+            // must call try_promote_speculated from outside of lock.
+            try_promote_speculated();
             try_next();
+        }
     }
 
     /**
-       Assumes already holding lock
+       !!!Must be called from OUTSIDE of lock!!!
+       
+       Should only be called on root and by root.
 
-       Should only be called on root.
+       When we try to promote and object to root (in promote speculated)
+       then, we:
+
+          1)   Acquire root's lock.
+          1.5) Check if can promote speculated.
+          2)   Acquire eldest derivative's lock.
+          3)   Check if eldest derivative's reference counter is zero.
+               If it is, goto 6.
+          4)   Eldest derivative's reference counter is not zero.  Release
+               root's lock.  Release eldest derivative's lock.  Listen for
+               signal on eldest derivative's condition variable.
+          5)   On signal, release eldest_derivative's lock and goto 1.
+               (Important to go to 1 instead of just acquiring root's
+               lock so that can maintain deadlock prevention invariant
+               that cannot acquire root's _mutex while holding lock on
+               derivative's.
+          6)   transfer_to_root on eldest derivative to root.  Check if
+               there are other objects to transfer.
      */
     private void try_promote_speculated()
-    {
+    {        
         //// DEBUG
         if (! root_speculative)
             Util.logger_assert("Can only call promote on root object.");
         //// END DEBUG
+
+        // 1 from above
+        _lock();
+
+        //// DEBUG
+        if (_lock_hold_count() != 1)
+        {
+            // it is important that we are not currently holding lock
+            // on _mutex when enter try_speculated because we need
+            // other threads to be able to perform operations on root
+            // in case a derived object's backout ref count != 0.
+            Util.logger_assert(
+                "Can only call try_promote_speculated when not holding lock.");
+        }
+        //// END DEBUG
         
-        
-        // check to see if we should promote any object that we
+        // 1.5 check to see if we should promote any object that we
         // speculated from this root object
         if (read_lock_holders.isEmpty())
         {
             while (! speculated_entries.isEmpty())
             {
                 SpeculativeAtomicObject<T,D> eldest_spec =
-                    speculated_entries.remove(0);
+                    speculated_entries.get(0);
+
+                // 2 from above
+                eldest_spec._lock();
+                // 3 from above
+                if (eldest_spec.derived_backout_derived_ref_count != 0)
+                {
+                    // 4 from above
+                    _unlock();
+                    try
+                    {
+                        eldest_spec.derived_condition.await();
+                    }
+                    catch (InterruptedException ex)
+                    {
+                        ex.printStackTrace();
+                        Util.logger_assert(
+                            "Error: Disallowed interrupted exception " +
+                            "occurred when waiting on ref count." );
+                    }
+
+                    //5 from above
+                    eldest_spec._unlock();
+                    try_promote_speculated();
+                    return;
+                }
+
+                // 6 from above: proceed with actually removing
+                // entries.
+
+                // actually remove the entry
+                speculated_entries.remove(0);
                 
                 // if the eldest entry was also the only entry, then
                 // we should no longer be speculating.
@@ -799,6 +1014,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                     speculating_on =
                         speculated_entries.get(speculated_entries.size() -1);
                 }
+                
                 Map<String,SpeculativeFuture> waiting_on_commit =
                     eldest_spec.transfer_to_root();
 
@@ -817,9 +1033,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 {
                     break;
                 }
-                
             }
         }
+        _unlock();
     }
     
     /**
@@ -1053,8 +1269,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        here is if we go through acquire_read_lock or
        acquire_write_lock.  acquire_write_lock takes care of
        invalidating derivative objects for us.
-       
-       Should override this method if are pushing changes to hardware.
 
        @see documentation of overridden method.
      */

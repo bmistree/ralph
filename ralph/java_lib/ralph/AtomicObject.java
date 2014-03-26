@@ -164,6 +164,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         _mutex.lock();
     }
+    protected int _lock_hold_count()
+    {
+        return _mutex.getHoldCount();
+    }
+    
     protected void _unlock()
     {
         _mutex.unlock();
@@ -455,6 +460,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        update_event_priority call from active_event (when an event
        with uuid "uuid" is promoted to boosted with priority
        "priority")
+
+       May be called multiple times for the same priority.
 
        @returns --- true if updating event priority means that we may
        need to update our waiting events.
