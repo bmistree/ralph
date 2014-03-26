@@ -642,6 +642,17 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     {
         _lock();
 
+        //// DEBUG
+        if (speculation_state != SpeculationState.RUNNING)
+        {
+            // Should only allow transferring to root at most once.
+            // (Ie, cannot already be in succeeded state.)  Should not
+            // transfer a failed to root.
+            Util.logger_assert(
+                "Error: can only transfer_to_root from RUNNING state.");
+        }
+        //// END DEBUG
+
         // in this speculation state, all requests to this object will
         // now be forwarded on to root object, who will deal with
         // them.
