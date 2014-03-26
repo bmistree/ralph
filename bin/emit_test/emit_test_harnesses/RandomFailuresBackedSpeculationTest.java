@@ -108,6 +108,7 @@ public class RandomFailuresBackedSpeculationTest
         private final RalphGlobals ralph_globals;
         private final WhichSwitch which_switch;
         private final IHardwareStateSupplier hardware_state_supplier;
+        private boolean failed_while_applying_remove = false;
         
         public RandomFailuresOnHardware(
             BackedSpeculation _endpt, RalphGlobals _ralph_globals,
@@ -148,9 +149,19 @@ public class RandomFailuresBackedSpeculationTest
             try
             {
                 if (which_switch == WhichSwitch.SWITCH_ONE)
-                    endpt.set_switch1(new_internal_switch,IsSuperFlag.SUPER);
+                {
+                    if (failed_while_applying_remove)
+                        endpt.set_switch1_and_add_entry(new_internal_switch,IsSuperFlag.SUPER);
+                    else
+                        endpt.set_switch1(new_internal_switch,IsSuperFlag.SUPER);
+                }
                 else
-                    endpt.set_switch2(new_internal_switch,IsSuperFlag.SUPER);
+                {
+                    if (failed_while_applying_remove)
+                        endpt.set_switch2_and_add_entry(new_internal_switch,IsSuperFlag.SUPER);
+                    else
+                        endpt.set_switch2(new_internal_switch,IsSuperFlag.SUPER);
+                }
             }
             catch (Exception ex)
             {
@@ -168,6 +179,10 @@ public class RandomFailuresBackedSpeculationTest
         {
             if (rand.nextFloat() < IND_FAILURE_PROBABILITY)
             {
+                // 1 is same as value assigned to switch_guard in
+                // remove_write_lock of backend_speculation.rph.
+                if (to_apply.intValue() == 1)
+                    failed_while_applying_remove = true;
                 ralph_globals.thread_pool.add_service_action(this);
                 return false;
             }

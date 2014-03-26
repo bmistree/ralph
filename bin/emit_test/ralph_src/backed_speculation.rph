@@ -74,7 +74,7 @@ Service BackedSpeculation
     set_switches(Struct Switch s1, Struct Switch s2)
     {
         set_switch1(s1);
-        set_switch2(s1);
+        set_switch2(s2);
     }
 
     /**
@@ -99,7 +99,24 @@ Service BackedSpeculation
             ws2.set_internal_switch(s2);
         }
     }
-    
+
+    set_switch1_and_add_entry(Struct Switch s1)
+    {
+        atomically
+        {
+            s1.dummy_flow_table.append(1);
+            ws1.set_internal_switch(s1);
+        }
+    }
+
+    set_switch2_and_add_entry(Struct Switch s2)
+    {
+        atomically
+        {
+            s2.dummy_flow_table.append(1);
+            ws2.set_internal_switch(s2);
+        }
+    }
     
     event1()
     {
