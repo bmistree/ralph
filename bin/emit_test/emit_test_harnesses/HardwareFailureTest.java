@@ -14,6 +14,9 @@ import RalphExceptions.BackoutException;
 import ralph.EventPriority.IsSuperFlag;
 import ralph.ICancellableFuture;
 import RalphAtomicWrappers.BaseAtomicWrappers;
+import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
+import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
+
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;

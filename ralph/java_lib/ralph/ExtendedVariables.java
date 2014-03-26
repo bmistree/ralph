@@ -11,6 +11,10 @@ import RalphServiceActions.ServiceAction;
 import java.util.concurrent.ExecutionException;
 import RalphServiceActions.LinkFutureBooleans;
 
+import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
+import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
+
+
 public class ExtendedVariables
 {
     public static abstract class ExtendedInternalAtomicList<T,D>

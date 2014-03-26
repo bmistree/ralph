@@ -10,7 +10,8 @@ import ralph.ActiveEvent;
 import ralph.Util;
 
 import RalphServiceActions.LinkFutureBooleans;
-
+import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
+import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
 
 public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 {
@@ -74,7 +75,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             // Once an object enters a failed state, cannot perform
             // any operations on it until it gets cleaned up
             if (current_state == ExtendedObjectStateController.State.FAILED)
-                return SpeculativeAtomicObject.ALWAYS_FALSE_FUTURE;
+                return ALWAYS_FALSE_FUTURE;
             
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
@@ -112,7 +113,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             // it's a read operation. never made a write to this variable:
             // do not need to ensure that hardware is up (for now).  May
             // want to add read checks as well.
-            return SpeculativeAtomicObject.ALWAYS_TRUE_FUTURE;
+            return ALWAYS_TRUE_FUTURE;
         }
         finally
         {

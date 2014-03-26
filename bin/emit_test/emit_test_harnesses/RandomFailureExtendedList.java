@@ -13,6 +13,9 @@ import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
 import java.util.concurrent.atomic.AtomicBoolean;
 import ralph.ICancellableFuture;
+import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
+import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
+
 
 public class RandomFailureExtendedList
 {
