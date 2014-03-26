@@ -763,14 +763,16 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
         hardware_backout_hook(active_event);
         
-        //# note: there are cases where an active event may try to
-        //# backout after it's
         read_lock_holders.remove(active_event.uuid);
-        if ((write_lock_holder != null) &&
-            write_lock_holder.event.uuid.equals(active_event.uuid))
+        if (is_write_lock_holder(active_event))
         {
             write_lock_holder_backed_out = true;
             write_lock_holder = null;
+            // shouldn't be necessary to reset dirty_val: new writer
+            // should create a new copy.  However, this may help with
+            // debugging later (eg., operating on a null when expected
+            // to be operating on a real value).
+            dirty_val = null;
         }
 
         //# un-jam threadsafe queue waiting for event
