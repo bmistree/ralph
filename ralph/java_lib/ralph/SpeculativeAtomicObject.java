@@ -974,7 +974,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 SpeculativeAtomicObject<T,D> eldest_spec =
                     speculated_entries.get(0);
 
-                // 2 from above
+                // 2 from above: if ref_count != 0, will unlock before
+                // waiting.  otherwise, unlock after transferring to
+                // root.
                 eldest_spec._lock();
                 // 3 from above
                 if (eldest_spec.derived_backout_derived_ref_count != 0)
@@ -1018,6 +1020,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 Map<String,SpeculativeFuture> waiting_on_commit =
                     eldest_spec.transfer_to_root();
 
+                // Unlock corresponding to lock acquired on line with
+                // associated with 2 above.
+                eldest_spec._unlock();
+                
                 for (SpeculativeFuture sf : waiting_on_commit.values())
                     internal_first_phase_commit_speculative(sf);
 
