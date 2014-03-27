@@ -73,7 +73,7 @@ Service BackedSpeculation
     {
         atomically
         {
-            if (evt1_last_added)
+            if (evt2_last_added)
                 s1.dummy_flow_table.append(1);
             ws1.set_internal_switch(s1);
         }
@@ -86,7 +86,7 @@ Service BackedSpeculation
     {
         atomically
         {
-            if (evt2_last_added)
+            if (evt1_last_added)
                 s2.dummy_flow_table.append(1);
             ws2.set_internal_switch(s2);
         }
