@@ -421,6 +421,16 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c BackedSpeculationJava"/>
     </exec>
+
+    <echo message="${line.separator}atomic_struct.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/atomic_struct.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/AtomicStructJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c AtomicStructJava"/>
+    </exec>
+
     
   </target>
 
@@ -477,7 +487,7 @@
          run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
          run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
          run_RandomDelaysAlwaysWorksBackedSpeculationTest,
-         run_RandomFailuresBackedSpeculationTest">
+         run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest">
   </target>
   
   
@@ -1142,7 +1152,22 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
-  
+
+  <!-- AtomicFailures test -->
+  <target
+      name="run_AtomicStructTest"
+      depends="compile_ralph_tests"
+      description="Ensure that TVar on struct works correctly">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.AtomicStructTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

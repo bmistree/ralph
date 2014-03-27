@@ -1,0 +1,45 @@
+
+/**
+   Testing to determine whether transactional structs work as expected.  Should
+   not be able to set internal struct while another event is holding its read
+   lock.  Run long_event and then run multiple short_event-s.  long_event should
+   always return 0.  If it doesn't, we failed.
+ */
+
+Struct SimpleStruct
+{
+    Number num = 0;
+}
+
+Service TVarStructTest
+{
+    TVar Struct SimpleStruct simple_struct;
+
+    /**
+       Should always return 0.
+     */
+    long_event() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            // read locks simple_struct and writes to num.
+            simple_struct.num = 0;
+            verbatim(
+                'try{ Thread.sleep(50);} catch(InterruptedException ex) { ex.printStackTrace(); assert(false);}');
+            to_return = simple_struct.num;
+        }
+        return to_return;
+    }
+
+    short_event()
+    {
+        Struct SimpleStruct replacement_simple_struct;
+        replacement_simple_struct.num = 5;
+        atomically
+        {
+            simple_struct;
+            simple_struct = replacement_simple_struct;
+        }
+    }
+}
