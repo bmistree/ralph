@@ -1,5 +1,6 @@
 package emit_test_harnesses;
 
+import java.lang.Exception;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Random;
 
@@ -24,6 +25,8 @@ public class RandomFailuresBackedSpeculationTest
     private final static Random rand = new Random();
     private final static float IND_FAILURE_PROBABILITY = .1f;
     private final static AtomicBoolean had_exception = new AtomicBoolean(false);
+    private final static boolean ENABLE_SPECULATION = true;
+
     
     public enum WhichSwitch
     {
@@ -63,12 +66,14 @@ public class RandomFailuresBackedSpeculationTest
             
             _InternalSwitch switch1 =
                 create_switch(
-                    ralph_globals,true,hardware_change_applier_switch1,
+                    ralph_globals,ENABLE_SPECULATION,
+                    hardware_change_applier_switch1,
                     hardware_state_supplier_switch1);
 
             _InternalSwitch switch2 =
                 create_switch(
-                    ralph_globals,true,hardware_change_applier_switch2,
+                    ralph_globals,ENABLE_SPECULATION,
+                    hardware_change_applier_switch2,
                     hardware_state_supplier_switch2);
 
             // so that the state supplier can actually read off
@@ -139,6 +144,7 @@ public class RandomFailuresBackedSpeculationTest
         private final RalphGlobals ralph_globals;
         private final WhichSwitch which_switch;
         private boolean failed_while_applying_remove = false;
+        private boolean has_failed = false;
         
         public RandomFailuresOnHardware(
             BackedSpeculation _endpt, RalphGlobals _ralph_globals,
@@ -153,11 +159,25 @@ public class RandomFailuresBackedSpeculationTest
         @Override
         public boolean apply(Double to_apply)
         {
+            if (has_failed)
+            {
+                Exception ex = new Exception();
+                ex.printStackTrace();
+                had_exception.set(true);
+            }
+            
             return check_application(to_apply);
         }
         @Override
         public boolean undo(Double to_undo)
         {
+            if (has_failed)
+            {
+                Exception ex = new Exception();
+                ex.printStackTrace();
+                had_exception.set(true);
+            }
+            
             return check_application(to_undo);
         }
 
@@ -174,7 +194,7 @@ public class RandomFailuresBackedSpeculationTest
             
             _InternalSwitch new_internal_switch =
                 create_switch(
-                    ralph_globals,true,new_change_applier,
+                    ralph_globals,ENABLE_SPECULATION,new_change_applier,
                     hardware_state_supplier);
 
             // need to push state guard state through to
@@ -217,10 +237,13 @@ public class RandomFailuresBackedSpeculationTest
         {
             if (rand.nextFloat() < IND_FAILURE_PROBABILITY)
             {
+                has_failed = true;
+                
                 // 1 is same as value assigned to switch_guard in
                 // remove_write_lock of backend_speculation.rph.
                 if (to_apply.intValue() == 1)
                     failed_while_applying_remove = true;
+                
                 ralph_globals.thread_pool.add_service_action(this);
                 return false;
             }
