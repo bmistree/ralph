@@ -14,11 +14,14 @@ Struct Switch
 
 Service WrappedSwitch
 {
-    Struct Switch internal_switch = null;
+    TVar Struct Switch internal_switch = null;
 
     set_internal_switch(Struct Switch to_set_to)
     {
-        internal_switch = to_set_to;
+        atomically
+        {
+            internal_switch = to_set_to;
+        }
     }
     read_lock()
     {
