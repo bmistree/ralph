@@ -16,7 +16,7 @@ import RalphExtended.IHardwareStateSupplier;
 import static emit_test_harnesses.BackedSpeculationTestLib.create_switch;
 import static emit_test_harnesses.BackedSpeculationTestLib.InternalSwitchGuard;
 import static emit_test_harnesses.BackedSpeculationTestLib.EventThread;
-
+import static emit_test_harnesses.AlwaysWorksBackedSpeculationTest.AlwaysZeroStateSupplier;
 
 
 public class RandomFailuresBackedSpeculationTest
@@ -50,12 +50,7 @@ public class RandomFailuresBackedSpeculationTest
             RalphGlobals ralph_globals = new RalphGlobals();
             BackedSpeculation endpt = new BackedSpeculation(
                 ralph_globals,new SingleSideConnection());
-
-            SwitchGuardStateSupplier hardware_state_supplier_switch1
-                = new SwitchGuardStateSupplier();
-            SwitchGuardStateSupplier hardware_state_supplier_switch2
-                = new SwitchGuardStateSupplier();
-
+            
             RandomFailuresOnHardware hardware_change_applier_switch1 =
                 new RandomFailuresOnHardware(
                     endpt, ralph_globals,WhichSwitch.SWITCH_ONE);
@@ -68,24 +63,16 @@ public class RandomFailuresBackedSpeculationTest
                 create_switch(
                     ralph_globals,ENABLE_SPECULATION,
                     hardware_change_applier_switch1,
-                    hardware_state_supplier_switch1);
+                    new AlwaysZeroStateSupplier());
 
             _InternalSwitch switch2 =
                 create_switch(
                     ralph_globals,ENABLE_SPECULATION,
                     hardware_change_applier_switch2,
-                    hardware_state_supplier_switch2);
-
-            // so that the state supplier can actually read off
-            // internal values of switch guard.
-            hardware_state_supplier_switch1.set_internal_switch_guard(
-                (InternalSwitchGuard)switch1.switch_guard);
-            hardware_state_supplier_switch2.set_internal_switch_guard(
-                (InternalSwitchGuard)switch2.switch_guard);
+                    new AlwaysZeroStateSupplier());
 
             // set the switches in ralph
             endpt.set_switches(switch1,switch2);
-
 
             EventThread event_1 =
                 new EventThread(endpt,false,NUM_OPS_PER_THREAD,had_exception);
@@ -109,31 +96,6 @@ public class RandomFailuresBackedSpeculationTest
         }
     }
 
-
-    /**
-       Reads internal state of switch guard and returns it.
-     */
-    public static class SwitchGuardStateSupplier
-        implements IHardwareStateSupplier<Double>
-    {
-        private InternalSwitchGuard internal_switch_guard = null;
-
-        public void set_internal_switch_guard(
-            InternalSwitchGuard _internal_switch_guard)
-        {
-            internal_switch_guard = _internal_switch_guard;
-        }
-        
-        @Override
-        public Double get_state_to_push(ActiveEvent active_event)
-        {
-            if (internal_switch_guard.is_write_lock_holder(active_event))
-                return internal_switch_guard.dirty_val.val;
-            return internal_switch_guard.val.val;
-        }
-    }
-
-    
     /**
        Just ensures that the change always gets applied to hardware.
      */
@@ -143,7 +105,6 @@ public class RandomFailuresBackedSpeculationTest
         private final BackedSpeculation endpt;
         private final RalphGlobals ralph_globals;
         private final WhichSwitch which_switch;
-        private boolean failed_while_applying_remove = false;
         private boolean has_failed = false;
         
         public RandomFailuresOnHardware(
@@ -186,8 +147,6 @@ public class RandomFailuresBackedSpeculationTest
         // ourselves and replace with a new switch.  Using super priority.
         public void run()
         {
-            SwitchGuardStateSupplier hardware_state_supplier
-                = new SwitchGuardStateSupplier();
             RandomFailuresOnHardware new_change_applier =
                 new RandomFailuresOnHardware(
                     endpt,ralph_globals,which_switch);
@@ -195,31 +154,14 @@ public class RandomFailuresBackedSpeculationTest
             _InternalSwitch new_internal_switch =
                 create_switch(
                     ralph_globals,ENABLE_SPECULATION,new_change_applier,
-                    hardware_state_supplier);
+                    new AlwaysZeroStateSupplier());
 
-            // need to push state guard state through to
-            // hardware_state_supplier so that it can read the values
-            // and pass them into RandomFailuresOnHardware class in
-            // apply and undo.
-            hardware_state_supplier.set_internal_switch_guard(
-                (InternalSwitchGuard)new_internal_switch.switch_guard);
-            
             try
             {
                 if (which_switch == WhichSwitch.SWITCH_ONE)
-                {
-                    if (failed_while_applying_remove)
-                        endpt.set_switch1_and_add_entry(new_internal_switch,IsSuperFlag.SUPER);
-                    else
-                        endpt.set_switch1(new_internal_switch,IsSuperFlag.SUPER);
-                }
+                    endpt.set_switch1(new_internal_switch,IsSuperFlag.SUPER);
                 else
-                {
-                    if (failed_while_applying_remove)
-                        endpt.set_switch2_and_add_entry(new_internal_switch,IsSuperFlag.SUPER);
-                    else
-                        endpt.set_switch2(new_internal_switch,IsSuperFlag.SUPER);
-                }
+                    endpt.set_switch2(new_internal_switch,IsSuperFlag.SUPER);
             }
             catch (Exception ex)
             {
@@ -238,12 +180,6 @@ public class RandomFailuresBackedSpeculationTest
             if (rand.nextFloat() < IND_FAILURE_PROBABILITY)
             {
                 has_failed = true;
-                
-                // 1 is same as value assigned to switch_guard in
-                // remove_write_lock of backend_speculation.rph.
-                if (to_apply.intValue() == 1)
-                    failed_while_applying_remove = true;
-                
                 ralph_globals.thread_pool.add_service_action(this);
                 return false;
             }

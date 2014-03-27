@@ -24,23 +24,11 @@ Service WrappedSwitch
     {
         internal_switch.switch_guard;
     }
-    // using separate values for read and write locks this.  This is because
-    // when hardware fails, we want to know if failed in the middle of an add or
-    // in the middle of a remove.  This is because external events assume that
-    // dummy_flow_table maintains any elements that they've previously added.
-    // The backend hardware state pusher then uses this state to replace a
-    // failed switch with a switch that has an equivalent flowtable.  This is
-    // only required for testing.  A real application should check sizes of flow
-    // tables, etc. before adding and removing entries.
-    remove_write_lock()
+    write_lock()
     {
         internal_switch.switch_guard = 1;
     }
-    add_write_lock()
-    {
-        internal_switch.switch_guard = 2;
-    }
-
+    
     
     flow_table_size() returns Number
     {
@@ -49,13 +37,13 @@ Service WrappedSwitch
     }
     remove_entry_switch(Number index)
     {
-        remove_write_lock();
+        write_lock();
         internal_switch.dummy_flow_table.remove(index);
     }
 
     add_entry_switch(Number to_add)
     {
-        add_write_lock();
+        write_lock();
         internal_switch.dummy_flow_table.append(to_add);
     }
 }
@@ -85,6 +73,8 @@ Service BackedSpeculation
     {
         atomically
         {
+            if (evt1_last_added)
+                s1.dummy_flow_table.append(1);
             ws1.set_internal_switch(s1);
         }
     }
@@ -96,38 +86,28 @@ Service BackedSpeculation
     {
         atomically
         {
+            if (evt2_last_added)
+                s2.dummy_flow_table.append(1);
             ws2.set_internal_switch(s2);
         }
     }
 
-    set_switch1_and_add_entry(Struct Switch s1)
-    {
-        atomically
-        {
-            s1.dummy_flow_table.append(1);
-            ws1.set_internal_switch(s1);
-        }
-    }
-
-    set_switch2_and_add_entry(Struct Switch s2)
-    {
-        atomically
-        {
-            s2.dummy_flow_table.append(1);
-            ws2.set_internal_switch(s2);
-        }
-    }
-    
     event1()
     {
-        read_and_write(ws1,ws2,not evt1_last_added);
-        evt1_last_added = not evt1_last_added;
+        atomically
+        {
+            read_and_write(ws1,ws2,not evt1_last_added);
+            evt1_last_added = not evt1_last_added;
+        }
     }
     
     event2()
     {
-        read_and_write(ws2,ws1,not evt2_last_added);
-        evt2_last_added = not evt2_last_added;
+        atomically
+        {
+            read_and_write(ws2,ws1,not evt2_last_added);
+            evt2_last_added = not evt2_last_added;
+        }
     }
     
     read_and_write(
