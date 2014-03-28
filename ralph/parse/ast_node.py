@@ -1332,12 +1332,37 @@ class DivideExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(DivideExpressionNode,self).__init__(
             filename,ast_labels.DIVIDE,lhs_expression_node,rhs_expression_node)
+
+def is_text_node(ast_node):
+    '''
+    @returns {boolean} --- True if ast_node has text type, false
+    otherwise.
+    '''
+    if isinstance(ast_node.type,BasicType):
+        basic_type = ast_node.type.basic_type
+        if basic_type == ast_labels.STRING_TYPE:
+            return True
+    return False
         
 class AddExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(AddExpressionNode,self).__init__(
             filename,ast_labels.ADD,lhs_expression_node,rhs_expression_node)
-        
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.lhs_expression_node.type_check_pass_one(struct_types_ctx)
+        self.rhs_expression_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.lhs_expression_node.type_check_pass_two(type_check_ctx)
+        self.rhs_expression_node.type_check_pass_two(type_check_ctx)
+        if (is_text_node(self.lhs_expression_node) or
+            is_text_node(self.rhs_expression_node)):
+            # don't worry about else: by default, initializer of
+            # parent _ArithmeticExpressionNode set type to Number.
+            self.type = BasicType(ast_labels.STRING_TYPE,False)
+
+            
 class SubtractExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(SubtractExpressionNode,self).__init__(
@@ -1400,7 +1425,6 @@ class NotInExpressionNode(_LogicalExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(NotInExpressionNode,self).__init__(
             filename,ast_labels.NOT_IN,lhs_expression_node,rhs_expression_node)
-        
         
 def create_binary_expression_node(
     operator,lhs_expression_node,rhs_expression_node):
