@@ -478,7 +478,7 @@ class PrintCallNode(_AstNode):
         if len(print_call_args_list) != 1:
             raise TypeCheckException(
                 self.filename,self.line_number,
-                ('Print requires 1 argument, not %s.' %
+                ('print requires 1 argument, not %s.' %
                  len(print_call_args_list)))
         
         self.print_arg_node = print_call_args_list[0]
@@ -490,6 +490,27 @@ class PrintCallNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.print_arg_node.type_check_pass_two(type_check_ctx)
 
+class ToTextCallNode(_AstNode):
+    def __init__(self,filename,method_args_node,line_number):
+        super(ToTextCallNode,self).__init__(
+            filename,ast_labels.TO_TEXT_CALL,line_number,
+            ast_labels.STRING_TYPE)
+
+        to_text_call_args_list = method_args_node.get_args_list()
+        if len(to_text_call_args_list) != 1:
+            raise TypeCheckException(
+                self.filename,self.line_number,
+                ('to_text requires 1 argument, not %s.' %
+                 len(to_text_call_args_list)))
+        
+        self.to_text_arg_node = to_text_call_args_list[0]
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.to_text_arg_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.to_text_arg_node.type_check_pass_two(type_check_ctx)
+        
 
 class DynamicCastNode(_AstNode):
     def __init__(self,filename,to_variable_type_node,method_args_node,

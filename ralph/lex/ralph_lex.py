@@ -12,6 +12,7 @@ SPECULATE_TOKEN = 'speculate'
 SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
 SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
+TO_TEXT_TOKEN = 'to_text'
 
 reserved = {
     'Endpoint' : 'ENDPOINT',
@@ -30,6 +31,7 @@ reserved = {
     'and': 'AND',
     'or': 'OR',
     'print': 'PRINT',
+    'to_text': 'TO_TEXT',
     'speculate': 'SPECULATE',
     'speculate_container_internals': 'SPECULATE_CONTAINER_INTERNALS',
     'speculate_all': 'SPECULATE_ALL',

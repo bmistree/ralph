@@ -4,7 +4,7 @@ from ralph.lex.ralph_lex import ENDPOINT_TOKEN, VERBATIM_TOKEN
 from ralph.lex.ralph_lex import SERVICE_TOKEN, INTERFACE_TOKEN
 from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN,SPECULATE_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_CONTAINER_INTERNALS_TOKEN
-from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN
+from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN, TO_TEXT_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -351,6 +351,8 @@ def p_MethodCall(p):
                | SPECULATE_ALL LEFT_PAREN RIGHT_PAREN
                | VERBATIM LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | DYNAMIC_CAST LESS_THAN VariableType GREATER_THAN LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               | TO_TEXT LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               
     '''
     if p[1] == PRINT_TYPE_TOKEN:
         line_number = p.lineno(1)
@@ -361,6 +363,11 @@ def p_MethodCall(p):
         line_number = p.lineno(1)
         method_args_node = p[3]
         p[0] = VerbatimCallNode(
+            global_parsing_filename,method_args_node,line_number)
+    elif p[1] == TO_TEXT_TOKEN:
+        line_number = p.lineno(1)
+        method_args_node = p[3]
+        p[0] = ToTextCallNode(
             global_parsing_filename,method_args_node,line_number)
     elif p[1] == SPECULATE_TOKEN:
         line_number = p.lineno(1)
