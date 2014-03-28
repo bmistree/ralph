@@ -353,8 +353,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 spec_obj._lock();
                 if (spec_obj.read_lock_holders.containsKey(active_event.uuid))
                 {
-                    if ((spec_obj.write_lock_holder != null) &&
-                        (spec_obj.write_lock_holder.event.uuid.equals(active_event.uuid)))
+                    if (spec_obj.is_write_lock_holder(active_event))
                     {
                         to_return = spec_obj.dirty_val.val;
                         break;
