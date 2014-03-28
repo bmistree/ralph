@@ -506,7 +506,7 @@
          run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
          run_RandomDelaysAlwaysWorksBackedSpeculationTest,
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
-         run_TextManipulation">
+         run_TextManipulation,run_LotsOfBackouts">
   </target>
   
   
@@ -1202,8 +1202,21 @@
     </java>
   </target>
 
+  <!-- Lots of Backouts test -->
+  <target
+      name="run_LotsOfBackouts"
+      depends="compile_ralph_tests"
+      description="Test that always rollback state during backouts.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.LotsOfBackoutsTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
 
-  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
