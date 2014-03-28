@@ -431,6 +431,14 @@
       <arg line="-c AtomicStructJava"/>
     </exec>
 
+    <echo message="${line.separator}text_add_and_to_text.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/text_add_and_to_text.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/TextAddAndToTextJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c TextAddAndToTextJava"/>
+    </exec>
     
   </target>
 

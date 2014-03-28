@@ -1,0 +1,13 @@
+Service TextAdder
+{
+    return_addition(Text text_a, Text text_b) returns Text
+    {
+        return text_a + text_b;
+    }
+
+    // convert(Number num)
+    // {
+    //     return to_text(num);
+    // }
+    
+}
