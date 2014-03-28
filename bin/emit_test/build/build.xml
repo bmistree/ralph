@@ -495,7 +495,8 @@
          run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
          run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
          run_RandomDelaysAlwaysWorksBackedSpeculationTest,
-         run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest">
+         run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
+         run_TextManipulation">
   </target>
   
   
@@ -1176,6 +1177,23 @@
     </java>
   </target>
 
+  <!-- TextManipulation test -->
+  <target
+      name="run_TextManipulation"
+      depends="compile_ralph_tests"
+      description="Test concatenating strings and converting numbers to strings.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.TextManipulation"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
