@@ -9,4 +9,12 @@ Service TextAdder
     {
         return to_text(num);
     }
+
+    many_add_and_convert(
+        Number num1, Text text1, Number num2, Number num3, Text text2)
+        returns Text
+    {
+        return to_text(num1) + text1 + to_text(num2) + to_text(num3) + text2;
+    }
+    
 }
