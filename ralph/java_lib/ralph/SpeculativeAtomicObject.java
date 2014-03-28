@@ -370,6 +370,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
 
+        // FIXME: refactor.  Consider a try-finally for
+        // derived_holding_lock_on and _lock, _unlock().
+        
+        // if we are supposed to speculate on a derived object's
+        // value, we hold a lock on that derived object so that it
+        // cannot change from beneath us while we're creating a
+        // duplicate to speculate on top of.  In that case,
+        // derived_holding_lock_on will become non-null and we should
+        // release it at the end of this method.
+        SpeculativeAtomicObject<T,D> derived_holding_lock_on = null;
+
+        
         // must determine what to speculate on.  Rule: if currently
         // speculating on any objects, speculate on top of them.
         // Otherwise, choose dirty_val of current object, if it
@@ -380,11 +392,16 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (speculating_on != null)
             {
                 speculating_on._lock();
+                derived_holding_lock_on = speculating_on;
                 if (speculating_on.write_lock_holder != null)
                     to_speculate_on = speculating_on.dirty_val.val;
                 else
                     to_speculate_on = speculating_on.val.val;
-                speculating_on._unlock();
+
+                // NOTE: No unlock here.  Relying on
+                // derived_holding_lock_on to release speculating_on
+                // lock.
+                // speculating_on._unlock();
             }
             else
             {
@@ -494,6 +511,11 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         if (schedule_try_next)
             speculating_on.schedule_try_next();
 
+
+        // see note at declaration of derived_holding_lock_on.
+        if (derived_holding_lock_on != null)
+            derived_holding_lock_on._unlock();
+        
         _unlock();
         return to_speculate_on;
     }
