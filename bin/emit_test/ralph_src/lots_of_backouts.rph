@@ -9,7 +9,7 @@ Service LotsOfBackouts
 {
     TVar List(element: Number) atom_list;
 
-    perform_test (Number num_times_to_run)
+    perform_test(Number num_times_to_run)
     {
         if (atom_list.size() == 0)
             atom_list.append(1);
@@ -23,6 +23,27 @@ Service LotsOfBackouts
             if (num_times < num_times_to_run)
             {
                 atom_list.remove(0);
+                verbatim('throw new BackoutException()');
+            }
+        }
+    }
+    
+    // same as above, but adds a speculate call in middle.
+    perform_speculation_test (Number num_times_to_run)
+    {
+        if (atom_list.size() == 0)
+            atom_list.append(1);
+        Number num_times = 0;
+
+        // note: if backouts are working incorrectly, it should mean that we get
+        // a double remove, causing an error that caller catches.
+        atomically
+        {
+            num_times=num_times+1;
+            if (num_times < num_times_to_run)
+            {
+                atom_list.remove(0);
+                speculate(atom_list);
                 verbatim('throw new BackoutException()');
             }
         }

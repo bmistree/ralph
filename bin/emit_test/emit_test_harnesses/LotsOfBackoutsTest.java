@@ -25,6 +25,8 @@ public class LotsOfBackoutsTest
                 new SingleSideConnection());
 
             endpt.perform_test(new Double(NUM_TIMES_TO_RUN));
+
+            endpt.perform_speculation_test(new Double(NUM_TIMES_TO_RUN));
         }
         catch (Exception _ex)
         {
