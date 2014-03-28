@@ -5,9 +5,8 @@ Service TextAdder
         return text_a + text_b;
     }
 
-    // convert(Number num)
-    // {
-    //     return to_text(num);
-    // }
-    
+    convert(Number num) returns Text
+    {
+        return to_text(num);
+    }
 }

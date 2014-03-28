@@ -28,7 +28,11 @@ public class TextManipulation
 
             if (! result.equals(lhs + rhs))
                 return false;
-            
+
+            Double some_double = new Double(3);
+            result = endpt.convert(some_double);
+            if (! result.equals(some_double.toString()))
+                return false;
         }
         catch (Exception _ex)
         {
