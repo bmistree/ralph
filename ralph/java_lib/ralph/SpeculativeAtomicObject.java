@@ -314,7 +314,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 
 
      @param {T} to_speculate_on --- Can be null, in which case,
-     speculate on existing value associated with active_event.
+     speculate on existing value associated with active_event or
+     dirty val of latest derived object.
+
 
      @returns --- Returns the dirty value associated with
      active_event.  Note, if speculate is called on object that has no
@@ -358,7 +360,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                         to_return = spec_obj.dirty_val.val;
                         break;
                     }
-                        
                     to_return = spec_obj.val.val;
                     break;
                 }
@@ -369,16 +370,35 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
 
+        // must determine what to speculate on.  Rule: if currently
+        // speculating on any objects, speculate on top of them.
+        // Otherwise, choose dirty_val of current object, if it
+        // exists.
         if (to_speculate_on == null)
         {
-            if (to_return != null)
-                to_speculate_on = to_return;
-            else if (is_write_lock_holder(active_event))
-                to_speculate_on = dirty_val.val;
+            // get value of last element speculating on.
+            if (speculating_on != null)
+            {
+                speculating_on._lock();
+                if (speculating_on.write_lock_holder != null)
+                    to_speculate_on = speculating_on.dirty_val.val;
+                else
+                    to_speculate_on = speculating_on.val.val;
+                speculating_on._unlock();
+            }
             else
-                to_speculate_on = val.val;
+            {
+                if (is_write_lock_holder(active_event))
+                    to_speculate_on = dirty_val.val;
+                else
+                    to_speculate_on = val.val;
+            }
+
+            // FIXME: Should we hold lock on speculating_on to apply
+            // to_speculate_on.
         }
-                
+
+        
         // step 1
         SpeculativeAtomicObject<T,D> to_speculate_on_wrapper =
             duplicate_for_speculation(to_speculate_on);
