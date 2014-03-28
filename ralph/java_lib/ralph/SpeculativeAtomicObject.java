@@ -373,7 +373,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         {
             if (to_return != null)
                 to_speculate_on = to_return;
-            else if (dirty_val != null)
+            else if (is_write_lock_holder(active_event))
                 to_speculate_on = dirty_val.val;
             else
                 to_speculate_on = val.val;
