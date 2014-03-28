@@ -1100,20 +1100,34 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     }
     
     /**
-       If speculating, re-map get_val to get from the object that
-       we're speculating on instead.
+       Can only be called on root object.
+
+       Does not assume already holding lock.
+
+       This method intercepts acquire_read_lock requests and
+       delegates them to the appropriate derived object.
      */
     protected DataWrapper<T,D> acquire_read_lock(ActiveEvent active_event)
         throws BackoutException
     {
+        //// DEBUG
+        if (! root_speculative)
+        {
+            Util.logger_assert(
+                "Can only acquire read lock on root of speculatives.");
+        }
+        //// END DEBUG
+
+        
         _lock();
         try
         {
             boolean already_processing = already_processing_event(
                 active_event);
 
+            // means active_event already exists on root.
             if (already_processing)
-                return super.internal_acquire_read_lock(active_event,_mutex);
+                return internal_acquire_read_lock(active_event,_mutex);
 
             for (SpeculativeAtomicObject<T,D> derivative_object :
                      speculated_entries)
@@ -1121,16 +1135,26 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 already_processing =
                     derivative_object.already_processing_event(active_event);
                 if (already_processing)
-                    return  derivative_object.internal_acquire_read_lock(active_event,_mutex);
+                {
+                    return derivative_object.internal_acquire_read_lock(
+                        active_event,_mutex);
+                }
+
+                // FIXME: ensure that do not need to invalidate any
+                // derivative objects here.
             }
 
             // if we got here, it means that this object and none
             // of its derivatives have serviced active event before
             if (speculating_on != null)
-                return speculating_on.internal_acquire_read_lock(active_event,_mutex);
+            {
+                return speculating_on.internal_acquire_read_lock(
+                    active_event,_mutex);
+            }
             else
             {
-                DataWrapper<T,D> to_return = super.internal_acquire_read_lock(active_event,_mutex);
+                DataWrapper<T,D> to_return =
+                    internal_acquire_read_lock(active_event,_mutex);
                 return to_return;
             }
         }
@@ -1203,15 +1227,31 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
 
+    /**
+       Can only be called on root object.
+
+       Does not assume already holding lock.
+
+       This method intercepts acquire_write_lock requests and
+       delegates them to the appropriate derived object.
+     */
     protected DataWrapper<T,D> acquire_write_lock(ActiveEvent active_event)
         throws BackoutException
     {
+        //// DEBUG
+        if (! root_speculative)
+        {
+            Util.logger_assert(
+                "Can only acquire write lock on root of speculatives.");
+        }
+        //// END DEBUG
+        
         _lock();
         try
         {
             // an event can still make local accesses to a variable
             // even after it requests us to speculate.  First check if
-            // we should be acquiring on root object
+            // we should be acquiring on root object.
             boolean already_processing = already_processing_event(
                 active_event);
 
@@ -1254,11 +1294,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
             else
             {
-                // note: do not need to invalidate anything
-                // because cannot get to else of this if-else
-                // block unless we aren't speculating on any
-                // objects.
-                return super.internal_acquire_write_lock(active_event,_mutex);
+                // means that trying to acquire write lock on root.
+                
+                // note: do not need to invalidate anything because
+                // cannot get to else of this if-else block unless we
+                // aren't speculating on any objects.
+                return internal_acquire_write_lock(active_event,_mutex);
             }
         }
         catch (BackoutException ex)
@@ -1267,19 +1308,27 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
     }
 
+    
     /**
        Assumes already within lock.  Gets called any time that this
-       object releases itself from an event that was holding **because
-       another event tries to assume a read or read/write lock on this
-       object.  Note that because this is the case, there can be no
-       derived objects and we therefore do not need to invalidate any
-       derived objects.
+       object releases itself from an event that was holding a read or
+       read/write lock *because another event tries to assume a read
+       or read/write lock on this object*.
 
        Note: we do not need to invalidate any derivative objects in
        this method.  This is because the only way that we can reach
        here is if we go through acquire_read_lock or
        acquire_write_lock.  acquire_write_lock takes care of
        invalidating derivative objects for us.
+       
+       acquire_read_lock should not need to invalidate any derived.
+       This is because an active_event that is not already a read_lock
+       holder for this particular derivative object should not be able
+       to access that derivative object, thereby causing an
+       invalidation.
+
+       FIXME: how does this interact with speculate's not holding lock
+       on speculating_on when running?
 
        @see documentation of overridden method.
      */
