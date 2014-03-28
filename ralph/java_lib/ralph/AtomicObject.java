@@ -33,6 +33,22 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     protected ReentrantLock _mutex = new ReentrantLock();
+
+    /**
+       Note: try to maintain invariant that when there are no write
+       lock holders, dirty_val is null.  Programmer shouldn't rely on
+       this.  Ie, should not do check
+       
+       if (dirty_val != null)
+
+       as a substitute for
+
+       if (write_lock_holder != null)
+
+       Just try to maintain invariant so that it may make debugging
+       easier (null pointer exceptions when shouldn't be allowed to
+       operate on dirty_val).
+     */
     public DataWrapper<T,D> dirty_val = null;
 		
     //# If write_lock_holder is not null, then the only element in
@@ -559,6 +575,9 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             (write_lock_holder.event.uuid.equals(active_event.uuid)))
         {
             write_lock_holder = null;
+            // when backout a write lock holder, should return
+            // dirty_val to null.
+            dirty_val = null;
         }
 		
         //# un-jam threadsafe queue waiting for event
@@ -636,6 +655,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             write_lock_holder_completed = true;
             val.write(dirty_val.val);
             write_lock_holder= null;
+            dirty_val = null;
             read_lock_holders =
                 new HashMap<String,EventCachedPriorityObj>();
         }
