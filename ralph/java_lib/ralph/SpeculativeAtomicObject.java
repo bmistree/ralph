@@ -1160,8 +1160,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                         active_event,_mutex);
                 }
 
-                // FIXME: ensure that do not need to invalidate any
-                // derivative objects here.
+                // do not need to invalidate any derivative objects
+                // here. reads can preempt writes, but cannot perform
+                // a read on an object unless 1) have already
+                // performed a read on that object or 2) reading last
+                // object.  In either case, have nothing to
+                // invalidate.  Note: this is distinct from
+                // acquire_write_lock, which can promote a reader to a
+                // writer and thereby need invalidation.
+                
             }
 
             // if we got here, it means that this object and none
