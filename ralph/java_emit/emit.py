@@ -1348,7 +1348,6 @@ def emit_internal_type(type_object):
 
 # indices are labels; values are operators should compile to.
 NUMERICAL_ONLY_BINARY_LABELS_DICT = {
-    ast_labels.ADD: '+',
     ast_labels.SUBTRACT: '-',
     ast_labels.MULTIPLY: '*',
     ast_labels.DIVIDE: '/'
@@ -1360,6 +1359,16 @@ NUMERICAL_ONLY_COMPARISONS_DICT = {
     ast_labels.LESS_THAN_EQUALS: '<='
     }
 
+def is_text_node(ast_node):
+    '''
+    @returns {boolean} --- True if ast_node has text type, false
+    otherwise.
+    '''
+    if isinstance(ast_node.type,BasicType):
+        basic_type = ast_node.type.basic_type
+        if basic_type == STRING_TYPE:
+            return True
+    return False
 
 def emit_statement(emit_ctx,statement_node):
     '''
@@ -1377,6 +1386,28 @@ def emit_statement(emit_ctx,statement_node):
         return (
             '(new Double(%s.doubleValue() %s %s.doubleValue() ) )' %
             (lhs, java_operator, rhs))
+
+    elif statement_node.label == ast_labels.ADD:
+        # add can be a string or a number.  It will return a string if
+        # either the lhs or the rhs are strings.  Otherwise, it'll
+        # return a number.
+        lhs = emit_statement(emit_ctx,statement_node.lhs_expression_node)
+        rhs = emit_statement(emit_ctx,statement_node.rhs_expression_node)
+
+        string_addition = False
+        # check if lhs is string
+        if (is_text_node(statement_node.lhs_expression_node) or
+            is_text_node(statement_node.rhs_expression_node)):
+            string_addition = True
+
+        if not string_addition:
+            return (
+                '(new Double(%s.doubleValue() + %s.doubleValue() ) )' %
+                (lhs, rhs))
+
+        return (
+            '(new String(%s.toString() + %s.toString() ) )' %
+            (lhs, rhs))
     
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
