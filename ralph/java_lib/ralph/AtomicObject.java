@@ -347,6 +347,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             Util.logger_assert(
                 "Did not consider effect of interruption while waiting");
         }
+
+        if (to_return == null)
+            throw new BackoutException();
+        
         return to_return;
     }
 
@@ -467,9 +471,13 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             Util.logger_assert(
                 "Did not consider effect of interruption while waiting");            
         }
+
+        if (to_return == null)
+            throw new BackoutException();
+        
         return to_return;
     }
-
+    
     
     /**
        Called from SpeculativeAtomicObject receives an
@@ -584,7 +592,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         WaitingElement<T,D> waiting_event =
             waiting_events.remove(active_event.uuid);
         if (waiting_event != null)
-            waiting_event.unwait(this);
+        {
+            // tell event waiting on lock that it got preempted.
+            waiting_event.unwait_fail();
+        }
     }
 
     /**
@@ -807,7 +818,10 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             waiting_events.remove(active_event.uuid);
         
         if (waiting_event != null)
-            waiting_event.unwait(this);
+        {
+            // tell event waiting on lock that it got preempted.
+            waiting_event.unwait_fail();
+        }
 
         _unlock();
         return write_lock_holder_backed_out;

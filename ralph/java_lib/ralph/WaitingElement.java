@@ -95,6 +95,15 @@ public class WaitingElement <T,D>
             queue.add(multi_threaded_obj.dirty_val);
         }
     }
+
+    /**
+       Called from within lcoked_obj's lock.
+     */
+    public void unwait_fail()
+    {
+        queue.add(null);
+    }
+    
     
     public int compareTo(WaitingElement<T,D> o2) 
     {

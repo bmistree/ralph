@@ -652,8 +652,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
 
         for (WaitingElement<T,D> we : waiting_events.values())
         {
+            // tell all events that waited on a lock for this object
+            // that they failed/were preempted.
             we.event.backout(null,false);
-            we.unwait(this);
+            we.unwait_fail();
         }
     }
 
