@@ -205,16 +205,8 @@ public class RalphInternalList<V,D>
         throws BackoutException
     {
         ListTypeDataWrapper<V,D> wrapped_val = get_val_write(active_event);
-        try
-        {
-            wrapped_val.del_key(active_event, key_to_delete);
-            check_immediate_commit(active_event);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            System.out.println("\n\nHere\n\n");
-        }
+        wrapped_val.del_key(active_event, key_to_delete);
+        check_immediate_commit(active_event);
     }
     @Override
     public void remove(ActiveEvent active_event, Double key_to_delete)
