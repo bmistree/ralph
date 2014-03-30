@@ -99,9 +99,14 @@ public class WaitingElement <T,D>
     /**
        Called from within lcoked_obj's lock.
      */
-    public void unwait_fail()
+    public void unwait_fail(AtomicObject multi_threaded_obj)
     {
-        queue.add(null);
+        // FIXME: creating a needless copy here.  Should just wake up
+        // waiting element and announce that it has failed.
+        DataWrapper<T,D> to_add =
+            data_wrapper_constructor.construct(
+                (T)multi_threaded_obj.val.val,log_changes);
+        queue.add(to_add);
     }
     
     

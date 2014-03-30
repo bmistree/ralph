@@ -11,7 +11,7 @@ public class DataWrapper<T,D>
 {
     public T val;
     protected boolean has_been_written_since_last_msg = false;
-	
+    
     public DataWrapper(T _val, boolean log_changes)
     {
         val= _val;

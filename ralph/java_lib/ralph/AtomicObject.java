@@ -594,7 +594,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if (waiting_event != null)
         {
             // tell event waiting on lock that it got preempted.
-            waiting_event.unwait_fail();
+            waiting_event.unwait_fail(this);
         }
     }
 
@@ -820,7 +820,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if (waiting_event != null)
         {
             // tell event waiting on lock that it got preempted.
-            waiting_event.unwait_fail();
+            waiting_event.unwait_fail(this);
         }
 
         _unlock();
