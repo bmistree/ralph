@@ -816,6 +816,7 @@ def p_Number(p):
 def p_String(p):
     '''
     String : SINGLE_LINE_STRING
+           | MULTI_LINE_STRING
     '''
     text_literal = p[1]
     line_number = p.lineno(1)
