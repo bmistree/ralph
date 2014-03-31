@@ -13,6 +13,38 @@ import RalphServiceActions.LinkFutureBooleans;
 import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
 import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
 
+
+/**
+   Interfaces to Ralph runtime:
+
+     hardware_first_phase_commit_hook
+       Returns a future.  This future can be cancelled by ralph
+       runtime, while hardware is still pushing changes.  In this
+       case, guaranteed to get a call to hardware_backout_hook.  That
+       call should block until all changes have been removed from
+       hardware.
+
+       It should be impossible to get another
+       hardware_first_phase_commit_hook while we are backing out.
+       Adding an assert to ensure.
+
+
+     hardware_complete_commit_hook
+       Changes that have been pushed can be released.  Only called
+       after hardware_first_phase_commit_hook.
+
+     hardware_backout_hook
+     
+       Backout changes that may have been made to a hardware element.
+       Only return after barrier response that changes have completely
+       been removed from hardware.  Note: this may be called even when
+       no changes have been pushed to hardware (eg., if event has been
+       preempted on object).  In these cases, nothing to undo.
+
+     hardware_first_phase_commit_speculative_hook
+
+     See SwitchGuardState.java for more about state transitions.
+ */
 public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 {
     // Keeps track of the state this object is in (pushing to
