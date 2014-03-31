@@ -449,6 +449,14 @@
       <arg line="-c LotsOfBackoutsJava"/>
     </exec>
 
+    <echo message="${line.separator}multiline_string.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/multiline_string.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/MultilineStringJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c MultilineStringJava"/>
+    </exec>
     
   </target>
 

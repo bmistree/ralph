@@ -1,0 +1,10 @@
+
+Service MultilineStringService
+{
+    get_text () returns Text
+    {
+        return "
+hello.  This is some text
+";
+    }
+}
