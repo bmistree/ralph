@@ -124,6 +124,7 @@ tokens = [
     
     #Strings and quotes
     "SINGLE_LINE_STRING",
+    "MULTI_LINE_STRING",
     
     "ALL_ELSE",
     ] + list(reserved.values())
@@ -398,6 +399,10 @@ def t_IDENTIFIER(t):
 
 def t_SINGLE_LINE_STRING(t):
     r'[\']'
+    return lex_state_machine.add_token(t)
+
+def t_MULTI_LINE_STRING(t):
+    r'[\"]'
     return lex_state_machine.add_token(t)
 
 def t_ALL_ELSE(t):
