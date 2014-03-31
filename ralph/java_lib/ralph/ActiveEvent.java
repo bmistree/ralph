@@ -95,7 +95,7 @@ public abstract class ActiveEvent
     public abstract void _backout_touched_objs();
     public abstract void put_exception(Exception error);
     public abstract void stop(boolean skip_partner);
-    public abstract void backout(
+    public abstract void blocking_backout(
         String backout_requester_host_uuid, boolean stop_request);
     
     /**

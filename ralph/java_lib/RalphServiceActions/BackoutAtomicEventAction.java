@@ -14,6 +14,6 @@ public class BackoutAtomicEventAction extends ServiceAction {
     @Override
     public void run() 
     {
-        event_to_backout.backout(null,false);
+        event_to_backout.blocking_backout(null,false);
     }
 }

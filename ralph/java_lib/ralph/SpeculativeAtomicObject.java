@@ -644,17 +644,22 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         
         _unlock();
 
+        
+        // This call does not need to still hold lock.  That is
+        // because read_lock_holders will not change size and neither
+        // will waiting_events: when in SpeculationState FAILED,
+        // ignore backout requests, etc.
         for (EventCachedPriorityObj cached_priority_obj :
                  read_lock_holders.values())
         {
-            cached_priority_obj.event.backout(null,false);
+            cached_priority_obj.event.blocking_backout(null,false);
         }
 
         for (WaitingElement<T,D> we : waiting_events.values())
         {
             // tell all events that waited on a lock for this object
             // that they failed/were preempted.
-            we.event.backout(null,false);
+            we.event.blocking_backout(null,false);
             we.unwait_fail(this);
         }
     }

@@ -232,7 +232,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
        method on us.
        * @param stop_request
        */
-    public void backout(
+    @Override
+    public void blocking_backout(
         String backout_requester_host_uuid, boolean stop_request)
     {
         Util.logger_assert(

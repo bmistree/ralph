@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.Condition;
 
 import RalphServiceActions.ServiceAction;
 
@@ -138,9 +139,26 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
   One waits for B to commit before unspeculating A.  Two waits for A
   to commit before unspeculating B.
-*/
 
+  ------------
+  Dirty speculate
 
+  Assume an event, Evt, is running.  Evt speculates on some object, A,
+  producing A'.  Then Evt backs out, and a new event, Evt' takes its
+  place.  It is important that in this case Evt' cannot access A'.
+  (Example reason, Evt is removing from an array with 1 element; when
+  Evt' operates on A', A' is empty and causes an exception.)
+
+  What this means is that when we handle a backout exception on Evt or
+  if we receive a request to backout because a partner event has
+  backed out, we must delay returning from this until all touched
+  objects have been backed out.  Use method backout to handle these.
+  Use internal method _backout to not block on all events' backing
+  out.
+
+  This means that cannot call backout while holding a lock on
+  AtomicActiveEvent to avoid deadlocks.
+  */
 
 public class AtomicActiveEvent extends ActiveEvent
 {
@@ -211,16 +229,36 @@ public class AtomicActiveEvent extends ActiveEvent
     private int atomic_reference_counts = 0;
     ActiveEvent to_restore_from_atomic = null;
 	
-    //# FIXME: maybe can unmake this reentrant, but get deadlock
-    //# from serializing data when need to add to touched objects.
-    private ReentrantLock mutex = new ReentrantLock();
+    private final ReentrantLock mutex = new ReentrantLock();
+    /**
+       Occasionally, we need to wait until an event has completely
+       backed out of all its touched objects.  As an example, what if
+       this event has speculated on an object? Then, may request a
+       retry of event before this event has completely backed out of
+       its touched objects. This can mean that the retry request
+       begins operating over the speculated value that this
+       still-backing-out event used. For instance, if an array has a
+       single element and an event's purpose is to remove from that
+       array, then the first event will leave the array empty, the
+       retried event will speculate on this empty array, removing it
+       again. This causes an out-of-bounds index exception.
+
+       When we receive a backout request, we block until the backout
+       has completed (individually backed out all touched objects)
+       before returning.  This prevents errors where a retried event
+       operates on the speculated value an event holds.
+     */
+    private final Condition completely_backed_out_condition =
+        mutex.newCondition();
+    
 	
     private State state = State.STATE_RUNNING;
 	
     private ReentrantLock _nfmutex = new ReentrantLock();
 
     /**
-       See note in _backout: can get a call to _backout twice.
+       See note in non_blocking_backout: can get a call to
+       non_blocking_backout twice.
      */
     private boolean received_backout_already = false;
     
@@ -346,14 +384,14 @@ public class AtomicActiveEvent extends ActiveEvent
 
 	
     /**
-     *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
-     read or a write on a Waldo object, if this event has not
-     previously performed a read or write on that object, then we
-     check to ensure that this event hasn't already begun to
-     backout.
+     * @param {WaldoLockedObj} obj --- Whenever we try to perform a
+       read or a write on a Waldo object, if this event has not
+       previously performed a read or write on that object, then we
+       check to ensure that this event hasn't already begun to
+       backout.
 
-     @returns {bool} --- Returns True if have not already backed
-     out.  Returns False otherwise.
+       @returns {bool} --- Returns True if have not already backed
+       out.  Returns False otherwise.
     */
     @Override
     public boolean add_touched_obj(AtomicObject obj)
@@ -692,6 +730,8 @@ public class AtomicActiveEvent extends ActiveEvent
 
     /**
        @see comment in ActiveEvent.java.
+
+       Will block until event has backed out from all objects.
      */
     @Override
     public void handle_backout_exception(BackoutException be)
@@ -708,8 +748,6 @@ public class AtomicActiveEvent extends ActiveEvent
         else
             put_exception(be);
     }
-
-    
 
     public void second_phase_commit()
     {
@@ -773,8 +811,13 @@ public class AtomicActiveEvent extends ActiveEvent
         if (lock_hold_count() == 0)
             Util.logger_assert(msg);
     }
-    
 
+    protected void assert_if_holding_lock(String msg)
+    {
+        if (lock_hold_count() != 0)
+            Util.logger_assert(msg);
+    }
+    
     /**
        MUST BE CALLED FROM WITHIN LOCK
         
@@ -803,12 +846,19 @@ public class AtomicActiveEvent extends ActiveEvent
 
        * @param backout_requester_host_uuid
        * @param stop_request
+
+       Changes internal state to BACKING_OUT.  Schedules an event to
+       backout all remaining touched objects, but (unlike _backout)
+       does not actually wait for them to do so.  Forwards rollbacks
+       to other hosts.
        */
-    private void _backout(String backout_requester_host_uuid, boolean stop_request)
+    private void non_blocking_backout(
+        String backout_requester_host_uuid, boolean stop_request)
     {
         //// DEBUG
         assert_if_not_holding_lock(
-            "_backout in AtomicActiveEvent should be holding lock.");
+            "non_blocking_backout in AtomicActiveEvent should " +
+            "be holding lock.");
         //// END DEBUG
         
         //# 0
@@ -859,8 +909,11 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
     /**
-     * Called from a separate thread in waldoServiceActions.  Runs
+     Called from a separate thread in waldoServiceActions.  Runs
      through all touched objects and backs out of them.
+
+     Once object has transitioned into STATE_BACKED_OUT, it notifies
+     all conditions that it has now backed out of all objects.
     */
     public void _backout_touched_objs()
     {
@@ -875,16 +928,20 @@ public class AtomicActiveEvent extends ActiveEvent
         _lock();
         
         state = State.STATE_BACKED_OUT;
+        completely_backed_out_condition.signalAll();
         _unlock();
     }
 
     /**
      *  @param error {Exception}
+     * 
+     *  Note that if error is a BackoutException, this will block
+     *  until has backed out of all objects.
      */
     public void put_exception(Exception error)
     {
         if (RalphExceptions.BackoutException.class.isInstance(error))
-            backout(null,false);
+            blocking_backout(null,false);
         else
             event_parent.put_exception(error,message_listening_queues_map);
     }
@@ -934,6 +991,14 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
     /**
+       Must be called OUTSIDE of lock.
+
+       Unlike non_blocking_backout, blocks until all touched objects
+       have processed backout (ie, we've transitioned into
+       STATE_BACKED_OUT).  See note "Dirty speculate" at top of file
+       for why we do this.
+       
+       
        @param {uuid or None} backout_requester_host_uuid --- If None,
        means that the call to backout originated on local endpoint.
        Otherwise, means that call to backout was made by either
@@ -941,11 +1006,32 @@ public class AtomicActiveEvent extends ActiveEvent
        method on, or an endpoint that called an endpoint method on us.
        * @param stop_request
        */
-    public void backout(
+    @Override
+    public void blocking_backout(
         String backout_requester_host_uuid, boolean stop_request)
     {
+        assert_if_holding_lock(
+            "Cannot be holding lock when enter backout.");
+        
         _lock();
-        _backout(backout_requester_host_uuid,stop_request);
+        non_blocking_backout(backout_requester_host_uuid,stop_request);
+        _unlock();
+
+        _lock();
+        while(state != State.STATE_BACKED_OUT)
+        {
+            try
+            {
+                completely_backed_out_condition.await();
+            }
+            catch (InterruptedException ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Should never receive interrupted exceptions " +
+                    "while in backout.");
+            }
+        }
         _unlock();
     }
         
@@ -973,7 +1059,7 @@ public class AtomicActiveEvent extends ActiveEvent
         touched_objs.remove(obj_requesting.uuid);
         _touched_objs_unlock();
 
-        _backout(null,false);
+        non_blocking_backout(null,false);
         
         //# unlock after method
         _unlock();
@@ -1190,7 +1276,7 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         //# FIXME: may be needlessly forwarding backouts to partners and
         //# back to the endpoints that requested us to back out.
-        backout(null,stop_request);
+        blocking_backout(null,stop_request);
     }
 
 
