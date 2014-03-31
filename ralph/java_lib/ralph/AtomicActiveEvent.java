@@ -756,6 +756,24 @@ public class AtomicActiveEvent extends ActiveEvent
         
     }
 
+    /**
+       Useful to ensure expectation that certain methods are called
+       while holding lock.
+     */
+    protected int lock_hold_count()
+    {
+        return mutex.getHoldCount();
+    }
+    /**
+       Throws an assertion if thread that calls this is not currently
+       holding lock.
+     */
+    protected void assert_if_not_holding_lock(String msg)
+    {
+        if (lock_hold_count() == 0)
+            Util.logger_assert(msg);
+    }
+    
 
     /**
        MUST BE CALLED FROM WITHIN LOCK
@@ -788,6 +806,11 @@ public class AtomicActiveEvent extends ActiveEvent
        */
     private void _backout(String backout_requester_host_uuid, boolean stop_request)
     {
+        //// DEBUG
+        assert_if_not_holding_lock(
+            "_backout in AtomicActiveEvent should be holding lock.");
+        //// END DEBUG
+        
         //# 0
         if (received_backout_already)
         {
@@ -850,6 +873,7 @@ public class AtomicActiveEvent extends ActiveEvent
             touched_obj.backout(this);
 
         _lock();
+        
         state = State.STATE_BACKED_OUT;
         _unlock();
     }
@@ -885,6 +909,13 @@ public class AtomicActiveEvent extends ActiveEvent
        */
     private void rollback_unblock_waiting_queues(boolean stop_request)
     {
+        //// DEBUG
+        assert_if_not_holding_lock(
+            "rollback_unblock_waiting_queues in AtomicActiveEvent " +
+            "should be holding lock.");
+        //// END DEBUG
+
+        
         for (ArrayBlockingQueue<MessageCallResultObject> msg_queue_to_unblock :
                  message_listening_queues_map.values())
         {
@@ -1026,7 +1057,8 @@ public class AtomicActiveEvent extends ActiveEvent
                     // sequence complete call to an endpoint where the
                     // passed in argument was not passed in by
                     // reference.
-                    VariablesProto.Variables.Any.Builder any_builder = VariablesProto.Variables.Any.newBuilder();
+                    VariablesProto.Variables.Any.Builder any_builder =
+                        VariablesProto.Variables.Any.newBuilder();
 
                     if (arg == null)
                     {
@@ -1183,6 +1215,13 @@ public class AtomicActiveEvent extends ActiveEvent
         StoppedException
     {
 
+        //// DEBUG
+        assert_if_not_holding_lock(
+            "handle_first_sequence_msg_from_partner in AtomicActiveEvent " +
+            "should be holding lock.");
+        //// END DEBUG
+
+        
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
         {
@@ -1286,6 +1325,14 @@ public class AtomicActiveEvent extends ActiveEvent
     private void handle_non_first_sequence_msg_from_partner(
         Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
     {
+
+        //// DEBUG
+        assert_if_not_holding_lock(
+            "handle_non_first_sequence_msg_from_partner in AtomicActiveEvent " +
+            "should be holding lock.");
+        //// END DEBUG
+
+        
         String reply_to_uuid = msg.getReplyToUuid().getData();
 
         //#### DEBUG
