@@ -514,8 +514,10 @@
          run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
          run_RandomDelaysAlwaysWorksBackedSpeculationTest,
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
-         run_TextManipulation,run_LotsOfBackouts">
+         run_TextManipulation,run_LotsOfBackouts,
+         run_TimedAlwaysWorksBackedSpeculationTest">
   </target>
+  
   
   
   <!-- Single side setter getter -->
@@ -1225,6 +1227,21 @@
     </java>
   </target>
 
+  <!-- TimedAlwaysWorksBackedSpeculationTest -->
+  <target
+      name="run_TimedAlwaysWorksBackedSpeculationTest"
+      depends="compile_ralph_tests"
+      description="Test that speculation actually increases throughput.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.TimedAlwaysWorksBackedSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+    
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
