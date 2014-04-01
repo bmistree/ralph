@@ -1523,7 +1523,7 @@ def emit_statement(emit_ctx,statement_node):
         return 'continue'
     
     elif statement_node.label == ast_labels.VERBATIM_CALL:
-        return statement_node.verbatim_arg_node.value
+        return statement_node.verbatim_arg_node.value.replace('\\n','\n')
 
     elif statement_node.label == ast_labels.SELF:
         return '(this)' 
