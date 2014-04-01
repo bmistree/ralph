@@ -1,0 +1,50 @@
+/**
+   Basic test: wl's lock is backed by a hardware-extended object that, in one
+   case, starts speculation on it when it gets to first phase of commit and in
+   the other, does not.  In both cases, actually applying to hardware has an
+   inserted get_internal_delay delay.
+
+   Have two thread that call evt.  Successive calls to evt should take half as
+   long to run when speculation is on than when it's off.  This is because evts
+   will be pipelined.  While one evt is actually pushing to hardware, the other
+   can be write and be waiting in sleep.
+
+ */
+
+Struct WrappedLock
+{
+    TVar Number lock;
+}
+
+Service SimplifiedBackedSpeculation
+{
+    Struct WrappedLock wl = null;
+
+    set_wrapped_lock(Struct WrappedLock to_set_to)
+    {
+        wl = to_set_to;
+    }
+
+    /**
+       Returns in ms.
+     */
+    get_internal_delay() returns Number
+    {
+        return 500;
+    }
+    
+    evt()
+    {
+        atomically
+        {
+            wl.lock = wl.lock +1;
+            verbatim("
+try {
+   Thread.sleep(500);
+} catch(InterruptedException ex) {
+   ex.printStackTrace(); assert(false);
+}");
+        }
+    }
+    
+}

@@ -457,6 +457,15 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c MultilineStringJava"/>
     </exec>
+
+    <echo message="${line.separator}simplified_backed_speculation.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/simplified_backed_speculation.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SimplifiedBackedSpeculationJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SimplifiedBackedSpeculationJava"/>
+    </exec>
     
   </target>
 
@@ -1241,7 +1250,7 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
-    
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
