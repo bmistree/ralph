@@ -13,6 +13,7 @@ import RalphExtended.IHardwareChangeApplier;
 import RalphExtended.IHardwareStateSupplier;
 import static emit_test_harnesses.BackedSpeculationTestLib.create_switch;
 import static emit_test_harnesses.BackedSpeculationTestLib.EventThread;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class AlwaysWorksBackedSpeculationTest
 {
@@ -40,13 +41,29 @@ public class AlwaysWorksBackedSpeculationTest
             new AlwaysSucceedsOnHardware(),new AlwaysSucceedsOnHardware(),
             new AlwaysZeroStateSupplier(), new AlwaysZeroStateSupplier());
     }
-    
-    
+
     public static boolean run_test(
         IHardwareChangeApplier<Double> hardware_change_applier_switch1,
         IHardwareChangeApplier<Double> hardware_change_applier_switch2,
         IHardwareStateSupplier<Double> hardware_state_supplier_switch1,
         IHardwareStateSupplier<Double> hardware_state_supplier_switch2)
+    {
+        return run_test(
+            hardware_change_applier_switch1, hardware_change_applier_switch2,
+            hardware_state_supplier_switch1, hardware_state_supplier_switch2,
+            true,null,NUM_OPS_PER_THREAD);
+    }
+    
+    /**
+       @param time_to_run --- Returns the time it took to run both
+       events.  Can be null.  If it's null, then do not report it.
+     */
+    public static boolean run_test(
+        IHardwareChangeApplier<Double> hardware_change_applier_switch1,
+        IHardwareChangeApplier<Double> hardware_change_applier_switch2,
+        IHardwareStateSupplier<Double> hardware_state_supplier_switch1,
+        IHardwareStateSupplier<Double> hardware_state_supplier_switch2,
+        boolean speculation_on,AtomicLong time_to_run, int num_ops_to_run)
     {
         try
         {
@@ -56,33 +73,43 @@ public class AlwaysWorksBackedSpeculationTest
 
             _InternalSwitch switch1 =
                 create_switch(
-                    ralph_globals,true,hardware_change_applier_switch1,
+                    ralph_globals,speculation_on,
+                    hardware_change_applier_switch1,
                     hardware_state_supplier_switch1);
 
             _InternalSwitch switch2 =
                 create_switch(
-                    ralph_globals,true,hardware_change_applier_switch2,
+                    ralph_globals,speculation_on,
+                    hardware_change_applier_switch2,
                     hardware_state_supplier_switch2);
 
             endpt.set_switches(switch1,switch2);
 
             AtomicBoolean had_exception = new AtomicBoolean(false);
             EventThread event_1 =
-                new EventThread(endpt,false,NUM_OPS_PER_THREAD,had_exception);
+                new EventThread(endpt,false,num_ops_to_run,had_exception);
             EventThread event_2 =
-                new EventThread(endpt,true,NUM_OPS_PER_THREAD,had_exception);
+                new EventThread(endpt,true,num_ops_to_run,had_exception);
 
+            long start = System.nanoTime();
+            
             event_1.start();
             event_2.start();
             event_1.join();
             event_2.join();
 
+            long end = System.nanoTime();
+
+            if (time_to_run != null)
+                time_to_run.set(end - start);
+            
+            
             if (had_exception.get())
                 return false;
 
             // see note on this condition above in documenation for
             // num_ops_set_on_hardware.
-            if (num_ops_set_on_hardware.get() != (2*NUM_OPS_PER_THREAD))
+            if (num_ops_set_on_hardware.get() != (2*num_ops_to_run))
                 return false;
             
             return true;
