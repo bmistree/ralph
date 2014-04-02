@@ -45,4 +45,10 @@ message PartnerRequestSequenceBlock
        otherwise.
      */
     required bool transaction = 7;
+
+    /**
+       If this is the result of an rpc call, can contain return
+       values.
+     */
+    optional Variables return_objs = 8;
 }
