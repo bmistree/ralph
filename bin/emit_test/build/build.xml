@@ -543,7 +543,7 @@
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
-         run_SimplifiedTimedSpeculationTest">
+         run_SimplifiedTimedSpeculationTest, run_BasicPartnerReturnByReference">
   </target>
   
   
@@ -1279,6 +1279,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.SimplifiedTimedSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  <!-- BasicPartnerReturnByReference -->
+  <target
+      name="run_BasicPartnerReturnByReference"
+      depends="compile_ralph_tests"
+      description="Test that passing a value back to caller by reference works.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.PartnerCallBasicReturnByReference"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

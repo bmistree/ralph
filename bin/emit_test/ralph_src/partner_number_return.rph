@@ -7,6 +7,9 @@ Endpoint PassReturnArg
         return to_return;
     }
 
+    /**
+       Should only be called through partner call.
+     */
     partner_receive_and_return(Number a, Number b, Number to_return)
     {
         to_return = a + b;
