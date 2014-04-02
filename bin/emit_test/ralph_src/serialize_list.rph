@@ -1,0 +1,20 @@
+Endpoint ListSerializer
+{
+    sum_numbers(Number max_number) returns Number
+    {
+        List(element: Number) list_to_sum;
+        list_to_sum = range(0,max_number);
+        Number sum;
+        @partner.partner_sum_numbers_in_list(sum, list_to_sum);
+        return sum;
+    }
+
+    // called only by partner
+    partner_sum_numbers_in_list(
+        Number to_return_through,List(element:Number) to_sum)
+    {
+        to_return_through = 0;
+        for (Number num in to_sum)
+            to_return_through = to_return_through + num;
+    }
+}

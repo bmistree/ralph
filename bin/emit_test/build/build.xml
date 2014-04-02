@@ -467,6 +467,15 @@
       <arg line="-c SimplifiedBackedSpeculationJava"/>
     </exec>
     
+    <echo message="${line.separator}serialize_list.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/serialize_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeListJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SerializeListJava"/>
+    </exec>
+    
   </target>
 
   
