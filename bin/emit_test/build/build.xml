@@ -524,7 +524,8 @@
          run_RandomDelaysAlwaysWorksBackedSpeculationTest,
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
          run_TextManipulation,run_LotsOfBackouts,
-         run_TimedAlwaysWorksBackedSpeculationTest">
+         run_TimedAlwaysWorksBackedSpeculationTest,
+         run_SimplifiedTimedSpeculationTest">
   </target>
   
   
@@ -1244,6 +1245,22 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.TimedAlwaysWorksBackedSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  <!-- TimedAlwaysWorksBackedSpeculationTest -->
+  <target
+      name="run_SimplifiedTimedSpeculationTest"
+      depends="compile_ralph_tests"
+      description="Test that speculation actually increases
+                   throughput on smaller test case than BackedSpeculation.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SimplifiedTimedSpeculationTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
