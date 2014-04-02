@@ -475,6 +475,15 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c SerializeListJava"/>
     </exec>
+
+    <echo message="${line.separator}partner_number_return.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/partner_number_return.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/PartnerNumberReturnJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c PartnerNumberReturnJava"/>
+    </exec>
     
   </target>
 

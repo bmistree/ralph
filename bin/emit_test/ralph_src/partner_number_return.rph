@@ -1,0 +1,14 @@
+Endpoint PassReturnArg
+{
+    pass_sum_return(Number a, Number b) returns Number
+    {
+        Number to_return;
+        @partner.partner_receive_and_return(a,b, &to_return);
+        return to_return;
+    }
+
+    partner_receive_and_return(Number a, Number b, Number to_return)
+    {
+        to_return = a + b;
+    }
+}
