@@ -403,7 +403,9 @@ class IdentifierNode(_AstNode):
 
         self.value = value
         self.is_reference = False
-        
+
+    def get_is_reference(self):
+        return self.is_reference
     def set_reference(self,to_set_to):
         self.is_reference = True
         

@@ -1708,11 +1708,19 @@ def emit_statement(emit_ctx,statement_node):
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for rpc_arg_node in statement_node.args_list:
+
+            # if identifier and identifier's is_reference is set to
+            # true, then pass as a reference
+            as_reference = 'false'
+            if ((rpc_arg_node.label == ast_labels.IDENTIFIER_EXPRESSION) and
+                (rpc_arg_node.get_is_reference())):
+                as_reference = 'true'
+            
             # FIXME: Setting false here, which disallows sending arg
             # as reference.
             rpc_arg_text = (
-                'new RPCArgObject( %s,false )' %
-                emit_statement(emit_ctx,rpc_arg_node))
+                'new RPCArgObject( %s,%s )' %
+                (emit_statement(emit_ctx,rpc_arg_node),as_reference))
             rpc_args.append(rpc_arg_text)
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
 
@@ -1723,7 +1731,6 @@ def emit_statement(emit_ctx,statement_node):
         rpc_args_list_text = (
             'new ArrayList<RPCArgObject>( %s)' % array_list_arg)
 
-        
         partner_call_text = '''
 _ctx.hide_partner_call(
     this, _active_event,"%s",true, //whether or not first method call
