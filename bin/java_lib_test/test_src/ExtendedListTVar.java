@@ -13,6 +13,8 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import ralph.RalphGlobals;
 import ralph.ICancellableFuture;
 import java.util.concurrent.Future;
+import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
+import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
 
 /**
    Can create an extended version of a list: one that allows us to
