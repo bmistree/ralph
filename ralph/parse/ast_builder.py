@@ -600,6 +600,7 @@ def p_AssignmentStatement(p):
 def p_Variable(p):
     '''
     Variable : Identifier
+             | REFERENCE Identifier
              | Variable LEFT_BRACKET Expression RIGHT_BRACKET
              | Variable DOT Identifier
     '''
@@ -607,6 +608,12 @@ def p_Variable(p):
     if len(p) == 2:
         # Identifier
         identifier_node = p[1]
+        p[0] = identifier_node
+
+    elif len(p) == 3:
+        # a reference to an identifier
+        identifier_node = p[2]
+        identifier_node.set_reference(True)
         p[0] = identifier_node
         
     elif len(p) == 5:

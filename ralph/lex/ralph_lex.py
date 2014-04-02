@@ -117,6 +117,7 @@ tokens = [
     "CURLY_RIGHT",
 
     'DOT',
+    'REFERENCE',
     
     "NUMBER",
     _IDENTIFIER_TOKEN,
@@ -386,6 +387,10 @@ def t_MINUS(t):
 
 def t_DOT(t):
     '[.]'
+    return lex_state_machine.add_token(t)
+
+def t_REFERENCE(t):
+    '&'
     return lex_state_machine.add_token(t)
 
 def t_NUMBER(t):
