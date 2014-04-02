@@ -35,7 +35,7 @@ public class SimplifiedTimedSpeculationTest
         long time_no_speculation = run(false);
         if (had_exception.get())
             return false;
-        
+
         long time_speculation = run(true);
         if (had_exception.get())
             return false;
@@ -141,7 +141,7 @@ public class SimplifiedTimedSpeculationTest
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
                     this,this,this,
-                    should_speculate,ralph_globals);
+                    _should_speculate,ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
 
             should_speculate = _should_speculate;
