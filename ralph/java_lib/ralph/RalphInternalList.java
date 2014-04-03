@@ -131,9 +131,33 @@ public class RalphInternalList<V,D>
         ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        Util.logger_assert(
-            "Need to add list serialization code.");
+        // mostly useless
+        any_builder.setVarName("");
+        any_builder.setReference(is_reference);
+
+        // get list's internal data
+        ListTypeDataWrapper<V,D> wrapped_val = get_val_read(active_event);
+        ArrayList<RalphObject<V,D>> ralph_list = wrapped_val.val;
+
+        // create a list message that contains all changes
+        VariablesProto.Variables.List.Builder list_builder =
+            VariablesProto.Variables.List.newBuilder();
+
+        for (RalphObject<V,D> to_append : ralph_list)
+        {
+            VariablesProto.Variables.Any.Builder single_element_builder =
+                VariablesProto.Variables.Any.newBuilder();
+            to_append.serialize_as_rpc_arg(
+                active_event,single_element_builder,is_reference);
+            list_builder.addListValues(single_element_builder);
+        }
+
+        any_builder.setList(list_builder);
+        
+        // non-atomics should not hold locks
+        check_immediate_commit(active_event);
     }
+    
     @Override
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException
