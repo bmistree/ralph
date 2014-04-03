@@ -543,7 +543,8 @@
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
-         run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn">
+         run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
+         run_SerializeListTest">
   </target>
   
   
@@ -1286,7 +1287,7 @@
     </java>
   </target>
 
-  <!-- BasicPartnerReturnByReference -->
+  <!-- PartnerCallReturn -->
   <target
       name="run_PartnerCallReturn"
       depends="compile_ralph_tests"
@@ -1301,6 +1302,22 @@
     </java>
   </target>
 
+  <!-- SerializeListTest -->
+  <target
+      name="run_SerializeListTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a list.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeListTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
