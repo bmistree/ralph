@@ -1139,7 +1139,8 @@ public class AtomicActiveEvent extends ActiveEvent
             }
 
             // construct variables for arg messages
-            VariablesProto.Variables.Builder serialized_arguments = VariablesProto.Variables.newBuilder();
+            VariablesProto.Variables.Builder serialized_arguments =
+                VariablesProto.Variables.newBuilder();
             for (RPCArgObject arg : args)
             {
                 try
@@ -1185,6 +1186,7 @@ public class AtomicActiveEvent extends ActiveEvent
                     _unlock();
                     return false;
                 }
+                serialized_results.addVars(any_builder);
             }
 
 

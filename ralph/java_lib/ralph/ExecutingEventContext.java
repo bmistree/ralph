@@ -359,7 +359,7 @@ public class ExecutingEventContext
             // objects.  Could just use a single return value.
             List<RalphObject> returned_objs =
                 ExecutingEventContext.deserialize_variables_list(
-                    returned_objs_proto,true,endpoint.ralph_globals);
+                    returned_objs_proto,false,endpoint.ralph_globals);
             
             if (returned_objs.size() != 1)
             {

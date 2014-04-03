@@ -322,7 +322,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
         }
 
         // construct variables for arg messages
-        VariablesProto.Variables.Builder serialized_arguments = VariablesProto.Variables.newBuilder();
+        VariablesProto.Variables.Builder serialized_arguments =
+            VariablesProto.Variables.newBuilder();
         for (RPCArgObject arg : args)
         {
             try
@@ -331,7 +332,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 // sequence complete call to an endpoint where the
                 // passed in argument was not passed in by
                 // reference.
-                VariablesProto.Variables.Any.Builder any_builder = VariablesProto.Variables.Any.newBuilder();
+                VariablesProto.Variables.Any.Builder any_builder =
+                    VariablesProto.Variables.Any.newBuilder();
 
                 if (arg == null)
                 {
@@ -365,8 +367,9 @@ public class NonAtomicActiveEvent extends ActiveEvent
             {
                 return false;
             }
+            serialized_results.addVars(any_builder);
         }
-
+        
         // changed to have rpc semantics: this means that if it's not
         // the first message, then it is a reply to another message.
         // if it is a first message, then should not be replying to
@@ -375,7 +378,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         if (! first_msg)
             replying_to = ctx.get_to_reply_with();
 
-        
         // request endpoint to send message to partner
         endpoint._send_partner_message_sequence_block_request(
             func_name,uuid,get_priority(),reply_with_uuid,

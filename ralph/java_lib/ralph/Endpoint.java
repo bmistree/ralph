@@ -851,6 +851,7 @@ public abstract class Endpoint
         request_sequence_block_msg.setArguments(rpc_variables);
         if (serialized_results != null)
             request_sequence_block_msg.setReturnObjs(serialized_results);
+        
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
     	_conn_obj.write(general_message.build(),this);
     }    
