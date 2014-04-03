@@ -543,7 +543,7 @@
          run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
-         run_SimplifiedTimedSpeculationTest, run_BasicPartnerReturnByReference">
+         run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn">
   </target>
   
   
@@ -1288,12 +1288,12 @@
 
   <!-- BasicPartnerReturnByReference -->
   <target
-      name="run_BasicPartnerReturnByReference"
+      name="run_PartnerCallReturn"
       depends="compile_ralph_tests"
-      description="Test that passing a value back to caller by reference works.">
+      description="Test that passing a value back to caller works.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.PartnerCallBasicReturnByReference"
+        classname="emit_test_harnesses.PartnerCallReturn"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

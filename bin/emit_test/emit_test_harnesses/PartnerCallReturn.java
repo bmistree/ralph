@@ -4,14 +4,14 @@ import ralph_emitted.PartnerNumberReturnJava.PassReturnArg;
 import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 
-public class PartnerCallBasicReturnByReference
+public class PartnerCallReturn
 {
     public static void main(String[] args)
     {
         if (run_test())
-            System.out.println("\nSUCCESS in PartnerCallBasicReturnByReference\n");
+            System.out.println("\nSUCCESS in PartnerCallReturn\n");
         else
-            System.out.println("\nFAILURE in PartnerCallBasicReturnByReference\n");
+            System.out.println("\nFAILURE in PartnerCallReturn\n");
     }
 
     public static boolean run_test()
@@ -34,7 +34,7 @@ public class PartnerCallBasicReturnByReference
                             
                 Double result = side_a.pass_sum_return(num1, num2);
                 if (! result.equals(num1 + num2))
-                    return false;                
+                    return false;
             }
             return true;
         }
