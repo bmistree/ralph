@@ -426,6 +426,9 @@ def convert_args_text_for_dispatch(method_declaration_node):
     Note that it is dumb that we deserialize into a locked object,
     instead of the value directly.  Should change.
 
+    If method has return value, then put the result into variable
+    named result.
+    
     @param {int} index --- Which value of args array to read from and
     how to name transalted arg (eg., "arg0" above instead of "arg1" or
     "arg2".)
@@ -484,6 +487,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             single_arg_string = '''
 %s %s = ((%s)%s).get_val(null);
 ''' % (java_type,arg_name,locked_type,arg_vec_to_read_from)
+
             
         to_return += single_arg_string
     return to_return
@@ -525,7 +529,7 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
     #### END DEBUG
         
 
-def exec_dispatch_sequence_call(method_declaration_node):
+def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
     '''
     When emitting rpc dispatch method, this method actually executes
     method call associated with method_declaration_node, assuming that
@@ -547,10 +551,18 @@ def exec_dispatch_sequence_call(method_declaration_node):
     if args_text != '':
         args_text = ',' + args_text
 
-    actual_call = method_name + '(ctx,active_event' + args_text + ');\n'
+    actual_call = method_name + '(ctx,active_event' + args_text + ')'
     if method_declaration_node.returns_value():
-        actual_call = 'result = (Object)' + actual_call
-    return actual_call
+        return_type = method_declaration_node.get_return_type()
+        new_expression = (
+            'result = %s;\n' %
+            construct_new_expression(return_type,None,emit_ctx))
+        assignment_statement = (
+            'result.set_val(active_event,%s);' %
+            actual_call)
+        actual_call = new_expression + assignment_statement
+
+    return actual_call + ';\n'
 
 
 def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
@@ -584,14 +596,14 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
         # contents of if-elif statement
         if_elif_body = (
             convert_args_text_for_dispatch(method_declaration_node) +
-            exec_dispatch_sequence_call(method_declaration_node))
+            exec_dispatch_sequence_call(method_declaration_node,emit_ctx))
 
         rpc_text_for_methods += (
             if_elif + '(to_exec_internal_name.equals("' +
             method_declaration_node.method_name + '")) {\n' + 
             indent_string(if_elif_body,1) + 
             '\n}\n')
-    
+        
     #### For debugging: what happens if asked to run an rpc method
     #### that isn't available locally.
     if rpc_text_for_methods != '':
@@ -605,19 +617,20 @@ else
 
 '''
     #### End debug
-    
+        
     emitted_method = '''
-protected void _handle_rpc_call(
+protected RalphObject _handle_rpc_call(
     String to_exec_internal_name,ActiveEvent active_event,
     ExecutingEventContext ctx,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException,
     StoppedException
 {
-    Object result = null;
+    RalphObject result = null;
 
 %s
 
+    return result;
 }
 ''' % indent_string(rpc_text_for_methods,1)
 
@@ -1734,8 +1747,8 @@ def emit_statement(emit_ctx,statement_node):
         partner_call_text = '''
 _ctx.hide_partner_call(
     this, _active_event,"%s",true, //whether or not first method call
-    %s)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
-
+    %s,null)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
+        
         return partner_call_text
     
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:

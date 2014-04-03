@@ -654,6 +654,9 @@ class MethodDeclarationNode(_AstNode):
         '''
         return self.method_signature_node.type.returns_type is not None
 
+    def get_return_type(self):
+        return self.method_signature_node.type.returns_type
+    
     def type_check_pass_one(self,struct_types_ctx):
         self.method_signature_node.type_check_pass_one(struct_types_ctx)
         self.type = self.method_signature_node.type
