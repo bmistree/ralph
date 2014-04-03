@@ -790,6 +790,9 @@ public abstract class Endpoint
      data.  (For peered data, we can just use
      self._global_var_store.)
 
+     @param{Builder} serialized_results --- Can be null.  Serialized
+     value of all returned objects.
+     
      @param {bool} first_msg --- If we are sending the first
      message in a sequence block, then we must force the sequence
      local data to be transmitted whether or not it was modified.
@@ -801,7 +804,9 @@ public abstract class Endpoint
     public void _send_partner_message_sequence_block_request(
         String block_name,String event_uuid,String priority,
         String reply_with_uuid, String reply_to_uuid,
-        ActiveEvent active_event, VariablesProto.Variables.Builder rpc_variables,
+        ActiveEvent active_event,
+        VariablesProto.Variables.Builder rpc_variables,
+        VariablesProto.Variables.Builder serialized_results,
         boolean first_msg,boolean transactional)
     {
     	GeneralMessage.Builder general_message =
@@ -844,8 +849,9 @@ public abstract class Endpoint
     	}
         
         request_sequence_block_msg.setArguments(rpc_variables);
+        if (serialized_results != null)
+            request_sequence_block_msg.setReturnObjs(serialized_results);
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
-    	
     	_conn_obj.write(general_message.build(),this);
     }    
 
@@ -1054,7 +1060,7 @@ public abstract class Endpoint
        @param {*args} to_exec_args ---- Any additional arguments that
        get passed to the closure to be executed.
     */
-    protected abstract void _handle_rpc_call(
+    protected abstract RalphObject _handle_rpc_call(
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         Object...to_exec_args)
@@ -1070,9 +1076,10 @@ public abstract class Endpoint
         Object...args)
         throws ApplicationException, BackoutException, NetworkException,StoppedException
     {
+        RalphObject result = null;
         try
         {
-            _handle_rpc_call(
+            result = _handle_rpc_call(
                 to_exec_internal_name,active_event, ctx,args);
         }
         catch (BackoutException _ex)
@@ -1099,6 +1106,6 @@ public abstract class Endpoint
         }
 
         // tell other side that the rpc call has completed
-        ctx.hide_sequence_completed_call(this, active_event);
+        ctx.hide_sequence_completed_call(this, active_event,result);
     }
 }

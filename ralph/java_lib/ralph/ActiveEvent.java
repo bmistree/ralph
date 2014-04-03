@@ -161,16 +161,19 @@ public abstract class ActiveEvent
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
+
+       @param {RalphObject} result --- If this is a reply to an rpc
+       and the called method had a return value, then we return it in
+       result.
        
        The local endpoint is requesting its partner to call some
        method on itself.
     */
     public abstract boolean issue_partner_sequence_block_call(
-        Endpoint endpt,ExecutingEventContext ctx, String func_name,
+        Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args);
-
-
+        boolean first_msg,ArrayList<RPCArgObject>args,RalphObject result);
+    
 
     public abstract String get_priority();
 

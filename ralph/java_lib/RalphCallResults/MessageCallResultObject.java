@@ -44,8 +44,13 @@ public class MessageCallResultObject
      VariableStore._VariableStore.incorporate_deltas
     */
     public Variables returned_variables = null;
-	
 
+    /**
+       If the rpc was supposed to return a value, that value will be
+       in returned_objs.
+     */
+    public Variables returned_objs = null;
+    
     /**
        Only have private constructor.  Otherwise, should use one of
        static methods to produce a new object.
@@ -73,7 +78,7 @@ public class MessageCallResultObject
 
     public static MessageCallResultObject completed(
         String _reply_with_msg_field, String _to_exec_next_name_msg_field,
-        Variables _returned_variables)
+        Variables _returned_variables,Variables _returned_objs)
     {
         MessageCallResultObject to_return =
             new MessageCallResultObject(ResultType.COMPLETED);
@@ -81,6 +86,7 @@ public class MessageCallResultObject
         to_return.reply_with_msg_field = _reply_with_msg_field;
         to_return.to_exec_next_name_msg_field = _to_exec_next_name_msg_field;
         to_return.returned_variables = _returned_variables;
+        to_return.returned_objs = _returned_objs;
         return to_return;
     }
 

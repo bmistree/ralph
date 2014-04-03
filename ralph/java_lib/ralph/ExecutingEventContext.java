@@ -1,5 +1,6 @@
 package ralph;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -171,9 +172,12 @@ public class ExecutingEventContext
        sequence, we must send a parting message so that the root
        endpoint can continue running.  This method sends that
        message.
-    */    
+
+       @param result --- result may be null if rpc call does not
+       return anything.
+    */
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ActiveEvent active_event)
+        Endpoint endpoint, ActiveEvent active_event,RalphObject result)
         throws NetworkException, ApplicationException, BackoutException,
         StoppedException
     {
@@ -203,7 +207,7 @@ public class ExecutingEventContext
             endpoint,active_event,
             null,  // no function name
             false, // not first msg sent
-            args_to_reply_with);
+            args_to_reply_with, result);
     }
 
 
@@ -225,16 +229,26 @@ public class ExecutingEventContext
        @param {boolean} transactional --- True if this call should be
        part of a transaction.  False if it's just a regular rpc.  Only
        matters if it's the first message in a sequence.  
-       
+
+       @param {RalphObject} result --- If this is the reply to an RPC
+       that returns a value, then result is non-null.  If it's the
+       first request, then this value is null.
+
        The local endpoint is requesting its partner to call some
        sequence block.
+
+       @returns {RalphObject} --- If this is not the reply to an rpc
+       request and the method called returns a value, then this
+       returns it.  Otherwise, null.
+       
        * @throws NetworkException 
        * @throws ApplicationException 
        * @throws BackoutException 
        */
-    public void hide_partner_call(
+    public RalphObject hide_partner_call(
         Endpoint endpoint, ActiveEvent active_event,
-        String func_name, boolean first_msg,ArrayList<RPCArgObject> args)
+        String func_name, boolean first_msg,ArrayList<RPCArgObject> args,
+        RalphObject result)
         throws NetworkException, ApplicationException, BackoutException,StoppedException
     {
     	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
@@ -242,8 +256,9 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                endpoint,this, func_name, threadsafe_unblock_queue, first_msg,args);
-
+                endpoint,this, func_name, threadsafe_unblock_queue, first_msg,args,
+                result);
+        
     	if (! partner_call_requested)
     	{
             //# already backed out.  did not schedule message.  raise
@@ -254,7 +269,7 @@ public class ExecutingEventContext
         // do not wait on result of call if it was the final return of
         // the call.
     	if (func_name == null)
-            return; 
+            return null; 
 
         // wait on result of call
     	MessageCallResultObject queue_elem = null;
@@ -332,6 +347,28 @@ public class ExecutingEventContext
             //# previous one.
             reset_to_reply_with();
         }
+
+        // if this was the response to an rpc that returned a value,
+        // then return it here.
+        if (queue_elem.returned_objs != null)
+        {
+            VariablesProto.Variables returned_objs_proto =
+                queue_elem.returned_objs;
+            
+            // FIXME: probably do not need to use a list for returned
+            // objects.  Could just use a single return value.
+            List<RalphObject> returned_objs =
+                ExecutingEventContext.deserialize_variables_list(
+                    returned_objs_proto,true,endpoint.ralph_globals);
+            
+            if (returned_objs.size() != 1)
+            {
+                Util.logger_assert(
+                    "If RPC returns variable, should only return one.");
+            }
+            return returned_objs.get(0);
+        }
+        return null;
     }
 
     /**

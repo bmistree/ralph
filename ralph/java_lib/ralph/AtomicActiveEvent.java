@@ -1100,14 +1100,19 @@ public class AtomicActiveEvent extends ActiveEvent
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
+
+       @param {RalphObject} result --- If this is a reply to an rpc
+       and the called method had a return value, then we return it in
+       result.
        
        The local endpoint is requesting its partner to call some
        method on itself.
     */
+    @Override
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args)
+        boolean first_msg,ArrayList<RPCArgObject>args,RalphObject result)
     {
         boolean partner_call_requested = false;
         _lock();
@@ -1165,6 +1170,23 @@ public class AtomicActiveEvent extends ActiveEvent
                 }
             }
 
+            VariablesProto.Variables.Builder serialized_results = null;
+            if (result != null)
+            {
+                serialized_results = VariablesProto.Variables.newBuilder();
+                VariablesProto.Variables.Any.Builder any_builder =
+                    VariablesProto.Variables.Any.newBuilder();
+                try
+                {
+                    result.serialize_as_rpc_arg(this,any_builder,false);
+                }
+                catch (BackoutException excep)
+                {
+                    _unlock();
+                    return false;
+                }
+            }
+
 
             // changed to have rpc semantics: this means that if it's not
             // the first message, then it is a reply to another message.
@@ -1178,7 +1200,7 @@ public class AtomicActiveEvent extends ActiveEvent
             // request endpoint to send message to partner
             endpoint._send_partner_message_sequence_block_request(
                 func_name,uuid,get_priority(),reply_with_uuid,
-                replying_to,this,serialized_arguments,
+                replying_to,this,serialized_arguments,serialized_results,
                 first_msg,true);
 
         }
@@ -1433,12 +1455,18 @@ public class AtomicActiveEvent extends ActiveEvent
         String reply_with_uuid = msg.getReplyWithUuid().getData();
         VariablesProto.Variables returned_variables = msg.getArguments();
 
+        VariablesProto.Variables returned_objs = null;
+        if (msg.hasReturnObjs())
+            returned_objs = msg.getReturnObjs();
+        
         //# unblock waiting listening queue.
         message_listening_queues_map.get(reply_to_uuid).add(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid,name_of_block_to_exec_next,
-                // contain returned results.
-                returned_variables));
+                // args passed in as references
+                returned_variables,
+                // result of rpc
+                returned_objs));
 
         //# no need holding onto queue waiting on a message response.
         message_listening_queues_map.remove(reply_to_uuid);
