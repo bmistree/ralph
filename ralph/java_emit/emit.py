@@ -94,245 +94,6 @@ public class %s
 
     return prog_txt
 
-def emit_internal_struct_type(struct_type):
-    return struct_type.prepend_to_name('_Internal')
-
-def emit_struct_definition(struct_name,struct_type):
-    '''
-    Each user-defined struct has a wrapper class and an internal
-    class.  (Call wrapper class' get_val and set_val to access the
-    internal values of the struct.)
-    '''
-
-    # do not emit aliased structs.  they are defined in other, already
-    # emitted files.
-    if struct_type.alias_name is not None:
-        return ''
-    
-    dw_constructor_text = emit_struct_data_wrapper_constructor(struct_type)
-    external_struct_definition_text = emit_struct_wrapper(struct_type)
-    internal_struct_definition_text = emit_internal_struct(struct_type)
-    struct_map_wrapper = emit_struct_map_wrapper(struct_type)
-    struct_deserializer = emit_struct_deserializer(struct_type)
-    
-    return (
-        dw_constructor_text + '\n' +
-        external_struct_definition_text + '\n' +
-        internal_struct_definition_text + '\n' +
-        struct_map_wrapper + '\n' +
-        struct_deserializer)
-
-
-def emit_struct_data_wrapper_constructor(struct_type):
-    '''
-    Each user-defined struct has its own data wrapper const
-    '''
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    data_wrapper_type_text = (
-        'ValueTypeDataWrapperFactory<%s,%s>' %
-        (internal_struct_name,internal_struct_name))
-
-    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
-        struct_name)
-    data_wrapper_constructor_text = '''
-final static %s
-    %s = 
-    new %s();
-''' % (
-        data_wrapper_type_text,data_wrapper_constructor_name,
-        data_wrapper_type_text)
-    return data_wrapper_constructor_text
-    
-def struct_data_wrapper_constructor_name(struct_name):
-    return '%s_type_data_wrapper_constructor' % struct_name
-
-def emit_struct_deserializer(struct_type):
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    internal_deserializer_name = (
-        '__%s_SingletonStructDeserializer' % internal_struct_name)
-    
-    to_return = '''
-public static class %s implements StructDataConstructor
-{
-    // Singleton: want to ensure will only ever register this struct
-    // once.
-    private static final %s instance = new %s();
-
-    protected %s()
-    {
-        DataConstructorRegistry registry =
-            DataConstructorRegistry.get_instance();
-        registry.register_struct("%s",this);
-    }
-    @Override
-    public RalphObject construct(
-        RalphGlobals ralph_globals,
-        VariablesProto.Variables.Struct proto_struct)
-    {
-        // FIXME: must finish deserialization of struct
-        Util.logger_assert(
-            "Have not defined deserializing structs as rpc arguments.");
-        return null;
-    }
-}
-''' % (internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name)
-
-    return to_return
-
-
-def emit_struct_map_wrapper(struct_type):
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    
-    # ensure locked wrappers
-    locked_wrappers_text = '''
-public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
-{
-    public RalphObject<%s,%s> ensure_atomic_object(
-        %s object_to_ensure, RalphGlobals ralph_globals)
-    {
-        return new %s(false,object_to_ensure,ralph_globals);
-    }
-}
-''' % (struct_name,internal_struct_name,internal_struct_name,
-       internal_struct_name,internal_struct_name,internal_struct_name,
-       struct_name)
-
-    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
-        struct_type)
-    locked_wrappers_text += '''
-// making this public in case external code needs to reference it.
-public final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
-''' % (struct_name, struct_locked_wrapper_name,struct_name)
-
-    return locked_wrappers_text
-
-
-def emit_struct_locked_map_wrapper_name(struct_type):
-    return struct_type.prepend_to_name(
-        'STRUCT_LOCKED_MAP_WRAPPER__')
-
-def emit_struct_wrapper(struct_type):
-    '''
-    Each user-defined struct gets wrapped by a locked variable that
-    points to an internal struct object that has individual fields
-    that are multithreaded objects and singlethreaded objects.
-    '''
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    
-    ##### External wrapped struct
-    external_struct_definition_text = '''
-public static class %s extends AtomicValueVariable<%s,%s>
-{''' % (struct_name, internal_struct_name, internal_struct_name)
-
-    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
-        struct_name)
-    
-    external_struct_definition_constructor = '''
-public %s (boolean log_operations, RalphGlobals ralph_globals)
-{
-    super(
-        log_operations,
-        new %s(ralph_globals),%s,ralph_globals);
-}
-
-public void serialize_as_rpc_arg(
-    ActiveEvent active_event,Variables.Any.Builder any_builder,
-    boolean is_reference) throws BackoutException
-{
-    // FIXME: must finish serialization of struct
-    Util.logger_assert(
-        "Have not defined serializing structs as rpc arguments.");
-}
-
-''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
-    # FIXME: should define rpc serialization for structs.
-
-
-    external_struct_definition_constructor += '''
-@Override
-protected SpeculativeAtomicObject<%s, %s>
-      duplicate_for_speculation(%s to_speculate_on)
-{
-    ///FIXME: must finish speculation for user-defined structs
-    Util.logger_assert(
-        "Have not finished duplicate_for_speculation for structs.");
-    return null;
-}
-''' % (internal_struct_name,internal_struct_name,internal_struct_name)
-
-
-    # when pass a struct into a method, should clone the struct's
-    # wrapper to have pass-by-reference semantics.
-    clone_for_args_method_constructor_text = '''
-/** Constructor for cloning into args */
-public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
-{
-    super(
-        log_operations,
-        internal_val,%s,ralph_globals);
-}
-''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
-
-    external_struct_definition_text += indent_string(
-        external_struct_definition_constructor +
-        clone_for_args_method_constructor_text)
-    external_struct_definition_text += '}\n'
-    
-    return external_struct_definition_text
-
-def emit_internal_struct(struct_type):
-    '''
-    Each internal struct's fields are single threaded locked and
-    unlocked variables.
-    '''
-    internal_struct_name = emit_internal_struct_type(
-        struct_type)
-    
-    ### Internal wrapped struct    
-    internal_struct_definition_text = '''
-public static class %s
-{
-''' % internal_struct_name
-
-    # emit struct's fields
-    emit_ctx = None
-    internal_struct_body_text = ''
-    for field_name in struct_type.name_to_field_type_dict:
-        field_type = struct_type.name_to_field_type_dict[field_name]
-        internal_struct_body_text += (
-            'public %s %s = null;\n' %
-            (emit_ralph_wrapped_type(field_type),field_name))
-
-    # emit constructor for struct
-    internal_struct_body_text += (
-        'public %s (RalphGlobals ralph_globals)\n' %
-        internal_struct_name)
-    internal_struct_body_text += '{\n'
-
-    internal_constructor_text = ''
-    initializer_dict = struct_type.name_to_initializer_dict
-    for field_name in struct_type.name_to_field_type_dict:
-        field_type = struct_type.name_to_field_type_dict[field_name]
-
-        initializer_node = initializer_dict.get(field_name,None)
-        internal_constructor_text += (
-            '%s = %s;\n' %
-            (field_name,
-             construct_new_expression(field_type,initializer_node,emit_ctx)))
-    internal_struct_body_text += indent_string(internal_constructor_text)
-    internal_struct_body_text += '}\n'
-    
-    internal_struct_definition_text += indent_string(
-        internal_struct_body_text)
-    internal_struct_definition_text += '\n}'
-    return internal_struct_definition_text
-
 def emit_interface(interface_node):
     emit_ctx = EmitContext()
     emit_ctx.push_scope()
@@ -2156,3 +1917,245 @@ def emit_for_statement(for_node,emit_ctx):
        
     emit_ctx.pop_scope()
     return to_return
+
+
+######### HANDLING STRUCTS ########
+def emit_internal_struct_type(struct_type):
+    return struct_type.prepend_to_name('_Internal')
+
+def emit_struct_definition(struct_name,struct_type):
+    '''
+    Each user-defined struct has a wrapper class and an internal
+    class.  (Call wrapper class' get_val and set_val to access the
+    internal values of the struct.)
+    '''
+
+    # do not emit aliased structs.  they are defined in other, already
+    # emitted files.
+    if struct_type.alias_name is not None:
+        return ''
+    
+    dw_constructor_text = emit_struct_data_wrapper_constructor(struct_type)
+    external_struct_definition_text = emit_struct_wrapper(struct_type)
+    internal_struct_definition_text = emit_internal_struct(struct_type)
+    struct_map_wrapper = emit_struct_map_wrapper(struct_type)
+    struct_deserializer = emit_struct_deserializer(struct_type)
+    
+    return (
+        dw_constructor_text + '\n' +
+        external_struct_definition_text + '\n' +
+        internal_struct_definition_text + '\n' +
+        struct_map_wrapper + '\n' +
+        struct_deserializer)
+
+def emit_struct_data_wrapper_constructor(struct_type):
+    '''
+    Each user-defined struct has its own data wrapper const
+    '''
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    data_wrapper_type_text = (
+        'ValueTypeDataWrapperFactory<%s,%s>' %
+        (internal_struct_name,internal_struct_name))
+
+    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
+        struct_name)
+    data_wrapper_constructor_text = '''
+final static %s
+    %s = 
+    new %s();
+''' % (
+        data_wrapper_type_text,data_wrapper_constructor_name,
+        data_wrapper_type_text)
+    return data_wrapper_constructor_text
+    
+def struct_data_wrapper_constructor_name(struct_name):
+    return '%s_type_data_wrapper_constructor' % struct_name
+
+def emit_struct_deserializer(struct_type):
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    internal_deserializer_name = (
+        '__%s_SingletonStructDeserializer' % internal_struct_name)
+    
+    to_return = '''
+public static class %s implements StructDataConstructor
+{
+    // Singleton: want to ensure will only ever register this struct
+    // once.
+    private static final %s instance = new %s();
+
+    protected %s()
+    {
+        DataConstructorRegistry registry =
+            DataConstructorRegistry.get_instance();
+        registry.register_struct("%s",this);
+    }
+    @Override
+    public RalphObject construct(
+        RalphGlobals ralph_globals,
+        VariablesProto.Variables.Struct proto_struct)
+    {
+        // FIXME: must finish deserialization of struct
+        Util.logger_assert(
+            "Have not defined deserializing structs as rpc arguments.");
+        return null;
+    }
+}
+''' % (internal_deserializer_name,internal_deserializer_name,
+       internal_deserializer_name,internal_deserializer_name,
+       internal_deserializer_name)
+
+    return to_return
+
+
+def emit_struct_map_wrapper(struct_type):
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    
+    # ensure locked wrappers
+    locked_wrappers_text = '''
+public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
+{
+    public RalphObject<%s,%s> ensure_atomic_object(
+        %s object_to_ensure, RalphGlobals ralph_globals)
+    {
+        return new %s(false,object_to_ensure,ralph_globals);
+    }
+}
+''' % (struct_name,internal_struct_name,internal_struct_name,
+       internal_struct_name,internal_struct_name,internal_struct_name,
+       struct_name)
+
+    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
+        struct_type)
+    locked_wrappers_text += '''
+// making this public in case external code needs to reference it.
+public final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper();
+''' % (struct_name, struct_locked_wrapper_name,struct_name)
+
+    return locked_wrappers_text
+
+
+def emit_struct_locked_map_wrapper_name(struct_type):
+    return struct_type.prepend_to_name(
+        'STRUCT_LOCKED_MAP_WRAPPER__')
+
+def emit_struct_wrapper(struct_type):
+    '''
+    Each user-defined struct gets wrapped by a locked variable that
+    points to an internal struct object that has individual fields
+    that are multithreaded objects and singlethreaded objects.
+    '''
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    
+    ##### External wrapped struct
+    external_struct_definition_text = '''
+public static class %s extends AtomicValueVariable<%s,%s>
+{''' % (struct_name, internal_struct_name, internal_struct_name)
+
+    data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
+        struct_name)
+    
+    external_struct_definition_constructor = '''
+public %s (boolean log_operations, RalphGlobals ralph_globals)
+{
+    super(
+        log_operations,
+        new %s(ralph_globals),%s,ralph_globals);
+}
+
+public void serialize_as_rpc_arg(
+    ActiveEvent active_event,Variables.Any.Builder any_builder,
+    boolean is_reference) throws BackoutException
+{
+    // FIXME: must finish serialization of struct
+    Util.logger_assert(
+        "Have not defined serializing structs as rpc arguments.");
+}
+
+''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
+    # FIXME: should define rpc serialization for structs.
+
+
+    external_struct_definition_constructor += '''
+@Override
+protected SpeculativeAtomicObject<%s, %s>
+      duplicate_for_speculation(%s to_speculate_on)
+{
+    ///FIXME: must finish speculation for user-defined structs
+    Util.logger_assert(
+        "Have not finished duplicate_for_speculation for structs.");
+    return null;
+}
+''' % (internal_struct_name,internal_struct_name,internal_struct_name)
+
+
+    # when pass a struct into a method, should clone the struct's
+    # wrapper to have pass-by-reference semantics.
+    clone_for_args_method_constructor_text = '''
+/** Constructor for cloning into args */
+public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
+{
+    super(
+        log_operations,
+        internal_val,%s,ralph_globals);
+}
+''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
+
+    external_struct_definition_text += indent_string(
+        external_struct_definition_constructor +
+        clone_for_args_method_constructor_text)
+    external_struct_definition_text += '}\n'
+    
+    return external_struct_definition_text
+
+def emit_internal_struct(struct_type):
+    '''
+    Each internal struct's fields are single threaded locked and
+    unlocked variables.
+    '''
+    internal_struct_name = emit_internal_struct_type(
+        struct_type)
+    
+    ### Internal wrapped struct    
+    internal_struct_definition_text = '''
+public static class %s
+{
+''' % internal_struct_name
+
+    # emit struct's fields
+    emit_ctx = None
+    internal_struct_body_text = ''
+    for field_name in struct_type.name_to_field_type_dict:
+        field_type = struct_type.name_to_field_type_dict[field_name]
+        internal_struct_body_text += (
+            'public %s %s = null;\n' %
+            (emit_ralph_wrapped_type(field_type),field_name))
+
+    # emit constructor for struct
+    internal_struct_body_text += (
+        'public %s (RalphGlobals ralph_globals)\n' %
+        internal_struct_name)
+    internal_struct_body_text += '{\n'
+
+    internal_constructor_text = ''
+    initializer_dict = struct_type.name_to_initializer_dict
+    for field_name in struct_type.name_to_field_type_dict:
+        field_type = struct_type.name_to_field_type_dict[field_name]
+
+        initializer_node = initializer_dict.get(field_name,None)
+        internal_constructor_text += (
+            '%s = %s;\n' %
+            (field_name,
+             construct_new_expression(field_type,initializer_node,emit_ctx)))
+    internal_struct_body_text += indent_string(internal_constructor_text)
+    internal_struct_body_text += '}\n'
+    
+    internal_struct_definition_text += indent_string(
+        internal_struct_body_text)
+    internal_struct_definition_text += '\n}'
+    return internal_struct_definition_text
+
+
