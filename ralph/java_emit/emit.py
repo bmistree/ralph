@@ -1627,15 +1627,28 @@ def emit_statement(emit_ctx,statement_node):
 }
 ''' % atomic_logic
 
-
-
-
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
         emit_ctx.set_lhs_of_assign(True)
         lhs_text = emit_statement(emit_ctx,statement_node.lhs_node)
         emit_ctx.set_lhs_of_assign(False)
-        return '%s.set_val(_active_event,%s);\n' % (lhs_text,rhs_text);
+
+        # FIXME: special-casing handling setting from partner method
+        # call.  The reason that we're doing this is because we might
+        # get a null value from rpcs that do not return anything.
+        is_partner_method_call = False
+        if statement_node.rhs_node.label == ast_labels.PARTNER_METHOD_CALL:
+            is_partner_method_call = True
+            get_val_text = '.get_val(_active_event)'
+
+        if not is_partner_method_call:
+            return (
+                '%s.set_val(_active_event,%s);\n' % (lhs_text,rhs_text));
+        
+        internal_type = emit_internal_type(statement_node.lhs_node.type)
+        return (
+            '%s.set_val(_active_event,(%s)%s.get_val(_active_event));\n' %
+            (lhs_text,internal_type,rhs_text));
 
     elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
 
@@ -1748,7 +1761,7 @@ def emit_statement(emit_ctx,statement_node):
 _ctx.hide_partner_call(
     this, _active_event,"%s",true, //whether or not first method call
     %s,null)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
-        
+
         return partner_call_text
     
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:

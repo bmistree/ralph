@@ -202,7 +202,7 @@ public class ExecutingEventContext
             if (! arg.is_reference)
                 args_to_reply_with.set(i,null);
         }
-
+        
         hide_partner_call(
             endpoint,active_event,
             null,  // no function name
@@ -269,8 +269,8 @@ public class ExecutingEventContext
         // do not wait on result of call if it was the final return of
         // the call.
     	if (func_name == null)
-            return null; 
-
+            return null;
+        
         // wait on result of call
     	MessageCallResultObject queue_elem = null;
         try {
@@ -364,7 +364,8 @@ public class ExecutingEventContext
             if (returned_objs.size() != 1)
             {
                 Util.logger_assert(
-                    "If RPC returns variable, should only return one.");
+                    "If RPC returns variable, should only return one.  " +
+                    returned_objs.size());
             }
             return returned_objs.get(0);
         }

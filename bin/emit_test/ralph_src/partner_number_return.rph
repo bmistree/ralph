@@ -3,15 +3,16 @@ Endpoint PassReturnArg
     pass_sum_return(Number a, Number b) returns Number
     {
         Number to_return;
-        @partner.partner_receive_and_return(a,b, &to_return);
+        to_return = 3;
+        to_return = @partner.partner_receive_and_return(a,b);
         return to_return;
     }
 
     /**
        Should only be called through partner call.
      */
-    partner_receive_and_return(Number a, Number b, Number to_return)
+    partner_receive_and_return(Number a, Number b) returns Number
     {
-        to_return = a + b;
+        return a + b;
     }
 }
