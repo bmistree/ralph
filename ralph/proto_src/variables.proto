@@ -19,6 +19,12 @@ message Variables
         repeated Any map_values = 2;
     }
 
+    message Struct
+    {
+        required string struct_identifier = 1;
+        required Map struct_as_map = 2;
+    }
+    
     message Any
     {
         // for case of data internal to a map/list/struct, use a
@@ -31,7 +37,7 @@ message Variables
         optional bool true_false = 5;
         optional List list = 6;
         optional Map map = 7;
-        optional Map struct = 8;
+        optional Struct struct = 8;
         optional bytes service_factory = 9;
     }
 
