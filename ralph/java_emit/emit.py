@@ -33,6 +33,11 @@ import ralph.Variables.AtomicInterfaceVariable;
 import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph.Variables.AtomicServiceFactoryVariable;
 
+import ralph_protobuffs.VariablesProto;
+
+import RalphDataConstructorRegistry.DataConstructorRegistry;
+import RalphDataConstructorRegistry.StructDataConstructor;
+
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
 
@@ -108,12 +113,14 @@ def emit_struct_definition(struct_name,struct_type):
     external_struct_definition_text = emit_struct_wrapper(struct_type)
     internal_struct_definition_text = emit_internal_struct(struct_type)
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
+    struct_deserializer = emit_struct_deserializer(struct_type)
     
     return (
         dw_constructor_text + '\n' +
         external_struct_definition_text + '\n' +
         internal_struct_definition_text + '\n' +
-        struct_map_wrapper)
+        struct_map_wrapper + '\n' +
+        struct_deserializer)
 
 
 def emit_struct_data_wrapper_constructor(struct_type):
@@ -139,6 +146,42 @@ final static %s
     
 def struct_data_wrapper_constructor_name(struct_name):
     return '%s_type_data_wrapper_constructor' % struct_name
+
+def emit_struct_deserializer(struct_type):
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    internal_deserializer_name = (
+        '__%s_SingletonStructDeserializer' % internal_struct_name)
+    
+    to_return = '''
+public static class %s implements StructDataConstructor
+{
+    // Singleton: want to ensure will only ever register this struct
+    // once.
+    private static final %s instance = new %s();
+
+    protected %s()
+    {
+        DataConstructorRegistry registry =
+            DataConstructorRegistry.get_instance();
+        registry.register_struct("%s",this);
+    }
+    @Override
+    public RalphObject construct(
+        RalphGlobals ralph_globals,
+        VariablesProto.Variables.Struct proto_struct)
+    {
+        // FIXME: must finish deserialization of struct
+        Util.logger_assert(
+            "Have not defined deserializing structs as rpc arguments.");
+        return null;
+    }
+}
+''' % (internal_deserializer_name,internal_deserializer_name,
+       internal_deserializer_name,internal_deserializer_name,
+       internal_deserializer_name)
+
+    return to_return
 
 
 def emit_struct_map_wrapper(struct_type):

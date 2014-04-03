@@ -33,7 +33,7 @@ public class DataConstructorRegistry
         // this class
     }
 
-    public DataConstructorRegistry get_instance()
+    public static DataConstructorRegistry get_instance()
     {
         return instance;
     }
