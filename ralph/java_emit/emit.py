@@ -49,6 +49,7 @@ import RalphConnObj.SingleSideConnection;
 import RalphExceptions.*;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import ralph.Util;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.HashMap;
@@ -838,7 +839,9 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         type_object: {BasicType object}
         
         initializer_node: {None or AstNode} What to assign with new
-        expression
+        expression.  If initializer node has null_type, then will be
+        initialized to null.  If initializer_node is None, then
+        initializes to default value.
 
         emit_ctx: {EmitContext}
 
@@ -2108,8 +2111,7 @@ public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
     
     return external_struct_definition_text
 
-        
-                    
+
 def emit_internal_struct(struct_type):
     '''
     Each internal struct's fields are single threaded locked and
@@ -2153,12 +2155,66 @@ public static class %s
     internal_struct_body_text += '}\n'
     internal_struct_body_text += (
         emit_internal_struct_serialize_as_rpc(struct_type))
-
+    internal_struct_body_text += (
+        emit_internal_struct_deserialize_constructor(struct_type))
     
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'
     return internal_struct_definition_text
+
+
+def emit_internal_struct_deserialize_constructor(struct_type):
+    '''
+    Each struct has a constructor that can be initialized by a proto
+    message.
+    '''
+    # when emitting structs, do not yet have emit context
+    emit_ctx = None
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(
+        struct_type)
+    dict_dot_fields = struct_type.dict_dot_fields()
+    internal_field_deserialization_text = ''
+    counter = 0;
+    for field_name in dict_dot_fields:
+        field_type = dict_dot_fields[field_name]
+        internal_field_type = emit_ralph_wrapped_type(field_type)
+        internal_field_deserialization_text += '''
+{
+    // FIXME: if allow serializing null, should do so here.
+    %s = %s;
+    %s.deserialize_rpc(
+        ralph_globals,_active_event,_struct_field_list.get(%i));
+}
+''' % (field_name,construct_new_expression(field_type,None,emit_ctx),
+       field_name,counter)
+        counter += 1
+
+    
+    constructor_text = '''
+public static %s deserialize_rpc(
+    RalphGlobals ralph_globals, ActiveEvent _active_event,
+    Variables.Any any_with_struct)
+{
+    Variables.Struct _internal_struct = any_with_struct.getStruct();
+    return new %s(ralph_globals,_active_event,_internal_struct);
+}
+
+private %s (
+    RalphGlobals ralph_globals, ActiveEvent _active_event,
+    Variables.Struct _internal_struct)
+{
+    Variables.Map _struct_as_map = _internal_struct.getStructAsMap();
+    List<Variables.Any> _struct_field_list =
+        _struct_as_map.getMapValuesList();
+
+    // deserializing individual fields of struct
+%s
+}
+''' % (internal_struct_name,internal_struct_name,internal_struct_name,
+       indent_string(internal_field_deserialization_text))
+    return constructor_text
 
 
 def emit_internal_struct_serialize_as_rpc(struct_type):
