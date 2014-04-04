@@ -47,15 +47,13 @@ public abstract class RalphObject<T,D>
     public abstract void serialize_as_rpc_arg(
         ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException;
-
-    public void deserialize_rpc(
+    /**
+       Object has already been constructed.  Deserialize contents of
+       any into it.
+     */
+    public abstract void deserialize_rpc(
         RalphGlobals ralph_globals, ActiveEvent active_event,
-        VariablesProto.Variables.Any any)
-    {
-        // FIXME: Placeholder method for deserializing into individual
-        // Ralph Objets.
-        Util.logger_assert("FIXME: must finish adding method deserialize_rpc");
-    }
+        VariablesProto.Variables.Any any);
     
     /**
      * 

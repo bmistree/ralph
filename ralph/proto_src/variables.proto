@@ -10,13 +10,16 @@ message Variables
 {
     message List
     {
-        repeated Any list_values = 1;
+        required string element_type_identifier = 1;
+        repeated Any list_values = 2;
     }
 
     message Map
     {
-        repeated Any map_indices = 1;
-        repeated Any map_values = 2;
+        required string key_type_identifier = 1;
+        required string value_type_identifier = 2;
+        repeated Any map_indices = 3;
+        repeated Any map_values = 4;
     }
 
     message Struct
