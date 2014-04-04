@@ -1046,7 +1046,6 @@ def emit_internal_list_type(type_object):
          (element_type_text,dewaldoify_type_text)))
 
 
-    
 def emit_map_type(type_object):
     # emit for maps
     if isinstance(type_object,MapType):
@@ -1100,7 +1099,6 @@ def emit_list_type(type_object):
             'unknown',0,
             'Requires list type in emit_list_type')
 
-    
     
 def emit_internal_type(type_object):
     '''
@@ -2065,20 +2063,19 @@ public %s (boolean log_operations, RalphGlobals ralph_globals)
         log_operations,
         new %s(ralph_globals),%s,ralph_globals);
 }
-
+@Override
 public void serialize_as_rpc_arg(
     ActiveEvent active_event,Variables.Any.Builder any_builder,
     boolean is_reference) throws BackoutException
 {
-    // FIXME: must finish serialization of struct
-    Util.logger_assert(
-        "Have not defined serializing structs as rpc arguments.");
+    get_val(active_event).serialize_as_rpc_arg(
+        active_event,any_builder,is_reference);
 }
 
 ''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
     # FIXME: should define rpc serialization for structs.
 
-
+    
     external_struct_definition_constructor += '''
 @Override
 protected SpeculativeAtomicObject<%s, %s>
@@ -2111,6 +2108,8 @@ public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
     
     return external_struct_definition_text
 
+        
+                    
 def emit_internal_struct(struct_type):
     '''
     Each internal struct's fields are single threaded locked and
@@ -2152,6 +2151,9 @@ public static class %s
              construct_new_expression(field_type,initializer_node,emit_ctx)))
     internal_struct_body_text += indent_string(internal_constructor_text)
     internal_struct_body_text += '}\n'
+    internal_struct_body_text += (
+        emit_internal_struct_serialize_as_rpc(struct_type))
+
     
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
@@ -2159,3 +2161,51 @@ public static class %s
     return internal_struct_definition_text
 
 
+def emit_internal_struct_serialize_as_rpc(struct_type):
+    # first build create a builder for each internal field
+    struct_name = struct_type.struct_name
+    internal_field_serialization_text = ''
+    dict_dot_fields = struct_type.dict_dot_fields()
+    for field_name in dict_dot_fields:
+        internal_field_serialization_text += '''
+{
+    // using separate blocks for each so that we can reuse internal
+    // variable names (eg., _field_builder).
+    Variables.Any.Builder _index_builder = Variables.Any.newBuilder();
+    _index_builder.setText("%s");
+
+    Variables.Any.Builder _field_builder = Variables.Any.newBuilder();
+    %s.serialize_as_rpc_arg(_active_event,_field_builder,_is_reference);
+
+    _struct_fields_builder.addMapIndices(_index_builder);
+    _struct_fields_builder.addMapValues(_field_builder);
+}
+''' % (field_name,field_name)
+
+    serialize_as_rpc_text = '''
+public void serialize_as_rpc_arg(
+    ActiveEvent _active_event,Variables.Any.Builder _any_builder,
+    boolean _is_reference) throws BackoutException
+{
+    // build internal fields of struct
+    Variables.Map.Builder _struct_fields_builder =
+        Variables.Map.newBuilder();
+
+    // particular to each struct.
+%s
+
+    // apply internal fields to struct builder
+    Variables.Struct.Builder _struct_builder =
+       Variables.Struct.newBuilder();
+    _struct_builder.setStructAsMap(_struct_fields_builder);
+    // particular for each struct
+    _struct_builder.setStructIdentifier("%s");
+
+    // apply struct message to any builder
+    _any_builder.setStruct(_struct_builder);
+    _any_builder.setVarName("");
+    _any_builder.setReference(_is_reference);
+}
+''' % (indent_string(internal_field_serialization_text),struct_name)
+
+    return serialize_as_rpc_text

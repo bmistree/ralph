@@ -493,7 +493,7 @@
     <javac
         srcdir="${ralph_emitted.dir}"
         destdir="${build.dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false" />
