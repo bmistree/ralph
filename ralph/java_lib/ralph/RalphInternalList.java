@@ -128,7 +128,8 @@ public class RalphInternalList<V,D>
        them into any_builder.
      */
     public void serialize_as_rpc_arg (
-        ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
         // mostly useless
@@ -151,7 +152,8 @@ public class RalphInternalList<V,D>
                 active_event,single_element_builder,is_reference);
             list_builder.addListValues(single_element_builder);
         }
-
+        list_builder.setElementTypeIdentifier(
+            locked_wrapper.get_serialization_label());
         any_builder.setList(list_builder);
         
         // non-atomics should not hold locks

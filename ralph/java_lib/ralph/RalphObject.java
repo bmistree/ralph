@@ -51,9 +51,12 @@ public abstract class RalphObject<T,D>
        Object has already been constructed.  Deserialize contents of
        any into it.
      */
-    public abstract void deserialize_rpc(
+    public void deserialize_rpc(
         RalphGlobals ralph_globals, ActiveEvent active_event,
-        VariablesProto.Variables.Any any);
+        VariablesProto.Variables.Any any)
+    {
+        Util.logger_assert("FIXME: objects override deserialize_rpc.");
+    }
     
     /**
      * 

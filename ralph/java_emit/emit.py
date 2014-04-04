@@ -2018,6 +2018,13 @@ def emit_struct_map_wrapper(struct_type):
     locked_wrappers_text = '''
 public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
 {
+    @Override
+    public String get_serialization_label()
+    {
+        return "%s";
+    }
+
+    @Override
     public RalphObject<%s,%s> ensure_atomic_object(
         %s object_to_ensure, RalphGlobals ralph_globals)
     {
@@ -2025,6 +2032,7 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
     }
 }
 ''' % (struct_name,internal_struct_name,internal_struct_name,
+       struct_name,
        internal_struct_name,internal_struct_name,internal_struct_name,
        struct_name)
 

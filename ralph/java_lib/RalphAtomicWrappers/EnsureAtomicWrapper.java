@@ -27,6 +27,11 @@ import ralph.RalphGlobals;
  */
 public interface EnsureAtomicWrapper<V,D>
 {
+    /**
+       Used to determine how to deserialize internal data.
+     */
+    public String get_serialization_label();
+    
     public RalphObject<V,D> ensure_atomic_object(
         V object_to_ensure,RalphGlobals ralph_globals);
 }
