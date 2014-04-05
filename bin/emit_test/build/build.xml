@@ -552,7 +552,7 @@
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeListTest">
+         run_SerializeListTest,run_SerializeStructTest">
   </target>
   
   
@@ -1325,6 +1325,20 @@
     </java>
   </target>
 
+  <!-- SerializeStructTest -->
+  <target
+      name="run_SerializeStructTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a struct.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.StructSerialization"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
   
   
   <!-- Delete the build directories -->
