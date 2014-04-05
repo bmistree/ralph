@@ -1,0 +1,24 @@
+Struct NumHolder
+{
+    Number num;
+    TVar Number atom_num;
+}
+
+Endpoint StructSerializer
+{
+    sum_struct_fields_on_other_side(Number a, Number b) returns Number
+    {
+        Struct NumHolder num_holder;
+        num_holder.num = a;
+        num_holder.atom_num = b;
+
+        Number result;
+        result = @partner.receive_struct_sum_fields(num_holder);
+        return result;
+    }
+
+    receive_struct_sum_fields(Struct NumHolder num_holder) returns Number
+    {
+        return num_holder.num + num_holder.atom_num;
+    }
+}
