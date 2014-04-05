@@ -3,10 +3,11 @@ package RalphDataConstructorRegistry;
 import ralph_protobuffs.VariablesProto;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
+import ralph.ActiveEvent;
 
-public interface StructDataConstructor
+public interface DataConstructor
 {
     public RalphObject construct(
-        RalphGlobals ralph_globals,
-        VariablesProto.Variables.Struct proto_struct);
+        VariablesProto.Variables.Any any,RalphGlobals ralph_globals);
+
 }

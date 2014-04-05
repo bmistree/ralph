@@ -10,14 +10,12 @@ import java.io.ObjectInputStream;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
+import RalphDataConstructorRegistry.DataConstructorRegistry;
+
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-import ralph.Variables.NonAtomicTextVariable;
-import ralph.Variables.NonAtomicNumberVariable;
-import ralph.Variables.NonAtomicTrueFalseVariable;
-import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph_protobuffs.VariablesProto;
 
 import RalphCallResults.MessageCallResultObject;
@@ -444,7 +442,6 @@ public class ExecutingEventContext
 
         return to_return;
     }
-
     
     /**
        @returns {RalphObject or null} --- Returns null if the
@@ -455,59 +452,7 @@ public class ExecutingEventContext
     public static RalphObject deserialize_any(
         VariablesProto.Variables.Any variable,RalphGlobals ralph_globals)
     {
-        RalphObject lo = null;
-
-        if (variable.hasNum())
-        {
-            lo = new NonAtomicNumberVariable(
-                false,new Double(variable.getNum()),ralph_globals);
-        }
-        else if (variable.hasText())
-        {
-            lo = new NonAtomicTextVariable(
-                false,variable.getText(),ralph_globals);
-        }
-        else if (variable.hasTrueFalse())
-        {
-            lo = new NonAtomicTrueFalseVariable(
-                false,new Boolean(variable.getTrueFalse()),ralph_globals);
-        }
-        else if (variable.hasList())
-        {
-            Util.logger_assert("Have not added lists back to ralph yet.");
-        }
-        else if (variable.hasMap())
-        {
-            Util.logger_assert("Skipping locked maps");
-        }
-        else if (variable.hasStruct())
-        {
-            Util.logger_assert("Skipping locked structs.");
-        }
-        else if (variable.hasServiceFactory())
-        {
-            EndpointConstructorObj constructor_obj = null;
-            try {
-                byte [] byte_array = variable.getServiceFactory().toByteArray();
-                ByteArrayInputStream array_stream =
-                    new ByteArrayInputStream(byte_array);
-                ObjectInputStream in = new ObjectInputStream(array_stream);
-                Class<EndpointConstructorObj> constructor_class =
-                    (Class<EndpointConstructorObj>) in.readObject();
-                in.close();
-                array_stream.close();
-                constructor_obj = constructor_class.newInstance();
-            } catch (Exception ex) {
-                // FIXME: should catch deserialization error and backout.
-                ex.printStackTrace();
-                Util.logger_assert("Issue deserializing service factory");
-            }
-
-            InternalServiceFactory internal_service_factory =
-                new InternalServiceFactory(constructor_obj,ralph_globals);
-            lo = new NonAtomicServiceFactoryVariable(
-                false,internal_service_factory,ralph_globals);
-        }
-        return lo;
+        DataConstructorRegistry dcr = DataConstructorRegistry.get_instance();
+        return dcr.deserialize(variable,ralph_globals);
     }
 }

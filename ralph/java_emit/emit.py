@@ -36,7 +36,7 @@ import ralph.Variables.AtomicServiceFactoryVariable;
 import ralph_protobuffs.VariablesProto;
 
 import RalphDataConstructorRegistry.DataConstructorRegistry;
-import RalphDataConstructorRegistry.StructDataConstructor;
+import RalphDataConstructorRegistry.DataConstructor;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -1980,7 +1980,7 @@ def emit_struct_deserializer(struct_type):
         '__%s_SingletonStructDeserializer' % internal_struct_name)
     
     to_return = '''
-public static class %s implements StructDataConstructor
+public static class %s implements DataConstructor
 {
     // Singleton: want to ensure will only ever register this struct
     // once.
@@ -1990,12 +1990,12 @@ public static class %s implements StructDataConstructor
     {
         DataConstructorRegistry registry =
             DataConstructorRegistry.get_instance();
-        registry.register_struct("%s",this);
+        registry.register("%s",this);
     }
     @Override
     public RalphObject construct(
-        RalphGlobals ralph_globals,
-        VariablesProto.Variables.Struct proto_struct)
+        VariablesProto.Variables.Any any,
+        RalphGlobals ralph_globals)
     {
         // FIXME: must finish deserialization of struct
         Util.logger_assert(
