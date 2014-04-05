@@ -1982,15 +1982,21 @@ def emit_struct_deserializer(struct_type):
     to_return = '''
 public static class %s implements DataConstructor
 {
+    private static %s instance = new %s();
+
     // Singleton: want to ensure will only ever register this struct
     // once.
-    private static final %s instance = new %s();
-
     protected %s()
     {
         DataConstructorRegistry registry =
             DataConstructorRegistry.get_instance();
+        // put struct name into consturctor registry
         registry.register("%s",this);
+    }
+    
+    public static %s get_instance()
+    {
+        return instance;
     }
     @Override
     public RalphObject construct(
@@ -2003,9 +2009,14 @@ public static class %s implements DataConstructor
         return null;
     }
 }
+// forces construction of internal data constructor
+private static final %s %s__instance = %s.get_instance();
 ''' % (internal_deserializer_name,internal_deserializer_name,
        internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name)
+       # the name that's entered into registry:
+       struct_name,
+       internal_deserializer_name,internal_deserializer_name,
+       internal_deserializer_name,internal_deserializer_name)
 
     return to_return
 
