@@ -25,7 +25,8 @@ message Variables
     message Struct
     {
         required string struct_identifier = 1;
-        required Map struct_as_map = 2;
+        repeated string field_names = 2;
+        repeated Any field_values = 3;
     }
     
     message Any

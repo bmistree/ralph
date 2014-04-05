@@ -1779,10 +1779,20 @@ public final class VariablesProto {
       boolean hasStructIdentifier();
       String getStructIdentifier();
       
-      // required .Variables.Map struct_as_map = 2;
-      boolean hasStructAsMap();
-      ralph_protobuffs.VariablesProto.Variables.Map getStructAsMap();
-      ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructAsMapOrBuilder();
+      // repeated string field_names = 2;
+      java.util.List<String> getFieldNamesList();
+      int getFieldNamesCount();
+      String getFieldNames(int index);
+      
+      // repeated .Variables.Any field_values = 3;
+      java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
+          getFieldValuesList();
+      ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index);
+      int getFieldValuesCount();
+      java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
+          getFieldValuesOrBuilderList();
+      ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
+          int index);
     }
     public static final class Struct extends
         com.google.protobuf.GeneratedMessage
@@ -1845,22 +1855,45 @@ public final class VariablesProto {
         }
       }
       
-      // required .Variables.Map struct_as_map = 2;
-      public static final int STRUCT_AS_MAP_FIELD_NUMBER = 2;
-      private ralph_protobuffs.VariablesProto.Variables.Map structAsMap_;
-      public boolean hasStructAsMap() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+      // repeated string field_names = 2;
+      public static final int FIELD_NAMES_FIELD_NUMBER = 2;
+      private com.google.protobuf.LazyStringList fieldNames_;
+      public java.util.List<String>
+          getFieldNamesList() {
+        return fieldNames_;
       }
-      public ralph_protobuffs.VariablesProto.Variables.Map getStructAsMap() {
-        return structAsMap_;
+      public int getFieldNamesCount() {
+        return fieldNames_.size();
       }
-      public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructAsMapOrBuilder() {
-        return structAsMap_;
+      public String getFieldNames(int index) {
+        return fieldNames_.get(index);
+      }
+      
+      // repeated .Variables.Any field_values = 3;
+      public static final int FIELD_VALUES_FIELD_NUMBER = 3;
+      private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> fieldValues_;
+      public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getFieldValuesList() {
+        return fieldValues_;
+      }
+      public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
+          getFieldValuesOrBuilderList() {
+        return fieldValues_;
+      }
+      public int getFieldValuesCount() {
+        return fieldValues_.size();
+      }
+      public ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index) {
+        return fieldValues_.get(index);
+      }
+      public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
+          int index) {
+        return fieldValues_.get(index);
       }
       
       private void initFields() {
         structIdentifier_ = "";
-        structAsMap_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
+        fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        fieldValues_ = java.util.Collections.emptyList();
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1871,13 +1904,11 @@ public final class VariablesProto {
           memoizedIsInitialized = 0;
           return false;
         }
-        if (!hasStructAsMap()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        if (!getStructAsMap().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
+        for (int i = 0; i < getFieldValuesCount(); i++) {
+          if (!getFieldValues(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
         }
         memoizedIsInitialized = 1;
         return true;
@@ -1889,8 +1920,11 @@ public final class VariablesProto {
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           output.writeBytes(1, getStructIdentifierBytes());
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeMessage(2, structAsMap_);
+        for (int i = 0; i < fieldNames_.size(); i++) {
+          output.writeBytes(2, fieldNames_.getByteString(i));
+        }
+        for (int i = 0; i < fieldValues_.size(); i++) {
+          output.writeMessage(3, fieldValues_.get(i));
         }
         getUnknownFields().writeTo(output);
       }
@@ -1905,9 +1939,18 @@ public final class VariablesProto {
           size += com.google.protobuf.CodedOutputStream
             .computeBytesSize(1, getStructIdentifierBytes());
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        {
+          int dataSize = 0;
+          for (int i = 0; i < fieldNames_.size(); i++) {
+            dataSize += com.google.protobuf.CodedOutputStream
+              .computeBytesSizeNoTag(fieldNames_.getByteString(i));
+          }
+          size += dataSize;
+          size += 1 * getFieldNamesList().size();
+        }
+        for (int i = 0; i < fieldValues_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, structAsMap_);
+            .computeMessageSize(3, fieldValues_.get(i));
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -2025,7 +2068,7 @@ public final class VariablesProto {
         }
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-            getStructAsMapFieldBuilder();
+            getFieldValuesFieldBuilder();
           }
         }
         private static Builder create() {
@@ -2036,12 +2079,14 @@ public final class VariablesProto {
           super.clear();
           structIdentifier_ = "";
           bitField0_ = (bitField0_ & ~0x00000001);
-          if (structAsMapBuilder_ == null) {
-            structAsMap_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
-          } else {
-            structAsMapBuilder_.clear();
-          }
+          fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
           bitField0_ = (bitField0_ & ~0x00000002);
+          if (fieldValuesBuilder_ == null) {
+            fieldValues_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000004);
+          } else {
+            fieldValuesBuilder_.clear();
+          }
           return this;
         }
         
@@ -2084,13 +2129,20 @@ public final class VariablesProto {
             to_bitField0_ |= 0x00000001;
           }
           result.structIdentifier_ = structIdentifier_;
-          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000002;
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            fieldNames_ = new com.google.protobuf.UnmodifiableLazyStringList(
+                fieldNames_);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
-          if (structAsMapBuilder_ == null) {
-            result.structAsMap_ = structAsMap_;
+          result.fieldNames_ = fieldNames_;
+          if (fieldValuesBuilder_ == null) {
+            if (((bitField0_ & 0x00000004) == 0x00000004)) {
+              fieldValues_ = java.util.Collections.unmodifiableList(fieldValues_);
+              bitField0_ = (bitField0_ & ~0x00000004);
+            }
+            result.fieldValues_ = fieldValues_;
           } else {
-            result.structAsMap_ = structAsMapBuilder_.build();
+            result.fieldValues_ = fieldValuesBuilder_.build();
           }
           result.bitField0_ = to_bitField0_;
           onBuilt();
@@ -2111,8 +2163,41 @@ public final class VariablesProto {
           if (other.hasStructIdentifier()) {
             setStructIdentifier(other.getStructIdentifier());
           }
-          if (other.hasStructAsMap()) {
-            mergeStructAsMap(other.getStructAsMap());
+          if (!other.fieldNames_.isEmpty()) {
+            if (fieldNames_.isEmpty()) {
+              fieldNames_ = other.fieldNames_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureFieldNamesIsMutable();
+              fieldNames_.addAll(other.fieldNames_);
+            }
+            onChanged();
+          }
+          if (fieldValuesBuilder_ == null) {
+            if (!other.fieldValues_.isEmpty()) {
+              if (fieldValues_.isEmpty()) {
+                fieldValues_ = other.fieldValues_;
+                bitField0_ = (bitField0_ & ~0x00000004);
+              } else {
+                ensureFieldValuesIsMutable();
+                fieldValues_.addAll(other.fieldValues_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.fieldValues_.isEmpty()) {
+              if (fieldValuesBuilder_.isEmpty()) {
+                fieldValuesBuilder_.dispose();
+                fieldValuesBuilder_ = null;
+                fieldValues_ = other.fieldValues_;
+                bitField0_ = (bitField0_ & ~0x00000004);
+                fieldValuesBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getFieldValuesFieldBuilder() : null;
+              } else {
+                fieldValuesBuilder_.addAllMessages(other.fieldValues_);
+              }
+            }
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -2123,13 +2208,11 @@ public final class VariablesProto {
             
             return false;
           }
-          if (!hasStructAsMap()) {
-            
-            return false;
-          }
-          if (!getStructAsMap().isInitialized()) {
-            
-            return false;
+          for (int i = 0; i < getFieldValuesCount(); i++) {
+            if (!getFieldValues(i).isInitialized()) {
+              
+              return false;
+            }
           }
           return true;
         }
@@ -2163,12 +2246,14 @@ public final class VariablesProto {
                 break;
               }
               case 18: {
-                ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Map.newBuilder();
-                if (hasStructAsMap()) {
-                  subBuilder.mergeFrom(getStructAsMap());
-                }
+                ensureFieldNamesIsMutable();
+                fieldNames_.add(input.readBytes());
+                break;
+              }
+              case 26: {
+                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
                 input.readMessage(subBuilder, extensionRegistry);
-                setStructAsMap(subBuilder.buildPartial());
+                addFieldValues(subBuilder.buildPartial());
                 break;
               }
             }
@@ -2213,94 +2298,246 @@ public final class VariablesProto {
           onChanged();
         }
         
-        // required .Variables.Map struct_as_map = 2;
-        private ralph_protobuffs.VariablesProto.Variables.Map structAsMap_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
-        private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> structAsMapBuilder_;
-        public boolean hasStructAsMap() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+        // repeated string field_names = 2;
+        private com.google.protobuf.LazyStringList fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        private void ensureFieldNamesIsMutable() {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+            fieldNames_ = new com.google.protobuf.LazyStringArrayList(fieldNames_);
+            bitField0_ |= 0x00000002;
+           }
         }
-        public ralph_protobuffs.VariablesProto.Variables.Map getStructAsMap() {
-          if (structAsMapBuilder_ == null) {
-            return structAsMap_;
+        public java.util.List<String>
+            getFieldNamesList() {
+          return java.util.Collections.unmodifiableList(fieldNames_);
+        }
+        public int getFieldNamesCount() {
+          return fieldNames_.size();
+        }
+        public String getFieldNames(int index) {
+          return fieldNames_.get(index);
+        }
+        public Builder setFieldNames(
+            int index, String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFieldNamesIsMutable();
+          fieldNames_.set(index, value);
+          onChanged();
+          return this;
+        }
+        public Builder addFieldNames(String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFieldNamesIsMutable();
+          fieldNames_.add(value);
+          onChanged();
+          return this;
+        }
+        public Builder addAllFieldNames(
+            java.lang.Iterable<String> values) {
+          ensureFieldNamesIsMutable();
+          super.addAll(values, fieldNames_);
+          onChanged();
+          return this;
+        }
+        public Builder clearFieldNames() {
+          fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+          return this;
+        }
+        void addFieldNames(com.google.protobuf.ByteString value) {
+          ensureFieldNamesIsMutable();
+          fieldNames_.add(value);
+          onChanged();
+        }
+        
+        // repeated .Variables.Any field_values = 3;
+        private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> fieldValues_ =
+          java.util.Collections.emptyList();
+        private void ensureFieldValuesIsMutable() {
+          if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+            fieldValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>(fieldValues_);
+            bitField0_ |= 0x00000004;
+           }
+        }
+        
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> fieldValuesBuilder_;
+        
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getFieldValuesList() {
+          if (fieldValuesBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(fieldValues_);
           } else {
-            return structAsMapBuilder_.getMessage();
+            return fieldValuesBuilder_.getMessageList();
           }
         }
-        public Builder setStructAsMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
-          if (structAsMapBuilder_ == null) {
+        public int getFieldValuesCount() {
+          if (fieldValuesBuilder_ == null) {
+            return fieldValues_.size();
+          } else {
+            return fieldValuesBuilder_.getCount();
+          }
+        }
+        public ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index) {
+          if (fieldValuesBuilder_ == null) {
+            return fieldValues_.get(index);
+          } else {
+            return fieldValuesBuilder_.getMessage(index);
+          }
+        }
+        public Builder setFieldValues(
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
+          if (fieldValuesBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
             }
-            structAsMap_ = value;
+            ensureFieldValuesIsMutable();
+            fieldValues_.set(index, value);
             onChanged();
           } else {
-            structAsMapBuilder_.setMessage(value);
+            fieldValuesBuilder_.setMessage(index, value);
           }
-          bitField0_ |= 0x00000002;
           return this;
         }
-        public Builder setStructAsMap(
-            ralph_protobuffs.VariablesProto.Variables.Map.Builder builderForValue) {
-          if (structAsMapBuilder_ == null) {
-            structAsMap_ = builderForValue.build();
+        public Builder setFieldValues(
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
+          if (fieldValuesBuilder_ == null) {
+            ensureFieldValuesIsMutable();
+            fieldValues_.set(index, builderForValue.build());
             onChanged();
           } else {
-            structAsMapBuilder_.setMessage(builderForValue.build());
+            fieldValuesBuilder_.setMessage(index, builderForValue.build());
           }
-          bitField0_ |= 0x00000002;
           return this;
         }
-        public Builder mergeStructAsMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
-          if (structAsMapBuilder_ == null) {
-            if (((bitField0_ & 0x00000002) == 0x00000002) &&
-                structAsMap_ != ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) {
-              structAsMap_ =
-                ralph_protobuffs.VariablesProto.Variables.Map.newBuilder(structAsMap_).mergeFrom(value).buildPartial();
-            } else {
-              structAsMap_ = value;
+        public Builder addFieldValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
+          if (fieldValuesBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
             }
+            ensureFieldValuesIsMutable();
+            fieldValues_.add(value);
             onChanged();
           } else {
-            structAsMapBuilder_.mergeFrom(value);
+            fieldValuesBuilder_.addMessage(value);
           }
-          bitField0_ |= 0x00000002;
           return this;
         }
-        public Builder clearStructAsMap() {
-          if (structAsMapBuilder_ == null) {
-            structAsMap_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
+        public Builder addFieldValues(
+            int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
+          if (fieldValuesBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureFieldValuesIsMutable();
+            fieldValues_.add(index, value);
             onChanged();
           } else {
-            structAsMapBuilder_.clear();
+            fieldValuesBuilder_.addMessage(index, value);
           }
-          bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
-        public ralph_protobuffs.VariablesProto.Variables.Map.Builder getStructAsMapBuilder() {
-          bitField0_ |= 0x00000002;
-          onChanged();
-          return getStructAsMapFieldBuilder().getBuilder();
-        }
-        public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getStructAsMapOrBuilder() {
-          if (structAsMapBuilder_ != null) {
-            return structAsMapBuilder_.getMessageOrBuilder();
+        public Builder addFieldValues(
+            ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
+          if (fieldValuesBuilder_ == null) {
+            ensureFieldValuesIsMutable();
+            fieldValues_.add(builderForValue.build());
+            onChanged();
           } else {
-            return structAsMap_;
+            fieldValuesBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        public Builder addFieldValues(
+            int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
+          if (fieldValuesBuilder_ == null) {
+            ensureFieldValuesIsMutable();
+            fieldValues_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            fieldValuesBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        public Builder addAllFieldValues(
+            java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
+          if (fieldValuesBuilder_ == null) {
+            ensureFieldValuesIsMutable();
+            super.addAll(values, fieldValues_);
+            onChanged();
+          } else {
+            fieldValuesBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        public Builder clearFieldValues() {
+          if (fieldValuesBuilder_ == null) {
+            fieldValues_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000004);
+            onChanged();
+          } else {
+            fieldValuesBuilder_.clear();
+          }
+          return this;
+        }
+        public Builder removeFieldValues(int index) {
+          if (fieldValuesBuilder_ == null) {
+            ensureFieldValuesIsMutable();
+            fieldValues_.remove(index);
+            onChanged();
+          } else {
+            fieldValuesBuilder_.remove(index);
+          }
+          return this;
+        }
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder getFieldValuesBuilder(
+            int index) {
+          return getFieldValuesFieldBuilder().getBuilder(index);
+        }
+        public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
+            int index) {
+          if (fieldValuesBuilder_ == null) {
+            return fieldValues_.get(index);  } else {
+            return fieldValuesBuilder_.getMessageOrBuilder(index);
           }
         }
-        private com.google.protobuf.SingleFieldBuilder<
-            ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> 
-            getStructAsMapFieldBuilder() {
-          if (structAsMapBuilder_ == null) {
-            structAsMapBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-                ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder>(
-                    structAsMap_,
+        public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
+             getFieldValuesOrBuilderList() {
+          if (fieldValuesBuilder_ != null) {
+            return fieldValuesBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(fieldValues_);
+          }
+        }
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addFieldValuesBuilder() {
+          return getFieldValuesFieldBuilder().addBuilder(
+              ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
+        }
+        public ralph_protobuffs.VariablesProto.Variables.Any.Builder addFieldValuesBuilder(
+            int index) {
+          return getFieldValuesFieldBuilder().addBuilder(
+              index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
+        }
+        public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
+             getFieldValuesBuilderList() {
+          return getFieldValuesFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
+            getFieldValuesFieldBuilder() {
+          if (fieldValuesBuilder_ == null) {
+            fieldValuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder>(
+                    fieldValues_,
+                    ((bitField0_ & 0x00000004) == 0x00000004),
                     getParentForChildren(),
                     isClean());
-            structAsMap_ = null;
+            fieldValues_ = null;
           }
-          return structAsMapBuilder_;
+          return fieldValuesBuilder_;
         }
         
         // @@protoc_insertion_point(builder_scope:Variables.Struct)
@@ -4116,22 +4353,23 @@ public final class VariablesProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017variables.proto\032\nutil.proto\"\265\004\n\tVariab" +
+      "\n\017variables.proto\032\nutil.proto\"\311\004\n\tVariab" +
       "les\022\034\n\004vars\030\001 \003(\0132\016.Variables.Any\032L\n\004Lis" +
       "t\022\037\n\027element_type_identifier\030\001 \002(\t\022#\n\013li" +
       "st_values\030\002 \003(\0132\016.Variables.Any\032\212\001\n\003Map\022" +
       "\033\n\023key_type_identifier\030\001 \002(\t\022\035\n\025value_ty" +
       "pe_identifier\030\002 \002(\t\022#\n\013map_indices\030\003 \003(\013" +
       "2\016.Variables.Any\022\"\n\nmap_values\030\004 \003(\0132\016.V" +
-      "ariables.Any\032J\n\006Struct\022\031\n\021struct_identif" +
-      "ier\030\001 \002(\t\022%\n\rstruct_as_map\030\002 \002(\0132\016.Varia" +
-      "bles.Map\032\342\001\n\003Any\022\020\n\010var_name\030\001 \002(\t\022\021\n\tre",
-      "ference\030\002 \002(\010\022\017\n\007is_tvar\030\003 \002(\010\022\013\n\003num\030\004 " +
-      "\001(\001\022\014\n\004text\030\005 \001(\t\022\022\n\ntrue_false\030\006 \001(\010\022\035\n" +
-      "\004list\030\007 \001(\0132\017.Variables.List\022\033\n\003map\030\010 \001(" +
-      "\0132\016.Variables.Map\022!\n\006struct\030\t \001(\0132\021.Vari" +
-      "ables.Struct\022\027\n\017service_factory\030\n \001(\014B\"\n" +
-      "\020ralph_protobuffsB\016VariablesProto"
+      "ariables.Any\032^\n\006Struct\022\031\n\021struct_identif" +
+      "ier\030\001 \002(\t\022\023\n\013field_names\030\002 \003(\t\022$\n\014field_" +
+      "values\030\003 \003(\0132\016.Variables.Any\032\342\001\n\003Any\022\020\n\010",
+      "var_name\030\001 \002(\t\022\021\n\treference\030\002 \002(\010\022\017\n\007is_" +
+      "tvar\030\003 \002(\010\022\013\n\003num\030\004 \001(\001\022\014\n\004text\030\005 \001(\t\022\022\n" +
+      "\ntrue_false\030\006 \001(\010\022\035\n\004list\030\007 \001(\0132\017.Variab" +
+      "les.List\022\033\n\003map\030\010 \001(\0132\016.Variables.Map\022!\n" +
+      "\006struct\030\t \001(\0132\021.Variables.Struct\022\027\n\017serv" +
+      "ice_factory\030\n \001(\014B\"\n\020ralph_protobuffsB\016V" +
+      "ariablesProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4167,7 +4405,7 @@ public final class VariablesProto {
           internal_static_Variables_Struct_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Struct_descriptor,
-              new java.lang.String[] { "StructIdentifier", "StructAsMap", },
+              new java.lang.String[] { "StructIdentifier", "FieldNames", "FieldValues", },
               ralph_protobuffs.VariablesProto.Variables.Struct.class,
               ralph_protobuffs.VariablesProto.Variables.Struct.Builder.class);
           internal_static_Variables_Any_descriptor =
