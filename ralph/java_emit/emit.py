@@ -2060,6 +2060,7 @@ def emit_struct_wrapper(struct_type):
     internal_struct_name = emit_internal_struct_type(struct_type)
     
     ##### External wrapped struct
+    # FIXME: structs are always atomic.
     external_struct_definition_text = '''
 public static class %s extends AtomicValueVariable<%s,%s>
 {''' % (struct_name, internal_struct_name, internal_struct_name)
@@ -2081,6 +2082,7 @@ public void serialize_as_rpc_arg(
 {
     get_val(active_event).serialize_as_rpc_arg(
         active_event,any_builder,is_reference);
+    any_builder.setIsTvar(true);
 }
 
 ''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
@@ -2273,3 +2275,4 @@ public void serialize_as_rpc_arg(
 ''' % (indent_string(internal_field_serialization_text),struct_name)
 
     return serialize_as_rpc_text
+

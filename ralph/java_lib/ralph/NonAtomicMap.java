@@ -108,6 +108,7 @@ public abstract class NonAtomicMap<K,V,D>
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
+        any_builder.setIsTvar(false);
     }
     public void load_init_vals(
         HashMap<K,RalphObject<V,D>> init_val, boolean incorporating_deltas)

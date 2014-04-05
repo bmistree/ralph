@@ -339,6 +339,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 {
                     any_builder.setVarName("");
                     any_builder.setReference(false);
+                    any_builder.setIsTvar(false);
                 }
                 else
                 {

@@ -80,6 +80,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setNum(internal_val.doubleValue());
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(true);
         }
     }
 
@@ -109,6 +110,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setText(internal_val);
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(true);
         }
         
         @Override
@@ -149,6 +151,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setTrueFalse(internal_val.booleanValue());
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(true);
         }
         
         @Override
@@ -240,6 +243,7 @@ public class Variables {
         {
             InternalServiceFactory internal_val = get_val(active_event);
             serialize_service_factory(internal_val,any_builder,is_reference);
+            any_builder.setIsTvar(true);
         }
 
         /**
@@ -295,6 +299,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setNum(internal_val.doubleValue());
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(false);
         }
     }
 
@@ -326,6 +331,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setText(internal_val);
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(false);
         }
         
     }
@@ -358,6 +364,7 @@ public class Variables {
             any_builder.setVarName("");
             any_builder.setTrueFalse(internal_val.booleanValue());
             any_builder.setReference(is_reference);
+            any_builder.setIsTvar(false);
         }
     }
 
@@ -386,6 +393,7 @@ public class Variables {
             VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference)
         {
+            any_builder.setIsTvar(false);
             Util.logger_assert(
                 "Cannot pass interface reference over network.");
         }
@@ -420,6 +428,7 @@ public class Variables {
             InternalServiceFactory internal_val = get_val(active_event);
             AtomicServiceFactoryVariable.serialize_service_factory(
                 internal_val,any_builder,is_reference);
+            any_builder.setIsTvar(false);
         }
     }
 

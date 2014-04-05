@@ -2325,34 +2325,38 @@ public final class VariablesProto {
       boolean hasReference();
       boolean getReference();
       
-      // optional double num = 3;
+      // required bool is_tvar = 3;
+      boolean hasIsTvar();
+      boolean getIsTvar();
+      
+      // optional double num = 4;
       boolean hasNum();
       double getNum();
       
-      // optional string text = 4;
+      // optional string text = 5;
       boolean hasText();
       String getText();
       
-      // optional bool true_false = 5;
+      // optional bool true_false = 6;
       boolean hasTrueFalse();
       boolean getTrueFalse();
       
-      // optional .Variables.List list = 6;
+      // optional .Variables.List list = 7;
       boolean hasList();
       ralph_protobuffs.VariablesProto.Variables.List getList();
       ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder();
       
-      // optional .Variables.Map map = 7;
+      // optional .Variables.Map map = 8;
       boolean hasMap();
       ralph_protobuffs.VariablesProto.Variables.Map getMap();
       ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder();
       
-      // optional .Variables.Struct struct = 8;
+      // optional .Variables.Struct struct = 9;
       boolean hasStruct();
       ralph_protobuffs.VariablesProto.Variables.Struct getStruct();
       ralph_protobuffs.VariablesProto.Variables.StructOrBuilder getStructOrBuilder();
       
-      // optional bytes service_factory = 9;
+      // optional bytes service_factory = 10;
       boolean hasServiceFactory();
       com.google.protobuf.ByteString getServiceFactory();
     }
@@ -2427,21 +2431,31 @@ public final class VariablesProto {
         return reference_;
       }
       
-      // optional double num = 3;
-      public static final int NUM_FIELD_NUMBER = 3;
+      // required bool is_tvar = 3;
+      public static final int IS_TVAR_FIELD_NUMBER = 3;
+      private boolean isTvar_;
+      public boolean hasIsTvar() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public boolean getIsTvar() {
+        return isTvar_;
+      }
+      
+      // optional double num = 4;
+      public static final int NUM_FIELD_NUMBER = 4;
       private double num_;
       public boolean hasNum() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public double getNum() {
         return num_;
       }
       
-      // optional string text = 4;
-      public static final int TEXT_FIELD_NUMBER = 4;
+      // optional string text = 5;
+      public static final int TEXT_FIELD_NUMBER = 5;
       private java.lang.Object text_;
       public boolean hasText() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public String getText() {
         java.lang.Object ref = text_;
@@ -2469,21 +2483,21 @@ public final class VariablesProto {
         }
       }
       
-      // optional bool true_false = 5;
-      public static final int TRUE_FALSE_FIELD_NUMBER = 5;
+      // optional bool true_false = 6;
+      public static final int TRUE_FALSE_FIELD_NUMBER = 6;
       private boolean trueFalse_;
       public boolean hasTrueFalse() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       public boolean getTrueFalse() {
         return trueFalse_;
       }
       
-      // optional .Variables.List list = 6;
-      public static final int LIST_FIELD_NUMBER = 6;
+      // optional .Variables.List list = 7;
+      public static final int LIST_FIELD_NUMBER = 7;
       private ralph_protobuffs.VariablesProto.Variables.List list_;
       public boolean hasList() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       public ralph_protobuffs.VariablesProto.Variables.List getList() {
         return list_;
@@ -2492,11 +2506,11 @@ public final class VariablesProto {
         return list_;
       }
       
-      // optional .Variables.Map map = 7;
-      public static final int MAP_FIELD_NUMBER = 7;
+      // optional .Variables.Map map = 8;
+      public static final int MAP_FIELD_NUMBER = 8;
       private ralph_protobuffs.VariablesProto.Variables.Map map_;
       public boolean hasMap() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
         return map_;
@@ -2505,11 +2519,11 @@ public final class VariablesProto {
         return map_;
       }
       
-      // optional .Variables.Struct struct = 8;
-      public static final int STRUCT_FIELD_NUMBER = 8;
+      // optional .Variables.Struct struct = 9;
+      public static final int STRUCT_FIELD_NUMBER = 9;
       private ralph_protobuffs.VariablesProto.Variables.Struct struct_;
       public boolean hasStruct() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public ralph_protobuffs.VariablesProto.Variables.Struct getStruct() {
         return struct_;
@@ -2518,11 +2532,11 @@ public final class VariablesProto {
         return struct_;
       }
       
-      // optional bytes service_factory = 9;
-      public static final int SERVICE_FACTORY_FIELD_NUMBER = 9;
+      // optional bytes service_factory = 10;
+      public static final int SERVICE_FACTORY_FIELD_NUMBER = 10;
       private com.google.protobuf.ByteString serviceFactory_;
       public boolean hasServiceFactory() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       public com.google.protobuf.ByteString getServiceFactory() {
         return serviceFactory_;
@@ -2531,6 +2545,7 @@ public final class VariablesProto {
       private void initFields() {
         varName_ = "";
         reference_ = false;
+        isTvar_ = false;
         num_ = 0D;
         text_ = "";
         trueFalse_ = false;
@@ -2549,6 +2564,10 @@ public final class VariablesProto {
           return false;
         }
         if (!hasReference()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasIsTvar()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -2584,25 +2603,28 @@ public final class VariablesProto {
           output.writeBool(2, reference_);
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          output.writeDouble(3, num_);
+          output.writeBool(3, isTvar_);
         }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          output.writeBytes(4, getTextBytes());
+          output.writeDouble(4, num_);
         }
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
-          output.writeBool(5, trueFalse_);
+          output.writeBytes(5, getTextBytes());
         }
         if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          output.writeMessage(6, list_);
+          output.writeBool(6, trueFalse_);
         }
         if (((bitField0_ & 0x00000040) == 0x00000040)) {
-          output.writeMessage(7, map_);
+          output.writeMessage(7, list_);
         }
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          output.writeMessage(8, struct_);
+          output.writeMessage(8, map_);
         }
         if (((bitField0_ & 0x00000100) == 0x00000100)) {
-          output.writeBytes(9, serviceFactory_);
+          output.writeMessage(9, struct_);
+        }
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          output.writeBytes(10, serviceFactory_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -2623,31 +2645,35 @@ public final class VariablesProto {
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeDoubleSize(3, num_);
+            .computeBoolSize(3, isTvar_);
         }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(4, getTextBytes());
+            .computeDoubleSize(4, num_);
         }
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBoolSize(5, trueFalse_);
+            .computeBytesSize(5, getTextBytes());
         }
         if (((bitField0_ & 0x00000020) == 0x00000020)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(6, list_);
+            .computeBoolSize(6, trueFalse_);
         }
         if (((bitField0_ & 0x00000040) == 0x00000040)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(7, map_);
+            .computeMessageSize(7, list_);
         }
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(8, struct_);
+            .computeMessageSize(8, map_);
         }
         if (((bitField0_ & 0x00000100) == 0x00000100)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(9, serviceFactory_);
+            .computeMessageSize(9, struct_);
+        }
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(10, serviceFactory_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -2780,32 +2806,34 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000001);
           reference_ = false;
           bitField0_ = (bitField0_ & ~0x00000002);
-          num_ = 0D;
+          isTvar_ = false;
           bitField0_ = (bitField0_ & ~0x00000004);
-          text_ = "";
+          num_ = 0D;
           bitField0_ = (bitField0_ & ~0x00000008);
-          trueFalse_ = false;
+          text_ = "";
           bitField0_ = (bitField0_ & ~0x00000010);
+          trueFalse_ = false;
+          bitField0_ = (bitField0_ & ~0x00000020);
           if (listBuilder_ == null) {
             list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
           } else {
             listBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000040);
           if (mapBuilder_ == null) {
             map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
           } else {
             mapBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000080);
           if (structBuilder_ == null) {
             struct_ = ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
           } else {
             structBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000080);
-          serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
           bitField0_ = (bitField0_ & ~0x00000100);
+          serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
+          bitField0_ = (bitField0_ & ~0x00000200);
           return this;
         }
         
@@ -2855,41 +2883,45 @@ public final class VariablesProto {
           if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
             to_bitField0_ |= 0x00000004;
           }
-          result.num_ = num_;
+          result.isTvar_ = isTvar_;
           if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
             to_bitField0_ |= 0x00000008;
           }
-          result.text_ = text_;
+          result.num_ = num_;
           if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
             to_bitField0_ |= 0x00000010;
           }
-          result.trueFalse_ = trueFalse_;
+          result.text_ = text_;
           if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
             to_bitField0_ |= 0x00000020;
+          }
+          result.trueFalse_ = trueFalse_;
+          if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+            to_bitField0_ |= 0x00000040;
           }
           if (listBuilder_ == null) {
             result.list_ = list_;
           } else {
             result.list_ = listBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-            to_bitField0_ |= 0x00000040;
+          if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+            to_bitField0_ |= 0x00000080;
           }
           if (mapBuilder_ == null) {
             result.map_ = map_;
           } else {
             result.map_ = mapBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-            to_bitField0_ |= 0x00000080;
+          if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+            to_bitField0_ |= 0x00000100;
           }
           if (structBuilder_ == null) {
             result.struct_ = struct_;
           } else {
             result.struct_ = structBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-            to_bitField0_ |= 0x00000100;
+          if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+            to_bitField0_ |= 0x00000200;
           }
           result.serviceFactory_ = serviceFactory_;
           result.bitField0_ = to_bitField0_;
@@ -2913,6 +2945,9 @@ public final class VariablesProto {
           }
           if (other.hasReference()) {
             setReference(other.getReference());
+          }
+          if (other.hasIsTvar()) {
+            setIsTvar(other.getIsTvar());
           }
           if (other.hasNum()) {
             setNum(other.getNum());
@@ -2945,6 +2980,10 @@ public final class VariablesProto {
             return false;
           }
           if (!hasReference()) {
+            
+            return false;
+          }
+          if (!hasIsTvar()) {
             
             return false;
           }
@@ -3002,22 +3041,27 @@ public final class VariablesProto {
                 reference_ = input.readBool();
                 break;
               }
-              case 25: {
+              case 24: {
                 bitField0_ |= 0x00000004;
+                isTvar_ = input.readBool();
+                break;
+              }
+              case 33: {
+                bitField0_ |= 0x00000008;
                 num_ = input.readDouble();
                 break;
               }
-              case 34: {
-                bitField0_ |= 0x00000008;
+              case 42: {
+                bitField0_ |= 0x00000010;
                 text_ = input.readBytes();
                 break;
               }
-              case 40: {
-                bitField0_ |= 0x00000010;
+              case 48: {
+                bitField0_ |= 0x00000020;
                 trueFalse_ = input.readBool();
                 break;
               }
-              case 50: {
+              case 58: {
                 ralph_protobuffs.VariablesProto.Variables.List.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.List.newBuilder();
                 if (hasList()) {
                   subBuilder.mergeFrom(getList());
@@ -3026,7 +3070,7 @@ public final class VariablesProto {
                 setList(subBuilder.buildPartial());
                 break;
               }
-              case 58: {
+              case 66: {
                 ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Map.newBuilder();
                 if (hasMap()) {
                   subBuilder.mergeFrom(getMap());
@@ -3035,7 +3079,7 @@ public final class VariablesProto {
                 setMap(subBuilder.buildPartial());
                 break;
               }
-              case 66: {
+              case 74: {
                 ralph_protobuffs.VariablesProto.Variables.Struct.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Struct.newBuilder();
                 if (hasStruct()) {
                   subBuilder.mergeFrom(getStruct());
@@ -3044,8 +3088,8 @@ public final class VariablesProto {
                 setStruct(subBuilder.buildPartial());
                 break;
               }
-              case 74: {
-                bitField0_ |= 0x00000100;
+              case 82: {
+                bitField0_ |= 0x00000200;
                 serviceFactory_ = input.readBytes();
                 break;
               }
@@ -3112,31 +3156,52 @@ public final class VariablesProto {
           return this;
         }
         
-        // optional double num = 3;
+        // required bool is_tvar = 3;
+        private boolean isTvar_ ;
+        public boolean hasIsTvar() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
+        }
+        public boolean getIsTvar() {
+          return isTvar_;
+        }
+        public Builder setIsTvar(boolean value) {
+          bitField0_ |= 0x00000004;
+          isTvar_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearIsTvar() {
+          bitField0_ = (bitField0_ & ~0x00000004);
+          isTvar_ = false;
+          onChanged();
+          return this;
+        }
+        
+        // optional double num = 4;
         private double num_ ;
         public boolean hasNum() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+          return ((bitField0_ & 0x00000008) == 0x00000008);
         }
         public double getNum() {
           return num_;
         }
         public Builder setNum(double value) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           num_ = value;
           onChanged();
           return this;
         }
         public Builder clearNum() {
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           num_ = 0D;
           onChanged();
           return this;
         }
         
-        // optional string text = 4;
+        // optional string text = 5;
         private java.lang.Object text_ = "";
         public boolean hasText() {
-          return ((bitField0_ & 0x00000008) == 0x00000008);
+          return ((bitField0_ & 0x00000010) == 0x00000010);
         }
         public String getText() {
           java.lang.Object ref = text_;
@@ -3152,50 +3217,50 @@ public final class VariablesProto {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000010;
           text_ = value;
           onChanged();
           return this;
         }
         public Builder clearText() {
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000010);
           text_ = getDefaultInstance().getText();
           onChanged();
           return this;
         }
         void setText(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           text_ = value;
           onChanged();
         }
         
-        // optional bool true_false = 5;
+        // optional bool true_false = 6;
         private boolean trueFalse_ ;
         public boolean hasTrueFalse() {
-          return ((bitField0_ & 0x00000010) == 0x00000010);
+          return ((bitField0_ & 0x00000020) == 0x00000020);
         }
         public boolean getTrueFalse() {
           return trueFalse_;
         }
         public Builder setTrueFalse(boolean value) {
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000020;
           trueFalse_ = value;
           onChanged();
           return this;
         }
         public Builder clearTrueFalse() {
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000020);
           trueFalse_ = false;
           onChanged();
           return this;
         }
         
-        // optional .Variables.List list = 6;
+        // optional .Variables.List list = 7;
         private ralph_protobuffs.VariablesProto.Variables.List list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder> listBuilder_;
         public boolean hasList() {
-          return ((bitField0_ & 0x00000020) == 0x00000020);
+          return ((bitField0_ & 0x00000040) == 0x00000040);
         }
         public ralph_protobuffs.VariablesProto.Variables.List getList() {
           if (listBuilder_ == null) {
@@ -3214,7 +3279,7 @@ public final class VariablesProto {
           } else {
             listBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           return this;
         }
         public Builder setList(
@@ -3225,12 +3290,12 @@ public final class VariablesProto {
           } else {
             listBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           return this;
         }
         public Builder mergeList(ralph_protobuffs.VariablesProto.Variables.List value) {
           if (listBuilder_ == null) {
-            if (((bitField0_ & 0x00000020) == 0x00000020) &&
+            if (((bitField0_ & 0x00000040) == 0x00000040) &&
                 list_ != ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance()) {
               list_ =
                 ralph_protobuffs.VariablesProto.Variables.List.newBuilder(list_).mergeFrom(value).buildPartial();
@@ -3241,7 +3306,7 @@ public final class VariablesProto {
           } else {
             listBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           return this;
         }
         public Builder clearList() {
@@ -3251,11 +3316,11 @@ public final class VariablesProto {
           } else {
             listBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000040);
           return this;
         }
         public ralph_protobuffs.VariablesProto.Variables.List.Builder getListBuilder() {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           onChanged();
           return getListFieldBuilder().getBuilder();
         }
@@ -3280,12 +3345,12 @@ public final class VariablesProto {
           return listBuilder_;
         }
         
-        // optional .Variables.Map map = 7;
+        // optional .Variables.Map map = 8;
         private ralph_protobuffs.VariablesProto.Variables.Map map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> mapBuilder_;
         public boolean hasMap() {
-          return ((bitField0_ & 0x00000040) == 0x00000040);
+          return ((bitField0_ & 0x00000080) == 0x00000080);
         }
         public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
           if (mapBuilder_ == null) {
@@ -3304,7 +3369,7 @@ public final class VariablesProto {
           } else {
             mapBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
           return this;
         }
         public Builder setMap(
@@ -3315,12 +3380,12 @@ public final class VariablesProto {
           } else {
             mapBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
           return this;
         }
         public Builder mergeMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (mapBuilder_ == null) {
-            if (((bitField0_ & 0x00000040) == 0x00000040) &&
+            if (((bitField0_ & 0x00000080) == 0x00000080) &&
                 map_ != ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) {
               map_ =
                 ralph_protobuffs.VariablesProto.Variables.Map.newBuilder(map_).mergeFrom(value).buildPartial();
@@ -3331,7 +3396,7 @@ public final class VariablesProto {
           } else {
             mapBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
           return this;
         }
         public Builder clearMap() {
@@ -3341,11 +3406,11 @@ public final class VariablesProto {
           } else {
             mapBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000040);
+          bitField0_ = (bitField0_ & ~0x00000080);
           return this;
         }
         public ralph_protobuffs.VariablesProto.Variables.Map.Builder getMapBuilder() {
-          bitField0_ |= 0x00000040;
+          bitField0_ |= 0x00000080;
           onChanged();
           return getMapFieldBuilder().getBuilder();
         }
@@ -3370,12 +3435,12 @@ public final class VariablesProto {
           return mapBuilder_;
         }
         
-        // optional .Variables.Struct struct = 8;
+        // optional .Variables.Struct struct = 9;
         private ralph_protobuffs.VariablesProto.Variables.Struct struct_ = ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Struct, ralph_protobuffs.VariablesProto.Variables.Struct.Builder, ralph_protobuffs.VariablesProto.Variables.StructOrBuilder> structBuilder_;
         public boolean hasStruct() {
-          return ((bitField0_ & 0x00000080) == 0x00000080);
+          return ((bitField0_ & 0x00000100) == 0x00000100);
         }
         public ralph_protobuffs.VariablesProto.Variables.Struct getStruct() {
           if (structBuilder_ == null) {
@@ -3394,7 +3459,7 @@ public final class VariablesProto {
           } else {
             structBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
           return this;
         }
         public Builder setStruct(
@@ -3405,12 +3470,12 @@ public final class VariablesProto {
           } else {
             structBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
           return this;
         }
         public Builder mergeStruct(ralph_protobuffs.VariablesProto.Variables.Struct value) {
           if (structBuilder_ == null) {
-            if (((bitField0_ & 0x00000080) == 0x00000080) &&
+            if (((bitField0_ & 0x00000100) == 0x00000100) &&
                 struct_ != ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance()) {
               struct_ =
                 ralph_protobuffs.VariablesProto.Variables.Struct.newBuilder(struct_).mergeFrom(value).buildPartial();
@@ -3421,7 +3486,7 @@ public final class VariablesProto {
           } else {
             structBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
           return this;
         }
         public Builder clearStruct() {
@@ -3431,11 +3496,11 @@ public final class VariablesProto {
           } else {
             structBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
           return this;
         }
         public ralph_protobuffs.VariablesProto.Variables.Struct.Builder getStructBuilder() {
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
           onChanged();
           return getStructFieldBuilder().getBuilder();
         }
@@ -3460,10 +3525,10 @@ public final class VariablesProto {
           return structBuilder_;
         }
         
-        // optional bytes service_factory = 9;
+        // optional bytes service_factory = 10;
         private com.google.protobuf.ByteString serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
         public boolean hasServiceFactory() {
-          return ((bitField0_ & 0x00000100) == 0x00000100);
+          return ((bitField0_ & 0x00000200) == 0x00000200);
         }
         public com.google.protobuf.ByteString getServiceFactory() {
           return serviceFactory_;
@@ -3472,13 +3537,13 @@ public final class VariablesProto {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000200;
           serviceFactory_ = value;
           onChanged();
           return this;
         }
         public Builder clearServiceFactory() {
-          bitField0_ = (bitField0_ & ~0x00000100);
+          bitField0_ = (bitField0_ & ~0x00000200);
           serviceFactory_ = getDefaultInstance().getServiceFactory();
           onChanged();
           return this;
@@ -4051,7 +4116,7 @@ public final class VariablesProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017variables.proto\032\nutil.proto\"\244\004\n\tVariab" +
+      "\n\017variables.proto\032\nutil.proto\"\265\004\n\tVariab" +
       "les\022\034\n\004vars\030\001 \003(\0132\016.Variables.Any\032L\n\004Lis" +
       "t\022\037\n\027element_type_identifier\030\001 \002(\t\022#\n\013li" +
       "st_values\030\002 \003(\0132\016.Variables.Any\032\212\001\n\003Map\022" +
@@ -4060,13 +4125,13 @@ public final class VariablesProto {
       "2\016.Variables.Any\022\"\n\nmap_values\030\004 \003(\0132\016.V" +
       "ariables.Any\032J\n\006Struct\022\031\n\021struct_identif" +
       "ier\030\001 \002(\t\022%\n\rstruct_as_map\030\002 \002(\0132\016.Varia" +
-      "bles.Map\032\321\001\n\003Any\022\020\n\010var_name\030\001 \002(\t\022\021\n\tre",
-      "ference\030\002 \002(\010\022\013\n\003num\030\003 \001(\001\022\014\n\004text\030\004 \001(\t" +
-      "\022\022\n\ntrue_false\030\005 \001(\010\022\035\n\004list\030\006 \001(\0132\017.Var" +
-      "iables.List\022\033\n\003map\030\007 \001(\0132\016.Variables.Map" +
-      "\022!\n\006struct\030\010 \001(\0132\021.Variables.Struct\022\027\n\017s" +
-      "ervice_factory\030\t \001(\014B\"\n\020ralph_protobuffs" +
-      "B\016VariablesProto"
+      "bles.Map\032\342\001\n\003Any\022\020\n\010var_name\030\001 \002(\t\022\021\n\tre",
+      "ference\030\002 \002(\010\022\017\n\007is_tvar\030\003 \002(\010\022\013\n\003num\030\004 " +
+      "\001(\001\022\014\n\004text\030\005 \001(\t\022\022\n\ntrue_false\030\006 \001(\010\022\035\n" +
+      "\004list\030\007 \001(\0132\017.Variables.List\022\033\n\003map\030\010 \001(" +
+      "\0132\016.Variables.Map\022!\n\006struct\030\t \001(\0132\021.Vari" +
+      "ables.Struct\022\027\n\017service_factory\030\n \001(\014B\"\n" +
+      "\020ralph_protobuffsB\016VariablesProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4110,7 +4175,7 @@ public final class VariablesProto {
           internal_static_Variables_Any_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Any_descriptor,
-              new java.lang.String[] { "VarName", "Reference", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", },
+              new java.lang.String[] { "VarName", "Reference", "IsTvar", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", },
               ralph_protobuffs.VariablesProto.Variables.Any.class,
               ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
           return null;

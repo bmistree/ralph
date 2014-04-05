@@ -129,6 +129,7 @@ public class NonAtomicInternalList<V,D>
         boolean is_reference) throws BackoutException
     {
         internal_list.serialize_as_rpc_arg(active_event,any_builder,is_reference);
+        any_builder.setIsTvar(false);
     }
 
     @Override

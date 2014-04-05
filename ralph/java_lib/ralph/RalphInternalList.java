@@ -125,7 +125,8 @@ public class RalphInternalList<V,D>
 
     /**
        Runs through all the entries in the map/list/struct and puts
-       them into any_builder.
+       them into any_builder.  Note: parent that calls will set
+       is_tvar field.
      */
     public void serialize_as_rpc_arg (
         ActiveEvent active_event,

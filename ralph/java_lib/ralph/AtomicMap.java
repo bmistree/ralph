@@ -124,7 +124,6 @@ public class AtomicMap<K,V,D>
         load_init_vals(init_val,incorporating_deltas);
     }
     
-
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
@@ -133,6 +132,7 @@ public class AtomicMap<K,V,D>
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
+        any_builder.setIsTvar(true);
     }
     
     public void load_init_vals(
