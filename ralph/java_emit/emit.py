@@ -2215,9 +2215,8 @@ private %s (
     RalphGlobals ralph_globals, ActiveEvent _active_event,
     Variables.Struct _internal_struct)
 {
-    Variables.Map _struct_as_map = _internal_struct.getStructAsMap();
     List<Variables.Any> _struct_field_list =
-        _struct_as_map.getMapValuesList();
+        _internal_struct.getFieldValuesList();
 
     // deserializing individual fields of struct
 %s
@@ -2237,42 +2236,34 @@ def emit_internal_struct_serialize_as_rpc(struct_type):
 {
     // using separate blocks for each so that we can reuse internal
     // variable names (eg., _field_builder).
-    Variables.Any.Builder _index_builder = Variables.Any.newBuilder();
-    _index_builder.setText("%s");
-
     Variables.Any.Builder _field_builder = Variables.Any.newBuilder();
     %s.serialize_as_rpc_arg(_active_event,_field_builder,_is_reference);
 
-    _struct_fields_builder.addMapIndices(_index_builder);
-    _struct_fields_builder.addMapValues(_field_builder);
+    _struct_builder.addFieldNames("%s");
+    _struct_builder.addFieldValues(_field_builder);
 }
 ''' % (field_name,field_name)
-
+        
     serialize_as_rpc_text = '''
 public void serialize_as_rpc_arg(
     ActiveEvent _active_event,Variables.Any.Builder _any_builder,
     boolean _is_reference) throws BackoutException
 {
-    // build internal fields of struct
-    Variables.Map.Builder _struct_fields_builder =
-        Variables.Map.newBuilder();
-
-    // particular to each struct.
-%s
-
     // apply internal fields to struct builder
     Variables.Struct.Builder _struct_builder =
        Variables.Struct.newBuilder();
-    _struct_builder.setStructAsMap(_struct_fields_builder);
     // particular for each struct
     _struct_builder.setStructIdentifier("%s");
+
+    // particular to each struct.
+%s
 
     // apply struct message to any builder
     _any_builder.setStruct(_struct_builder);
     _any_builder.setVarName("");
     _any_builder.setReference(_is_reference);
 }
-''' % (indent_string(internal_field_serialization_text),struct_name)
+''' % (struct_name,indent_string(internal_field_serialization_text))
 
     return serialize_as_rpc_text
 
