@@ -23,11 +23,21 @@ import ralph.RPCArgObject;
 
 public class DeserializationEvent extends ActiveEvent
 {
+    // Note that deserialization events are guaranteed to run
+    // independently on objects that no other event will run on until
+    // deserialization event is complete.  Therefore, assigning
+    // priority and uuid to constant values should not matter.
     final static private String dummy_priority = "a";
+    final static private String DESERIALIZATION_UUID =
+        Util.generate_uuid();
     
-    public String uuid = null;
-    public EventParent event_parent = null;
-    protected ThreadPool thread_pool = null;
+    public DeserializationEvent()
+    {
+        super();
+        uuid = DESERIALIZATION_UUID;
+        event_parent = null;
+        thread_pool = null;
+    }
     
     public ActiveEvent clone_atomic() throws StoppedException
     {
