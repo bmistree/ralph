@@ -1,5 +1,6 @@
 Endpoint ListSerializer
 {
+    /** NonAtomc Number lists */
     sum_numbers(Number max_number) returns Number
     {
         List(element: Number) list_to_sum;
@@ -17,4 +18,25 @@ Endpoint ListSerializer
             to_return = to_return + num;
         return to_return;
     }
+
+    /** Atom Number lists */
+    sum_atom_numbers(Number max_number) returns Number
+    {
+        TVar List(element: Number) list_to_sum;
+        for (Number num in range(0,max_number))
+            list_to_sum.append(num);
+        Number sum;
+        sum = @partner.partner_sum_numbers_in_atom_list(list_to_sum);
+        return sum;
+    }
+    
+    partner_sum_numbers_in_atom_list(TVar List(element:Number) to_sum)
+        returns Number
+    {
+        Number to_return = 0;
+        for (Number num in to_sum)
+            to_return = to_return + num;
+        return to_return;
+    }    
+    
 }
