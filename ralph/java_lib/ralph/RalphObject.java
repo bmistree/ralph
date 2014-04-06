@@ -52,8 +52,7 @@ public abstract class RalphObject<T,D>
        any into it.
      */
     public void deserialize_rpc(
-        RalphGlobals ralph_globals, ActiveEvent active_event,
-        VariablesProto.Variables.Any any)
+        RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
     {
         Util.logger_assert("FIXME: objects override deserialize_rpc.");
     }

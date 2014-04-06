@@ -9,5 +9,4 @@ public interface DataConstructor
 {
     public RalphObject construct(
         VariablesProto.Variables.Any any,RalphGlobals ralph_globals);
-
 }

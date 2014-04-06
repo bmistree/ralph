@@ -1978,7 +1978,7 @@ def emit_struct_deserializer(struct_type):
     internal_struct_name = emit_internal_struct_type(struct_type)
     internal_deserializer_name = (
         '__%s_SingletonStructDeserializer' % internal_struct_name)
-    
+
     to_return = '''
 public static class %s implements DataConstructor
 {
@@ -2003,10 +2003,9 @@ public static class %s implements DataConstructor
         VariablesProto.Variables.Any any,
         RalphGlobals ralph_globals)
     {
-        // FIXME: must finish deserialization of struct
-        Util.logger_assert(
-            "Have not defined deserializing structs as rpc arguments.");
-        return null;
+        %s to_return = new %s(false,ralph_globals);
+        to_return.deserialize_rpc(ralph_globals,any);
+        return to_return;
     }
 }
 // forces construction of internal data constructor
@@ -2015,8 +2014,13 @@ private static final %s %s__instance = %s.get_instance();
        internal_deserializer_name,internal_deserializer_name,
        # the name that's entered into registry:
        struct_name,
+       # get_instance
+       internal_deserializer_name,
+       # inside of construct method
+       struct_name,struct_name,
+       # generates static instance.
        internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name,internal_deserializer_name)
+       internal_deserializer_name)
 
     return to_return
 
@@ -2206,7 +2210,7 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     // FIXME: if allow serializing null, should do so here.
     %s = %s;
     %s.deserialize_rpc(
-        ralph_globals,_active_event,_struct_field_list.get(%i));
+        ralph_globals,_struct_field_list.get(%i));
 }
 ''' % (field_name,construct_new_expression(field_type,None,emit_ctx),
        field_name,counter)
@@ -2215,16 +2219,14 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     
     constructor_text = '''
 public static %s deserialize_rpc(
-    RalphGlobals ralph_globals, ActiveEvent _active_event,
-    Variables.Any any_with_struct)
+    RalphGlobals ralph_globals, Variables.Any any_with_struct)
 {
     Variables.Struct _internal_struct = any_with_struct.getStruct();
-    return new %s(ralph_globals,_active_event,_internal_struct);
+    return new %s(ralph_globals,_internal_struct);
 }
 
 private %s (
-    RalphGlobals ralph_globals, ActiveEvent _active_event,
-    Variables.Struct _internal_struct)
+    RalphGlobals ralph_globals, Variables.Struct _internal_struct)
 {
     List<Variables.Any> _struct_field_list =
         _internal_struct.getFieldValuesList();
