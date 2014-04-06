@@ -475,13 +475,13 @@
       <arg line="-c SimplifiedBackedSpeculationJava"/>
     </exec>
     
-    <echo message="${line.separator}serialize_list.rph${line.separator}"/>
+    <echo message="${line.separator}serialize_number_list.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeListJava.java"/>
+      <arg line="-i ${ralph_src.dir}/serialize_number_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeNumberListJava.java"/>
       <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeListJava"/>
+      <arg line="-c SerializeNumberListJava"/>
     </exec>
 
     <echo message="${line.separator}partner_number_return.rph${line.separator}"/>
@@ -552,7 +552,7 @@
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeListTest,run_SerializeStructTest">
+         run_SerializeNumberListTest,run_SerializeStructTest">
   </target>
   
   
@@ -1312,12 +1312,12 @@
 
   <!-- SerializeListTest -->
   <target
-      name="run_SerializeListTest"
+      name="run_SerializeNumberListTest"
       depends="compile_ralph_tests"
-      description="Test that can serialize a list.">
+      description="Test that can serialize a list of numbers.">
     <java
         dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeListTest"
+        classname="emit_test_harnesses.SerializeNumberListTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>

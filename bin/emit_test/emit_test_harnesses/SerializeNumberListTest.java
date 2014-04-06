@@ -1,17 +1,17 @@
 package emit_test_harnesses;
 
-import ralph_emitted.SerializeListJava.ListSerializer;
+import ralph_emitted.SerializeNumberListJava.ListSerializer;
 import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 
-public class SerializeListTest
+public class SerializeNumberListTest
 {
     public static void main(String[] args)
     {
         if (run_test())
-            System.out.println("\nSUCCESS in SerializeListTest\n");
+            System.out.println("\nSUCCESS in SerializeNumberListTest\n");
         else
-            System.out.println("\nFAILURE in SerializeListTest\n");
+            System.out.println("\nFAILURE in SerializeNumberListTest\n");
     }
 
     public static boolean run_test()
