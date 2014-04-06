@@ -56,7 +56,11 @@ public class DataConstructorRegistry
         return instance;
     }
 
-
+    public static String merge_labels(String label_outside, String label_inside)
+    {
+        return label_outside + "|" + label_inside;
+    }
+    
     public void register(String name, DataConstructor constructor)
     {
         constructors.put(name,constructor);
