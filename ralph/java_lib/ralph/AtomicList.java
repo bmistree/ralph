@@ -37,7 +37,7 @@ public class AtomicList<V,D>
 {
     private EnsureAtomicWrapper<V,D> locked_wrapper = null;
 
-    public final static String label = "Atomic List";
+    public final static String deserialization_label = "Atomic List";
     
     public AtomicList(
         boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper,

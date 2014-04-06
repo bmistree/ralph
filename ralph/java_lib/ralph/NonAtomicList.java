@@ -33,6 +33,8 @@ public abstract class NonAtomicList<V,D>
     // what will return when call de_waldoify.
     D>
 {
+    public final static String deserialization_label = "NonAtomic List";
+    
     public NonAtomicList(
         EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
     {

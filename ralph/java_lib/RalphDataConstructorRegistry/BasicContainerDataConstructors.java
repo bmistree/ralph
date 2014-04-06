@@ -5,6 +5,7 @@ import java.util.List;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
 import ralph.AtomicList;
+import ralph.NonAtomicList;
 import ralph_protobuffs.VariablesProto;
 import static ralph.Variables.AtomicListVariable;
 import static ralph.Variables.NonAtomicListVariable;
@@ -39,7 +40,8 @@ public class BasicContainerDataConstructors
                 DataConstructorRegistry.get_instance();
             
             String label = deserializer.merge_labels(
-                AtomicList.label, BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
+                AtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
 
             deserializer.register(label,this);
         }
@@ -107,7 +109,8 @@ public class BasicContainerDataConstructors
                 DataConstructorRegistry.get_instance();
             
             String label = deserializer.merge_labels(
-                AtomicList.label, BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
+                NonAtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
 
             deserializer.register(label,this);
         }

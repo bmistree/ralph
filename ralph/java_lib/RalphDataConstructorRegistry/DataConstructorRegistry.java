@@ -15,6 +15,8 @@ import ralph.ActiveEvent;
 
 import ralph.EndpointConstructorObj;
 import ralph.InternalServiceFactory;
+import ralph.AtomicList;
+import ralph.NonAtomicList;
 
 import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicNumberVariable;
@@ -117,7 +119,24 @@ public class DataConstructorRegistry
         }
         else if (any.hasList())
         {
-            Util.logger_assert("Have not added lists back to ralph yet.");
+            String list_deserialization_label =
+                NonAtomicList.deserialization_label;
+            if (any.getIsTvar())
+                list_deserialization_label = AtomicList.deserialization_label;
+
+            VariablesProto.Variables.List list_message = any.getList();
+            
+            String full_deserialization_label =
+                merge_labels(
+                    list_deserialization_label,
+                    list_message.getElementTypeIdentifier());
+
+            DataConstructor dc =
+                constructors.get(full_deserialization_label);
+            if (dc != null)
+                lo = dc.construct(any,ralph_globals);
+            else
+                Util.logger_assert("Missing list deserialiation type.");
         }
         else if (any.hasMap())
         {
