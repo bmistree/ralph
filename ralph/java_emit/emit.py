@@ -2222,15 +2222,12 @@ def emit_internal_struct_deserialize_constructor(struct_type):
         internal_field_deserialization_text += '''
 {
     // FIXME: if allow serializing null, should do so here.
-    %s = %s;
-    %s.deserialize_rpc(
-        ralph_globals,_struct_field_list.get(%i));
+    %s = (%s)registry_instance.deserialize(
+        _struct_field_list.get(%i),ralph_globals);
 }
-''' % (field_name,construct_new_expression(field_type,None,emit_ctx),
-       field_name,counter)
+''' % (field_name,emit_ralph_wrapped_type(field_type),counter)
         counter += 1
-
-    
+        
     constructor_text = '''
 public static %s deserialize_rpc(
     RalphGlobals ralph_globals, Variables.Any any_with_struct)
@@ -2244,6 +2241,8 @@ private %s (
 {
     List<Variables.Any> _struct_field_list =
         _internal_struct.getFieldValuesList();
+    DataConstructorRegistry registry_instance =
+        DataConstructorRegistry.get_instance();
 
     // deserializing individual fields of struct
 %s
