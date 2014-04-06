@@ -64,10 +64,7 @@ public class SerializeTextListTest
 
             String result = null;
             if (atom)
-            {
-                System.out.println("Still must test for atomics");
-                assert(false);
-            }
+                result = to_call_on.atom_concatenate_strings(a,b,c);
             else
                 result = to_call_on.concatenate_strings(a,b,c);
             

@@ -1,6 +1,6 @@
 Endpoint ListSerializer
 {
-    /** NonAtom Text lists */
+    /** NonAtomic Text lists */
     concatenate_strings(Text string_a, Text string_b, Text string_c)
         returns Text
     {
@@ -23,4 +23,32 @@ Endpoint ListSerializer
             to_return = to_return + text;
         return to_return;
     }
+
+
+    /** Atomic Text lists */
+    atom_concatenate_strings(Text string_a, Text string_b, Text string_c)
+        returns Text
+    {
+        TVar List(element: Text) list_to_concat;
+        list_to_concat.append(string_a);
+        list_to_concat.append(string_b);
+        list_to_concat.append(string_c);
+        Text concatenated;
+        concatenated =
+            @partner.atom_partner_concatenate_strings_in_list(list_to_concat);
+        return concatenated;
+    }
+
+    // called only by partner
+    atom_partner_concatenate_strings_in_list(TVar List(element:Text) to_concat)
+        returns Text
+    {
+        Text to_return = '';
+        for (Text text in to_concat)
+            to_return = to_return + text;
+        return to_return;
+    }
+
+
+    
 }
