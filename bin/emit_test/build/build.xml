@@ -58,7 +58,16 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c StructSerializationJava"/>
     </exec>
-    
+
+    <echo message="${line.separator}Emitting serialize_text_list.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/serialize_text_list.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeTextListJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SerializeTextListJava"/>
+    </exec>
+
     <echo message="${line.separator}Emitting basic_ralph.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>

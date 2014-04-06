@@ -1,0 +1,26 @@
+Endpoint ListSerializer
+{
+    /** NonAtom Text lists */
+    concatenate_strings(Text string_a, Text string_b, Text string_c)
+        returns Text
+    {
+        List(element: Text) list_to_concat;
+        list_to_concat.append(string_a);
+        list_to_concat.append(string_b);
+        list_to_concat.append(string_c);
+        Text concatenated;
+        concatenated =
+            @partner.partner_concatenate_strings_in_list(list_to_concat);
+        return concatenated;
+    }
+
+    // called only by partner
+    partner_concatenate_strings_in_list(List(element:Text) to_concat)
+        returns Text
+    {
+        Text to_return = '';
+        for (Text text in to_concat)
+            to_return = to_return + text;
+        return to_return;
+    }
+}
