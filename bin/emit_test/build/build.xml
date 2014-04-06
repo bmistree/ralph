@@ -570,8 +570,8 @@
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeNumberListTest,run_SerializeStructTest,
-         run_SerializeTextListTest">
+         run_SerializeNumberListTest,run_SerializeTextListTest,
+         run_SerializeTrueFalseListTest,run_SerializeStructTest">
   </target>
   
   
@@ -1359,6 +1359,20 @@
     </java>
   </target>
 
+  <!-- SerializeTrueFalseListTest -->
+  <target
+      name="run_SerializeTrueFalseListTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a list of booleans.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeTrueFalseListTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
   
   <!-- SerializeStructTest -->
   <target
@@ -1374,7 +1388,6 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
-  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
