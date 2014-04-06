@@ -8,6 +8,7 @@ Endpoint ListSerializer
         list_to_merge.append(a);
         list_to_merge.append(b);
         list_to_merge.append(c);
+        list_to_merge.append(d);
         Text concatenated;
         concatenated =
             @partner.partner_merge_tfs_in_list(list_to_merge);
@@ -37,6 +38,7 @@ Endpoint ListSerializer
         list_to_merge.append(a);
         list_to_merge.append(b);
         list_to_merge.append(c);
+        list_to_merge.append(d);
         Text concatenated;
         concatenated =
             @partner.atom_partner_merge_tfs_in_list(list_to_merge);
