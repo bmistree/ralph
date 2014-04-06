@@ -72,6 +72,7 @@ public class Variables {
                 number_value_type_data_wrapper_factory,ralph_globals);
         }
         
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
@@ -81,6 +82,13 @@ public class Variables {
             any_builder.setNum(internal_val.doubleValue());
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -101,6 +109,7 @@ public class Variables {
                 _log_changes,default_text,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
             VariablesProto.Variables.Any.Builder any_builder,
@@ -111,6 +120,13 @@ public class Variables {
             any_builder.setText(internal_val);
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
         
         @Override
@@ -142,7 +158,7 @@ public class Variables {
                 _log_changes,default_tf,
                 true_false_value_type_data_wrapper_factory,ralph_globals);
         }
-        
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
@@ -152,6 +168,13 @@ public class Variables {
             any_builder.setTrueFalse(internal_val.booleanValue());
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
         
         @Override
@@ -196,7 +219,7 @@ public class Variables {
             to_return.set_derived(this);
             return to_return;
         }
-        
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
@@ -235,7 +258,6 @@ public class Variables {
             return to_return;
         }
 
-        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
@@ -244,6 +266,13 @@ public class Variables {
             InternalServiceFactory internal_val = get_val(active_event);
             serialize_service_factory(internal_val,any_builder,is_reference);
             any_builder.setIsTvar(true);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
 
         /**
@@ -290,7 +319,7 @@ public class Variables {
                 default_number,
                 number_value_type_data_wrapper_factory,ralph_globals);
         }
-        
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference)
@@ -300,6 +329,13 @@ public class Variables {
             any_builder.setNum(internal_val.doubleValue());
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -322,7 +358,7 @@ public class Variables {
                 default_text,
                 text_value_type_data_wrapper_factory,ralph_globals);
         }
-        
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
@@ -333,7 +369,13 @@ public class Variables {
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
         }
-        
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
+        }
     }
 
     public static class NonAtomicTrueFalseVariable
@@ -365,6 +407,14 @@ public class Variables {
             any_builder.setTrueFalse(internal_val.booleanValue());
             any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
+        }
+
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -429,6 +479,13 @@ public class Variables {
             AtomicServiceFactoryVariable.serialize_service_factory(
                 internal_val,any_builder,is_reference);
             any_builder.setIsTvar(false);
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
