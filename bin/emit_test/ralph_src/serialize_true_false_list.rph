@@ -1,0 +1,60 @@
+Endpoint ListSerializer
+{
+    /** NonAtomic tf lists */
+    merge_true_falses(TrueFalse a, TrueFalse b, TrueFalse c, TrueFalse d)
+        returns Text
+    {
+        List(element: TrueFalse) list_to_merge;
+        list_to_merge.append(a);
+        list_to_merge.append(b);
+        list_to_merge.append(c);
+        Text concatenated;
+        concatenated =
+            @partner.partner_merge_tfs_in_list(list_to_merge);
+        return concatenated;
+    }
+
+    // called only by partner
+    partner_merge_tfs_in_list(List(element:TrueFalse) to_merge)
+        returns Text
+    {
+        Text to_return = '';
+        for (TrueFalse tf in to_merge)
+        {
+            if (tf)
+                to_return = to_return + "1";
+            else
+                to_return = to_return + "0";
+        }
+        return to_return;
+    }
+
+    /** NonAtomic tf lists */
+    atom_merge_true_falses(TrueFalse a, TrueFalse b, TrueFalse c, TrueFalse d)
+        returns Text
+    {
+        TVar List(element: TrueFalse) list_to_merge;
+        list_to_merge.append(a);
+        list_to_merge.append(b);
+        list_to_merge.append(c);
+        Text concatenated;
+        concatenated =
+            @partner.atom_partner_merge_tfs_in_list(list_to_merge);
+        return concatenated;
+    }
+
+    // called only by partner
+    atom_partner_merge_tfs_in_list(TVar List(element:TrueFalse) to_merge)
+        returns Text
+    {
+        Text to_return = '';
+        for (TrueFalse tf in to_merge)
+        {
+            if (tf)
+                to_return = to_return + "1";
+            else
+                to_return = to_return + "0";
+        }
+        return to_return;
+    }
+}
