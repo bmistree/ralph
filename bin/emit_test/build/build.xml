@@ -561,7 +561,8 @@
          run_TextManipulation,run_LotsOfBackouts,
          run_TimedAlwaysWorksBackedSpeculationTest,
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeNumberListTest,run_SerializeStructTest">
+         run_SerializeNumberListTest,run_SerializeStructTest,
+         run_SerializeTextListTest">
   </target>
   
   
@@ -1319,7 +1320,7 @@
     </java>
   </target>
 
-  <!-- SerializeListTest -->
+  <!-- SerializeNumberListTest -->
   <target
       name="run_SerializeNumberListTest"
       depends="compile_ralph_tests"
@@ -1334,6 +1335,22 @@
     </java>
   </target>
 
+  <!-- SerializeTextListTest -->
+  <target
+      name="run_SerializeTextListTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a list of strings.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeTextListTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  
   <!-- SerializeStructTest -->
   <target
       name="run_SerializeStructTest"
