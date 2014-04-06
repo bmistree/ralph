@@ -10,6 +10,7 @@ import ralph_protobuffs.VariablesProto;
 import static ralph.Variables.AtomicListVariable;
 import static ralph.Variables.NonAtomicListVariable;
 import static ralph.Variables.NonAtomicNumberVariable;
+import static ralph.Variables.NonAtomicTextVariable;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
 import ralph.ActiveEvent;
@@ -179,5 +180,78 @@ public class BasicContainerDataConstructors
             return to_return;
         }
     }
-    
+
+    /** NonAtomic Text list*/
+    private final static NonAtomTextListConstructor dummy_non_atom_text_list_constructor =
+        NonAtomTextListConstructor.get_instance();
+    private static class NonAtomTextListConstructor implements DataConstructor
+    {
+        private final static NonAtomTextListConstructor singleton =
+            new NonAtomTextListConstructor();
+        
+        protected NonAtomTextListConstructor()
+        {
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            
+            String label = deserializer.merge_labels(
+                NonAtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL);
+
+            deserializer.register(label,this);
+        }
+        public static NonAtomTextListConstructor get_instance()
+        {
+            return singleton;
+        }
+        
+        @Override
+        public RalphObject construct(
+            VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
+        {
+            // create an atomic list variable, then, independently
+            // populate each of its fields.
+            NonAtomicListVariable<String,String> outer_list =
+                new NonAtomicListVariable<String,String>(
+                    false,BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+                    ralph_globals);
+            RalphObject to_return = null;
+
+            ActiveEvent evt = dummy_deserialization_active_event();
+
+            //// DEBUG
+            if ((! any.hasList()) || any.getIsTvar())
+            {
+                Util.logger_assert(
+                    "Incorrectly deserializing as non-atomic list.");
+            }
+            //// END DEBUG
+
+            VariablesProto.Variables.List list_message = any.getList();
+            List<VariablesProto.Variables.Any> any_list =
+                list_message.getListValuesList();
+
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            for (VariablesProto.Variables.Any list_element : any_list)
+            {
+                try
+                {
+                    NonAtomicTextVariable non_atom_text =
+                        (NonAtomicTextVariable)
+                        deserializer.deserialize(list_element,ralph_globals);
+                    outer_list.get_val(evt).append(evt,non_atom_text.get_val(evt));
+                    to_return = outer_list.get_val(null);
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Should never be backed out when deserializing");
+                }
+            }
+            // return internal list            
+            return to_return;
+        }
+    }
 }
