@@ -12,7 +12,7 @@ import static ralph.Variables.NonAtomicListVariable;
 import static ralph.Variables.NonAtomicNumberVariable;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
-import ralph.NonAtomicActiveEvent;
+import ralph.ActiveEvent;
 
 
 public class BasicContainerDataConstructors
@@ -27,12 +27,12 @@ public class BasicContainerDataConstructors
         return instance;
     }
 
-    protected static NonAtomicActiveEvent dummy_deserialization_active_event()
+    // reuse same event when deserializing
+    private final static DeserializationEvent const_deserialization_event =
+        new DeserializationEvent();
+    protected static ActiveEvent dummy_deserialization_active_event()
     {
-        // FIXME: must finish
-        Util.logger_assert(
-            "Must create dummy non-atomic events for dserialization");
-        return null;
+        return const_deserialization_event;
     }
 
     
@@ -71,7 +71,7 @@ public class BasicContainerDataConstructors
                     false,BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                     ralph_globals);
 
-            NonAtomicActiveEvent evt = dummy_deserialization_active_event();
+            ActiveEvent evt = dummy_deserialization_active_event();
 
             //// DEBUG
             if ((! any.hasList()) || (! any.getIsTvar()))
@@ -140,7 +140,7 @@ public class BasicContainerDataConstructors
                     false,BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                     ralph_globals);
 
-            NonAtomicActiveEvent evt = dummy_deserialization_active_event();
+            ActiveEvent evt = dummy_deserialization_active_event();
 
             //// DEBUG
             if ((! any.hasList()) || any.getIsTvar())

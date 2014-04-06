@@ -242,7 +242,6 @@ public abstract class ActiveEvent
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException;
 
-
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
         String msg_originator_host_uuid);
