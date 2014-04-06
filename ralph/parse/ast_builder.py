@@ -481,14 +481,13 @@ def p_RangeExpression(p):
                     | RANGE LEFT_PAREN Expression COMMA Expression RIGHT_PAREN
     '''
     start_expression_node = p[3]
+    end_expression_node = p[5]
     line_number = p.lineno(1)
     if len(p) == 9:
-        increment_expression_node = p[5]
-        end_expression_node = p[7]
+        increment_expression_node = p[7]
     else:
         increment_expression_node = NumberLiteralNode(
             global_parsing_filename,1,line_number)
-        end_expression_node = p[5]
 
     range_expression_node = RangeExpressionNode(
         global_parsing_filename,start_expression_node,increment_expression_node,

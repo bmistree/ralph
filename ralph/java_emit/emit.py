@@ -1334,8 +1334,8 @@ def emit_statement(emit_ctx,statement_node):
 
         return (
             'this._produce_range(%s,%s,%s)' %
-            (start_expression_text,increment_expression_text,
-             end_expression_text))
+            (start_expression_text,end_expression_text,
+             increment_expression_text))
     
     elif statement_node.label == ast_labels.CONTINUE:
         return 'continue'
