@@ -66,11 +66,11 @@ public class BasicContainerDataConstructors
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            AtomicListVariable<Double,Double> to_return =
+            AtomicListVariable<Double,Double> outer_list =
                 new AtomicListVariable<Double,Double>(
                     false,BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                     ralph_globals);
-
+            RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
 
             //// DEBUG
@@ -91,7 +91,8 @@ public class BasicContainerDataConstructors
                     NonAtomicNumberVariable non_atom_number =
                         (NonAtomicNumberVariable)
                         deserializer.deserialize(list_element,ralph_globals);
-                    to_return.get_val(evt).append(evt,non_atom_number.get_val(evt));
+                    outer_list.get_val(evt).append(evt,non_atom_number.get_val(evt));
+                    to_return = outer_list.get_val(null);
                 }
                 catch(Exception ex)
                 {
@@ -100,7 +101,7 @@ public class BasicContainerDataConstructors
                         "Should never be backed out when deserializing");
                 }
             }
-            
+            // return internal list
             return to_return;
         }
     }
@@ -135,10 +136,11 @@ public class BasicContainerDataConstructors
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            NonAtomicListVariable<Double,Double> to_return =
+            NonAtomicListVariable<Double,Double> outer_list =
                 new NonAtomicListVariable<Double,Double>(
                     false,BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                     ralph_globals);
+            RalphObject to_return = null;
 
             ActiveEvent evt = dummy_deserialization_active_event();
 
@@ -163,7 +165,8 @@ public class BasicContainerDataConstructors
                     NonAtomicNumberVariable non_atom_number =
                         (NonAtomicNumberVariable)
                         deserializer.deserialize(list_element,ralph_globals);
-                    to_return.get_val(evt).append(evt,non_atom_number.get_val(evt));
+                    outer_list.get_val(evt).append(evt,non_atom_number.get_val(evt));
+                    to_return = outer_list.get_val(null);
                 }
                 catch(Exception ex)
                 {
@@ -172,7 +175,7 @@ public class BasicContainerDataConstructors
                         "Should never be backed out when deserializing");
                 }
             }
-            
+            // return internal list            
             return to_return;
         }
     }
