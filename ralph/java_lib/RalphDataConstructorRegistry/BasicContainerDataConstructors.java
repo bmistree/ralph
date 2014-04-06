@@ -38,7 +38,7 @@ public class BasicContainerDataConstructors
 
     
     /** List deserializers*/
-    private final static AtomNumListConstructor dummy_atom_list_constructor =
+    private final static AtomNumListConstructor dummy_atom_num_list_constructor =
         AtomNumListConstructor.get_instance();
     private static class AtomNumListConstructor implements DataConstructor
     {
@@ -108,7 +108,7 @@ public class BasicContainerDataConstructors
     }
 
 
-    private final static NonAtomNumListConstructor dummy_non_atom_list_constructor =
+    private final static NonAtomNumListConstructor dummy_non_atom_num_list_constructor =
         NonAtomNumListConstructor.get_instance();
     private static class NonAtomNumListConstructor implements DataConstructor
     {
@@ -181,6 +181,77 @@ public class BasicContainerDataConstructors
         }
     }
 
+    /** Atomic text list*/
+    private final static AtomTextListConstructor dummy_atom_text_list_constructor =
+        AtomTextListConstructor.get_instance();
+    private static class AtomTextListConstructor implements DataConstructor
+    {
+        private final static AtomTextListConstructor singleton =
+            new AtomTextListConstructor();
+        
+        protected AtomTextListConstructor()
+        {
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            
+            String label = deserializer.merge_labels(
+                AtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL);
+
+            deserializer.register(label,this);
+        }
+        public static AtomTextListConstructor get_instance()
+        {
+            return singleton;
+        }
+        
+        @Override
+        public RalphObject construct(
+            VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
+        {
+            // create an atomic list variable, then, independently
+            // populate each of its fields.
+            AtomicListVariable<String,String> outer_list =
+                new AtomicListVariable<String,String>(
+                    false,BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+                    ralph_globals);
+            RalphObject to_return = null;
+            ActiveEvent evt = dummy_deserialization_active_event();
+
+            //// DEBUG
+            if ((! any.hasList()) || (! any.getIsTvar()))
+                Util.logger_assert("Cannot deserialize list without list field");
+            //// END DEBUG
+
+            VariablesProto.Variables.List list_message = any.getList();
+            List<VariablesProto.Variables.Any> any_list =
+                list_message.getListValuesList();
+
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            for (VariablesProto.Variables.Any list_element : any_list)
+            {
+                try
+                {
+                    NonAtomicTextVariable atom_text =
+                        (NonAtomicTextVariable)
+                        deserializer.deserialize(list_element,ralph_globals);
+                    outer_list.get_val(evt).append(evt,atom_text.get_val(evt));
+                    to_return = outer_list.get_val(null);
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Should never be backed out when deserializing");
+                }
+            }
+            // return internal list
+            return to_return;
+        }
+    }
+
+    
     /** NonAtomic Text list*/
     private final static NonAtomTextListConstructor dummy_non_atom_text_list_constructor =
         NonAtomTextListConstructor.get_instance();
@@ -254,4 +325,6 @@ public class BasicContainerDataConstructors
             return to_return;
         }
     }
+
+    
 }
