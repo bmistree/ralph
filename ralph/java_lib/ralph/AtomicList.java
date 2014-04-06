@@ -136,11 +136,10 @@ public class AtomicList<V,D>
         ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
         boolean is_reference) throws BackoutException
     {
-        Util.logger_assert("FIXME: finish serializing lists.");
-        // AtomicMapContainer<K,V,D> internal_val =
-        //     get_val(active_event);
-        // internal_val.serialize_as_rpc_arg(
-        //     active_event,any_builder,is_reference);
+        AtomicInternalList<V,D> internal_val =
+            get_val(active_event);
+        internal_val.serialize_as_rpc_arg(
+            active_event,any_builder,is_reference);
     }
 
     public void load_init_vals(
