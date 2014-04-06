@@ -11,6 +11,7 @@ import static ralph.Variables.AtomicListVariable;
 import static ralph.Variables.NonAtomicListVariable;
 import static ralph.Variables.NonAtomicNumberVariable;
 import static ralph.Variables.NonAtomicTextVariable;
+import static ralph.Variables.NonAtomicTrueFalseVariable;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
 import ralph.ActiveEvent;
@@ -326,5 +327,148 @@ public class BasicContainerDataConstructors
         }
     }
 
+    /** Atomic truefalse list*/
+    private final static AtomTrueFalseListConstructor dummy_atom_tf_list_constructor =
+        AtomTrueFalseListConstructor.get_instance();
+    private static class AtomTrueFalseListConstructor implements DataConstructor
+    {
+        private final static AtomTrueFalseListConstructor singleton =
+            new AtomTrueFalseListConstructor();
+        
+        protected AtomTrueFalseListConstructor()
+        {
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            
+            String label = deserializer.merge_labels(
+                AtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL);
+
+            deserializer.register(label,this);
+        }
+        public static AtomTrueFalseListConstructor get_instance()
+        {
+            return singleton;
+        }
+        
+        @Override
+        public RalphObject construct(
+            VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
+        {
+            // create an atomic list variable, then, independently
+            // populate each of its fields.
+            AtomicListVariable<Boolean,Boolean> outer_list =
+                new AtomicListVariable<Boolean,Boolean>(
+                    false,BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+                    ralph_globals);
+            RalphObject to_return = null;
+            ActiveEvent evt = dummy_deserialization_active_event();
+
+            //// DEBUG
+            if ((! any.hasList()) || (! any.getIsTvar()))
+                Util.logger_assert("Cannot deserialize list without list field");
+            //// END DEBUG
+
+            VariablesProto.Variables.List list_message = any.getList();
+            List<VariablesProto.Variables.Any> any_list =
+                list_message.getListValuesList();
+
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            for (VariablesProto.Variables.Any list_element : any_list)
+            {
+                try
+                {
+                    NonAtomicTrueFalseVariable atom_tf =
+                        (NonAtomicTrueFalseVariable)
+                        deserializer.deserialize(list_element,ralph_globals);
+                    outer_list.get_val(evt).append(evt,atom_tf.get_val(evt));
+                    to_return = outer_list.get_val(null);
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Should never be backed out when deserializing");
+                }
+            }
+            // return internal list
+            return to_return;
+        }
+    }
+
     
+    /** NonAtomic TrueFalse list*/
+    private final static NonAtomTrueFalseListConstructor dummy_non_atom_tf_list_constructor =
+        NonAtomTrueFalseListConstructor.get_instance();
+    private static class NonAtomTrueFalseListConstructor implements DataConstructor
+    {
+        private final static NonAtomTrueFalseListConstructor singleton =
+            new NonAtomTrueFalseListConstructor();
+        
+        protected NonAtomTrueFalseListConstructor()
+        {
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            
+            String label = deserializer.merge_labels(
+                NonAtomicList.deserialization_label,
+                BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL);
+
+            deserializer.register(label,this);
+        }
+        public static NonAtomTrueFalseListConstructor get_instance()
+        {
+            return singleton;
+        }
+        
+        @Override
+        public RalphObject construct(
+            VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
+        {
+            // create an atomic list variable, then, independently
+            // populate each of its fields.
+            NonAtomicListVariable<Boolean,Boolean> outer_list =
+                new NonAtomicListVariable<Boolean,Boolean>(
+                    false,BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+                    ralph_globals);
+            RalphObject to_return = null;
+
+            ActiveEvent evt = dummy_deserialization_active_event();
+
+            //// DEBUG
+            if ((! any.hasList()) || any.getIsTvar())
+            {
+                Util.logger_assert(
+                    "Incorrectly deserializing as non-atomic list.");
+            }
+            //// END DEBUG
+
+            VariablesProto.Variables.List list_message = any.getList();
+            List<VariablesProto.Variables.Any> any_list =
+                list_message.getListValuesList();
+
+            DataConstructorRegistry deserializer =
+                DataConstructorRegistry.get_instance();
+            for (VariablesProto.Variables.Any list_element : any_list)
+            {
+                try
+                {
+                    NonAtomicTrueFalseVariable non_atom_tf =
+                        (NonAtomicTrueFalseVariable)
+                        deserializer.deserialize(list_element,ralph_globals);
+                    outer_list.get_val(evt).append(evt,non_atom_tf.get_val(evt));
+                    to_return = outer_list.get_val(null);
+                }
+                catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Should never be backed out when deserializing");
+                }
+            }
+            // return internal list            
+            return to_return;
+        }
+    }
 }
