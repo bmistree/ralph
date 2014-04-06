@@ -7,4 +7,13 @@ Service RangeTest
             to_return = to_return + num;
         return to_return;
     }
+
+    sum_range_no_incrementer(Number first, Number end) returns Number
+    {
+        Number to_return = 0;
+        for (Number num in range(first,end))
+            to_return = to_return + num;
+        return to_return;
+    }
+    
 }

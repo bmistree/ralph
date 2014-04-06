@@ -8,7 +8,7 @@ public class Range
 {
     public static void main(String[] args)
     {
-        if (Range.run_test())
+        if (run_test())
             System.out.println("\nSUCCESS in Range\n");
         else
             System.out.println("\nFAILURE in Range\n");
@@ -36,6 +36,9 @@ public class Range
             Double zero_to_ten = rt_service.sum_range(0.,10.,1.);
             if (! zero_to_ten.equals(expected))
                 return false;
+            zero_to_ten = rt_service.sum_range_no_incrementer(0.,10.);
+            if (! zero_to_ten.equals(expected))
+                return false;
             
             // sum from [5,10)
             example_array = new double [] {5.,6.,7.,8.,9.};
@@ -43,6 +46,10 @@ public class Range
             Double five_to_ten = rt_service.sum_range(5.,10.,1.);
             if (! five_to_ten.equals(expected))
                 return false;
+            five_to_ten = rt_service.sum_range_no_incrementer(5.,10.);
+            if (! five_to_ten.equals(expected))
+                return false;
+            
             
             // sum from [10,20), incrementing by 2
             example_array = new double [] {10.,12.,14.,16.,18.};
