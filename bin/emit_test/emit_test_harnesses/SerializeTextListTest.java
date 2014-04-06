@@ -24,10 +24,9 @@ public class SerializeTextListTest
             ListSerializer side_b = new ListSerializer(
                 new RalphGlobals(),conn_obj);
 
-            // FIXME: still must test atomic text lists.
-            // // tests atomic text list serialization
-            // if (! text_list_concat_test(true,side_a))
-            //     return false;
+            // tests atomic text list serialization
+            if (! text_list_concat_test(true,side_a))
+                return false;
             
             // tests non atomic text list serialization
             if (! text_list_concat_test(false,side_a))
