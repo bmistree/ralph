@@ -1998,13 +1998,15 @@ public static class %s implements DataConstructor
     {
         return instance;
     }
+
+    // used for data deserialization
     @Override
     public RalphObject construct(
         VariablesProto.Variables.Any any,
         RalphGlobals ralph_globals)
     {
-        %s to_return = new %s(false,ralph_globals);
-        to_return.deserialize_rpc(ralph_globals,any);
+        %s internal_holder = %s.deserialize_rpc(ralph_globals,any);
+        %s to_return = new %s(false,internal_holder,ralph_globals);
         return to_return;
     }
 }
@@ -2017,6 +2019,7 @@ private static final %s %s__instance = %s.get_instance();
        # get_instance
        internal_deserializer_name,
        # inside of construct method
+       internal_struct_name,internal_struct_name, 
        struct_name,struct_name,
        # generates static instance.
        internal_deserializer_name,internal_deserializer_name,
@@ -2090,6 +2093,17 @@ public %s (boolean log_operations, RalphGlobals ralph_globals)
         log_operations,
         new %s(ralph_globals),%s,ralph_globals);
 }
+
+@Override
+public void deserialize_rpc(
+    RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+{
+    Util.logger_assert(
+        "Should be using this struct's SingletonStructDeserializer " +
+        "to deserialize, instead of calling deserialize_as_rpc_arg " +
+        "directly.");
+}
+
 @Override
 public void serialize_as_rpc_arg(
     ActiveEvent active_event,Variables.Any.Builder any_builder,
