@@ -17,6 +17,16 @@ import ralph.NonAtomicActiveEvent;
 
 public class BasicContainerDataConstructors
 {
+    // only used to force populating internal static fields
+    private final static BasicContainerDataConstructors instance =
+        new BasicContainerDataConstructors();
+    protected BasicContainerDataConstructors()
+    {}
+    public static BasicContainerDataConstructors get_instance()
+    {
+        return instance;
+    }
+
     protected static NonAtomicActiveEvent dummy_deserialization_active_event()
     {
         // FIXME: must finish

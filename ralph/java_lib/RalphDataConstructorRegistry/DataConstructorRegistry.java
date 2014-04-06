@@ -41,6 +41,9 @@ public class DataConstructorRegistry
 {
     private final static DataConstructorRegistry instance =
         new DataConstructorRegistry();
+
+    private final static BasicContainerDataConstructors basic_constructors_instance =
+        BasicContainerDataConstructors.get_instance();
     
     // Maps from unique name defining the struct to a DataConstructor
     // that can be used to produce the struct.
