@@ -13,6 +13,7 @@
 
 Struct WrappedLock
 {
+    TVar List(element: Number) dummy_list;
     TVar Number lock;
 }
 
@@ -38,6 +39,7 @@ Service SimplifiedBackedSpeculation
         atomically
         {
             wl.lock = wl.lock +1;
+            wl.dummy_list.append(1);
             verbatim("
 try {
    Thread.sleep(500);

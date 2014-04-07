@@ -10,6 +10,8 @@ import RalphConnObj.SingleSideConnection;
 import ralph.ActiveEvent;
 import ralph.SpeculativeFuture;
 import ralph.ICancellableFuture;
+import ralph.Variables.AtomicListVariable;
+import ralph.AtomicInternalList;
 
 import RalphExtended.IHardwareChangeApplier;
 import RalphExtended.IHardwareStateSupplier;
@@ -116,7 +118,8 @@ public class SimplifiedTimedSpeculationTest
         _InternalWrappedLock to_return = new _InternalWrappedLock(ralph_globals);
         to_return.lock =
             new InternalLockNumber(
-                ralph_globals,should_speculate,time_to_delay_on_apply);
+                ralph_globals,should_speculate,time_to_delay_on_apply,
+                to_return.dummy_list);
         return to_return;
     }
     
@@ -132,10 +135,12 @@ public class SimplifiedTimedSpeculationTest
             ExtendedHardwareOverrides<Double> extended_hardware_overrides;
         private int time_to_delay_on_apply;
         private boolean should_speculate;
+        private final AtomicListVariable<Double,Double> locked_list;
         
         public InternalLockNumber(
             RalphGlobals ralph_globals, boolean _should_speculate,
-            int _time_to_delay_on_apply)
+            int _time_to_delay_on_apply,
+            AtomicListVariable<Double,Double> _locked_list)
         {
             super(false,new Double(0),ralph_globals);
             extended_hardware_overrides =
@@ -146,6 +151,7 @@ public class SimplifiedTimedSpeculationTest
 
             should_speculate = _should_speculate;
             time_to_delay_on_apply = _time_to_delay_on_apply;
+            locked_list = _locked_list;
         }
 
         /** Overriding HardwareStateSupplier */
@@ -180,6 +186,11 @@ public class SimplifiedTimedSpeculationTest
         public void speculate(ActiveEvent active_event)
         {
             speculate(active_event,null);
+
+            // speculate on internal list
+            AtomicInternalList<Double,Double> internal_list =
+                locked_list.val.val;
+            internal_list.speculate(active_event,null);
         }
         
 
