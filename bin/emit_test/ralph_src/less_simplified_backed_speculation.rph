@@ -1,0 +1,55 @@
+/**
+   An additional speculation test.  switch guards backed by code that starts
+   speculation when it gets to first phase commit.
+ */
+
+Struct Switch
+{
+    TVar List(element: Number) dummy_flow_table;
+    TVar Number switch_guard;
+}
+
+
+Service LessSimplifiedBackedSpeculation
+{
+    Struct Switch switch1 = null;
+    Struct Switch switch2 = null;
+
+    /**
+       Will only be called once from external, before any events are called.
+     */
+    set_switches(Struct Switch s1, Struct Switch s2)
+    {
+        switch1 = s1;
+        switch2 = s2;
+    }
+
+    get_internal_delay() returns Number
+    {
+        return 500;
+    }
+    
+    event1()
+    {
+        atomically
+        {
+            switch1.switch_guard;
+            switch1.dummy_flow_table.size();
+
+            switch2.switch_guard = 3;
+            switch2.dummy_flow_table.append(1);
+        }
+    }
+    
+    event2()
+    {
+        atomically
+        {
+            switch2.switch_guard;
+            switch2.dummy_flow_table.size();
+
+            switch1.switch_guard = 3;
+            switch1.dummy_flow_table.append(1);
+        }
+    }
+}

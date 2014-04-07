@@ -59,6 +59,16 @@
       <arg line="-c StructSerializationJava"/>
     </exec>
 
+    <echo message="${line.separator}Emitting less_simplified_backed_speculation.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/less_simplified_backed_speculation.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/LessSimplifiedBackedSpeculationJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c LessSimplifiedBackedSpeculationJava"/>
+    </exec>
+
+    
     <echo message="${line.separator}Emitting struct_list_serialization.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
@@ -581,7 +591,7 @@
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
          run_SerializeNumberListTest,run_SerializeTextListTest,
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
-         run_ListOfStructsSerializationTest">
+         run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation">
   </target>
     
   
@@ -1412,6 +1422,22 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
+
+  <!-- LessSimplifiedTimedBackedSpeculation -->
+  <target
+      name="run_LessSimplifiedTimedBackedSpeculation"
+      depends="compile_ralph_tests"
+      description="Test that can speuclate concurrently on a less simplified test..">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.LessSimplifiedTimedSpeculationTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
