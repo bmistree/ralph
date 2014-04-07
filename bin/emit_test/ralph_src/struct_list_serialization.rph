@@ -1,0 +1,51 @@
+#include 'struct_serialization.rph'
+alias Struct NumHolder as 'ralph_emitted.StructSerializationJava.NumHolder';
+
+Endpoint StructSerializer
+{
+    /** List of structs */
+    sum_list_of_struct_fields_on_other_side(Number a, Number b) returns Number
+    {
+        Struct NumHolder num_holder;
+        num_holder.num = a;
+        num_holder.atom_num = b;
+
+        List(element: Struct NumHolder) struct_list;
+        struct_list.append(num_holder);
+        Number to_return;
+        to_return = @partner.receive_list_structs_sum_fields(struct_list);
+        return to_return;
+    }
+
+    receive_list_structs_sum_fields(List(element: Struct NumHolder) s_list)
+        returns Number
+    {
+        Number to_return = 0;
+        for (Struct NumHolder s in s_list)
+            to_return = to_return + s.num + s.atom_num;
+        return to_return;
+    }
+
+    atom_sum_list_of_struct_fields_on_other_side(Number a, Number b)
+        returns Number
+    {
+        Struct NumHolder num_holder;
+        num_holder.num = a;
+        num_holder.atom_num = b;
+
+        TVar List(element: Struct NumHolder) struct_list;
+        struct_list.append(num_holder);
+        Number to_return;
+        to_return = @partner.atom_receive_list_structs_sum_fields(struct_list);
+        return to_return;
+    }
+
+    atom_receive_list_structs_sum_fields(
+        TVar List(element: Struct NumHolder) s_list) returns Number
+    {
+        Number to_return = 0;
+        for (Struct NumHolder s in s_list)
+            to_return = to_return + s.num + s.atom_num;
+        return to_return;
+    }
+}
