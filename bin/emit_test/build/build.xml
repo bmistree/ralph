@@ -580,10 +580,10 @@
          run_TimedAlwaysWorksBackedSpeculationTest,
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
          run_SerializeNumberListTest,run_SerializeTextListTest,
-         run_SerializeTrueFalseListTest,run_SerializeStructTest">
+         run_SerializeTrueFalseListTest,run_SerializeStructTest,
+         run_ListOfStructsSerializationTest">
   </target>
-  
-  
+    
   
   <!-- Single side setter getter -->
   <target
@@ -1391,6 +1391,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.StructSerialization"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  <!-- ListOfStructsSerializationTest -->
+  <target
+      name="run_ListOfStructsSerializationTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a list of structs.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ListOfStructsSerialization"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
