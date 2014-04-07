@@ -32,7 +32,7 @@ public class BasicContainerDataConstructors
     // reuse same event when deserializing
     private final static DeserializationEvent const_deserialization_event =
         new DeserializationEvent();
-    protected static ActiveEvent dummy_deserialization_active_event()
+    public static ActiveEvent dummy_deserialization_active_event()
     {
         return const_deserialization_event;
     }
