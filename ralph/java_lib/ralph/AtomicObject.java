@@ -738,7 +738,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        
        @returns --- Can be null, eg., if the object is not backed by
        hardware.  Otherwise, call to get on future returns true if if
-       can commit in first phase, false otherwise.
+       can commit in first phase, false otherwise.  Should always
+       return true for read only ops.
 
        Note that an object will only receive one
        hardware_first_phase_commit_hook call per active_event (we prevent

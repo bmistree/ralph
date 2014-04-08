@@ -10,10 +10,12 @@ public class SpeculativeFuture implements ICancellableFuture
     private boolean has_been_set = false;
     private boolean to_return = false;
     public ActiveEvent event = null;
-
-    public SpeculativeFuture(ActiveEvent event)
+    private final boolean read_only;
+    
+    public SpeculativeFuture(ActiveEvent event, boolean read_only)
     {
         this.event = event;
+        this.read_only = read_only;
     }
 
     /** ICancellableFuture interface */
@@ -28,6 +30,11 @@ public class SpeculativeFuture implements ICancellableFuture
         set(true);
     }
 
+    public boolean is_read_only()
+    {
+        return read_only;
+    }
+    
     private void set(boolean to_set_to)
     {
         rlock.lock();

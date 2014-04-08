@@ -575,12 +575,27 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // try to commit normally.
         if (root_speculative)
         {
+            // note: to_return should be ALWAYS_TRUE_FUTURE for read
+            // only operation.
             ICancellableFuture to_return =
                 hardware_first_phase_commit_hook(active_event);
             if (to_return == null)
                 to_return = ALWAYS_TRUE_FUTURE;
+
             root_outstanding_commit_requests.put(active_event.uuid,to_return);
+
+            boolean write_lock_holder = is_write_lock_holder(active_event);
             _unlock();
+            
+            // If a read lock holder enters first phase of commit, the
+            // commit is automatically validated, allowing future
+            // events to operate on obj.  Note: should only allow this
+            // on root event.  If allow it on derivative, then can get
+            // issue where allowed a derivative read that committed on
+            // a rolled back write that it derived from.
+            if (! write_lock_holder)
+                complete_commit(active_event);
+            
             return to_return;
         }
 
@@ -611,7 +626,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // wait on objects that we are deriving from before trying
             // to commit.  Note, while committing, the event still
             // holds read and read/write locks on
-            SpeculativeFuture to_return = new SpeculativeFuture(active_event);
+            SpeculativeFuture to_return =
+                new SpeculativeFuture(
+                    active_event, ! is_write_lock_holder(active_event));
             outstanding_commit_requests.put(active_event.uuid,to_return);
             _unlock();
             return to_return;
@@ -622,6 +639,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         return null;
     }
 
+    
+    
     /**
        One of the objects that this speculativeatomicobject derived
        from failed.  Must unroll all objects that speculated.
@@ -923,14 +942,28 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         if (may_require_update)
             schedule_try_next();
     }
-    
 
+
+    /**
+       ASSUMES CALLED FROM WITHIN LOCK
+       
+       Factored into separate method so that could call both during
+       try_promote_speculated and complete_commit.
+     */
+    protected void within_lock_running_complete_commit(
+        ActiveEvent active_event)
+    {
+        internal_complete_commit(active_event);
+    }
+    
+    /**
+       Called from outside of lock
+     */
     @Override
     public void complete_commit(ActiveEvent active_event)
     {
         boolean should_try_next = false;
         _lock();
-        
         if (speculation_state == SpeculationState.SUCCEEDED)
         {
             // unlocking here so that maintaining invariant that child
@@ -947,7 +980,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
         else
         {
-            internal_complete_commit(active_event);
+            within_lock_running_complete_commit(active_event);
             should_try_next = true;
         }
 
@@ -960,18 +993,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // collection.
             root_outstanding_commit_requests.remove(active_event.uuid);
         }
-
         
         _unlock();
         //# FIXME: may want to actually check whether the change could
         //# have caused another read/write to be scheduled.
         if (should_try_next)
         {
-            // must call try_promote_speculated from outside of lock.
             try_promote_speculated();
             try_next();
         }
     }
+
+    
 
     /**
        !!!Must be called from OUTSIDE of lock!!!
@@ -1018,6 +1051,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 "Can only call try_promote_speculated when not holding lock.");
         }
         //// END DEBUG
+
+        boolean should_try_next = false;
         
         // 1.5 check to see if we should promote any object that we
         // speculated from this root object
@@ -1077,9 +1112,37 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 // Unlock corresponding to lock acquired on line with
                 // associated with 2 above.
                 eldest_spec._unlock();
+
                 
+                // Must remove read only events from waiting_on_commit
+                // because read only events are guaranteed to
+                // instantly commit on hardware and do not need to
+                // wait for predecessor event to complete before
+                // releasing read lock.  This means that if we were
+                // only speculatively waiting on a read event, we
+                // should go to the next derivative object.  The check
+                // for whether we should go to next derivative object
+                // checks if waiting_on_commit is empty.  So actually
+                // removing read only events from waiting_on_commit
+                // should take care of this.
+                Set<String> read_only_events = new HashSet<String>();
                 for (SpeculativeFuture sf : waiting_on_commit.values())
+                {
                     internal_first_phase_commit_speculative(sf);
+                    if (sf.is_read_only())
+                    {
+                        // will complete commit for waiting event.
+                        // following, check if should then schedule
+                        // waiting events or other speculatives.
+                        should_try_next = true;
+                        // removes event from read_lock_holders, etc.
+                        within_lock_running_complete_commit(sf.event);
+                        read_only_events.add(sf.event.uuid);
+                    }
+                }
+                for (String read_only_event_uuid : read_only_events)
+                    waiting_on_commit.remove(read_only_event_uuid);
+
 
                 // there can be cases where a derived object does not
                 // hold any read or write locks.  (eg., a read lock
@@ -1096,6 +1159,15 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
         _unlock();
+
+        // in case we only had a speculative read event that was
+        // waiting on commit, we may need to go to waiters or even
+        // promote next.
+        if (should_try_next)
+        {
+            try_next();
+            try_promote_speculated();
+        }
     }
     
     /**

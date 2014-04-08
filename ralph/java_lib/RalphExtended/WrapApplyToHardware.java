@@ -8,8 +8,16 @@ public class WrapApplyToHardware<T> extends ServiceAction
     private final T to_apply;
     private final boolean undo_changes;
     private final ExtendedObjectStateController state_controller;
+    /**
+       Note: using constructor of SpeculativeFuture here out of
+       convenience: it's the only class that implements
+       ICancellableFuture, and don't want to create a dummy
+       implementation.  That said, it's very important that only stick
+       to ICancellableFuture interface, as will easily get things like
+       NullPointerExceptions if try to operate on its event.
+     */
     public final SpeculativeFuture to_notify_when_complete =
-        new SpeculativeFuture(null);
+        new SpeculativeFuture(null,false);
     private final IHardwareChangeApplier<T> hardware_change_applier;
     
     public WrapApplyToHardware(
