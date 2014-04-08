@@ -254,8 +254,6 @@ public class AtomicActiveEvent extends ActiveEvent
 	
     private State state = State.STATE_RUNNING;
 	
-    private ReentrantLock _nfmutex = new ReentrantLock();
-
     /**
        See note in non_blocking_backout: can get a call to
        non_blocking_backout twice.
@@ -1529,36 +1527,6 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         _touched_objs_mutex.unlock();
     }
-        
-    private void _nflock()
-    {
-        _nfmutex.lock();
-    }
-    
-    private void _nfunlock()
-    {
-        _nfmutex.unlock();
-    }
-     
-    private void set_network_failure()
-    {
-        _nflock();
-        _network_failure = true;
-        _nfunlock();
-        //# self._lock()
-        //# if self.state == AtomicActiveEvent.STATE_FIRST_PHASE_COMMIT:
-        //#     self.forward_backout_request_and_backout_self()
-        //# self._unlock()
-    }
-    
-    private boolean get_network_failure()
-    {
-        _nflock();
-        boolean failure = _network_failure;
-        _nfunlock();
-        return failure;
-    }
-
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
