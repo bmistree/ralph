@@ -105,12 +105,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     private int derived_backout_derived_ref_count = 0;
 
     /**
-       If we are requested to speculate with a particular value that
-       should overwrite val, even if speculation is unsuccessful.
-     */
-    private boolean force_to_speculate_on = false;
-    
-    /**
        Derived speculative atomic objects cannot commit until their
        predecessors do.  Therefore, if a derived speculative object
        receives a request to commit from an event that is holding read
@@ -341,14 +335,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      */
     public T speculate(ActiveEvent active_event, T to_speculate_on)
     {
-        return speculate(active_event, to_speculate_on, false);
-    }
-
-    public T speculate(ActiveEvent active_event, T to_speculate_on,boolean force)
-    {
-        if (force)
-            force_to_speculate_on = true;
-        
         _lock();
 
         // No event to speculate on top of: do nothing.  Handles case
@@ -920,9 +906,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         root_object.write_lock_holder = write_lock_holder;
         root_object.waiting_events = waiting_events;
         root_object.dirty_val = dirty_val;
-
-        if (root_object.force_to_speculate_on)
-            root_object.val = val;
 
         // Once a derived object transfers its events (lock holders
         // and waiters) to root, root manages them explicitly.
