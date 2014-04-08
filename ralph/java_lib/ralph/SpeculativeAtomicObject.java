@@ -317,7 +317,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      speculate on existing value associated with active_event or
      dirty val of latest derived object.
 
-
+     @param {boolean} force_val_reset --- If force_val_reset is true,
+     then all derived objects and root object will have their internal
+     vals set to to_speculate_on.
+     
      @returns --- Returns the dirty value associated with
      active_event.  Note, if speculate is called on object that has no
      read lock holders, write lock holders, or waiting events (ie,
@@ -333,7 +336,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      getting rid of 2's write).
      
      */
-    public T speculate(ActiveEvent active_event, T to_speculate_on)
+    public T speculate(ActiveEvent active_event)
+    {
+        return force_speculate(active_event,null,false);
+    }
+
+    public T force_speculate(
+        ActiveEvent active_event, T to_speculate_on,boolean force_val_reset)
     {
         _lock();
 
@@ -439,6 +448,16 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
 
+        if (force_val_reset)
+        {
+            for (SpeculativeAtomicObject<T,D> spec_obj : to_iter_over)
+            {
+                spec_obj._lock();
+                spec_obj.val =
+                    data_wrapper_constructor.construct(to_speculate_on,log_changes);
+                spec_obj._unlock();
+            }
+        }
         
         // step 1
         SpeculativeAtomicObject<T,D> to_speculate_on_wrapper =

@@ -1299,22 +1299,18 @@ def emit_statement(emit_ctx,statement_node):
         # SPECULATE_CONTAINER_INTERNALS_CALL, then first get value of
         # internal container.
         suffix_to_speculate_on = ''
-        internal_suffix_to_speculate_on = ''
         if statement_node.label == ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL:
             suffix_to_speculate_on = '.get_val(_active_event)'
-            internal_suffix_to_speculate_on = '.get_val(_active_event)'
-        
+
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for to_speculate_on in statement_node.speculate_call_args_list:
             emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
             to_return += (
-                '%s%s.speculate(_active_event,%s.get_val(_active_event)%s);\n' %
-                (emitted_to_speculate_on,suffix_to_speculate_on,
-                 emitted_to_speculate_on,internal_suffix_to_speculate_on))
+                '%s%s.speculate(_active_event);\n' %
+                (emitted_to_speculate_on,suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
         return to_return
-
         
     elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
         raise InternalEmitException(

@@ -122,20 +122,45 @@ public class SimplifiedTimedSpeculationTest
                 to_return.dummy_list);
         return to_return;
     }
+
+    private static class SpeculateListener implements ISpeculateListener
+    {
+        private final AtomicListVariable<Double,Double> locked_list;
+        private final InternalLockNumber internal_lock_number;
+
+        public SpeculateListener(
+            AtomicListVariable<Double,Double> _locked_list,
+            InternalLockNumber _internal_lock_number)
+        {
+            locked_list = _locked_list;
+            internal_lock_number = _internal_lock_number;
+        }
+        
+        /** Override ISpeculateListener */
+        public void speculate(ActiveEvent active_event)
+        {
+            internal_lock_number.speculate(active_event);
+            // speculate on internal list
+            AtomicInternalList<Double,Double> internal_list =
+                locked_list.val.val;
+            internal_list.speculate(active_event);
+        }
+    }
     
     /**
        The TVar Number lock in each Struct WrappedLock.
      */
     private static class InternalLockNumber
         extends AtomicNumberVariable
-        implements IHardwareStateSupplier<Double>, IHardwareChangeApplier<Double>,
-                   ISpeculateListener
+        implements IHardwareStateSupplier<Double>, IHardwareChangeApplier<Double>
     {
         private final
             ExtendedHardwareOverrides<Double> extended_hardware_overrides;
         private int time_to_delay_on_apply;
         private boolean should_speculate;
         private final AtomicListVariable<Double,Double> locked_list;
+
+        private final SpeculateListener spec_listener;
         
         public InternalLockNumber(
             RalphGlobals ralph_globals, boolean _should_speculate,
@@ -143,9 +168,10 @@ public class SimplifiedTimedSpeculationTest
             AtomicListVariable<Double,Double> _locked_list)
         {
             super(false,new Double(0),ralph_globals);
+            spec_listener = new SpeculateListener(_locked_list,this);
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
-                    this,this,this,
+                    this,this,spec_listener,
                     _should_speculate,ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
 
@@ -181,18 +207,6 @@ public class SimplifiedTimedSpeculationTest
         {
             return true;
         }
-
-        /** Override ISpeculateListener */
-        public void speculate(ActiveEvent active_event)
-        {
-            speculate(active_event,null);
-
-            // speculate on internal list
-            AtomicInternalList<Double,Double> internal_list =
-                locked_list.val.val;
-            internal_list.speculate(active_event,null);
-        }
-        
 
         /** Overriding AtomicNumberVariable internal methods */
         @Override

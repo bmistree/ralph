@@ -105,8 +105,8 @@ public class BackedSpeculationTestLib
         {
             AtomicInternalList<Double,Double>
                 internal_ft_list = get_internal_ft_list();
-            internal_ft_list.speculate(active_event,null);
-            internal_switch_guard.speculate(active_event,null);
+            internal_ft_list.speculate(active_event);
+            internal_switch_guard.speculate(active_event);
         }
     }
 
