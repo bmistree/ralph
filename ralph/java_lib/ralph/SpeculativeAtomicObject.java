@@ -431,9 +431,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 speculating_on._lock();
                 derived_holding_lock_on = speculating_on;
                 if (speculating_on.is_write_lock_holder(active_event))
-                    to_speculate_on = dirty_val.val;
+                    to_speculate_on = speculating_on.dirty_val.val;
                 else if (speculating_on.is_read_lock_holder(active_event))
-                    to_speculate_on = val.val;
+                    to_speculate_on = speculating_on.val.val;
                 else
                 {
                     speculating_on._unlock();
