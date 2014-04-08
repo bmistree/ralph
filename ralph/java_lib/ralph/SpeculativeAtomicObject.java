@@ -329,12 +329,21 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      read lock holders, write lock holders, or waiting events (ie,
      this active event and no other have ever interacted with object),
      then return null.
+
+     NOTE: Speculation only succeeds/is scheduled for case where event
+     requesting speculation is a read/write lock holder on outermost
+     derived object.  Otherwise, speculation does nothing and returns
+     null.  This avoids problems caused by multiple speculative calls.
+     Eg., Evt 1 holds read lock on A; Evt 1 speculates on A; Evt 2
+     writes to derived A; Evt 1 speculates on A again (effectively
+     getting rid of 2's write).
+     
      */
     public T speculate(ActiveEvent active_event, T to_speculate_on)
     {
         return speculate(active_event, to_speculate_on, false);
     }
-    
+
     public T speculate(ActiveEvent active_event, T to_speculate_on,boolean force)
     {
         if (force)
@@ -396,38 +405,54 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         SpeculativeAtomicObject<T,D> derived_holding_lock_on = null;
 
         
-        // must determine what to speculate on.  Rule: if currently
-        // speculating on any objects, speculate on top of them.
-        // Otherwise, choose dirty_val of current object, if it
-        // exists.
+        // must determine what to speculate on.  Rule: only allowed to
+        // speculate if active_event is outer-most derivative object.
+        // Ie., active_event is read_lock_holder for speculating_on
+        // (or root object if there are no speculating entries).  This
+        // avoids instances such as the following: Evt 1 holds read
+        // lock on A; Evt 1 speculates on A; Evt 2 writes to derived
+        // A; Evt 1 speculates on A again (effectively getting rid of
+        // 2's write).
+        
+        // When active_event is at least read lock holder on outermost
+        // object, go ahead and take its internal value to speculate
+        // on top of.
         if (to_speculate_on == null)
         {
-            // get value of last element speculating on.
-            if (speculating_on != null)
+            if (speculating_on == null)
+            {
+                if (is_write_lock_holder(active_event))
+                    to_speculate_on = dirty_val.val;
+                else if (is_read_lock_holder(active_event))
+                    to_speculate_on = val.val;
+                else
+                {
+                    _unlock();
+                    return null;
+                }
+            }
+            else
             {
                 speculating_on._lock();
                 derived_holding_lock_on = speculating_on;
-                if (speculating_on.write_lock_holder != null)
-                    to_speculate_on = speculating_on.dirty_val.val;
+                if (speculating_on.is_write_lock_holder(active_event))
+                    to_speculate_on = dirty_val.val;
+                else if (speculating_on.is_read_lock_holder(active_event))
+                    to_speculate_on = val.val;
                 else
-                    to_speculate_on = speculating_on.val.val;
+                {
+                    speculating_on._unlock();
+                    _unlock();
+                    return null;
+                }
 
-                // NOTE: No unlock here.  Relying on
+                // NOTE: No speculating_on._unlock here.  Relying on
                 // derived_holding_lock_on to release speculating_on
                 // lock.
                 // speculating_on._unlock();
             }
-            else
-            {
-                if (is_write_lock_holder(active_event))
-                    to_speculate_on = dirty_val.val;
-                else
-                    to_speculate_on = val.val;
-            }
-
-            // FIXME: Should we hold lock on speculating_on to apply
-            // to_speculate_on.
         }
+
         
         // step 1
         SpeculativeAtomicObject<T,D> to_speculate_on_wrapper =

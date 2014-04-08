@@ -774,8 +774,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         return false;
     }
-        
-
     
     /**
        Already presupposes within lock!
@@ -787,6 +785,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             return true;
 
         return false;
+    }
+
+    public boolean is_read_lock_holder(ActiveEvent active_event)
+    {
+        return read_lock_holders.containsKey(active_event.uuid);
     }
     
     /**
