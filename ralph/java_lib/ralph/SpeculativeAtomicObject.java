@@ -341,6 +341,11 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         return force_speculate(active_event,null,false);
     }
 
+    /**
+       NOTE: Calling this directly with force_val_reset true is deeply
+       unsafe.  Overwrites all internal values (dirty or otherwise) of
+       root and derived objects.  Be careful.
+     */
     public T force_speculate(
         ActiveEvent active_event, T to_speculate_on,boolean force_val_reset)
     {
@@ -454,6 +459,9 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             {
                 spec_obj._lock();
                 spec_obj.val =
+                    data_wrapper_constructor.construct(to_speculate_on,log_changes);
+                // NOTE: CALLING THIS DIRECTLY IS DEEPLY UNSAFE
+                spec_obj.dirty_val =
                     data_wrapper_constructor.construct(to_speculate_on,log_changes);
                 spec_obj._unlock();
             }
