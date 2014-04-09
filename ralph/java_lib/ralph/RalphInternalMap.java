@@ -10,6 +10,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
+import RalphAtomicWrappers.BaseAtomicWrappers;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -89,26 +90,58 @@ public class RalphInternalMap<K,V,D>
     {
         MapTypeDataWrapper<K,V,D> wrapped_val = get_val_write(active_event);
 
-        VariablesProto.Variables.Map.Builder map_builder = VariablesProto.Variables.Map.newBuilder();
+        VariablesProto.Variables.Map.Builder map_builder =
+            VariablesProto.Variables.Map.newBuilder();
+
+        // set identifier types
+        if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
+        {
+            map_builder.setKeyTypeIdentifier(
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
+        }
+        else if (index_type == NonAtomicInternalMap.IndexType.STRING)
+        {
+            map_builder.setKeyTypeIdentifier(
+                BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL);
+        }
+        else if (index_type == NonAtomicInternalMap.IndexType.BOOLEAN)
+        {
+            map_builder.setKeyTypeIdentifier(
+                BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL);
+        }
+        //// DEBUG
+        else
+            Util.logger_assert("Unkonw map index type in serialize");
+        //// END DEBUG
+
+        
+        map_builder.setValueTypeIdentifier(
+            locked_wrapper.get_serialization_label());
+
+        // serialize internal values        
         for (Entry<K,RalphObject<V,D>> map_entry : wrapped_val.val.entrySet() )
         {
             // create any for index
             VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
             index_builder.setVarName("");
+            index_builder.setReference(false);
             if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
             {
                 Double index_entry = (Double) map_entry.getKey();
                 index_builder.setNum(index_entry.doubleValue());
+                index_builder.setIsTvar(false);                
             }
             else if (index_type == NonAtomicInternalMap.IndexType.STRING)
             {
                 String index_entry = (String) map_entry.getKey();
                 index_builder.setText(index_entry);
+                index_builder.setIsTvar(false);
             }
             else if (index_type == NonAtomicInternalMap.IndexType.BOOLEAN)
             {
                 Boolean index_entry = (Boolean) map_entry.getKey();
                 index_builder.setTrueFalse(index_entry.booleanValue());
+                index_builder.setIsTvar(false);
             }
             else
             {
