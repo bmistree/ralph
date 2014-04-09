@@ -52,7 +52,7 @@ Endpoint MapSerializer
         }
         
         Number sum;
-        sum = @partner.partner_sum_keys_and_values(to_serialize);
+        sum = @partner.atom_partner_sum_keys_and_values(to_serialize);
 
         if ((sum - expected_result) == 0)
             return True;
@@ -60,7 +60,7 @@ Endpoint MapSerializer
 
     }
     // called only by partner
-    partner_sum_keys_and_values(TVar Map(from: Number, to: Number) to_sum)
+    atom_partner_sum_keys_and_values(TVar Map(from: Number, to: Number) to_sum)
         returns Number
     {
         Number to_return = 0;
