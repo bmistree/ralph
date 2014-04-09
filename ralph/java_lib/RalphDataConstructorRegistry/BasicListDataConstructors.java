@@ -108,8 +108,6 @@ public class BasicListDataConstructors
                     outer_list.get_val(evt).append(
                         evt,
                         (ElementType)non_atom_element.get_val(evt));
-
-                    to_return = outer_list.get_val(null);
                 }
                 catch(Exception ex)
                 {
@@ -118,6 +116,18 @@ public class BasicListDataConstructors
                         "Should never be backed out when deserializing");
                 }
             }
+
+            try
+            {
+                to_return = outer_list.get_val(null);
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Should never be backed out when deserializing");
+            }
+            
             // return internal list
             return to_return;
         }
@@ -174,8 +184,6 @@ public class BasicListDataConstructors
                     outer_list.get_val(evt).append(
                         evt,
                         (ElementType)non_atom_element.get_val(evt));
-
-                    to_return = outer_list.get_val(null);
                 }
                 catch(Exception ex)
                 {
@@ -184,6 +192,19 @@ public class BasicListDataConstructors
                         "Should never be backed out when deserializing");
                 }
             }
+
+            try
+            {
+                to_return = outer_list.get_val(null);
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Should never be backed out when deserializing");
+            }
+
+            
             // return internal list
             return to_return;
         }
