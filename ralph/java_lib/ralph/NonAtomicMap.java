@@ -36,6 +36,8 @@ public abstract class NonAtomicMap<K,V,D>
     // what will return when call de_waldoify.
     D>
 {
+    public final static String deserialization_label = "NonAtomic Map";
+    
     public NonAtomicMap(
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
