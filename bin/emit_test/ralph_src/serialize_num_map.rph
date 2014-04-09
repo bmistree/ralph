@@ -1,0 +1,74 @@
+Endpoint MapSerializer
+{
+    /** NonAtomc Number Maps */
+    sum_numbers(Number max_number) returns TrueFalse
+    {
+        List(element: Number) list_of_indices;
+        list_of_indices = range(0,max_number);
+
+        Map(from: Number, to: Number) to_serialize;
+        Number expected_result = 0;
+        for (Number index in list_of_indices)
+        {
+            Number value = index + 3;
+            to_serialize.set(index,value);
+            expected_result = expected_result + index + value;
+        }
+        
+        Number sum;
+        sum = @partner.partner_sum_keys_and_values(to_serialize);
+
+        if ((sum - expected_result) == 0)
+            return True;
+        return False;
+    }
+
+    // called only by partner
+    partner_sum_keys_and_values(Map(from: Number, to: Number) to_sum)
+        returns Number
+    {
+        Number to_return = 0;
+        for (Number index in to_sum)
+        {
+            to_return = to_return + index;
+            to_return = to_return + to_sum.get(index);
+        }
+        return to_return;
+    }
+
+    /** Atom Number map */
+    atom_sum_numbers(Number max_number) returns TrueFalse
+    {
+        List(element: Number) list_of_indices;
+        list_of_indices = range(0,max_number);
+
+        TVar Map(from: Number, to: Number) to_serialize;
+        Number expected_result = 0;
+        for (Number index in list_of_indices)
+        {
+            Number value = index + 3;
+            to_serialize.set(index,value);
+            expected_result = expected_result + index + value;
+        }
+        
+        Number sum;
+        sum = @partner.partner_sum_keys_and_values(to_serialize);
+
+        if ((sum - expected_result) == 0)
+            return True;
+        return False;
+
+    }
+    // called only by partner
+    partner_sum_keys_and_values(TVar Map(from: Number, to: Number) to_sum)
+        returns Number
+    {
+        Number to_return = 0;
+        for (Number index in to_sum)
+        {
+            to_return = to_return + index;
+            to_return = to_return + to_sum.get(index);
+        }
+        return to_return;
+    }
+}

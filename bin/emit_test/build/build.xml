@@ -68,6 +68,14 @@
       <arg line="-c LessSimplifiedBackedSpeculationJava"/>
     </exec>
 
+    <echo message="${line.separator}Emitting serialize_num_map.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/serialize_num_map.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeNumMapJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SerializeNumMapJava"/>
+    </exec>
     
     <echo message="${line.separator}Emitting struct_list_serialization.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
