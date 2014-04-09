@@ -44,10 +44,13 @@ public class DataConstructorRegistry
     private final static DataConstructorRegistry instance =
         new DataConstructorRegistry();
 
-    // unused: creation here registers all basic list data
+    // unused: creation here registers all basic list and map data
     // constructors in constructors map.
     private final static BasicListDataConstructors basic_list_constructors_instance =
         BasicListDataConstructors.get_instance();
+    private final static BasicMapDataConstructors basic_map_constructors_instance =
+        BasicMapDataConstructors.get_instance();
+    
     
     // Maps from unique name defining the struct to a DataConstructor
     // that can be used to produce the struct.
