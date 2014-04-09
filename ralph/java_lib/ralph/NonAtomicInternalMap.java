@@ -111,6 +111,7 @@ public class NonAtomicInternalMap<K,V,D>
     {
         internal_map.serialize_as_rpc_arg(
             active_event,any_builder,is_reference);
+        any_builder.setIsTvar(false);
     }
 
     @Override
