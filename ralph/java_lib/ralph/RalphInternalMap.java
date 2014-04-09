@@ -21,10 +21,6 @@ import RalphDataWrappers.MapTypeDataWrapperSupplier;
 public class RalphInternalMap<K,V,D> 
    implements RalphInternalMapInterface<K,V,D>
 {
-    public enum IndexType{
-        DOUBLE,STRING,BOOLEAN
-    };
-
     private EnsureAtomicWrapper<V,D>locked_wrapper;
     private MapTypeDataWrapperSupplier<K,V,D> data_wrapper_supplier;
     private ImmediateCommitSupplier immediate_commit_supplier;
@@ -32,7 +28,7 @@ public class RalphInternalMap<K,V,D>
     
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
-    public IndexType index_type;
+    public NonAtomicInternalMap.IndexType index_type;
     
     public RalphInternalMap(RalphGlobals ralph_globals)
     {
@@ -42,11 +38,13 @@ public class RalphInternalMap<K,V,D>
     public void init_ralph_internal_map(
         EnsureAtomicWrapper<V,D>_locked_wrapper,
         MapTypeDataWrapperSupplier<K,V,D>_data_wrapper_supplier,
-        ImmediateCommitSupplier _immediate_commit_supplier)
+        ImmediateCommitSupplier _immediate_commit_supplier,
+        NonAtomicInternalMap.IndexType _index_type)
     {
         locked_wrapper = _locked_wrapper;
         data_wrapper_supplier = _data_wrapper_supplier;
         immediate_commit_supplier = _immediate_commit_supplier;
+        index_type = _index_type;
     }
 
     private MapTypeDataWrapper<K,V,D> get_val_read(
@@ -97,17 +95,17 @@ public class RalphInternalMap<K,V,D>
             // create any for index
             VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
             index_builder.setVarName("");
-            if (index_type == IndexType.DOUBLE)
+            if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
             {
                 Double index_entry = (Double) map_entry.getKey();
                 index_builder.setNum(index_entry.doubleValue());
             }
-            else if (index_type == IndexType.STRING)
+            else if (index_type == NonAtomicInternalMap.IndexType.STRING)
             {
                 String index_entry = (String) map_entry.getKey();
                 index_builder.setText(index_entry);
             }
-            else if (index_type == IndexType.BOOLEAN)
+            else if (index_type == NonAtomicInternalMap.IndexType.BOOLEAN)
             {
                 Boolean index_entry = (Boolean) map_entry.getKey();
                 index_builder.setTrueFalse(index_entry.booleanValue());

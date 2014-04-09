@@ -31,8 +31,7 @@ public class AtomicInternalMap<K,V,D>
 {
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
-    public IndexType index_type;
-    
+    public NonAtomicInternalMap.IndexType index_type;
     private MapTypeDataWrapper<K,V,D> reference_type_val = null;
     private RalphInternalMap<K,V,D> internal_map = null;
     public EnsureAtomicWrapper<V,D> locked_wrapper = null;
@@ -64,7 +63,7 @@ public class AtomicInternalMap<K,V,D>
         boolean _log_changes,
         MapTypeDataWrapperFactory<K,V,D> rtdwc,
         HashMap<K,RalphObject<V,D>>init_val,
-        IndexType _index_type,
+        NonAtomicInternalMap.IndexType _index_type,
         EnsureAtomicWrapper<V,D>_locked_wrapper)
     {
         index_type = _index_type;
@@ -72,7 +71,7 @@ public class AtomicInternalMap<K,V,D>
         init_multithreaded_locked_object(
             rtdwc, _log_changes, init_val);
         internal_map.init_ralph_internal_map(
-            _locked_wrapper,this,this);
+            _locked_wrapper,this,this,_index_type);
     }
 
     @Override

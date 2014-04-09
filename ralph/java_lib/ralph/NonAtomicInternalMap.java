@@ -57,7 +57,7 @@ public class NonAtomicInternalMap<K,V,D>
             (MapTypeDataWrapper<K, V, D>)mtdwf.construct(init_val, false);
         val = reference_type_val;
         internal_map.init_ralph_internal_map(
-            _locked_wrapper,this,this);
+            _locked_wrapper,this,this,index_type);
     }
 
     @Override
