@@ -599,7 +599,8 @@
          run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
          run_SerializeNumberListTest,run_SerializeTextListTest,
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
-         run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation">
+         run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
+         run_SerializeNumberNumberMapTest">
   </target>
     
   
@@ -1435,7 +1436,8 @@
   <target
       name="run_LessSimplifiedTimedBackedSpeculation"
       depends="compile_ralph_tests"
-      description="Test that can speuclate concurrently on a less simplified test..">
+      description="Test that can speuclate concurrently
+                   on a less simplified test.">
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.LessSimplifiedTimedSpeculationTest"
@@ -1445,6 +1447,24 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
+
+  <!-- SerializeNumberNumberMapTest -->
+  <target
+      name="run_SerializeNumberNumberMapTest"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a map whose
+                   indices and values are numbers.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeNumberNumberMapTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  
 
   
   <!-- Delete the build directories -->
