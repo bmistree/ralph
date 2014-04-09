@@ -42,13 +42,23 @@ public class DataConstructorRegistry
     private final static DataConstructorRegistry instance =
         new DataConstructorRegistry();
 
-    private final static BasicContainerDataConstructors basic_constructors_instance =
-        BasicContainerDataConstructors.get_instance();
+    // unused: creation here registers all basic list data
+    // constructors in constructors map.
+    private final static BasicListDataConstructors basic_list_constructors_instance =
+        BasicListDataConstructors.get_instance();
     
     // Maps from unique name defining the struct to a DataConstructor
     // that can be used to produce the struct.
     private final Map<String, DataConstructor> constructors =
         new HashMap<String,DataConstructor>();
+
+    // reuse same event when deserializing
+    private final static DeserializationEvent const_deserialization_event =
+        new DeserializationEvent();
+    public static ActiveEvent dummy_deserialization_active_event()
+    {
+        return const_deserialization_event;
+    }
     
     protected DataConstructorRegistry()
     {

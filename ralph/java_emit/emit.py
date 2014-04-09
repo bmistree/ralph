@@ -62,8 +62,6 @@ import RalphCallResults.RootCallResult;
 
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
-import RalphDataConstructorRegistry.BasicContainerDataConstructors;
-
 
 public class %s
 {
@@ -2108,7 +2106,7 @@ private static class %s implements DataConstructor
         RalphObject to_return = null;
 
         ActiveEvent evt =
-            BasicContainerDataConstructors.dummy_deserialization_active_event();
+            DataConstructorRegistry.dummy_deserialization_active_event();
 
         //// DEBUG
         if (! any.hasList())

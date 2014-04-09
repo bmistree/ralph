@@ -15,29 +15,20 @@ import static ralph.Variables.NonAtomicTrueFalseVariable;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
 import ralph.ActiveEvent;
+import static RalphDataConstructorRegistry.DataConstructorRegistry.dummy_deserialization_active_event;
 
-
-public class BasicContainerDataConstructors
+public class BasicListDataConstructors
 {
     // only used to force populating internal static fields
-    private final static BasicContainerDataConstructors instance =
-        new BasicContainerDataConstructors();
-    protected BasicContainerDataConstructors()
+    private final static BasicListDataConstructors instance =
+        new BasicListDataConstructors();
+    protected BasicListDataConstructors()
     {}
-    public static BasicContainerDataConstructors get_instance()
+    public static BasicListDataConstructors get_instance()
     {
         return instance;
     }
 
-    // reuse same event when deserializing
-    private final static DeserializationEvent const_deserialization_event =
-        new DeserializationEvent();
-    public static ActiveEvent dummy_deserialization_active_event()
-    {
-        return const_deserialization_event;
-    }
-
-    
     /** List deserializers*/
     private final static AtomNumListConstructor dummy_atom_num_list_constructor =
         AtomNumListConstructor.get_instance();
