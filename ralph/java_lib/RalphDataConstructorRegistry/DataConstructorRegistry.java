@@ -17,6 +17,8 @@ import ralph.EndpointConstructorObj;
 import ralph.InternalServiceFactory;
 import ralph.AtomicList;
 import ralph.NonAtomicList;
+import ralph.AtomicMap;
+import ralph.NonAtomicMap;
 
 import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicNumberVariable;
@@ -153,7 +155,28 @@ public class DataConstructorRegistry
         }
         else if (any.hasMap())
         {
-            Util.logger_assert("Skipping locked maps");
+            String map_deserialization_label =
+                NonAtomicMap.deserialization_label;
+            if (any.getIsTvar())
+                map_deserialization_label = AtomicMap.deserialization_label;
+
+            VariablesProto.Variables.Map map_message = any.getMap();
+
+            String partial_deserialization_label = 
+                merge_labels(
+                    map_deserialization_label,
+                    map_message.getKeyTypeIdentifier());
+            String full_deserialization_label =
+                merge_labels(
+                    partial_deserialization_label,
+                    map_message.getValueTypeIdentifier());
+            
+            DataConstructor dc =
+                constructors.get(full_deserialization_label);
+            if (dc != null)
+                lo = dc.construct(any,ralph_globals);
+            else
+                Util.logger_assert("Missing map deserialiation type.");
         }
         else if (any.hasStruct())
         {
