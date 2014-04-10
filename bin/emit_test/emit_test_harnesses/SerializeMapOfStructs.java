@@ -1,5 +1,6 @@
 package emit_test_harnesses;
 
+import java.lang.Math;
 import java.util.Random;
 import java.util.Arrays;
 import java.util.List;
@@ -9,8 +10,12 @@ import ralph_emitted.SerializeMapOfStructsJava.MapSerializer;
 import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 
+
 public class SerializeMapOfStructs
 {
+    // Using inexact check for floating point equality between doubles
+    private final static double THRESHOLD_DELTA_BETWEEN_DOUBLES = .000001;
+    
     private final static Random rand = new Random();
     
     public static void main(String[] args)
@@ -88,9 +93,15 @@ public class SerializeMapOfStructs
             else
                 result = to_call_on.sum_numbers(a,b,c,d);
 
-            if (! result.equals(expected_value))
+            if (! threshold_equal(result,expected_value))
                 return false;
         }
         return true;
     }
+
+    public static boolean threshold_equal(double a, double b)
+    {
+        return Math.abs(a-b) < THRESHOLD_DELTA_BETWEEN_DOUBLES;
+    }
+    
 }
