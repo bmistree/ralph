@@ -87,10 +87,10 @@ public class SerializeMapOfStructs
                 result = to_call_on.atom_sum_numbers(a,b,c,d);
             else
                 result = to_call_on.sum_numbers(a,b,c,d);
+
             if (! result.equals(expected_value))
                 return false;
         }
         return true;
     }
-    
 }

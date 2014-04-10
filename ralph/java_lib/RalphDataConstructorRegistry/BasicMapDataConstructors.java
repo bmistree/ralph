@@ -153,7 +153,7 @@ public class BasicMapDataConstructors
             NonAtomicInternalMap.IndexType.BOOLEAN);
         
     
-    private static class AtomMapConstructor<IndexType,ValueType>
+    public static class AtomMapConstructor<IndexType,ValueType>
         implements DataConstructor
     {
         private final EnsureAtomicWrapper wrapper;
@@ -247,7 +247,7 @@ public class BasicMapDataConstructors
 
 
     // Non atomic deserializer
-    private static class NonAtomMapConstructor<IndexType,ValueType>
+    public static class NonAtomMapConstructor<IndexType,ValueType>
         implements DataConstructor
     {
         private final EnsureAtomicWrapper wrapper;

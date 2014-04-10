@@ -39,6 +39,8 @@ import RalphDataConstructorRegistry.DataConstructorRegistry;
 import RalphDataConstructorRegistry.DataConstructor;
 import static RalphDataConstructorRegistry.BasicListDataConstructors.AtomListConstructor;
 import static RalphDataConstructorRegistry.BasicListDataConstructors.NonAtomListConstructor;
+import static RalphDataConstructorRegistry.BasicMapDataConstructors.AtomMapConstructor;
+import static RalphDataConstructorRegistry.BasicMapDataConstructors.NonAtomMapConstructor;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -1939,7 +1941,9 @@ def emit_struct_definition(struct_name,struct_type):
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
     struct_deserializer = emit_struct_deserializer(struct_type)
     struct_list_deserializers = (
-        emit_struct_list_deserializer(struct_type,False))
+        emit_struct_list_deserializer(struct_type))
+    struct_map_deserializers = (
+        emit_struct_map_deserializer(struct_type))
     
     return (
         dw_constructor_text + '\n' +
@@ -1947,7 +1951,8 @@ def emit_struct_definition(struct_name,struct_type):
         internal_struct_definition_text + '\n' +
         struct_map_wrapper + '\n' +
         struct_deserializer + '\n' +
-        struct_list_deserializers)
+        struct_list_deserializers + '\n' +
+        struct_map_deserializers)
 
 def emit_struct_data_wrapper_constructor(struct_type):
     '''
@@ -2028,10 +2033,9 @@ private static final %s %s__instance = %s.get_instance();
     return to_return
 
 
-def emit_struct_list_deserializer(struct_type,atomic):
+def emit_struct_list_deserializer(struct_type):
     '''
     @param {type object} struct_type
-    @param {boolean} atomic --- True if this is atomic; false if not.
     '''
     struct_name = struct_type.struct_name
     internal_struct_name = emit_internal_struct_type(struct_type)
@@ -2054,6 +2058,56 @@ private final static {type_text} {var_name} =
     new {type_text} ("{label}", {wrapper});
 '''.format(type_text=type_text,var_name = var_name,label=struct_name,
            wrapper=struct_locked_wrapper_name)
+            
+    return to_return
+
+def emit_struct_map_deserializer(struct_type):
+    '''
+    @param {type object} struct_type
+    '''
+    struct_name = struct_type.struct_name
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
+        struct_type)
+    to_return = ''
+
+    key_tuples = (
+        ('Double',
+         'BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL',
+         'NonAtomicInternalMap.IndexType.DOUBLE'),
+        
+        ('String',
+         'BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL',
+         'NonAtomicInternalMap.IndexType.STRING'),
+        
+        ('Boolean',
+         'BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL',
+         'NonAtomicInternalMap.IndexType.BOOLEAN'))
+    
+    for constructor_text in ('AtomMapConstructor','NonAtomMapConstructor'):
+        for key_tuple in key_tuples:
+            java_key_type_text = key_tuple[0]
+            key_label_text = key_tuple[1]
+            index_type_text = key_tuple[2]
+            
+            # needs to be unique across struct names and
+            # atom/non-atom, and key types
+            var_name = (
+                '_______%s_SingletonStructDeserializer__%s_%s' %
+                (internal_struct_name,constructor_text,java_key_type_text))
+
+            type_text = (
+                '%s<%s,%s>' %
+                (constructor_text,java_key_type_text,internal_struct_name))
+
+            to_return += '''
+    private final static {type_text} {var_name} =
+        new {type_text} ({key_label}, "{value_label}", {wrapper},
+                         {index_type});
+    '''.format(type_text=type_text,var_name = var_name,
+               key_label=key_label_text,value_label=struct_name,
+               index_type=index_type_text,
+               wrapper=struct_locked_wrapper_name)
             
     return to_return
 
