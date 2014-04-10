@@ -37,6 +37,8 @@ import ralph_protobuffs.VariablesProto;
 
 import RalphDataConstructorRegistry.DataConstructorRegistry;
 import RalphDataConstructorRegistry.DataConstructor;
+import static RalphDataConstructorRegistry.BasicListDataConstructors.AtomListConstructor;
+import static RalphDataConstructorRegistry.BasicListDataConstructors.NonAtomListConstructor;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -1937,11 +1939,7 @@ def emit_struct_definition(struct_name,struct_type):
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
     struct_deserializer = emit_struct_deserializer(struct_type)
     struct_list_deserializers = (
-        # non-atomic list
-        emit_struct_list_deserializer(struct_type,False) + '\n' +
-        # atomic list
-        emit_struct_list_deserializer(struct_type,True))
-        
+        emit_struct_list_deserializer(struct_type,False))
     
     return (
         dw_constructor_text + '\n' +
@@ -2039,117 +2037,25 @@ def emit_struct_list_deserializer(struct_type,atomic):
     internal_struct_name = emit_internal_struct_type(struct_type)
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
         struct_type)
-
-    if atomic:
-        instantiation_modifier = 'atom_list'
-        list_labeler = 'AtomicList'
-        list_variable_type = 'AtomicListVariable'
-    else:
-        instantiation_modifier = 'non_atom_list'
-        list_labeler = 'NonAtomicList'
-        list_variable_type = 'NonAtomicListVariable'
-
-    internal_list_deserializer_name = (
-        '__%s_%s_SingletonStructDeserializer' %
-        (internal_struct_name,instantiation_modifier))
-
-    instantiation_text = '''
-private final static %s %s__instance = %s.get_instance();
-''' % (internal_list_deserializer_name,internal_list_deserializer_name,
-       internal_list_deserializer_name)
-
-
-    declaration_text = '''
-private static class %s implements DataConstructor
-{
-    // takes care of singleton
-    private final static %s singleton = new %s();
-    public static %s get_instance()
-    {
-        return singleton;
-    }
-
-    protected %s()
-    {
-        // when create singleton, register it
-        DataConstructorRegistry deserializer =
-            DataConstructorRegistry.get_instance();
-
-        String label = deserializer.merge_labels(
-            %s.deserialization_label,"%s");
-
-        deserializer.register(label,this);
-    }
-''' % (internal_list_deserializer_name,
-       # singleton creation and get instance
-       internal_list_deserializer_name, internal_list_deserializer_name,
-       internal_list_deserializer_name,
-       # constructor
-       internal_list_deserializer_name,
-       list_labeler,
-       struct_name, # label merged with list label
-       )
-
-    declaration_text += '''
-    @Override
-    public RalphObject construct(
-        VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
-    {
-        // create a non-atomic list variable, then, independently
-        // populate each of its fields.
-        %s<%s,%s> outer_list =
-            new %s<%s,%s>(
-                false,
-                // struct locked wrapper
-                %s,
-                ralph_globals);
-        RalphObject to_return = null;
-
-        ActiveEvent evt =
-            DataConstructorRegistry.dummy_deserialization_active_event();
-
-        //// DEBUG
-        if (! any.hasList())
-        {
-            Util.logger_assert(
-                "Incorrectly deserializing struct list.");
-        }
-        //// END DEBUG
-
-        VariablesProto.Variables.List list_message = any.getList();
-        List<VariablesProto.Variables.Any> any_list =
-            list_message.getListValuesList();
-
-        DataConstructorRegistry deserializer =
-            DataConstructorRegistry.get_instance();
-        for (VariablesProto.Variables.Any list_element : any_list)
-        {
-            try
-            {
-                %s structer =
-                    (%s) deserializer.deserialize(list_element,ralph_globals);
-                outer_list.get_val(evt).append(evt,structer.get_val(evt));
-                to_return = outer_list.get_val(null);
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-                Util.logger_assert(
-                    "Should never be backed out when deserializing");
-            }
-        }
-        // return internal list            
-        return to_return;
-    }
-}
-''' % (# top of method
-        list_variable_type,internal_struct_name, internal_struct_name,
-        list_variable_type,internal_struct_name, internal_struct_name,
-        struct_locked_wrapper_name,
-        # try block
-        struct_name,struct_name)
-
-    return instantiation_text + declaration_text
+    to_return = ''
+    
+    for constructor_text in ('AtomListConstructor','NonAtomListConstructor'):
+        # needs to be unique across struct names and atom/non-atom
+        var_name = (
+            '_______%s_SingletonStructDeserializer__%s' %
+            (internal_struct_name,constructor_text))
+        
+        type_text = (
+            '%s<%s>' %
+            (constructor_text,internal_struct_name))
+        
+        to_return += '''
+private final static {type_text} {var_name} =
+    new {type_text} ("{label}", {wrapper});
+'''.format(type_text=type_text,var_name = var_name,label=struct_name,
+           wrapper=struct_locked_wrapper_name)
+            
+    return to_return
 
 
 

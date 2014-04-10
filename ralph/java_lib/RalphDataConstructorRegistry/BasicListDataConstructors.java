@@ -56,9 +56,8 @@ public class BasicListDataConstructors
         new NonAtomListConstructor<Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER);
-    
-    
-    private static class AtomListConstructor<ElementType>
+
+    public static class AtomListConstructor<ElementType>
         implements DataConstructor
     {
         private final EnsureAtomicWrapper wrapper;
@@ -134,7 +133,7 @@ public class BasicListDataConstructors
     }
     
 
-    private static class NonAtomListConstructor<ElementType>
+    public static class NonAtomListConstructor<ElementType>
         implements DataConstructor
     {
         private final EnsureAtomicWrapper wrapper;
