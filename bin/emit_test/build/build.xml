@@ -609,7 +609,7 @@
          run_SerializeNumberListTest,run_SerializeTextListTest,
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
          run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
-         run_SerializeNumberNumberMapTest">
+         run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs">
   </target>
     
   
@@ -1473,7 +1473,21 @@
     </java>
   </target>
 
-  
+  <!-- SerializeMapOfStructsTest -->
+  <target
+      name="run_SerializeMapOfStructs"
+      depends="compile_ralph_tests"
+      description="Test that can serialize a map whose
+                   indices are numbers and values are structs.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeMapOfStructs"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
 
   
   <!-- Delete the build directories -->
