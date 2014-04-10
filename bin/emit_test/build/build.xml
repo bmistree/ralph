@@ -50,6 +50,15 @@
       <arg line="-c IFaceBasicRalph"/>
     </exec>
 
+    <echo message="${line.separator}Emitting serialize_map_of_structs.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/serialize_map_of_structs.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeMapOfStructsJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SerializeMapOfStructsJava"/>
+    </exec>
+    
     <echo message="${line.separator}Emitting struct_serialization.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>

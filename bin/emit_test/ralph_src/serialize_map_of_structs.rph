@@ -1,0 +1,80 @@
+
+
+Struct NumHolder
+{
+    TVar Number atom_num;
+    Number num;
+}
+
+Service MapSerializer
+{
+    /** Maps */
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct NumHolder s1;
+        Struct NumHolder s2;
+        s1.atom_num = a;
+        s1.num = b;
+        s2.atom_num = c;
+        s2.num = d;
+
+        Map(from: Text, to: Struct NumHolder) struct_map;
+        struct_map.set('a',s1);
+        struct_map.set('b',s2);
+        
+        Number to_return;
+        to_return = @partner.partner_map_sum(struct_map);
+        return to_return;
+    }
+
+    partner_map_sum(
+        Map(from: Text, to: Struct NumHolder) to_sum) returns Number
+    {
+        Number to_return = 0;
+
+        for (Text index in to_sum)
+        {
+            Struct NumHolder value;
+            value = to_sum.get(index);
+            to_return = to_return + value.atom_num;
+            to_return = to_return + value.num;
+        }
+        return to_return;
+    }
+
+
+    /** Atomic maps */
+    atom_sum_numbers(Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct NumHolder s1;
+        Struct NumHolder s2;
+        s1.atom_num = a;
+        s1.num = b;
+        s2.atom_num = c;
+        s2.num = d;
+
+        TVar Map(from: Text, to: Struct NumHolder) struct_map;
+        struct_map.set('a',s1);
+        struct_map.set('b',s2);
+        
+        Number to_return;
+        to_return = @partner.atom_partner_map_sum(struct_map);
+        return to_return;
+    }
+
+    atom_partner_map_sum(
+        TVar Map(from: Text, to: Struct NumHolder) to_sum) returns Number
+    {
+        Number to_return = 0;
+
+        for (Text index in to_sum)
+        {
+            Struct NumHolder value;
+            value = to_sum.get(index);
+            to_return = to_return + value.atom_num;
+            to_return = to_return + value.num;
+        }
+        return to_return;
+    }
+}
