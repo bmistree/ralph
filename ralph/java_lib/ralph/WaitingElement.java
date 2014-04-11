@@ -8,15 +8,15 @@ public class WaitingElement <T,D>
     implements Comparable<WaitingElement<T,D>>
 {
     
-    //	# Each event has a priority associated with it.  This priority
-    //	# can change when an event gets promoted to be boosted.  To
-    //	# avoid the read/write conflicts this might cause, instead of
-    //	# operating on an event's real-time priority, when trying to
-    //	# acquire read and write locks on events, we initially request
-    //	# their priorities and use them for the main body of that
-    //	# operation.  This priority gets cached in WaitingElements and
-    //	# can get updated, asynchronously, when an event requests
-    //	# promotion.
+    // Each event has a priority associated with it.  This priority
+    // can change when an event gets promoted to be boosted.  To
+    // avoid the read/write conflicts this might cause, instead of
+    // operating on an event's real-time priority, when trying to
+    // acquire read and write locks on events, we initially request
+    // their priorities and use them for the main body of that
+    // operation.  This priority gets cached in WaitingElements and
+    // can get updated, asynchronously, when an event requests
+    // promotion.
     public String cached_priority; 
 	
     public ActiveEvent event;
@@ -24,13 +24,33 @@ public class WaitingElement <T,D>
     DataWrapperFactory<T,D> data_wrapper_constructor;
 	
     // Acquire write lock and acquire read lock block reading this
-    // queue if they cannot instantly acquire the write/read lock #
-    // when add a waiting element, that waiting element's read or #
-    // write blocks.  The way that it blocks is by listening at a #
-    // threadsafe queue.  This is that queue.
-    public ArrayBlockingQueue<DataWrapper<T,D>> queue = 
-        new ArrayBlockingQueue<DataWrapper<T,D>>(Util.QUEUE_CAPACITIES);
-	
+    // queue if they cannot instantly acquire the write/read lock when
+    // add a waiting element, that waiting element's read or write
+    // blocks.  The way that it blocks is by listening at a threadsafe
+    // queue.  This is that queue.
+    public static class UnwaitElement<T,D>
+    {
+        public boolean successful;
+        // can be null
+        public DataWrapper<T,D> result;
+
+        /**
+           @param _result --- If null, means that operation was not
+           successful and waiter should throw backout.
+         */
+        public UnwaitElement(DataWrapper<T,D> _result)
+        {
+            successful = (_result != null);
+            result = _result;
+        }
+    }
+
+    // FIXME: Really just need a synchronized single-element channel
+    // with backout-always-wins semantics
+    public ArrayBlockingQueue<UnwaitElement> queue = 
+        new ArrayBlockingQueue<UnwaitElement>(Util.QUEUE_CAPACITIES);
+
+    
     private boolean log_changes;
 	
     /**
@@ -79,36 +99,30 @@ public class WaitingElement <T,D>
     {
         if (read)
         {
-            // # read expects updated value returned in queue
-            queue.add(multi_threaded_obj.val);
+            // read expects updated value returned in queue            
+            queue.add(new UnwaitElement(multi_threaded_obj.val));
         }
         else
         {
-            //# FIXME: it may be that we don't want to copy over initial
-            //# value when acquiring a lock (eg., if we're just going to
-            //# write over it anyways).  Add a mechanism for that?
+            // FIXME: it may be that we don't want to copy over initial
+            // value when acquiring a lock (eg., if we're just going to
+            // write over it anyways).  Add a mechanism for that?
             //
-            //# update dirty val with value asked to write with
-            multi_threaded_obj.dirty_val = 
+            // update dirty val with value asked to write with
+            multi_threaded_obj.dirty_val =
                 data_wrapper_constructor.construct(
                     (T)multi_threaded_obj.val.val,log_changes);
-            queue.add(multi_threaded_obj.dirty_val);
+            queue.add(new UnwaitElement(multi_threaded_obj.dirty_val));
         }
     }
-
+    
     /**
        Called from within lcoked_obj's lock.
      */
     public void unwait_fail(AtomicObject multi_threaded_obj)
     {
-        // FIXME: creating a needless copy here.  Should just wake up
-        // waiting element and announce that it has failed.
-        DataWrapper<T,D> to_add =
-            data_wrapper_constructor.construct(
-                (T)multi_threaded_obj.val.val,log_changes);
-        queue.add(to_add);
+        queue.add(new UnwaitElement(null));
     }
-    
     
     public int compareTo(WaitingElement<T,D> o2) 
     {

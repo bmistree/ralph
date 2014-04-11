@@ -337,10 +337,12 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         
         _unlock();
 
-        
+
+        WaitingElement.UnwaitElement<T,D> unwait_element = null;
         DataWrapper<T,D> to_return = null;
         try {
-            to_return = waiting_element.queue.take();
+            unwait_element = waiting_element.queue.take();
+            to_return = unwait_element.result;
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -462,9 +464,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             to_unlock.unlock();
         _unlock();
 
+        WaitingElement.UnwaitElement<T,D> unwait_element = null;
         DataWrapper<T,D> to_return = null;
         try {
-            to_return = write_waiting_event.queue.take();
+            unwait_element = write_waiting_event.queue.take();
+            to_return = unwait_element.result;
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
