@@ -1,0 +1,25 @@
+
+Struct ToReturnStruct
+{
+    Number internal_number_1 = 0;
+    Number internal_number_2 = 0;
+}
+
+
+Service StructReturner
+{
+    sum_numbers(Number a, Number b) returns Number
+    {
+        Struct ToReturnStruct to_sum = null;
+        to_sum = create_struct(a,b);
+        return to_sum.internal_number_1 + to_sum.internal_number_2;
+    }
+
+    create_struct(Number a, Number b) returns Struct ToReturnStruct
+    {
+        Struct ToReturnStruct to_return;
+        to_return.internal_number_1 = a;
+        to_return.internal_number_2 = b;
+        return to_return;
+    }
+}
