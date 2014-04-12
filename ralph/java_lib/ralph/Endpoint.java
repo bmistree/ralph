@@ -46,7 +46,38 @@ public abstract class Endpoint
     public String _host_uuid = null;
 	
     private LamportClock _clock = null;
-	
+
+    /**
+       Can update the connection object of a service factory.  This
+       happens, for instance, if one endpoint sends a ServiceFactory
+       to another and wants to create a local copy of it, which it can
+       then call methods on.
+
+       Endpoint Receiver
+       {
+           receive_and_instantiate(PartnerServiceFactory psf) returns ServiceReference
+           {
+               Endpoint ReceiverCreated receiver_created_endpoint =
+                   dynamic_cast<Endpoint ReceiverCreated>(psf.construct());
+               ...
+               return created_endpoint.rpc_reference();
+           }
+       }
+
+       Endpoint Sender
+       {
+           instantiate_remote(ServiceFactory remote_sf, ServiceFactory local_sf)
+           {
+               ServiceReference sr = @partner.receive_and_instantiate(remote_sf);
+
+               Endpoint SenderCreated sender_created_endpoint =
+                   dynamic_cast<Endpoint SenderCreated>(local_sf.construct(sr));
+           }
+       }
+       
+       partner is installed on a foreign 
+     */
+    private final ReentrantLock _conn_obj_mutex = new ReentrantLock();
     private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
 
