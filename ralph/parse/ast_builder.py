@@ -5,6 +5,7 @@ from ralph.lex.ralph_lex import SERVICE_TOKEN, INTERFACE_TOKEN
 from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN,SPECULATE_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_CONTAINER_INTERNALS_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN, TO_TEXT_TOKEN
+from ralph.lex.ralph_lex import SERVICE_REFERENCE_TOKEN
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -876,6 +877,9 @@ def p_VariableType(p):
                  
                  | SERVICE_FACTORY
                  | TVAR SERVICE_FACTORY
+
+                 | SERVICE_REFERENCE
+                 | TVAR SERVICE_REFERENCE
     '''
     if len(p) >= 11:
         # It's a map
@@ -956,6 +960,18 @@ def p_VariableType(p):
             is_tvar = True
         line_number = p.lineno(1)
         p[0] = ServiceFactoryVariableTypeNode(
+            global_parsing_filename,is_tvar,line_number)
+        
+    elif (
+        (p[1] == SERVICE_REFERENCE_TOKEN) or
+        ((len(p) >= 3) and (p[2] == SERVICE_REFERENCE_TOKEN))):
+        # emitting a service reference type
+        is_tvar = False
+        if len(p) == 3:
+            # service reference is a tvar
+            is_tvar = True
+        line_number = p.lineno(1)
+        p[0] = ServiceReferenceVariableTypeNode(
             global_parsing_filename,is_tvar,line_number)
         
     else:

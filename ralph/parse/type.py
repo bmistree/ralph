@@ -395,3 +395,11 @@ class ServiceFactoryType(Type):
         
     def dict_dot_fields(self):
         return ServiceFactoryType.SERVICE_FACTORY_DOT_DICT_METHODS
+
+class ServiceReferenceType(Type):
+    def __init__(self,is_tvar):
+        self.is_tvar = is_tvar
+        
+    def dict_dot_fields(self):
+        return {}
+    

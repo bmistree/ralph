@@ -1,12 +1,20 @@
+alias Endpoint Receiver as 'ReferenceServiceFactoryJava.Receiver';
+alias Endpoint Sender as 'ReferenceServiceFactoryJava.Sender';
+alias Endpoint ReceiverCreated as 'ReferenceServiceFactoryJava.ReceiverCreated';
+alias Endpoint SenderCreated as 'ReferenceServiceFactoryJava.SenderCreated';
+
+
 Endpoint Receiver
 {
     Endpoint ReceiverCreated receiver_created_endpoint = null;
     
-    receive_and_instantiate(PartnerServiceFactory psf) returns ServiceReference
+    receive_and_instantiate(ServiceFactory partner_service_factory)
+        returns ServiceReference
     {
         receiver_created_endpoint =
-            dynamic_cast<Endpoint ReceiverCreated>(psf.construct());
-        return created_endpoint.rpc_reference();
+            dynamic_cast<Endpoint ReceiverCreated>(
+                partner_service_factory.construct());
+        return receiver_created_endpoint.rpc_reference();
    }
 }
 

@@ -7,6 +7,7 @@ ENDPOINT_TOKEN = 'Endpoint'
 SERVICE_TOKEN = 'Service'
 INTERFACE_TOKEN = 'Interface'
 SERVICE_FACTORY_TOKEN = 'ServiceFactory'
+SERVICE_REFERENCE_TOKEN = 'ServiceReference'
 PRINT_TYPE_TOKEN = 'print'
 SPECULATE_TOKEN = 'speculate'
 SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
@@ -59,6 +60,7 @@ reserved = {
     'verbatim': 'VERBATIM',
     'null': 'NULL',
     'ServiceFactory' : 'SERVICE_FACTORY',
+    'ServiceReference':'SERVICE_REFERENCE',
     'self': 'SELF',
     'implements': 'IMPLEMENTS',
     'Interface': 'INTERFACE',
@@ -66,7 +68,6 @@ reserved = {
     'break': 'BREAK',
     'continue': 'CONTINUE'
     }
-
 
 tokens = [
     #comments
