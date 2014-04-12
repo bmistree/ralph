@@ -26,7 +26,8 @@ Endpoint Sender
        ServiceReference sr = @partner.receive_and_instantiate(remote_sf);
 
        Endpoint SenderCreated sender_created_endpoint =
-           dynamic_cast<Endpoint SenderCreated>(local_sf.construct(sr));
+           dynamic_cast<Endpoint SenderCreated>(
+               local_sf.construct_from_reference(sr));
 
        Number returned_number;
        returned_number = sender_created_endpoint.call_partner();

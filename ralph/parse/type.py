@@ -379,15 +379,30 @@ class MethodType(Type):
         return self.returns_type.dict_dot_methods()
 
 
+class ServiceReferenceType(Type):
+    def __init__(self,is_tvar):
+        self.is_tvar = is_tvar
+        
+    def dict_dot_fields(self):
+        return {}
+
 class ServiceFactoryType(Type):
     CONSTRUCT_METHOD_NAME = 'construct'
+    CONSTRUCT_FROM_REFERENCE_METHOD_NAME = 'construct_from_reference'
 
     SERVICE_FACTORY_DOT_DICT_METHODS = {
         CONSTRUCT_METHOD_NAME : MethodType(
             # returns Endpoint
             GENERIC_ENDPOINT_TYPE,
             # takes no arguments
-            [])
+            []),
+
+        CONSTRUCT_FROM_REFERENCE_METHOD_NAME : MethodType(
+            # returns Endpoint
+            GENERIC_ENDPOINT_TYPE,
+            # takes single argument: a ServiceReferenceType. By
+            # default, using non-atomic ServiceReferenceType.
+            [ServiceReferenceType(False)]) 
         }
     
     def __init__(self,is_tvar):
@@ -395,11 +410,4 @@ class ServiceFactoryType(Type):
         
     def dict_dot_fields(self):
         return ServiceFactoryType.SERVICE_FACTORY_DOT_DICT_METHODS
-
-class ServiceReferenceType(Type):
-    def __init__(self,is_tvar):
-        self.is_tvar = is_tvar
-        
-    def dict_dot_fields(self):
-        return {}
     
