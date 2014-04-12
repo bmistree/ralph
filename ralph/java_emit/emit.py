@@ -3,7 +3,7 @@ from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType,WildcardType
 from ralph.parse.type import MapType,StructType,ListType,EndpointType
-from ralph.parse.type import ServiceFactoryType
+from ralph.parse.type import ServiceFactoryType, ServiceReferenceType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE,NULL_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -1136,6 +1136,10 @@ def emit_internal_type(type_object):
         # emit for ServiceFactories
         if isinstance(type_object,ServiceFactoryType):
             return 'InternalServiceFactory'
+        # emit for ServiceReference
+        if isinstance(type_object,ServiceReferenceType):
+            return 'InternalServiceReference'
+
         
         # emit for basic types
         if isinstance(type_object,BasicType):
@@ -1152,6 +1156,9 @@ def emit_internal_type(type_object):
                 # FIXME: Ugly, hackish way to return structs
                 if isinstance(typer,StructType):
                     return emit_internal_type(typer)
+
+                # FIXME: Need to support returning ServiceFactories,
+                # Services, and ServiceReferenceType
                 
                 typer = typer.basic_type
 
