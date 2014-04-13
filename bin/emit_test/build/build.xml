@@ -627,7 +627,8 @@
          run_SerializeNumberListTest,run_SerializeTextListTest,
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
          run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
-         run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs">
+         run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
+         run_InternalStructMethodCallTest">
   </target>
     
   
@@ -1500,6 +1501,21 @@
     <java
         dir="${build.dir}"
         classname="emit_test_harnesses.SerializeMapOfStructs"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
+  <!-- InternalStructMethodCallTest -->
+  <target
+      name="run_InternalStructMethodCallTest"
+      depends="compile_ralph_tests"
+      description="Tests that handles returning structs from methods">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.InternalStructMethodCallTest"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
