@@ -814,7 +814,6 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         typer = type_object.returns_type
         is_tvar = False
 
-    
         
     if typer == BOOL_TYPE:
         if is_tvar and (not force_single_threaded):
@@ -1140,7 +1139,6 @@ def emit_internal_type(type_object):
         if isinstance(type_object,ServiceReferenceType):
             return 'InternalServiceReference'
 
-        
         # emit for basic types
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
@@ -1156,10 +1154,18 @@ def emit_internal_type(type_object):
                 # FIXME: Ugly, hackish way to return structs
                 if isinstance(typer,StructType):
                     return emit_internal_type(typer)
-
+                # FIXME: Ugly, hackish way to return endpoints
+                if isinstance(typer,EndpointType):
+                    return emit_internal_type(typer)
+                # FIXME: Ugly, hackish way to return service factories
+                if isinstance(typer,ServiceFactoryType):
+                    return emit_internal_type(typer)
+                # FIXME: Ugly, hackish way to return service references
+                if isinstance(typer,ServiceReferenceType):
+                    return emit_internal_type(typer)
+                
                 # FIXME: Need to support returning ServiceFactories,
                 # Services, and ServiceReferenceType
-                
                 typer = typer.basic_type
 
         if typer == BOOL_TYPE:
