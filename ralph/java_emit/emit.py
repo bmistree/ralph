@@ -32,6 +32,9 @@ import ralph.Variables.NonAtomicInterfaceVariable;
 import ralph.Variables.AtomicInterfaceVariable;
 import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph.Variables.AtomicServiceFactoryVariable;
+import ralph.Variables.NonAtomicServiceReferenceVariable;
+import ralph.Variables.AtomicServiceReferenceVariable;
+
 
 import ralph_protobuffs.VariablesProto;
 
@@ -805,6 +808,12 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         if type_object.is_tvar and (not force_single_threaded):
             return 'AtomicServiceFactoryVariable'
         return 'NonAtomicServiceFactoryVariable'
+
+    # emit for service references
+    if isinstance(type_object,ServiceReferenceType):
+        if type_object.is_tvar and (not force_single_threaded):
+            return 'AtomicServiceReferenceVariable'
+        return 'NonAtomicServiceReferenceVariable'
     
     # emit for others
     if isinstance(type_object,BasicType):
@@ -813,7 +822,6 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     elif isinstance(type_object,MethodType):
         typer = type_object.returns_type
         is_tvar = False
-
         
     if typer == BOOL_TYPE:
         if is_tvar and (not force_single_threaded):
@@ -971,6 +979,19 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 'new  %s(false,ralph_globals)' % java_type_text)
 
         return to_return
+
+    elif isinstance(type_object,ServiceReferenceType):
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+            to_return = (
+                'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
+        else:
+            to_return = (
+                'new  %s(false,ralph_globals)' % java_type_text)
+
+        return to_return
+
     
     #### DEBUG
     else:

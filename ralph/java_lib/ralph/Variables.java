@@ -13,6 +13,7 @@ import RalphDataWrappers.TextTypeDataWrapperFactory;
 import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
+import RalphDataWrappers.ServiceReferenceTypeDataWrapperFactory;
 
 public class Variables {
     public final static NumberTypeDataWrapperFactory
@@ -38,6 +39,11 @@ public class Variables {
 
     final static InternalServiceFactory default_service_factory = null;
 
+    final static ServiceReferenceTypeDataWrapperFactory
+        service_reference_value_type_data_wrapper_factory = 
+        new ServiceReferenceTypeDataWrapperFactory();
+
+    final static InternalServiceReference default_service_reference = null;
 
     /** Atomics */
     
@@ -298,6 +304,53 @@ public class Variables {
         }
     }
     
+    public static class AtomicServiceReferenceVariable
+        extends AtomicValueVariable<InternalServiceReference,InternalServiceReference>
+    {
+        public AtomicServiceReferenceVariable(
+            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,(InternalServiceReference)init_val,
+                service_reference_value_type_data_wrapper_factory,ralph_globals);
+        }
+        public AtomicServiceReferenceVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,default_service_reference,
+                service_reference_value_type_data_wrapper_factory,ralph_globals);
+        }
+
+        @Override
+        protected SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference>
+            duplicate_for_speculation(InternalServiceReference to_speculate_on)
+        {
+            SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference> to_return =
+                new AtomicServiceReferenceVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
+
+        @Override
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            // FIXME: still must perform serialization for service references
+            Util.logger_assert(
+                "Must add code for serializing service references.");
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
+        }
+
+    }
     
     public static class NonAtomicNumberVariable
         extends NonAtomicValueVariable<Double,Double>
@@ -489,6 +542,47 @@ public class Variables {
         }
     }
 
+
+    public static class NonAtomicServiceReferenceVariable
+        extends NonAtomicValueVariable<InternalServiceReference,InternalServiceReference>
+    {
+        public NonAtomicServiceReferenceVariable(
+            boolean _log_changes,InternalServiceReference init_val,
+            RalphGlobals ralph_globals)
+        {
+            super(
+                init_val,
+                service_reference_value_type_data_wrapper_factory,
+                ralph_globals);
+        }
+        public NonAtomicServiceReferenceVariable(
+            boolean _dummy_log_changes,RalphGlobals ralph_globals)
+        {
+            super(
+                default_service_reference,
+                service_reference_value_type_data_wrapper_factory,
+                ralph_globals);
+        }
+
+        @Override
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference) throws BackoutException
+        {
+            // FIXME: still must perform serialization for service references
+            Util.logger_assert(
+                "Must add code for serializing service references.");
+        }
+        @Override
+        public void deserialize_rpc(
+            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
+        {
+            Util.logger_assert(
+                "Should deserialize directly in DataConstructorRegistry.");
+        }
+    }
+
+    
         
     /************ Handling maps ********/
     //non-atomic
