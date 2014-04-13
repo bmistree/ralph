@@ -1833,6 +1833,8 @@ def emit_dot_statement(emit_ctx,dot_node):
         right_hand_side_method = right_of_dot_node.value
         if right_hand_side_method == ServiceFactoryType.CONSTRUCT_METHOD_NAME:
             to_return += '.construct'
+        elif right_hand_side_method == ServiceFactoryType.CONSTRUCT_FROM_REFERENCE_METHOD_NAME:
+            to_return += '.construct_from_reference'
         #### DEBUG
         else:
             raise InternalEmitException(

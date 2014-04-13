@@ -43,4 +43,13 @@ public class InternalServiceFactory
         SingleSideConnection ssc = new SingleSideConnection();
         return this.endpt_constructor.construct(ralph_globals,ssc);
     }
+    public Endpoint construct_from_reference(
+        ActiveEvent active_event,InternalServiceReference service_reference)
+    {
+        // FIXME: should fill in this stub for constructing endpoints
+        // from references.
+        Util.logger_assert(
+            "FIXME: Must fill in construct from reference method");
+    }
+    
 }
