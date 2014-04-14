@@ -50,6 +50,6 @@ public class InternalServiceFactory
         // from references.
         Util.logger_assert(
             "FIXME: Must fill in construct from reference method");
+        return null;
     }
-    
 }
