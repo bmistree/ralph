@@ -1,15 +1,14 @@
 package ralph;
 
-import java.net.InetAddress;
-
 public class Util
 {
 	
     public static final Endpoint PARTNER_ENDPOINT_SENTINEL = null;
 
     public static final int DEFAULT_TCP_PORT_NEW_CONNECTIONS = 55559;
-    public static final InetAddress DEFAULT_IP_ADDRESS_NEW_CONNECTIONS =
-        InetAddress.getLocalHost().getHostAddress();
+    public static final String DEFAULT_IP_ADDRESS_NEW_CONNECTIONS =
+        "0.0.0.0";
+
     
     /**
      * Queues must be declared with capacities.  All queues have this

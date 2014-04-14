@@ -3,12 +3,12 @@ package ralph;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
-public class RalphGlobals {
+public class RalphGlobals
+{
     public LamportClock clock;
     public final String host_uuid = Util.generate_uuid();
     
@@ -22,7 +22,7 @@ public class RalphGlobals {
 
     public int tcp_port_to_listen_for_connections_on =
         Util.DEFAULT_TCP_PORT_NEW_CONNECTIONS;
-    public InetAddress address_to_listen_for_connections_on =
+    public String ip_addr_to_listen_for_connections_on =
         Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
     
     private List<Stoppable> stoppable_list =
@@ -44,11 +44,11 @@ public class RalphGlobals {
     }
 
     public RalphGlobals (
-        InetAddress _address_to_listen_for_connections_on,
+        String _ip_addr_to_listen_for_connections_on,
         int _tcp_port_to_listen_for_connections_on)
     {
-        address_to_listen_for_connections_on =
-            _address_to_listen_for_connections_on;
+        ip_addr_to_listen_for_connections_on =
+            _ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
             _tcp_port_to_listen_for_connections_on;
     }
