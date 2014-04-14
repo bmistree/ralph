@@ -28,6 +28,15 @@ message Variables
         repeated string field_names = 2;
         repeated Any field_values = 3;
     }
+
+    message ServiceReference
+    {
+        required string ip_addr = 1;
+        // would use uint16, but those aren't defined in protocol
+        // buffers.
+        required uint32 tcp_port = 2;
+        required UUID service_uuid = 3;
+    }
     
     message Any
     {
@@ -44,6 +53,7 @@ message Variables
         optional Map map = 8;
         optional Struct struct = 9;
         optional bytes service_factory = 10;
+        optional ServiceReference service_reference = 11;
     }
 
     repeated Any vars = 1;

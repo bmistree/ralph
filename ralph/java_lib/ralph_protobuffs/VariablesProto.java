@@ -2551,6 +2551,613 @@ public final class VariablesProto {
       // @@protoc_insertion_point(class_scope:Variables.Struct)
     }
     
+    public interface ServiceReferenceOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+      
+      // required string ip_addr = 1;
+      boolean hasIpAddr();
+      String getIpAddr();
+      
+      // required uint32 tcp_port = 2;
+      boolean hasTcpPort();
+      int getTcpPort();
+      
+      // required .UUID service_uuid = 3;
+      boolean hasServiceUuid();
+      ralph_protobuffs.UtilProto.UUID getServiceUuid();
+      ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder();
+    }
+    public static final class ServiceReference extends
+        com.google.protobuf.GeneratedMessage
+        implements ServiceReferenceOrBuilder {
+      // Use ServiceReference.newBuilder() to construct.
+      private ServiceReference(Builder builder) {
+        super(builder);
+      }
+      private ServiceReference(boolean noInit) {}
+      
+      private static final ServiceReference defaultInstance;
+      public static ServiceReference getDefaultInstance() {
+        return defaultInstance;
+      }
+      
+      public ServiceReference getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+      
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable;
+      }
+      
+      private int bitField0_;
+      // required string ip_addr = 1;
+      public static final int IP_ADDR_FIELD_NUMBER = 1;
+      private java.lang.Object ipAddr_;
+      public boolean hasIpAddr() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getIpAddr() {
+        java.lang.Object ref = ipAddr_;
+        if (ref instanceof String) {
+          return (String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+            ipAddr_ = s;
+          }
+          return s;
+        }
+      }
+      private com.google.protobuf.ByteString getIpAddrBytes() {
+        java.lang.Object ref = ipAddr_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+          ipAddr_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      
+      // required uint32 tcp_port = 2;
+      public static final int TCP_PORT_FIELD_NUMBER = 2;
+      private int tcpPort_;
+      public boolean hasTcpPort() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getTcpPort() {
+        return tcpPort_;
+      }
+      
+      // required .UUID service_uuid = 3;
+      public static final int SERVICE_UUID_FIELD_NUMBER = 3;
+      private ralph_protobuffs.UtilProto.UUID serviceUuid_;
+      public boolean hasServiceUuid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public ralph_protobuffs.UtilProto.UUID getServiceUuid() {
+        return serviceUuid_;
+      }
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder() {
+        return serviceUuid_;
+      }
+      
+      private void initFields() {
+        ipAddr_ = "";
+        tcpPort_ = 0;
+        serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+        
+        if (!hasIpAddr()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasTcpPort()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasServiceUuid()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!getServiceUuid().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+      
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getIpAddrBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeUInt32(2, tcpPort_);
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          output.writeMessage(3, serviceUuid_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+      
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+      
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getIpAddrBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeUInt32Size(2, tcpPort_);
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(3, serviceUuid_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+      
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+      
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data).buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data, extensionRegistry)
+                 .buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data).buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return newBuilder().mergeFrom(data, extensionRegistry)
+                 .buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input).buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input, extensionRegistry)
+                 .buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        Builder builder = newBuilder();
+        if (builder.mergeDelimitedFrom(input)) {
+          return builder.buildParsed();
+        } else {
+          return null;
+        }
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        Builder builder = newBuilder();
+        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+          return builder.buildParsed();
+        } else {
+          return null;
+        }
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input).buildParsed();
+      }
+      public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return newBuilder().mergeFrom(input, extensionRegistry)
+                 .buildParsed();
+      }
+      
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.ServiceReference prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+      
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_descriptor;
+        }
+        
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable;
+        }
+        
+        // Construct using ralph_protobuffs.VariablesProto.Variables.ServiceReference.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+        
+        private Builder(BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getServiceUuidFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+        
+        public Builder clear() {
+          super.clear();
+          ipAddr_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          tcpPort_ = 0;
+          bitField0_ = (bitField0_ & ~0x00000002);
+          if (serviceUuidBuilder_ == null) {
+            serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          } else {
+            serviceUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000004);
+          return this;
+        }
+        
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+        
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDescriptor();
+        }
+        
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReference getDefaultInstanceForType() {
+          return ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
+        }
+        
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReference build() {
+          ralph_protobuffs.VariablesProto.Variables.ServiceReference result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+        
+        private ralph_protobuffs.VariablesProto.Variables.ServiceReference buildParsed()
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          ralph_protobuffs.VariablesProto.Variables.ServiceReference result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(
+              result).asInvalidProtocolBufferException();
+          }
+          return result;
+        }
+        
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReference buildPartial() {
+          ralph_protobuffs.VariablesProto.Variables.ServiceReference result = new ralph_protobuffs.VariablesProto.Variables.ServiceReference(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.ipAddr_ = ipAddr_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.tcpPort_ = tcpPort_;
+          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+            to_bitField0_ |= 0x00000004;
+          }
+          if (serviceUuidBuilder_ == null) {
+            result.serviceUuid_ = serviceUuid_;
+          } else {
+            result.serviceUuid_ = serviceUuidBuilder_.build();
+          }
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+        
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.VariablesProto.Variables.ServiceReference) {
+            return mergeFrom((ralph_protobuffs.VariablesProto.Variables.ServiceReference)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+        
+        public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.ServiceReference other) {
+          if (other == ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance()) return this;
+          if (other.hasIpAddr()) {
+            setIpAddr(other.getIpAddr());
+          }
+          if (other.hasTcpPort()) {
+            setTcpPort(other.getTcpPort());
+          }
+          if (other.hasServiceUuid()) {
+            mergeServiceUuid(other.getServiceUuid());
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+        
+        public final boolean isInitialized() {
+          if (!hasIpAddr()) {
+            
+            return false;
+          }
+          if (!hasTcpPort()) {
+            
+            return false;
+          }
+          if (!hasServiceUuid()) {
+            
+            return false;
+          }
+          if (!getServiceUuid().isInitialized()) {
+            
+            return false;
+          }
+          return true;
+        }
+        
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+              this.getUnknownFields());
+          while (true) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  this.setUnknownFields(unknownFields.build());
+                  onChanged();
+                  return this;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                ipAddr_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                tcpPort_ = input.readUInt32();
+                break;
+              }
+              case 26: {
+                ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
+                if (hasServiceUuid()) {
+                  subBuilder.mergeFrom(getServiceUuid());
+                }
+                input.readMessage(subBuilder, extensionRegistry);
+                setServiceUuid(subBuilder.buildPartial());
+                break;
+              }
+            }
+          }
+        }
+        
+        private int bitField0_;
+        
+        // required string ip_addr = 1;
+        private java.lang.Object ipAddr_ = "";
+        public boolean hasIpAddr() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        public String getIpAddr() {
+          java.lang.Object ref = ipAddr_;
+          if (!(ref instanceof String)) {
+            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+            ipAddr_ = s;
+            return s;
+          } else {
+            return (String) ref;
+          }
+        }
+        public Builder setIpAddr(String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          ipAddr_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearIpAddr() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          ipAddr_ = getDefaultInstance().getIpAddr();
+          onChanged();
+          return this;
+        }
+        void setIpAddr(com.google.protobuf.ByteString value) {
+          bitField0_ |= 0x00000001;
+          ipAddr_ = value;
+          onChanged();
+        }
+        
+        // required uint32 tcp_port = 2;
+        private int tcpPort_ ;
+        public boolean hasTcpPort() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        public int getTcpPort() {
+          return tcpPort_;
+        }
+        public Builder setTcpPort(int value) {
+          bitField0_ |= 0x00000002;
+          tcpPort_ = value;
+          onChanged();
+          return this;
+        }
+        public Builder clearTcpPort() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          tcpPort_ = 0;
+          onChanged();
+          return this;
+        }
+        
+        // required .UUID service_uuid = 3;
+        private ralph_protobuffs.UtilProto.UUID serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> serviceUuidBuilder_;
+        public boolean hasServiceUuid() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
+        }
+        public ralph_protobuffs.UtilProto.UUID getServiceUuid() {
+          if (serviceUuidBuilder_ == null) {
+            return serviceUuid_;
+          } else {
+            return serviceUuidBuilder_.getMessage();
+          }
+        }
+        public Builder setServiceUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (serviceUuidBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            serviceUuid_ = value;
+            onChanged();
+          } else {
+            serviceUuidBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000004;
+          return this;
+        }
+        public Builder setServiceUuid(
+            ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (serviceUuidBuilder_ == null) {
+            serviceUuid_ = builderForValue.build();
+            onChanged();
+          } else {
+            serviceUuidBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000004;
+          return this;
+        }
+        public Builder mergeServiceUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (serviceUuidBuilder_ == null) {
+            if (((bitField0_ & 0x00000004) == 0x00000004) &&
+                serviceUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+              serviceUuid_ =
+                ralph_protobuffs.UtilProto.UUID.newBuilder(serviceUuid_).mergeFrom(value).buildPartial();
+            } else {
+              serviceUuid_ = value;
+            }
+            onChanged();
+          } else {
+            serviceUuidBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000004;
+          return this;
+        }
+        public Builder clearServiceUuid() {
+          if (serviceUuidBuilder_ == null) {
+            serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+            onChanged();
+          } else {
+            serviceUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000004);
+          return this;
+        }
+        public ralph_protobuffs.UtilProto.UUID.Builder getServiceUuidBuilder() {
+          bitField0_ |= 0x00000004;
+          onChanged();
+          return getServiceUuidFieldBuilder().getBuilder();
+        }
+        public ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder() {
+          if (serviceUuidBuilder_ != null) {
+            return serviceUuidBuilder_.getMessageOrBuilder();
+          } else {
+            return serviceUuid_;
+          }
+        }
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+            getServiceUuidFieldBuilder() {
+          if (serviceUuidBuilder_ == null) {
+            serviceUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                    serviceUuid_,
+                    getParentForChildren(),
+                    isClean());
+            serviceUuid_ = null;
+          }
+          return serviceUuidBuilder_;
+        }
+        
+        // @@protoc_insertion_point(builder_scope:Variables.ServiceReference)
+      }
+      
+      static {
+        defaultInstance = new ServiceReference(true);
+        defaultInstance.initFields();
+      }
+      
+      // @@protoc_insertion_point(class_scope:Variables.ServiceReference)
+    }
+    
     public interface AnyOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
       
@@ -2596,6 +3203,11 @@ public final class VariablesProto {
       // optional bytes service_factory = 10;
       boolean hasServiceFactory();
       com.google.protobuf.ByteString getServiceFactory();
+      
+      // optional .Variables.ServiceReference service_reference = 11;
+      boolean hasServiceReference();
+      ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference();
+      ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder();
     }
     public static final class Any extends
         com.google.protobuf.GeneratedMessage
@@ -2779,6 +3391,19 @@ public final class VariablesProto {
         return serviceFactory_;
       }
       
+      // optional .Variables.ServiceReference service_reference = 11;
+      public static final int SERVICE_REFERENCE_FIELD_NUMBER = 11;
+      private ralph_protobuffs.VariablesProto.Variables.ServiceReference serviceReference_;
+      public boolean hasServiceReference() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      public ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference() {
+        return serviceReference_;
+      }
+      public ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder() {
+        return serviceReference_;
+      }
+      
       private void initFields() {
         varName_ = "";
         reference_ = false;
@@ -2790,6 +3415,7 @@ public final class VariablesProto {
         map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         struct_ = ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
         serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
+        serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -2822,6 +3448,12 @@ public final class VariablesProto {
         }
         if (hasStruct()) {
           if (!getStruct().isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        if (hasServiceReference()) {
+          if (!getServiceReference().isInitialized()) {
             memoizedIsInitialized = 0;
             return false;
           }
@@ -2862,6 +3494,9 @@ public final class VariablesProto {
         }
         if (((bitField0_ & 0x00000200) == 0x00000200)) {
           output.writeBytes(10, serviceFactory_);
+        }
+        if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          output.writeMessage(11, serviceReference_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -2911,6 +3546,10 @@ public final class VariablesProto {
         if (((bitField0_ & 0x00000200) == 0x00000200)) {
           size += com.google.protobuf.CodedOutputStream
             .computeBytesSize(10, serviceFactory_);
+        }
+        if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(11, serviceReference_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -3031,6 +3670,7 @@ public final class VariablesProto {
             getListFieldBuilder();
             getMapFieldBuilder();
             getStructFieldBuilder();
+            getServiceReferenceFieldBuilder();
           }
         }
         private static Builder create() {
@@ -3071,6 +3711,12 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000100);
           serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
           bitField0_ = (bitField0_ & ~0x00000200);
+          if (serviceReferenceBuilder_ == null) {
+            serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
+          } else {
+            serviceReferenceBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000400);
           return this;
         }
         
@@ -3161,6 +3807,14 @@ public final class VariablesProto {
             to_bitField0_ |= 0x00000200;
           }
           result.serviceFactory_ = serviceFactory_;
+          if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+            to_bitField0_ |= 0x00000400;
+          }
+          if (serviceReferenceBuilder_ == null) {
+            result.serviceReference_ = serviceReference_;
+          } else {
+            result.serviceReference_ = serviceReferenceBuilder_.build();
+          }
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -3207,6 +3861,9 @@ public final class VariablesProto {
           if (other.hasServiceFactory()) {
             setServiceFactory(other.getServiceFactory());
           }
+          if (other.hasServiceReference()) {
+            mergeServiceReference(other.getServiceReference());
+          }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
@@ -3238,6 +3895,12 @@ public final class VariablesProto {
           }
           if (hasStruct()) {
             if (!getStruct().isInitialized()) {
+              
+              return false;
+            }
+          }
+          if (hasServiceReference()) {
+            if (!getServiceReference().isInitialized()) {
               
               return false;
             }
@@ -3328,6 +3991,15 @@ public final class VariablesProto {
               case 82: {
                 bitField0_ |= 0x00000200;
                 serviceFactory_ = input.readBytes();
+                break;
+              }
+              case 90: {
+                ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.ServiceReference.newBuilder();
+                if (hasServiceReference()) {
+                  subBuilder.mergeFrom(getServiceReference());
+                }
+                input.readMessage(subBuilder, extensionRegistry);
+                setServiceReference(subBuilder.buildPartial());
                 break;
               }
             }
@@ -3784,6 +4456,96 @@ public final class VariablesProto {
           serviceFactory_ = getDefaultInstance().getServiceFactory();
           onChanged();
           return this;
+        }
+        
+        // optional .Variables.ServiceReference service_reference = 11;
+        private ralph_protobuffs.VariablesProto.Variables.ServiceReference serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.VariablesProto.Variables.ServiceReference, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder, ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder> serviceReferenceBuilder_;
+        public boolean hasServiceReference() {
+          return ((bitField0_ & 0x00000400) == 0x00000400);
+        }
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference() {
+          if (serviceReferenceBuilder_ == null) {
+            return serviceReference_;
+          } else {
+            return serviceReferenceBuilder_.getMessage();
+          }
+        }
+        public Builder setServiceReference(ralph_protobuffs.VariablesProto.Variables.ServiceReference value) {
+          if (serviceReferenceBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            serviceReference_ = value;
+            onChanged();
+          } else {
+            serviceReferenceBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000400;
+          return this;
+        }
+        public Builder setServiceReference(
+            ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder builderForValue) {
+          if (serviceReferenceBuilder_ == null) {
+            serviceReference_ = builderForValue.build();
+            onChanged();
+          } else {
+            serviceReferenceBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000400;
+          return this;
+        }
+        public Builder mergeServiceReference(ralph_protobuffs.VariablesProto.Variables.ServiceReference value) {
+          if (serviceReferenceBuilder_ == null) {
+            if (((bitField0_ & 0x00000400) == 0x00000400) &&
+                serviceReference_ != ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance()) {
+              serviceReference_ =
+                ralph_protobuffs.VariablesProto.Variables.ServiceReference.newBuilder(serviceReference_).mergeFrom(value).buildPartial();
+            } else {
+              serviceReference_ = value;
+            }
+            onChanged();
+          } else {
+            serviceReferenceBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000400;
+          return this;
+        }
+        public Builder clearServiceReference() {
+          if (serviceReferenceBuilder_ == null) {
+            serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
+            onChanged();
+          } else {
+            serviceReferenceBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000400);
+          return this;
+        }
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder getServiceReferenceBuilder() {
+          bitField0_ |= 0x00000400;
+          onChanged();
+          return getServiceReferenceFieldBuilder().getBuilder();
+        }
+        public ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder() {
+          if (serviceReferenceBuilder_ != null) {
+            return serviceReferenceBuilder_.getMessageOrBuilder();
+          } else {
+            return serviceReference_;
+          }
+        }
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.VariablesProto.Variables.ServiceReference, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder, ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder> 
+            getServiceReferenceFieldBuilder() {
+          if (serviceReferenceBuilder_ == null) {
+            serviceReferenceBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_protobuffs.VariablesProto.Variables.ServiceReference, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder, ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder>(
+                    serviceReference_,
+                    getParentForChildren(),
+                    isClean());
+            serviceReference_ = null;
+          }
+          return serviceReferenceBuilder_;
         }
         
         // @@protoc_insertion_point(builder_scope:Variables.Any)
@@ -4340,6 +5102,11 @@ public final class VariablesProto {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Variables_Struct_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_Variables_ServiceReference_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_Variables_ServiceReference_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_Variables_Any_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4353,7 +5120,7 @@ public final class VariablesProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017variables.proto\032\nutil.proto\"\311\004\n\tVariab" +
+      "\n\017variables.proto\032\nutil.proto\"\325\005\n\tVariab" +
       "les\022\034\n\004vars\030\001 \003(\0132\016.Variables.Any\032L\n\004Lis" +
       "t\022\037\n\027element_type_identifier\030\001 \002(\t\022#\n\013li" +
       "st_values\030\002 \003(\0132\016.Variables.Any\032\212\001\n\003Map\022" +
@@ -4362,14 +5129,17 @@ public final class VariablesProto {
       "2\016.Variables.Any\022\"\n\nmap_values\030\004 \003(\0132\016.V" +
       "ariables.Any\032^\n\006Struct\022\031\n\021struct_identif" +
       "ier\030\001 \002(\t\022\023\n\013field_names\030\002 \003(\t\022$\n\014field_" +
-      "values\030\003 \003(\0132\016.Variables.Any\032\342\001\n\003Any\022\020\n\010",
-      "var_name\030\001 \002(\t\022\021\n\treference\030\002 \002(\010\022\017\n\007is_" +
-      "tvar\030\003 \002(\010\022\013\n\003num\030\004 \001(\001\022\014\n\004text\030\005 \001(\t\022\022\n" +
-      "\ntrue_false\030\006 \001(\010\022\035\n\004list\030\007 \001(\0132\017.Variab" +
-      "les.List\022\033\n\003map\030\010 \001(\0132\016.Variables.Map\022!\n" +
-      "\006struct\030\t \001(\0132\021.Variables.Struct\022\027\n\017serv" +
-      "ice_factory\030\n \001(\014B\"\n\020ralph_protobuffsB\016V" +
-      "ariablesProto"
+      "values\030\003 \003(\0132\016.Variables.Any\032R\n\020ServiceR",
+      "eference\022\017\n\007ip_addr\030\001 \002(\t\022\020\n\010tcp_port\030\002 " +
+      "\002(\r\022\033\n\014service_uuid\030\003 \002(\0132\005.UUID\032\232\002\n\003Any" +
+      "\022\020\n\010var_name\030\001 \002(\t\022\021\n\treference\030\002 \002(\010\022\017\n" +
+      "\007is_tvar\030\003 \002(\010\022\013\n\003num\030\004 \001(\001\022\014\n\004text\030\005 \001(" +
+      "\t\022\022\n\ntrue_false\030\006 \001(\010\022\035\n\004list\030\007 \001(\0132\017.Va" +
+      "riables.List\022\033\n\003map\030\010 \001(\0132\016.Variables.Ma" +
+      "p\022!\n\006struct\030\t \001(\0132\021.Variables.Struct\022\027\n\017" +
+      "service_factory\030\n \001(\014\0226\n\021service_referen" +
+      "ce\030\013 \001(\0132\033.Variables.ServiceReferenceB\"\n" +
+      "\020ralph_protobuffsB\016VariablesProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4408,12 +5178,20 @@ public final class VariablesProto {
               new java.lang.String[] { "StructIdentifier", "FieldNames", "FieldValues", },
               ralph_protobuffs.VariablesProto.Variables.Struct.class,
               ralph_protobuffs.VariablesProto.Variables.Struct.Builder.class);
-          internal_static_Variables_Any_descriptor =
+          internal_static_Variables_ServiceReference_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(3);
+          internal_static_Variables_ServiceReference_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_Variables_ServiceReference_descriptor,
+              new java.lang.String[] { "IpAddr", "TcpPort", "ServiceUuid", },
+              ralph_protobuffs.VariablesProto.Variables.ServiceReference.class,
+              ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder.class);
+          internal_static_Variables_Any_descriptor =
+            internal_static_Variables_descriptor.getNestedTypes().get(4);
           internal_static_Variables_Any_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Any_descriptor,
-              new java.lang.String[] { "VarName", "Reference", "IsTvar", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", },
+              new java.lang.String[] { "VarName", "Reference", "IsTvar", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", "ServiceReference", },
               ralph_protobuffs.VariablesProto.Variables.Any.class,
               ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
           return null;
