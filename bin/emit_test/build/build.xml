@@ -628,7 +628,7 @@
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
          run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
          run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
-         run_InternalStructMethodCallTest">
+         run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest">
   </target>
     
   
@@ -1522,6 +1522,23 @@
         <jvmarg value="-ea"/>
     </java>
   </target>
+  
+  <!-- ReferenceServiceFactoryTest -->
+  <target
+      name="run_ReferenceServiceFactoryTest"
+      depends="compile_ralph_tests"
+      description="Tests that can use servicereferences to construct
+                   partnered endpoints">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.ReferenceServiceFactoryTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+
 
   
   <!-- Delete the build directories -->
