@@ -15,6 +15,7 @@ import ralph.ActiveEvent;
 
 import ralph.EndpointConstructorObj;
 import ralph.InternalServiceFactory;
+import ralph.InternalServiceReference;
 import ralph.AtomicList;
 import ralph.NonAtomicList;
 import ralph.AtomicMap;
@@ -24,10 +25,12 @@ import ralph.Variables.NonAtomicTextVariable;
 import ralph.Variables.NonAtomicNumberVariable;
 import ralph.Variables.NonAtomicTrueFalseVariable;
 import ralph.Variables.NonAtomicServiceFactoryVariable;
+import ralph.Variables.NonAtomicServiceReferenceVariable;
 import ralph.Variables.AtomicTextVariable;
 import ralph.Variables.AtomicNumberVariable;
 import ralph.Variables.AtomicTrueFalseVariable;
 import ralph.Variables.AtomicServiceFactoryVariable;
+import ralph.Variables.AtomicServiceReferenceVariable;
 
 
 /**
@@ -221,6 +224,30 @@ public class DataConstructorRegistry
             {
                 lo = new NonAtomicServiceFactoryVariable(
                     false,internal_service_factory,ralph_globals);
+            }
+        }
+        else if (any.hasServiceReference())
+        {
+            VariablesProto.Variables.ServiceReference service_reference_proto =
+                any.getServiceReference();
+            
+            String ip_addr = service_reference_proto.getIpAddr();
+            int tcp_port = service_reference_proto.getTcpPort();
+            String service_uuid =
+                service_reference_proto.getServiceUuid().getData();
+
+            InternalServiceReference isr =
+                new InternalServiceReference(ip_addr,tcp_port,service_uuid);
+            
+            if (any.getIsTvar())
+            {
+                lo = new AtomicServiceReferenceVariable(
+                    false,isr,ralph_globals);
+            }
+            else
+            {
+                lo = new NonAtomicServiceReferenceVariable(
+                    false,isr,ralph_globals);
             }
         }
         return lo;
