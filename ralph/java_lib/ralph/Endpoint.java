@@ -211,13 +211,29 @@ public abstract class Endpoint
         _stop_mutex.unlock();
     }
 
+    /**
+       Using this mechanism, a service on a remote host can connect to
+       this endpoint.  Series of required operations:
+
+       // one host
+       Service SomeService serv;
+       ServiceReference sr = serv.rpc_reference();
+
+       // send reference to other host, which receives it.
+       ServiceFactory sf;
+       Service OtherService other_service = sf.construct_from_reference(sr);
+
+       other_service.method(); // where method can call methods on
+                               // partner serv on other host.
+       
+     */
     public InternalServiceReference rpc_reference(
         ExecutingEventContext ctx, ActiveEvent active_event)
     {
-        // FIXME: Must return reference value from endpoint
-        Util.logger_assert(
-            "FIXME: should return InternalServiceReference from rpc_reference");
-        return null;
+        return new InternalServiceReference(
+            ralph_globals.ip_addr_to_listen_for_connections_on,
+            ralph_globals.tcp_port_to_listen_for_connections_on,
+            _uuid);
     }
     
     /**
