@@ -211,6 +211,15 @@ public abstract class Endpoint
         _stop_mutex.unlock();
     }
 
+    public InternalServiceReference rpc_reference(
+        ExecutingEventContext ctx, ActiveEvent active_event)
+    {
+        // FIXME: Must return reference value from endpoint
+        Util.logger_assert(
+            "FIXME: should return InternalServiceReference from rpc_reference");
+        return null;
+    }
+    
     /**
        Called when it has been determined that the connection to the partner
        endpoint has failed prematurely. Closes the socket and raises a network

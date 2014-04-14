@@ -23,7 +23,8 @@ Endpoint Sender
    instantiate_remote(ServiceFactory remote_sf, ServiceFactory local_sf)
        returns Number
    {
-       ServiceReference sr = @partner.receive_and_instantiate(remote_sf);
+       ServiceReference sr = null;
+       sr = @partner.receive_and_instantiate(remote_sf);
 
        Endpoint SenderCreated sender_created_endpoint =
            dynamic_cast<Endpoint SenderCreated>(
@@ -47,6 +48,8 @@ Endpoint SenderCreated
 {
     call_partner() returns Number
     {
-        return @partner.some_method();
+        Number to_return;
+        to_return = @partner.some_method();
+        return to_return;
     }
 }
