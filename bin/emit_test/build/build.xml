@@ -1559,6 +1559,4 @@
     <ant antfile="${lib_build_path}/build.xml" target="clean" />
     
   </target>
-
-  
 </project>

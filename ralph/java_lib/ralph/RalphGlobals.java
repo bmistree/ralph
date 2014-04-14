@@ -3,9 +3,10 @@ package ralph;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
-
+import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
+
+import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
 public class RalphGlobals {
     public LamportClock clock;
@@ -18,6 +19,11 @@ public class RalphGlobals {
 
     public final ConcurrentHashMap<String,ActiveEvent> all_events =
         new ConcurrentHashMap<String,ActiveEvent>();
+
+    public int tcp_port_to_listen_for_connections_on =
+        Util.DEFAULT_TCP_PORT_NEW_CONNECTIONS;
+    public InetAddress address_to_listen_for_connections_on =
+        Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
     
     private List<Stoppable> stoppable_list =
         Collections.synchronizedList(new ArrayList<Stoppable>());
@@ -37,7 +43,18 @@ public class RalphGlobals {
         thread_pool = new ThreadPool(Util.DEFAULT_NUM_THREADS);
     }
 
-    public void add_stoppable(Stoppable stoppable) {
+    public RalphGlobals (
+        InetAddress _address_to_listen_for_connections_on,
+        int _tcp_port_to_listen_for_connections_on)
+    {
+        address_to_listen_for_connections_on =
+            _address_to_listen_for_connections_on;
+        tcp_port_to_listen_for_connections_on =
+            _tcp_port_to_listen_for_connections_on;
+    }
+    
+    public void add_stoppable(Stoppable stoppable)
+    {
         stoppable_list.add(stoppable);
     }
 	
