@@ -65,7 +65,8 @@ public class AllEndpoints extends Thread
     public void send_clock_update()
     {
         _lock();
-        ArrayList<Endpoint>copied_endpoint_list = new ArrayList<Endpoint>(endpoint_map.values());
+        ArrayList<Endpoint>copied_endpoint_list =
+            new ArrayList<Endpoint>(endpoint_map.values());
         _unlock();
         
         //note: okay that running through after release lock because
@@ -95,5 +96,16 @@ public class AllEndpoints extends Thread
     public void network_exception(Endpoint which_endpoint_excepted)
     {
         _remove_endpoint_if_exists(which_endpoint_excepted);
+    }
+
+    /**
+       @returns null if no endpoint available.
+     */
+    public Endpoint get_endpoint_if_exists(String uuid)
+    {
+        _lock();
+        Endpoint to_return = endpoint_map.get(uuid);
+        _unlock();
+        return to_return;
     }
 }

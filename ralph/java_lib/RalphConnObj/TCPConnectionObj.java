@@ -73,7 +73,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
        Gets called from endpoint to send message from one side to the
        other.
     */    
-    public void write(GeneralMessage msg_to_write, ralph.Endpoint sender_endpoint_obj)
+    public void write(
+        GeneralMessage msg_to_write, ralph.Endpoint sender_endpoint_obj)
     {
         try {
             msg_to_write.writeDelimitedTo(sock.getOutputStream());

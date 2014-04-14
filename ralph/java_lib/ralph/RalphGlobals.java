@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import RalphServiceConnectionListener.ConnectionListener;
+
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
 public class RalphGlobals
@@ -13,6 +15,9 @@ public class RalphGlobals
     
     public final AllEndpoints all_endpoints = new AllEndpoints();
     public final LamportClock clock = new LamportClock(all_endpoints);
+
+    private final ConnectionListener connection_listener;
+    
     public final ThreadPool thread_pool =
         new ThreadPool(Util.DEFAULT_NUM_THREADS);
     public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
@@ -32,10 +37,17 @@ public class RalphGlobals
     public RalphGlobals(DeadlockAvoidanceAlgorithm daa)
     {
         deadlock_avoidance_algorithm = daa;
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,tcp_port_to_listen_for_connections_on);
     }
     
     public RalphGlobals()
-    { }
+    {
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,tcp_port_to_listen_for_connections_on);
+    }
 
     public RalphGlobals (
         String _ip_addr_to_listen_for_connections_on,
@@ -45,6 +57,9 @@ public class RalphGlobals
             _ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
             _tcp_port_to_listen_for_connections_on;
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,tcp_port_to_listen_for_connections_on);
     }
     
     public void add_stoppable(Stoppable stoppable)
