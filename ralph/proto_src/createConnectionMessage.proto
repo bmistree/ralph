@@ -1,0 +1,10 @@
+import "util.proto";
+
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "CreateConnectionProto";
+
+message CreateConnection
+{
+    required UUID target_endpoint_uuid = 1;
+    required UUID host_uuid = 2;
+}
