@@ -9,11 +9,12 @@ import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
 public class RalphGlobals
 {
-    public LamportClock clock;
     public final String host_uuid = Util.generate_uuid();
     
-    public AllEndpoints all_endpoints;
-    public ThreadPool thread_pool;
+    public final AllEndpoints all_endpoints = new AllEndpoints();
+    public final LamportClock clock = new LamportClock(all_endpoints);
+    public final ThreadPool thread_pool =
+        new ThreadPool(Util.DEFAULT_NUM_THREADS);
     public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
         DeadlockAvoidanceAlgorithm.BOOSTED;
 
@@ -31,17 +32,10 @@ public class RalphGlobals
     public RalphGlobals(DeadlockAvoidanceAlgorithm daa)
     {
         deadlock_avoidance_algorithm = daa;
-        all_endpoints = new AllEndpoints();
-        clock = new LamportClock(all_endpoints);
-        thread_pool = new ThreadPool(Util.DEFAULT_NUM_THREADS);
     }
     
     public RalphGlobals()
-    {
-        all_endpoints = new AllEndpoints();
-        clock = new LamportClock(all_endpoints);
-        thread_pool = new ThreadPool(Util.DEFAULT_NUM_THREADS);
-    }
+    { }
 
     public RalphGlobals (
         String _ip_addr_to_listen_for_connections_on,
@@ -57,5 +51,4 @@ public class RalphGlobals
     {
         stoppable_list.add(stoppable);
     }
-	
 }
