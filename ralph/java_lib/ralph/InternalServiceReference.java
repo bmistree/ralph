@@ -3,9 +3,9 @@ package ralph;
 
 public class InternalServiceReference
 {
-    private final String ip_addr;
-    private final int tcp_port;
-    private final String service_uuid;
+    public final String ip_addr;
+    public final int tcp_port;
+    public final String service_uuid;
     
     
     public InternalServiceReference(

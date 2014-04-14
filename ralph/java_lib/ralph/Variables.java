@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 
 import ralph_protobuffs.VariablesProto;
+import ralph_protobuffs.UtilProto.UUID;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
@@ -14,6 +15,7 @@ import RalphDataWrappers.TrueFalseTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceReferenceTypeDataWrapperFactory;
+
 
 public class Variables {
     public final static NumberTypeDataWrapperFactory
@@ -338,10 +340,36 @@ public class Variables {
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
-            // FIXME: still must perform serialization for service references
-            Util.logger_assert(
-                "Must add code for serializing service references.");
+            InternalServiceReference internal_val = get_val(active_event);
+            serialize_service_reference(internal_val,any_builder,is_reference);
+            any_builder.setIsTvar(true);
         }
+
+        
+        /**
+           Can be used by both atomic and non-atomic service factories.
+         */
+        public static void serialize_service_reference (
+            InternalServiceReference internal_val,
+            VariablesProto.Variables.Any.Builder any_builder,
+            boolean is_reference)
+        {
+            any_builder.setVarName("");
+            any_builder.setReference(is_reference);
+
+            UUID.Builder service_uuid = UUID.newBuilder();
+            service_uuid.setData(internal_val.service_uuid);
+            
+            VariablesProto.Variables.ServiceReference.Builder service_reference =
+                VariablesProto.Variables.ServiceReference.newBuilder();
+            
+            service_reference.setIpAddr(internal_val.ip_addr);
+            service_reference.setTcpPort(internal_val.tcp_port);
+            service_reference.setServiceUuid(service_uuid);
+
+            any_builder.setServiceReference(service_reference);
+        }
+        
         @Override
         public void deserialize_rpc(
             RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
@@ -569,9 +597,10 @@ public class Variables {
             ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
             boolean is_reference) throws BackoutException
         {
-            // FIXME: still must perform serialization for service references
-            Util.logger_assert(
-                "Must add code for serializing service references.");
+            InternalServiceReference internal_val = get_val(active_event);
+            AtomicServiceReferenceVariable.serialize_service_reference(
+                internal_val,any_builder,is_reference);
+            any_builder.setIsTvar(false);
         }
         @Override
         public void deserialize_rpc(
