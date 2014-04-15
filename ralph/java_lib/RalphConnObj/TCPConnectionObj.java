@@ -59,7 +59,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         }
     }
 
-    public void write_stop(GeneralMessage msg_to_write,ralph.Endpoint endpoint_writing)
+    public void write_stop(
+        GeneralMessage msg_to_write,ralph.Endpoint endpoint_writing)
     {
     	write(msg_to_write,endpoint_writing);
     }

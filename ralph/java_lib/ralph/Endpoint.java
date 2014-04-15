@@ -199,8 +199,19 @@ public abstract class Endpoint
         return new ExecutingEventContext(
             global_var_stack,rpc_args);
     }
-    
 
+    public void update_connection_obj(
+        RalphConnObj.ConnectionObj conn_obj,String partner_host_uuid)
+    {
+        _conn_obj_mutex.lock();
+        
+        _conn_obj = conn_obj;
+        _conn_obj.register_endpoint(this);
+        
+        _partner_host_uuid = partner_host_uuid;
+        _conn_obj_mutex.unlock();
+    }
+    
     private void _stop_lock()
     {
         _stop_mutex.lock();
