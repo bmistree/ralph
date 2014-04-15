@@ -27,6 +27,8 @@ public class BasicSpeculationTest
     // total allowable fudge factor.
     private final static int FUDGE_FACTOR_MS = 1;
 
+    private final static RalphGlobals speculative_interface_ralph_globals =
+        new RalphGlobals();
     
     public static void main(String[] args)
     {
@@ -191,9 +193,9 @@ public class BasicSpeculationTest
         {
             SpeculativeInterface endpt =
                 (SpeculativeInterface) constructor_obj.construct(
-                    new RalphGlobals(),
+                    speculative_interface_ralph_globals,
                     new SingleSideConnection());
-
+            
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
 

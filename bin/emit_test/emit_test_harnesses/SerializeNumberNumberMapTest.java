@@ -6,6 +6,9 @@ import ralph.RalphGlobals;
 
 public class SerializeNumberNumberMapTest
 {
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
+    
     public static void main(String[] args)
     {
         if (run_test())
@@ -20,9 +23,9 @@ public class SerializeNumberNumberMapTest
         {
             SameHostConnection conn_obj = new SameHostConnection();
             MapSerializer side_a = new MapSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
             MapSerializer side_b = new MapSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
 
             // tests atomic number list serialization
             if (! num_map_sum_test(true,side_a))

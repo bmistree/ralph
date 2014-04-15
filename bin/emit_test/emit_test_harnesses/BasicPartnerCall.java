@@ -7,6 +7,9 @@ import ralph.RalphGlobals;
 
 public class BasicPartnerCall
 {
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
+    
     public static void main(String[] args)
     {
         if (BasicPartnerCall.run_test())
@@ -21,9 +24,9 @@ public class BasicPartnerCall
         {
             SameHostConnection conn_obj = new SameHostConnection();
             SideA side_a = new SideA(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
             SideB side_b = new SideB(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
 
             double prev_number = side_b.get_number().doubleValue();
 

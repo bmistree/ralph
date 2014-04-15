@@ -39,6 +39,9 @@ public class PromotionTest
     final static int NUM_THREADS_EACH_SIDE = 10;
     final static int NUM_EXTERNAL_CALLS = 40;
     final static AtomicBoolean had_exception = new AtomicBoolean(false);
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
+
     
     public static void main(String[] args)
     {
@@ -71,9 +74,9 @@ public class PromotionTest
         {
             SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = new PromoterEndpoint(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
             PromoterEndpoint side_b = new PromoterEndpoint(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();

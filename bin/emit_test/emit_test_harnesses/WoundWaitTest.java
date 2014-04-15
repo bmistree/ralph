@@ -27,6 +27,8 @@ public class WoundWaitTest
     final static int NUM_THREADS_EACH_SIDE = 40;
     final static int NUM_EXTERNAL_CALLS = 40;
     final static AtomicBoolean had_exception = new AtomicBoolean(false);
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
     
     public static void main(String[] args)
     {
@@ -59,10 +61,14 @@ public class WoundWaitTest
         {
             SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = new PromoterEndpoint(
-                new RalphGlobals(DeadlockAvoidanceAlgorithm.WOUND_WAIT),
+                new RalphGlobals(
+                    DeadlockAvoidanceAlgorithm.WOUND_WAIT,
+                    TCP_CONNECTION_PORT_A),
                 conn_obj);
             PromoterEndpoint side_b = new PromoterEndpoint(
-                new RalphGlobals(DeadlockAvoidanceAlgorithm.WOUND_WAIT),
+                new RalphGlobals(
+                    DeadlockAvoidanceAlgorithm.WOUND_WAIT,
+                    TCP_CONNECTION_PORT_B),
                 conn_obj);
 
             ExecutorService executor_a = create_executor();

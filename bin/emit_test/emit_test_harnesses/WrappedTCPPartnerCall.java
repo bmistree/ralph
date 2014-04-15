@@ -23,6 +23,8 @@ public class WrappedTCPPartnerCall
     
     private static SideA side_a = null;
     private static SideB side_b = null;
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
 
     
     public static void main(String[] args)
@@ -37,7 +39,7 @@ public class WrappedTCPPartnerCall
     {
         try
         {
-            RalphGlobals a_globals = new RalphGlobals();
+            RalphGlobals a_globals = new RalphGlobals(TCP_CONNECTION_PORT_A);
             
             SingleSidedHolder single_holder = new SingleSidedHolder(
                 a_globals, new SingleSideConnection());
@@ -45,7 +47,7 @@ public class WrappedTCPPartnerCall
             
             Ralph.tcp_accept(
                 SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
-                new RalphGlobals());
+                new RalphGlobals(TCP_CONNECTION_PORT_B));
 
             // wait for the other side to ensure that it's listening
             Thread.sleep(1000);

@@ -23,6 +23,7 @@ public class SimplifiedTimedSpeculationTest
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
     private final static int NUM_OPS_TO_RUN_PER_THREAD = 5;
+    private final static RalphGlobals ralph_globals = new RalphGlobals();
     
     public static void main(String[] args)
     {
@@ -56,7 +57,6 @@ public class SimplifiedTimedSpeculationTest
     {
         try
         {
-            RalphGlobals ralph_globals = new RalphGlobals();
             SimplifiedBackedSpeculation endpt = new SimplifiedBackedSpeculation(
                 ralph_globals,new SingleSideConnection());
 

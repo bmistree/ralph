@@ -41,6 +41,19 @@ public class RalphGlobals
             new ConnectionListener(
                 all_endpoints,tcp_port_to_listen_for_connections_on);
     }
+
+    public RalphGlobals(
+        DeadlockAvoidanceAlgorithm daa,
+        int _tcp_port_to_listen_for_connections_on)
+    {
+        deadlock_avoidance_algorithm = daa;
+        tcp_port_to_listen_for_connections_on =
+            _tcp_port_to_listen_for_connections_on;
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,tcp_port_to_listen_for_connections_on);
+    }
+
     
     public RalphGlobals()
     {
@@ -61,6 +74,17 @@ public class RalphGlobals
             new ConnectionListener(
                 all_endpoints,tcp_port_to_listen_for_connections_on);
     }
+
+    public RalphGlobals (
+        int _tcp_port_to_listen_for_connections_on)
+    {
+        tcp_port_to_listen_for_connections_on =
+            _tcp_port_to_listen_for_connections_on;
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,tcp_port_to_listen_for_connections_on);
+    }
+    
     
     public void add_stoppable(Stoppable stoppable)
     {

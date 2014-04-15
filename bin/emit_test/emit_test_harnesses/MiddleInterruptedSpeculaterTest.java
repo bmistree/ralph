@@ -12,6 +12,8 @@ public class MiddleInterruptedSpeculaterTest
 {
     final public static AtomicBoolean had_exception = new AtomicBoolean(false);
     final public static int NUM_TIMES_TO_RUN_TEST = 100;
+
+    private final static RalphGlobals ralph_globals = new RalphGlobals();
     
     public static void main(String[] args)
     {
@@ -36,7 +38,7 @@ public class MiddleInterruptedSpeculaterTest
         try
         {
             MiddleInterruptedSpeculater endpt = new MiddleInterruptedSpeculater(
-                new RalphGlobals(),
+                ralph_globals,
                 new SingleSideConnection());
 
             run_concurrently(endpt);

@@ -28,6 +28,10 @@ import ralph_emitted.LinkedConnection.LinkedConnectionEndpoint;
 
 public class LinkedTests
 {
+    private final static int TCP_CONNECTION_PORT_AB = 20494;
+    private final static int TCP_CONNECTION_PORT_CDE = 20495;
+    private final static int TCP_CONNECTION_PORT_FG = 20496;
+    
     public static void main(String[] args)
     {
         if (LinkedTests.run_test())
@@ -40,9 +44,12 @@ public class LinkedTests
     {
         try
         {
-            RalphGlobals ab_globals = new RalphGlobals();
-            RalphGlobals cde_globals = new RalphGlobals();
-            RalphGlobals fg_globals = new RalphGlobals();
+            RalphGlobals ab_globals =
+                new RalphGlobals(TCP_CONNECTION_PORT_AB);
+            RalphGlobals cde_globals =
+                new RalphGlobals(TCP_CONNECTION_PORT_CDE);
+            RalphGlobals fg_globals =
+                new RalphGlobals(TCP_CONNECTION_PORT_FG);
 
             // a
             LinkedInstanceEndpoint a = new LinkedInstanceEndpoint(

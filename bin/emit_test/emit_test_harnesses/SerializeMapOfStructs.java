@@ -15,6 +15,9 @@ public class SerializeMapOfStructs
 {
     // Using inexact check for floating point equality between doubles
     private final static double THRESHOLD_DELTA_BETWEEN_DOUBLES = .000001;
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
+
     
     private final static Random rand = new Random();
     
@@ -32,9 +35,9 @@ public class SerializeMapOfStructs
         {
             SameHostConnection conn_obj = new SameHostConnection();
             MapSerializer side_a = new MapSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
             MapSerializer side_b = new MapSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
 
             // tests atomic number map serialization
             if (! map_num_sum_test(true,side_a))

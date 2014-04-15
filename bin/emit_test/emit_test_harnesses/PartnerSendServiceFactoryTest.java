@@ -14,6 +14,9 @@ import ralph.EndpointConstructorObj;
 public class PartnerSendServiceFactoryTest
 {
     private final static int NUM_APPENDS_TO_RUN = 20;
+    private final static int TCP_CONNECTION_PORT_RECEIVER = 20494;
+    private final static int TCP_CONNECTION_PORT_SENDER = 20495;
+
     
     public static void main(String[] args)
     {
@@ -25,16 +28,18 @@ public class PartnerSendServiceFactoryTest
     
     public static boolean run_test()
     {
-        try {
-            SameHostConnection conn_obj = new SameHostConnection();
+        try
+        {
+            SameHostConnection conn_obj = new SameHostConnection();            
             
-            
-            RalphGlobals receiver_globals = new RalphGlobals();
+            RalphGlobals receiver_globals =
+                new RalphGlobals(TCP_CONNECTION_PORT_RECEIVER);
             ServiceReceiver service_receiver_endpt =
                 (ServiceReceiver)ServiceReceiver.factory.construct(
                     receiver_globals,conn_obj);
             
-            RalphGlobals sender_globals = new RalphGlobals();
+            RalphGlobals sender_globals =
+                new RalphGlobals(TCP_CONNECTION_PORT_SENDER);
             ServiceFactorySender service_sender_endpt =
                 (ServiceFactorySender) ServiceFactorySender.factory.construct(
                     sender_globals,conn_obj);

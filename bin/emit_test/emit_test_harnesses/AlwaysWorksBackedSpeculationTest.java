@@ -25,6 +25,8 @@ public class AlwaysWorksBackedSpeculationTest
     // hits 2 switches).
     public final static AtomicInteger num_ops_set_on_hardware =
         new AtomicInteger(0);
+
+    private final static RalphGlobals ralph_globals = new RalphGlobals();
     
     public static void main(String[] args)
     {
@@ -67,7 +69,6 @@ public class AlwaysWorksBackedSpeculationTest
     {
         try
         {
-            RalphGlobals ralph_globals = new RalphGlobals();
             BackedSpeculation endpt = new BackedSpeculation(
                 ralph_globals,new SingleSideConnection());
 

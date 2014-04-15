@@ -9,6 +9,9 @@ import ralph.RalphGlobals;
 public class SerializeTrueFalseListTest
 {
     private final static Random rand = new Random();
+    private final static int TCP_CONNECTION_PORT_A = 20494;
+    private final static int TCP_CONNECTION_PORT_B = 20495;
+    
     public static void main(String[] args)
     {
         if (run_test())
@@ -23,9 +26,9 @@ public class SerializeTrueFalseListTest
         {
             SameHostConnection conn_obj = new SameHostConnection();
             ListSerializer side_a = new ListSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
             ListSerializer side_b = new ListSerializer(
-                new RalphGlobals(),conn_obj);
+                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
 
             // tests atomic text list serialization
             if (! tf_list_merge_test(true,side_a))
