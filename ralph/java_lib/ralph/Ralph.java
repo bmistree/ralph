@@ -28,13 +28,14 @@ public class Ralph {
 	
 	
     /**
-     * 	Tries to connect an endpoint to another endpoint via a TCP
+     * Tries to connect an endpoint to another endpoint via a TCP
      connection.
 
      Args:
 	    
-     constructor (Endpoint Constructor): The constructor of the endpoint to
-     create upon connection.  Should be imported from the compiled Waldo file.
+     constructor (Endpoint Constructor): The constructor of the
+     endpoint to create upon connection.  Should be imported from the
+     compiled Waldo file.
 
      host (String): The name of the host to connect to.
 

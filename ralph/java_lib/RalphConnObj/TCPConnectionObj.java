@@ -8,12 +8,14 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import ralph.Util;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 import ralph.SignalFunction;
 import ralph.Stoppable;
 import ralph.RalphGlobals;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph_protobuffs.CreateConnectionProto.CreateConnection;
 
 public class TCPConnectionObj implements ConnectionObj, Runnable
 {
@@ -29,7 +31,6 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
      */
     public TCPConnectionObj(String dst_host, int dst_port) throws IOException
     {
-
         sock = new java.net.Socket(dst_host,dst_port);
         sock.setTcpNoDelay(true);
     }
@@ -80,9 +81,26 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         try {
             msg_to_write.writeDelimitedTo(sock.getOutputStream());
         } catch (IOException e) {
-            local_endpoint.partner_connection_failure();			
+            local_endpoint.partner_connection_failure();            
         }
     }
+
+    public void write_create_connection(CreateConnection msg_to_write)
+    {
+        try
+        {
+            msg_to_write.writeDelimitedTo(sock.getOutputStream());
+        }
+        catch (IOException e)
+        {
+            // FIXME: consider writing back NetworkException error.
+            e.printStackTrace();
+            Util.logger_assert(
+                "Not handling IOExceptions on write_create_connection.  " +
+                "Should likely throw a NetworkException for event.");
+        }
+    }
+    
 
     /**
        @param {_Endpoint object} local_endpoint --- @see the emitted

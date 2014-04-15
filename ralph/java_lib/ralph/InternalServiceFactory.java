@@ -3,7 +3,8 @@ package ralph;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-
+import ralph_protobuffs.CreateConnectionProto.CreateConnection;
+import ralph_protobuffs.UtilProto.UUID;
 
 import RalphConnObj.SingleSideConnection;
 
@@ -46,10 +47,34 @@ public class InternalServiceFactory
     public Endpoint construct_from_reference(
         ActiveEvent active_event,InternalServiceReference service_reference)
     {
-        // FIXME: should fill in this stub for constructing endpoints
-        // from references.
-        Util.logger_assert(
-            "FIXME: Must fill in construct from reference method");
-        return null;
+        RalphConnObj.TCPConnectionObj tcp_connection_obj = null;
+        try
+        {
+            tcp_connection_obj =
+                new RalphConnObj.TCPConnectionObj(
+                    service_reference.ip_addr,service_reference.tcp_port);
+        }
+        catch (IOException ex)
+        {
+            // FIXME: handle rejected tcp connection to alternate host.
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Unhandled IOEXception in construct_from_reference");
+        }
+        
+        CreateConnection.Builder create_connection_msg =
+            CreateConnection.newBuilder();
+        
+        UUID.Builder target_endpoint_uuid = UUID.newBuilder();
+        target_endpoint_uuid.setData(service_reference.service_uuid);
+        create_connection_msg.setTargetEndpointUuid(target_endpoint_uuid);
+
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        create_connection_msg.setHostUuid(host_uuid);
+        
+        tcp_connection_obj.write_create_connection(
+            create_connection_msg.build());
+        return endpt_constructor.construct(ralph_globals,tcp_connection_obj);
     }
 }
