@@ -135,7 +135,7 @@ def p_EndpointList(p):
             endpoint_list_node.append_endpoint_definition(
                 endpoint_definition_node)
         else:
-            interface_definition_node = p[3]
+            interface_definition_node = p[2]
             endpoint_list_node.append_interface_definition(
                 interface_definition_node)
         
