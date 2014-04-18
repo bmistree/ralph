@@ -83,6 +83,18 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         should_speculate = _should_speculate;
         ralph_globals = _ralph_globals;
     }
+
+    /**
+       Moves state controller back to clean state, regardless of
+       whatever else has happened.
+     */
+    public void force_reset_clean()
+    {
+        state_controller.get_state_hold_lock();
+        state_controller.move_state_clean();
+        state_controller.release_lock();
+    }
+    
     /**
        Must be called before can continue.
      */
