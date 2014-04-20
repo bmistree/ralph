@@ -124,7 +124,7 @@ public class PartnersNoConflict
             // actually make call with arguments on partner endpoint
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_args_method",true,
-                arg_list);
+                arg_list,null);
             
             // check that commit worked
             root_event.begin_first_phase_commit();
@@ -209,7 +209,7 @@ public class PartnersNoConflict
 
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_method",true,
-                new ArrayList<RPCArgObject> ());
+                new ArrayList<RPCArgObject> (),null);
 
             root_event.begin_first_phase_commit();
             

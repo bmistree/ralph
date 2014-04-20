@@ -69,7 +69,8 @@ public class PartnersModifyRemoteState
                 
                 ctx.hide_partner_call(
                     endpta, root_event,"test_increment_local_num",true,
-                    arg_list);
+                    arg_list,null);
+
 
                 // check that value recovered from reference variable
                 // passed in contains correct result.
