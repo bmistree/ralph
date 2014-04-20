@@ -28,7 +28,12 @@ import RalphAtomicWrappers.BaseAtomicWrappers;
 
 
 public class TestClassUtil
-{    
+{
+    // When create ralph global, have it listening for service
+    // reference connections on this port, then increment port.  (That
+    // way, avoid address-already-in-use errors.)
+    private static int next_tcp_service_connection_listening_port = 35821;
+    
     public static void print_success(String test_name)
     {
         System.out.println("Test " + test_name + " .....");
@@ -156,7 +161,9 @@ public class TestClassUtil
         ConnectionObj conn_obj)
     {
         VariableStore vstore = new VariableStore(false);
-        RalphGlobals ralph_globals = new RalphGlobals();
+        RalphGlobals ralph_globals =
+            new RalphGlobals(next_tcp_service_connection_listening_port);
+        next_tcp_service_connection_listening_port += 1;
         
         // adding a number tvar
         vstore.add_var(
