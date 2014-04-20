@@ -66,14 +66,15 @@ public class TestClassUtil
             super(ralph_globals,conn_obj,vstore);
         }
 
-        protected void _handle_rpc_call(
+        @Override
+        protected RalphObject _handle_rpc_call(
             String to_exec_internal_name,ActiveEvent active_event,
             ExecutingEventContext ctx,
             Object...args)
             throws ApplicationException, BackoutException, NetworkException,
             StoppedException
         {
-            Object result = null;
+            RalphObject result = null;
             if (to_exec_internal_name.equals("test_partner_method"))
             {
                 _test_partner_method(active_event,ctx);
@@ -105,6 +106,7 @@ public class TestClassUtil
                     "Error handling rpc call: unknown method " +
                     to_exec_internal_name);
             }
+            return result;
         }
 
         
