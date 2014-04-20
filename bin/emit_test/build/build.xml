@@ -50,6 +50,15 @@
       <arg line="-c IFaceBasicRalph"/>
     </exec>
 
+    <echo message="${line.separator}multiple_interfaces.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/multiple_interfaces.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/MultipleInterfacesJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c MultipleInterfacesJava"/>
+    </exec>
+    
     <echo message="${line.separator}Emitting serialize_map_of_structs.rph${line.separator}"/>
     <exec executable="python" failonerror="true">
       <arg line="${ralph_compiler_py}"/>
@@ -628,7 +637,8 @@
          run_SerializeTrueFalseListTest,run_SerializeStructTest,
          run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
          run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
-         run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest">
+         run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest,
+         run_MultipleInterfacesTest">
   </target>
     
   
@@ -1539,7 +1549,22 @@
     </java>
   </target>
 
-
+  <!-- MultipleInterfaceTest -->
+  <target
+      name="run_MultipleInterfacesTest"
+      depends="compile_ralph_tests"
+      description="Tests that can implement multiple interfaces on
+                   a single endpoint.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.MultipleInterfacesTest"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

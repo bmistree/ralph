@@ -1,0 +1,39 @@
+alias Interface INumberSetterGetter as 'ralph_emitted.MultipleInterfacesJava.INumberSetterGetter';
+alias Interface ITextSetterGetter as 'ralph_emitted.MultipleInterfacesJava.ITextSetterGetter';
+
+Interface INumberSetterGetter
+{
+    get_number() returns Number;
+    set_number(Number new_number);
+}
+
+Interface ITextSetterGetter
+{
+    get_text() returns Text;
+    set_text(Text new_text);
+}
+
+Service SetterGetter
+    implements Interface INumberSetterGetter, Interface ITextSetterGetter
+{
+    Number internal_number;
+    Text internal_text;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+    set_number(Number new_number)
+    {
+        internal_number = new_number;
+    }
+    get_text() returns Text
+    {
+        return internal_text;
+    }
+    set_text(Text new_text)
+    {
+        internal_text = new_text;
+    }
+}
+
