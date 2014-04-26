@@ -176,7 +176,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 
     
-    protected void _lock()
+    public void _lock()
     {
         _mutex.lock();
     }
@@ -185,7 +185,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return _mutex.getHoldCount();
     }
     
-    protected void _unlock()
+    public void _unlock()
     {
         _mutex.unlock();
     }
