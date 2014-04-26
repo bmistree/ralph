@@ -1437,12 +1437,13 @@ class OrExpressionNode(_LogicalExpressionNode):
         super(OrExpressionNode,self).__init__(
             filename,ast_labels.OR,lhs_expression_node,rhs_expression_node)
         
-class InExpressionNode(_BinaryExpressionNode):
+class InExpressionNode(_LogicalExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(InExpressionNode,self).__init__(
             filename,ast_labels.IN,lhs_expression_node,rhs_expression_node)
     def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
+
         
 class NotInExpressionNode(_LogicalExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
