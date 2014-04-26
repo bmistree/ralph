@@ -239,6 +239,13 @@ public class NonAtomicActiveEvent extends ActiveEvent
         Util.logger_assert(
             "Should not call backout on non-atomic active event.");
     }
+    @Override
+    public void non_blocking_backout(
+        String backout_requester_host_uuid, boolean stop_request)
+    {
+        // can get called by speculative obj, eg., if backing out a
+        // derived from.
+    }
         
 
     /**

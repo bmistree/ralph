@@ -521,7 +521,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             else
                 act_event.remove_touched_obj(this);
         }
-        
+
         for (EventCachedPriorityObj read_lock_holder :
                  prev_read_events.values())
         {
@@ -722,14 +722,14 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         for (EventCachedPriorityObj cached_priority_obj :
                  read_lock_holders.values())
         {
-            cached_priority_obj.event.blocking_backout(null,false);
+            cached_priority_obj.event.non_blocking_backout(null,false);
         }
 
         for (WaitingElement<T,D> we : waiting_events.values())
         {
             // tell all events that waited on a lock for this object
             // that they failed/were preempted.
-            we.event.blocking_backout(null,false);
+            we.event.non_blocking_backout(null,false);
             we.unwait_fail(this);
         }
     }

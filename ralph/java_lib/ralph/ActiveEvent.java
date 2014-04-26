@@ -97,6 +97,8 @@ public abstract class ActiveEvent
     public abstract void stop(boolean skip_partner);
     public abstract void blocking_backout(
         String backout_requester_host_uuid, boolean stop_request);
+    public abstract void non_blocking_backout(
+        String backout_requester_host_uuid, boolean stop_request);
     
     /**
        Either this or obj_request_no_backout_and_release_lock
