@@ -877,11 +877,10 @@ class NotNode(_AstNode):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
     def type_check_pass_one(self,struct_types_ctx):
-        pass
-        
+        self.to_not_node.type_check_pass_one(struct_types_ctx)
+    
     def type_check_pass_two(self,type_check_ctx):
-        pass
-
+        self.to_not_node.type_check_pass_two(type_check_ctx)
         
 class LenNode(_AstNode):
     def __init__(self,filename,len_of_node,line_number):
@@ -892,11 +891,11 @@ class LenNode(_AstNode):
         self.type = BasicType(ast_labels.NUMBER_TYPE,False)
         
     def type_check_pass_one(self,struct_types_ctx):
-        pass
+        self.len_of_node.type_check_pass_one(struct_types_ctx)
 
     def type_check_pass_two(self,type_check_ctx):
-        pass
-    
+        self.len_of_node.type_check_pass_two(type_check_ctx)
+        
         
 class ReturnNode(_AstNode):
     def __init__(self,filename,line_number):
@@ -1344,7 +1343,7 @@ class _LogicalExpressionNode(_BinaryExpressionNode):
         self.rhs_expression_node.type_check_pass_two(type_check_ctx)
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
         
-        
+
 class MultiplyExpressionNode(_ArithmeticExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(MultiplyExpressionNode,self).__init__(
@@ -1444,7 +1443,6 @@ class InExpressionNode(_LogicalExpressionNode):
     def type_check(self,type_check_ctx):
         self.type = BasicType(ast_labels.BOOL_TYPE,False)
 
-        
 class NotInExpressionNode(_LogicalExpressionNode):
     def __init__(self,filename,lhs_expression_node,rhs_expression_node):
         super(NotInExpressionNode,self).__init__(
