@@ -73,6 +73,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
     // can get duplicate events from speculative object
     private ActiveEvent last_event = null;
+    private ICancellableFuture last_future = null;
     
     public ExtendedHardwareOverrides(
         IHardwareChangeApplier<HardwareChangeApplierType> _hardware_applier,
@@ -126,7 +127,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             
             // handles case of duplicate requests
             if (last_event == active_event)
-                return ALWAYS_TRUE_FUTURE;
+                return last_future;
         
             
             //// DEBUG
@@ -161,13 +162,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
                 // note: do not need to move state transition here
                 // ourselves.  to_apply_to_hardware does that for us.
-                return to_apply_to_hardware.to_notify_when_complete;
+                last_future = to_apply_to_hardware.to_notify_when_complete;
+                return last_future;
              }
 
             // it's a read operation. never made a write to this variable:
             // do not need to ensure that hardware is up (for now).  May
             // want to add read checks as well.
-            return ALWAYS_TRUE_FUTURE;
+            last_future = ALWAYS_TRUE_FUTURE;
+            return last_future;
         }
         finally
         {
@@ -197,6 +200,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 //// END DEBUG
                 state_controller.move_state_clean();
                 last_event = null;
+                last_future = null;
             }
             finally
             {
