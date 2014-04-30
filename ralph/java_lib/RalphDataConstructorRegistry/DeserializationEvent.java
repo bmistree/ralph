@@ -96,6 +96,9 @@ public class DeserializationEvent extends ActiveEvent
     public void blocking_backout(
         String backout_requester_host_uuid, boolean stop_request)
     {}
+    public void non_blocking_backout(
+        String backout_requester_host_uuid, boolean stop_request)
+    {}
     public void obj_request_backout_and_release_lock(
         AtomicObject obj_requesting)
     {}

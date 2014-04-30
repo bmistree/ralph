@@ -86,6 +86,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
     	String cached_priority = "";
     	public final ActiveEvent event;
+                
     	public EventCachedPriorityObj (
             ActiveEvent active_event,String _cached_priority)
     	{
@@ -807,7 +808,13 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# I think so.
         _lock();
 
-        hardware_backout_hook(active_event);
+        // Using additional check to prevent duplicate backouts' being
+        // passed to hardware backout hook.  (Can get duplicate
+        // backouts if a speculative event succeeds, root gets
+        // inserted into event's touched_objs, and then the
+        // speculative forwards its backout to root.)
+        if (read_lock_holders.containsKey(active_event.uuid))
+            hardware_backout_hook(active_event);
         
         read_lock_holders.remove(active_event.uuid);
         if (is_write_lock_holder(active_event))

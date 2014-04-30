@@ -521,7 +521,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             else
                 act_event.remove_touched_obj(this);
         }
-        
+
         for (EventCachedPriorityObj read_lock_holder :
                  prev_read_events.values())
         {
@@ -626,16 +626,32 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         // try to commit normally.
         if (root_speculative)
         {
-            // note: to_return should be ALWAYS_TRUE_FUTURE for read
-            // only operation.
-            ICancellableFuture to_return =
-                hardware_first_phase_commit_hook(active_event);
-            if (to_return == null)
-                to_return = ALWAYS_TRUE_FUTURE;
-
-            root_outstanding_commit_requests.put(active_event.uuid,to_return);
-
             boolean write_lock_holder = is_write_lock_holder(active_event);
+            ICancellableFuture to_return = null;
+            // A SpeculativeAtomicObject can receive multiple calls to
+            // commit or backout for a particular event.  This is
+            // because if we succeed speculating, we forward messages
+            // from the succeeded object to the head object.  The head
+            // object however, may also receive a message directly.
+            // To avoid transmitting duplicate messages to hardware
+            // extenders and doing duplicate work, we keep track of
+            // whether we've already processed an apply for the target
+            // event.
+            ICancellableFuture already_issued =
+                root_outstanding_commit_requests.get(active_event.uuid);
+            if (already_issued != null)
+                to_return = already_issued;
+            else
+            {
+                // note: to_return should be ALWAYS_TRUE_FUTURE for read
+                // only operation.
+                to_return = 
+                    hardware_first_phase_commit_hook(active_event);
+                if (to_return == null)
+                    to_return = ALWAYS_TRUE_FUTURE;
+
+                root_outstanding_commit_requests.put(active_event.uuid,to_return);
+            }
             _unlock();
             
             // If a read lock holder enters first phase of commit, the
@@ -722,14 +738,14 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         for (EventCachedPriorityObj cached_priority_obj :
                  read_lock_holders.values())
         {
-            cached_priority_obj.event.blocking_backout(null,false);
+            cached_priority_obj.event.non_blocking_backout(null,false);
         }
 
         for (WaitingElement<T,D> we : waiting_events.values())
         {
             // tell all events that waited on a lock for this object
             // that they failed/were preempted.
-            we.event.blocking_backout(null,false);
+            we.event.non_blocking_backout(null,false);
             we.unwait_fail(this);
         }
     }

@@ -255,8 +255,8 @@ public class AtomicActiveEvent extends ActiveEvent
     private State state = State.STATE_RUNNING;
 	
     /**
-       See note in non_blocking_backout: can get a call to
-       non_blocking_backout twice.
+       See note in locked_non_blocking_backout: can get a call to
+       locked_non_blocking_backout twice.
      */
     private boolean received_backout_already = false;
     
@@ -815,6 +815,15 @@ public class AtomicActiveEvent extends ActiveEvent
         if (lock_hold_count() != 0)
             Util.logger_assert(msg);
     }
+
+    @Override
+    public void non_blocking_backout(
+        String backout_requester_host_uuid, boolean stop_request)
+    {
+        _lock();
+        locked_non_blocking_backout(backout_requester_host_uuid,stop_request);
+        _unlock();
+    }
     
     /**
        MUST BE CALLED FROM WITHIN LOCK
@@ -850,12 +859,12 @@ public class AtomicActiveEvent extends ActiveEvent
        does not actually wait for them to do so.  Forwards rollbacks
        to other hosts.
        */
-    private void non_blocking_backout(
+    private void locked_non_blocking_backout(
         String backout_requester_host_uuid, boolean stop_request)
     {
         //// DEBUG
         assert_if_not_holding_lock(
-            "non_blocking_backout in AtomicActiveEvent should " +
+            "locked_non_blocking_backout in AtomicActiveEvent should " +
             "be holding lock.");
         //// END DEBUG
         
@@ -991,7 +1000,7 @@ public class AtomicActiveEvent extends ActiveEvent
     /**
        Must be called OUTSIDE of lock.
 
-       Unlike non_blocking_backout, blocks until all touched objects
+       Unlike locked_non_blocking_backout, blocks until all touched objects
        have processed backout (ie, we've transitioned into
        STATE_BACKED_OUT).  See note "Dirty speculate" at top of file
        for why we do this.
@@ -1012,7 +1021,7 @@ public class AtomicActiveEvent extends ActiveEvent
             "Cannot be holding lock when enter backout.");
         
         _lock();
-        non_blocking_backout(backout_requester_host_uuid,stop_request);
+        locked_non_blocking_backout(backout_requester_host_uuid,stop_request);
         _unlock();
 
         _lock();
@@ -1057,7 +1066,7 @@ public class AtomicActiveEvent extends ActiveEvent
         touched_objs.remove(obj_requesting.uuid);
         _touched_objs_unlock();
 
-        non_blocking_backout(null,false);
+        locked_non_blocking_backout(null,false);
         
         //# unlock after method
         _unlock();
