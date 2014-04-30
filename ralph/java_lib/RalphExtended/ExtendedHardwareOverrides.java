@@ -70,6 +70,11 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     private final boolean should_speculate;
 
     private final RalphGlobals ralph_globals;
+
+    // can get duplicate events from speculative object
+    private ActiveEvent last_event = null;
+    private ActiveEvent last_backout_event = null;
+    private ICancellableFuture last_future = null;
     
     public ExtendedHardwareOverrides(
         IHardwareChangeApplier<HardwareChangeApplierType> _hardware_applier,
@@ -121,15 +126,22 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             if (current_state == ExtendedObjectStateController.State.FAILED)
                 return ALWAYS_FALSE_FUTURE;
             
+            // handles case of duplicate requests
+            if (last_event == active_event)
+                return last_future;
+        
+            
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
             {
                 Util.logger_assert(
                     "Should only recieve first phase commit " +
-                    "request when in clean state");
+                    "request when in clean state " + current_state);
             }
             //// END DEBUG
 
+            last_event = active_event;
+            
             if (should_speculate)
                 speculate_listener.speculate(active_event);
 
@@ -151,13 +163,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
                 // note: do not need to move state transition here
                 // ourselves.  to_apply_to_hardware does that for us.
-                return to_apply_to_hardware.to_notify_when_complete;
+                last_future = to_apply_to_hardware.to_notify_when_complete;
+                return last_future;
              }
 
             // it's a read operation. never made a write to this variable:
             // do not need to ensure that hardware is up (for now).  May
             // want to add read checks as well.
-            return ALWAYS_TRUE_FUTURE;
+            last_future = ALWAYS_TRUE_FUTURE;
+            return last_future;
         }
         finally
         {
@@ -186,6 +200,8 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 }
                 //// END DEBUG
                 state_controller.move_state_clean();
+                last_event = null;
+                last_future = null;
             }
             finally
             {
@@ -198,9 +214,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     {
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
+
         
         if (write_lock_holder_being_preempted)
         {
+            // handles case of duplicate calls
+            if (active_event == last_backout_event)
+                return;
+            last_backout_event = active_event;
+            
             ExtendedObjectStateController.State current_state =
                 state_controller.get_state_hold_lock();
 
