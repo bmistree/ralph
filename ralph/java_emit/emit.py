@@ -2340,14 +2340,39 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     for field_name in dict_dot_fields:
         field_type = dict_dot_fields[field_name]
         internal_field_type = emit_ralph_wrapped_type(field_type)
-        internal_field_deserialization_text += '''
+        if isinstance(field_type,MapType):
+            internal_map_type = emit_internal_map_type(field_type)
+            internal_field_deserialization_text += '''
+{
+    %s = %s;
+    // FIXME: will only work for non-tvar maps.
+    try{
+        %s.set_val(
+            null,
+            (%s)registry_instance.deserialize(
+                _struct_field_list.get(%i),ralph_globals));
+    } catch (Exception ex) {
+        Util.logger_assert("Should not get an exception when deserializing");
+    }
+ 
+}
+''' % (field_name,
+       construct_new_expression(field_type,None,emit_ctx),
+       field_name,internal_map_type,counter)
+        else:
+            # not a map
+            internal_field_deserialization_text += '''
 {
     // FIXME: if allow serializing null, should do so here.
     %s = (%s)registry_instance.deserialize(
-        _struct_field_list.get(%i),ralph_globals);
+    _struct_field_list.get(%i),ralph_globals);
 }
 ''' % (field_name,emit_ralph_wrapped_type(field_type),counter)
+
+        # happens regardless of if-else
         counter += 1
+
+
         
     constructor_text = '''
 public static %s deserialize_rpc(
