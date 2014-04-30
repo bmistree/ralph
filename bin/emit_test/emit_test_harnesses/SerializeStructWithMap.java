@@ -87,7 +87,7 @@ public class SerializeStructWithMap
 
             Double result = null;
             result = to_call_on.sum_numbers(a,b,c,d);
-
+            
             if (! threshold_equal(result,expected_value))
                 return false;
         }

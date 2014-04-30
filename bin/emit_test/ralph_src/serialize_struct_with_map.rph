@@ -12,10 +12,10 @@ Service MapSerializer
         Number a, Number b, Number c, Number d) returns Number
     {
         Struct MapHolder s1;
-        s1.map_holder.set(a,a);
-        s1.map_holder.set(b,b);
-        s1.map_holder.set(c,c);
-        s1.map_holder.set(d,d);
+        s1.map_holder.set(1,a);
+        s1.map_holder.set(2,b);
+        s1.map_holder.set(3,c);
+        s1.map_holder.set(4,d);
         
         Number to_return;
         to_return = @partner.partner_map_sum(s1);
@@ -25,9 +25,11 @@ Service MapSerializer
     partner_map_sum(Struct MapHolder s1) returns Number
     {
         Number to_return = 0;
-
         for (Number key in s1.map_holder)
-            to_return = to_return + key;
+        {
+            Number value = s1.map_holder.get(key);
+            to_return = to_return + value;
+        }
         return to_return;
     }
 }
