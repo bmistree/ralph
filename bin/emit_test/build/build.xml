@@ -648,7 +648,7 @@
          run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
          run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
          run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest,
-         run_MultipleInterfacesTest">
+         run_MultipleInterfacesTest,run_SerializeStructWithMap">
   </target>
     
   
@@ -1575,6 +1575,23 @@
     </java>
   </target>
   
+  <!-- SerializeStructWithMap -->
+  <target
+      name="run_SerializeStructWithMap"
+      depends="compile_ralph_tests"
+      description="Tests that can serialize a struct
+                   containing a map.">
+    <java
+        dir="${build.dir}"
+        classname="emit_test_harnesses.SerializeStructWithMap"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}">
+        <arg line="${args}"/>
+        <jvmarg value="-ea"/>
+    </java>
+  </target>
+  
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
