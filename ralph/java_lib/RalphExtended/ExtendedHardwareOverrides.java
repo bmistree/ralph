@@ -70,6 +70,9 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     private final boolean should_speculate;
 
     private final RalphGlobals ralph_globals;
+
+    // can get duplicate events from speculative object
+    private ActiveEvent last_event = null;
     
     public ExtendedHardwareOverrides(
         IHardwareChangeApplier<HardwareChangeApplierType> _hardware_applier,
@@ -121,15 +124,22 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             if (current_state == ExtendedObjectStateController.State.FAILED)
                 return ALWAYS_FALSE_FUTURE;
             
+            // handles case of duplicate requests
+            if (last_event == active_event)
+                return ALWAYS_TRUE_FUTURE;
+        
+            
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
             {
                 Util.logger_assert(
                     "Should only recieve first phase commit " +
-                    "request when in clean state");
+                    "request when in clean state " + current_state);
             }
             //// END DEBUG
 
+            last_event = active_event;
+            
             if (should_speculate)
                 speculate_listener.speculate(active_event);
 
@@ -186,6 +196,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 }
                 //// END DEBUG
                 state_controller.move_state_clean();
+                last_event = null;
             }
             finally
             {
@@ -198,6 +209,9 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     {
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
+        // handles case of duplicate calls
+        if (active_event == last_event)
+            return;
         
         if (write_lock_holder_being_preempted)
         {
