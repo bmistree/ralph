@@ -73,6 +73,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
     // can get duplicate events from speculative object
     private ActiveEvent last_event = null;
+    private ActiveEvent last_backout_event = null;
     private ICancellableFuture last_future = null;
     
     public ExtendedHardwareOverrides(
@@ -213,12 +214,15 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     {
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
-        // handles case of duplicate calls
-        if (active_event == last_event)
-            return;
+
         
         if (write_lock_holder_being_preempted)
         {
+            // handles case of duplicate calls
+            if (active_event == last_backout_event)
+                return;
+            last_backout_event = active_event;
+            
             ExtendedObjectStateController.State current_state =
                 state_controller.get_state_hold_lock();
 
