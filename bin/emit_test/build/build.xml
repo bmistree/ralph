@@ -58,6 +58,16 @@
       <arg line="-p ${emitted_package}"/>
       <arg line="-c MultipleInterfacesJava"/>
     </exec>
+
+    <echo message="${line.separator}serialize_struct_with_map.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/serialize_struct_with_map.rph"/>
+      <arg line="-o ${ralph_emitted.dir}/SerializeStructWithMapJava.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c SerializeStructWithMapJava"/>
+    </exec>
+
     
     <echo message="${line.separator}Emitting serialize_map_of_structs.rph${line.separator}"/>
     <exec executable="python" failonerror="true">

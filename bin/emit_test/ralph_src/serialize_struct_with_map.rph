@@ -1,0 +1,33 @@
+
+
+Struct MapHolder
+{
+    Map(from: Number, to: Number) map_holder;
+}
+
+Service MapSerializer
+{
+    /** Maps */
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct MapHolder s1;
+        s1.map_holder.set(a,a);
+        s1.map_holder.set(b,b);
+        s1.map_holder.set(c,c);
+        s1.map_holder.set(d,d);
+        
+        Number to_return;
+        to_return = @partner.partner_map_sum(s1);
+        return to_return;
+    }
+
+    partner_map_sum(Struct MapHolder s1) returns Number
+    {
+        Number to_return = 0;
+
+        for (Number key in s1.map_holder)
+            to_return = to_return + key;
+        return to_return;
+    }
+}
