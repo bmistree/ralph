@@ -10,11 +10,10 @@ Service ListSerializer
         Number a, Number b, Number c, Number d) returns Number
     {
         Struct ListHolder s1;
-        s1.list_holder.append(1,a);
-        s1.list_holder.append(2,b);
-        s1.list_holder.append(3,c);
-        s1.list_holder.append(4,d);
-        
+        s1.list_holder.append(a);
+        s1.list_holder.append(b);
+        s1.list_holder.append(c);
+        s1.list_holder.append(d);
         Number to_return;
         to_return = @partner.partner_list_sum(s1);
         return to_return;
