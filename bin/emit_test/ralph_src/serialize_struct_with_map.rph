@@ -1,5 +1,3 @@
-
-
 Struct MapHolder
 {
     Map(from: Number, to: Number) map_holder;

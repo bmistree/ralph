@@ -1,0 +1,30 @@
+Struct ListHolder
+{
+    List(element: Number) list_holder;
+}
+
+Service ListSerializer
+{
+    /** Lists */
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct ListHolder s1;
+        s1.list_holder.append(1,a);
+        s1.list_holder.append(2,b);
+        s1.list_holder.append(3,c);
+        s1.list_holder.append(4,d);
+        
+        Number to_return;
+        to_return = @partner.partner_list_sum(s1);
+        return to_return;
+    }
+
+    partner_list_sum(Struct ListHolder s1) returns Number
+    {
+        Number to_return = 0;
+        for (Number val in s1.list_holder)
+            to_return = to_return + val;
+        return to_return;
+    }
+}
