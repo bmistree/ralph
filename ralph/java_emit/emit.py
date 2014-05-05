@@ -2337,15 +2337,16 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     dict_dot_fields = struct_type.dict_dot_fields()
     internal_field_deserialization_text = ''
     counter = 0;
+
     for field_name in dict_dot_fields:
         field_type = dict_dot_fields[field_name]
         internal_field_type = emit_ralph_wrapped_type(field_type)
-        if isinstance(field_type,MapType):
-            internal_map_type = emit_internal_map_type(field_type)
+        if isinstance(field_type,MapType) or isinstance(field_type,ListType):
+            internal_type = emit_internal_type(field_type)
             internal_field_deserialization_text += '''
 {
     %s = %s;
-    // FIXME: will only work for non-tvar maps.
+    // FIXME: will only work for non-tvars
     try{
         %s.set_val(
             null,
@@ -2358,9 +2359,9 @@ def emit_internal_struct_deserialize_constructor(struct_type):
 }
 ''' % (field_name,
        construct_new_expression(field_type,None,emit_ctx),
-       field_name,internal_map_type,counter)
+       field_name,internal_type,counter)
         else:
-            # not a map
+            # not a map/list
             internal_field_deserialization_text += '''
 {
     // FIXME: if allow serializing null, should do so here.
