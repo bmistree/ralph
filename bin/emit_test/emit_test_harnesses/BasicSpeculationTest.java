@@ -1,7 +1,7 @@
 package emit_test_harnesses;
 
-import ralph_emitted.BasicSpeculation.SpeculativeEndpoint;
-import ralph_emitted.BasicSpeculation.SpeculativeInterface;
+import ralph_emitted.BasicSpeculationJava.SpeculativeEndpoint;
+import ralph_emitted.BasicSpeculationJava.SpeculativeInterface;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.EndpointConstructorObj;

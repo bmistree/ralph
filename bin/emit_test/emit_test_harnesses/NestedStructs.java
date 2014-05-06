@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.NestedStructTest.End;
+import ralph_emitted.NestedStructsJava.End;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.Arrays;

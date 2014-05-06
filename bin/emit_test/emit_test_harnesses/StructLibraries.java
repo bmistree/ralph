@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.StructLibUser.StructUser;
+import ralph_emitted.StructLibUserJava.StructUser;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

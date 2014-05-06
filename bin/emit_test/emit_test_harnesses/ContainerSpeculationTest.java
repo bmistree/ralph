@@ -1,7 +1,7 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ContainerSpeculationJava.ContainerSpeculation;
-import ralph_emitted.BasicSpeculation.SpeculativeInterface;
+import ralph_emitted.BasicSpeculationJava.SpeculativeInterface;
 import ralph.EndpointConstructorObj;
 
 public class ContainerSpeculationTest

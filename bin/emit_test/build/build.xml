@@ -477,14 +477,11 @@
     </antcall>
   </target>
 
-  
-
   <!-- COMPILING -->
   <!-- compile java libraries -->
   <target name="compile_libs" depends="init" description="compile library files">
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
-
 
   
   <target name="ralph_to_byte_code" depends="init,compile_libs" description="compile ralph files">
@@ -498,27 +495,6 @@
         includeantruntime="false" />
   </target>
 
-    
-  <!-- compile ralph endpoints to java programs, including translating -->
-  <target
-      name="compile_ralph"
-      depends="init,compile_libs,translate_ralph,ralph_to_byte_code"
-      description="compile ralph files">
-  </target>
-
-  <target
-      name="compile_ralph_tests"
-      depends="init,compile_ralph"
-      description="compile basic ralph">
-    <!-- compile all ralph tests  -->
-    <javac
-        srcdir="${test_src.dir}"
-        destdir="${build.dir}"
-        classpath="${build.dir}"
-        debug="true"
-        debuglevel="lines,vars,source"
-        includeantruntime="false" />
-  </target>
 
   <!-- RUNNING TESTS -->
   <target
@@ -552,961 +528,330 @@
          run_SerializeStructWithList">
   </target>
     
-  
+
+  <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
   <target
-      name="run_BasicSetterGetter"
-      depends="compile_ralph_tests"
-      description="Single side setter getter test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicSetterGetter"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_BasicSetterGetter"
+      depends="iface_basic_ralph,basic_ralph">
   </target>
 
-  <!-- Struct setter getter -->
   <target
-      name="run_StructSetterGetter"
-      depends="compile_ralph_tests"
-      description="Setters and getters on struct fields test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructSetterGetter"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_StructSetterGetter"
+      depends="iface_basic_ralph,struct_test">
+  </target>
+
+  <target
+      name="ralph_BasicInternalMethodCall"
+      depends="internal_method_call">
+  </target>
+
+  <target
+      name="ralph_BasicTestAtomically"
+      depends="ralph_atomically">
+  </target>
+
+  <target
+      name="ralph_BasicPartnerCall"
+      depends="basic_partner">
+  </target>
+
+  <target
+      name="ralph_TCPPartnerCall"
+      depends="basic_partner">
+  </target>
+
+  <target
+      name="ralph_MapTest"
+      depends="test_map">
+  </target>
+
+  <target
+      name="ralph_AtomicMapTest"
+      depends="atomic_map_test">
+  </target>
+
+  <target
+      name="ralph_ListTest"
+      depends="test_list">
+  </target>
+
+  <target
+      name="ralph_AtomicListTest"
+      depends="atomic_list_test">
+  </target>
+
+  <target
+      name="ralph_NestedStructs"
+      depends="nested_structs">
+  </target>
+
+  <target
+      name="ralph_ForListTest"
+      depends="for_list">
+  </target>
+
+  <target
+      name="ralph_ForMapTest"
+      depends="for_map">
+  </target>
+
+  <target
+      name="ralph_StructLibraries"
+      depends="struct_lib_user">
   </target>
   
-  <!-- Internal method call on single host -->
   <target
-      name="run_BasicInternalMethodCall"
-      depends="compile_ralph_tests"
-      description="Single side internal method call.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicInternalMethodCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_InterruptedAtomically"
+      depends="interrupted_atomically">
   </target>
 
-  <!-- Atomically change -->
   <target
-      name="run_BasicTestAtomically"
-      depends="compile_ralph_tests"
-      description="Test nested atomically-s.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-
-  <!-- Partner call -->
-  <target
-      name="run_BasicPartnerCall"
-      depends="compile_ralph_tests"
-      description="Test calling partner methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- TCP partner call -->
-  <target
-      name="run_TCPPartnerCall"
-      depends="compile_ralph_tests"
-      description="Test calling partner methods over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_EndpointCalls"
+      depends="basic_ralph,endpoint_lib_user">
   </target>
 
-  
-  <!-- MapTesting -->
   <target
-      name="run_MapTest"
-      depends="compile_ralph_tests"
-      description="Test map methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MapTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- Atomic map test -->
-  <target
-      name="run_AtomicMapTest"
-      depends="compile_ralph_tests"
-      description="Test atomic map methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicMapTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_InterruptedEndpointCallAtomically"
+      depends="basic_ralph,interrupted_endpoint_atomically">
   </target>
 
-  <!-- ListTesting -->
   <target
-      name="run_ListTest"
-      depends="compile_ralph_tests"
-      description="Test list methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ListTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_PromotionTest"
+      depends="promotion">
   </target>
 
-  <!-- AtomicListTesting -->
   <target
-      name="run_AtomicListTest"
-      depends="compile_ralph_tests"
-      description="Test atomic list methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicListTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_SuperInterruptedAtomically"
+      depends="super_interrupted_atomically">
   </target>
 
-  <!-- Nested struct test -->
   <target
-      name="run_NestedStructTest"
-      depends="compile_ralph_tests"
-      description="Test nested struct.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.NestedStructs"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_HardwareFailure"
+      depends="hardware_failure">
   </target>
 
-  <!-- For list test -->
   <target
-      name="run_ForListTest"
-      depends="compile_ralph_tests"
-      description="Test for loop on lists.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ForList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_ReturnList"
+      depends="return_list">
   </target>
 
-  <!-- For map test -->
   <target
-      name="run_ForMapTest"
-      depends="compile_ralph_tests"
-      description="Test for loop on maps.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ForMap"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_WoundWait"
+      depends="promotion">
   </target>
 
-  <!-- Struct libraries -->
   <target
-      name="run_StructLibraries"
-      depends="compile_ralph_tests"
-      description="Tests that can import a struct from another library.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructLibraries"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_WoundWait"
+      depends="promotion">
   </target>
 
-
-  <!-- Run interrupted atomically -->
   <target
-      name="run_InterruptedAtomically"
-      depends="compile_ralph_tests"
-      description="Tests that handles atomic events' being interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_AtomicPartnerCall"
+      depends="atomic_partner">
   </target>
 
-  
-  <!-- Run endpoint calls -->
   <target
-      name="run_EndpointCalls"
-      depends="compile_ralph_tests"  
-      description="Tests issue endpoint calls from within ralph.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.EndpointCalls"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_AtomicTCPPartnerCall"
+      depends="atomic_partner">
+  </target>
+
+  <target
+      name="ralph_AtomicTCPPartnerCall"
+      depends="atomic_partner">
+  </target>
+
+  <target
+      name="ralph_RandomFailureExtendedList"
+      depends="many_ops_atomic_list_fail">
+  </target>
+
+  <target
+      name="ralph_AtomicListAppend"
+      depends="atomic_list_append">
+  </target>
+
+  <target
+      name="ralph_WrappedPartnerTCPCall"
+      depends="basic_partner,wrapped_partner">
+  </target>
+
+  <target
+      name="ralph_LinkedTests"
+      depends="linked_connection,linked_instance">
+  </target>
+
+  <target
+      name="ralph_SingleSideServiceFactory"
+      depends="basic_ralph,single_side_service_factory">
+  </target>
+
+  <target
+      name="ralph_PartnerServiceFactory"
+      depends="basic_ralph,single_side_service_factory">
+  </target>
+
+  <target
+      name="ralph_EndpointStructList"
+      depends="basic_ralph,endpoint_struct_list">
   </target>
   
-  <!-- Run interrupted endpoint calls -->
   <target
-      name="run_InterruptedEndpointCallAtomically"
-      depends="compile_ralph_tests"  
-      description="Tests ensure atomically wrapper between endpoint calls works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedEndpointCallAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run promotion test -->
-  <target
-      name="run_PromotionTest"
-      depends="compile_ralph_tests"
-      description="Tests quality of service through promotions.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PromotionTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run super event priority test -->
-  <target
-      name="run_SuperInterruptedAtomically"
-      depends="compile_ralph_tests"
-      description="Tests that can run with super priority.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SuperInterruptedTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run hardware failure test -->
-  <target
-      name="run_HardwareFailure"
-      depends="compile_ralph_tests"
-      description="Tests that system can handle hardware failures.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.HardwareFailureTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run return list -->
-  <target
-      name="run_ReturnList"
-      depends="compile_ralph_tests"
-      description="Tests that can return a list.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReturnListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run wound wait test -->
-  <target
-      name="run_WoundWait"
-      depends="compile_ralph_tests"
-      description="Tests that wound/wait works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.WoundWaitTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run atomic partner call -->
-  <target
-      name="run_AtomicPartnerCall"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run TCP atomic partner call -->
-  <target
-      name="run_AtomicTCPPartnerCall"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicTCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run RandomFailureExtendedList -->
-  <target
-      name="run_RandomFailureExtendedList"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomFailureExtendedList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run AtomicListAppendTest -->
-  <target
-      name="run_AtomicListAppend"
-      depends="compile_ralph_tests"
-      description="Ensures append works on atomic lists.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicListAppendTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run WrappedPartnerTCPCall   -->
-  <target
-      name="run_WrappedPartnerTCPCall"
-      depends="compile_ralph_tests"
-      description="Can make a tcp call from endpoint call.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.WrappedTCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run LinkedTests -->
-  <target
-      name="run_LinkedTests"
-      depends="compile_ralph_tests"
-      description="Can make a mixture of endpoint and partner calls and still complete.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LinkedTests"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run SingleSideServiceFactory -->
-  <target
-      name="run_SingleSideServiceFactory"
-      depends="compile_ralph_tests"
-      description="Run service factory">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SingleSideServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run PartnerServiceFactory -->
-  <target
-      name="run_PartnerServiceFactory"
-      depends="compile_ralph_tests"
-      description="Run partner service factory">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PartnerSendServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run EndpointStructListTest -->
-  <target
-      name="run_EndpointStructListTest"
-      depends="compile_ralph_tests"
-      description="Run endpoint struct list test">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.EndpointStructListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>        
-  
-  <!-- Run BasicSpeculation -->
-  <target
-      name="run_BasicSpeculation"
-      depends="compile_ralph_tests"
-      description="Run basic speculation test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run NullTest -->
-  <target
-      name="run_NullTest"
-      depends="compile_ralph_tests"
-      description="Run basic null test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.NullTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InternalCreateService -->
-  <target
-      name="run_InternalCreateService"
-      depends="compile_ralph_tests"
-      description="Run internal create service.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InternalCreateServiceTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run SelfTest -->
-  <target
-      name="run_Self"
-      depends="compile_ralph_tests"
-      description="Run self.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SelfTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run ContainerSpeculationTest -->
-  <target
-      name="run_ContainerSpeculation"
-      depends="compile_ralph_tests"
-      description="Run container speculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ContainerSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run Range test -->
-  <target
-      name="run_Range"
-      depends="compile_ralph_tests"
-      description="Run range test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.Range"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>        
-    </java>
+      name="ralph_BasicSpeculation"
+      depends="basic_speculation">
   </target>
   
-  <!-- Run ReadReadWriteSpeculation test -->
   <target
-      name="run_ReadReadWriteSpeculation"
-      depends="compile_ralph_tests"
-      description="Run read-read-write speculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReadReadWriteTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InterruptedSpeculater test -->
-  <target
-      name="run_InterruptedSpeculaterTest"
-      depends="compile_ralph_tests"
-      description="Run a test where the root of speculation gets interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedSpeculaterTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InterruptedSpeculater test -->
-  <target
-      name="run_MiddleInterruptedSpeculaterTest"
-      depends="compile_ralph_tests"
-      description="Run a test where an object in middle of speculation chain
-                   gets interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MiddleInterruptedSpeculaterTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Backed speculation test -->
-  <target
-      name="run_AlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware always succeed.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Random delays backed speculation test -->
-  <target
-      name="run_RandomDelaysAlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware always succeed, but
-                   take random times to commit">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomDelaysAlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Random failures backed speculation test -->
-  <target
-      name="run_RandomFailuresBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware randomly fail.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomFailuresBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- AtomicFailures test -->
-  <target
-      name="run_AtomicStructTest"
-      depends="compile_ralph_tests"
-      description="Ensure that TVar on struct works correctly">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicStructTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TextManipulation test -->
-  <target
-      name="run_TextManipulation"
-      depends="compile_ralph_tests"
-      description="Test concatenating strings and converting numbers to strings.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TextManipulation"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Lots of Backouts test -->
-  <target
-      name="run_LotsOfBackouts"
-      depends="compile_ralph_tests"
-      description="Test that always rollback state during backouts.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LotsOfBackoutsTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TimedAlwaysWorksBackedSpeculationTest -->
-  <target
-      name="run_TimedAlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Test that speculation actually increases throughput.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TimedAlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TimedAlwaysWorksBackedSpeculationTest -->
-  <target
-      name="run_SimplifiedTimedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Test that speculation actually increases
-                   throughput on smaller test case than BackedSpeculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SimplifiedTimedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- PartnerCallReturn -->
-  <target
-      name="run_PartnerCallReturn"
-      depends="compile_ralph_tests"
-      description="Test that passing a value back to caller works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PartnerCallReturn"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeNumberListTest -->
-  <target
-      name="run_SerializeNumberListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of numbers.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeNumberListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeTextListTest -->
-  <target
-      name="run_SerializeTextListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of strings.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeTextListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeTrueFalseListTest -->
-  <target
-      name="run_SerializeTrueFalseListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of booleans.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeTrueFalseListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_NullTest"
+      depends="null">
   </target>
   
-  <!-- SerializeStructTest -->
   <target
-      name="run_SerializeStructTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a struct.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructSerialization"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_InternalCreateService"
+      depends="internal_create_service">
   </target>
 
-  <!-- ListOfStructsSerializationTest -->
   <target
-      name="run_ListOfStructsSerializationTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of structs.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ListOfStructsSerialization"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_Self"
+      depends="self">
   </target>
 
-  <!-- LessSimplifiedTimedBackedSpeculation -->
   <target
-      name="run_LessSimplifiedTimedBackedSpeculation"
-      depends="compile_ralph_tests"
-      description="Test that can speuclate concurrently
-                   on a less simplified test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LessSimplifiedTimedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_ContainerSpeculation"
+      depends="basic_speculation,container_speculation">
   </target>
 
-  <!-- SerializeNumberNumberMapTest -->
   <target
-      name="run_SerializeNumberNumberMapTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a map whose
-                   indices and values are numbers.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeNumberNumberMapTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeMapOfStructsTest -->
-  <target
-      name="run_SerializeMapOfStructs"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a map whose
-                   indices are numbers and values are structs.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeMapOfStructs"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- InternalStructMethodCallTest -->
-  <target
-      name="run_InternalStructMethodCallTest"
-      depends="compile_ralph_tests"
-      description="Tests that handles returning structs from methods">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InternalStructMethodCallTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_Range"
+      depends="range_test">
   </target>
   
-  <!-- ReferenceServiceFactoryTest -->
   <target
-      name="run_ReferenceServiceFactoryTest"
-      depends="compile_ralph_tests"
-      description="Tests that can use servicereferences to construct
-                   partnered endpoints">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReferenceServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_ReadReadWriteSpeculation"
+      depends="read_read_write_speculation">
   </target>
 
-  <!-- MultipleInterfaceTest -->
   <target
-      name="run_MultipleInterfacesTest"
-      depends="compile_ralph_tests"
-      description="Tests that can implement multiple interfaces on
-                   a single endpoint.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MultipleInterfacesTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_InterruptedSpeculaterTest"
+      depends="interrupted_speculater">
+  </target>
+
+  <target
+      name="ralph_MiddleInterruptedSpeculaterTest"
+      depends="middle_interrupted_speculater">
+  </target>
+
+  <target
+      name="ralph_AlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_RandomDelaysAlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_RandomFailuresBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_AtomicStructTest"
+      depends="atomic_struct">
+  </target>
+
+  <target
+      name="ralph_TextManipulation"
+      depends="text_add_and_to_text">
+  </target>
+
+  <target
+      name="ralph_LotsOfBackouts"
+      depends="lots_of_backouts">
+  </target>
+
+  <target
+      name="ralph_TimedAlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_SimplifiedTimedSpeculationTest"
+      depends="simplified_backed_speculation">
+  </target>
+
+  <target
+      name="ralph_PartnerCallReturn"
+      depends="partner_number_return">
+  </target>
+
+  <target
+      name="ralph_SerializeNumberList"
+      depends="serialize_number_list">
+  </target>
+
+  <target
+      name="ralph_SerializeTextList"
+      depends="serialize_text_list">
+  </target>
+
+  <target
+      name="ralph_SerializeTrueFalseList"
+      depends="serialize_true_false_list">
   </target>
   
-  <!-- SerializeStructWithMap -->
   <target
-      name="run_SerializeStructWithMap"
-      depends="compile_ralph_tests"
-      description="Tests that can serialize a struct
-                   containing a map.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeStructWithMap"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_SerializeStructTest"
+      depends="struct_serialization">
   </target>
   
-  <!-- SerializeStructWithList -->
   <target
-      name="run_SerializeStructWithList"
-      depends="compile_ralph_tests"
-      description="Tests that can serialize a struct
-                   containing a list.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeStructWithList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_ListOfStructsSerializationTest"
+      depends="struct_list_serialization">
   </target>
+  
+  <target
+      name="ralph_LessSimplifiedTimedBackedSpeculation"
+      depends="less_simplified_backed_speculation">
+  </target>
+  
+  <target
+      name="ralph_SerializeNumberNumberMapTest"
+      depends="serialize_num_map">
+  </target>
+
+  <target
+      name="ralph_SerializeMapOfStructs"
+      depends="serialize_map_of_structs">
+  </target>
+
+  <target
+      name="ralph_InternalStructMethodCallTest"
+      depends="internal_return_struct">
+  </target>
+
+  <target
+      name="ralph_ReferenceServiceFactoryTest"
+      depends="reference_service_factory">
+  </target>
+
+  <target
+      name="ralph_MultipleInterfacesTest"
+      depends="multiple_interfaces">
+  </target>
+
+  <target
+      name="ralph_SerializeStructWithMap"
+      depends="serialize_struct_with_map">
+  </target>
+
+  <target
+      name="ralph_SerializeStructWithList"
+      depends="serialize_struct_with_list">
+  </target>
+
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">

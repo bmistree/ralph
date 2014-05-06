@@ -1,7 +1,7 @@
 package emit_test_harnesses;
 
-import ralph_emitted.AtomicPartner.SideA;
-import ralph_emitted.AtomicPartner.SideB;
+import ralph_emitted.AtomicPartnerJava.SideA;
+import ralph_emitted.AtomicPartnerJava.SideB;
 import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 

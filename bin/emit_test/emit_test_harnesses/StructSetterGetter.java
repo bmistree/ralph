@@ -1,7 +1,7 @@
 package emit_test_harnesses;
 
-import ralph_emitted.StructTest.SetterGetter;
-import ralph_emitted.IFaceBasicRalph.ISetterGetter;
+import ralph_emitted.StructTestJava.SetterGetter;
+import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

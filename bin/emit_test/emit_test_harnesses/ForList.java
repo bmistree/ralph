@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.ForListTest.ListEndpoint;
+import ralph_emitted.ForListJava.ListEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

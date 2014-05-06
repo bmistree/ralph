@@ -1,8 +1,8 @@
 package emit_test_harnesses;
 
-import ralph_emitted.BasicPartner.SideA;
-import ralph_emitted.BasicPartner.SideB;
-import ralph_emitted.WrappedPartner.SingleSidedHolder;
+import ralph_emitted.BasicPartnerJava.SideA;
+import ralph_emitted.BasicPartnerJava.SideB;
+import ralph_emitted.WrappedPartnerJava.SingleSidedHolder;
 import RalphConnObj.SingleSideConnection;
 import RalphConnObj.TCPConnectionObj;
 import ralph.RalphGlobals;
