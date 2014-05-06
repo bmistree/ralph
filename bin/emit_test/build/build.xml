@@ -33,567 +33,458 @@
   </target>
 
 
+  <!-- Compile an individual rph file -->
+  <target
+      name="compile_ralph"
+      description="Compile ralph">
+    <echo message="${line.separator}${rph_filename}${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/${rph_filename}"/>
+      <arg line="-o ${ralph_emitted.dir}/${class_name}.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c ${class_name}"/>
+    </exec>
+  </target>
+
+  <!-- Compilation for each ralph file -->
+  <target name="iface_basic_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="iface_basic_ralph.rph"/>
+      <param name="class_name" value="IFaceBasicRalphJava"/>
+    </antcall>
+  </target>
+
+  <target name="multiple_interfaces" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="multiple_interfaces.rph"/>
+      <param name="class_name" value="MultipleInterfacesJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_struct_with_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_struct_with_list.rph"/>
+      <param name="class_name" value="SerializeStructWithListJava"/>
+    </antcall>
+  </target>
+  
+  <target name="serialize_struct_with_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_struct_with_map.rph"/>
+      <param name="class_name" value="SerializeStructWithMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_map_of_structs" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_map_of_structs.rph"/>
+      <param name="class_name" value="SerializeMapOfStructsJava"/>
+    </antcall>
+  </target>
+    
+  <target name="struct_serialization" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_serialization.rph"/>
+      <param name="class_name" value="StructSerializationJava"/>
+    </antcall>
+  </target>
+
+  <target name="less_simplified_backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="less_simplified_backed_speculation.rph"/>
+      <param name="class_name" value="LessSimplifiedBackedSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_num_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_num_map.rph"/>
+      <param name="class_name" value="SerializeNumMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_list_serialization" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_list_serialization.rph"/>
+      <param name="class_name" value="StructListSerializationJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_text_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_text_list.rph"/>
+      <param name="class_name" value="SerializeTextListJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_true_false_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_true_false_list.rph"/>
+      <param name="class_name" value="SerializeTrueFalseListJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_ralph.rph"/>
+      <param name="class_name" value="BasicRalphJava"/>
+    </antcall>
+  </target>
+
+  <target name="internal_method_call" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_method_call.rph"/>
+      <param name="class_name" value="InternalMethodCallJava"/>
+    </antcall>
+  </target>
+
+  <target name="ralph_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="ralph_atomically.rph"/>
+      <param name="class_name" value="RalphAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_partner.rph"/>
+      <param name="class_name" value="BasicPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="test_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="test_map.rph"/>
+      <param name="class_name" value="TestMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_map.rph"/>
+      <param name="class_name" value="AtomicMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_test" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_test.rph"/>
+      <param name="class_name" value="StructTestJava"/>
+    </antcall>
+  </target>
+
+  <target name="nested_structs" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="nested_structs.rph"/>
+      <param name="class_name" value="NestedStructsJava"/>
+    </antcall>
+  </target>
+
+  <target name="test_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="test_list.rph"/>
+      <param name="class_name" value="TestListJava"/>
+    </antcall>
+  </target>
+  
+
+  <target name="atomic_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_list.rph"/>
+      <param name="class_name" value="AtomicListJava"/>
+    </antcall>
+  </target>
+  
+
+  <target name="for_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="for_list.rph"/>
+      <param name="class_name" value="ForListJava"/>
+    </antcall>
+  </target>
+
+  <target name="for_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="for_map.rph"/>
+      <param name="class_name" value="ForMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_lib" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_lib.rph"/>
+      <param name="class_name" value="StructLibJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_lib_user" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_lib_user.rph"/>
+      <param name="class_name" value="StructLibUserJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_atomically.rph"/>
+      <param name="class_name" value="InterruptedAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="endpoint_lib_user" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="endpoint_lib_user.rph"/>
+      <param name="class_name" value="EndpointLibUserJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_endpoint_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_endpoint_atomically.rph"/>
+      <param name="class_name" value="InterruptedEndpointAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="promotion" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="promotion.rph"/>
+      <param name="class_name" value="PromotionJava"/>
+    </antcall>
+  </target>
+
+  <target name="promotion" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="super_interrupted_atomically.rph"/>
+      <param name="class_name" value="SuperInterruptedAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="hardware_failure" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="hardware_failure.rph"/>
+      <param name="class_name" value="HardwareFailureJava"/>
+    </antcall>
+  </target>
+
+  <target name="return_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="return_list.rph"/>
+      <param name="class_name" value="ReturnListJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_partner.rph"/>
+      <param name="class_name" value="AtomicPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="many_ops_atomic_list_fail" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="many_ops_atomic_list_fail.rph"/>
+      <param name="class_name" value="ManyOpsAtomicListFailJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_list_append" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_list_append.rph"/>
+      <param name="class_name" value="AtomicListAppendJava"/>
+    </antcall>
+  </target>
+
+  <target name="endpoint_struct_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="endpoint_struct_list.rph"/>
+      <param name="class_name" value="EndpointStructListJava"/>
+    </antcall>
+  </target>
+
+  <target name="wrapped_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="wrapped_partner.rph"/>
+      <param name="class_name" value="WrappedPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="linked_instance" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="linked_instance.rph"/>
+      <param name="class_name" value="LinkedInstanceJava"/>
+    </antcall>
+  </target>
+  
+  <target name="linked_connection" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="linked_connection.rph"/>
+      <param name="class_name" value="LinkedConnectionJava"/>
+    </antcall>
+  </target>
+    
+  <target name="single_side_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="single_side_service_factory.rph"/>
+      <param name="class_name" value="SingleSideServiceFactoryJava"/>
+    </antcall>
+  </target>
+
+  <target name="partner_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="partner_service_factory.rph"/>
+      <param name="class_name" value="PartnerServiceFactoryJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_speculation.rph"/>
+      <param name="class_name" value="BasicSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="null" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="null.rph"/>
+      <param name="class_name" value="NullJava"/>
+    </antcall>
+  </target>
+
+  <target name="internal_create_service" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_create_service.rph"/>
+      <param name="class_name" value="InternalCreateServiceJava"/>
+    </antcall>
+  </target>
+  
+  <target name="self" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="self.rph"/>
+      <param name="class_name" value="SelfJava"/>
+    </antcall>
+  </target>
+
+  <target name="wrapped_iface" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="wrapped_iface.rph"/>
+      <param name="class_name" value="WrappedIFaceJava"/>
+    </antcall>
+  </target>
+
+  <target name="container_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="container_speculation.rph"/>
+      <param name="class_name" value="ContainerSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="range_test" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="range_test.rph"/>
+      <param name="class_name" value="RangeTestJava"/>
+    </antcall>
+  </target>
+  
+  <target name="read_read_write_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="read_read_write_speculation.rph"/>
+      <param name="class_name" value="ReadReadWriteSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_speculater" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_speculater.rph"/>
+      <param name="class_name" value="InterruptedSpeculaterJava"/>
+    </antcall>
+  </target>
+
+  <target name="middle_interrupted_speculater" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="middle_interrupted_speculater.rph"/>
+      <param name="class_name" value="MiddleInterruptedSpeculaterJava"/>
+    </antcall>
+  </target>
+
+  <target name="backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="backed_speculation.rph"/>
+      <param name="class_name" value="BackedSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_struct.rph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_struct.rph"/>
+      <param name="class_name" value="AtomicStructJava"/>
+    </antcall>
+  </target>
+
+  <target name="text_add_and_to_text" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="text_add_and_to_text.rph"/>
+      <param name="class_name" value="TextAddAndToTextJava"/>
+    </antcall>
+  </target>
+
+  <target name="lots_of_backouts" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="lots_of_backouts.rph"/>
+      <param name="class_name" value="LotsOfBackoutsJava"/>
+    </antcall>
+  </target>
+  
+  <target name="multiline_string" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="multiline_string.rph"/>
+      <param name="class_name" value="MultiLineStringJava"/>
+    </antcall>
+  </target>
+
+  <target name="simplified_backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="simplified_backed_speculation.rph"/>
+      <param name="class_name" value="SimplifiedBackedSpeculationJava"/>
+    </antcall>
+  </target>
+  
+  <target name="serialize_number_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_number_list.rph"/>
+      <param name="class_name" value="SerializeNumberListJava"/>
+    </antcall>
+  </target>
+  
+  <target name="partner_number_return" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="partner_number_return.rph"/>
+      <param name="class_name" value="PartnerNumberReturnJava"/>
+    </antcall>
+  </target>
+  
+  <target name="internal_return_struct" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_return_struct.rph"/>
+      <param name="class_name" value="InternalReturnStructJava"/>
+    </antcall>
+  </target>
+  
+  <target name="reference_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="reference_service_factory.rph"/>
+      <param name="class_name" value="ReferenceServiceFactoryJava"/>
+    </antcall>
+  </target>
+
+  
+
   <!-- COMPILING -->
   <!-- compile java libraries -->
   <target name="compile_libs" depends="init" description="compile library files">
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
 
-  <target name="translate_ralph" depends="init" description="translate ralph files">
-    <!-- Compile to java -->
-    <echo message="${line.separator}iface_basic_ralph.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/iface_basic_ralph.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/IFaceBasicRalph.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c IFaceBasicRalph"/>
-    </exec>
-
-    <echo message="${line.separator}multiple_interfaces.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/multiple_interfaces.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MultipleInterfacesJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MultipleInterfacesJava"/>
-    </exec>
-
-    <echo message="${line.separator}serialize_struct_with_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_struct_with_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeStructWithListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeStructWithListJava"/>
-    </exec>
-    
-    <echo message="${line.separator}serialize_struct_with_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_struct_with_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeStructWithMapJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeStructWithMapJava"/>
-    </exec>
-
-    
-    <echo message="${line.separator}Emitting serialize_map_of_structs.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_map_of_structs.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeMapOfStructsJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeMapOfStructsJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_serialization.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_serialization.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructSerializationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructSerializationJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting less_simplified_backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/less_simplified_backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LessSimplifiedBackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LessSimplifiedBackedSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting serialize_num_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_num_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeNumMapJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeNumMapJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_list_serialization.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_list_serialization.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructListSerializationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructListSerializationJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting serialize_text_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_text_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeTextListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeTextListJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting serialize_true_false_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_true_false_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeTrueFalseListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeTrueFalseListJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting basic_ralph.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_ralph.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicRalph.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicRalph"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting internal_method_call.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_method_call.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalMethodCall.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalMethodCall"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting ralph_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/ralph_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/RalphAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c RalphAtomically"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting basic_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicPartner"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting test_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/test_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MapTest"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting atomic_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicMapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicMapTest"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_test.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_test.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting nested_structs.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/nested_structs.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/NestedStructTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c NestedStructTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting test_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/test_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting for_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/for_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ForListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ForListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting for_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/for_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ForMapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ForMapTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting struct_lib.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_lib.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructLib.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructLib"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting struct_lib_user.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_lib_user.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructLibUser.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructLibUser"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting interrupted_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting endpoint_lib_user.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/endpoint_lib_user.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/EndpointLibUser.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c EndpointLibUser"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting interrupted_endpoint_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedEndpointAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting promotion.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/promotion.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/Promotion.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c Promotion"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting super_interrupted_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/super_interrupted_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SuperInterruptedAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SuperInterruptedAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting hardware_failure.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/hardware_failure.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/HardwareFailure.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c HardwareFailure"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting return_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/return_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReturnList.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReturnList"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicPartner"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting many_ops_atomic_list_fail.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/many_ops_atomic_list_fail.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ManyOpsAtomicListFail.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ManyOpsAtomicListFail"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_list_append${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_list_append.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicListAppend.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicListAppend"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting endpoint_struct_list${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/endpoint_struct_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/EndpointStructList.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c EndpointStructList"/>
-    </exec>
-
-    <echo message="${line.separator}wrapped_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/wrapped_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/WrappedPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c WrappedPartner"/>
-    </exec>
-
-    
-    <echo message="${line.separator}linked_instanced.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/linked_instance.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LinkedInstance.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LinkedInstance"/>
-    </exec>
-
-    <echo message="${line.separator}linked_connection.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/linked_connection.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LinkedConnection.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LinkedConnection"/>
-    </exec>
-
-    <echo message="${line.separator}single_side_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/single_side_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SingleSideServiceFactory"/>
-    </exec>
-
-    <echo message="${line.separator}partner_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/partner_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/PartnerServiceFactory.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c PartnerServiceFactory"/>
-    </exec>
-
-    <echo message="${line.separator}basic_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicSpeculation.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicSpeculation"/>
-    </exec>
-
-    <echo message="${line.separator}null.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/null.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/Null.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c Null"/>
-    </exec>
-
-    <echo message=
-          "${line.separator}internal_create_service.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_create_service.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalCreateServiceJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalCreateServiceJava"/>
-    </exec>
-
-    <echo message="${line.separator}self.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/self.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SelfJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SelfJava"/>
-    </exec>
-
-    <echo message="${line.separator}wrapped_iface.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/wrapped_iface.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/WrappedIFaceJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c WrappedIFaceJava"/>
-    </exec>
-
-    <echo message="${line.separator}container_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/container_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ContainerSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ContainerSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}range_test.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/range_test.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/RangeTestJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c RangeTestJava"/>
-    </exec>
-
-    <echo message="${line.separator}read_read_write_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/read_read_write_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReadReadWriteSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReadReadWriteSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}interrupted_speculater.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_speculater.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedSpeculaterJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedSpeculaterJava"/>
-    </exec>
-
-    <echo message="${line.separator}middle_interrupted_speculater.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/middle_interrupted_speculater.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MiddleInterruptedSpeculaterJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MiddleInterruptedSpeculaterJava"/>
-    </exec>
-
-    <echo message="${line.separator}backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BackedSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}atomic_struct.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_struct.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicStructJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicStructJava"/>
-    </exec>
-
-    <echo message="${line.separator}text_add_and_to_text.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/text_add_and_to_text.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/TextAddAndToTextJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c TextAddAndToTextJava"/>
-    </exec>
-
-    <echo message="${line.separator}lots_of_backouts.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/lots_of_backouts.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LotsOfBackoutsJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LotsOfBackoutsJava"/>
-    </exec>
-
-    <echo message="${line.separator}multiline_string.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/multiline_string.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MultilineStringJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MultilineStringJava"/>
-    </exec>
-
-    <echo message="${line.separator}simplified_backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/simplified_backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SimplifiedBackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SimplifiedBackedSpeculationJava"/>
-    </exec>
-    
-    <echo message="${line.separator}serialize_number_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_number_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeNumberListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeNumberListJava"/>
-    </exec>
-
-    <echo message="${line.separator}partner_number_return.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/partner_number_return.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/PartnerNumberReturnJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c PartnerNumberReturnJava"/>
-    </exec>
-
-    <echo message="${line.separator}internal_return_struct.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_return_struct.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalReturnStructJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalReturnStructJava"/>
-    </exec>
-
-    <echo message="${line.separator}reference_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/reference_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReferenceServiceFactoryJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReferenceServiceFactoryJava"/>
-    </exec>
-    
-  </target>
 
   
   <target name="ralph_to_byte_code" depends="init,compile_libs" description="compile ralph files">
