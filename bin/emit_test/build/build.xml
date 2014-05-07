@@ -23,6 +23,8 @@
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
       name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  <property
+      name="proto_jar_dir" location="${lib_build_path}/../"/>
   <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>
 
   <property name="emitted_package" value="ralph_emitted"/>
@@ -886,7 +888,7 @@
   </target>
 
   <property
-      name="basic_test_atomically"
+      name="basic_test_atomically_jar"
       value="basic_test_atomically.jar"/>
   <target
       name="jar_BasicTestAtomically"
@@ -898,7 +900,7 @@
   </target>
 
   <property
-      name="basic_partner_call"
+      name="basic_partner_call_jar"
       value="basic_partner_call.jar"/>
   <target
       name="jar_BasicPartnerCall"
@@ -1074,7 +1076,7 @@
       depends="ralph_SuperInterruptedAtomically">
     <antcall target="make_jar">
       <param name="main_class" value="SuperInterruptedTestAtomically"/>
-      <param name="dest_jar" value="${super_interrupted_test_atomically_jar}"/>
+      <param name="dest_jar" value="${super_interrupted_atomically_jar}"/>
     </antcall>
   </target>
 
@@ -1599,19 +1601,17 @@
   <!-- Make a jar -->
   <target
       name="make_jar"
+      depends="compile_libs"
       description="Make a jar">
-    <jar destfile="${dest_jar}" filesetmanifest="mergewithoutmain">
+    <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
       <manifest>
         <attribute name="Main-Class" value="${harness_package}.${main_class}"/>
-        <attribute name="Class-Path" value="${build.dir}"/>
+        <attribute name="Class-Path" value="${build.dir}:${proto_class_path}"/>
       </manifest>
-      <fileset dir="${lib_class_path}"/>
-      <fileset dir="${pronghorn_libs_class_path}"/>
-      <fileset dir="${experiments_build_classes_dir}"/>
-      <zipgroupfileset dir="${proto_class_path}" includes="**/*.jar" />
+      <fileset dir="${build.dir}"/>
+      <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
     </jar>
   </target>
-
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
