@@ -24,6 +24,7 @@
   <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>
 
   <property name="emitted_package" value="ralph_emitted"/>
+  <property name="harness_package" value="emit_test_harnesses"/>
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
@@ -642,17 +643,7 @@
   </target>
 
   <target
-      name="ralph_WoundWait"
-      depends="promotion">
-  </target>
-
-  <target
       name="ralph_AtomicPartnerCall"
-      depends="atomic_partner">
-  </target>
-
-  <target
-      name="ralph_AtomicTCPPartnerCall"
       depends="atomic_partner">
   </target>
 
@@ -807,7 +798,7 @@
   </target>
   
   <target
-      name="ralph_ListOfStructsSerializationTest"
+      name="ralph_ListOfStructsSerialization"
       depends="struct_list_serialization">
   </target>
   
@@ -852,6 +843,769 @@
   </target>
 
 
+  <!-- jarify experiments -->
+  <property
+      name="basic_setter_getter_jar"
+      value="basic_setter_getter.jar"/>
+  <target
+      name="jar_BasicSetterGetter"
+      depends="ralph_BasicSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicSetterGetter"/>
+      <param name="dest_jar" value="${basic_setter_getter_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="struct_setter_getter_jar"
+      value="struct_setter_getter.jar"/>
+  <target
+      name="jar_StructSetterGetter"
+      depends="ralph_StructSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructSetterGetter"/>
+      <param name="dest_jar" value="${struct_setter_getter_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_internal_method_call_jar"
+      value="basic_internal_method_call.jar"/>
+  <target
+      name="jar_BasicInternalMethodCall"
+      depends="ralph_BasicInternalMethodCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicInternalMethodCall"/>
+      <param name="dest_jar" value="${basic_internal_method_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_test_atomically"
+      value="basic_test_atomically.jar"/>
+  <target
+      name="jar_BasicTestAtomically"
+      depends="ralph_BasicTestAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicTestAtomically"/>
+      <param name="dest_jar" value="${basic_test_atomically_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_partner_call"
+      value="basic_partner_call.jar"/>
+  <target
+      name="jar_BasicPartnerCall"
+      depends="ralph_BasicPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicPartnerCall"/>
+      <param name="dest_jar" value="${basic_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="tcp_partner_call_jar"
+      value="tcp_partner_call.jar"/>
+  <target
+      name="jar_TCPPartnerCall"
+      depends="ralph_TCPPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="TCPPartnerCall"/>
+      <param name="dest_jar" value="${tcp_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="map_test_jar"
+      value="map_test.jar"/>
+  <target
+      name="jar_MapTest"
+      depends="ralph_MapTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="MapTester"/>
+      <param name="dest_jar" value="${map_test_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_map_test_jar"
+      value="atomic_map_test.jar"/>
+  <target
+      name="jar_AtomicMapTest"
+      depends="ralph_AtomicMapTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicMapTester"/>
+      <param name="dest_jar" value="${atomic_map_test_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="list_test_jar"
+      value="list_test.jar"/>
+  <target
+      name="jar_ListTest"
+      depends="ralph_ListTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="ListTest"/>
+      <param name="dest_jar" value="${list_test_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_list_test_jar"
+      value="atomic_list_test.jar"/>
+  <target
+      name="jar_AtomicListTest"
+      depends="ralph_AtomicListTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicListTest"/>
+      <param name="dest_jar" value="${atomic_list_test_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="nested_structs_jar"
+      value="nested_structs.jar"/>
+  <target
+      name="jar_NestedStructs"
+      depends="ralph_NestedStructs">
+    <antcall target="make_jar">
+      <param name="main_class" value="NestedStructs"/>
+      <param name="dest_jar" value="${nested_structs_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="for_list_jar"
+      value="for_list.jar"/>
+  <target
+      name="jar_ForList"
+      depends="ralph_ForList">
+    <antcall target="make_jar">
+      <param name="main_class" value="ForList"/>
+      <param name="dest_jar" value="${for_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="for_map_jar"
+      value="for_map.jar"/>
+  <target
+      name="jar_ForMap"
+      depends="ralph_ForMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="ForMap"/>
+      <param name="dest_jar" value="${for_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="struct_libraries_jar"
+      value="struct_libraries.jar"/>
+  <target
+      name="jar_StructLibraries"
+      depends="ralph_StructLibraries">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructLibraries"/>
+      <param name="dest_jar" value="${struct_libraries_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_atomically_jar"
+      value="interrupted_atomically.jar"/>
+  <target
+      name="jar_InterruptedAtomically"
+      depends="ralph_InterruptedAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedAtomically"/>
+      <param name="dest_jar" value="${interrupted_atomically_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="endpoint_calls_jar"
+      value="endpoint_calls.jar"/>
+  <target
+      name="jar_EndpointCalls"
+      depends="ralph_EndpointCalls">
+    <antcall target="make_jar">
+      <param name="main_class" value="EndpointCalls"/>
+      <param name="dest_jar" value="${endpoint_calls_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_endpoint_call_atomically_jar"
+      value="interrupted_endpoint_call_atomically.jar"/>
+  <target
+      name="jar_InterruptedEndpointCallAtomically"
+      depends="ralph_InterruptedEndpointCallAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedEndpointCallAtomically"/>
+      <param name="dest_jar" value="${interrupted_endpoint_call_atomically_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="promotion_test_jar"
+      value="promotion_test.jar"/>
+  <target
+      name="jar_PromotionTest"
+      depends="ralph_PromotionTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedEndpointCallAtomically"/>
+      <param name="dest_jar" value="${interrupted_endpoint_call_atomically_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="super_interrupted_atomically_jar"
+      value="super_interrupted_atomically.jar"/>
+  <target
+      name="jar_SuperInterruptedAtomically"
+      depends="ralph_SuperInterruptedAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="SuperInterruptedTestAtomically"/>
+      <param name="dest_jar" value="${super_interrupted_test_atomically_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="hardware_failure_jar"
+      value="hardware_failure.jar"/>
+  <target
+      name="jar_HardwareFailure"
+      depends="ralph_HardwareFailure">
+    <antcall target="make_jar">
+      <param name="main_class" value="HardwareFailure"/>
+      <param name="dest_jar" value="${hardware_failure_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="return_list_jar"
+      value="return_list.jar"/>
+  <target
+      name="jar_ReturnList"
+      depends="ralph_ReturnList">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReturnList"/>
+      <param name="dest_jar" value="${return_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="wound_wait_jar"
+      value="wound_wait.jar"/>
+  <target
+      name="jar_WoundWait"
+      depends="ralph_WoundWait">
+    <antcall target="make_jar">
+      <param name="main_class" value="WoundWaitTest"/>
+      <param name="dest_jar" value="${wound_wait_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_partner_call_jar"
+      value="atomic_partner_call.jar"/>
+  <target
+      name="jar_AtomicPartnerCall"
+      depends="ralph_AtomicPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicPartnerCall"/>
+      <param name="dest_jar" value="${atomic_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_tcp_partner_call_jar"
+      value="atomic_tcp_partner_call.jar"/>
+  <target
+      name="jar_AtomicTCPPartnerCall"
+      depends="ralph_AtomicTCPPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicTCPPartnerCall"/>
+      <param name="dest_jar" value="${atomic_tcp_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_failure_extended_list_jar"
+      value="random_failure_extended_list.jar"/>
+  <target
+      name="jar_RandomFailureExtendedList"
+      depends="ralph_RandomFailureExtendedList">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomFailureExtendedList"/>
+      <param name="dest_jar" value="${random_failure_extended_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_list_append_jar"
+      value="atomic_list_append.jar"/>
+  <target
+      name="jar_AtomicListAppend"
+      depends="ralph_AtomicListAppend">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicListAppend"/>
+      <param name="dest_jar" value="${atomic_list_append_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="wrapped_partner_tcp_call_jar"
+      value="wrapped_partner_tcp_call.jar"/>
+  <target
+      name="jar_WrappedPartnerTCPCall"
+      depends="ralph_WrappedPartnerTCPCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="WrappedPartnerTCPCall"/>
+      <param name="dest_jar" value="${wrapped_partner_tcp_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="linked_tests_jar"
+      value="linked_tests.jar"/>
+  <target
+      name="jar_LinkedTests"
+      depends="ralph_LinkedTests">
+    <antcall target="make_jar">
+      <param name="main_class" value="LinkedTests"/>
+      <param name="dest_jar" value="${linked_tests_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="single_side_service_factory_jar"
+      value="single_side_service_factory.jar"/>
+  <target
+      name="jar_SingleSideServiceFactory"
+      depends="ralph_SingleSideServiceFactory">
+    <antcall target="make_jar">
+      <param name="main_class" value="SingleSideServiceFactory"/>
+      <param name="dest_jar" value="${single_side_service_factory_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="partner_service_factory_jar"
+      value="partner_service_factory.jar"/>
+  <target
+      name="jar_PartnerServiceFactory"
+      depends="ralph_PartnerServiceFactory">
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnerServiceFactory"/>
+      <param name="dest_jar" value="${partner_service_factory_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="endpoint_struct_list_jar"
+      value="endpoint_struct_list.jar"/>
+  <target
+      name="jar_EndpointStructList"
+      depends="ralph_EndpointStructList">
+    <antcall target="make_jar">
+      <param name="main_class" value="EndpointStructList"/>
+      <param name="dest_jar" value="${endpoint_struct_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_speculation_jar"
+      value="basic_speculation.jar"/>
+  <target
+      name="jar_BasicSpeculation"
+      depends="ralph_BasicSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicSpeculation"/>
+      <param name="dest_jar" value="${basic_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="null_test_jar"
+      value="null_test.jar"/>
+  <target
+      name="jar_NullTest"
+      depends="ralph_NullTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="NullTest"/>
+      <param name="dest_jar" value="${null_test_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="internal_create_service_jar"
+      value="internal_create_service.jar"/>
+  <target
+      name="jar_InternalCreateService"
+      depends="ralph_InternalCreateService">
+    <antcall target="make_jar">
+      <param name="main_class" value="InternalCreateService"/>
+      <param name="dest_jar" value="${internal_create_service_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="self_jar"
+      value="self.jar"/>
+  <target
+      name="jar_Self"
+      depends="ralph_Self">
+    <antcall target="make_jar">
+      <param name="main_class" value="SelfTest"/>
+      <param name="dest_jar" value="${self_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="container_speculation_jar"
+      value="container_speculation.jar"/>
+  <target
+      name="jar_ContainerSpeculation"
+      depends="ralph_ContainerSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="ContainerSpeculationTest"/>
+      <param name="dest_jar" value="${container_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="range_jar"
+      value="range.jar"/>
+  <target
+      name="jar_Range"
+      depends="ralph_Range">
+    <antcall target="make_jar">
+      <param name="main_class" value="Range"/>
+      <param name="dest_jar" value="${range_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="read_read_write_speculation_jar"
+      value="read_read_write_speculation.jar"/>
+  <target
+      name="jar_ReadReadWriteSpeculation"
+      depends="ralph_ReadReadWriteSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReadReadWriteTest"/>
+      <param name="dest_jar" value="${read_read_write_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="read_read_write_speculation_jar"
+      value="read_read_write_speculation.jar"/>
+  <target
+      name="jar_ReadReadWriteSpeculation"
+      depends="ralph_ReadReadWriteSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReadReadWriteTest"/>
+      <param name="dest_jar" value="${read_read_write_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_speculater_jar"
+      value="interrupted_speculater.jar"/>
+  <target
+      name="jar_InterruptedSpeculater"
+      depends="ralph_InterruptedSpeculaterTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedSpeculaterTest"/>
+      <param name="dest_jar" value="${interrupted_speculater_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="middle_interrupted_speculater_jar"
+      value="middle_interrupted_speculater.jar"/>
+  <target
+      name="jar_MiddleInterruptedSpeculater"
+      depends="ralph_MiddleInterruptedSpeculaterTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="MiddleInterruptedSpeculaterTest"/>
+      <param name="dest_jar" value="${middle_interrupted_speculater_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="always_works_backed_speculation_jar"
+      value="always_works_backed_speculation.jar"/>
+  <target
+      name="jar_AlwaysWorksBackedSpeculation"
+      depends="ralph_AlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="AlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_delays_always_works_backed_speculation_jar"
+      value="random_delays_always_works_backed_speculation.jar"/>
+  <target
+      name="jar_RandomDelaysAlwaysWorksBackedSpeculation"
+      depends="ralph_RandomDelaysAlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomDelaysAlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${random_delays_always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_failures_backed_speculation_jar"
+      value="random_failures_backed_speculation.jar"/>
+  <target
+      name="jar_RandomFailuresBackedSpeculation"
+      depends="ralph_RandomFailuresBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomFailuresBackedSpeculationTest"/>
+      <param name="dest_jar" value="${random_failures_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_struct_jar"
+      value="atomic_struct.jar"/>
+  <target
+      name="jar_AtomicStruct"
+      depends="ralph_AtomicStructTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicStructTest"/>
+      <param name="dest_jar" value="${atomic_struct_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="text_manipulation_jar"
+      value="text_manipulation.jar"/>
+  <target
+      name="jar_TextManipulation"
+      depends="ralph_TextManipulation">
+    <antcall target="make_jar">
+      <param name="main_class" value="TextManipulation"/>
+      <param name="dest_jar" value="${text_manipulation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="lots_of_backouts_jar"
+      value="lots_of_backouts.jar"/>
+  <target
+      name="jar_LotsOfBackouts"
+      depends="ralph_LotsOfBackouts">
+    <antcall target="make_jar">
+      <param name="main_class" value="LotsOfBackoutsTest"/>
+      <param name="dest_jar" value="${lots_of_backouts_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="timed_always_works_backed_speculation_jar"
+      value="lots_of_backouts.jar"/>
+  <target
+      name="jar_TimedAlwaysWorksBackedSpeculation"
+      depends="ralph_TimedAlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="TimedAlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${timed_always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="simplified_timed_speculation_jar"
+      value="simplified_timed_speculation.jar"/>
+  <target
+      name="jar_SimplifiedTimedSpeculation"
+      depends="ralph_SimplifiedTimedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="SimplifiedTimedSpeculationTest"/>
+      <param name="dest_jar" value="${simplified_timed_speculation_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="partner_call_return_jar"
+      value="partner_call_return.jar"/>
+  <target
+      name="jar_PartnerCallReturn"
+      depends="ralph_PartnerCallReturn">
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnerCallReturn"/>
+      <param name="dest_jar" value="${partner_call_return_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_number_list_jar"
+      value="serialize_number_list.jar"/>
+  <target
+      name="jar_SerializeNumberList"
+      depends="ralph_SerializeNumberListTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeNumberListTest"/>
+      <param name="dest_jar" value="${serialize_number_list_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="serialize_text_list_jar"
+      value="serialize_text_list.jar"/>
+  <target
+      name="jar_SerializeTextList"
+      depends="ralph_SerializeTextList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeTextListTest"/>
+      <param name="dest_jar" value="${serialize_text_list_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="serialize_struct_jar"
+      value="serialize_struct.jar"/>
+  <target
+      name="jar_SerializeStruct"
+      depends="ralph_SerializeStructTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructSerialization"/>
+      <param name="dest_jar" value="${serialize_struct_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="list_of_structs_serialization_jar"
+      value="list_of_structs_serialization.jar"/>
+  <target
+      name="jar_ListOfStructsSerialization"
+      depends="ralph_ListOfStructsSerialization">
+    <antcall target="make_jar">
+      <param name="main_class" value="ListOfStructsSerialization"/>
+      <param name="dest_jar" value="${list_of_structs_serialization_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="less_simplified_timed_backed_speculation_jar"
+      value="less_simplified_timed_backed_speculation.jar"/>
+  <target
+      name="jar_LessSimplifiedTimedBackedSpeculation"
+      depends="ralph_LessSimplifiedTimedBackedSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="LessSimplifiedTimedSpeculationTest"/>
+      <param name="dest_jar" value="${less_simplified_timed_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_number_number_map_jar"
+      value="serialize_number_number_map.jar"/>
+  <target
+      name="jar_SerializeNumberNumberMap"
+      depends="ralph_SerializeNumberNumberMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeNumberNumberMapTest"/>
+      <param name="dest_jar" value="${serialize_number_number_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_map_of_structs_jar"
+      value="serialize_map_of_structs.jar"/>
+  <target
+      name="jar_SerializeMapOfStructs"
+      depends="ralph_SerializeMapOfStructs">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeMapOfStructs"/>
+      <param name="dest_jar" value="${serialize_map_of_structs_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="internal_struct_method_call_jar"
+      value="internal_struct_method_call.jar"/>
+  <target
+      name="jar_InternalStructMethodCall"
+      depends="ralph_InternalStructMethodCallTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="InternalStructMethodCallTest"/>
+      <param name="dest_jar" value="${internal_struct_method_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="reference_service_factory_jar"
+      value="reference_service_factory.jar"/>
+  <target
+      name="jar_ReferenceServiceFactory"
+      depends="ralph_ReferenceServiceFactoryTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReferenceServiceFactoryTest"/>
+      <param name="dest_jar" value="${reference_service_factory_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="multiple_interfaces_jar"
+      value="multiple_interfaces.jar"/>
+  <target
+      name="jar_MultipleInterfaces"
+      depends="ralph_MultipleInterfacesTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="MultipleInterfacesTest"/>
+      <param name="dest_jar" value="${multiple_interfaces_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_struct_with_map_jar"
+      value="serialize_struct_with_map.jar"/>
+  <target
+      name="jar_SerializeStructWithMap"
+      depends="ralph_SerializeStructWithMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeStructWithMap"/>
+      <param name="dest_jar" value="${serialize_struct_with_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_struct_with_list_jar"
+      value="serialize_struct_with_list.jar"/>
+  <target
+      name="jar_SerializeStructWithList"
+      depends="ralph_SerializeStructWithList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeStructWithList"/>
+      <param name="dest_jar" value="${serialize_struct_with_list_jar}"/>
+    </antcall>
+  </target>
+
+  
+  <!-- Make a jar -->
+  <target
+      name="make_jar"
+      description="Make a jar">
+    <jar destfile="${dest_jar}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${harness_package}.${main_class}"/>
+        <attribute name="Class-Path" value="${build.dir}"/>
+      </manifest>
+      <fileset dir="${lib_class_path}"/>
+      <fileset dir="${pronghorn_libs_class_path}"/>
+      <fileset dir="${experiments_build_classes_dir}"/>
+      <zipgroupfileset dir="${proto_class_path}" includes="**/*.jar" />
+    </jar>
+  </target>
+  
+  
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
