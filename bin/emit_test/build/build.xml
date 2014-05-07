@@ -850,6 +850,24 @@
       depends="serialize_struct_with_list">
   </target>
 
+  <!-- Compiling tests themselves -->
+  <target name="compile_harness">
+    <javac
+        srcdir="${test_src.dir}"
+        includes="${arg_harness_file_list}"
+        destdir="${build.dir}"
+        classpath="${lib_class_path}:${proto_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false" />
+  </target>
+
+  <target name="harness_BasicSetterGetter">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="BasicSetterGetter.java"/>
+    </antcall>
+  </target>
+  
 
   <!-- jarify experiments -->
   <property
@@ -857,7 +875,7 @@
       value="basic_setter_getter.jar"/>
   <target
       name="jar_BasicSetterGetter"
-      depends="ralph_BasicSetterGetter">
+      depends="ralph_BasicSetterGetter,ralph_to_byte_code,harness_BasicSetterGetter">
     <antcall target="make_jar">
       <param name="main_class" value="BasicSetterGetter"/>
       <param name="dest_jar" value="${basic_setter_getter_jar}"/>
