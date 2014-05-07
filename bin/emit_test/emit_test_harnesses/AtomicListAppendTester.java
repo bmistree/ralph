@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.AtomicListAppend.TVarListEndpoint;
+import ralph_emitted.AtomicListAppendJava.TVarListEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

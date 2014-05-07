@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.InterruptedAtomically.InterruptedAtomic;
+import ralph_emitted.InterruptedAtomicallyJava.InterruptedAtomic;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

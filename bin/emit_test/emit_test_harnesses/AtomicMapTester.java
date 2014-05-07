@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.AtomicMapTest.TVarMapEndpoint;
+import ralph_emitted.AtomicMapTestJava.TVarMapEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

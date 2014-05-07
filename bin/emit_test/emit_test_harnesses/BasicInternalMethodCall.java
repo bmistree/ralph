@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.InternalMethodCall.InternalMethodCaller;
+import ralph_emitted.InternalMethodCallJava.InternalMethodCaller;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

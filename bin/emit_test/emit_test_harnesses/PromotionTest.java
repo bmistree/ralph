@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.Promotion.PromoterEndpoint;
+import ralph_emitted.PromotionJava.PromoterEndpoint;
 import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 import ralph.Endpoint;

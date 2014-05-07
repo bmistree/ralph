@@ -11,6 +11,8 @@
     
   <!-- global properties for this build file -->
   <property name="build.dir" location="${emit_test_dir}/classes"/>
+  <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
+  
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
   <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
   <property name="test_src.dir" location="${emit_test_dir}/../emit_test_harnesses"/>
@@ -21,578 +23,472 @@
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
       name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  <property
+      name="proto_jar_dir" location="${lib_build_path}/../"/>
   <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>
 
   <property name="emitted_package" value="ralph_emitted"/>
+  <property name="harness_package" value="emit_test_harnesses"/>
+
+
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
     <echo message="Setting up build directories for tests"/>
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${ralph_emitted.dir}"/>
+    <mkdir dir="${jar_dir}"/>
   </target>
 
+
+  <!-- Compile an individual rph file -->
+  <target
+      name="compile_ralph"
+      description="Compile ralph">
+    <echo message="${line.separator}${rph_filename}${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src.dir}/${rph_filename}"/>
+      <arg line="-o ${ralph_emitted.dir}/${class_name}.java"/>
+      <arg line="-p ${emitted_package}"/>
+      <arg line="-c ${class_name}"/>
+    </exec>
+  </target>
+
+  <!-- Compilation for each ralph file -->
+  <target name="iface_basic_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="iface_basic_ralph.rph"/>
+      <param name="class_name" value="IFaceBasicRalphJava"/>
+    </antcall>
+  </target>
+
+  <target name="multiple_interfaces" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="multiple_interfaces.rph"/>
+      <param name="class_name" value="MultipleInterfacesJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_struct_with_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_struct_with_list.rph"/>
+      <param name="class_name" value="SerializeStructWithListJava"/>
+    </antcall>
+  </target>
+  
+  <target name="serialize_struct_with_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_struct_with_map.rph"/>
+      <param name="class_name" value="SerializeStructWithMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_map_of_structs" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_map_of_structs.rph"/>
+      <param name="class_name" value="SerializeMapOfStructsJava"/>
+    </antcall>
+  </target>
+    
+  <target name="struct_serialization" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_serialization.rph"/>
+      <param name="class_name" value="StructSerializationJava"/>
+    </antcall>
+  </target>
+
+  <target name="less_simplified_backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="less_simplified_backed_speculation.rph"/>
+      <param name="class_name" value="LessSimplifiedBackedSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_num_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_num_map.rph"/>
+      <param name="class_name" value="SerializeNumMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_list_serialization" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_list_serialization.rph"/>
+      <param name="class_name" value="StructListSerializationJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_text_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_text_list.rph"/>
+      <param name="class_name" value="SerializeTextListJava"/>
+    </antcall>
+  </target>
+
+  <target name="serialize_true_false_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_true_false_list.rph"/>
+      <param name="class_name" value="SerializeTrueFalseListJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_ralph.rph"/>
+      <param name="class_name" value="BasicRalphJava"/>
+    </antcall>
+  </target>
+
+  <target name="internal_method_call" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_method_call.rph"/>
+      <param name="class_name" value="InternalMethodCallJava"/>
+    </antcall>
+  </target>
+
+  <target name="ralph_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="ralph_atomically.rph"/>
+      <param name="class_name" value="RalphAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_partner.rph"/>
+      <param name="class_name" value="BasicPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="test_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="test_map.rph"/>
+      <param name="class_name" value="TestMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_map.rph"/>
+      <param name="class_name" value="AtomicMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_test" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_test.rph"/>
+      <param name="class_name" value="StructTestJava"/>
+    </antcall>
+  </target>
+
+  <target name="nested_structs" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="nested_structs.rph"/>
+      <param name="class_name" value="NestedStructsJava"/>
+    </antcall>
+  </target>
+
+  <target name="test_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="test_list.rph"/>
+      <param name="class_name" value="TestListJava"/>
+    </antcall>
+  </target>
+  
+
+  <target name="atomic_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_list.rph"/>
+      <param name="class_name" value="AtomicListJava"/>
+    </antcall>
+  </target>
+  
+
+  <target name="for_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="for_list.rph"/>
+      <param name="class_name" value="ForListJava"/>
+    </antcall>
+  </target>
+
+  <target name="for_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="for_map.rph"/>
+      <param name="class_name" value="ForMapJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_lib" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_lib.rph"/>
+      <param name="class_name" value="StructLibJava"/>
+    </antcall>
+  </target>
+
+  <target name="struct_lib_user" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="struct_lib_user.rph"/>
+      <param name="class_name" value="StructLibUserJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_atomically.rph"/>
+      <param name="class_name" value="InterruptedAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="endpoint_lib_user" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="endpoint_lib_user.rph"/>
+      <param name="class_name" value="EndpointLibUserJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_endpoint_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_endpoint_atomically.rph"/>
+      <param name="class_name" value="InterruptedEndpointAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="promotion" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="promotion.rph"/>
+      <param name="class_name" value="PromotionJava"/>
+    </antcall>
+  </target>
+
+  <target name="super_interrupted_atomically" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="super_interrupted_atomically.rph"/>
+      <param name="class_name" value="SuperInterruptedAtomicallyJava"/>
+    </antcall>
+  </target>
+
+  <target name="hardware_failure" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="hardware_failure.rph"/>
+      <param name="class_name" value="HardwareFailureJava"/>
+    </antcall>
+  </target>
+
+  <target name="return_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="return_list.rph"/>
+      <param name="class_name" value="ReturnListJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_partner.rph"/>
+      <param name="class_name" value="AtomicPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="many_ops_atomic_list_fail" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="many_ops_atomic_list_fail.rph"/>
+      <param name="class_name" value="ManyOpsAtomicListFailJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_list_append" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_list_append.rph"/>
+      <param name="class_name" value="AtomicListAppendJava"/>
+    </antcall>
+  </target>
+
+  <target name="endpoint_struct_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="endpoint_struct_list.rph"/>
+      <param name="class_name" value="EndpointStructListJava"/>
+    </antcall>
+  </target>
+
+  <target name="wrapped_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="wrapped_partner.rph"/>
+      <param name="class_name" value="WrappedPartnerJava"/>
+    </antcall>
+  </target>
+
+  <target name="linked_instance" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="linked_instance.rph"/>
+      <param name="class_name" value="LinkedInstanceJava"/>
+    </antcall>
+  </target>
+  
+  <target name="linked_connection" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="linked_connection.rph"/>
+      <param name="class_name" value="LinkedConnectionJava"/>
+    </antcall>
+  </target>
+    
+  <target name="single_side_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="single_side_service_factory.rph"/>
+      <param name="class_name" value="SingleSideServiceFactoryJava"/>
+    </antcall>
+  </target>
+
+  <target name="partner_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="partner_service_factory.rph"/>
+      <param name="class_name" value="PartnerServiceFactoryJava"/>
+    </antcall>
+  </target>
+
+  <target name="basic_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_speculation.rph"/>
+      <param name="class_name" value="BasicSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="null" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="null.rph"/>
+      <param name="class_name" value="NullJava"/>
+    </antcall>
+  </target>
+
+  <target name="internal_create_service" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_create_service.rph"/>
+      <param name="class_name" value="InternalCreateServiceJava"/>
+    </antcall>
+  </target>
+  
+  <target name="self" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="self.rph"/>
+      <param name="class_name" value="SelfJava"/>
+    </antcall>
+  </target>
+
+  <target name="wrapped_iface" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="wrapped_iface.rph"/>
+      <param name="class_name" value="WrappedIFaceJava"/>
+    </antcall>
+  </target>
+
+  <target name="container_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="container_speculation.rph"/>
+      <param name="class_name" value="ContainerSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="range_test" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="range_test.rph"/>
+      <param name="class_name" value="RangeTestJava"/>
+    </antcall>
+  </target>
+  
+  <target name="read_read_write_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="read_read_write_speculation.rph"/>
+      <param name="class_name" value="ReadReadWriteSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="interrupted_speculater" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="interrupted_speculater.rph"/>
+      <param name="class_name" value="InterruptedSpeculaterJava"/>
+    </antcall>
+  </target>
+
+  <target name="middle_interrupted_speculater" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="middle_interrupted_speculater.rph"/>
+      <param name="class_name" value="MiddleInterruptedSpeculaterJava"/>
+    </antcall>
+  </target>
+
+  <target name="backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="backed_speculation.rph"/>
+      <param name="class_name" value="BackedSpeculationJava"/>
+    </antcall>
+  </target>
+
+  <target name="atomic_struct" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_struct.rph"/>
+      <param name="class_name" value="AtomicStructJava"/>
+    </antcall>
+  </target>
+
+  <target name="text_add_and_to_text" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="text_add_and_to_text.rph"/>
+      <param name="class_name" value="TextAddAndToTextJava"/>
+    </antcall>
+  </target>
+
+  <target name="lots_of_backouts" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="lots_of_backouts.rph"/>
+      <param name="class_name" value="LotsOfBackoutsJava"/>
+    </antcall>
+  </target>
+  
+  <target name="multiline_string" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="multiline_string.rph"/>
+      <param name="class_name" value="MultiLineStringJava"/>
+    </antcall>
+  </target>
+
+  <target name="simplified_backed_speculation" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="simplified_backed_speculation.rph"/>
+      <param name="class_name" value="SimplifiedBackedSpeculationJava"/>
+    </antcall>
+  </target>
+  
+  <target name="serialize_number_list" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_number_list.rph"/>
+      <param name="class_name" value="SerializeNumberListJava"/>
+    </antcall>
+  </target>
+  
+  <target name="partner_number_return" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="partner_number_return.rph"/>
+      <param name="class_name" value="PartnerNumberReturnJava"/>
+    </antcall>
+  </target>
+  
+  <target name="internal_return_struct" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="internal_return_struct.rph"/>
+      <param name="class_name" value="InternalReturnStructJava"/>
+    </antcall>
+  </target>
+  
+  <target name="reference_service_factory" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="reference_service_factory.rph"/>
+      <param name="class_name" value="ReferenceServiceFactoryJava"/>
+    </antcall>
+  </target>
 
   <!-- COMPILING -->
   <!-- compile java libraries -->
   <target name="compile_libs" depends="init" description="compile library files">
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
-  </target>
-
-  <target name="translate_ralph" depends="init" description="translate ralph files">
-    <!-- Compile to java -->
-    <echo message="${line.separator}iface_basic_ralph.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/iface_basic_ralph.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/IFaceBasicRalph.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c IFaceBasicRalph"/>
-    </exec>
-
-    <echo message="${line.separator}multiple_interfaces.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/multiple_interfaces.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MultipleInterfacesJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MultipleInterfacesJava"/>
-    </exec>
-
-    <echo message="${line.separator}serialize_struct_with_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_struct_with_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeStructWithListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeStructWithListJava"/>
-    </exec>
-    
-    <echo message="${line.separator}serialize_struct_with_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_struct_with_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeStructWithMapJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeStructWithMapJava"/>
-    </exec>
-
-    
-    <echo message="${line.separator}Emitting serialize_map_of_structs.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_map_of_structs.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeMapOfStructsJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeMapOfStructsJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_serialization.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_serialization.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructSerializationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructSerializationJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting less_simplified_backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/less_simplified_backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LessSimplifiedBackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LessSimplifiedBackedSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting serialize_num_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_num_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeNumMapJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeNumMapJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_list_serialization.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_list_serialization.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructListSerializationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructListSerializationJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting serialize_text_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_text_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeTextListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeTextListJava"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting serialize_true_false_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_true_false_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeTrueFalseListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeTrueFalseListJava"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting basic_ralph.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_ralph.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicRalph.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicRalph"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting internal_method_call.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_method_call.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalMethodCall.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalMethodCall"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting ralph_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/ralph_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/RalphAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c RalphAtomically"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting basic_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicPartner"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting test_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/test_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MapTest"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting atomic_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicMapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicMapTest"/>
-    </exec>
-    
-    <echo message="${line.separator}Emitting struct_test.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_test.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting nested_structs.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/nested_structs.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/NestedStructTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c NestedStructTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting test_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/test_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting for_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/for_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ForListTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ForListTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting for_map.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/for_map.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ForMapTest.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ForMapTest"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting struct_lib.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_lib.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructLib.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructLib"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting struct_lib_user.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/struct_lib_user.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/StructLibUser.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c StructLibUser"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting interrupted_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting endpoint_lib_user.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/endpoint_lib_user.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/EndpointLibUser.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c EndpointLibUser"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting interrupted_endpoint_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_endpoint_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedEndpointAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedEndpointAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting promotion.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/promotion.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/Promotion.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c Promotion"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting super_interrupted_atomically.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/super_interrupted_atomically.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SuperInterruptedAtomically.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SuperInterruptedAtomically"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting hardware_failure.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/hardware_failure.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/HardwareFailure.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c HardwareFailure"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting return_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/return_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReturnList.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReturnList"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicPartner"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting many_ops_atomic_list_fail.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/many_ops_atomic_list_fail.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ManyOpsAtomicListFail.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ManyOpsAtomicListFail"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting atomic_list_append${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_list_append.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicListAppend.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicListAppend"/>
-    </exec>
-
-    <echo message="${line.separator}Emitting endpoint_struct_list${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/endpoint_struct_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/EndpointStructList.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c EndpointStructList"/>
-    </exec>
-
-    <echo message="${line.separator}wrapped_partner.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/wrapped_partner.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/WrappedPartner.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c WrappedPartner"/>
-    </exec>
-
-    
-    <echo message="${line.separator}linked_instanced.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/linked_instance.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LinkedInstance.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LinkedInstance"/>
-    </exec>
-
-    <echo message="${line.separator}linked_connection.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/linked_connection.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LinkedConnection.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LinkedConnection"/>
-    </exec>
-
-    <echo message="${line.separator}single_side_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/single_side_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SingleSideServiceFactory.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SingleSideServiceFactory"/>
-    </exec>
-
-    <echo message="${line.separator}partner_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/partner_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/PartnerServiceFactory.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c PartnerServiceFactory"/>
-    </exec>
-
-    <echo message="${line.separator}basic_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/basic_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BasicSpeculation.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BasicSpeculation"/>
-    </exec>
-
-    <echo message="${line.separator}null.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/null.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/Null.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c Null"/>
-    </exec>
-
-    <echo message=
-          "${line.separator}internal_create_service.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_create_service.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalCreateServiceJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalCreateServiceJava"/>
-    </exec>
-
-    <echo message="${line.separator}self.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/self.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SelfJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SelfJava"/>
-    </exec>
-
-    <echo message="${line.separator}wrapped_iface.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/wrapped_iface.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/WrappedIFaceJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c WrappedIFaceJava"/>
-    </exec>
-
-    <echo message="${line.separator}container_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/container_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ContainerSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ContainerSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}range_test.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/range_test.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/RangeTestJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c RangeTestJava"/>
-    </exec>
-
-    <echo message="${line.separator}read_read_write_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/read_read_write_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReadReadWriteSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReadReadWriteSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}interrupted_speculater.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/interrupted_speculater.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InterruptedSpeculaterJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InterruptedSpeculaterJava"/>
-    </exec>
-
-    <echo message="${line.separator}middle_interrupted_speculater.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/middle_interrupted_speculater.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MiddleInterruptedSpeculaterJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MiddleInterruptedSpeculaterJava"/>
-    </exec>
-
-    <echo message="${line.separator}backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/BackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c BackedSpeculationJava"/>
-    </exec>
-
-    <echo message="${line.separator}atomic_struct.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/atomic_struct.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/AtomicStructJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c AtomicStructJava"/>
-    </exec>
-
-    <echo message="${line.separator}text_add_and_to_text.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/text_add_and_to_text.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/TextAddAndToTextJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c TextAddAndToTextJava"/>
-    </exec>
-
-    <echo message="${line.separator}lots_of_backouts.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/lots_of_backouts.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/LotsOfBackoutsJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c LotsOfBackoutsJava"/>
-    </exec>
-
-    <echo message="${line.separator}multiline_string.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/multiline_string.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/MultilineStringJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c MultilineStringJava"/>
-    </exec>
-
-    <echo message="${line.separator}simplified_backed_speculation.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/simplified_backed_speculation.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SimplifiedBackedSpeculationJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SimplifiedBackedSpeculationJava"/>
-    </exec>
-    
-    <echo message="${line.separator}serialize_number_list.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/serialize_number_list.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/SerializeNumberListJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c SerializeNumberListJava"/>
-    </exec>
-
-    <echo message="${line.separator}partner_number_return.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/partner_number_return.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/PartnerNumberReturnJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c PartnerNumberReturnJava"/>
-    </exec>
-
-    <echo message="${line.separator}internal_return_struct.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/internal_return_struct.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/InternalReturnStructJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c InternalReturnStructJava"/>
-    </exec>
-
-    <echo message="${line.separator}reference_service_factory.rph${line.separator}"/>
-    <exec executable="python" failonerror="true">
-      <arg line="${ralph_compiler_py}"/>
-      <arg line="-i ${ralph_src.dir}/reference_service_factory.rph"/>
-      <arg line="-o ${ralph_emitted.dir}/ReferenceServiceFactoryJava.java"/>
-      <arg line="-p ${emitted_package}"/>
-      <arg line="-c ReferenceServiceFactoryJava"/>
-    </exec>
-    
   </target>
 
   
@@ -607,1020 +503,1122 @@
         includeantruntime="false" />
   </target>
 
-    
-  <!-- compile ralph endpoints to java programs, including translating -->
-  <target
-      name="compile_ralph"
-      depends="init,compile_libs,translate_ralph,ralph_to_byte_code"
-      description="compile ralph files">
-  </target>
-
-  <target
-      name="compile_ralph_tests"
-      depends="init,compile_ralph"
-      description="compile basic ralph">
-    <!-- compile all ralph tests  -->
-    <javac
-        srcdir="${test_src.dir}"
-        destdir="${build.dir}"
-        classpath="${build.dir}"
-        debug="true"
-        debuglevel="lines,vars,source"
-        includeantruntime="false" />
-  </target>
 
   <!-- RUNNING TESTS -->
   <target
-      name="run_all"
-      depends=
-        "run_BasicSetterGetter, run_BasicInternalMethodCall,
-         run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
-         run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
-         run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
-         run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
-         run_InterruptedEndpointCallAtomically,run_PromotionTest,
-         run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
-         run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
-         run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
-         run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
-         run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
-         run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation,
-         run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
-         run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
-         run_RandomDelaysAlwaysWorksBackedSpeculationTest,
-         run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
-         run_TextManipulation,run_LotsOfBackouts,
-         run_TimedAlwaysWorksBackedSpeculationTest,
-         run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeNumberListTest,run_SerializeTextListTest,
-         run_SerializeTrueFalseListTest,run_SerializeStructTest,
-         run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
-         run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
-         run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest,
-         run_MultipleInterfacesTest,run_SerializeStructWithMap,
-         run_SerializeStructWithList">
+      name="jarify_all"
+      depends= "ralph_to_byte_code,
+        jar_BasicSetterGetter, jar_BasicInternalMethodCall,
+        jar_BasicTestAtomically,jar_BasicPartnerCall,jar_Map,
+        jar_AtomicMap,jar_StructSetterGetter,jar_NestedStructs,
+        jar_List,jar_AtomicList,jar_ForList,jar_ForMap,
+        jar_StructLibraries,jar_InterruptedAtomically,jar_EndpointCalls,
+        jar_InterruptedEndpointCallAtomically,jar_Promotion,
+        jar_SuperInterruptedAtomically,jar_HardwareFailure,jar_ReturnList,
+        jar_WoundWait,jar_TCPPartnerCall,jar_AtomicPartnerCall,
+        jar_AtomicTCPPartnerCall,jar_RandomFailureExtendedList,
+        jar_WrappedPartnerTCPCall,jar_Linked,jar_SingleSideServiceFactory,
+        jar_PartnerServiceFactory,jar_EndpointStructList,jar_BasicSpeculation,
+        jar_Null,jar_InternalCreateService,jar_Self,jar_ContainerSpeculation,
+        jar_Range,jar_ReadReadWriteSpeculation,jar_InterruptedSpeculater,
+        jar_MiddleInterruptedSpeculater,jar_AlwaysWorksBackedSpeculation,
+        jar_RandomDelaysAlwaysWorksBackedSpeculation,
+        jar_RandomFailuresBackedSpeculation, jar_AtomicStruct,
+        jar_TextManipulation,jar_LotsOfBackouts,
+        jar_TimedAlwaysWorksBackedSpeculation,
+        jar_SimplifiedTimedSpeculation, jar_PartnerCallReturn,
+        jar_SerializeNumberList,jar_SerializeTextList,
+        jar_SerializeTrueFalseList,jar_SerializeStruct,
+        jar_ListOfStructsSerialization,jar_LessSimplifiedTimedBackedSpeculation,
+        jar_SerializeNumberNumberMap,jar_SerializeMapOfStructs,
+        jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
+        jar_MultipleInterfaces,jar_SerializeStructWithMap,
+        jar_SerializeStructWithList">
   </target>
-    
-  
+
+
+
+  <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
   <target
-      name="run_BasicSetterGetter"
-      depends="compile_ralph_tests"
-      description="Single side setter getter test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicSetterGetter"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_BasicSetterGetter"
+      depends="iface_basic_ralph,basic_ralph">
   </target>
 
-  <!-- Struct setter getter -->
   <target
-      name="run_StructSetterGetter"
-      depends="compile_ralph_tests"
-      description="Setters and getters on struct fields test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructSetterGetter"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- Internal method call on single host -->
-  <target
-      name="run_BasicInternalMethodCall"
-      depends="compile_ralph_tests"
-      description="Single side internal method call.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicInternalMethodCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_StructSetterGetter"
+      depends="iface_basic_ralph,struct_test">
   </target>
 
-  <!-- Atomically change -->
   <target
-      name="run_BasicTestAtomically"
-      depends="compile_ralph_tests"
-      description="Test nested atomically-s.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_BasicInternalMethodCall"
+      depends="internal_method_call">
   </target>
-  
 
-  <!-- Partner call -->
   <target
-      name="run_BasicPartnerCall"
-      depends="compile_ralph_tests"
-      description="Test calling partner methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_BasicTestAtomically"
+      depends="ralph_atomically">
+  </target>
+
+  <target
+      name="ralph_BasicPartnerCall"
+      depends="basic_partner">
+  </target>
+
+  <target
+      name="ralph_TCPPartnerCall"
+      depends="basic_partner">
+  </target>
+
+  <target
+      name="ralph_Map"
+      depends="test_map">
+  </target>
+
+  <target
+      name="ralph_AtomicMap"
+      depends="atomic_map">
+  </target>
+
+  <target
+      name="ralph_List"
+      depends="test_list">
+  </target>
+
+  <target
+      name="ralph_AtomicList"
+      depends="atomic_list">
+  </target>
+
+  <target
+      name="ralph_NestedStructs"
+      depends="nested_structs">
+  </target>
+
+  <target
+      name="ralph_ForList"
+      depends="for_list">
+  </target>
+
+  <target
+      name="ralph_ForMap"
+      depends="for_map">
+  </target>
+
+  <target
+      name="ralph_StructLibraries"
+      depends="struct_lib_user">
   </target>
   
-  <!-- TCP partner call -->
   <target
-      name="run_TCPPartnerCall"
-      depends="compile_ralph_tests"
-      description="Test calling partner methods over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="ralph_InterruptedAtomically"
+      depends="interrupted_atomically">
+  </target>
+
+  <target
+      name="ralph_EndpointCalls"
+      depends="basic_ralph,endpoint_lib_user">
+  </target>
+
+  <target
+      name="ralph_InterruptedEndpointCallAtomically"
+      depends="basic_ralph,interrupted_endpoint_atomically">
+  </target>
+
+  <target
+      name="ralph_Promotion"
+      depends="promotion">
+  </target>
+
+  <target
+      name="ralph_SuperInterruptedAtomically"
+      depends="super_interrupted_atomically">
+  </target>
+
+  <target
+      name="ralph_HardwareFailure"
+      depends="hardware_failure">
+  </target>
+
+  <target
+      name="ralph_ReturnList"
+      depends="return_list">
+  </target>
+
+  <target
+      name="ralph_WoundWait"
+      depends="promotion">
+  </target>
+
+  <target
+      name="ralph_AtomicPartnerCall"
+      depends="atomic_partner">
+  </target>
+
+  <target
+      name="ralph_AtomicTCPPartnerCall"
+      depends="atomic_partner">
+  </target>
+
+  <target
+      name="ralph_RandomFailureExtendedList"
+      depends="many_ops_atomic_list_fail">
+  </target>
+
+  <target
+      name="ralph_AtomicListAppend"
+      depends="atomic_list_append">
+  </target>
+
+  <target
+      name="ralph_WrappedPartnerTCPCall"
+      depends="basic_partner,wrapped_partner">
+  </target>
+
+  <target
+      name="ralph_Linked"
+      depends="linked_connection,linked_instance">
+  </target>
+
+  <target
+      name="ralph_SingleSideServiceFactory"
+      depends="basic_ralph,single_side_service_factory">
+  </target>
+
+  <target
+      name="ralph_PartnerServiceFactory"
+      depends="basic_ralph,single_side_service_factory">
+  </target>
+
+  <target
+      name="ralph_EndpointStructList"
+      depends="basic_ralph,endpoint_struct_list">
+  </target>
+  
+  <target
+      name="ralph_BasicSpeculation"
+      depends="basic_speculation">
+  </target>
+  
+  <target
+      name="ralph_Null"
+      depends="null">
+  </target>
+  
+  <target
+      name="ralph_InternalCreateService"
+      depends="internal_create_service">
+  </target>
+
+  <target
+      name="ralph_Self"
+      depends="self">
+  </target>
+
+  <target
+      name="ralph_ContainerSpeculation"
+      depends="basic_speculation,container_speculation">
+  </target>
+
+  <target
+      name="ralph_Range"
+      depends="range_test">
+  </target>
+  
+  <target
+      name="ralph_ReadReadWriteSpeculation"
+      depends="read_read_write_speculation">
+  </target>
+
+  <target
+      name="ralph_InterruptedSpeculaterTest"
+      depends="interrupted_speculater">
+  </target>
+
+  <target
+      name="ralph_MiddleInterruptedSpeculaterTest"
+      depends="middle_interrupted_speculater">
+  </target>
+
+  <target
+      name="ralph_AlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_RandomDelaysAlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_RandomFailuresBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_AtomicStruct"
+      depends="atomic_struct">
+  </target>
+
+  <target
+      name="ralph_TextManipulation"
+      depends="text_add_and_to_text">
+  </target>
+
+  <target
+      name="ralph_LotsOfBackouts"
+      depends="lots_of_backouts">
+  </target>
+
+  <target
+      name="ralph_TimedAlwaysWorksBackedSpeculationTest"
+      depends="backed_speculation">
+  </target>
+
+  <target
+      name="ralph_SimplifiedTimedSpeculationTest"
+      depends="simplified_backed_speculation">
+  </target>
+
+  <target
+      name="ralph_PartnerCallReturn"
+      depends="partner_number_return">
+  </target>
+
+  <target
+      name="ralph_SerializeNumberList"
+      depends="serialize_number_list">
+  </target>
+
+  <target
+      name="ralph_SerializeTextList"
+      depends="serialize_text_list">
+  </target>
+
+  <target
+      name="ralph_SerializeTrueFalseList"
+      depends="serialize_true_false_list">
+  </target>
+  
+  <target
+      name="ralph_SerializeStructTest"
+      depends="struct_serialization">
+  </target>
+  
+  <target
+      name="ralph_ListOfStructsSerialization"
+      depends="struct_list_serialization">
+  </target>
+  
+  <target
+      name="ralph_LessSimplifiedTimedBackedSpeculation"
+      depends="less_simplified_backed_speculation">
+  </target>
+  
+  <target
+      name="ralph_SerializeNumberNumberMap"
+      depends="serialize_num_map">
+  </target>
+
+  <target
+      name="ralph_SerializeMapOfStructs"
+      depends="serialize_map_of_structs">
+  </target>
+
+  <target
+      name="ralph_InternalStructMethodCall"
+      depends="internal_return_struct">
+  </target>
+
+  <target
+      name="ralph_ReferenceServiceFactory"
+      depends="reference_service_factory">
+  </target>
+
+  <target
+      name="ralph_MultipleInterfaces"
+      depends="multiple_interfaces">
+  </target>
+
+  <target
+      name="ralph_SerializeStructWithMap"
+      depends="serialize_struct_with_map">
+  </target>
+
+  <target
+      name="ralph_SerializeStructWithList"
+      depends="serialize_struct_with_list">
+  </target>
+
+
+  <!-- jarify experiments -->
+  <property
+      name="basic_setter_getter_jar"
+      value="basic_setter_getter.jar"/>
+  <target
+      name="jar_BasicSetterGetter"
+      depends="ralph_BasicSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicSetterGetter"/>
+      <param name="dest_jar" value="${basic_setter_getter_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="struct_setter_getter_jar"
+      value="struct_setter_getter.jar"/>
+  <target
+      name="jar_StructSetterGetter"
+      depends="ralph_StructSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructSetterGetter"/>
+      <param name="dest_jar" value="${struct_setter_getter_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_internal_method_call_jar"
+      value="basic_internal_method_call.jar"/>
+  <target
+      name="jar_BasicInternalMethodCall"
+      depends="ralph_BasicInternalMethodCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicInternalMethodCall"/>
+      <param name="dest_jar" value="${basic_internal_method_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_test_atomically_jar"
+      value="basic_test_atomically.jar"/>
+  <target
+      name="jar_BasicTestAtomically"
+      depends="ralph_BasicTestAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicTestAtomically"/>
+      <param name="dest_jar" value="${basic_test_atomically_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_partner_call_jar"
+      value="basic_partner_call.jar"/>
+  <target
+      name="jar_BasicPartnerCall"
+      depends="ralph_BasicPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicPartnerCall"/>
+      <param name="dest_jar" value="${basic_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="tcp_partner_call_jar"
+      value="tcp_partner_call.jar"/>
+  <target
+      name="jar_TCPPartnerCall"
+      depends="ralph_TCPPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="TCPPartnerCall"/>
+      <param name="dest_jar" value="${tcp_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="map_jar"
+      value="map.jar"/>
+  <target
+      name="jar_Map"
+      depends="ralph_Map">
+    <antcall target="make_jar">
+      <param name="main_class" value="MapTester"/>
+      <param name="dest_jar" value="${map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_map_jar"
+      value="atomic_map.jar"/>
+  <target
+      name="jar_AtomicMap"
+      depends="ralph_AtomicMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicMapTester"/>
+      <param name="dest_jar" value="${atomic_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="list_jar"
+      value="list.jar"/>
+  <target
+      name="jar_List"
+      depends="ralph_List">
+    <antcall target="make_jar">
+      <param name="main_class" value="ListTest"/>
+      <param name="dest_jar" value="${list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_list_jar"
+      value="atomic_list.jar"/>
+  <target
+      name="jar_AtomicList"
+      depends="ralph_AtomicList">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicList"/>
+      <param name="dest_jar" value="${atomic_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="nested_structs_jar"
+      value="nested_structs.jar"/>
+  <target
+      name="jar_NestedStructs"
+      depends="ralph_NestedStructs">
+    <antcall target="make_jar">
+      <param name="main_class" value="NestedStructs"/>
+      <param name="dest_jar" value="${nested_structs_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="for_list_jar"
+      value="for_list.jar"/>
+  <target
+      name="jar_ForList"
+      depends="ralph_ForList">
+    <antcall target="make_jar">
+      <param name="main_class" value="ForList"/>
+      <param name="dest_jar" value="${for_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="for_map_jar"
+      value="for_map.jar"/>
+  <target
+      name="jar_ForMap"
+      depends="ralph_ForMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="ForMap"/>
+      <param name="dest_jar" value="${for_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="struct_libraries_jar"
+      value="struct_libraries.jar"/>
+  <target
+      name="jar_StructLibraries"
+      depends="ralph_StructLibraries">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructLibraries"/>
+      <param name="dest_jar" value="${struct_libraries_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_atomically_jar"
+      value="interrupted_atomically.jar"/>
+  <target
+      name="jar_InterruptedAtomically"
+      depends="ralph_InterruptedAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedAtomically"/>
+      <param name="dest_jar" value="${interrupted_atomically_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="endpoint_calls_jar"
+      value="endpoint_calls.jar"/>
+  <target
+      name="jar_EndpointCalls"
+      depends="ralph_EndpointCalls">
+    <antcall target="make_jar">
+      <param name="main_class" value="EndpointCalls"/>
+      <param name="dest_jar" value="${endpoint_calls_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_endpoint_call_atomically_jar"
+      value="interrupted_endpoint_call_atomically.jar"/>
+  <target
+      name="jar_InterruptedEndpointCallAtomically"
+      depends="ralph_InterruptedEndpointCallAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedEndpointCallAtomically"/>
+      <param name="dest_jar" value="${interrupted_endpoint_call_atomically_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="promotion_jar"
+      value="promotion.jar"/>
+  <target
+      name="jar_Promotion"
+      depends="ralph_Promotion">
+    <antcall target="make_jar">
+      <param name="main_class" value="PromotionTest"/>
+      <param name="dest_jar" value="${promotion_jar}"/>
+    </antcall>
+  </target>
+
+
+  <property
+      name="super_interrupted_atomically_jar"
+      value="super_interrupted_atomically.jar"/>
+  <target
+      name="jar_SuperInterruptedAtomically"
+      depends="ralph_SuperInterruptedAtomically">
+    <antcall target="make_jar">
+      <param name="main_class" value="SuperInterruptedTestAtomically"/>
+      <param name="dest_jar" value="${super_interrupted_atomically_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="hardware_failure_jar"
+      value="hardware_failure.jar"/>
+  <target
+      name="jar_HardwareFailure"
+      depends="ralph_HardwareFailure">
+    <antcall target="make_jar">
+      <param name="main_class" value="HardwareFailure"/>
+      <param name="dest_jar" value="${hardware_failure_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="return_list_jar"
+      value="return_list.jar"/>
+  <target
+      name="jar_ReturnList"
+      depends="ralph_ReturnList">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReturnList"/>
+      <param name="dest_jar" value="${return_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="wound_wait_jar"
+      value="wound_wait.jar"/>
+  <target
+      name="jar_WoundWait"
+      depends="ralph_WoundWait">
+    <antcall target="make_jar">
+      <param name="main_class" value="WoundWaitTest"/>
+      <param name="dest_jar" value="${wound_wait_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_partner_call_jar"
+      value="atomic_partner_call.jar"/>
+  <target
+      name="jar_AtomicPartnerCall"
+      depends="ralph_AtomicPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicPartnerCall"/>
+      <param name="dest_jar" value="${atomic_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_tcp_partner_call_jar"
+      value="atomic_tcp_partner_call.jar"/>
+  <target
+      name="jar_AtomicTCPPartnerCall"
+      depends="ralph_AtomicTCPPartnerCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicTCPPartnerCall"/>
+      <param name="dest_jar" value="${atomic_tcp_partner_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_failure_extended_list_jar"
+      value="random_failure_extended_list.jar"/>
+  <target
+      name="jar_RandomFailureExtendedList"
+      depends="ralph_RandomFailureExtendedList">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomFailureExtendedList"/>
+      <param name="dest_jar" value="${random_failure_extended_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_list_append_jar"
+      value="atomic_list_append.jar"/>
+  <target
+      name="jar_AtomicListAppend"
+      depends="ralph_AtomicListAppend">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicListAppend"/>
+      <param name="dest_jar" value="${atomic_list_append_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="wrapped_partner_tcp_call_jar"
+      value="wrapped_partner_tcp_call.jar"/>
+  <target
+      name="jar_WrappedPartnerTCPCall"
+      depends="ralph_WrappedPartnerTCPCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="WrappedPartnerTCPCall"/>
+      <param name="dest_jar" value="${wrapped_partner_tcp_call_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="linked_jar"
+      value="linked.jar"/>
+  <target
+      name="jar_Linked"
+      depends="ralph_Linked">
+    <antcall target="make_jar">
+      <param name="main_class" value="LinkedTests"/>
+      <param name="dest_jar" value="${linked_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="single_side_service_factory_jar"
+      value="single_side_service_factory.jar"/>
+  <target
+      name="jar_SingleSideServiceFactory"
+      depends="ralph_SingleSideServiceFactory">
+    <antcall target="make_jar">
+      <param name="main_class" value="SingleSideServiceFactory"/>
+      <param name="dest_jar" value="${single_side_service_factory_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="partner_service_factory_jar"
+      value="partner_service_factory.jar"/>
+  <target
+      name="jar_PartnerServiceFactory"
+      depends="ralph_PartnerServiceFactory">
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnerServiceFactory"/>
+      <param name="dest_jar" value="${partner_service_factory_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="endpoint_struct_list_jar"
+      value="endpoint_struct_list.jar"/>
+  <target
+      name="jar_EndpointStructList"
+      depends="ralph_EndpointStructList">
+    <antcall target="make_jar">
+      <param name="main_class" value="EndpointStructList"/>
+      <param name="dest_jar" value="${endpoint_struct_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_speculation_jar"
+      value="basic_speculation.jar"/>
+  <target
+      name="jar_BasicSpeculation"
+      depends="ralph_BasicSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicSpeculation"/>
+      <param name="dest_jar" value="${basic_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="null_jar"
+      value="null.jar"/>
+  <target
+      name="jar_Null"
+      depends="ralph_Null">
+    <antcall target="make_jar">
+      <param name="main_class" value="NullTest"/>
+      <param name="dest_jar" value="${null_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="internal_create_service_jar"
+      value="internal_create_service.jar"/>
+  <target
+      name="jar_InternalCreateService"
+      depends="ralph_InternalCreateService">
+    <antcall target="make_jar">
+      <param name="main_class" value="InternalCreateService"/>
+      <param name="dest_jar" value="${internal_create_service_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="self_jar"
+      value="self.jar"/>
+  <target
+      name="jar_Self"
+      depends="ralph_Self">
+    <antcall target="make_jar">
+      <param name="main_class" value="SelfTest"/>
+      <param name="dest_jar" value="${self_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="container_speculation_jar"
+      value="container_speculation.jar"/>
+  <target
+      name="jar_ContainerSpeculation"
+      depends="ralph_ContainerSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="ContainerSpeculationTest"/>
+      <param name="dest_jar" value="${container_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="range_jar"
+      value="range.jar"/>
+  <target
+      name="jar_Range"
+      depends="ralph_Range">
+    <antcall target="make_jar">
+      <param name="main_class" value="Range"/>
+      <param name="dest_jar" value="${range_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="read_read_write_speculation_jar"
+      value="read_read_write_speculation.jar"/>
+  <target
+      name="jar_ReadReadWriteSpeculation"
+      depends="ralph_ReadReadWriteSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReadReadWriteTest"/>
+      <param name="dest_jar" value="${read_read_write_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="interrupted_speculater_jar"
+      value="interrupted_speculater.jar"/>
+  <target
+      name="jar_InterruptedSpeculater"
+      depends="ralph_InterruptedSpeculaterTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="InterruptedSpeculaterTest"/>
+      <param name="dest_jar" value="${interrupted_speculater_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="middle_interrupted_speculater_jar"
+      value="middle_interrupted_speculater.jar"/>
+  <target
+      name="jar_MiddleInterruptedSpeculater"
+      depends="ralph_MiddleInterruptedSpeculaterTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="MiddleInterruptedSpeculaterTest"/>
+      <param name="dest_jar" value="${middle_interrupted_speculater_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="always_works_backed_speculation_jar"
+      value="always_works_backed_speculation.jar"/>
+  <target
+      name="jar_AlwaysWorksBackedSpeculation"
+      depends="ralph_AlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="AlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_delays_always_works_backed_speculation_jar"
+      value="random_delays_always_works_backed_speculation.jar"/>
+  <target
+      name="jar_RandomDelaysAlwaysWorksBackedSpeculation"
+      depends="ralph_RandomDelaysAlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomDelaysAlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${random_delays_always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="random_failures_backed_speculation_jar"
+      value="random_failures_backed_speculation.jar"/>
+  <target
+      name="jar_RandomFailuresBackedSpeculation"
+      depends="ralph_RandomFailuresBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="RandomFailuresBackedSpeculationTest"/>
+      <param name="dest_jar" value="${random_failures_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="atomic_struct_jar"
+      value="atomic_struct.jar"/>
+  <target
+      name="jar_AtomicStruct"
+      depends="ralph_AtomicStruct">
+    <antcall target="make_jar">
+      <param name="main_class" value="AtomicStructTest"/>
+      <param name="dest_jar" value="${atomic_struct_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="text_manipulation_jar"
+      value="text_manipulation.jar"/>
+  <target
+      name="jar_TextManipulation"
+      depends="ralph_TextManipulation">
+    <antcall target="make_jar">
+      <param name="main_class" value="TextManipulation"/>
+      <param name="dest_jar" value="${text_manipulation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="lots_of_backouts_jar"
+      value="lots_of_backouts.jar"/>
+  <target
+      name="jar_LotsOfBackouts"
+      depends="ralph_LotsOfBackouts">
+    <antcall target="make_jar">
+      <param name="main_class" value="LotsOfBackoutsTest"/>
+      <param name="dest_jar" value="${lots_of_backouts_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="timed_always_works_backed_speculation_jar"
+      value="lots_of_backouts.jar"/>
+  <target
+      name="jar_TimedAlwaysWorksBackedSpeculation"
+      depends="ralph_TimedAlwaysWorksBackedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="TimedAlwaysWorksBackedSpeculationTest"/>
+      <param name="dest_jar" value="${timed_always_works_backed_speculation_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="simplified_timed_speculation_jar"
+      value="simplified_timed_speculation.jar"/>
+  <target
+      name="jar_SimplifiedTimedSpeculation"
+      depends="ralph_SimplifiedTimedSpeculationTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="SimplifiedTimedSpeculationTest"/>
+      <param name="dest_jar" value="${simplified_timed_speculation_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="partner_call_return_jar"
+      value="partner_call_return.jar"/>
+  <target
+      name="jar_PartnerCallReturn"
+      depends="ralph_PartnerCallReturn">
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnerCallReturn"/>
+      <param name="dest_jar" value="${partner_call_return_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_number_list_jar"
+      value="serialize_number_list.jar"/>
+  <target
+      name="jar_SerializeNumberList"
+      depends="ralph_SerializeNumberList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeNumberListTest"/>
+      <param name="dest_jar" value="${serialize_number_list_jar}"/>
+    </antcall>
+  </target>
+  
+  <property
+      name="serialize_text_list_jar"
+      value="serialize_text_list.jar"/>
+  <target
+      name="jar_SerializeTextList"
+      depends="ralph_SerializeTextList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeTextListTest"/>
+      <param name="dest_jar" value="${serialize_text_list_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_true_false_list_jar"
+      value="serialize_true_false_list.jar"/>
+  <target
+      name="jar_SerializeTrueFalseList"
+      depends="ralph_SerializeTrueFalseList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeTrueFalseListTest"/>
+      <param name="dest_jar" value="${serialize_true_false_list_jar}"/>
+    </antcall>
   </target>
 
   
-  <!-- MapTesting -->
+  <property
+      name="serialize_struct_jar"
+      value="serialize_struct.jar"/>
   <target
-      name="run_MapTest"
-      depends="compile_ralph_tests"
-      description="Test map methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MapTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- Atomic map test -->
-  <target
-      name="run_AtomicMapTest"
-      depends="compile_ralph_tests"
-      description="Test atomic map methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicMapTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_SerializeStruct"
+      depends="ralph_SerializeStructTest">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructSerialization"/>
+      <param name="dest_jar" value="${serialize_struct_jar}"/>
+    </antcall>
   </target>
 
-  <!-- ListTesting -->
+  <property
+      name="list_of_structs_serialization_jar"
+      value="list_of_structs_serialization.jar"/>
   <target
-      name="run_ListTest"
-      depends="compile_ralph_tests"
-      description="Test list methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ListTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_ListOfStructsSerialization"
+      depends="ralph_ListOfStructsSerialization">
+    <antcall target="make_jar">
+      <param name="main_class" value="ListOfStructsSerialization"/>
+      <param name="dest_jar" value="${list_of_structs_serialization_jar}"/>
+    </antcall>
   </target>
 
-  <!-- AtomicListTesting -->
+  <property
+      name="less_simplified_timed_backed_speculation_jar"
+      value="less_simplified_timed_backed_speculation.jar"/>
   <target
-      name="run_AtomicListTest"
-      depends="compile_ralph_tests"
-      description="Test atomic list methods.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicListTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_LessSimplifiedTimedBackedSpeculation"
+      depends="ralph_LessSimplifiedTimedBackedSpeculation">
+    <antcall target="make_jar">
+      <param name="main_class" value="LessSimplifiedTimedSpeculationTest"/>
+      <param name="dest_jar" value="${less_simplified_timed_backed_speculation_jar}"/>
+    </antcall>
   </target>
 
-  <!-- Nested struct test -->
+  <property
+      name="serialize_number_number_map_jar"
+      value="serialize_number_number_map.jar"/>
   <target
-      name="run_NestedStructTest"
-      depends="compile_ralph_tests"
-      description="Test nested struct.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.NestedStructs"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_SerializeNumberNumberMap"
+      depends="ralph_SerializeNumberNumberMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeNumberNumberMapTest"/>
+      <param name="dest_jar" value="${serialize_number_number_map_jar}"/>
+    </antcall>
   </target>
 
-  <!-- For list test -->
+  <property
+      name="serialize_map_of_structs_jar"
+      value="serialize_map_of_structs.jar"/>
   <target
-      name="run_ForListTest"
-      depends="compile_ralph_tests"
-      description="Test for loop on lists.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ForList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_SerializeMapOfStructs"
+      depends="ralph_SerializeMapOfStructs">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeMapOfStructs"/>
+      <param name="dest_jar" value="${serialize_map_of_structs_jar}"/>
+    </antcall>
   </target>
 
-  <!-- For map test -->
+  <property
+      name="internal_struct_method_call_jar"
+      value="internal_struct_method_call.jar"/>
   <target
-      name="run_ForMapTest"
-      depends="compile_ralph_tests"
-      description="Test for loop on maps.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ForMap"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_InternalStructMethodCall"
+      depends="ralph_InternalStructMethodCall">
+    <antcall target="make_jar">
+      <param name="main_class" value="InternalStructMethodCallTest"/>
+      <param name="dest_jar" value="${internal_struct_method_call_jar}"/>
+    </antcall>
   </target>
 
-  <!-- Struct libraries -->
+  <property
+      name="reference_service_factory_jar"
+      value="reference_service_factory.jar"/>
   <target
-      name="run_StructLibraries"
-      depends="compile_ralph_tests"
-      description="Tests that can import a struct from another library.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructLibraries"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_ReferenceServiceFactory"
+      depends="ralph_ReferenceServiceFactory">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReferenceServiceFactoryTest"/>
+      <param name="dest_jar" value="${reference_service_factory_jar}"/>
+    </antcall>
   </target>
 
-
-  <!-- Run interrupted atomically -->
+  <property
+      name="multiple_interfaces_jar"
+      value="multiple_interfaces.jar"/>
   <target
-      name="run_InterruptedAtomically"
-      depends="compile_ralph_tests"
-      description="Tests that handles atomic events' being interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="jar_MultipleInterfaces"
+      depends="ralph_MultipleInterfaces">
+    <antcall target="make_jar">
+      <param name="main_class" value="MultipleInterfacesTest"/>
+      <param name="dest_jar" value="${multiple_interfaces_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_struct_with_map_jar"
+      value="serialize_struct_with_map.jar"/>
+  <target
+      name="jar_SerializeStructWithMap"
+      depends="ralph_SerializeStructWithMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeStructWithMap"/>
+      <param name="dest_jar" value="${serialize_struct_with_map_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="serialize_struct_with_list_jar"
+      value="serialize_struct_with_list.jar"/>
+  <target
+      name="jar_SerializeStructWithList"
+      depends="ralph_SerializeStructWithList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeStructWithList"/>
+      <param name="dest_jar" value="${serialize_struct_with_list_jar}"/>
+    </antcall>
   </target>
 
   
-  <!-- Run endpoint calls -->
+  <!-- Make a jar -->
   <target
-      name="run_EndpointCalls"
-      depends="compile_ralph_tests"  
-      description="Tests issue endpoint calls from within ralph.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.EndpointCalls"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- Run interrupted endpoint calls -->
-  <target
-      name="run_InterruptedEndpointCallAtomically"
-      depends="compile_ralph_tests"  
-      description="Tests ensure atomically wrapper between endpoint calls works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedEndpointCallAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run promotion test -->
-  <target
-      name="run_PromotionTest"
-      depends="compile_ralph_tests"
-      description="Tests quality of service through promotions.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PromotionTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run super event priority test -->
-  <target
-      name="run_SuperInterruptedAtomically"
-      depends="compile_ralph_tests"
-      description="Tests that can run with super priority.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SuperInterruptedTestAtomically"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run hardware failure test -->
-  <target
-      name="run_HardwareFailure"
-      depends="compile_ralph_tests"
-      description="Tests that system can handle hardware failures.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.HardwareFailureTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run return list -->
-  <target
-      name="run_ReturnList"
-      depends="compile_ralph_tests"
-      description="Tests that can return a list.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReturnListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run wound wait test -->
-  <target
-      name="run_WoundWait"
-      depends="compile_ralph_tests"
-      description="Tests that wound/wait works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.WoundWaitTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run atomic partner call -->
-  <target
-      name="run_AtomicPartnerCall"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run TCP atomic partner call -->
-  <target
-      name="run_AtomicTCPPartnerCall"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicTCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run RandomFailureExtendedList -->
-  <target
-      name="run_RandomFailureExtendedList"
-      depends="compile_ralph_tests"
-      description="Tests that can make atomic partner calls over TCP.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomFailureExtendedList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run AtomicListAppendTest -->
-  <target
-      name="run_AtomicListAppend"
-      depends="compile_ralph_tests"
-      description="Ensures append works on atomic lists.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicListAppendTester"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run WrappedPartnerTCPCall   -->
-  <target
-      name="run_WrappedPartnerTCPCall"
-      depends="compile_ralph_tests"
-      description="Can make a tcp call from endpoint call.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.WrappedTCPPartnerCall"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run LinkedTests -->
-  <target
-      name="run_LinkedTests"
-      depends="compile_ralph_tests"
-      description="Can make a mixture of endpoint and partner calls and still complete.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LinkedTests"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run SingleSideServiceFactory -->
-  <target
-      name="run_SingleSideServiceFactory"
-      depends="compile_ralph_tests"
-      description="Run service factory">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SingleSideServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run PartnerServiceFactory -->
-  <target
-      name="run_PartnerServiceFactory"
-      depends="compile_ralph_tests"
-      description="Run partner service factory">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PartnerSendServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run EndpointStructListTest -->
-  <target
-      name="run_EndpointStructListTest"
-      depends="compile_ralph_tests"
-      description="Run endpoint struct list test">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.EndpointStructListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>        
-  
-  <!-- Run BasicSpeculation -->
-  <target
-      name="run_BasicSpeculation"
-      depends="compile_ralph_tests"
-      description="Run basic speculation test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.BasicSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run NullTest -->
-  <target
-      name="run_NullTest"
-      depends="compile_ralph_tests"
-      description="Run basic null test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.NullTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InternalCreateService -->
-  <target
-      name="run_InternalCreateService"
-      depends="compile_ralph_tests"
-      description="Run internal create service.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InternalCreateServiceTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run SelfTest -->
-  <target
-      name="run_Self"
-      depends="compile_ralph_tests"
-      description="Run self.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SelfTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run ContainerSpeculationTest -->
-  <target
-      name="run_ContainerSpeculation"
-      depends="compile_ralph_tests"
-      description="Run container speculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ContainerSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Run Range test -->
-  <target
-      name="run_Range"
-      depends="compile_ralph_tests"
-      description="Run range test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.Range"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>        
-    </java>
-  </target>
-  
-  <!-- Run ReadReadWriteSpeculation test -->
-  <target
-      name="run_ReadReadWriteSpeculation"
-      depends="compile_ralph_tests"
-      description="Run read-read-write speculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReadReadWriteTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InterruptedSpeculater test -->
-  <target
-      name="run_InterruptedSpeculaterTest"
-      depends="compile_ralph_tests"
-      description="Run a test where the root of speculation gets interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InterruptedSpeculaterTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Run InterruptedSpeculater test -->
-  <target
-      name="run_MiddleInterruptedSpeculaterTest"
-      depends="compile_ralph_tests"
-      description="Run a test where an object in middle of speculation chain
-                   gets interrupted.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MiddleInterruptedSpeculaterTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Backed speculation test -->
-  <target
-      name="run_AlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware always succeed.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Random delays backed speculation test -->
-  <target
-      name="run_RandomDelaysAlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware always succeed, but
-                   take random times to commit">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomDelaysAlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-
-  <!-- Random failures backed speculation test -->
-  <target
-      name="run_RandomFailuresBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Run a test where we try to back a speculative with a
-                   backing code.  Commits to hardware randomly fail.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.RandomFailuresBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- AtomicFailures test -->
-  <target
-      name="run_AtomicStructTest"
-      depends="compile_ralph_tests"
-      description="Ensure that TVar on struct works correctly">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.AtomicStructTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TextManipulation test -->
-  <target
-      name="run_TextManipulation"
-      depends="compile_ralph_tests"
-      description="Test concatenating strings and converting numbers to strings.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TextManipulation"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- Lots of Backouts test -->
-  <target
-      name="run_LotsOfBackouts"
-      depends="compile_ralph_tests"
-      description="Test that always rollback state during backouts.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LotsOfBackoutsTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TimedAlwaysWorksBackedSpeculationTest -->
-  <target
-      name="run_TimedAlwaysWorksBackedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Test that speculation actually increases throughput.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.TimedAlwaysWorksBackedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- TimedAlwaysWorksBackedSpeculationTest -->
-  <target
-      name="run_SimplifiedTimedSpeculationTest"
-      depends="compile_ralph_tests"
-      description="Test that speculation actually increases
-                   throughput on smaller test case than BackedSpeculation.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SimplifiedTimedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- PartnerCallReturn -->
-  <target
-      name="run_PartnerCallReturn"
-      depends="compile_ralph_tests"
-      description="Test that passing a value back to caller works.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.PartnerCallReturn"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeNumberListTest -->
-  <target
-      name="run_SerializeNumberListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of numbers.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeNumberListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeTextListTest -->
-  <target
-      name="run_SerializeTextListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of strings.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeTextListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeTrueFalseListTest -->
-  <target
-      name="run_SerializeTrueFalseListTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of booleans.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeTrueFalseListTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- SerializeStructTest -->
-  <target
-      name="run_SerializeStructTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a struct.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.StructSerialization"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- ListOfStructsSerializationTest -->
-  <target
-      name="run_ListOfStructsSerializationTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a list of structs.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ListOfStructsSerialization"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- LessSimplifiedTimedBackedSpeculation -->
-  <target
-      name="run_LessSimplifiedTimedBackedSpeculation"
-      depends="compile_ralph_tests"
-      description="Test that can speuclate concurrently
-                   on a less simplified test.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.LessSimplifiedTimedSpeculationTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeNumberNumberMapTest -->
-  <target
-      name="run_SerializeNumberNumberMapTest"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a map whose
-                   indices and values are numbers.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeNumberNumberMapTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- SerializeMapOfStructsTest -->
-  <target
-      name="run_SerializeMapOfStructs"
-      depends="compile_ralph_tests"
-      description="Test that can serialize a map whose
-                   indices are numbers and values are structs.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeMapOfStructs"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- InternalStructMethodCallTest -->
-  <target
-      name="run_InternalStructMethodCallTest"
-      depends="compile_ralph_tests"
-      description="Tests that handles returning structs from methods">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.InternalStructMethodCallTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- ReferenceServiceFactoryTest -->
-  <target
-      name="run_ReferenceServiceFactoryTest"
-      depends="compile_ralph_tests"
-      description="Tests that can use servicereferences to construct
-                   partnered endpoints">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.ReferenceServiceFactoryTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-
-  <!-- MultipleInterfaceTest -->
-  <target
-      name="run_MultipleInterfacesTest"
-      depends="compile_ralph_tests"
-      description="Tests that can implement multiple interfaces on
-                   a single endpoint.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.MultipleInterfacesTest"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- SerializeStructWithMap -->
-  <target
-      name="run_SerializeStructWithMap"
-      depends="compile_ralph_tests"
-      description="Tests that can serialize a struct
-                   containing a map.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeStructWithMap"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
-  </target>
-  
-  <!-- SerializeStructWithList -->
-  <target
-      name="run_SerializeStructWithList"
-      depends="compile_ralph_tests"
-      description="Tests that can serialize a struct
-                   containing a list.">
-    <java
-        dir="${build.dir}"
-        classname="emit_test_harnesses.SerializeStructWithList"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-        <jvmarg value="-ea"/>
-    </java>
+      name="make_jar"
+      depends="compile_libs"
+      description="Make a jar">
+    <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${harness_package}.${main_class}"/>
+        <attribute name="Class-Path" value="${build.dir}:${proto_class_path}"/>
+      </manifest>
+      <fileset dir="${build.dir}"/>
+      <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
+    </jar>
   </target>
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
     <delete dir="${ralph_emitted.dir}"/>
+    <delete dir="${jar_dir}"/>
     <!-- Delete ralph compiler output -->
     <delete file="parser.out"/>
     <delete file="parsetab.py"/>

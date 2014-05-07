@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.ForMapTest.MapEndpoint;
+import ralph_emitted.ForMapJava.MapEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

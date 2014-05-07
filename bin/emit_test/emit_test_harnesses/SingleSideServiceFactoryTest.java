@@ -1,7 +1,7 @@
 package emit_test_harnesses;
 
-import ralph_emitted.SingleSideServiceFactory.ServiceReceiver;
-import ralph_emitted.BasicRalph.SetterGetter;
+import ralph_emitted.SingleSideServiceFactoryJava.ServiceReceiver;
+import ralph_emitted.BasicRalphJava.SetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.InternalServiceFactory;

@@ -4,8 +4,8 @@ import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import RalphConnObj.SameHostConnection;
 
-import ralph_emitted.LinkedInstance.LinkedInstanceEndpoint;
-import ralph_emitted.LinkedConnection.LinkedConnectionEndpoint;
+import ralph_emitted.LinkedInstanceJava.LinkedInstanceEndpoint;
+import ralph_emitted.LinkedConnectionJava.LinkedConnectionEndpoint;
 
 /**
    Here's topology:

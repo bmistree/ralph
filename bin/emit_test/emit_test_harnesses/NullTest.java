@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.Null.NullService;
+import ralph_emitted.NullJava.NullService;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 

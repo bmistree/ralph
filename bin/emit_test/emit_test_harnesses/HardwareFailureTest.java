@@ -1,8 +1,8 @@
 package emit_test_harnesses;
 
-import ralph_emitted.HardwareFailure;
-import ralph_emitted.HardwareFailure.HardwareOwner;
-import ralph_emitted.HardwareFailure._InternalPieceOfHardware;
+import ralph_emitted.HardwareFailureJava;
+import ralph_emitted.HardwareFailureJava.HardwareOwner;
+import ralph_emitted.HardwareFailureJava._InternalPieceOfHardware;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import RalphDataWrappers.ListTypeDataWrapper;
