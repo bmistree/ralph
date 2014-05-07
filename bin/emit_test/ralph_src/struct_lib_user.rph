@@ -1,6 +1,6 @@
 #include 'struct_lib.rph'
 
-alias Struct SomeStruct as 'StructLib.SomeStruct';
+alias Struct SomeStruct as 'StructLibJava.SomeStruct';
 
 Endpoint StructUser
 {

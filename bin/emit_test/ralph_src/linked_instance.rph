@@ -1,4 +1,4 @@
-alias Endpoint LinkedConnectionEndpoint as 'LinkedConnection.LinkedConnectionEndpoint';
+alias Endpoint LinkedConnectionEndpoint as 'LinkedConnectionJava.LinkedConnectionEndpoint';
 
 Struct ConnectionWrapper
 {

@@ -1,4 +1,4 @@
-alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+alias Endpoint BasicSetterGetter as 'BasicRalphJava.SetterGetter';
 
 Endpoint ServiceReceiver
 {

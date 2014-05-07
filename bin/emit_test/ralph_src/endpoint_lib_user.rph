@@ -1,4 +1,4 @@
-alias Service BasicSetterGetter as 'BasicRalph.SetterGetter';
+alias Service BasicSetterGetter as 'BasicRalphJava.SetterGetter';
 
 
 Endpoint EndpointUser

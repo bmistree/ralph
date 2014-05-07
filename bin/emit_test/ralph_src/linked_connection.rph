@@ -1,4 +1,4 @@
-alias Endpoint LinkedInstanceEndpoint as 'LinkedInstance.LinkedInstanceEndpoint';
+alias Endpoint LinkedInstanceEndpoint as 'LinkedInstanceJava.LinkedInstanceEndpoint';
 
 Endpoint LinkedConnectionEndpoint
 {

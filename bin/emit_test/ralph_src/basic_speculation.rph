@@ -1,4 +1,4 @@
-alias Interface SpeculativeInterface as 'ralph_emitted.BasicSpeculation.SpeculativeInterface';
+alias Interface SpeculativeInterface as 'ralph_emitted.BasicSpeculationJava.SpeculativeInterface';
 
 /**
    pipleine and pipeline_interrupted increments internal number.

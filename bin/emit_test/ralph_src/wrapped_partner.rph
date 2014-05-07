@@ -1,4 +1,4 @@
-alias Endpoint SideA as 'ralph_emitted.BasicPartner.SideA';
+alias Endpoint SideA as 'ralph_emitted.BasicPartnerJava.SideA';
 
 
 Endpoint SingleSidedHolder

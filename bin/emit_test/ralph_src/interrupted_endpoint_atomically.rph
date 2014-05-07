@@ -1,4 +1,4 @@
-alias Endpoint BasicSetterGetter as 'BasicRalph.SetterGetter';
+alias Endpoint BasicSetterGetter as 'BasicRalphJava.SetterGetter';
 
 /**
    Tests to ensure that when an atomically event is backed out, all of its
