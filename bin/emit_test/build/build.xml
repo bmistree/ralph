@@ -11,6 +11,8 @@
     
   <!-- global properties for this build file -->
   <property name="build.dir" location="${emit_test_dir}/classes"/>
+  <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
+  
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
   <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
   <property name="test_src.dir" location="${emit_test_dir}/../emit_test_harnesses"/>
@@ -25,12 +27,15 @@
 
   <property name="emitted_package" value="ralph_emitted"/>
   <property name="harness_package" value="emit_test_harnesses"/>
+
+
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
     <echo message="Setting up build directories for tests"/>
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${ralph_emitted.dir}"/>
+    <mkdir dir="${jar_dir}"/>
   </target>
 
 
@@ -254,7 +259,7 @@
     </antcall>
   </target>
 
-  <target name="promotion" depends="init" description="translate ralph files">
+  <target name="super_interrupted_atomically" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="super_interrupted_atomically.rph"/>
       <param name="class_name" value="SuperInterruptedAtomicallyJava"/>
@@ -415,7 +420,7 @@
     </antcall>
   </target>
 
-  <target name="atomic_struct.rph" depends="init" description="translate ralph files">
+  <target name="atomic_struct" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_struct.rph"/>
       <param name="class_name" value="AtomicStructJava"/>
@@ -499,36 +504,36 @@
 
   <!-- RUNNING TESTS -->
   <target
-      name="run_all"
-      depends=
-        "run_BasicSetterGetter, run_BasicInternalMethodCall,
-         run_BasicTestAtomically,run_BasicPartnerCall,run_MapTest,
-         run_AtomicMapTest,run_StructSetterGetter,run_NestedStructTest,
-         run_ListTest,run_AtomicListTest,run_ForListTest,run_ForMapTest,
-         run_StructLibraries,run_InterruptedAtomically,run_EndpointCalls,
-         run_InterruptedEndpointCallAtomically,run_PromotionTest,
-         run_SuperInterruptedAtomically,run_HardwareFailure,run_ReturnList,
-         run_WoundWait,run_TCPPartnerCall,run_AtomicPartnerCall,
-         run_AtomicTCPPartnerCall,run_RandomFailureExtendedList,
-         run_WrappedPartnerTCPCall,run_LinkedTests,run_SingleSideServiceFactory,
-         run_PartnerServiceFactory,run_EndpointStructListTest,run_BasicSpeculation,
-         run_NullTest,run_InternalCreateService,run_Self,run_ContainerSpeculation,
-         run_Range,run_ReadReadWriteSpeculation,run_InterruptedSpeculaterTest,
-         run_MiddleInterruptedSpeculaterTest,run_AlwaysWorksBackedSpeculationTest,
-         run_RandomDelaysAlwaysWorksBackedSpeculationTest,
-         run_RandomFailuresBackedSpeculationTest, run_AtomicStructTest,
-         run_TextManipulation,run_LotsOfBackouts,
-         run_TimedAlwaysWorksBackedSpeculationTest,
-         run_SimplifiedTimedSpeculationTest, run_PartnerCallReturn,
-         run_SerializeNumberListTest,run_SerializeTextListTest,
-         run_SerializeTrueFalseListTest,run_SerializeStructTest,
-         run_ListOfStructsSerializationTest,run_LessSimplifiedTimedBackedSpeculation,
-         run_SerializeNumberNumberMapTest,run_SerializeMapOfStructs,
-         run_InternalStructMethodCallTest,run_ReferenceServiceFactoryTest,
-         run_MultipleInterfacesTest,run_SerializeStructWithMap,
-         run_SerializeStructWithList">
+      name="jarify_all"
+      depends= "jar_BasicSetterGetter, jar_BasicInternalMethodCall,
+         jar_BasicTestAtomically,jar_BasicPartnerCall,jar_Map,
+         jar_AtomicMap,jar_StructSetterGetter,jar_NestedStructs,
+         jar_List,jar_AtomicList,jar_ForList,jar_ForMap,
+         jar_StructLibraries,jar_InterruptedAtomically,jar_EndpointCalls,
+         jar_InterruptedEndpointCallAtomically,jar_Promotion,
+         jar_SuperInterruptedAtomically,jar_HardwareFailure,jar_ReturnList,
+         jar_WoundWait,jar_TCPPartnerCall,jar_AtomicPartnerCall,
+         jar_AtomicTCPPartnerCall,jar_RandomFailureExtendedList,
+         jar_WrappedPartnerTCPCall,jar_Linked,jar_SingleSideServiceFactory,
+         jar_PartnerServiceFactory,jar_EndpointStructList,jar_BasicSpeculation,
+         jar_Null,jar_InternalCreateService,jar_Self,jar_ContainerSpeculation,
+         jar_Range,jar_ReadReadWriteSpeculation,jar_InterruptedSpeculater,
+         jar_MiddleInterruptedSpeculater,jar_AlwaysWorksBackedSpeculation,
+         jar_RandomDelaysAlwaysWorksBackedSpeculation,
+         jar_RandomFailuresBackedSpeculation, jar_AtomicStruct,
+         jar_TextManipulation,jar_LotsOfBackouts,
+         jar_TimedAlwaysWorksBackedSpeculation,
+         jar_SimplifiedTimedSpeculation, jar_PartnerCallReturn,
+         jar_SerializeNumberList,jar_SerializeTextList,
+         jar_SerializeTrueFalseList,jar_SerializeStruct,
+         jar_ListOfStructsSerialization,jar_LessSimplifiedTimedBackedSpeculation,
+         jar_SerializeNumberNumberMap,jar_SerializeMapOfStructs,
+         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
+         jar_MultipleInterfaces,jar_SerializeStructWithMap,
+         jar_SerializeStructWithList">
   </target>
-    
+
+
 
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
@@ -563,23 +568,23 @@
   </target>
 
   <target
-      name="ralph_MapTest"
+      name="ralph_Map"
       depends="test_map">
   </target>
 
   <target
-      name="ralph_AtomicMapTest"
-      depends="atomic_map_test">
+      name="ralph_AtomicMap"
+      depends="atomic_map">
   </target>
 
   <target
-      name="ralph_ListTest"
+      name="ralph_List"
       depends="test_list">
   </target>
 
   <target
-      name="ralph_AtomicListTest"
-      depends="atomic_list_test">
+      name="ralph_AtomicList"
+      depends="atomic_list">
   </target>
 
   <target
@@ -588,12 +593,12 @@
   </target>
 
   <target
-      name="ralph_ForListTest"
+      name="ralph_ForList"
       depends="for_list">
   </target>
 
   <target
-      name="ralph_ForMapTest"
+      name="ralph_ForMap"
       depends="for_map">
   </target>
 
@@ -618,7 +623,7 @@
   </target>
 
   <target
-      name="ralph_PromotionTest"
+      name="ralph_Promotion"
       depends="promotion">
   </target>
 
@@ -668,7 +673,7 @@
   </target>
 
   <target
-      name="ralph_LinkedTests"
+      name="ralph_Linked"
       depends="linked_connection,linked_instance">
   </target>
 
@@ -693,7 +698,7 @@
   </target>
   
   <target
-      name="ralph_NullTest"
+      name="ralph_Null"
       depends="null">
   </target>
   
@@ -748,7 +753,7 @@
   </target>
 
   <target
-      name="ralph_AtomicStructTest"
+      name="ralph_AtomicStruct"
       depends="atomic_struct">
   </target>
 
@@ -808,7 +813,7 @@
   </target>
   
   <target
-      name="ralph_SerializeNumberNumberMapTest"
+      name="ralph_SerializeNumberNumberMap"
       depends="serialize_num_map">
   </target>
 
@@ -818,17 +823,17 @@
   </target>
 
   <target
-      name="ralph_InternalStructMethodCallTest"
+      name="ralph_InternalStructMethodCall"
       depends="internal_return_struct">
   </target>
 
   <target
-      name="ralph_ReferenceServiceFactoryTest"
+      name="ralph_ReferenceServiceFactory"
       depends="reference_service_factory">
   </target>
 
   <target
-      name="ralph_MultipleInterfacesTest"
+      name="ralph_MultipleInterfaces"
       depends="multiple_interfaces">
   </target>
 
@@ -917,50 +922,50 @@
   </target>
 
   <property
-      name="map_test_jar"
-      value="map_test.jar"/>
+      name="map_jar"
+      value="map.jar"/>
   <target
-      name="jar_MapTest"
-      depends="ralph_MapTest">
+      name="jar_Map"
+      depends="ralph_Map">
     <antcall target="make_jar">
       <param name="main_class" value="MapTester"/>
-      <param name="dest_jar" value="${map_test_jar}"/>
+      <param name="dest_jar" value="${map_jar}"/>
     </antcall>
   </target>
 
   <property
-      name="atomic_map_test_jar"
-      value="atomic_map_test.jar"/>
+      name="atomic_map_jar"
+      value="atomic_map.jar"/>
   <target
-      name="jar_AtomicMapTest"
-      depends="ralph_AtomicMapTest">
+      name="jar_AtomicMap"
+      depends="ralph_AtomicMap">
     <antcall target="make_jar">
       <param name="main_class" value="AtomicMapTester"/>
-      <param name="dest_jar" value="${atomic_map_test_jar}"/>
+      <param name="dest_jar" value="${atomic_map_jar}"/>
     </antcall>
   </target>
 
   <property
-      name="list_test_jar"
-      value="list_test.jar"/>
+      name="list_jar"
+      value="list.jar"/>
   <target
-      name="jar_ListTest"
-      depends="ralph_ListTest">
+      name="jar_List"
+      depends="ralph_List">
     <antcall target="make_jar">
       <param name="main_class" value="ListTest"/>
-      <param name="dest_jar" value="${list_test_jar}"/>
+      <param name="dest_jar" value="${list_jar}"/>
     </antcall>
   </target>
 
   <property
-      name="atomic_list_test_jar"
-      value="atomic_list_test.jar"/>
+      name="atomic_list_jar"
+      value="atomic_list.jar"/>
   <target
-      name="jar_AtomicListTest"
-      depends="ralph_AtomicListTest">
+      name="jar_AtomicList"
+      depends="ralph_AtomicList">
     <antcall target="make_jar">
-      <param name="main_class" value="AtomicListTest"/>
-      <param name="dest_jar" value="${atomic_list_test_jar}"/>
+      <param name="main_class" value="AtomicList"/>
+      <param name="dest_jar" value="${atomic_list_jar}"/>
     </antcall>
   </target>
 
@@ -1049,16 +1054,17 @@
   </target>
   
   <property
-      name="promotion_test_jar"
-      value="promotion_test.jar"/>
+      name="promotion_jar"
+      value="promotion.jar"/>
   <target
-      name="jar_PromotionTest"
-      depends="ralph_PromotionTest">
+      name="jar_Promotion"
+      depends="ralph_Promotion">
     <antcall target="make_jar">
-      <param name="main_class" value="InterruptedEndpointCallAtomically"/>
-      <param name="dest_jar" value="${interrupted_endpoint_call_atomically_jar}"/>
+      <param name="main_class" value="PromotionTest"/>
+      <param name="dest_jar" value="${promotion_jar}"/>
     </antcall>
   </target>
+
 
   <property
       name="super_interrupted_atomically_jar"
@@ -1169,14 +1175,14 @@
   </target>
 
   <property
-      name="linked_tests_jar"
-      value="linked_tests.jar"/>
+      name="linked_jar"
+      value="linked.jar"/>
   <target
-      name="jar_LinkedTests"
-      depends="ralph_LinkedTests">
+      name="jar_Linked"
+      depends="ralph_Linked">
     <antcall target="make_jar">
       <param name="main_class" value="LinkedTests"/>
-      <param name="dest_jar" value="${linked_tests_jar}"/>
+      <param name="dest_jar" value="${linked_jar}"/>
     </antcall>
   </target>
 
@@ -1229,14 +1235,14 @@
   </target>
 
   <property
-      name="null_test_jar"
-      value="null_test.jar"/>
+      name="null_jar"
+      value="null.jar"/>
   <target
-      name="jar_NullTest"
-      depends="ralph_NullTest">
+      name="jar_Null"
+      depends="ralph_Null">
     <antcall target="make_jar">
       <param name="main_class" value="NullTest"/>
-      <param name="dest_jar" value="${null_test_jar}"/>
+      <param name="dest_jar" value="${null_jar}"/>
     </antcall>
   </target>
 
@@ -1285,18 +1291,6 @@
     <antcall target="make_jar">
       <param name="main_class" value="Range"/>
       <param name="dest_jar" value="${range_jar}"/>
-    </antcall>
-  </target>
-
-  <property
-      name="read_read_write_speculation_jar"
-      value="read_read_write_speculation.jar"/>
-  <target
-      name="jar_ReadReadWriteSpeculation"
-      depends="ralph_ReadReadWriteSpeculation">
-    <antcall target="make_jar">
-      <param name="main_class" value="ReadReadWriteTest"/>
-      <param name="dest_jar" value="${read_read_write_speculation_jar}"/>
     </antcall>
   </target>
 
@@ -1377,7 +1371,7 @@
       value="atomic_struct.jar"/>
   <target
       name="jar_AtomicStruct"
-      depends="ralph_AtomicStructTest">
+      depends="ralph_AtomicStruct">
     <antcall target="make_jar">
       <param name="main_class" value="AtomicStructTest"/>
       <param name="dest_jar" value="${atomic_struct_jar}"/>
@@ -1449,7 +1443,7 @@
       value="serialize_number_list.jar"/>
   <target
       name="jar_SerializeNumberList"
-      depends="ralph_SerializeNumberListTest">
+      depends="ralph_SerializeNumberList">
     <antcall target="make_jar">
       <param name="main_class" value="SerializeNumberListTest"/>
       <param name="dest_jar" value="${serialize_number_list_jar}"/>
@@ -1467,6 +1461,19 @@
       <param name="dest_jar" value="${serialize_text_list_jar}"/>
     </antcall>
   </target>
+
+  <property
+      name="serialize_true_false_list_jar"
+      value="serialize_true_false_list.jar"/>
+  <target
+      name="jar_SerializeTrueFalseList"
+      depends="ralph_SerializeTrueFalseList">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeTrueFalseListTest"/>
+      <param name="dest_jar" value="${serialize_true_false_list_jar}"/>
+    </antcall>
+  </target>
+
   
   <property
       name="serialize_struct_jar"
@@ -1533,7 +1540,7 @@
       value="internal_struct_method_call.jar"/>
   <target
       name="jar_InternalStructMethodCall"
-      depends="ralph_InternalStructMethodCallTest">
+      depends="ralph_InternalStructMethodCall">
     <antcall target="make_jar">
       <param name="main_class" value="InternalStructMethodCallTest"/>
       <param name="dest_jar" value="${internal_struct_method_call_jar}"/>
@@ -1545,7 +1552,7 @@
       value="reference_service_factory.jar"/>
   <target
       name="jar_ReferenceServiceFactory"
-      depends="ralph_ReferenceServiceFactoryTest">
+      depends="ralph_ReferenceServiceFactory">
     <antcall target="make_jar">
       <param name="main_class" value="ReferenceServiceFactoryTest"/>
       <param name="dest_jar" value="${reference_service_factory_jar}"/>
@@ -1557,7 +1564,7 @@
       value="multiple_interfaces.jar"/>
   <target
       name="jar_MultipleInterfaces"
-      depends="ralph_MultipleInterfacesTest">
+      depends="ralph_MultipleInterfaces">
     <antcall target="make_jar">
       <param name="main_class" value="MultipleInterfacesTest"/>
       <param name="dest_jar" value="${multiple_interfaces_jar}"/>
@@ -1604,13 +1611,13 @@
       <zipgroupfileset dir="${proto_class_path}" includes="**/*.jar" />
     </jar>
   </target>
-  
-  
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
     <delete dir="${ralph_emitted.dir}"/>
+    <delete dir="${jar_dir}"/>
     <!-- Delete ralph compiler output -->
     <delete file="parser.out"/>
     <delete file="parsetab.py"/>
