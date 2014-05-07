@@ -1,4 +1,4 @@
-alias Interface ISetterGetter as 'IFaceBasicRalph.ISetterGetter';
+alias Interface ISetterGetter as 'IFaceBasicRalphJava.ISetterGetter';
 
 Struct BasicStruct
 {
