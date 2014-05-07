@@ -687,7 +687,8 @@
 
   <target
       name="ralph_PartnerServiceFactory"
-      depends="basic_ralph,single_side_service_factory">
+      depends="basic_ralph,single_side_service_factory,
+               partner_service_factory">
   </target>
 
   <target
@@ -1038,7 +1039,7 @@
 
   <target name="harness_PartnerServiceFactory">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="PartnerSendServiceFactory.java"/>
+      <param name="arg_harness_file_list" value="PartnerSendServiceFactoryTest.java"/>
     </antcall>
   </target>
 
@@ -1159,19 +1160,19 @@
 
   <target name="harness_SerializeNumberList">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeNumberList.java"/>
+      <param name="arg_harness_file_list" value="SerializeNumberListTest.java"/>
     </antcall>
   </target>
 
   <target name="harness_SerializeTextList">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeTextList.java"/>
+      <param name="arg_harness_file_list" value="SerializeTextListTest.java"/>
     </antcall>
   </target>
 
   <target name="harness_SerializeTrueFalseList">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeTrueFalseList.java"/>
+      <param name="arg_harness_file_list" value="SerializeTrueFalseListTest.java"/>
     </antcall>
   </target>
   
@@ -1195,7 +1196,7 @@
   
   <target name="harness_SerializeNumberNumberMap">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeNumberMap.java"/>
+      <param name="arg_harness_file_list" value="SerializeNumberNumberMapTest.java"/>
     </antcall>
   </target>
 
@@ -1207,19 +1208,19 @@
 
   <target name="harness_InternalStructMethodCall">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="InternalStructMethodCall.java"/>
+      <param name="arg_harness_file_list" value="InternalStructMethodCallTest.java"/>
     </antcall>
   </target>
 
   <target name="harness_ReferenceServiceFactory">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="ReferenceServiceFactory.java"/>
+      <param name="arg_harness_file_list" value="ReferenceServiceFactoryTest.java"/>
     </antcall>
   </target>
 
   <target name="harness_MultipleInterfaces">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="MultipleInterfaces.java"/>
+      <param name="arg_harness_file_list" value="MultipleInterfacesTest.java"/>
     </antcall>
   </target>
 
@@ -1341,7 +1342,7 @@
       name="jar_List"
       depends="ralph_List,ralph_to_byte_code,harness_List">
     <antcall target="make_jar">
-      <param name="main_class" value="ListTest"/>
+      <param name="main_class" value="ListTester"/>
       <param name="dest_jar" value="${list_jar}"/>
     </antcall>
   </target>
@@ -1353,7 +1354,7 @@
       name="jar_AtomicList"
       depends="ralph_AtomicList,ralph_to_byte_code,harness_AtomicList">
     <antcall target="make_jar">
-      <param name="main_class" value="AtomicList"/>
+      <param name="main_class" value="AtomicListTester"/>
       <param name="dest_jar" value="${atomic_list_jar}"/>
     </antcall>
   </target>
@@ -1413,7 +1414,7 @@
       name="jar_InterruptedAtomically"
       depends="ralph_InterruptedAtomically,ralph_to_byte_code,harness_InterruptedAtomically">
     <antcall target="make_jar">
-      <param name="main_class" value="InterruptedAtomically"/>
+      <param name="main_class" value="InterruptedTestAtomically"/>
       <param name="dest_jar" value="${interrupted_atomically_jar}"/>
     </antcall>
   </target>
@@ -1476,7 +1477,7 @@
       name="jar_HardwareFailure"
       depends="ralph_HardwareFailure,ralph_to_byte_code,harness_HardwareFailure">
     <antcall target="make_jar">
-      <param name="main_class" value="HardwareFailure"/>
+      <param name="main_class" value="HardwareFailureTest"/>
       <param name="dest_jar" value="${hardware_failure_jar}"/>
     </antcall>
   </target>
@@ -1488,7 +1489,7 @@
       name="jar_ReturnList"
       depends="ralph_ReturnList,ralph_to_byte_code,harness_ReturnList">
     <antcall target="make_jar">
-      <param name="main_class" value="ReturnList"/>
+      <param name="main_class" value="ReturnListTest"/>
       <param name="dest_jar" value="${return_list_jar}"/>
     </antcall>
   </target>
@@ -1561,7 +1562,7 @@
       depends="ralph_WrappedPartnerTCPCall,
                ralph_to_byte_code,harness_WrappedPartnerTCPCall">
     <antcall target="make_jar">
-      <param name="main_class" value="WrappedPartnerTCPCall"/>
+      <param name="main_class" value="WrappedTCPPartnerCall"/>
       <param name="dest_jar" value="${wrapped_partner_tcp_call_jar}"/>
     </antcall>
   </target>
@@ -1586,7 +1587,7 @@
       depends="ralph_SingleSideServiceFactory,
                ralph_to_byte_code,harness_SingleSideServiceFactory">
     <antcall target="make_jar">
-      <param name="main_class" value="SingleSideServiceFactory"/>
+      <param name="main_class" value="SingleSideServiceFactoryTest"/>
       <param name="dest_jar" value="${single_side_service_factory_jar}"/>
     </antcall>
   </target>
@@ -1599,7 +1600,7 @@
       depends="ralph_PartnerServiceFactory,
                ralph_to_byte_code,harness_PartnerServiceFactory">
     <antcall target="make_jar">
-      <param name="main_class" value="PartnerServiceFactory"/>
+      <param name="main_class" value="PartnerSendServiceFactoryTest"/>
       <param name="dest_jar" value="${partner_service_factory_jar}"/>
     </antcall>
   </target>
@@ -1612,7 +1613,7 @@
       depends="ralph_EndpointStructList,
                ralph_to_byte_code,harness_EndpointStructList">
     <antcall target="make_jar">
-      <param name="main_class" value="EndpointStructList"/>
+      <param name="main_class" value="EndpointStructListTest"/>
       <param name="dest_jar" value="${endpoint_struct_list_jar}"/>
     </antcall>
   </target>
@@ -1625,7 +1626,7 @@
       depends="ralph_BasicSpeculation,
                ralph_to_byte_code,harness_BasicSpeculation">
     <antcall target="make_jar">
-      <param name="main_class" value="BasicSpeculation"/>
+      <param name="main_class" value="BasicSpeculationTest"/>
       <param name="dest_jar" value="${basic_speculation_jar}"/>
     </antcall>
   </target>
@@ -1650,7 +1651,7 @@
       depends="ralph_InternalCreateService,
                ralph_to_byte_code,harness_InternalCreateService">
     <antcall target="make_jar">
-      <param name="main_class" value="InternalCreateService"/>
+      <param name="main_class" value="InternalCreateServiceTest"/>
       <param name="dest_jar" value="${internal_create_service_jar}"/>
     </antcall>
   </target>
