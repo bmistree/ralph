@@ -6,6 +6,9 @@ from ralph.lex.ralph_lex import SERVICE_FACTORY_TOKEN,SPECULATE_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_CONTAINER_INTERNALS_TOKEN
 from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN, TO_TEXT_TOKEN
 from ralph.lex.ralph_lex import SERVICE_REFERENCE_TOKEN
+from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
+from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
+
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
 from ralph.parse.parse_util import InternalParseException,ParseException
@@ -676,9 +679,29 @@ def p_OperationPlusAssignment(p):
         operation_token = p[2]
         line_number = p.lineno(2)
         rhs_node = p[3]
-        p[0] = OperationPlusAssignmentNode(
-            global_parsing_filename,lhs_node,operation_token,rhs_node,
-            line_number)
+
+        if operation_token == PLUS_EQUAL_TOKEN:
+            new_rhs_node = (
+                AddExpressionNode(
+                    global_parsing_filename,lhs_node,rhs_node))
+        elif operation_token == MINUS_EQUAL_TOKEN:
+            new_rhs_node = (
+                SubtractExpressionNode(
+                    global_parsing_filename,lhs_node,rhs_node))
+        elif operation_token == MULTIPLY_EQUAL_TOKEN:
+            new_rhs_node = (
+                MultiplyExpressionNode(
+                    global_parsing_filename,lhs_node,rhs_node))
+        elif operation_token == DIVIDE_EQUAL_TOKEN:
+            new_rhs_node = (
+                DivideExpressionNode(
+                    global_parsing_filename,lhs_node,rhs_node))
+        else:
+            raise InternalParseException(
+                global_parsing_filename,line_number,
+                'Unknown operation plus assignment token.')
+        
+        p[0] = AssignmentNode(global_parsing_filename,lhs_node,new_rhs_node)
     else:
         # was an OrExpression
         p[0] = p[1]

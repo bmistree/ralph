@@ -30,8 +30,8 @@ Endpoint MapSerializer
         Number to_return = 0;
         for (Number index in to_sum)
         {
-            to_return = to_return + index;
-            to_return = to_return + to_sum.get(index);
+            to_return += index;
+            to_return += to_sum.get(index);
         }
         return to_return;
     }

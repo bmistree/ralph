@@ -45,11 +45,6 @@ DIVIDE = 'divide'
 ADD = 'add'
 SUBTRACT = 'subtract'
 
-MULTIPLY_EQUAL = 'multiply_equal'
-DIVIDE_EQUAL = 'divide_equal'
-ADD_EQUAL = 'add_equal'
-SUBTRACT_EQUAL = 'subtract_equal'
-
 GREATER_THAN = 'greater_than'
 GREATER_THAN_EQUALS = 'greater_than_equal'
 LESS_THAN = 'less_than'

@@ -7,8 +7,6 @@ from ralph.parse.type import ServiceFactoryType,NullType,ServiceReferenceType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 from ralph.parse.type_check_context import FixupableObject
-from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
-from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
 
 # Type check is broken into two passes:
 #
