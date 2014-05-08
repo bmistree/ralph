@@ -76,6 +76,13 @@
       <param name="class_name" value="SerializeStructWithListJava"/>
     </antcall>
   </target>
+
+  <target name="serialize_struct_with_structs" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_struct_with_structs.rph"/>
+      <param name="class_name" value="SerializeStructWithStructsJava"/>
+    </antcall>
+  </target>
   
   <target name="serialize_struct_with_map" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
@@ -844,6 +851,11 @@
   <target
       name="ralph_SerializeStructWithMap"
       depends="serialize_struct_with_map">
+  </target>
+
+  <target
+      name="ralph_SerializeStructWithStructs"
+      depends="serialize_struct_with_structs">
   </target>
 
   <target

@@ -1,0 +1,36 @@
+
+Struct InnerStruct
+{
+    Map (from: Text, to: Number) inner_map;
+}
+
+Struct OuterStruct
+{
+    Struct InnerStruct inner_struct;
+}
+
+
+Service SerializeStructWithStructs
+{
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct OuterStruct to_pass;
+        to_pass.inner_struct.inner_map.set('a',a);
+        to_pass.inner_struct.inner_map.set('b',b);
+        to_pass.inner_struct.inner_map.set('c',c);
+        to_pass.inner_struct.inner_map.set('d',d);
+    }
+
+
+    partner_sum(Struct OuterStruct to_sum) returns Number
+    {
+        Number to_return = 0;
+        for (Text key in to_sum.inner_struct.inner_map)
+        {
+            Number value = to_sum.inner_struct.inner_map.get(key);
+            to_return += value;
+        }
+        return to_return;
+    }
+}
