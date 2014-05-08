@@ -1,9 +1,11 @@
+alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+
 Struct ListHolder
 {
     List(element: Number) list_holder;
 }
 
-Service ListSerializer
+Service ListSerializer implements Interface ISerializeStructSum
 {
     /** Lists */
     sum_numbers(

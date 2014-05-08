@@ -1,3 +1,4 @@
+alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
 
 Struct InnerStruct
 {
@@ -10,8 +11,9 @@ Struct OuterStruct
 }
 
 
-Service SerializeStructWithStructs
+Service SerializeStructWithStructs implements Interface ISerializeStructSum
 {
+    //@Override
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
     {
@@ -20,6 +22,9 @@ Service SerializeStructWithStructs
         to_pass.inner_struct.inner_map.set('b',b);
         to_pass.inner_struct.inner_map.set('c',c);
         to_pass.inner_struct.inner_map.set('d',d);
+
+        Number to_return = @partner_sum(to_pass);
+        return to_return;
     }
 
 

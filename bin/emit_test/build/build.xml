@@ -70,6 +70,13 @@
     </antcall>
   </target>
 
+  <target name="iserialize_struct_sum" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="iserialize_struct_sum.rph"/>
+      <param name="class_name" value="ISerializeStructSumJava"/>
+    </antcall>
+  </target>
+      
   <target name="serialize_struct_with_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_struct_with_list.rph"/>
@@ -850,19 +857,20 @@
 
   <target
       name="ralph_SerializeStructWithMap"
-      depends="serialize_struct_with_map">
-  </target>
-
-  <target
-      name="ralph_SerializeStructWithStructs"
-      depends="serialize_struct_with_structs">
+      depends="serialize_struct_with_map,iserialize_struct_sum">
   </target>
 
   <target
       name="ralph_SerializeStructWithList"
-      depends="serialize_struct_with_list">
+      depends="serialize_struct_with_list,iserialize_struct_sum">
   </target>
 
+  <target
+      name="ralph_SerializeStructWithStructs"
+      depends="serialize_struct_with_structs,iserialize_struct_sum">
+  </target>
+
+  
   <!-- Compiling tests themselves -->
   <target name="compile_harness" depends="ralph_to_byte_code">
     <javac

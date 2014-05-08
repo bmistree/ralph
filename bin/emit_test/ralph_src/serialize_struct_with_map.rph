@@ -1,9 +1,11 @@
+alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+
 Struct MapHolder
 {
     Map(from: Number, to: Number) map_holder;
 }
 
-Service MapSerializer
+Service MapSerializer implements Interface ISerializeStructSum
 {
     /** Maps */
     sum_numbers(

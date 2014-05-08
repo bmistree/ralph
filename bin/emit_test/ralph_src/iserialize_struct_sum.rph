@@ -1,0 +1,5 @@
+Interface ISerializeStructSum
+{
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number;
+}
