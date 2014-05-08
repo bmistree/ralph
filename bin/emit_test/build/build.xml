@@ -84,10 +84,10 @@
     </antcall>
   </target>
 
-  <target name="serialize_struct_with_structs" depends="init" description="translate ralph files">
+  <target name="serialize_struct_with_struct" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
-      <param name="rph_filename" value="serialize_struct_with_structs.rph"/>
-      <param name="class_name" value="SerializeStructWithStructsJava"/>
+      <param name="rph_filename" value="serialize_struct_with_struct.rph"/>
+      <param name="class_name" value="SerializeStructWithStructJava"/>
     </antcall>
   </target>
   
@@ -547,7 +547,7 @@
         jar_SerializeNumberNumberMap,jar_SerializeMapOfStructs,
         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
-        jar_SerializeStructWithList">
+        jar_SerializeStructWithStruct,jar_SerializeStructWithList">
   </target>
 
 
@@ -866,8 +866,8 @@
   </target>
 
   <target
-      name="ralph_SerializeStructWithStructs"
-      depends="serialize_struct_with_structs,iserialize_struct_sum">
+      name="ralph_SerializeStructWithStruct"
+      depends="serialize_struct_with_struct,iserialize_struct_sum">
   </target>
 
   
@@ -1251,12 +1251,20 @@
           value="SerializeStructWithMap.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
-
+  
   <target name="harness_SerializeStructWithList">
     <antcall target="compile_harness">
       <param
           name="arg_harness_file_list"
           value="SerializeStructWithList.java,SerializeStructHarnessHelper.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_SerializeStructWithStruct">
+    <antcall target="compile_harness">
+      <param
+          name="arg_harness_file_list"
+          value="SerializeStructWithStruct.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
 
@@ -2030,6 +2038,19 @@
     </antcall>
   </target>
 
+  <property
+      name="serialize_struct_with_struct_jar"
+      value="serialize_struct_with_struct.jar"/>
+  <target
+      name="jar_SerializeStructWithStruct"
+      depends="ralph_SerializeStructWithStruct,
+               ralph_to_byte_code,harness_SerializeStructWithStruct">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeStructWithStruct"/>
+      <param name="dest_jar" value="${serialize_struct_with_struct_jar}"/>
+    </antcall>
+  </target>
+  
   <property
       name="serialize_struct_with_list_jar"
       value="serialize_struct_with_list.jar"/>
