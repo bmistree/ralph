@@ -57,7 +57,7 @@ public class BasicMapDataConstructors
         new AtomMapConstructor<String,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
     private final static AtomMapConstructor<String,String> atom_text_text_map_constructor =
         new AtomMapConstructor<String,String>(
@@ -76,13 +76,13 @@ public class BasicMapDataConstructors
         new AtomMapConstructor<Boolean,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
     private final static AtomMapConstructor<Boolean,String> atom_tf_text_map_constructor =
         new AtomMapConstructor<Boolean,String>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
     private final static AtomMapConstructor<Boolean,Boolean> atom_tf_tf_map_constructor =
         new AtomMapConstructor<Boolean,Boolean>(
@@ -118,7 +118,7 @@ public class BasicMapDataConstructors
         new NonAtomMapConstructor<String,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
     private final static NonAtomMapConstructor<String,String> non_atom_text_text_map_constructor =
         new NonAtomMapConstructor<String,String>(
@@ -137,13 +137,13 @@ public class BasicMapDataConstructors
         new NonAtomMapConstructor<Boolean,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
     private final static NonAtomMapConstructor<Boolean,String> non_atom_tf_text_map_constructor =
         new NonAtomMapConstructor<Boolean,String>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
     private final static NonAtomMapConstructor<Boolean,Boolean> non_atom_tf_tf_map_constructor =
         new NonAtomMapConstructor<Boolean,Boolean>(
