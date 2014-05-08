@@ -1207,7 +1207,7 @@
       <param name="arg_harness_file_list" value="ListOfStructsSerialization.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_LessSimplifiedTimedBackedSpeculation">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="LessSimplifiedTimedSpeculationTest.java"/>
@@ -1246,13 +1246,17 @@
 
   <target name="harness_SerializeStructWithMap">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeStructWithMap.java"/>
+      <param
+          name="arg_harness_file_list"
+          value="SerializeStructWithMap.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
 
   <target name="harness_SerializeStructWithList">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="SerializeStructWithList.java"/>
+      <param
+          name="arg_harness_file_list"
+          value="SerializeStructWithList.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
 
