@@ -7,6 +7,9 @@ from ralph.parse.type import ServiceFactoryType,NullType,ServiceReferenceType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext
 from ralph.parse.type_check_context import FixupableObject
+from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
+from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
+
 # Type check is broken into two passes:
 #
 #   Pass one:
@@ -1512,7 +1515,44 @@ def create_binary_expression_node(
         lhs_expression_node.filename,lhs_expression_node.line_number,
         'Unknown binary operator when creating binary expression')
 
-    
+class OperationPlusAssignmentNode(_AstNode):
+    def __init__(self,filename,to_assign_to_node,operation_token,rhs_node,
+                 line_number):
+        '''
+        Used for +=, -=, *=, /=.
+
+        For line:
+          a += 1
+        to_assign_to_node contains a, operation_token is +=, and
+        rhs_node is 1.
+        '''
+        if operation_token == PLUS_EQUAL_TOKEN:
+            label = ast_labels.ADD_EQUAL
+        elif operation_token == MINUS_EQUAL_TOKEN:
+            label = ast_labels.MINUS_EQUAL
+        elif operation_token == MULTIPLY_EQUAL_TOKEN:
+            label = ast_labels.MULTIPLY_EQUAL
+        elif operation_token == DIVIDE_EQUAL_TOKEN:
+            label = ast_labels.DIVIDE_EQUAL
+        else:
+            raise InternalParseException(
+                to_assign_to_node.filename,to_assign_to_node.line_number,
+                'Unknown operation plus assignment token.')
+            
+        super(OperationPlusAssignmentNode,self).__init__(
+            filename,label,line_number)
+        
+        self.to_assign_to_node = to_assign_to_node
+        self.rhs_node = rhs_node
+
+    def type_check_pass_one(self,struct_types_ctx):
+        self.to_assign_to_node.type_check_pass_one(struct_types_ctx)
+        self.rhs_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.to_assign_to_node.type_check_pass_two(type_check_ctx)
+        self.rhs_node.type_check_pass_two(type_check_ctx)
+
     
 #### Intermediate nodes that get removed from actual AST ####
     

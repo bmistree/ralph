@@ -14,6 +14,11 @@ SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
 SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 TO_TEXT_TOKEN = 'to_text'
+PLUS_EQUAL_TOKEN = '+='
+MINUS_EQUAL_TOKEN = '-='
+MULTIPLY_EQUAL_TOKEN = '*='
+DIVIDE_EQUAL_TOKEN = '/='
+
 
 reserved = {
     'Endpoint' : 'ENDPOINT',

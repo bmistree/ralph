@@ -655,13 +655,34 @@ def p_ReturnStatement(p):
         what_to_return_node = p[2]
         return_node.add_return_expression_node(what_to_return_node)
     p[0] = return_node
+
     
 def p_Expression(p):
     '''
-    Expression : OrExpression
+    Expression : OperationPlusAssignment
     '''
     p[0] = p[1]
 
+def p_OperationPlusAssignment(p):
+    '''
+    OperationPlusAssignment : Variable PLUS_EQUAL Expression
+                            | Variable MINUS_EQUAL Expression
+                            | Variable MULTIPLY_EQUAL Expression
+                            | Variable DIVIDE_EQUAL Expression
+                            | OrExpression
+    '''
+    if len(p) == 4:
+        lhs_node = p[1]
+        operation_token = p[2]
+        line_number = p.lineno(2)
+        rhs_node = p[3]
+        p[0] = OperationPlusAssignmentNode(
+            global_parsing_filename,lhs_node,operation_token,rhs_node,
+            line_number)
+    else:
+        # was an OrExpression
+        p[0] = p[1]
+    
 def p_OrExpression(p):
     '''
     OrExpression : OrExpression OR AndExpression
