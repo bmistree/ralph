@@ -1162,11 +1162,10 @@ public class AtomicActiveEvent extends ActiveEvent
                     if (arg == null)
                     {
                         any_builder.setVarName("");
-                        any_builder.setReference(false);
                         any_builder.setIsTvar(false);
                     }
                     else
-                        arg.serialize_as_rpc_arg(this,any_builder,false);
+                        arg.serialize_as_rpc_arg(this,any_builder);
                     
                     serialized_arguments.addVars(any_builder);
                 }
@@ -1185,7 +1184,7 @@ public class AtomicActiveEvent extends ActiveEvent
                     VariablesProto.Variables.Any.newBuilder();
                 try
                 {
-                    result.serialize_as_rpc_arg(this,any_builder,false);
+                    result.serialize_as_rpc_arg(this,any_builder);
                 }
                 catch (BackoutException excep)
                 {

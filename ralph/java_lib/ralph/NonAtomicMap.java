@@ -103,13 +103,12 @@ public abstract class NonAtomicMap<K,V,D>
 
     
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException
+        ActiveEvent active_event,Variables.Any.Builder any_builder)
+        throws BackoutException
     {
         NonAtomicInternalMap<K,V,D> internal_val =
             get_val(active_event);
-        internal_val.serialize_as_rpc_arg(
-            active_event,any_builder,is_reference);
+        internal_val.serialize_as_rpc_arg(active_event,any_builder);
         any_builder.setIsTvar(false);
     }
     public void load_init_vals(

@@ -38,8 +38,9 @@ public interface RalphInternalListInterface<V,D>
        them into any_builder.
      */
     public void serialize_as_rpc_arg (
-        ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException;
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder)
+        throws BackoutException;
     
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException;

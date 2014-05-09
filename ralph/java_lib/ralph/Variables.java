@@ -82,13 +82,12 @@ public class Variables {
         
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder) throws BackoutException
         {
             Double internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setNum(internal_val.doubleValue());
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
         }
         @Override
@@ -120,13 +119,12 @@ public class Variables {
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             String internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setText(internal_val);
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
         }
         @Override
@@ -168,13 +166,13 @@ public class Variables {
         }
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             Boolean internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setTrueFalse(internal_val.booleanValue());
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(true);
         }
         @Override
@@ -229,8 +227,9 @@ public class Variables {
         }
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             Util.logger_assert(
                 "Cannot pass reference to interface across network.");
@@ -268,11 +267,12 @@ public class Variables {
 
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             InternalServiceFactory internal_val = get_val(active_event);
-            serialize_service_factory(internal_val,any_builder,is_reference);
+            serialize_service_factory(internal_val,any_builder);
             any_builder.setIsTvar(true);
         }
         @Override
@@ -288,11 +288,9 @@ public class Variables {
          */
         public static void serialize_service_factory (
             InternalServiceFactory internal_val,
-            VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
+            VariablesProto.Variables.Any.Builder any_builder)
         {
             any_builder.setVarName("");
-            any_builder.setReference(is_reference);
             try {
                 any_builder.setServiceFactory(
                     com.google.protobuf.ByteString.copyFrom(
@@ -337,11 +335,12 @@ public class Variables {
 
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             InternalServiceReference internal_val = get_val(active_event);
-            serialize_service_reference(internal_val,any_builder,is_reference);
+            serialize_service_reference(internal_val,any_builder);
             any_builder.setIsTvar(true);
         }
 
@@ -351,11 +350,9 @@ public class Variables {
          */
         public static void serialize_service_reference (
             InternalServiceReference internal_val,
-            VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
+            VariablesProto.Variables.Any.Builder any_builder)
         {
             any_builder.setVarName("");
-            any_builder.setReference(is_reference);
 
             UUID.Builder service_uuid = UUID.newBuilder();
             service_uuid.setData(internal_val.service_uuid);
@@ -402,13 +399,12 @@ public class Variables {
         }
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
         {
             Double internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setNum(internal_val.doubleValue());
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
         }
         @Override
@@ -441,13 +437,13 @@ public class Variables {
         }
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             String internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setText(internal_val);
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
         }
         @Override
@@ -480,13 +476,12 @@ public class Variables {
         }
 
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
         {
             Boolean internal_val = get_val(active_event);
             any_builder.setVarName("");
             any_builder.setTrueFalse(internal_val.booleanValue());
-            any_builder.setReference(is_reference);
             any_builder.setIsTvar(false);
         }
 
@@ -521,8 +516,7 @@ public class Variables {
 
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference)
+            VariablesProto.Variables.Any.Builder any_builder)
         {
             any_builder.setIsTvar(false);
             Util.logger_assert(
@@ -553,12 +547,13 @@ public class Variables {
 
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             InternalServiceFactory internal_val = get_val(active_event);
             AtomicServiceFactoryVariable.serialize_service_factory(
-                internal_val,any_builder,is_reference);
+                internal_val,any_builder);
             any_builder.setIsTvar(false);
         }
         @Override
@@ -594,12 +589,13 @@ public class Variables {
 
         @Override
         public void serialize_as_rpc_arg(
-            ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-            boolean is_reference) throws BackoutException
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
         {
             InternalServiceReference internal_val = get_val(active_event);
             AtomicServiceReferenceVariable.serialize_service_reference(
-                internal_val,any_builder,is_reference);
+                internal_val,any_builder);
             any_builder.setIsTvar(false);
         }
         @Override

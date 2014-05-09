@@ -44,16 +44,15 @@ message Variables
         // garbage var name.
         required string var_name = 1;
         // true if when done with request, sends the variable back.
-        required bool reference = 2;
-        required bool is_tvar = 3;
-        optional double num = 4;
-        optional string text = 5;
-        optional bool true_false = 6;
-        optional List list = 7;
-        optional Map map = 8;
-        optional Struct struct = 9;
-        optional bytes service_factory = 10;
-        optional ServiceReference service_reference = 11;
+        required bool is_tvar = 2;
+        optional double num = 3;
+        optional string text = 4;
+        optional bool true_false = 5;
+        optional List list = 6;
+        optional Map map = 7;
+        optional Struct struct = 8;
+        optional bytes service_factory = 9;
+        optional ServiceReference service_reference = 10;
     }
 
     repeated Any vars = 1;

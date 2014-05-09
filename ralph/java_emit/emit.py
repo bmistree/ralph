@@ -2218,11 +2218,10 @@ public void deserialize_rpc(
 
 @Override
 public void serialize_as_rpc_arg(
-    ActiveEvent active_event,Variables.Any.Builder any_builder,
-    boolean is_reference) throws BackoutException
+    ActiveEvent active_event,Variables.Any.Builder any_builder)
+    throws BackoutException
 {
-    get_val(active_event).serialize_as_rpc_arg(
-        active_event,any_builder,is_reference);
+    get_val(active_event).serialize_as_rpc_arg(active_event,any_builder);
     any_builder.setIsTvar(true);
 }
 
@@ -2401,7 +2400,7 @@ def emit_internal_struct_serialize_as_rpc(struct_type):
     // using separate blocks for each so that we can reuse internal
     // variable names (eg., _field_builder).
     Variables.Any.Builder _field_builder = Variables.Any.newBuilder();
-    %s.serialize_as_rpc_arg(_active_event,_field_builder,_is_reference);
+    %s.serialize_as_rpc_arg(_active_event,_field_builder);
 
     _struct_builder.addFieldNames("%s");
     _struct_builder.addFieldValues(_field_builder);
@@ -2410,8 +2409,8 @@ def emit_internal_struct_serialize_as_rpc(struct_type):
         
     serialize_as_rpc_text = '''
 public void serialize_as_rpc_arg(
-    ActiveEvent _active_event,Variables.Any.Builder _any_builder,
-    boolean _is_reference) throws BackoutException
+    ActiveEvent _active_event,Variables.Any.Builder _any_builder)
+    throws BackoutException
 {
     // apply internal fields to struct builder
     Variables.Struct.Builder _struct_builder =
@@ -2425,7 +2424,6 @@ public void serialize_as_rpc_arg(
     // apply struct message to any builder
     _any_builder.setStruct(_struct_builder);
     _any_builder.setVarName("");
-    _any_builder.setReference(_is_reference);
 }
 ''' % (struct_name,indent_string(internal_field_serialization_text))
 

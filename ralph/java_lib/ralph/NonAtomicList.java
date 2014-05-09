@@ -96,13 +96,12 @@ public abstract class NonAtomicList<V,D>
 
 
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException
+        ActiveEvent active_event,
+        Variables.Any.Builder any_builder) throws BackoutException
     {
         NonAtomicInternalList<V,D> internal_val =
             get_val(active_event);
-        internal_val.serialize_as_rpc_arg(
-            active_event,any_builder,is_reference);
+        internal_val.serialize_as_rpc_arg(active_event,any_builder);
     }
 
     public D de_waldoify(ActiveEvent active_event) throws BackoutException

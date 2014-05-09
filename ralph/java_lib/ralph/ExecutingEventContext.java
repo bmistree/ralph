@@ -296,36 +296,6 @@ public class ExecutingEventContext
 
     	//means that it must be a sequence message call result
     	set_to_reply_with(queue_elem.reply_with_msg_field);
-
-        /*
-        overwrite local variables with reference variables that got
-        returned from variables.
-
-        Step 1: grab arguments from message object
-        Step 2: deserialize arguments
-        Step 3: overwrite local arguments passed by reference.
-        */
-
-        // step 1: grab arguments from message object
-        VariablesProto.Variables variables = queue_elem.returned_variables;
-
-        // step 2: deserialize message variables
-        ArrayList<RalphObject> returned_variables =
-            ExecutingEventContext.deserialize_variables_list(
-                variables,true,endpoint.ralph_globals);
-
-        // step 3: actually overwrite local variables
-        for (int i = 0; i < returned_variables.size(); ++i)
-        {
-            RalphObject lo = returned_variables.get(i);
-            if (lo != null)
-            {
-                // will be null for arguments that did not pass as
-                // references.
-                RalphObject arg = args.get(i);
-                arg.swap_internal_vals(active_event,lo);
-            }
-        }
         
         //# send more messages
         String to_exec_next = queue_elem.to_exec_next_name_msg_field;
@@ -356,7 +326,7 @@ public class ExecutingEventContext
             // objects.  Could just use a single return value.
             List<RalphObject> returned_objs =
                 ExecutingEventContext.deserialize_variables_list(
-                    returned_objs_proto,false,endpoint.ralph_globals);
+                    returned_objs_proto,endpoint.ralph_globals);
             
             if (returned_objs.size() != 1)
             {
@@ -374,8 +344,7 @@ public class ExecutingEventContext
        Index of map is variable name; value of map is object.
      */
     public static HashMap<String,RalphObject> deserialize_variables_map(
-        VariablesProto.Variables variables,boolean references_only,
-        RalphGlobals ralph_globals)
+        VariablesProto.Variables variables, RalphGlobals ralph_globals)
     {
         HashMap<String,RalphObject> to_return =
             new HashMap<String,RalphObject>();
@@ -383,11 +352,6 @@ public class ExecutingEventContext
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList() )
         {
-            boolean is_reference = variable.getReference();
-
-            if (references_only && (! is_reference))
-                continue;
-            
             String var_name = variable.getVarName();
             RalphObject lo = deserialize_any(variable,ralph_globals);
             to_return.put(var_name,lo);
@@ -419,27 +383,19 @@ public class ExecutingEventContext
        put null values in for the non-references.
      */
     public static ArrayList<RalphObject> deserialize_variables_list(
-        VariablesProto.Variables variables,boolean references_only,
-        RalphGlobals ralph_globals)
+        VariablesProto.Variables variables, RalphGlobals ralph_globals)
     {
         ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
-            boolean is_reference = variable.getReference();
-            
-            RalphObject lo = null;
-            if ((references_only &&  is_reference) ||
-                (! references_only))
-            {
-                lo = deserialize_any(variable,ralph_globals);
-            }
+            RalphObject lo = deserialize_any(variable,ralph_globals);
             to_return.add(lo);
         }
-
         return to_return;
     }
+
     
     /**
        @returns {RalphObject or null} --- Returns null if the

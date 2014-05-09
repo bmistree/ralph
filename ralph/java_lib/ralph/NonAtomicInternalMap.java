@@ -106,11 +106,11 @@ public class NonAtomicInternalMap<K,V,D>
      */
     @Override
     public void serialize_as_rpc_arg (
-        ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder)
+        throws BackoutException
     {
-        internal_map.serialize_as_rpc_arg(
-            active_event,any_builder,is_reference);
+        internal_map.serialize_as_rpc_arg(active_event,any_builder);
         any_builder.setIsTvar(false);
     }
 

@@ -45,8 +45,9 @@ public abstract class RalphObject<T,D>
        Varialbes.Any.Builder.
      */
     public abstract void serialize_as_rpc_arg(
-        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException;
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder)
+        throws BackoutException;
     /**
        Object has already been constructed.  Deserialize contents of
        any into it.

@@ -84,9 +84,11 @@ public class RalphInternalMap<K,V,D>
        Runs through all the entries in the map/list/struct and puts
        them into any_builder.
      */
+    @Override
     public void serialize_as_rpc_arg (
-        ActiveEvent active_event, VariablesProto.Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder)
+        throws BackoutException
     {
         MapTypeDataWrapper<K,V,D> wrapped_val = get_val_write(active_event);
 
@@ -124,7 +126,6 @@ public class RalphInternalMap<K,V,D>
             // create any for index
             VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
             index_builder.setVarName("");
-            index_builder.setReference(false);
             if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
             {
                 Double index_entry = (Double) map_entry.getKey();
@@ -150,11 +151,11 @@ public class RalphInternalMap<K,V,D>
             }
 
             // create any for value
-            VariablesProto.Variables.Any.Builder value_builder = VariablesProto.Variables.Any.newBuilder();
+            VariablesProto.Variables.Any.Builder value_builder =
+                VariablesProto.Variables.Any.newBuilder();
             RalphObject<V,D> map_value = map_entry.getValue();
             
-            map_value.serialize_as_rpc_arg(
-                active_event,value_builder,is_reference);
+            map_value.serialize_as_rpc_arg(active_event,value_builder);
             
             // apply both to map builder
             map_builder.addMapIndices(index_builder);
@@ -162,7 +163,6 @@ public class RalphInternalMap<K,V,D>
         }
         any_builder.setVarName("");
         any_builder.setMap(map_builder);
-        any_builder.setReference(is_reference);
 
         check_immediate_commit(active_event);
     }

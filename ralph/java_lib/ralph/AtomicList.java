@@ -133,13 +133,13 @@ public class AtomicList<V,D>
 
 
     public void serialize_as_rpc_arg(
-        ActiveEvent active_event,VariablesProto.Variables.Any.Builder any_builder,
-        boolean is_reference) throws BackoutException
+        ActiveEvent active_event,
+        VariablesProto.Variables.Any.Builder any_builder)
+        throws BackoutException
     {
         AtomicInternalList<V,D> internal_val =
             get_val(active_event);
-        internal_val.serialize_as_rpc_arg(
-            active_event,any_builder,is_reference);
+        internal_val.serialize_as_rpc_arg(active_event,any_builder);
     }
 
     public void load_init_vals(
