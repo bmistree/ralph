@@ -2328,7 +2328,7 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     internal_field_deserialization_text = ''
     counter = 0;
 
-    for field_name in dict_dot_fields:
+    for field_name in sorted(dict_dot_fields.keys()):
         field_type = dict_dot_fields[field_name]
         internal_field_type = emit_ralph_wrapped_type(field_type)
         if isinstance(field_type,MapType) or isinstance(field_type,ListType):
@@ -2362,8 +2362,6 @@ def emit_internal_struct_deserialize_constructor(struct_type):
 
         # happens regardless of if-else
         counter += 1
-
-
         
     constructor_text = '''
 public static %s deserialize_rpc(
@@ -2394,7 +2392,8 @@ def emit_internal_struct_serialize_as_rpc(struct_type):
     struct_name = struct_type.struct_name
     internal_field_serialization_text = ''
     dict_dot_fields = struct_type.dict_dot_fields()
-    for field_name in dict_dot_fields:
+
+    for field_name in sorted(dict_dot_fields.keys()):
         internal_field_serialization_text += '''
 {
     // using separate blocks for each so that we can reuse internal
