@@ -403,12 +403,6 @@ class IdentifierNode(_AstNode):
             filename,ast_labels.IDENTIFIER_EXPRESSION,line_number)
 
         self.value = value
-        self.is_reference = False
-
-    def get_is_reference(self):
-        return self.is_reference
-    def set_reference(self,to_set_to):
-        self.is_reference = True
         
     def type_check_pass_one(self,struct_types_ctx):
         pass
