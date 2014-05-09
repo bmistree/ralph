@@ -19,7 +19,7 @@ import ralph.AtomicObject;
 import ralph.Endpoint;
 import ralph.ExecutingEventContext;
 import ralph.RalphObject;
-import ralph.RPCArgObject;
+
 
 public class DeserializationEvent extends ActiveEvent
 {
@@ -117,7 +117,7 @@ public class DeserializationEvent extends ActiveEvent
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args,RalphObject result)
+        boolean first_msg,ArrayList<RalphObject>args,RalphObject result)
     {
         Util.logger_assert(
             "Should never issue_partner_sequence_block_call " +

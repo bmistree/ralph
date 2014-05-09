@@ -1567,24 +1567,15 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.PARTNER_METHOD_CALL:
         rpc_args = []
 
-        #FIXME: only allowing putting identifiers into arguments of
-        #remote method call because must create RPCArgObjects.
+        # FIXME: only allowing putting identifiers into arguments of
+        # remote method call because must create RPC arguments
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for rpc_arg_node in statement_node.args_list:
 
-            # if identifier and identifier's is_reference is set to
-            # true, then pass as a reference
-            as_reference = 'false'
-            if ((rpc_arg_node.label == ast_labels.IDENTIFIER_EXPRESSION) and
-                (rpc_arg_node.get_is_reference())):
-                as_reference = 'true'
-            
             # FIXME: Setting false here, which disallows sending arg
             # as reference.
-            rpc_arg_text = (
-                'new RPCArgObject( %s,%s )' %
-                (emit_statement(emit_ctx,rpc_arg_node),as_reference))
+            rpc_arg_text = emit_statement(emit_ctx,rpc_arg_node)
             rpc_args.append(rpc_arg_text)
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
 
@@ -1593,7 +1584,7 @@ def emit_statement(emit_ctx,statement_node):
             array_list_arg = 'Arrays.asList(%s)' % ','.join(rpc_args)
             
         rpc_args_list_text = (
-            'new ArrayList<RPCArgObject>( %s)' % array_list_arg)
+            'new ArrayList<RalphObject>( %s)' % array_list_arg)
 
         partner_call_text = '''
 _ctx.hide_partner_call(

@@ -310,7 +310,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args,RalphObject result)
+        boolean first_msg,ArrayList<RalphObject>args,RalphObject result)
     {
         
         //# code is listening on threadsafe result_queue.  when we
@@ -331,7 +331,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // construct variables for arg messages
         VariablesProto.Variables.Builder serialized_arguments =
             VariablesProto.Variables.newBuilder();
-        for (RPCArgObject arg : args)
+        for (RalphObject arg : args)
         {
             try
             {
@@ -349,10 +349,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
                     any_builder.setIsTvar(false);
                 }
                 else
-                {
-                    arg.arg_to_pass.serialize_as_rpc_arg(
-                        this,any_builder,arg.is_reference);
-                }
+                    arg.serialize_as_rpc_arg(this,any_builder,false);
+
                 serialized_arguments.addVars(any_builder);
             }
             catch (BackoutException excep)
@@ -523,7 +521,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         //#### END DEBUG
 
         // grab all arguments from message
-        ArrayList <RPCArgObject> args =
+        ArrayList <RalphObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
                 msg.getArguments(),endpt_recvd_msg_on.ralph_globals);
         
@@ -539,7 +537,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // convert array list of args to optional array of arg objects.
         Object [] rpc_call_arg_array = new Object[args.size()];
         for (int i = 0; i < args.size(); ++i)
-            rpc_call_arg_array[i] = args.get(i).arg_to_pass;
+            rpc_call_arg_array[i] = args.get(i);
         
         boolean takes_args = args.size() != 0;
 

@@ -54,7 +54,7 @@ public class ExecutingEventContext
        have to return one or more of these objects as references when
        return result of rpc.
      */
-    private ArrayList<RPCArgObject> args_to_reply_with = null;
+    private ArrayList<RalphObject> args_to_reply_with = null;
     
     boolean msg_send_initialized_bit = false;
 
@@ -86,7 +86,7 @@ public class ExecutingEventContext
      */
     public ExecutingEventContext (
         VariableStack _var_stack,
-        ArrayList<RPCArgObject> _args_to_reply_with)
+        ArrayList<RalphObject> _args_to_reply_with)
     {
         var_stack = _var_stack.fork_stack();
         args_to_reply_with = _args_to_reply_with;
@@ -196,9 +196,8 @@ public class ExecutingEventContext
         // args not passed by reference
         for (int i = 0; i < args_to_reply_with.size(); ++i)
         {
-            RPCArgObject arg = args_to_reply_with.get(i);
-            if (! arg.is_reference)
-                args_to_reply_with.set(i,null);
+            RalphObject arg = args_to_reply_with.get(i);
+            args_to_reply_with.set(i,null);
         }
         
         hide_partner_call(
@@ -245,7 +244,7 @@ public class ExecutingEventContext
        */
     public RalphObject hide_partner_call(
         Endpoint endpoint, ActiveEvent active_event,
-        String func_name, boolean first_msg,ArrayList<RPCArgObject> args,
+        String func_name, boolean first_msg,ArrayList<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException,StoppedException
     {
@@ -323,8 +322,8 @@ public class ExecutingEventContext
             {
                 // will be null for arguments that did not pass as
                 // references.
-                RPCArgObject arg = args.get(i);
-                arg.arg_to_pass.swap_internal_vals(active_event,lo);
+                RalphObject arg = args.get(i);
+                arg.swap_internal_vals(active_event,lo);
             }
         }
         
@@ -397,17 +396,16 @@ public class ExecutingEventContext
         return to_return;
     }
 
-    public static ArrayList<RPCArgObject> deserialize_rpc_args_list(
+    public static ArrayList<RalphObject> deserialize_rpc_args_list(
         VariablesProto.Variables variables,RalphGlobals ralph_globals)
     {
-        ArrayList<RPCArgObject> to_return = new ArrayList<RPCArgObject>();
+        ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
         {
             RalphObject lo = deserialize_any(variable,ralph_globals);
-            boolean is_reference = variable.getReference();
-            to_return.add(new RPCArgObject(lo,is_reference));
+            to_return.add(lo);
         }
 
         return to_return;

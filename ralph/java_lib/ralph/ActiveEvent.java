@@ -174,7 +174,7 @@ public abstract class ActiveEvent
     public abstract boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RPCArgObject>args,RalphObject result);
+        boolean first_msg,ArrayList<RalphObject>args,RalphObject result);
     
 
     public abstract String get_priority();
