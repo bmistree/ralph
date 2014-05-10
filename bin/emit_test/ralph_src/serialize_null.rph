@@ -1,0 +1,27 @@
+alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+
+Struct ListHolder
+{
+    List(element: Number) list_holder;
+}
+
+Service SerializeNull implements Interface ISerializeStructSum
+{
+    /** Lists */
+    sum_numbers(
+        Number a, Number b, Number c, Number d) returns Number
+    {
+        Struct ListHolder s1 = null;
+        s1 = @partner.partner_list_sum(s1);
+        if (s1 != null)
+            return -1;
+
+        Number to_return = a+b+c+d;
+        return to_return;
+    }
+
+    partner_nuller(Struct ListHolder s1) returns Struct ListHolder
+    {
+        return s1;
+    }
+}

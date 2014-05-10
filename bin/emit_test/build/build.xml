@@ -76,7 +76,14 @@
       <param name="class_name" value="ISerializeStructSumJava"/>
     </antcall>
   </target>
-      
+
+  <target name="serialize_null" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="serialize_null.rph"/>
+      <param name="class_name" value="SerializeNullJava"/>
+    </antcall>
+  </target>
+  
   <target name="serialize_struct_with_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_struct_with_list.rph"/>
@@ -805,6 +812,11 @@
       depends="serialize_number_list">
   </target>
 
+  <target
+      name="ralph_SerializeNull"
+      depends="serialize_null">
+  </target>
+  
   <target
       name="ralph_SerializeTextList"
       depends="serialize_text_list">
