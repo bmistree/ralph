@@ -554,7 +554,8 @@
         jar_SerializeNumberNumberMap,jar_SerializeMapOfStructs,
         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
-        jar_SerializeStructWithStruct,jar_SerializeStructWithList">
+        jar_SerializeStructWithStruct,jar_SerializeStructWithList,
+        jar_SerializeNullStruct">
   </target>
 
 
@@ -813,11 +814,6 @@
   </target>
 
   <target
-      name="ralph_SerializeNull"
-      depends="serialize_null">
-  </target>
-  
-  <target
       name="ralph_SerializeTextList"
       depends="serialize_text_list">
   </target>
@@ -870,6 +866,11 @@
   <target
       name="ralph_SerializeStructWithMap"
       depends="serialize_struct_with_map,iserialize_struct_sum">
+  </target>
+
+  <target
+      name="ralph_SerializeNullStruct"
+      depends="serialize_null,iserialize_struct_sum">
   </target>
 
   <target
@@ -1261,6 +1262,14 @@
       <param
           name="arg_harness_file_list"
           value="SerializeStructWithMap.java,SerializeStructHarnessHelper.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_SerializeNullStruct">
+    <antcall target="compile_harness">
+      <param
+          name="arg_harness_file_list"
+          value="SerializeNullStruct.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
   
@@ -2062,7 +2071,7 @@
       <param name="dest_jar" value="${serialize_struct_with_struct_jar}"/>
     </antcall>
   </target>
-  
+
   <property
       name="serialize_struct_with_list_jar"
       value="serialize_struct_with_list.jar"/>
@@ -2076,6 +2085,19 @@
     </antcall>
   </target>
 
+  <property
+      name="serialize_null_struct_jar"
+      value="serialize_null_struct.jar"/>
+  <target
+      name="jar_SerializeNullStruct"
+      depends="ralph_SerializeNullStruct,
+               ralph_to_byte_code,harness_SerializeNullStruct">
+    <antcall target="make_jar">
+      <param name="main_class" value="SerializeNullStruct"/>
+      <param name="dest_jar" value="${serialize_null_struct_jar}"/>
+    </antcall>
+  </target>
+  
   
   <!-- Make a jar -->
   <target
