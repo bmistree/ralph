@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import RalphDataConstructorRegistry.DataConstructorRegistry;
+import RalphDeserializer.Deserializer;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -432,7 +432,7 @@ public class ExecutingEventContext
     public static RalphObject deserialize_any(
         VariablesProto.Variables.Any variable,RalphGlobals ralph_globals)
     {
-        DataConstructorRegistry dcr = DataConstructorRegistry.get_instance();
-        return dcr.deserialize(variable,ralph_globals);
+        Deserializer deserializer = Deserializer.get_instance();
+        return deserializer.deserialize(variable,ralph_globals);
     }
 }

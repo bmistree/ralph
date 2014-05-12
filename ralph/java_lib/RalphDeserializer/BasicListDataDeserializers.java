@@ -1,4 +1,4 @@
-package RalphDataConstructorRegistry;
+package RalphDeserializer;
 
 import java.util.List;
 
@@ -15,58 +15,58 @@ import static ralph.Variables.NonAtomicTrueFalseVariable;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
 import ralph.ActiveEvent;
-import static RalphDataConstructorRegistry.DataConstructorRegistry.dummy_deserialization_active_event;
+import static RalphDeserializer.Deserializer.dummy_deserialization_active_event;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
-public class BasicListDataConstructors
+public class BasicListDataDeserializers
 {
     // only used to force populating internal static fields
-    private final static BasicListDataConstructors instance =
-        new BasicListDataConstructors();
-    protected BasicListDataConstructors()
+    private final static BasicListDataDeserializers instance =
+        new BasicListDataDeserializers();
+    protected BasicListDataDeserializers()
     {}
-    public static BasicListDataConstructors get_instance()
+    public static BasicListDataDeserializers get_instance()
     {
         return instance;
     }
 
     // Note: Atomic lists still have non-atomic internal elements.
-    private final static AtomListConstructor<Double> atom_num_list_constructor =
-        new AtomListConstructor<Double>(
+    private final static AtomListDeserializer<Double> atom_num_list_constructor =
+        new AtomListDeserializer<Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
-    private final static AtomListConstructor<String> atom_text_list_constructor =
-        new AtomListConstructor<String>(
+    private final static AtomListDeserializer<String> atom_text_list_constructor =
+        new AtomListDeserializer<String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER);
-    private final static AtomListConstructor<Boolean> atom_tf_list_constructor =
-        new AtomListConstructor<Boolean>(
+    private final static AtomListDeserializer<Boolean> atom_tf_list_constructor =
+        new AtomListDeserializer<Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER);
     // non-atomic list constructors
-    private final static NonAtomListConstructor<Double> non_atom_num_list_constructor =
-        new NonAtomListConstructor<Double>(
+    private final static NonAtomListDeserializer<Double> non_atom_num_list_constructor =
+        new NonAtomListDeserializer<Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
-    private final static NonAtomListConstructor<String> non_atom_text_list_constructor =
-        new NonAtomListConstructor<String>(
+    private final static NonAtomListDeserializer<String> non_atom_text_list_constructor =
+        new NonAtomListDeserializer<String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER);
-    private final static NonAtomListConstructor<Boolean> non_atom_tf_list_constructor =
-        new NonAtomListConstructor<Boolean>(
+    private final static NonAtomListDeserializer<Boolean> non_atom_tf_list_constructor =
+        new NonAtomListDeserializer<Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER);
 
-    public static class AtomListConstructor<ElementType>
-        implements DataConstructor
+    public static class AtomListDeserializer<ElementType>
+        implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
         
-        public AtomListConstructor(String element_label,EnsureAtomicWrapper _wrapper)
+        public AtomListDeserializer(String element_label,EnsureAtomicWrapper _wrapper)
         {
             wrapper = _wrapper;
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             
             String label = deserializer.merge_labels(
                 AtomicList.deserialization_label,
@@ -75,7 +75,7 @@ public class BasicListDataConstructors
         }
 
         @Override
-        public RalphObject construct(
+        public RalphObject deserialize(
             VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
         {
             // create an atomic list variable, then, independently
@@ -95,8 +95,8 @@ public class BasicListDataConstructors
             List<VariablesProto.Variables.Any> any_list =
                 list_message.getListValuesList();
 
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             for (VariablesProto.Variables.Any list_element : any_list)
             {
                 try
@@ -133,16 +133,16 @@ public class BasicListDataConstructors
     }
     
 
-    public static class NonAtomListConstructor<ElementType>
-        implements DataConstructor
+    public static class NonAtomListDeserializer<ElementType>
+        implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
         
-        public NonAtomListConstructor(String element_label,EnsureAtomicWrapper _wrapper)
+        public NonAtomListDeserializer(String element_label,EnsureAtomicWrapper _wrapper)
         {
             wrapper = _wrapper;
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             
             String label = deserializer.merge_labels(
                 NonAtomicList.deserialization_label,
@@ -151,7 +151,7 @@ public class BasicListDataConstructors
         }
 
         @Override
-        public RalphObject construct(
+        public RalphObject deserialize(
             VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
         {
             // create an atomic list variable, then, independently
@@ -171,8 +171,8 @@ public class BasicListDataConstructors
             List<VariablesProto.Variables.Any> any_list =
                 list_message.getListValuesList();
 
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             for (VariablesProto.Variables.Any list_element : any_list)
             {
                 try

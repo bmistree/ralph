@@ -1,4 +1,4 @@
-package RalphDataConstructorRegistry;
+package RalphDeserializer;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -39,26 +39,26 @@ import ralph.Variables.AtomicServiceReferenceVariable;
    Need special facilities for serializing and deserializing
    user-defined structs.  Whenever create a user-defined struct, one
    of its static members tries to register a constructor for it into
-   DataConstructorRegistry.  Can then use deserialize_struct to create
+   Deserializer.  Can then use deserialize_struct to create
    a struct of that type.
  */
-public class DataConstructorRegistry
+public class Deserializer
 {
-    private final static DataConstructorRegistry instance =
-        new DataConstructorRegistry();
+    private final static Deserializer instance =
+        new Deserializer();
 
     // unused: creation here registers all basic list and map data
-    // constructors in constructors map.
-    private final static BasicListDataConstructors basic_list_constructors_instance =
-        BasicListDataConstructors.get_instance();
-    private final static BasicMapDataConstructors basic_map_constructors_instance =
-        BasicMapDataConstructors.get_instance();
+    // deserializers in deserializers map.
+    private final static BasicListDataDeserializers basic_list_deserializers_instance =
+        BasicListDataDeserializers.get_instance();
+    private final static BasicMapDataDeserializers basic_map_deserializers_instance =
+        BasicMapDataDeserializers.get_instance();
     
     
-    // Maps from unique name defining the struct to a DataConstructor
+    // Maps from unique name defining the struct to a DataDeserializer
     // that can be used to produce the struct.
-    private final Map<String, DataConstructor> constructors =
-        new HashMap<String,DataConstructor>();
+    private final Map<String, DataDeserializer> deserializers =
+        new HashMap<String,DataDeserializer>();
 
     // reuse same event when deserializing
     private final static DeserializationEvent const_deserialization_event =
@@ -68,13 +68,13 @@ public class DataConstructorRegistry
         return const_deserialization_event;
     }
     
-    protected DataConstructorRegistry()
+    protected Deserializer()
     {
         // protected so that nothing else can create a new version of
         // this class
     }
 
-    public static DataConstructorRegistry get_instance()
+    public static Deserializer get_instance()
     {
         return instance;
     }
@@ -84,9 +84,9 @@ public class DataConstructorRegistry
         return label_outside + "|" + label_inside;
     }
     
-    public void register(String name, DataConstructor constructor)
+    public void register(String name, DataDeserializer deserializer)
     {
-        constructors.put(name,constructor);
+        deserializers.put(name,deserializer);
     }
 
     /**
@@ -152,10 +152,10 @@ public class DataConstructorRegistry
                     list_deserialization_label,
                     list_message.getElementTypeIdentifier());
 
-            DataConstructor dc =
-                constructors.get(full_deserialization_label);
+            DataDeserializer dc =
+                deserializers.get(full_deserialization_label);
             if (dc != null)
-                lo = dc.construct(any,ralph_globals);
+                lo = dc.deserialize(any,ralph_globals);
             else
                 Util.logger_assert("Missing list deserialiation type.");
         }
@@ -177,10 +177,10 @@ public class DataConstructorRegistry
                     partial_deserialization_label,
                     map_message.getValueTypeIdentifier());
             
-            DataConstructor dc =
-                constructors.get(full_deserialization_label);
+            DataDeserializer dc =
+                deserializers.get(full_deserialization_label);
             if (dc != null)
-                lo = dc.construct(any,ralph_globals);
+                lo = dc.deserialize(any,ralph_globals);
             else
                 Util.logger_assert("Missing map deserialiation type.");
         }
@@ -189,9 +189,9 @@ public class DataConstructorRegistry
             // FIXME: should check if is tvar or not.
             VariablesProto.Variables.Struct struct_proto =
                 any.getStruct();
-            DataConstructor dc =
-                constructors.get(struct_proto.getStructIdentifier());
-            lo = dc.construct(any,ralph_globals);
+            DataDeserializer dc =
+                deserializers.get(struct_proto.getStructIdentifier());
+            lo = dc.deserialize(any,ralph_globals);
         }
         else if (any.hasServiceFactory())
         {

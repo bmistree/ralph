@@ -1,12 +1,12 @@
-package RalphDataConstructorRegistry;
+package RalphDeserializer;
 
 import ralph_protobuffs.VariablesProto;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
 import ralph.ActiveEvent;
 
-public interface DataConstructor
+public interface DataDeserializer
 {
-    public RalphObject construct(
+    public RalphObject deserialize(
         VariablesProto.Variables.Any any,RalphGlobals ralph_globals);
 }

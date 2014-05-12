@@ -21,7 +21,7 @@
   <property name="ralph_call_results.dir" location="${real_dir}/../RalphCallResults/"/>
   <property name="ralph_service_actions.dir" location="${real_dir}/../RalphServiceActions/"/>
   <property name="ralph_extended_dir" location="${real_dir}/../RalphExtended/"/>
-  <property name="ralph_data_constructor_registry_dir" location="${real_dir}/../RalphDataConstructorRegistry/"/>
+  <property name="ralph_deserializer_dir" location="${real_dir}/../RalphDeserializer/"/>
   <property name="ralph_service_connection_listener_dir" location="${real_dir}/../RalphServiceConnectionListener/"/>
     
   <property name="protobuf_path" location="${real_dir}/../protobuf-java-2.4.1.jar"/>
@@ -56,7 +56,7 @@
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:
                 ${atomic_wrappers.dir}:${data_wrappers.dir}:${ralph_extended_dir}:
-                ${ralph_data_constructor_registry_dir}:${ralph_service_connection_listener_dir}"
+                ${ralph_deserializer_dir}:${ralph_service_connection_listener_dir}"
         destdir="${build.dir}"
         classpath="${build.dir}/ralph_protobuffs/*.class:${protobuf_path}"
         debug="true"

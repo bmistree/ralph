@@ -1,4 +1,4 @@
-package RalphDataConstructorRegistry;
+package RalphDeserializer;
 
 import java.util.List;
 
@@ -16,76 +16,76 @@ import ralph.NonAtomicInternalMap;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import ralph.Util;
 import ralph.ActiveEvent;
-import static RalphDataConstructorRegistry.DataConstructorRegistry.dummy_deserialization_active_event;
+import static RalphDeserializer.Deserializer.dummy_deserialization_active_event;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
 
-public class BasicMapDataConstructors
+public class BasicMapDataDeserializers
 {
     // only used to force populating internal static fields
-    private final static BasicMapDataConstructors instance =
-        new BasicMapDataConstructors();
-    protected BasicMapDataConstructors()
+    private final static BasicMapDataDeserializers instance =
+        new BasicMapDataDeserializers();
+    protected BasicMapDataDeserializers()
     {}
-    public static BasicMapDataConstructors get_instance()
+    public static BasicMapDataDeserializers get_instance()
     {
         return instance;
     }
 
     // Note: Atomic maps still have non-atomic internal elements.
     // number indices
-    private final static AtomMapConstructor<Double,Double> atom_num_num_map_constructor =
-        new AtomMapConstructor<Double,Double>(
+    private final static AtomMapDeserializer<Double,Double> atom_num_num_map_constructor =
+        new AtomMapDeserializer<Double,Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
-    private final static AtomMapConstructor<Double,String> atom_num_text_map_constructor =
-        new AtomMapConstructor<Double,String>(
+    private final static AtomMapDeserializer<Double,String> atom_num_text_map_constructor =
+        new AtomMapDeserializer<Double,String>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
-    private final static AtomMapConstructor<Double,Boolean> atom_num_tf_map_constructor =
-        new AtomMapConstructor<Double,Boolean>(
+    private final static AtomMapDeserializer<Double,Boolean> atom_num_tf_map_constructor =
+        new AtomMapDeserializer<Double,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
     // text indices
-    private final static AtomMapConstructor<String,Double> atom_text_num_map_constructor =
-        new AtomMapConstructor<String,Double>(
+    private final static AtomMapDeserializer<String,Double> atom_text_num_map_constructor =
+        new AtomMapDeserializer<String,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
-    private final static AtomMapConstructor<String,String> atom_text_text_map_constructor =
-        new AtomMapConstructor<String,String>(
+    private final static AtomMapDeserializer<String,String> atom_text_text_map_constructor =
+        new AtomMapDeserializer<String,String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
-    private final static AtomMapConstructor<String,Boolean> atom_text_tf_map_constructor =
-        new AtomMapConstructor<String,Boolean>(
+    private final static AtomMapDeserializer<String,Boolean> atom_text_tf_map_constructor =
+        new AtomMapDeserializer<String,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
     // tf indices
-    private final static AtomMapConstructor<Boolean,Double> atom_tf_num_map_constructor =
-        new AtomMapConstructor<Boolean,Double>(
+    private final static AtomMapDeserializer<Boolean,Double> atom_tf_num_map_constructor =
+        new AtomMapDeserializer<Boolean,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
-    private final static AtomMapConstructor<Boolean,String> atom_tf_text_map_constructor =
-        new AtomMapConstructor<Boolean,String>(
+    private final static AtomMapDeserializer<Boolean,String> atom_tf_text_map_constructor =
+        new AtomMapDeserializer<Boolean,String>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
-    private final static AtomMapConstructor<Boolean,Boolean> atom_tf_tf_map_constructor =
-        new AtomMapConstructor<Boolean,Boolean>(
+    private final static AtomMapDeserializer<Boolean,Boolean> atom_tf_tf_map_constructor =
+        new AtomMapDeserializer<Boolean,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
@@ -95,78 +95,78 @@ public class BasicMapDataConstructors
     // NonAtomic map deserializers
     
     // number indices
-    private final static NonAtomMapConstructor<Double,Double> non_atom_num_num_map_constructor =
-        new NonAtomMapConstructor<Double,Double>(
+    private final static NonAtomMapDeserializer<Double,Double> non_atom_num_num_map_constructor =
+        new NonAtomMapDeserializer<Double,Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
-    private final static NonAtomMapConstructor<Double,String> non_atom_num_text_map_constructor =
-        new NonAtomMapConstructor<Double,String>(
+    private final static NonAtomMapDeserializer<Double,String> non_atom_num_text_map_constructor =
+        new NonAtomMapDeserializer<Double,String>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
-    private final static NonAtomMapConstructor<Double,Boolean> non_atom_num_tf_map_constructor =
-        new NonAtomMapConstructor<Double,Boolean>(
+    private final static NonAtomMapDeserializer<Double,Boolean> non_atom_num_tf_map_constructor =
+        new NonAtomMapDeserializer<Double,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE);
     // text indices
-    private final static NonAtomMapConstructor<String,Double> non_atom_text_num_map_constructor =
-        new NonAtomMapConstructor<String,Double>(
+    private final static NonAtomMapDeserializer<String,Double> non_atom_text_num_map_constructor =
+        new NonAtomMapDeserializer<String,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
-    private final static NonAtomMapConstructor<String,String> non_atom_text_text_map_constructor =
-        new NonAtomMapConstructor<String,String>(
+    private final static NonAtomMapDeserializer<String,String> non_atom_text_text_map_constructor =
+        new NonAtomMapDeserializer<String,String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
-    private final static NonAtomMapConstructor<String,Boolean> non_atom_text_tf_map_constructor =
-        new NonAtomMapConstructor<String,Boolean>(
+    private final static NonAtomMapDeserializer<String,Boolean> non_atom_text_tf_map_constructor =
+        new NonAtomMapDeserializer<String,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING);
     // tf indices
-    private final static NonAtomMapConstructor<Boolean,Double> non_atom_tf_num_map_constructor =
-        new NonAtomMapConstructor<Boolean,Double>(
+    private final static NonAtomMapDeserializer<Boolean,Double> non_atom_tf_num_map_constructor =
+        new NonAtomMapDeserializer<Boolean,Double>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
-    private final static NonAtomMapConstructor<Boolean,String> non_atom_tf_text_map_constructor =
-        new NonAtomMapConstructor<Boolean,String>(
+    private final static NonAtomMapDeserializer<Boolean,String> non_atom_tf_text_map_constructor =
+        new NonAtomMapDeserializer<Boolean,String>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
-    private final static NonAtomMapConstructor<Boolean,Boolean> non_atom_tf_tf_map_constructor =
-        new NonAtomMapConstructor<Boolean,Boolean>(
+    private final static NonAtomMapDeserializer<Boolean,Boolean> non_atom_tf_tf_map_constructor =
+        new NonAtomMapDeserializer<Boolean,Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN);
         
     
-    public static class AtomMapConstructor<IndexType,ValueType>
-        implements DataConstructor
+    public static class AtomMapDeserializer<IndexType,ValueType>
+        implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
         private final NonAtomicInternalMap.IndexType index_type;
         
-        public AtomMapConstructor(
+        public AtomMapDeserializer(
             String index_label,String value_label,EnsureAtomicWrapper _wrapper,
             NonAtomicInternalMap.IndexType _index_type)
         {
             wrapper = _wrapper;
             index_type = _index_type;
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             
             String pre_label = deserializer.merge_labels(
                 AtomicMap.deserialization_label,
@@ -176,7 +176,7 @@ public class BasicMapDataConstructors
         }
 
         @Override
-        public RalphObject construct(
+        public RalphObject deserialize(
             VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
         {
             // create an atomic list variable, then, independently
@@ -199,8 +199,8 @@ public class BasicMapDataConstructors
                 map_message.getMapValuesList();
 
             
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             for (int i = 0; i < any_map_indices.size(); ++i)
             {
                 VariablesProto.Variables.Any map_index_message =
@@ -247,20 +247,20 @@ public class BasicMapDataConstructors
 
 
     // Non atomic deserializer
-    public static class NonAtomMapConstructor<IndexType,ValueType>
-        implements DataConstructor
+    public static class NonAtomMapDeserializer<IndexType,ValueType>
+        implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
         private final NonAtomicInternalMap.IndexType index_type;
         
-        public NonAtomMapConstructor(
+        public NonAtomMapDeserializer(
             String index_label,String value_label,EnsureAtomicWrapper _wrapper,
             NonAtomicInternalMap.IndexType _index_type)
         {
             wrapper = _wrapper;
             index_type = _index_type;
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             
             String pre_label = deserializer.merge_labels(
                 NonAtomicMap.deserialization_label,
@@ -270,7 +270,7 @@ public class BasicMapDataConstructors
         }
 
         @Override
-        public RalphObject construct(
+        public RalphObject deserialize(
             VariablesProto.Variables.Any any,RalphGlobals ralph_globals)
         {
             // create an atomic list variable, then, independently
@@ -292,8 +292,8 @@ public class BasicMapDataConstructors
             List<VariablesProto.Variables.Any> any_map_values =
                 map_message.getMapValuesList();
             
-            DataConstructorRegistry deserializer =
-                DataConstructorRegistry.get_instance();
+            Deserializer deserializer =
+                Deserializer.get_instance();
             for (int i = 0; i < any_map_indices.size(); ++i)
             {
                 VariablesProto.Variables.Any map_index_message =

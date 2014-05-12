@@ -38,12 +38,12 @@ import ralph.Variables.AtomicServiceReferenceVariable;
 
 import ralph_protobuffs.VariablesProto;
 
-import RalphDataConstructorRegistry.DataConstructorRegistry;
-import RalphDataConstructorRegistry.DataConstructor;
-import static RalphDataConstructorRegistry.BasicListDataConstructors.AtomListConstructor;
-import static RalphDataConstructorRegistry.BasicListDataConstructors.NonAtomListConstructor;
-import static RalphDataConstructorRegistry.BasicMapDataConstructors.AtomMapConstructor;
-import static RalphDataConstructorRegistry.BasicMapDataConstructors.NonAtomMapConstructor;
+import RalphDeserializer.Deserializer;
+import RalphDeserializer.DataDeserializer;
+import static RalphDeserializer.BasicListDataDeserializers.AtomListDeserializer;
+import static RalphDeserializer.BasicListDataDeserializers.NonAtomListDeserializer;
+import static RalphDeserializer.BasicMapDataDeserializers.AtomMapDeserializer;
+import static RalphDeserializer.BasicMapDataDeserializers.NonAtomMapDeserializer;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -2014,7 +2014,7 @@ def emit_struct_deserializer(struct_type):
         '__%s_SingletonStructDeserializer' % internal_struct_name)
 
     to_return = '''
-public static class %s implements DataConstructor
+public static class %s implements DataDeserializer
 {
     private static %s instance = new %s();
 
@@ -2022,10 +2022,10 @@ public static class %s implements DataConstructor
     // once.
     protected %s()
     {
-        DataConstructorRegistry registry =
-            DataConstructorRegistry.get_instance();
-        // put struct name into consturctor registry
-        registry.register("%s",this);
+        Deserializer deserializer =
+            Deserializer.get_instance();
+        // put struct name into deserializer
+        deserializer.register("%s",this);
     }
     
     public static %s get_instance()
@@ -2035,7 +2035,7 @@ public static class %s implements DataConstructor
 
     // used for data deserialization
     @Override
-    public RalphObject construct(
+    public RalphObject deserialize(
         VariablesProto.Variables.Any any,
         RalphGlobals ralph_globals)
     {
@@ -2048,7 +2048,7 @@ public static class %s implements DataConstructor
 private static final %s %s__instance = %s.get_instance();
 ''' % (internal_deserializer_name,internal_deserializer_name,
        internal_deserializer_name,internal_deserializer_name,
-       # the name that's entered into registry:
+       # the name that's entered into deserializer registry:
        struct_name,
        # get_instance
        internal_deserializer_name,
@@ -2072,7 +2072,7 @@ def emit_struct_list_deserializer(struct_type):
         struct_type)
     to_return = ''
     
-    for constructor_text in ('AtomListConstructor','NonAtomListConstructor'):
+    for constructor_text in ('AtomListDeserializer','NonAtomListDeserializer'):
         # needs to be unique across struct names and atom/non-atom
         var_name = (
             '_______%s_SingletonStructDeserializer__%s' %
@@ -2113,7 +2113,7 @@ def emit_struct_map_deserializer(struct_type):
          'BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL',
          'NonAtomicInternalMap.IndexType.BOOLEAN'))
     
-    for constructor_text in ('AtomMapConstructor','NonAtomMapConstructor'):
+    for constructor_text in ('AtomMapDeserializer','NonAtomMapDeserializer'):
         for key_tuple in key_tuples:
             java_key_type_text = key_tuple[0]
             key_label_text = key_tuple[1]
@@ -2348,7 +2348,7 @@ def emit_internal_struct_deserialize_constructor(struct_type):
     try{
         %s.set_val(
             null,
-            (%s)registry_instance.deserialize(
+            (%s)deserializer_instance.deserialize(
                 _struct_field_list.get(%i),ralph_globals));
     } catch (Exception ex) {
         Util.logger_assert("Should not get an exception when deserializing");
@@ -2363,7 +2363,7 @@ def emit_internal_struct_deserialize_constructor(struct_type):
             internal_field_deserialization_text += '''
 {
     // FIXME: if allow serializing null, should do so here.
-    %s = (%s)registry_instance.deserialize(
+    %s = (%s)deserializer_instance.deserialize(
     _struct_field_list.get(%i),ralph_globals);
 }
 ''' % (field_name,emit_ralph_wrapped_type(field_type),counter)
@@ -2384,8 +2384,8 @@ private %s (
 {
     List<Variables.Any> _struct_field_list =
         _internal_struct.getFieldValuesList();
-    DataConstructorRegistry registry_instance =
-        DataConstructorRegistry.get_instance();
+    Deserializer deserializer_instance =
+        Deserializer.get_instance();
 
     // deserializing individual fields of struct
 %s
