@@ -347,7 +347,20 @@ public class ExecutingEventContext
                     "If RPC returns variable, should only return one.  " +
                     returned_objs.size());
             }
-            return returned_objs.get(0);
+
+            RalphObject to_return = returned_objs.get(0);
+            if (to_return == null)
+            {
+                // when other side returns a value, the caller expects
+                // the returned value to be wrapped (ie, accessible
+                // only after a call to get_val).  In this case then
+                // we can just wrap the null in a simple
+                // NonAtomicNumberVariable... lightweight and will
+                // still return null when its get_val is called.
+                to_return = new Variables.NonAtomicNumberVariable(
+                    false,null,endpoint.ralph_globals);
+            }
+            return to_return;
         }
         return null;
     }
