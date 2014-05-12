@@ -84,8 +84,8 @@ public class ExecutingEventContext
     {
         if (to_serialize == null)
         {
-            any_builder.var_name = "";
-            any_builder.is_tvar = false;
+            any_builder.setVarName("");
+            any_builder.setIsTvar(false);
             return;
         }
 
