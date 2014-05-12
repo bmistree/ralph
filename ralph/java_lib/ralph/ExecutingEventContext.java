@@ -78,7 +78,20 @@ public class ExecutingEventContext
         var_stack = _var_stack.fork_stack();
     }
 
+    public static void serialize_as_rpc_arg(
+        ActiveEvent active_event, RalphObject to_serialize,
+        VariablesProto.Variables.Any.Builder any_builder) throws BackoutException
+    {
+        if (to_serialize == null)
+        {
+            any_builder.var_name = "";
+            any_builder.is_tvar = false;
+            return;
+        }
 
+        to_serialize.serialize_as_rpc_arg(active_event,any_builder);
+    }
+    
     /**
        Use this constructor when creating an event context as a result
        of an rpc call from another node.  Keeps track of which objects
