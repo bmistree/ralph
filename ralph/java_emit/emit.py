@@ -2221,11 +2221,17 @@ public void serialize_as_rpc_arg(
     ActiveEvent active_event,Variables.Any.Builder any_builder)
     throws BackoutException
 {
-    get_val(active_event).serialize_as_rpc_arg(active_event,any_builder);
+    %s to_serialize = get_val(active_event);
+    if (to_serialize == null)
+        any_builder.setVarName("");
+    else
+       to_serialize.serialize_as_rpc_arg(active_event,any_builder);
+
     any_builder.setIsTvar(true);
 }
 
-''' % (struct_name, internal_struct_name, data_wrapper_constructor_name)
+''' % (struct_name, internal_struct_name,
+       data_wrapper_constructor_name,internal_struct_name)
     # FIXME: should define rpc serialization for structs.
 
     
