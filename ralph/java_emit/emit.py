@@ -264,8 +264,9 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # method expects a map type.
             map_type = emit_internal_type(method_declaration_arg_node.type)
             single_arg_string = (
-                '%s %s = (%s) %s;' %
-                (map_type, arg_name, map_type, arg_vec_to_read_from))
+                '%s %s = (%s == null) ? null : (%s) %s;\n' %
+                (map_type, arg_name, arg_vec_to_read_from, map_type,
+                 arg_vec_to_read_from))
 
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
@@ -279,9 +280,10 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
             single_arg_string = (
-                '%s %s = ((%s) %s).get_val(active_event);' %
-                (internal_struct_type, arg_name, struct_type_name,
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
+                (internal_struct_type, arg_name, arg_vec_to_read_from,struct_type_name,
                  arg_vec_to_read_from))
+            
         elif isinstance(method_declaration_arg_node.type, EndpointType):
             # note: unable to dispatch for rpc for methods that
             # requires endpoint argument because cannot pass endpoint
@@ -296,8 +298,8 @@ def convert_args_text_for_dispatch(method_declaration_node):
             method_declaration_arg_node)
 
             single_arg_string = '''
-%s %s = ((%s)%s).get_val(null);
-''' % (java_type,arg_name,locked_type,arg_vec_to_read_from)
+%s %s = (%s == null) ? null : ((%s)%s).get_val(null);
+''' % (java_type,arg_name,arg_vec_to_read_from, locked_type,arg_vec_to_read_from)
 
             
         to_return += single_arg_string
