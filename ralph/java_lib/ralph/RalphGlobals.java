@@ -18,8 +18,7 @@ public class RalphGlobals
 
     private final ConnectionListener connection_listener;
     
-    public final ThreadPool thread_pool =
-        new ThreadPool(Util.DEFAULT_NUM_THREADS);
+    public final ThreadPool thread_pool;
     public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
         DeadlockAvoidanceAlgorithm.BOOSTED;
 
@@ -36,6 +35,11 @@ public class RalphGlobals
 
     public RalphGlobals(DeadlockAvoidanceAlgorithm daa)
     {
+        thread_pool =
+            new ThreadPool(
+                Util.PERSISTENT_NUM_THREADS,
+                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
+        
         deadlock_avoidance_algorithm = daa;
         connection_listener =
             new ConnectionListener(
@@ -46,6 +50,11 @@ public class RalphGlobals
         DeadlockAvoidanceAlgorithm daa,
         int _tcp_port_to_listen_for_connections_on)
     {
+        thread_pool =
+            new ThreadPool(
+                Util.PERSISTENT_NUM_THREADS,
+                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
+
         deadlock_avoidance_algorithm = daa;
         tcp_port_to_listen_for_connections_on =
             _tcp_port_to_listen_for_connections_on;
@@ -57,6 +66,11 @@ public class RalphGlobals
     
     public RalphGlobals()
     {
+        thread_pool =
+            new ThreadPool(
+                Util.PERSISTENT_NUM_THREADS,
+                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
+        
         connection_listener =
             new ConnectionListener(
                 all_endpoints,tcp_port_to_listen_for_connections_on);
@@ -66,6 +80,12 @@ public class RalphGlobals
         String _ip_addr_to_listen_for_connections_on,
         int _tcp_port_to_listen_for_connections_on)
     {
+        thread_pool =
+            new ThreadPool(
+                Util.PERSISTENT_NUM_THREADS,
+                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
+
+        
         ip_addr_to_listen_for_connections_on =
             _ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
@@ -78,6 +98,11 @@ public class RalphGlobals
     public RalphGlobals (
         int _tcp_port_to_listen_for_connections_on)
     {
+        thread_pool =
+            new ThreadPool(
+                Util.PERSISTENT_NUM_THREADS,
+                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
+
         tcp_port_to_listen_for_connections_on =
             _tcp_port_to_listen_for_connections_on;
         connection_listener =

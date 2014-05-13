@@ -1,5 +1,7 @@
 package ralph;
 
+import java.util.concurrent.TimeUnit;
+
 public class Util
 {
 	
@@ -15,7 +17,7 @@ public class Util
      * default capacity
      */
     static public int QUEUE_CAPACITIES = 100;
-	
+    
     /**
      * For queues that are only really supposed to have one result
      * returned in them.
@@ -27,7 +29,10 @@ public class Util
      */
     public static int MEDIUM_QUEUE_CAPACITIES = 10;
 
-    public static int DEFAULT_NUM_THREADS = 70;
+    public static int PERSISTENT_NUM_THREADS = 70;
+    public static int MAX_NUM_THREADS = 200;
+    public static TimeUnit THREAD_KEEP_ALIVE_TIME = TimeUnit.SECONDS;
+
 	
     /**
      * Takes in the name of the function that another endpoint has
