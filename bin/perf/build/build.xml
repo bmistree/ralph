@@ -9,10 +9,16 @@
     file="${ant.file.PerformanceTests}"
   />
 
+  
+
   <!-- global properties for this build file -->
   <property name="build_dir" location="${perf_test_dir}/classes"/>
+  <!-- Setting this ensures that when compile libraries, those
+       libraries are placed locally. -->
+  <property name="build.dir" location="${perf_test_dir}/classes"/>
   <property name="ralph_src_dir" location="${perf_test_dir}/../ralph_src"/>
   <property name="ralph_emitted_dir" location="${perf_test_dir}/../ralph_emitted"/>
+  <property name="jar_dir" location="${build_dir}/../jar_dir"/>
   <property name="test_src_dir" location="${perf_test_dir}/../src"/>
   <property
       name="lib_build_path"
@@ -21,6 +27,9 @@
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
       name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+  <property
+      name="proto_jar_dir" location="${lib_build_path}/../"/>
+  
   <property name="ralph_compiler_py" location="${perf_test_dir}/../../emit_file.py"/>
 
   <property
@@ -33,6 +42,7 @@
     <echo message="Setting up build directories for tests"/>
     <mkdir dir="${build_dir}"/>
     <mkdir dir="${ralph_emitted_dir}"/>
+    <mkdir dir="${jar_dir}"/>
   </target>
 
 
@@ -41,7 +51,7 @@
   <target name="compile_libs" depends="init" description="compile library files">
     <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
   </target>
-
+  
   <!-- compile utils (needed by all tests) -->
   <target name="compile_utils">
       <javac
@@ -58,12 +68,10 @@
 
   <property name="num_ops_to_perform"
             value="10000"/>
-  <property name="read_num_ops_per_thread"
-            value="30000"/>
-  <property name="read_num_threads"
-            value="5"/>
-  <target name="run_read_test" depends="init,compile_libs,compile_utils">
-
+  <property
+      name="read_perf_jar"
+      value="read_perf.jar"/>
+  <target name="read_perf" depends="init,compile_libs,compile_utils">
     <!-- Translate source for read test into java -->
     <echo message="${line.separator}Read test${line.separator}"/>
     <exec executable="python" failonerror="true">
@@ -96,15 +104,11 @@
       <include name="ReadTestPerf.java" />
     </javac>
 
-    <!-- Run the read test -->
-    <java
-        dir="${build_dir}"
-        classname="${perf_package}.ReadTestPerf"
-        fork="yes"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
-        <arg line="${read_num_ops_per_thread}"/>
-        <arg line="${read_num_threads}"/>
-    </java>
+    <!-- Create a jar -->
+    <antcall target="make_jar">
+      <param name="main_class" value="ReadTestPerf"/>
+      <param name="dest_jar" value="${read_perf_jar}"/>
+    </antcall>
   </target>
 
 
@@ -245,12 +249,27 @@
     </java>
   </target>
 
-  
+  <!-- Make a jar -->
+  <target
+      name="make_jar"
+      depends="compile_libs"
+      description="Make a jar">
+    <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${perf_package}.${main_class}"/>
+        <attribute name="Class-Path" value="${build_dir}:${proto_class_path}"/>
+      </manifest>
+      <fileset dir="${build_dir}"/>
+      <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
   
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build_dir}"/>
     <delete dir="${ralph_emitted_dir}"/>
+    <delete dir="${jar_dir}"/>
     <!-- Delete ralph compiler output -->
     <delete file="parser.out"/>
     <delete file="parsetab.py"/>
