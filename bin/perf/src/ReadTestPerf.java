@@ -55,7 +55,8 @@ public class ReadTestPerf
             {
                 threads.add(
                     new ReadThread(
-                        endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ));
+                        endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ,
+                        num_reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
@@ -70,7 +71,8 @@ public class ReadTestPerf
             {
                 threads.add(
                     new ReadThread(
-                        endpt,ReadThreadType.ATOMIC_NUMBER_READ));
+                        endpt,ReadThreadType.ATOMIC_NUMBER_READ,
+                        num_reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
@@ -85,7 +87,8 @@ public class ReadTestPerf
             {
                 threads.add(
                     new ReadThread(
-                        endpt,ReadThreadType.NON_ATOMIC_MAP_READ));
+                        endpt,ReadThreadType.NON_ATOMIC_MAP_READ,
+                        num_reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
@@ -100,7 +103,8 @@ public class ReadTestPerf
             {
                 threads.add(
                     new ReadThread(
-                        endpt,ReadThreadType.ATOMIC_MAP_READ));
+                        endpt,ReadThreadType.ATOMIC_MAP_READ,
+                        num_reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
@@ -132,11 +136,14 @@ public class ReadTestPerf
     {
         private final Tester endpt;
         private final ReadThreadType read_thread_type;
-
-        public ReadThread(Tester _endpt, ReadThreadType _read_thread_type)
+        private final int num_ops;
+        
+        public ReadThread(
+            Tester _endpt, ReadThreadType _read_thread_type, int _num_ops)
         {
             endpt = _endpt;
             read_thread_type = _read_thread_type;
+            num_ops = _num_ops;
         }
 
         @Override
@@ -144,25 +151,27 @@ public class ReadTestPerf
         {
             try
             {
-                switch (read_thread_type)
+                for (int i = 0; i < num_ops; ++i)
                 {
-                case ATOMIC_NUMBER_READ:
-                    endpt.read_atomic_number();
-                    break;
-                case NON_ATOMIC_NUMBER_READ:
-                    endpt.read_number();
-                    break;
-                case ATOMIC_MAP_READ:
-                    endpt.read_atomic_map();
-                    break;
-                case NON_ATOMIC_MAP_READ:
-                    endpt.read_map();
-                    break;
-                default:
-                    System.out.println("\nUnknown read type\n");
-                    assert(false);
+                    switch (read_thread_type)
+                    {
+                    case ATOMIC_NUMBER_READ:
+                        endpt.read_atomic_number();
+                        break;
+                    case NON_ATOMIC_NUMBER_READ:
+                        endpt.read_number();
+                        break;
+                    case ATOMIC_MAP_READ:
+                        endpt.read_atomic_map();
+                        break;
+                    case NON_ATOMIC_MAP_READ:
+                        endpt.read_map();
+                        break;
+                    default:
+                        System.out.println("\nUnknown read type\n");
+                        assert(false);
+                    }
                 }
-
             }
             catch (Exception ex)
             {
