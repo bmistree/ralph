@@ -58,7 +58,10 @@
 
   <property name="num_ops_to_perform"
             value="10000"/>
-  
+  <property name="read_num_ops_per_thread"
+            value="30000"/>
+  <property name="read_num_threads"
+            value="5"/>
   <target name="run_read_test" depends="init,compile_libs,compile_utils">
 
     <!-- Translate source for read test into java -->
@@ -99,10 +102,10 @@
         classname="${perf_package}.ReadTestPerf"
         fork="yes"
         classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
-        <arg line="${num_ops_to_perform}"/>
+        <arg line="${read_num_ops_per_thread}"/>
+        <arg line="${read_num_threads}"/>
     </java>
   </target>
-
 
 
   <!-- Write test -->
