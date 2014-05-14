@@ -24,16 +24,25 @@ public class ReadTestPerf
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
 
+    // Which operations to benchmark
+    private final static String ATOM_NUM_CMD_LINE = "atom_num_reads";
+    private final static String ATOM_MAP_CMD_LINE = "atom_map_reads";
+    private final static String NON_ATOM_NUM_CMD_LINE = "non_atom_num_reads";
+    private final static String NON_ATOM_MAP_CMD_LINE = "non_atom_map_reads";
+
+    // Experiment setup params
     private final static String READS_PER_THREAD_CMD_LINE = "reads_per_thread";
     private final static String NUM_THREADS_CMD_LINE = "num_threads";
     private final static String WOUND_WAIT_CMD_LINE = "wound_wait";
-    private final static String HELP_CMD_LINE = "help";
     private final static String MAX_THREAD_POOL_THREADS_CMD_LINE =
         "max_thread_pool_threads";
     private final static String PERSISTENT_THREAD_POOL_THREADS_CMD_LINE =
         "persistent_thread_pool_threads";
     private final static String ATOM_INT_UUID_GENERATOR_CMD_LINE =
         "atomic_int_uuid_generator";
+    
+    // Display help
+    private final static String HELP_CMD_LINE = "help";
     
     private static class Parameters
     {
@@ -45,10 +54,16 @@ public class ReadTestPerf
         
         public int persistent_thread_pool_threads = NOT_SET_SENTINEL;
         public int max_thread_pool_threads = NOT_SET_SENTINEL;
+
+        public boolean reads_atom_num = false;
+        public boolean reads_atom_map = false;
+        public boolean reads_non_atom_num = false;
+        public boolean reads_non_atom_map = false;
     }
 
     private static Parameters get_parameters(String [] args)
     {
+        // SET UP ARGUMENT PARSER
         Option help_option =
             new Option(
                 "h","help",false,"Help");
@@ -73,7 +88,23 @@ public class ReadTestPerf
             new Option(
                 "a",ATOM_INT_UUID_GENERATOR_CMD_LINE,false,
                 "Use atomic int uuid generator.");
-
+        Option atom_num_option =
+            new Option(
+                "an",ATOM_NUM_CMD_LINE,false,
+                "Perform reads on atomic number.");
+        Option atom_map_option =
+            new Option(
+                "am",ATOM_MAP_CMD_LINE,false,
+                "Perform reads on atomic map.");        
+        Option non_atom_num_option =
+            new Option(
+                "nan",NON_ATOM_NUM_CMD_LINE,false,
+                "Perform reads on non-atomic number.");
+        Option non_atom_map_option =
+            new Option(
+                "nam",NON_ATOM_MAP_CMD_LINE,false,
+                "Perform reads on non-atomic map.");        
+        
         Options options = new Options();
         options.addOption(help_option);
         options.addOption(num_reads_per_thread_option);
@@ -82,6 +113,12 @@ public class ReadTestPerf
         options.addOption(persistent_thread_pool_threads_option);
         options.addOption(max_thread_pool_threads_option);
         options.addOption(atom_int_uuid_generator_option);
+        options.addOption(atom_num_option);
+        options.addOption(atom_map_option);
+        options.addOption(non_atom_num_option);
+        options.addOption(non_atom_map_option);
+        
+        // PARSE ARGUMENTS
         GnuParser parser = new GnuParser();
         CommandLine command_line = null;
         try
@@ -114,8 +151,10 @@ public class ReadTestPerf
             System.exit(0);
         }
         
-
+        // SET PARAMETERS
         Parameters to_return = new Parameters();
+        
+        // get optional arguments        
         if (command_line.hasOption(WOUND_WAIT_CMD_LINE))
             to_return.wound_wait = true;
         if (command_line.hasOption(ATOM_INT_UUID_GENERATOR_CMD_LINE))
@@ -141,14 +180,23 @@ public class ReadTestPerf
                     command_line.getOptionValue(
                         MAX_THREAD_POOL_THREADS_CMD_LINE));
         }
+
+        // which experiment to run
+        if (command_line.hasOption(ATOM_NUM_CMD_LINE))
+            to_return.reads_atom_num = true;
+        if (command_line.hasOption(ATOM_MAP_CMD_LINE))
+            to_return.reads_atom_map = true;
+        if (command_line.hasOption(NON_ATOM_NUM_CMD_LINE))
+            to_return.reads_non_atom_num = true;
+        if (command_line.hasOption(NON_ATOM_MAP_CMD_LINE))
+            to_return.reads_non_atom_map = true;
+        
         return to_return;
     }
     
     public static void main(String[] args)
     {
-        Parameters params = get_parameters(args);
-        
-        PerfClock clock = new PerfClock();
+        Parameters params = get_parameters(args);        
         try
         {
             RalphGlobals.Parameters rg_params = new RalphGlobals.Parameters();
@@ -163,7 +211,6 @@ public class ReadTestPerf
                     UUIDGenerators.ATOM_INT_UUID_GENERATOR;
             }
 
-            
             // check threadpool parameters
             ThreadPool.Parameters tp_params = new ThreadPool.Parameters();
             if (params.persistent_thread_pool_threads !=
@@ -188,85 +235,37 @@ public class ReadTestPerf
             // warm up 
             for (int i = 0; i < params.reads_per_thread; ++i)
             {
-                endpt.read_number();
-                endpt.read_atomic_number();
-                endpt.read_map();
-                endpt.read_atomic_map();
+                if (params.reads_atom_num)
+                    endpt.read_atomic_number();
+                if (params.reads_non_atom_num)
+                    endpt.read_number();
+                if (params.reads_atom_map)
+                    endpt.read_atomic_map();
+                if (params.reads_non_atom_map)
+                    endpt.read_map();
             }
 
-            List<Thread> threads = new ArrayList<Thread>();
-            
-            // non-atomic number reads
-            for (int i = 0; i < params.num_threads; ++i)
+            // actually run
+            if (params.reads_atom_num)
             {
-                threads.add(
-                    new ReadThread(
-                        endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ,
-                        params.reads_per_thread));
+                run_single_condition(
+                    endpt,ReadThreadType.ATOMIC_NUMBER_READ,params);
             }
-            clock.tic();
-            for (Thread t : threads)
-                t.start();
-            for (Thread t : threads)
-                t.join();
-            clock.toc(
-                params.num_threads*params.reads_per_thread,
-                "Non-atomic number read:\t");
-            threads.clear();
-            
-            // atomic number reads
-            for (int i = 0; i < params.num_threads; ++i)
+            if (params.reads_non_atom_num)
             {
-                threads.add(
-                    new ReadThread(
-                        endpt,ReadThreadType.ATOMIC_NUMBER_READ,
-                        params.reads_per_thread));
+                run_single_condition(
+                    endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ,params);
             }
-            clock.tic();
-            for (Thread t : threads)
-                t.start();
-            for (Thread t : threads)
-                t.join();
-            clock.toc(
-                params.num_threads*params.reads_per_thread,
-                "Atomic number read:\t");
-            threads.clear();
-            
-            // non-atomic map reads
-            for (int i = 0; i < params.num_threads; ++i)
+            if (params.reads_atom_map)
             {
-                threads.add(
-                    new ReadThread(
-                        endpt,ReadThreadType.NON_ATOMIC_MAP_READ,
-                        params.reads_per_thread));
+                run_single_condition(
+                    endpt,ReadThreadType.ATOMIC_MAP_READ,params);
             }
-            clock.tic();
-            for (Thread t : threads)
-                t.start();
-            for (Thread t : threads)
-                t.join();
-            clock.toc(
-                params.num_threads*params.reads_per_thread,
-                "Non-atomic map read:\t");
-            threads.clear();
-            
-            // atomic map reads
-            for (int i = 0; i < params.num_threads; ++i)
+            if (params.reads_non_atom_map)
             {
-                threads.add(
-                    new ReadThread(
-                        endpt,ReadThreadType.ATOMIC_MAP_READ,
-                        params.reads_per_thread));
+                run_single_condition(
+                    endpt,ReadThreadType.NON_ATOMIC_MAP_READ,params);
             }
-            clock.tic();
-            for (Thread t : threads)
-                t.start();
-            for (Thread t : threads)
-                t.join();
-            clock.toc(
-                params.num_threads*params.reads_per_thread,
-                "Atomic map read:\t");
-            threads.clear();
         }
         catch (Exception _ex)
         {
@@ -279,6 +278,34 @@ public class ReadTestPerf
                 "\n\nWarning: times may be garbage, had an exception\n\n");
         }
     }
+
+    /**
+       Run an experiment for a single condition: create a bunch of
+       threads and then start them and join them.
+     */
+    private static void run_single_condition(
+        Tester endpt, ReadThreadType thread_type,Parameters params)
+        throws InterruptedException
+    {
+        List<Thread> threads = new ArrayList<Thread>();
+        for (int i = 0; i < params.num_threads; ++i)
+        {
+            threads.add(
+                new ReadThread(endpt,thread_type,params.reads_per_thread));
+        }
+        PerfClock clock = new PerfClock();    
+        clock.tic();
+        for (Thread t : threads)
+            t.start();
+        for (Thread t : threads)
+            t.join();
+        clock.toc(
+            params.num_threads*params.reads_per_thread,
+            thread_type.toString() + "\t");
+        threads.clear();
+    }
+
+    
     private static void print_usage(Options options)
     {
         print_usage(options,null);
