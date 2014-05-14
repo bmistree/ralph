@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import performance.ReadTest.Tester;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import performance.PerfUtil.PerfClock;
 
 
@@ -23,12 +24,14 @@ public class ReadTestPerf
 
     private final static String READS_PER_THREAD_CMD_LINE = "reads_per_thread";
     private final static String NUM_THREADS_CMD_LINE = "num_threads";
+    private final static String WOUND_WAIT_CMD_LINE = "wound_wait";
     private final static String HELP_CMD_LINE = "help";
     
     private static class Parameters
     {
         public int reads_per_thread;
         public int num_threads;
+        public boolean wound_wait;
     }
 
     private static Parameters get_parameters(String [] args)
@@ -38,14 +41,19 @@ public class ReadTestPerf
                 "h","help",false,"Help");
         Option num_reads_per_thread_option =
             new Option(
-                "r","reads_per_thread",true,"Number of reads per thread");
+                "r",READS_PER_THREAD_CMD_LINE,true,"Number of reads per thread");
         Option num_threads_option = 
-            new Option("t","num_threads",true,"Number of threads");
+            new Option("t",NUM_THREADS_CMD_LINE,true,"Number of threads");
+        Option wound_wait_option = 
+            new Option(
+                "w",WOUND_WAIT_CMD_LINE,false,
+                "Specify if should use wound-wait");
 
         Options options = new Options();
         options.addOption(help_option);
         options.addOption(num_reads_per_thread_option);
         options.addOption(num_threads_option);
+        options.addOption(wound_wait_option);
         GnuParser parser = new GnuParser();
         CommandLine command_line = null;
         try
@@ -76,6 +84,9 @@ public class ReadTestPerf
         }
 
         Parameters to_return = new Parameters();
+        to_return.wound_wait = false;
+        if (command_line.hasOption(WOUND_WAIT_CMD_LINE))
+            to_return.wound_wait = true;
         to_return.reads_per_thread =
             Integer.parseInt(
                 command_line.getOptionValue(READS_PER_THREAD_CMD_LINE));
@@ -92,8 +103,15 @@ public class ReadTestPerf
         PerfClock clock = new PerfClock();
         try
         {
+            RalphGlobals.Parameters rg_params = new RalphGlobals.Parameters();
+            if (params.wound_wait)
+            {
+                rg_params.deadlock_avoidance_algorithm =
+                    DeadlockAvoidanceAlgorithm.WOUND_WAIT;
+            }
+            
             Tester endpt = new Tester(
-                new RalphGlobals(),
+                new RalphGlobals(rg_params),
                 new SingleSideConnection());
 
             // warm up 
