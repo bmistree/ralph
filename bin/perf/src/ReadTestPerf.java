@@ -3,6 +3,12 @@ package performance;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.ParseException;
 
 import performance.ReadTest.Tester;
 import RalphConnObj.SingleSideConnection;
@@ -12,27 +18,78 @@ import performance.PerfUtil.PerfClock;
 
 public class ReadTestPerf
 {
-    private final static int NUM_READS_PER_THREAD_INDEX = 0;
-    private final static int NUM_THREADS_INDEX = 1;
-    private final static AtomicBoolean had_exception = new AtomicBoolean(false);
+    private final static AtomicBoolean had_exception =
+        new AtomicBoolean(false);
+
+    private final static String READS_PER_THREAD_CMD_LINE = "reads_per_thread";
+    private final static String NUM_THREADS_CMD_LINE = "num_threads";
+    private final static String HELP_CMD_LINE = "help";
+    
+    private static class Parameters
+    {
+        public int reads_per_thread;
+        public int num_threads;
+    }
+
+    private static Parameters get_parameters(String [] args)
+    {
+        Option help_option =
+            new Option(
+                "h","help",false,"Help");
+        Option num_reads_per_thread_option =
+            new Option(
+                "r","reads_per_thread",true,"Number of reads per thread");
+        Option num_threads_option = 
+            new Option("t","num_threads",true,"Number of threads");
+
+        Options options = new Options();
+        options.addOption(help_option);
+        options.addOption(num_reads_per_thread_option);
+        options.addOption(num_threads_option);
+        GnuParser parser = new GnuParser();
+        CommandLine command_line = null;
+        try
+        {
+            command_line = parser.parse(options,args);
+        }
+        catch (ParseException parse_excep)
+        {
+            parse_excep.printStackTrace();
+            print_usage(options);
+            System.exit(0);
+        }
+        
+        if (command_line.hasOption(HELP_CMD_LINE))
+        {
+            print_usage(options);
+            System.exit(0);
+        }
+        if (! command_line.hasOption(READS_PER_THREAD_CMD_LINE))
+        {
+            print_usage(options,READS_PER_THREAD_CMD_LINE);
+            System.exit(0);
+        }
+        if (! command_line.hasOption(NUM_THREADS_CMD_LINE))
+        {
+            print_usage(options,NUM_THREADS_CMD_LINE);
+            System.exit(0);
+        }
+
+        Parameters to_return = new Parameters();
+        to_return.reads_per_thread =
+            Integer.parseInt(
+                command_line.getOptionValue(READS_PER_THREAD_CMD_LINE));
+        to_return.num_threads =
+            Integer.parseInt(command_line.getOptionValue(NUM_THREADS_CMD_LINE));
+
+        return to_return;
+    }
     
     public static void main(String[] args)
     {
-        if (args.length != 2)
-        {
-            System.out.println(
-                "ReadTest requires 2 arguments: 1) num reads per thread; " +
-                "2) num threads");
-            assert(false);
-        }
-        
-        int num_reads_per_thread =
-            Integer.parseInt(args[NUM_READS_PER_THREAD_INDEX]);
-        int num_threads = 
-            Integer.parseInt(args[NUM_THREADS_INDEX]);
+        Parameters params = get_parameters(args);
         
         PerfClock clock = new PerfClock();
-        
         try
         {
             Tester endpt = new Tester(
@@ -40,7 +97,7 @@ public class ReadTestPerf
                 new SingleSideConnection());
 
             // warm up 
-            for (int i = 0; i < num_reads_per_thread; ++i)
+            for (int i = 0; i < params.reads_per_thread; ++i)
             {
                 endpt.read_number();
                 endpt.read_atomic_number();
@@ -51,67 +108,75 @@ public class ReadTestPerf
             List<Thread> threads = new ArrayList<Thread>();
             
             // non-atomic number reads
-            for (int i = 0; i < num_threads; ++i)
+            for (int i = 0; i < params.num_threads; ++i)
             {
                 threads.add(
                     new ReadThread(
                         endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ,
-                        num_reads_per_thread));
+                        params.reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
                 t.start();
             for (Thread t : threads)
                 t.join();
-            clock.toc(num_threads*num_reads_per_thread,"Non-atomic number read:\t");
+            clock.toc(
+                params.num_threads*params.reads_per_thread,
+                "Non-atomic number read:\t");
             threads.clear();
             
             // atomic number reads
-            for (int i = 0; i < num_threads; ++i)
+            for (int i = 0; i < params.num_threads; ++i)
             {
                 threads.add(
                     new ReadThread(
                         endpt,ReadThreadType.ATOMIC_NUMBER_READ,
-                        num_reads_per_thread));
+                        params.reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
                 t.start();
             for (Thread t : threads)
                 t.join();
-            clock.toc(num_threads*num_reads_per_thread,"Atomic number read:\t\t");
+            clock.toc(
+                params.num_threads*params.reads_per_thread,
+                "Atomic number read:\t");
             threads.clear();
             
             // non-atomic map reads
-            for (int i = 0; i < num_threads; ++i)
+            for (int i = 0; i < params.num_threads; ++i)
             {
                 threads.add(
                     new ReadThread(
                         endpt,ReadThreadType.NON_ATOMIC_MAP_READ,
-                        num_reads_per_thread));
+                        params.reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
                 t.start();
             for (Thread t : threads)
                 t.join();
-            clock.toc(num_threads*num_reads_per_thread,"Non-atomic map read:\t");
+            clock.toc(
+                params.num_threads*params.reads_per_thread,
+                "Non-atomic map read:\t");
             threads.clear();
             
             // atomic map reads
-            for (int i = 0; i < num_threads; ++i)
+            for (int i = 0; i < params.num_threads; ++i)
             {
                 threads.add(
                     new ReadThread(
                         endpt,ReadThreadType.ATOMIC_MAP_READ,
-                        num_reads_per_thread));
+                        params.reads_per_thread));
             }
             clock.tic();
             for (Thread t : threads)
                 t.start();
             for (Thread t : threads)
                 t.join();
-            clock.toc(num_threads*num_reads_per_thread,"Atomic map read:\t\t");
+            clock.toc(
+                params.num_threads*params.reads_per_thread,
+                "Atomic map read:\t");
             threads.clear();
         }
         catch (Exception _ex)
@@ -124,6 +189,20 @@ public class ReadTestPerf
             System.out.println(
                 "\n\nWarning: times may be garbage, had an exception\n\n");
         }
+    }
+    private static void print_usage(Options options)
+    {
+        print_usage(options,null);
+    }
+        
+    private static void print_usage(Options options, String missing_arg)
+    {
+        String header = "";
+        if (missing_arg != null)
+            header = "Missing required argument: " + missing_arg;
+        
+        HelpFormatter help_formatter = new HelpFormatter();
+        help_formatter.printHelp("read_perf",header,options,"",true);
     }
     
     public enum ReadThreadType

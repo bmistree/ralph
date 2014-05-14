@@ -28,7 +28,9 @@
   <property
       name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
   <property
-      name="proto_jar_dir" location="${lib_build_path}/../"/>
+      name="commons_class_path" location="${lib_build_path}/../commons-cli-1.2.jar"/>
+  <property
+      name="external_jar_dir" location="${lib_build_path}/../"/>
   
   <property name="ralph_compiler_py" location="${perf_test_dir}/../../emit_file.py"/>
 
@@ -57,7 +59,7 @@
       <javac
             srcdir="${test_src_dir}/"
             destdir="${build_dir}"
-            classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
+            classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
             debug="true"
             debuglevel="lines,vars,source"
             includeantruntime="false">
@@ -86,7 +88,7 @@
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${proto_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -97,7 +99,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -129,7 +131,7 @@
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${proto_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -140,7 +142,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -152,7 +154,7 @@
         dir="${build_dir}"
         classname="${perf_package}.WriteTestPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}">
         <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
@@ -176,7 +178,7 @@
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${proto_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -187,7 +189,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -199,7 +201,7 @@
         dir="${build_dir}"
         classname="${perf_package}.NestedStructsPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}">
         <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
@@ -221,7 +223,7 @@
     <javac
         srcdir="${ralph_emitted_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${proto_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -232,7 +234,7 @@
     <javac
         srcdir="${test_src_dir}/"
         destdir="${build_dir}"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false">
@@ -244,7 +246,7 @@
         dir="${build_dir}"
         classname="${perf_package}.PronghornTestPerf"
         fork="yes"
-        classpath="${lib_class_path}:${build_dir}:${proto_class_path}">
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}">
         <arg line="${num_ops_to_perform}"/>
     </java>
   </target>
@@ -257,10 +259,10 @@
     <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
       <manifest>
         <attribute name="Main-Class" value="${perf_package}.${main_class}"/>
-        <attribute name="Class-Path" value="${build_dir}:${proto_class_path}"/>
+        <attribute name="Class-Path" value="${build_dir}:${proto_class_path}:${commons_class_path}"/>
       </manifest>
       <fileset dir="${build_dir}"/>
-      <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
+      <zipgroupfileset dir="${external_jar_dir}" includes="**/*.jar" />
     </jar>
   </target>
 
