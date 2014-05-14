@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import performance.ReadTest.Tester;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.ThreadPool;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import performance.PerfUtil.PerfClock;
 
@@ -26,12 +27,20 @@ public class ReadTestPerf
     private final static String NUM_THREADS_CMD_LINE = "num_threads";
     private final static String WOUND_WAIT_CMD_LINE = "wound_wait";
     private final static String HELP_CMD_LINE = "help";
-    
+    private final static String MAX_THREAD_POOL_THREADS_CMD_LINE =
+        "max_thread_pool_threads";
+    private final static String PERSISTENT_THREAD_POOL_THREADS_CMD_LINE =
+        "persistent_thread_pool_threads";
+
     private static class Parameters
     {
+        public final static int NOT_SET_SENTINEL = -1;
         public int reads_per_thread;
         public int num_threads;
         public boolean wound_wait;
+        
+        public int persistent_thread_pool_threads = NOT_SET_SENTINEL;
+        public int max_thread_pool_threads = NOT_SET_SENTINEL;
     }
 
     private static Parameters get_parameters(String [] args)
@@ -48,12 +57,22 @@ public class ReadTestPerf
             new Option(
                 "w",WOUND_WAIT_CMD_LINE,false,
                 "Specify if should use wound-wait");
+        Option persistent_thread_pool_threads_option = 
+            new Option(
+                "p",PERSISTENT_THREAD_POOL_THREADS_CMD_LINE,true,
+                "Number of persistent thread pool threads");
+        Option max_thread_pool_threads_option = 
+            new Option(
+                "m",MAX_THREAD_POOL_THREADS_CMD_LINE,true,
+                "Maximum number of thread pool threads");        
 
         Options options = new Options();
         options.addOption(help_option);
         options.addOption(num_reads_per_thread_option);
         options.addOption(num_threads_option);
         options.addOption(wound_wait_option);
+        options.addOption(persistent_thread_pool_threads_option);
+        options.addOption(max_thread_pool_threads_option);
         GnuParser parser = new GnuParser();
         CommandLine command_line = null;
         try
@@ -66,12 +85,15 @@ public class ReadTestPerf
             print_usage(options);
             System.exit(0);
         }
-        
+
+        // if help, ignore other arguments and return
         if (command_line.hasOption(HELP_CMD_LINE))
         {
             print_usage(options);
             System.exit(0);
         }
+
+        // Check required arguments
         if (! command_line.hasOption(READS_PER_THREAD_CMD_LINE))
         {
             print_usage(options,READS_PER_THREAD_CMD_LINE);
@@ -82,6 +104,7 @@ public class ReadTestPerf
             print_usage(options,NUM_THREADS_CMD_LINE);
             System.exit(0);
         }
+        
 
         Parameters to_return = new Parameters();
         to_return.wound_wait = false;
@@ -93,6 +116,20 @@ public class ReadTestPerf
         to_return.num_threads =
             Integer.parseInt(command_line.getOptionValue(NUM_THREADS_CMD_LINE));
 
+        if (command_line.hasOption(PERSISTENT_THREAD_POOL_THREADS_CMD_LINE))
+        {
+            to_return.persistent_thread_pool_threads =
+                Integer.parseInt(
+                    command_line.getOptionValue(
+                        PERSISTENT_THREAD_POOL_THREADS_CMD_LINE));
+        }
+        if (command_line.hasOption(MAX_THREAD_POOL_THREADS_CMD_LINE))
+        {
+            to_return.persistent_thread_pool_threads =
+                Integer.parseInt(
+                    command_line.getOptionValue(
+                        MAX_THREAD_POOL_THREADS_CMD_LINE));
+        }
         return to_return;
     }
     
@@ -110,6 +147,24 @@ public class ReadTestPerf
                     DeadlockAvoidanceAlgorithm.WOUND_WAIT;
             }
             
+            // check threadpool parameters
+            ThreadPool.Parameters tp_params = new ThreadPool.Parameters();
+            if (params.persistent_thread_pool_threads !=
+                Parameters.NOT_SET_SENTINEL)
+            {
+                tp_params.persistent_num_threads =
+                    params.persistent_thread_pool_threads;
+            }
+            if (params.max_thread_pool_threads !=
+                Parameters.NOT_SET_SENTINEL)
+            {
+                tp_params.max_num_threads =
+                    params.max_thread_pool_threads;
+            }
+            rg_params.threadpool_params = tp_params;
+
+
+            // set up experiment
             Tester endpt = new Tester(
                 new RalphGlobals(rg_params),
                 new SingleSideConnection());
