@@ -25,15 +25,26 @@ public class ReferenceServiceFactoryTest
 
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_receiver =
+            new RalphGlobals.Parameters();
+        params_receiver.tcp_port_to_listen_for_connections_on =
+            TCP_CONNECTION_PORT_RECEIVER;
+        
+        RalphGlobals.Parameters params_sender =
+            new RalphGlobals.Parameters();
+        params_sender.tcp_port_to_listen_for_connections_on =
+            TCP_CONNECTION_PORT_SENDER;
+
+        
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
             RalphGlobals sender_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_SENDER);
+                new RalphGlobals(params_sender);
             Sender sender = new Sender(sender_globals,conn_obj);
             Receiver receiver =
                 new Receiver(
-                    new RalphGlobals(TCP_CONNECTION_PORT_RECEIVER),conn_obj);
+                    new RalphGlobals(params_receiver),conn_obj);
 
             EndpointConstructorObj receiver_creater =
                 ReceiverCreated.factory;

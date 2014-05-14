@@ -11,106 +11,63 @@ import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 
 public class RalphGlobals
 {
+    public static class Parameters
+    {
+        public ThreadPool.Parameters threadpool_params =
+            ThreadPool.DEFAULT_PARAMETERS;
+        public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
+            DeadlockAvoidanceAlgorithm.BOOSTED;
+        public int tcp_port_to_listen_for_connections_on =
+            Util.DEFAULT_TCP_PORT_NEW_CONNECTIONS;
+        public String ip_addr_to_listen_for_connections_on = 
+            Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
+    }
+    
+    public static final Parameters DEFAULT_PARAMETERS = new Parameters();
+    
     public final String host_uuid = Util.generate_uuid();
     
     public final AllEndpoints all_endpoints = new AllEndpoints();
     public final LamportClock clock = new LamportClock(all_endpoints);
-
-    private final ConnectionListener connection_listener;
+    private ConnectionListener connection_listener;
     
-    public final ThreadPool thread_pool;
-    public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm =
-        DeadlockAvoidanceAlgorithm.BOOSTED;
-
+    public ThreadPool thread_pool;
     public final ConcurrentHashMap<String,ActiveEvent> all_events =
         new ConcurrentHashMap<String,ActiveEvent>();
 
-    public int tcp_port_to_listen_for_connections_on =
-        Util.DEFAULT_TCP_PORT_NEW_CONNECTIONS;
-    public String ip_addr_to_listen_for_connections_on =
-        Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
-    
     private List<Stoppable> stoppable_list =
         Collections.synchronizedList(new ArrayList<Stoppable>());
 
-    public RalphGlobals(DeadlockAvoidanceAlgorithm daa)
-    {
-        thread_pool =
-            new ThreadPool(
-                Util.PERSISTENT_NUM_THREADS,
-                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
-        
-        deadlock_avoidance_algorithm = daa;
-        connection_listener =
-            new ConnectionListener(
-                all_endpoints,tcp_port_to_listen_for_connections_on);
-    }
-
-    public RalphGlobals(
-        DeadlockAvoidanceAlgorithm daa,
-        int _tcp_port_to_listen_for_connections_on)
-    {
-        thread_pool =
-            new ThreadPool(
-                Util.PERSISTENT_NUM_THREADS,
-                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
-
-        deadlock_avoidance_algorithm = daa;
-        tcp_port_to_listen_for_connections_on =
-            _tcp_port_to_listen_for_connections_on;
-        connection_listener =
-            new ConnectionListener(
-                all_endpoints,tcp_port_to_listen_for_connections_on);
-    }
-
+    public String ip_addr_to_listen_for_connections_on;
+    public int tcp_port_to_listen_for_connections_on;
+    public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     
     public RalphGlobals()
     {
-        thread_pool =
-            new ThreadPool(
-                Util.PERSISTENT_NUM_THREADS,
-                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
-        
-        connection_listener =
-            new ConnectionListener(
-                all_endpoints,tcp_port_to_listen_for_connections_on);
+        init(DEFAULT_PARAMETERS);
+    }
+    
+    public RalphGlobals(Parameters params)
+    {
+        init(params);
     }
 
-    public RalphGlobals (
-        String _ip_addr_to_listen_for_connections_on,
-        int _tcp_port_to_listen_for_connections_on)
+    public void init(Parameters params)
     {
-        thread_pool =
-            new ThreadPool(
-                Util.PERSISTENT_NUM_THREADS,
-                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
-
-        
         ip_addr_to_listen_for_connections_on =
-            _ip_addr_to_listen_for_connections_on;
+            params.ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
-            _tcp_port_to_listen_for_connections_on;
+            params.tcp_port_to_listen_for_connections_on;
+        deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
+        
         connection_listener =
             new ConnectionListener(
-                all_endpoints,tcp_port_to_listen_for_connections_on);
-    }
-
-    public RalphGlobals (
-        int _tcp_port_to_listen_for_connections_on)
-    {
-        thread_pool =
-            new ThreadPool(
-                Util.PERSISTENT_NUM_THREADS,
-                Util.MAX_NUM_THREADS,Util.THREAD_KEEP_ALIVE_TIME);
-
-        tcp_port_to_listen_for_connections_on =
-            _tcp_port_to_listen_for_connections_on;
-        connection_listener =
-            new ConnectionListener(
-                all_endpoints,tcp_port_to_listen_for_connections_on);
+                all_endpoints,params.tcp_port_to_listen_for_connections_on);
+        deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
+        thread_pool = new ThreadPool(params.threadpool_params);
     }
     
-    
+    // FIXME: get rid of this?
     public void add_stoppable(Stoppable stoppable)
     {
         stoppable_list.add(stoppable);

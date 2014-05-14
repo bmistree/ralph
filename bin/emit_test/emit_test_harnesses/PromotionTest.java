@@ -45,7 +45,7 @@ public class PromotionTest
     
     public static void main(String[] args)
     {
-        if (PromotionTest.run_test())
+        if (run_test())
             System.out.println("\nSUCCESS in PromotionTest\n");
         else
             System.out.println("\nFAILURE in PromotionTest\n");
@@ -70,13 +70,20 @@ public class PromotionTest
     
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
+        params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
+        
+        RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
+        params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
+
+        
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = new PromoterEndpoint(
-                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
+                new RalphGlobals(params_a),conn_obj);
             PromoterEndpoint side_b = new PromoterEndpoint(
-                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
+                new RalphGlobals(params_b),conn_obj);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();

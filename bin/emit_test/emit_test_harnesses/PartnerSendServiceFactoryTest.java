@@ -28,18 +28,29 @@ public class PartnerSendServiceFactoryTest
     
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_receiver =
+            new RalphGlobals.Parameters();
+        params_receiver.tcp_port_to_listen_for_connections_on =
+            TCP_CONNECTION_PORT_RECEIVER;
+        
+        RalphGlobals.Parameters params_sender =
+            new RalphGlobals.Parameters();
+        params_sender.tcp_port_to_listen_for_connections_on =
+            TCP_CONNECTION_PORT_SENDER;
+
+        
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();            
             
             RalphGlobals receiver_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_RECEIVER);
+                new RalphGlobals(params_receiver);
             ServiceReceiver service_receiver_endpt =
                 (ServiceReceiver)ServiceReceiver.factory.construct(
                     receiver_globals,conn_obj);
             
             RalphGlobals sender_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_SENDER);
+                new RalphGlobals(params_sender);
             ServiceFactorySender service_sender_endpt =
                 (ServiceFactorySender) ServiceFactorySender.factory.construct(
                     sender_globals,conn_obj);

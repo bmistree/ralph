@@ -42,14 +42,20 @@ public class LinkedTests
 
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_ab = new RalphGlobals.Parameters();
+        params_ab.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_AB;
+        
+        RalphGlobals.Parameters params_cde = new RalphGlobals.Parameters();
+        params_cde.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_CDE;
+        
+        RalphGlobals.Parameters params_fg = new RalphGlobals.Parameters();
+        params_fg.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_FG;
+        
         try
         {
-            RalphGlobals ab_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_AB);
-            RalphGlobals cde_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_CDE);
-            RalphGlobals fg_globals =
-                new RalphGlobals(TCP_CONNECTION_PORT_FG);
+            RalphGlobals ab_globals = new RalphGlobals(params_ab);
+            RalphGlobals cde_globals = new RalphGlobals(params_cde);
+            RalphGlobals fg_globals = new RalphGlobals(params_fg);
 
             // a
             LinkedInstanceEndpoint a = new LinkedInstanceEndpoint(

@@ -20,13 +20,19 @@ public class SerializeStructWithStruct
 
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
+        params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
+        
+        RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
+        params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
+        
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
             StructSerializer side_a = new StructSerializer(
-                new RalphGlobals(TCP_CONNECTION_PORT_A),conn_obj);
+                new RalphGlobals(params_a),conn_obj);
             StructSerializer side_b = new StructSerializer(
-                new RalphGlobals(TCP_CONNECTION_PORT_B),conn_obj);
+                new RalphGlobals(params_b),conn_obj);
 
             if (! num_sum_test(side_a))
                 return false;

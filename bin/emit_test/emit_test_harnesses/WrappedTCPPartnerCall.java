@@ -37,9 +37,16 @@ public class WrappedTCPPartnerCall
 
     public static boolean run_test()
     {
+        RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
+        params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
+        
+        RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
+        params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
+        
+
         try
         {
-            RalphGlobals a_globals = new RalphGlobals(TCP_CONNECTION_PORT_A);
+            RalphGlobals a_globals = new RalphGlobals(params_a);
             
             SingleSidedHolder single_holder = new SingleSidedHolder(
                 a_globals, new SingleSideConnection());
@@ -47,7 +54,7 @@ public class WrappedTCPPartnerCall
             
             Ralph.tcp_accept(
                 SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
-                new RalphGlobals(TCP_CONNECTION_PORT_B));
+                new RalphGlobals(params_b));
 
             // wait for the other side to ensure that it's listening
             Thread.sleep(1000);

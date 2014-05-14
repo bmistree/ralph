@@ -11,18 +11,35 @@ import RalphServiceActions.ServiceAction;
 
 public class ThreadPool 
 {
-    public final int WORK_QUEUE_CAPACITIES = 500;
+    public static final int DEFAULT_WORK_QUEUE_CAPACITIES = 500;
+    public static final int DEFAULT_PERSISTENT_NUM_THREADS = 70;
+    public static final int DEFAULT_MAX_NUM_THREADS = 150;
+    public static final long DEFAULT_KEEP_ALIVE_TIME = 1L;
+    public static final TimeUnit DEFAULT_KEEP_ALIVE_TIME_UNIT =
+        TimeUnit.SECONDS;
+    
+    public static class Parameters
+    {
+        public int work_queue_capacities = DEFAULT_WORK_QUEUE_CAPACITIES;
+        public int persistent_num_threads = DEFAULT_PERSISTENT_NUM_THREADS;
+        public int max_num_threads = DEFAULT_MAX_NUM_THREADS;
+        public long keep_alive_time = DEFAULT_KEEP_ALIVE_TIME;
+        public TimeUnit keep_alive_time_unit = DEFAULT_KEEP_ALIVE_TIME_UNIT;
+    }
+    public static final Parameters DEFAULT_PARAMETERS = new Parameters();
+    
     
     private final ThreadPoolExecutor executor;
-    private final ArrayBlockingQueue<Runnable> work_queue =
-        new ArrayBlockingQueue<Runnable>(WORK_QUEUE_CAPACITIES);
+    private final ArrayBlockingQueue<Runnable> work_queue;
     
-    public ThreadPool(
-        int persistent_num_threads, int max_num_threads, TimeUnit keep_alive_time)
+    public ThreadPool(Parameters params)
     {
+        work_queue =
+            new ArrayBlockingQueue<Runnable>(params.work_queue_capacities);
+        
         executor = new ThreadPoolExecutor (
-            persistent_num_threads,max_num_threads, 1L,keep_alive_time,
-            work_queue,
+            params.persistent_num_threads,params.max_num_threads,
+            params.keep_alive_time, params.keep_alive_time_unit, work_queue,
             new ThreadFactory()
             {
                 // each thread created is a daemon
