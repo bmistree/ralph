@@ -31,6 +31,7 @@ public class BoostedManager
 
     private DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     
+    private final RalphGlobals ralph_globals;
     
     /**
      * @param _act_event_map
@@ -38,12 +39,14 @@ public class BoostedManager
      */
     public BoostedManager(
         ActiveEventMap _act_event_map, LamportClock _clock,
-        DeadlockAvoidanceAlgorithm _deadlock_avoidance_algorithm)
+        DeadlockAvoidanceAlgorithm _deadlock_avoidance_algorithm,
+        RalphGlobals _ralph_globals)
     {
         act_event_map = _act_event_map;
         clock = _clock;
         deadlock_avoidance_algorithm = _deadlock_avoidance_algorithm;
-        last_boosted_complete = clock.get_timestamp();		
+        last_boosted_complete = clock.get_timestamp();
+        ralph_globals = _ralph_globals;
     }
 
     public ActiveEvent create_root_atomic_event(ActiveEvent atomic_parent)
@@ -78,8 +81,7 @@ public class BoostedManager
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
 
-        
-        String evt_uuid = Util.generate_uuid();
+        String evt_uuid = ralph_globals.generate_uuid();
         String evt_priority = null;
 
         if (atomic_parent != null)
@@ -123,7 +125,8 @@ public class BoostedManager
 
         RootEventParent rep = 
             new RootEventParent(
-                act_event_map.local_endpoint._host_uuid,evt_uuid,evt_priority);
+                act_event_map.local_endpoint._host_uuid,evt_uuid,evt_priority,
+                ralph_globals);
         
         ActiveEvent root_event = null;
         if (atomic)

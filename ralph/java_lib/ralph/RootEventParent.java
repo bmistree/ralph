@@ -46,9 +46,10 @@ public class RootEventParent extends EventParent {
        root events use a random uuid because some must be boosted.
     */
     public RootEventParent(
-        String _host_uuid,String _uuid, String _priority)
+        String _host_uuid,String _uuid, String _priority,
+        RalphGlobals _ralph_globals)
     {
-        super(_host_uuid,_uuid,_priority);
+        super(_host_uuid,_uuid,_priority,_ralph_globals);
     }
 
     private void  _lock_endpoints_waiting_on_commit()

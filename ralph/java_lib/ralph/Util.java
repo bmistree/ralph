@@ -63,12 +63,6 @@ public class Util
         return "_onCreate";
     }
 
-	
-    static public String generate_uuid()
-    {
-        return java.util.UUID.randomUUID().toString();
-    }
-	
     static public void logger_assert(String to_assert)
     {
         System.out.println("Compiler error: " + to_assert);

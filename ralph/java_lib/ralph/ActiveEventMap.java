@@ -17,13 +17,15 @@ public class ActiveEventMap
     private boolean in_stop_complete_phase = false;
     private StopCallback stop_callback = null;
     private BoostedManager boosted_manager = null;
+    private final RalphGlobals ralph_globals;
     
     public ActiveEventMap(
         Endpoint _local_endpoint, LamportClock clock,
-        DeadlockAvoidanceAlgorithm daa)
+        DeadlockAvoidanceAlgorithm daa,RalphGlobals _ralph_globals)
     {
+        ralph_globals = _ralph_globals;
         local_endpoint = _local_endpoint;
-        boosted_manager = new BoostedManager(this,clock,daa);
+        boosted_manager = new BoostedManager(this,clock,daa,_ralph_globals);
     }
 
     /**
@@ -215,7 +217,8 @@ public class ActiveEventMap
             {
                 PartnerEventParent pep =
                     new PartnerEventParent(
-                        local_endpoint._host_uuid,local_endpoint,uuid,priority);
+                        local_endpoint._host_uuid,local_endpoint,uuid,priority,
+                        ralph_globals);
                 ActiveEvent new_event = null;
                 if (atomic)
                 {

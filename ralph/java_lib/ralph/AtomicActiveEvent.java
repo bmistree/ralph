@@ -1135,7 +1135,9 @@ public class AtomicActiveEvent extends ActiveEvent
             //# put result queue in map so that can demultiplex messages
             //# from partner to determine which result queue is finished
         	
-            String reply_with_uuid = Util.generate_uuid();
+            String reply_with_uuid =
+                event_parent.ralph_globals.generate_uuid();
+
             if (threadsafe_unblock_queue != null)
             {
                 //# may get None for result queue for the last message

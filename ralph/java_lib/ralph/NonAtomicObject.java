@@ -16,14 +16,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * entirely true If this is an internal container, then contains what
  * each value in map/list would dewaldoify to.
  */
-public abstract class NonAtomicObject<T,D> extends RalphObject<T,D> {
-	
-    public String uuid = Util.generate_uuid();
+public abstract class NonAtomicObject<T,D> extends RalphObject<T,D>
+{
+    public final String uuid;
     private DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
     
     public NonAtomicObject(RalphGlobals ralph_globals)
-    {}
+    {
+        uuid = ralph_globals.generate_uuid();
+    }
 	
     public void init(
         ValueTypeDataWrapperFactory<T,D> vtdwc,

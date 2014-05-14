@@ -21,20 +21,24 @@ public abstract class EventParent
     protected String host_uuid = null;
     
     public String uuid = null;
+    public final RalphGlobals ralph_globals;
     private String priority = null;
     private ReentrantLock _priority_mutex = new ReentrantLock();
 	
     protected ActiveEvent event = null;
     private boolean has_been_boosted = false;
+
 	
-	
-    public EventParent(String _host_uuid,String _uuid, String _priority)
+    public EventParent(
+        String _host_uuid,String _uuid, String _priority,
+        RalphGlobals _ralph_globals)
     {
         host_uuid = _host_uuid;
         uuid = _uuid;
-		
+
+        ralph_globals = _ralph_globals;
         if (uuid == null)
-            uuid = Util.generate_uuid();
+            uuid = ralph_globals.generate_uuid();
 		
         priority = _priority;
 		

@@ -86,7 +86,7 @@ public abstract class Endpoint
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
 
-    public final String _uuid = Util.generate_uuid();
+    public final String _uuid;
 	
     private ReentrantLock _stop_mutex = new ReentrantLock();
 	
@@ -142,12 +142,14 @@ public abstract class Endpoint
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
+        _uuid = ralph_globals.generate_uuid();
         this.ralph_globals = ralph_globals;
         
         _clock = ralph_globals.clock;
         _act_event_map =
             new ActiveEventMap(
-                this,_clock,ralph_globals.deadlock_avoidance_algorithm);
+                this,_clock,ralph_globals.deadlock_avoidance_algorithm,
+                ralph_globals);
         _conn_obj = conn_obj;
 
         global_var_stack.push(global_var_store);

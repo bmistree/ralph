@@ -28,7 +28,7 @@ import RalphServiceActions.AtomicObjectTryNextAction;
  */
 public abstract class AtomicObject<T,D> extends RalphObject<T,D> 
 {
-    public String uuid = Util.generate_uuid();
+    public final String uuid;
     public boolean log_changes;
     public DataWrapperFactory<T,D> data_wrapper_constructor;
     public DataWrapper<T,D> val = null;
@@ -145,6 +145,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     
     public AtomicObject(RalphGlobals ralph_globals)
     {
+        uuid = ralph_globals.generate_uuid();
         try_next_action = new AtomicObjectTryNextAction(this);
         this.ralph_globals = ralph_globals;
     }

@@ -28,8 +28,7 @@ public class DeserializationEvent extends ActiveEvent
     // deserialization event is complete.  Therefore, assigning
     // priority and uuid to constant values should not matter.
     final static private String dummy_priority = "a";
-    final static private String DESERIALIZATION_UUID =
-        Util.generate_uuid();
+    final static private String DESERIALIZATION_UUID = "a";
     
     public DeserializationEvent()
     {
