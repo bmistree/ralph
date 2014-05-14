@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import performance.ReadTest.Tester;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.UUIDGenerators;
 import ralph.ThreadPool;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import performance.PerfUtil.PerfClock;
@@ -31,13 +32,16 @@ public class ReadTestPerf
         "max_thread_pool_threads";
     private final static String PERSISTENT_THREAD_POOL_THREADS_CMD_LINE =
         "persistent_thread_pool_threads";
-
+    private final static String ATOM_INT_UUID_GENERATOR_CMD_LINE =
+        "atomic_int_uuid_generator";
+    
     private static class Parameters
     {
         public final static int NOT_SET_SENTINEL = -1;
         public int reads_per_thread;
         public int num_threads;
-        public boolean wound_wait;
+        public boolean wound_wait = false;
+        public boolean atom_int_uuid_generator = false;
         
         public int persistent_thread_pool_threads = NOT_SET_SENTINEL;
         public int max_thread_pool_threads = NOT_SET_SENTINEL;
@@ -65,6 +69,10 @@ public class ReadTestPerf
             new Option(
                 "m",MAX_THREAD_POOL_THREADS_CMD_LINE,true,
                 "Maximum number of thread pool threads");        
+        Option atom_int_uuid_generator_option =
+            new Option(
+                "a",ATOM_INT_UUID_GENERATOR_CMD_LINE,false,
+                "Use atomic int uuid generator.");
 
         Options options = new Options();
         options.addOption(help_option);
@@ -73,6 +81,7 @@ public class ReadTestPerf
         options.addOption(wound_wait_option);
         options.addOption(persistent_thread_pool_threads_option);
         options.addOption(max_thread_pool_threads_option);
+        options.addOption(atom_int_uuid_generator_option);
         GnuParser parser = new GnuParser();
         CommandLine command_line = null;
         try
@@ -107,9 +116,11 @@ public class ReadTestPerf
         
 
         Parameters to_return = new Parameters();
-        to_return.wound_wait = false;
         if (command_line.hasOption(WOUND_WAIT_CMD_LINE))
             to_return.wound_wait = true;
+        if (command_line.hasOption(ATOM_INT_UUID_GENERATOR_CMD_LINE))
+            to_return.atom_int_uuid_generator = true;
+        
         to_return.reads_per_thread =
             Integer.parseInt(
                 command_line.getOptionValue(READS_PER_THREAD_CMD_LINE));
@@ -146,6 +157,12 @@ public class ReadTestPerf
                 rg_params.deadlock_avoidance_algorithm =
                     DeadlockAvoidanceAlgorithm.WOUND_WAIT;
             }
+            if (params.atom_int_uuid_generator)
+            {
+                rg_params.uuid_generator =
+                    UUIDGenerators.ATOM_INT_UUID_GENERATOR;
+            }
+
             
             // check threadpool parameters
             ThreadPool.Parameters tp_params = new ThreadPool.Parameters();
@@ -162,7 +179,6 @@ public class ReadTestPerf
                     params.max_thread_pool_threads;
             }
             rg_params.threadpool_params = tp_params;
-
 
             // set up experiment
             Tester endpt = new Tester(
