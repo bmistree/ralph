@@ -6,6 +6,8 @@ Endpoint Tester
     Number number = 0;
     TVar Number atomic_number = 0;
 
+    TVar Number other_atomic_number = 0;
+    
     read_number() returns Number
     {
         return number;
@@ -17,6 +19,16 @@ Endpoint Tester
         atomically
         {
             to_return = atomic_number;
+        }
+        return to_return;
+    }
+
+    read_other_atomic_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = other_atomic_number;
         }
         return to_return;
     }

@@ -40,6 +40,8 @@ public class ReadTestPerf
         "persistent_thread_pool_threads";
     private final static String ATOM_INT_UUID_GENERATOR_CMD_LINE =
         "atomic_int_uuid_generator";
+    private final static String READS_ON_OTHER_ATOM_NUM_CMD_LINE =
+        "reads_on_other_atom_num";
     
     // Display help
     private final static String HELP_CMD_LINE = "help";
@@ -59,6 +61,7 @@ public class ReadTestPerf
         public boolean reads_atom_map = false;
         public boolean reads_non_atom_num = false;
         public boolean reads_non_atom_map = false;
+        public boolean reads_on_other_atom_num = false;
     }
 
     private static Parameters get_parameters(String [] args)
@@ -103,7 +106,11 @@ public class ReadTestPerf
         Option non_atom_map_option =
             new Option(
                 "nam",NON_ATOM_MAP_CMD_LINE,false,
-                "Perform reads on non-atomic map.");        
+                "Perform reads on non-atomic map.");
+        Option reads_on_other_atom_num_option =
+            new Option(
+                "oan",READS_ON_OTHER_ATOM_NUM_CMD_LINE,false,
+                "Perform reads on other atomic number.");
         
         Options options = new Options();
         options.addOption(help_option);
@@ -117,6 +124,7 @@ public class ReadTestPerf
         options.addOption(atom_map_option);
         options.addOption(non_atom_num_option);
         options.addOption(non_atom_map_option);
+        options.addOption(reads_on_other_atom_num_option);
         
         // PARSE ARGUMENTS
         GnuParser parser = new GnuParser();
@@ -184,6 +192,8 @@ public class ReadTestPerf
         // which experiment to run
         if (command_line.hasOption(ATOM_NUM_CMD_LINE))
             to_return.reads_atom_num = true;
+        if (command_line.hasOption(READS_ON_OTHER_ATOM_NUM_CMD_LINE))
+            to_return.reads_on_other_atom_num = true;
         if (command_line.hasOption(ATOM_MAP_CMD_LINE))
             to_return.reads_atom_map = true;
         if (command_line.hasOption(NON_ATOM_NUM_CMD_LINE))
@@ -290,8 +300,13 @@ public class ReadTestPerf
         List<Thread> threads = new ArrayList<Thread>();
         for (int i = 0; i < params.num_threads; ++i)
         {
+            boolean perform_read_on_other_atom_num = false;
+            if (params.reads_on_other_atom_num)
+                perform_read_on_other_atom_num = (i % 2) == 0;
             threads.add(
-                new ReadThread(endpt,thread_type,params.reads_per_thread));
+                new ReadThread(
+                    endpt,thread_type,params.reads_per_thread,
+                    perform_read_on_other_atom_num));
         }
         PerfClock clock = new PerfClock();    
         clock.tic();
@@ -332,13 +347,16 @@ public class ReadTestPerf
         private final Tester endpt;
         private final ReadThreadType read_thread_type;
         private final int num_ops;
+        private final boolean read_other_atom_num;
         
         public ReadThread(
-            Tester _endpt, ReadThreadType _read_thread_type, int _num_ops)
+            Tester _endpt, ReadThreadType _read_thread_type, int _num_ops,
+            boolean _read_other_atom_num)
         {
             endpt = _endpt;
             read_thread_type = _read_thread_type;
             num_ops = _num_ops;
+            read_other_atom_num = _read_other_atom_num;
         }
 
         @Override
@@ -351,7 +369,10 @@ public class ReadTestPerf
                     switch (read_thread_type)
                     {
                     case ATOMIC_NUMBER_READ:
-                        endpt.read_atomic_number();
+                        if (read_other_atom_num)
+                            endpt.read_other_atomic_number();
+                        else
+                            endpt.read_atomic_number();
                         break;
                     case NON_ATOMIC_NUMBER_READ:
                         endpt.read_number();
