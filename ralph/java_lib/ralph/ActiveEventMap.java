@@ -72,18 +72,25 @@ public class ActiveEventMap
 
     public AtomicActiveEvent create_root_atomic_event(ActiveEvent event_parent)
         throws RalphExceptions.StoppedException
-    {        
-        return
+    {
+        AtomicLogger atomic_logger = new AtomicLogger();
+        AtomicActiveEvent to_return =
             (AtomicActiveEvent)create_root_event(
-                true,event_parent,false,new AtomicLogger());
+                true,event_parent,false,atomic_logger);
+        atomic_logger.dump_log();
+        return to_return;
+
     }
 
     public NonAtomicActiveEvent create_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        return
+        AtomicLogger atomic_logger = new AtomicLogger();
+        NonAtomicActiveEvent to_return = 
             (NonAtomicActiveEvent)create_root_event(
-                false,null,false,new AtomicLogger());
+                false,null,false,atomic_logger);
+        atomic_logger.dump_log();
+        return to_return;
     }
     
     /**
@@ -94,10 +101,13 @@ public class ActiveEventMap
     public NonAtomicActiveEvent create_super_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        
-        return
+        AtomicLogger atomic_logger = new AtomicLogger();
+        NonAtomicActiveEvent to_return =
             (NonAtomicActiveEvent)create_root_event(
-                false,null,true,new AtomicLogger());
+                false,null,true,atomic_logger);
+        atomic_logger.dump_log();
+        return to_return;
+
     }
 
 
@@ -192,6 +202,7 @@ public class ActiveEventMap
 
         _unlock();
         logger.log("re_ie bottom");
+        logger.dump_log();
         return to_remove;
     }
 
