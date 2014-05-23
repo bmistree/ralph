@@ -72,14 +72,18 @@ public class ActiveEventMap
 
     public AtomicActiveEvent create_root_atomic_event(ActiveEvent event_parent)
         throws RalphExceptions.StoppedException
-    {
-        return (AtomicActiveEvent)create_root_event(true,event_parent,false);
+    {        
+        return
+            (AtomicActiveEvent)create_root_event(
+                true,event_parent,false,new AtomicLogger());
     }
 
     public NonAtomicActiveEvent create_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        return (NonAtomicActiveEvent)create_root_event(false,null,false);
+        return
+            (NonAtomicActiveEvent)create_root_event(
+                false,null,false,new AtomicLogger());
     }
     
     /**
@@ -90,7 +94,10 @@ public class ActiveEventMap
     public NonAtomicActiveEvent create_super_root_non_atomic_event()
         throws RalphExceptions.StoppedException
     {
-        return (NonAtomicActiveEvent)create_root_event(false,null,true);
+        
+        return
+            (NonAtomicActiveEvent)create_root_event(
+                false,null,true,new AtomicLogger());
     }
 
 
@@ -108,9 +115,12 @@ public class ActiveEventMap
        endpoint and returns it.
      */
     private ActiveEvent create_root_event(
-        boolean atomic, ActiveEvent event_parent, boolean super_priority)
+        boolean atomic, ActiveEvent event_parent, boolean super_priority,
+        AtomicLogger atomic_logger)
         throws RalphExceptions.StoppedException
     {
+        atomic_logger.log("c_rt_evt top");
+        atomic_logger.log("c_rt_ac top");
         // DEBUG
         if (super_priority && atomic)
             Util.logger_assert(
@@ -118,6 +128,8 @@ public class ActiveEventMap
         // END DEBUG
         
         _lock();
+        atomic_logger.log("c_rt_ac bottom");
+        
         if (in_stop_phase)
         {
             _unlock();
@@ -126,12 +138,15 @@ public class ActiveEventMap
 
         ActiveEvent root_event = null;
         if (atomic)
-            root_event = boosted_manager.create_root_atomic_event(event_parent);
+            root_event = boosted_manager.create_root_atomic_event(event_parent,atomic_logger);
         else
-            root_event = boosted_manager.create_root_non_atomic_event(super_priority);
+            root_event = boosted_manager.create_root_non_atomic_event(super_priority,atomic_logger);
 
+        atomic_logger.log("glob_put_evt top");
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
+        atomic_logger.log("glob_put_evt bottom");
         _unlock();
+        atomic_logger.log("c_rt_evt bottom");
         return root_event;
     }
     
@@ -160,18 +175,23 @@ public class ActiveEventMap
 
     */
     public ActiveEvent remove_event_if_exists(String event_uuid)
-    {        
+    {
+        AtomicLogger logger = new AtomicLogger();
+        logger.log("re_ie top");
+        logger.log("re_lock top");
         _lock();
+        logger.log("re_bottom top");
         ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
         ActiveEvent successor_event = null;
-        
+
         if ((to_remove != null) &&
             RootEventParent.class.isInstance(to_remove.event_parent))
         {
-            boosted_manager.complete_root_event(event_uuid);
+            boosted_manager.complete_root_event(event_uuid,logger);
         }
 
         _unlock();
+        logger.log("re_ie bottom");
         return to_remove;
     }
 

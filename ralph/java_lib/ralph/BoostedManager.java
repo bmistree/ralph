@@ -49,18 +49,20 @@ public class BoostedManager
         ralph_globals = _ralph_globals;
     }
 
-    public ActiveEvent create_root_atomic_event(ActiveEvent atomic_parent)
+    public ActiveEvent create_root_atomic_event(
+        ActiveEvent atomic_parent,AtomicLogger logger)
     {
-        return create_root_event(true,atomic_parent,false);
+        return create_root_event(true,atomic_parent,false,logger);
     }
 
     /**
        @param {boolean} super_priority --- True if non atomic active
        event should have a super priority.
      */
-    public ActiveEvent create_root_non_atomic_event(boolean super_priority)
+    public ActiveEvent create_root_non_atomic_event(
+        boolean super_priority,AtomicLogger logger)
     {
-        return create_root_event(false,null,super_priority);
+        return create_root_event(false,null,super_priority,logger);
     }
 
 
@@ -73,14 +75,19 @@ public class BoostedManager
        directly with super priority.
      */
     private ActiveEvent create_root_event(
-        boolean atomic,ActiveEvent atomic_parent,boolean super_priority)
+        boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
+        AtomicLogger logger)
     {
+        logger.log("b_c_evt top");
+        
         // DEBUG
         if (super_priority && atomic)
             Util.logger_assert(
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
 
+        logger.log("b_c_priority top");
+        
         String evt_uuid = ralph_globals.generate_uuid();
         String evt_priority = null;
 
@@ -122,12 +129,17 @@ public class BoostedManager
                 EventPriority.generate_standard_priority(
                     clock.get_and_increment_timestamp());
         }
+        logger.log("b_c_priority bottom");
 
+        logger.log("b_c_parent top");
         RootEventParent rep = 
             new RootEventParent(
                 act_event_map.local_endpoint._host_uuid,evt_uuid,evt_priority,
                 ralph_globals);
-        
+        logger.log("b_c_parent bottom");
+
+
+        logger.log("b_c_evt top");
         ActiveEvent root_event = null;
         if (atomic)
         {
@@ -139,13 +151,15 @@ public class BoostedManager
         }
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
-
+        logger.log("b_c_evt bottom");
+        
         // do not insert supers into event list: event list is a queue
         // that keeps track of which root event to promote to boosted.
         // We cannot boost supers, so do not insert it.
         if (!EventPriority.is_super_priority(evt_priority))
             event_list.add(root_event);
-        
+
+        logger.log("b_c_evt bottom");
         return root_event;
     }
 	
@@ -158,11 +172,14 @@ public class BoostedManager
        waiting uuids.
 
     */
-    public void complete_root_event(String completed_event_uuid)
+    public void complete_root_event(String completed_event_uuid,AtomicLogger logger)
     {
+        logger.log("b_c_root top");
         int counter = 0;
         int remove_counter = -1;
         ActiveEvent completed_event = null;
+
+        logger.log("c_iter top");
         for (ActiveEvent event : event_list)
         {
             if (event.uuid.equals(completed_event_uuid))
@@ -173,7 +190,7 @@ public class BoostedManager
             }
             counter += 1;
         }
-
+        logger.log("c_iter bottom");
         
         if (remove_counter == -1)
         {
@@ -181,9 +198,11 @@ public class BoostedManager
             // is because we never want to promote them: supers are
             // always supers.  Therefore, may not have an event in
             // event list with completed_event_uuid if it's super.
+            logger.log("b_c_root bottom");
             return;
         }
 
+        logger.log("r_and_p top");
         /*
           we are not retrying this event: remove the event from
           the list and if there are any other outstanding events,
@@ -195,6 +214,8 @@ public class BoostedManager
             last_boosted_complete = clock.get_and_increment_timestamp();
             promote_first_to_boosted();
         }
+        logger.log("r_and_p bottom");
+        logger.log("b_c_root bottom");
     }
     
         
@@ -222,5 +243,4 @@ public class BoostedManager
         act_event_map.local_endpoint._thread_pool.add_service_action(
             service_action);
     }
-
 }
