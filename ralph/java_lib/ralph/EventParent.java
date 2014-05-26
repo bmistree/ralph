@@ -68,6 +68,17 @@ public abstract class EventParent
         _priority_unlock();
         return priority_to_return;
     }
+
+    /**
+       Only called once after object is constructed.
+     */
+    public void initialize_priority(String new_priority)
+    {
+        if (priority != null)
+            Util.logger_assert("Error: already had priority");
+        priority = new_priority;
+    }
+    
 	
     /**
        @returns {bool} --- True if the new_priority is actually

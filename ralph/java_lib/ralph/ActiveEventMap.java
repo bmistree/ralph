@@ -116,13 +116,6 @@ public class ActiveEventMap
             Util.logger_assert(
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
-        
-        _lock();
-        if (in_stop_phase)
-        {
-            _unlock();
-            throw new RalphExceptions.StoppedException();
-        }
 
         ActiveEvent root_event = null;
         if (atomic)
@@ -130,6 +123,7 @@ public class ActiveEventMap
         else
             root_event = boosted_manager.create_root_non_atomic_event(super_priority);
 
+        _lock();
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
         _unlock();
         return root_event;
