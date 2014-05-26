@@ -166,18 +166,11 @@ public class BoostedManager
                     clock.get_and_increment_timestamp());
         }
 
-        // must check to ensure that between time that we inserted
-        // ourselves in back of list and time spent generating
-        // priorities, we weren't boosted.  (Otherwise, we might
-        // overwrite boosted priority with standard priority when we
-        // initialize priority below.)
-        if (! should_be_boosted)
-        {
-            _lock();
-            if (event_list.get(0) != root_event)
-                rep.initialize_priority(evt_priority);
-            _unlock();
-        }
+        // Note: this will not overwrite a boosted priority that got
+        // updated between time released lock and now.  This is
+        // because eventparent only initializes priorities if previous
+        // priority had been null.
+        rep.initialize_priority(evt_priority);
         return root_event;
     }
     

@@ -74,9 +74,12 @@ public abstract class EventParent
      */
     public void initialize_priority(String new_priority)
     {
-        if (priority != null)
-            Util.logger_assert("Error: already had priority");
-        priority = new_priority;
+        _priority_lock();
+        // only reset priority if did not previously have priority.
+        // This prevents overwriting a promoted priority.
+        if (priority == null)
+            priority = new_priority;
+        _priority_unlock();
     }
     
 	
