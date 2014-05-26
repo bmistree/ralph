@@ -7,6 +7,11 @@ public class AtomicLogger
     private final static float LOG_PROBABILITY = .10f;
     private final StringBuffer buffer = new StringBuffer();
     private final boolean should_log = rand.nextFloat() < LOG_PROBABILITY;
+
+    public AtomicLogger()
+    {
+        log("Creation");
+    }
     
     public void log(String event_note)
     {
@@ -25,6 +30,7 @@ public class AtomicLogger
     {
         if (!should_log)
             return;
+        log("end_sentinel");
         System.out.println(buffer.toString());
     }
 }

@@ -190,7 +190,7 @@ public class ActiveEventMap
         logger.log("re_ie top");
         logger.log("re_lock top");
         _lock();
-        logger.log("re_bottom top");
+        logger.log("re_lock bottom");
         ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
         ActiveEvent successor_event = null;
 

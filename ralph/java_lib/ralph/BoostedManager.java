@@ -138,8 +138,7 @@ public class BoostedManager
                 ralph_globals);
         logger.log("b_c_parent bottom");
 
-
-        logger.log("b_c_evt top");
+        logger.log("b_c_aae top");
         ActiveEvent root_event = null;
         if (atomic)
         {
@@ -151,7 +150,7 @@ public class BoostedManager
         }
         else
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
-        logger.log("b_c_evt bottom");
+        logger.log("b_c_aae bottom");
         
         // do not insert supers into event list: event list is a queue
         // that keeps track of which root event to promote to boosted.
