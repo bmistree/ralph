@@ -113,9 +113,28 @@ public class BoostedManager
             root_event = new NonAtomicActiveEvent(rep,act_event_map);
 
         
+
+        // trying to hold lock for as short a time as possible.  Add
+        // event to list and then generate its priority.
+        boolean should_be_boosted = false;
+        _lock();
+        if ((atomic_parent != null) && (! super_priority) &&
+            (event_list.isEmpty()))
+        {
+            if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
+                should_be_boosted = true;
+        }
+
+        // do not insert supers into event list: event list is a queue
+        // that keeps track of which root event to promote to boosted.
+        // We cannot boost supers, so do not insert it.
+        if (!super_priority)
+            event_list.add(root_event);
+        _unlock();
+
         
         String evt_priority = null;
-        _lock();
+        
         if (atomic_parent != null)
         {
             // atomic should inherit parent's priority.
@@ -128,41 +147,37 @@ public class BoostedManager
                 EventPriority.generate_super_priority(
                     clock.get_and_increment_timestamp());
         }
-        else if (event_list.isEmpty())
+        else if (should_be_boosted)
         {
-            if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
-            {
-                // boosted priority
-                evt_priority = 
-                    EventPriority.generate_boosted_priority(last_boosted_complete);
-            }
-            else if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.WOUND_WAIT)
-            {
-                evt_priority =
-                    EventPriority.generate_standard_priority(
-                        clock.get_and_increment_timestamp());
-            }
-            // DEBUG
-            else
-                Util.logger_assert("Unknown deadlock avoidance algo selected");
-            // END DEBUG
+            // boosted priority
+            
+            // note: should be okay to use last_boosted_complete here
+            // outside of lock because only thing that will change
+            // last_boosted_complete is the event we are now
+            // inserting.
+            evt_priority = 
+                EventPriority.generate_boosted_priority(last_boosted_complete);
         }
         else
         {
-            // standard priority
+            // standard priority... also used for wound-wait
             evt_priority =
                 EventPriority.generate_standard_priority(
                     clock.get_and_increment_timestamp());
         }
 
-        rep.initialize_priority(evt_priority);
-        
-        // do not insert supers into event list: event list is a queue
-        // that keeps track of which root event to promote to boosted.
-        // We cannot boost supers, so do not insert it.
-        if (!EventPriority.is_super_priority(evt_priority))
-            event_list.add(root_event);
-        _unlock();
+        // must check to ensure that between time that we inserted
+        // ourselves in back of list and time spent generating
+        // priorities, we weren't boosted.  (Otherwise, we might
+        // overwrite boosted priority with standard priority when we
+        // initialize priority below.)
+        if (! should_be_boosted)
+        {
+            _lock();
+            if (event_list.get(0) != root_event)
+                rep.initialize_priority(evt_priority);
+            _unlock();
+        }
         return root_event;
     }
     
