@@ -1083,6 +1083,12 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         
         _unlock();
 
+        // remove from event's touched objects list when complete
+        // commit (this way, do not get dual complete commits for
+        // read-only events).
+        active_event.only_remove_touched_obj(this);
+
+        
         if (should_try_promote_speculated)
             schedule_try_promote_speculated();
         if (should_try_next)

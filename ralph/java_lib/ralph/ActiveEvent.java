@@ -30,6 +30,9 @@ public abstract class ActiveEvent
     
     public abstract ActiveEvent restore_from_atomic();
 
+    public void only_remove_touched_obj(AtomicObject obj)
+    {}
+    
     /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
      read or a write on a Waldo object, if this event has not

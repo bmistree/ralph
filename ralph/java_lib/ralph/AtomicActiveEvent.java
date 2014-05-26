@@ -434,6 +434,14 @@ public class AtomicActiveEvent extends ActiveEvent
         _unlock();
         return still_running;
     }
+
+    @Override
+    public void only_remove_touched_obj(AtomicObject obj)
+    {
+        _touched_objs_lock();
+        touched_objs.remove(obj.uuid);
+        _touched_objs_unlock();
+    }
     
     
     /**
@@ -773,7 +781,8 @@ public class AtomicActiveEvent extends ActiveEvent
         // holding this lock however because the complete_commit call
         // to each of the objects in touched_objs attempts to acquire
         // the lock of each AtomicObject.
-        for (AtomicObject obj : touched_objs.values())
+        ArrayList<AtomicObject> t_obj = new ArrayList(touched_objs.values());
+        for (AtomicObject obj : t_obj)
             obj.complete_commit(this);
 
         
