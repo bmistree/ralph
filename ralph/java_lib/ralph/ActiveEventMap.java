@@ -130,28 +130,21 @@ public class ActiveEventMap
         throws RalphExceptions.StoppedException
     {
         atomic_logger.log("c_rt_evt top");
-        atomic_logger.log("c_rt_ac top");
+
         // DEBUG
         if (super_priority && atomic)
             Util.logger_assert(
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
-        
-        _lock();
-        atomic_logger.log("c_rt_ac bottom");
-        
-        if (in_stop_phase)
-        {
-            _unlock();
-            throw new RalphExceptions.StoppedException();
-        }
-
         ActiveEvent root_event = null;
         if (atomic)
             root_event = boosted_manager.create_root_atomic_event(event_parent,atomic_logger);
         else
             root_event = boosted_manager.create_root_non_atomic_event(super_priority,atomic_logger);
 
+        atomic_logger.log("c_rt_ac top");
+        _lock();
+        atomic_logger.log("c_rt_ac bottom");
         atomic_logger.log("glob_put_evt top");
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
         atomic_logger.log("glob_put_evt bottom");

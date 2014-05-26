@@ -1,7 +1,7 @@
 package ralph;
 
 import java.util.ArrayList;
-
+import java.util.concurrent.locks.ReentrantLock;
 import RalphServiceActions.ServiceAction;
 import RalphServiceActions.PromoteBoostedAction;
 
@@ -21,6 +21,10 @@ public class BoostedManager
     private ArrayList<ActiveEvent> event_list =
         new ArrayList<ActiveEvent>();
 
+    // access is no longer protected by underlying activeeventmap,
+    // must use own locking
+    private ReentrantLock _mutex = new ReentrantLock();
+    
     /**
        Allow programmer to choose type of deadlock avoidance algorithm
        to use.
@@ -65,6 +69,15 @@ public class BoostedManager
         return create_root_event(false,null,super_priority,logger);
     }
 
+    private void _lock()
+    {
+        _mutex.lock();
+    }
+    private void _unlock()
+    {
+        _mutex.unlock();
+    }
+    
 
     /**
        @param {boolean} super_priority --- true if non atomic active
@@ -79,18 +92,38 @@ public class BoostedManager
         AtomicLogger logger)
     {
         logger.log("b_c_evt top");
-        
         // DEBUG
         if (super_priority && atomic)
             Util.logger_assert(
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
 
-        logger.log("b_c_priority top");
-        
+        logger.log("b_ce top");
         String evt_uuid = ralph_globals.generate_uuid();
-        String evt_priority = null;
+        RootEventParent rep = 
+            new RootEventParent(
+                act_event_map.local_endpoint._host_uuid,evt_uuid,null,
+                ralph_globals);
 
+        ActiveEvent root_event = null;
+        if (atomic)
+        {
+            root_event =
+                new AtomicActiveEvent(
+                    rep,
+                    act_event_map.local_endpoint._thread_pool,
+                    act_event_map,atomic_parent);
+        }
+        else
+            root_event = new NonAtomicActiveEvent(rep,act_event_map);
+        logger.log("b_ce bottom");
+
+        logger.log("b_c_priority top");
+        String evt_priority = null;
+        logger.log("b_c_ac top");
+        _lock();
+        logger.log("b_c_ac bottom");
+        
         if (atomic_parent != null)
         {
             // atomic should inherit parent's priority.
@@ -108,7 +141,7 @@ public class BoostedManager
             if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
             {
                 // boosted priority
-                evt_priority =
+                evt_priority = 
                     EventPriority.generate_boosted_priority(last_boosted_complete);
             }
             else if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.WOUND_WAIT)
@@ -129,39 +162,18 @@ public class BoostedManager
                 EventPriority.generate_standard_priority(
                     clock.get_and_increment_timestamp());
         }
+        rep.initialize_priority(evt_priority);
         logger.log("b_c_priority bottom");
-
-        logger.log("b_c_parent top");
-        RootEventParent rep = 
-            new RootEventParent(
-                act_event_map.local_endpoint._host_uuid,evt_uuid,evt_priority,
-                ralph_globals);
-        logger.log("b_c_parent bottom");
-
-        logger.log("b_c_aae top");
-        ActiveEvent root_event = null;
-        if (atomic)
-        {
-            root_event =
-                new AtomicActiveEvent(
-                    rep,
-                    act_event_map.local_endpoint._thread_pool,
-                    act_event_map,atomic_parent);
-        }
-        else
-            root_event = new NonAtomicActiveEvent(rep,act_event_map);
-        logger.log("b_c_aae bottom");
-        
         // do not insert supers into event list: event list is a queue
         // that keeps track of which root event to promote to boosted.
         // We cannot boost supers, so do not insert it.
         if (!EventPriority.is_super_priority(evt_priority))
             event_list.add(root_event);
-
+        _unlock();
         logger.log("b_c_evt bottom");
         return root_event;
     }
-	
+    
     /**
        @param {UUID} completed_event_uuid
         
@@ -177,49 +189,58 @@ public class BoostedManager
         int counter = 0;
         int remove_counter = -1;
         ActiveEvent completed_event = null;
-
-        logger.log("c_iter top");
-        for (ActiveEvent event : event_list)
+        logger.log("b_c_ac top");
+        _lock();
+        logger.log("b_c_ac bottom");
+        logger.log("b_list top");
+        try
         {
-            if (event.uuid.equals(completed_event_uuid))
+            for (ActiveEvent event : event_list)
             {
-                remove_counter = counter;
-                completed_event = event;
-                break;
+                if (event.uuid.equals(completed_event_uuid))
+                {
+                    remove_counter = counter;
+                    completed_event = event;
+                    break;
+                }
+                counter += 1;
             }
-            counter += 1;
-        }
-        logger.log("c_iter bottom");
-        
-        if (remove_counter == -1)
-        {
-            // note: not inserting super events into event_list.  This
-            // is because we never want to promote them: supers are
-            // always supers.  Therefore, may not have an event in
-            // event list with completed_event_uuid if it's super.
-            logger.log("b_c_root bottom");
-            return;
-        }
+            if (remove_counter == -1)
+            {
+                // note: not inserting super events into event_list.  This
+                // is because we never want to promote them: supers are
+                // always supers.  Therefore, may not have an event in
+                // event list with completed_event_uuid if it's super.
+                logger.log("b_list bottom");
+                return;                
+            }
 
-        logger.log("r_and_p top");
-        /*
-          we are not retrying this event: remove the event from
-          the list and if there are any other outstanding events,
-          check if they should be promoted to boosted status.
-        */
-        event_list.remove(counter);
-        if (counter == 0)
-        {
-            last_boosted_complete = clock.get_and_increment_timestamp();
-            promote_first_to_boosted();
+            logger.log("b_list bottom");
+            
+            /*
+              we are not retrying this event: remove the event from
+              the list and if there are any other outstanding events,
+              check if they should be promoted to boosted status.
+            */
+            event_list.remove(counter);
+            if (counter == 0)
+            {
+                last_boosted_complete = clock.get_and_increment_timestamp();
+                promote_first_to_boosted();
+            }
         }
-        logger.log("r_and_p bottom");
-        logger.log("b_c_root bottom");
+        finally
+        {
+            _unlock();
+            logger.log("b_c_root bottom");
+        }
     }
-    
+
         
     /**
      * 
+     MUST BE CALLED FROM WITHIN LOCK
+     
      If there is an event in event_list, then turn that event into
      a boosted event.  If there is not, then there are no events to
      promote and we should do nothing.            
