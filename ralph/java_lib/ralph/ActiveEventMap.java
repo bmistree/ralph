@@ -142,14 +142,8 @@ public class ActiveEventMap
         else
             root_event = boosted_manager.create_root_non_atomic_event(super_priority,atomic_logger);
 
-        atomic_logger.log("c_rt_ac top");
-        _lock();
-        atomic_logger.log("c_rt_ac bottom");
-        atomic_logger.log("glob_put_evt top");
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
-        atomic_logger.log("glob_put_evt bottom");
-        _unlock();
-        atomic_logger.log("c_rt_evt bottom");
+        atomic_logger.log("c_rt_evt bottom");            
         return root_event;
     }
     
@@ -170,35 +164,24 @@ public class ActiveEventMap
      * @return ----
      a {Event or None} --- If an event existed in the map, then
      we return it.  Otherwise, return None.
-
-     b {Event or None} --- If we requested retry-ing, then
-     return a new root event with
-     successor uuid to event_uuid.
-     Otherwise, return None.
-
     */
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {
         AtomicLogger logger = new AtomicLogger();
         logger.log("re_ie top");
-        logger.log("re_lock top");
-        _lock();
-        logger.log("re_lock bottom");
         ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
-        ActiveEvent successor_event = null;
-
+        
         if ((to_remove != null) &&
             RootEventParent.class.isInstance(to_remove.event_parent))
         {
             boosted_manager.complete_root_event(event_uuid,logger);
         }
 
-        _unlock();
         logger.log("re_ie bottom");
         logger.dump_log();
         return to_remove;
     }
-
+    
     
     /**
      * @returns {None,_ActiveEvent} --- None if event with name uuid
@@ -207,10 +190,8 @@ public class ActiveEventMap
     */
     public ActiveEvent get_event(String uuid)
     {
-        _lock();
         ActiveEvent to_return =
             local_endpoint.ralph_globals.all_events.get(uuid);
-        _unlock();
         return to_return;
     }
 
