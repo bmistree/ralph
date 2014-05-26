@@ -222,7 +222,9 @@ public class BoostedManager
               the list and if there are any other outstanding events,
               check if they should be promoted to boosted status.
             */
+            logger.log("b_rm top");
             event_list.remove(counter);
+            logger.log("b_rm bottom");
             if (counter == 0)
             {
                 last_boosted_complete = clock.get_and_increment_timestamp();
