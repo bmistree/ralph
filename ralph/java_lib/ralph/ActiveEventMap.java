@@ -123,9 +123,7 @@ public class ActiveEventMap
         else
             root_event = boosted_manager.create_root_non_atomic_event(super_priority);
 
-        _lock();
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
-        _unlock();
         return root_event;
     }
     
@@ -146,29 +144,19 @@ public class ActiveEventMap
      * @return ----
      a {Event or None} --- If an event existed in the map, then
      we return it.  Otherwise, return None.
-
-     b {Event or None} --- If we requested retry-ing, then
-     return a new root event with
-     successor uuid to event_uuid.
-     Otherwise, return None.
-
     */
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
-        _lock();
         ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
-        ActiveEvent successor_event = null;
         
         if ((to_remove != null) &&
             RootEventParent.class.isInstance(to_remove.event_parent))
         {
             boosted_manager.complete_root_event(event_uuid);
         }
-
-        _unlock();
         return to_remove;
     }
-
+    
     
     /**
      * @returns {None,_ActiveEvent} --- None if event with name uuid
@@ -177,10 +165,8 @@ public class ActiveEventMap
     */
     public ActiveEvent get_event(String uuid)
     {
-        _lock();
         ActiveEvent to_return =
             local_endpoint.ralph_globals.all_events.get(uuid);
-        _unlock();
         return to_return;
     }
 
