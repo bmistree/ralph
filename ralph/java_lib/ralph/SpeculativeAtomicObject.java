@@ -1046,8 +1046,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
         else
         {
-            within_lock_running_complete_commit(active_event);
-            should_try_next = true;
+            // can get a request to complete a commit 2x for read-only
+            // events.  Once in first phase commit and another time
+            // when event goes through second phase of commit.  To
+            // avoid doing this double work, only call internal
+            // complete commit if completing on an event in
+            // read_lock_holders (ie, one that hasn't already been
+            // completed).
+            if (read_lock_holders.containsKey(active_event.uuid ))
+            {
+                within_lock_running_complete_commit(active_event);
+                should_try_next = true;
+            }
         }
 
         if (root_speculative)
