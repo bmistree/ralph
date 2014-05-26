@@ -180,6 +180,8 @@ public class BoostedManager
         int counter = 0;
         int remove_counter = -1;
         ActiveEvent completed_event = null;
+        ActiveEvent to_promote = null;
+        String last_completed = null;
         _lock();
         try
         {
@@ -213,41 +215,35 @@ public class BoostedManager
             if (counter == 0)
             {
                 last_boosted_complete = clock.get_and_increment_timestamp();
-                promote_first_to_boosted();
+                if ( (! event_list.isEmpty()) &&
+                     (deadlock_avoidance_algorithm != DeadlockAvoidanceAlgorithm.BOOSTED))
+                {
+                    last_completed = last_boosted_complete;
+                    to_promote = event_list.get(0);
+                }
             }
         }
         finally
         {
             _unlock();
         }
+        if (to_promote != null)
+            promote_to_boosted(last_completed,to_promote);
     }
 
         
     /**
      * 
-     MUST BE CALLED FROM WITHIN LOCK
-     
-     If there is an event in event_list, then turn that event into
-     a boosted event.  If there is not, then there are no events to
-     promote and we should do nothing.            
-    */
-    public void promote_first_to_boosted()
+     */
+    private void promote_to_boosted(String last_completed_time, ActiveEvent to_promote)
     {
-        // perform no promotions if not using boosted.
-        if (deadlock_avoidance_algorithm != DeadlockAvoidanceAlgorithm.BOOSTED)
-            return;
-        
-    	if (event_list.isEmpty())
-            return;
-    	
         String boosted_priority =
-            EventPriority.generate_boosted_priority(last_boosted_complete);
+            EventPriority.generate_boosted_priority(last_completed_time);
 
         ServiceAction service_action = new PromoteBoostedAction(
-            event_list.get(0),boosted_priority);
+            to_promote,boosted_priority);
         
         act_event_map.local_endpoint._thread_pool.add_service_action(
             service_action);
     }
-
 }
