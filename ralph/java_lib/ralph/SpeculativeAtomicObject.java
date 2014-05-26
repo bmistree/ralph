@@ -14,6 +14,7 @@ import RalphExceptions.BackoutException;
 import RalphDataWrappers.DataWrapper;
 import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
 import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
+import RalphServiceActions.SpeculativeObjectPromoteAction;
 
 /**
    ==Deadlock prevention invariant==
@@ -149,6 +150,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
      */
     private SpeculativeAtomicObject<T,D> root_object = null;
 
+    /**
+       Only really used on root object.
+     */
+    private final SpeculativeObjectPromoteAction schedule_promote_service_action;
     
     /**
        If speculative object B derives from speculative object A (ie,
@@ -165,6 +170,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     public SpeculativeAtomicObject(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
+        schedule_promote_service_action = new SpeculativeObjectPromoteAction(this);
     }
 
     /**
@@ -1029,6 +1035,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     public void complete_commit(ActiveEvent active_event)
     {
         boolean should_try_next = false;
+        boolean should_try_promote_speculated = false;
         _lock();
         if (speculation_state == SpeculationState.SUCCEEDED)
         {
@@ -1056,7 +1063,11 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (read_lock_holders.containsKey(active_event.uuid ))
             {
                 within_lock_running_complete_commit(active_event);
-                should_try_next = true;
+                should_try_promote_speculated =
+                    (read_lock_holders.isEmpty()) &&
+                    (! speculated_entries.isEmpty());
+
+                should_try_next = !waiting_events.isEmpty();
             }
         }
 
@@ -1071,15 +1082,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         }
         
         _unlock();
-        //# FIXME: may want to actually check whether the change could
-        //# have caused another read/write to be scheduled.
+
+        if (should_try_promote_speculated)
+            schedule_try_promote_speculated();
         if (should_try_next)
-        {
-            try_promote_speculated();
-            try_next();
-        }
+            schedule_try_next();
     }
 
+    private void schedule_try_promote_speculated()
+    {
+        ralph_globals.thread_pool.add_service_action(
+            schedule_promote_service_action);
+    }
     
 
     /**
@@ -1105,8 +1119,10 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                derivative's.
           6)   transfer_to_root on eldest derivative to root.  Check if
                there are other objects to transfer.
+
+        Should be called from service action
      */
-    private void try_promote_speculated()
+    public void try_promote_speculated()
     {        
         //// DEBUG
         if (! root_speculative)
@@ -1235,7 +1251,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             }
         }
         _unlock();
-
+        
         // in case we only had a speculative read event that was
         // waiting on commit, we may need to go to waiters or even
         // promote next.
