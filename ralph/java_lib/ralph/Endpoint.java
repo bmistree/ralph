@@ -142,7 +142,7 @@ public abstract class Endpoint
         RalphConnObj.ConnectionObj conn_obj,
         VariableStore global_var_store)
     {
-        _uuid = ralph_globals.generate_uuid();
+        _uuid = ralph_globals.generate_local_uuid();
         this.ralph_globals = ralph_globals;
         
         _clock = ralph_globals.clock;

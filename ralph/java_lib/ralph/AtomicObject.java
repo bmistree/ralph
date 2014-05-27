@@ -145,7 +145,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     
     public AtomicObject(RalphGlobals ralph_globals)
     {
-        uuid = ralph_globals.generate_uuid();
+        uuid = ralph_globals.generate_local_uuid();
         try_next_action = new AtomicObjectTryNextAction(this);
         this.ralph_globals = ralph_globals;
     }

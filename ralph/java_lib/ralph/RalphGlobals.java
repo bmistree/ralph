@@ -22,8 +22,15 @@ public class RalphGlobals implements IUUIDGenerator
         public String ip_addr_to_listen_for_connections_on = 
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
-            UUIDGenerators.REAL_UUID_GENERATOR;
+            UUIDGenerators.ATOM_INT_UUID_GENERATOR;
     }
+
+    /**
+       Construct globally unique UUIDs as BASE_UUID +
+       uuid_generator.generate_uuid().
+     */
+    private static final String BASE_UUID =
+        UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
     
     public static final Parameters DEFAULT_PARAMETERS = new Parameters();
         
@@ -58,7 +65,12 @@ public class RalphGlobals implements IUUIDGenerator
     @Override
     public String generate_uuid()
     {
-        return uuid_generator.generate_uuid();
+        return BASE_UUID + uuid_generator.generate_uuid();
+    }
+
+    public String generate_local_uuid()
+    {
+        return UUIDGenerators.LOCAL_ATOM_INT_UUID_GENERATOR.generate_uuid();
     }
     
     private void init(Parameters params)
