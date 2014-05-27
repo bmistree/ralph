@@ -1,0 +1,31 @@
+alias Endpoint Tester as 'performance.MultiReadTestJava.Tester';
+
+Struct SharedTVar
+{
+    TVar Number atomic_number = 0;    
+}
+
+Endpoint Tester
+{
+    Struct SharedTVar shared_tvar;
+
+    give_other_shared() returns Struct SharedTVar
+    {
+        return shared_tvar;
+    }
+    
+    set_from_other(Endpoint Tester to_set_from)
+    {
+        shared_tvar = to_set_from.give_other_shared();
+    }
+    
+    read_atomic_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = shared_tvar.atomic_number;
+        }
+        return to_return;
+    }
+}

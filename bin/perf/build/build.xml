@@ -114,6 +114,53 @@
   </target>
 
 
+
+  <property
+      name="multi_read_perf_jar"
+      value="multi_read_perf.jar"/>
+  <target name="multi_read_perf" depends="init,compile_libs,compile_utils">
+    <!-- Translate source for read test into java -->
+    <echo message="${line.separator}Multi read test${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src_dir}/multi_read_test.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/MultiReadTestJava.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c MultiReadTestJava"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="MultiReadTest.java" />
+    </javac>
+
+    <!-- Compile performance test for variable reads -->
+    <!-- <javac -->
+    <!--     srcdir="${test_src_dir}/" -->
+    <!--     destdir="${build_dir}" -->
+    <!--     classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}" -->
+    <!--     debug="true" -->
+    <!--     debuglevel="lines,vars,source" -->
+    <!--     includeantruntime="false"> -->
+    <!--   <include name="ReadTestPerf.java" /> -->
+    <!-- </javac> -->
+
+    <!-- Create a jar -->
+    <!-- <antcall target="make_jar"> -->
+    <!--   <param name="main_class" value="ReadTestPerf"/> -->
+    <!--   <param name="dest_jar" value="${read_perf_jar}"/> -->
+    <!-- </antcall> -->
+  </target>
+
+
+  
+
   <!-- Write test -->
   <target name="run_write_test" depends="init,compile_libs,compile_utils">
 
