@@ -49,7 +49,7 @@ public class RootEventParent extends EventParent {
         String _host_uuid,String _uuid, String _priority,
         RalphGlobals _ralph_globals)
     {
-        super(_host_uuid,_uuid,_priority,_ralph_globals);
+        super(_host_uuid,_uuid,_priority,_ralph_globals,true);
     }
 
     private void  _lock_endpoints_waiting_on_commit()

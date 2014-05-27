@@ -18,32 +18,32 @@ import java.util.Set;
  */
 public abstract class EventParent
 {
-    protected String host_uuid = null;
-    
-    public String uuid = null;
+    protected final String host_uuid;
+    public final String uuid;
     public final RalphGlobals ralph_globals;
     private String priority = null;
-    private ReentrantLock _priority_mutex = new ReentrantLock();
+    private final ReentrantLock _priority_mutex = new ReentrantLock();
 	
     protected ActiveEvent event = null;
     private boolean has_been_boosted = false;
-
+    public final boolean is_root;
 	
     public EventParent(
         String _host_uuid,String _uuid, String _priority,
-        RalphGlobals _ralph_globals)
+        RalphGlobals _ralph_globals,boolean _is_root)
     {
         host_uuid = _host_uuid;
-        uuid = _uuid;
-
         ralph_globals = _ralph_globals;
-        if (uuid == null)
+        
+        if (_uuid == null)
             uuid = ralph_globals.generate_uuid();
-		
-        priority = _priority;
-		
-    }
+        else
+            uuid = _uuid;
 
+        priority = _priority;
+        is_root = _is_root;
+    }
+    
     private void _priority_lock()
     {
         _priority_mutex.lock();

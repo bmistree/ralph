@@ -147,13 +147,12 @@ public class ActiveEventMap
     */
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
-        ActiveEvent to_remove = local_endpoint.ralph_globals.all_events.remove(event_uuid);
+        ActiveEvent to_remove =
+            local_endpoint.ralph_globals.all_events.remove(event_uuid);
         
-        if ((to_remove != null) &&
-            RootEventParent.class.isInstance(to_remove.event_parent))
-        {
+        if ((to_remove != null) && (to_remove.event_parent.is_root))
             boosted_manager.complete_root_event(event_uuid);
-        }
+
         return to_remove;
     }
     

@@ -14,7 +14,7 @@ public class PartnerEventParent extends EventParent {
         String _host_uuid, Endpoint local_endpoint, String _uuid,
         String _priority, RalphGlobals _ralph_globals)
     {
-        super(_host_uuid,_uuid,_priority,_ralph_globals);
+        super(_host_uuid,_uuid,_priority,_ralph_globals,false);
         this.local_endpoint = local_endpoint;
     }
 
