@@ -1,10 +1,14 @@
 package performance;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.List;
 
 import ralph.RalphGlobals;
 import RalphConnObj.SingleSideConnection;
+
 import performance.ReadTest.Tester;
+import performance.IReadTestJava.IReadTest;
 
 public class ReadTestPerf
 {
@@ -38,7 +42,10 @@ public class ReadTestPerf
                     endpt.read_map();
             }
 
-            ReadTestUtil.run_condition(endpt,params,had_exception);
+            List<IReadTest> endpt_list = new ArrayList<IReadTest>();
+            for (int i =0; i < params.num_threads; ++i)
+                endpt_list.add(endpt);
+            ReadTestUtil.run_condition(endpt_list,params,had_exception);
         }
         catch (Exception _ex)
         {

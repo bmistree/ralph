@@ -219,32 +219,32 @@ public class ReadTestUtil
     }
 
     public static void run_condition(
-        IReadTest endpt,Parameters params, AtomicBoolean had_exception)
+        List<IReadTest> endpt_list,Parameters params, AtomicBoolean had_exception)
         throws InterruptedException
     {
         // actually run
         if (params.reads_atom_num)
         {
             run_single_condition(
-                endpt,ReadThreadType.ATOMIC_NUMBER_READ,params,
+                endpt_list,ReadThreadType.ATOMIC_NUMBER_READ,params,
                 had_exception);
         }
         if (params.reads_non_atom_num)
         {
             run_single_condition(
-                endpt,ReadThreadType.NON_ATOMIC_NUMBER_READ,params,
+                endpt_list,ReadThreadType.NON_ATOMIC_NUMBER_READ,params,
                 had_exception);
         }
         if (params.reads_atom_map)
         {
             run_single_condition(
-                endpt,ReadThreadType.ATOMIC_MAP_READ,params,
+                endpt_list,ReadThreadType.ATOMIC_MAP_READ,params,
                 had_exception);
         }
         if (params.reads_non_atom_map)
         {
             run_single_condition(
-                endpt,ReadThreadType.NON_ATOMIC_MAP_READ,params,
+                endpt_list,ReadThreadType.NON_ATOMIC_MAP_READ,params,
                 had_exception);
         }
     }
@@ -255,20 +255,29 @@ public class ReadTestUtil
        threads and then start them and join them.
      */
     private static void run_single_condition(
-        IReadTest endpt, ReadThreadType thread_type,Parameters params,
+        List<IReadTest> endpt_list, ReadThreadType thread_type,Parameters params,
         AtomicBoolean had_exception)
         throws InterruptedException
     {
+        if (endpt_list.size() != params.num_threads)
+        {
+            System.out.println(
+                "\nError: require same size endpoint list and num threads");
+            assert(false);
+        }
+        
         List<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < params.num_threads; ++i)
+        int counter = 0;
+        for (IReadTest endpt : endpt_list)
         {
             boolean perform_read_on_other_atom_num = false;
             if (params.reads_on_other_atom_num)
-                perform_read_on_other_atom_num = (i % 2) == 0;
+                perform_read_on_other_atom_num = (counter % 2) == 0;
             threads.add(
                 new ReadThread(
                     endpt,thread_type,params.reads_per_thread,
                     perform_read_on_other_atom_num,had_exception));
+            ++counter;
         }
         PerfClock clock = new PerfClock();    
         clock.tic();
@@ -277,7 +286,7 @@ public class ReadTestUtil
         for (Thread t : threads)
             t.join();
         clock.toc(
-            params.num_threads*params.reads_per_thread,
+            endpt_list.size()*params.reads_per_thread,
             thread_type.toString() + "\t");
         threads.clear();
     }
