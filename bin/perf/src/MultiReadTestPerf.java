@@ -6,11 +6,10 @@ import java.util.List;
 
 import ralph.RalphGlobals;
 import RalphConnObj.SingleSideConnection;
-
-import performance.ReadTest.Tester;
+import performance.MultiReadTestJava.Tester;
 import performance.IReadTestJava.IReadTest;
 
-public class ReadTestPerf
+public class MultiReadTestPerf
 {
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
@@ -25,26 +24,42 @@ public class ReadTestPerf
                 ReadTestUtil.ralph_params_from_read_test_params(
                     params);
             // set up experiment
-            Tester endpt = new Tester(
-                new RalphGlobals(rg_params),
-                new SingleSideConnection());
+            List<IReadTest> endpt_list = new ArrayList<IReadTest>();
+            // keeping track of parent so can perform reads on shared
+            // state.
+            Tester master = null;
+            RalphGlobals rg = new RalphGlobals(rg_params);
+            for (int i = 0; i < params.num_threads; ++i)
+            {
+                Tester endpt = new Tester(
+                    rg, new SingleSideConnection());
+                
+                if (master == null)
+                    master = endpt;
+                else
+                    endpt.set_from_other(master);
+                endpt_list.add(endpt);
+            }
 
+            if (master == null)
+            {
+                System.out.println("Must run with at least one thread");
+                assert(false);
+            }
+            
             // warm up 
             for (int i = 0; i < params.reads_per_thread; ++i)
             {
                 if (params.reads_atom_num)
-                    endpt.read_atomic_number();
+                    master.read_atomic_number();
                 if (params.reads_non_atom_num)
-                    endpt.read_number();
+                    master.read_number();
                 if (params.reads_atom_map)
-                    endpt.read_atomic_map();
+                    master.read_atomic_map();
                 if (params.reads_non_atom_map)
-                    endpt.read_map();
+                    master.read_map();
             }
 
-            List<IReadTest> endpt_list = new ArrayList<IReadTest>();
-            for (int i =0; i < params.num_threads; ++i)
-                endpt_list.add(endpt);
             ReadTestUtil.run_condition(endpt_list,params,had_exception);
         }
         catch (Exception _ex)

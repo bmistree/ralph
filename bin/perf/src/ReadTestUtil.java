@@ -16,7 +16,6 @@ import ralph.UUIDGenerators;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ThreadPool;
 
-import performance.ReadTest.Tester;
 import performance.IReadTestJava.IReadTest;
 import performance.PerfUtil.PerfClock;
 
