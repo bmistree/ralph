@@ -1,4 +1,6 @@
-Endpoint Tester
+alias Interface IReadTest as 'performance.IReadTestJava.IReadTest';
+
+Endpoint Tester implements Interface IReadTest
 {
     Map (from: Number, to: Number) map;
     TVar Map (from: Number, to: Number) atomic_map;
@@ -7,12 +9,14 @@ Endpoint Tester
     TVar Number atomic_number = 0;
 
     TVar Number other_atomic_number = 0;
-    
+
+    // @Override
     read_number() returns Number
     {
         return number;
     }
 
+    // @Override
     read_atomic_number() returns Number
     {
         Number to_return;
@@ -22,7 +26,8 @@ Endpoint Tester
         }
         return to_return;
     }
-
+    
+    // @Override
     read_other_atomic_number() returns Number
     {
         Number to_return;
@@ -32,12 +37,14 @@ Endpoint Tester
         }
         return to_return;
     }
-
+    
+    // @Override
     read_map()
     {
         map.contains(3);
     }
-
+    
+    // @Override
     read_atomic_map()
     {
         atomically

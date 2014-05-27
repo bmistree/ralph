@@ -68,12 +68,35 @@
   </target>
 
 
+  <target name="iread_test" depends="init">
+    <!-- Translate source for read test into java -->
+    <echo message="${line.separator}iread_test.rph${line.separator}"/>
+    <exec executable="python" failonerror="true">
+      <arg line="${ralph_compiler_py}"/>
+      <arg line="-i ${ralph_src_dir}/iread_test.rph"/>
+      <arg line="-o ${ralph_emitted_dir}/IReadTestJava.java"/>
+      <arg line="-p ${perf_package}"/>
+      <arg line="-c IReadTestJava"/>
+    </exec>
+
+    <!-- Compile java emitted to byte code for test -->
+    <javac
+        srcdir="${ralph_emitted_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${proto_class_path}:${commons_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="IReadTestJava.java" />
+    </javac>
+  </target>
+  
   <property name="num_ops_to_perform"
             value="10000"/>
   <property
       name="read_perf_jar"
       value="read_perf.jar"/>
-  <target name="read_perf" depends="init,compile_libs,compile_utils">
+  <target name="read_perf" depends="init,compile_libs,compile_utils,iread_test">
     <!-- Translate source for read test into java -->
     <echo message="${line.separator}Read test${line.separator}"/>
     <exec executable="python" failonerror="true">

@@ -17,6 +17,7 @@ import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ThreadPool;
 
 import performance.ReadTest.Tester;
+import performance.IReadTestJava.IReadTest;
 import performance.PerfUtil.PerfClock;
 
 
@@ -218,7 +219,7 @@ public class ReadTestUtil
     }
 
     public static void run_condition(
-        Tester endpt,Parameters params, AtomicBoolean had_exception)
+        IReadTest endpt,Parameters params, AtomicBoolean had_exception)
         throws InterruptedException
     {
         // actually run
@@ -254,7 +255,7 @@ public class ReadTestUtil
        threads and then start them and join them.
      */
     private static void run_single_condition(
-        Tester endpt, ReadThreadType thread_type,Parameters params,
+        IReadTest endpt, ReadThreadType thread_type,Parameters params,
         AtomicBoolean had_exception)
         throws InterruptedException
     {
@@ -324,14 +325,14 @@ public class ReadTestUtil
     
     public static class ReadThread extends Thread
     {
-        private final Tester endpt;
+        private final IReadTest endpt;
         private final ReadThreadType read_thread_type;
         private final int num_ops;
         private final boolean read_other_atom_num;
         private final AtomicBoolean had_exception;
         
         public ReadThread(
-            Tester _endpt, ReadThreadType _read_thread_type, int _num_ops,
+            IReadTest _endpt, ReadThreadType _read_thread_type, int _num_ops,
             boolean _read_other_atom_num, AtomicBoolean _had_exception)
         {
             endpt = _endpt;
