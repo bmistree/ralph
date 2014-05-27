@@ -152,7 +152,7 @@
   <property
       name="multi_read_perf_jar"
       value="multi_read_perf.jar"/>
-  <target name="multi_read_perf" depends="init,compile_libs,compile_utils">
+  <target name="multi_read_perf" depends="init,compile_libs,compile_utils,iread_test">
     <!-- Translate source for read test into java -->
     <echo message="${line.separator}Multi read test${line.separator}"/>
     <exec executable="python" failonerror="true">
