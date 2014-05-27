@@ -95,6 +95,17 @@
       <include name="ReadTest.java" />
     </javac>
 
+    <!-- Compile java for read utils -->
+    <javac
+        srcdir="${test_src_dir}/"
+        destdir="${build_dir}"
+        classpath="${lib_class_path}:${build_dir}:${proto_class_path}:${commons_class_path}"
+        debug="true"
+        debuglevel="lines,vars,source"
+        includeantruntime="false">
+      <include name="ReadTestUtil.java" />
+    </javac>
+    
     <!-- Compile performance test for variable reads -->
     <javac
         srcdir="${test_src_dir}/"
