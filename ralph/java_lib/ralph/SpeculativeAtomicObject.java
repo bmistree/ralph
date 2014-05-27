@@ -634,6 +634,8 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
         {
             boolean write_lock_holder = is_write_lock_holder(active_event);
             ICancellableFuture to_return = null;
+            boolean completed_commit = false;
+            
             // A SpeculativeAtomicObject can receive multiple calls to
             // commit or backout for a particular event.  This is
             // because if we succeed speculating, we forward messages
@@ -642,7 +644,7 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // To avoid transmitting duplicate messages to hardware
             // extenders and doing duplicate work, we keep track of
             // whether we've already processed an apply for the target
-            // event.
+            // event.            
             ICancellableFuture already_issued =
                 root_outstanding_commit_requests.get(active_event.uuid);
             if (already_issued != null)
@@ -657,18 +659,29 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                     to_return = ALWAYS_TRUE_FUTURE;
 
                 root_outstanding_commit_requests.put(active_event.uuid,to_return);
+
+                // If a read lock holder enters first phase of commit, the
+                // commit is automatically validated, allowing future
+                // events to operate on obj.  Note: should only allow this
+                // on root event.  If allow it on derivative, then can get
+                // issue where allowed a derivative read that committed on
+                // a rolled back write that it derived from.
+                if (! write_lock_holder)
+                {
+                    completed_commit = true;
+                    running_state_and_lock_held_complete_commit(active_event);
+                }
             }
             _unlock();
             
-            // If a read lock holder enters first phase of commit, the
-            // commit is automatically validated, allowing future
-            // events to operate on obj.  Note: should only allow this
-            // on root event.  If allow it on derivative, then can get
-            // issue where allowed a derivative read that committed on
-            // a rolled back write that it derived from.
-            if (! write_lock_holder)
-                complete_commit(active_event);
-            
+
+            if (completed_commit)
+            {
+                // remove from event's touched objects list when complete
+                // commit (this way, do not get dual complete commits for
+                // read-only events).
+                active_event.only_remove_touched_obj(this);
+            }
             return to_return;
         }
 
@@ -1034,8 +1047,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
     @Override
     public void complete_commit(ActiveEvent active_event)
     {
-        boolean should_try_next = false;
-        boolean should_try_promote_speculated = false;
         _lock();
         if (speculation_state == SpeculationState.SUCCEEDED)
         {
@@ -1052,25 +1063,43 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                 "from a failed speculation state.");
         }
         else
+            running_state_and_lock_held_complete_commit(active_event);
+        _unlock();
+
+        // remove from event's touched objects list when complete
+        // commit (this way, do not get dual complete commits for
+        // read-only events).
+        active_event.only_remove_touched_obj(this);
+    }
+
+    /**
+       Called from inside lock.  Must be in running state.
+
+       NOTE: AFTER LOCK IS RELEASED, SHOULD remove this from evt's
+       touched objs.
+     */
+    private void running_state_and_lock_held_complete_commit(ActiveEvent active_event)
+    {
+        boolean should_try_next = false;
+        boolean should_try_promote_speculated = false;
+        
+        // can get a request to complete a commit 2x for read-only
+        // events.  Once in first phase commit and another time
+        // when event goes through second phase of commit.  To
+        // avoid doing this double work, only call internal
+        // complete commit if completing on an event in
+        // read_lock_holders (ie, one that hasn't already been
+        // completed).
+        if (read_lock_holders.containsKey(active_event.uuid ))
         {
-            // can get a request to complete a commit 2x for read-only
-            // events.  Once in first phase commit and another time
-            // when event goes through second phase of commit.  To
-            // avoid doing this double work, only call internal
-            // complete commit if completing on an event in
-            // read_lock_holders (ie, one that hasn't already been
-            // completed).
-            if (read_lock_holders.containsKey(active_event.uuid ))
-            {
-                within_lock_running_complete_commit(active_event);
-                should_try_promote_speculated =
-                    (read_lock_holders.isEmpty()) &&
-                    (! speculated_entries.isEmpty());
+            within_lock_running_complete_commit(active_event);
+            should_try_promote_speculated =
+                (read_lock_holders.isEmpty()) &&
+                (! speculated_entries.isEmpty());
 
-                should_try_next = !waiting_events.isEmpty();
-            }
+            should_try_next = !waiting_events.isEmpty();
         }
-
+        
         if (root_speculative)
         {
             // Note that we do not need to actually fail or succeed
@@ -1080,21 +1109,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // collection.
             root_outstanding_commit_requests.remove(active_event.uuid);
         }
-        
-        _unlock();
 
-        // remove from event's touched objects list when complete
-        // commit (this way, do not get dual complete commits for
-        // read-only events).
-        active_event.only_remove_touched_obj(this);
-
-        
         if (should_try_promote_speculated)
             schedule_try_promote_speculated();
         if (should_try_next)
             schedule_try_next();
     }
-
+    
     private void schedule_try_promote_speculated()
     {
         ralph_globals.thread_pool.add_service_action(
