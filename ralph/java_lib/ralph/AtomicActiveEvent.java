@@ -214,9 +214,8 @@ public class AtomicActiveEvent extends ActiveEvent
         STATE_BACKED_OUT
     }
 
-    public ActiveEventMap event_map = null;
+    public final ActiveEventMap event_map;
 
-    
     /**
        When we are inside of one atomic event and encounter another
        atomic block, we increase our reference count.  We decrement
@@ -227,7 +226,7 @@ public class AtomicActiveEvent extends ActiveEvent
        nested our atomic statements are.
      */
     private int atomic_reference_counts = 0;
-    ActiveEvent to_restore_from_atomic = null;
+    private final ActiveEvent to_restore_from_atomic;
 	
     private final ReentrantLock mutex = new ReentrantLock();
     /**
@@ -334,7 +333,7 @@ public class AtomicActiveEvent extends ActiveEvent
      //# (@see
      //# waldoExecutingEvent._ExecutingEventContext.to_reply_with_uuid.)
      */
-    HashMap<String,
+    private final HashMap<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
 
@@ -361,11 +360,8 @@ public class AtomicActiveEvent extends ActiveEvent
         ActiveEventMap _event_map,
         ActiveEvent _to_restore_from_atomic)
     {
-        event_parent = _event_parent;
-        thread_pool = _thread_pool;
+        super(_event_parent,_thread_pool);
         event_map = _event_map;
-		
-        uuid = event_parent.get_uuid();
         to_restore_from_atomic = _to_restore_from_atomic;
     }
 

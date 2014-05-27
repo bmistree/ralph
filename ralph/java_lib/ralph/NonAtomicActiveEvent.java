@@ -37,19 +37,17 @@ public class NonAtomicActiveEvent extends ActiveEvent
        this properly, keep track of atomic_child.
      */
     private AtomicActiveEvent atomic_child = null;
-    private ReentrantLock _atomic_child_mutex = new ReentrantLock();
+    private final ReentrantLock _atomic_child_mutex = new ReentrantLock();
     
-    HashMap<String,
+    private final HashMap<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
     
     public NonAtomicActiveEvent(
         EventParent _event_parent, ActiveEventMap _event_map)
     {
-        event_parent = _event_parent;
+        super(_event_parent,null);
         event_map = _event_map;
-
-        uuid = event_parent.get_uuid();
     }
 
     /**

@@ -15,9 +15,24 @@ import RalphExceptions.StoppedException;
 
 public abstract class ActiveEvent
 {
-    public String uuid = null;
-    public EventParent event_parent = null;
-    protected ThreadPool thread_pool = null;
+    public final String uuid;
+    public final EventParent event_parent;
+    protected final ThreadPool thread_pool;
+
+    public ActiveEvent(EventParent _event_parent, ThreadPool _thread_pool)
+    {
+        event_parent = _event_parent;
+        thread_pool = _thread_pool;
+        uuid = event_parent.get_uuid();
+    }
+    public ActiveEvent(
+        String _uuid, EventParent _event_parent, ThreadPool _thread_pool)
+    {
+        uuid = _uuid;
+        event_parent = _event_parent;
+        thread_pool = _thread_pool;
+    }
+    
     
     /**
        When we enter an atomic block from a non-atomic block, we

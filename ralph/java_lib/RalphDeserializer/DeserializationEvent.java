@@ -32,10 +32,7 @@ public class DeserializationEvent extends ActiveEvent
     
     public DeserializationEvent()
     {
-        super();
-        uuid = DESERIALIZATION_UUID;
-        event_parent = null;
-        thread_pool = null;
+        super(DESERIALIZATION_UUID, null,null);
     }
     
     public ActiveEvent clone_atomic() throws StoppedException
