@@ -1175,7 +1175,10 @@
 
   <target name="harness_TimedAlwaysWorksBackedSpeculation">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="TimedAlwaysWorksBackedSpeculationTest.java"/>
+      <param name="arg_harness_file_list"
+             value="TimedAlwaysWorksBackedSpeculationTest.java,
+                    AlwaysWorksBackedSpeculationTest.java,
+                    BackedSpeculationTestLib.java"/>
     </antcall>
   </target>
 
