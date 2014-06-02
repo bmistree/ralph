@@ -1273,6 +1273,13 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
                      (!read_lock_holders.isEmpty()) ||
                      (!waiting_events.isEmpty()))
                 {
+                    // Should ensure a try next if the only remaining
+                    // element is waiting on being serviced.
+                    if ((!waiting_events.isEmpty()) &&
+                        (read_lock_holders.isEmpty()))
+                    {
+                        should_try_next = true;
+                    }
                     break;
                 }
             }
