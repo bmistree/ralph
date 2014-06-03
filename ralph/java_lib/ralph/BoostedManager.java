@@ -224,7 +224,7 @@ public class BoostedManager
             {
                 last_boosted_complete = clock.get_and_increment_timestamp();
                 if ( (! event_list.isEmpty()) &&
-                     (deadlock_avoidance_algorithm != DeadlockAvoidanceAlgorithm.BOOSTED))
+                     (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED))
                 {
                     last_completed = last_boosted_complete;
                     to_promote = event_list.get(0);
