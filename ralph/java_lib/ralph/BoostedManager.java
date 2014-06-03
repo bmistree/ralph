@@ -118,7 +118,7 @@ public class BoostedManager
         // event to list and then generate its priority.
         boolean should_be_boosted = false;
         _lock();
-        if ((atomic_parent != null) && (! super_priority) &&
+        if ((atomic_parent == null) && (! super_priority) &&
             (event_list.isEmpty()))
         {
             if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
