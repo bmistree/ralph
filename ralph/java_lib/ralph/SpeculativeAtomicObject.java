@@ -608,82 +608,40 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
        An event that is not a reader or writer on this object can call
        this method.  This can happen if an event *had been* a
        read/writer on this object is backed out by one thread, but is
-       still trying to commit to its touched objects on another.
+       still trying to commit to its touched objects on another.  It
+       can also mean that
        
        In this case, this method should return a future that will
        instantly return False.
+
+
+       When we should always not commit:
+       
+         * This is a derived object and the derived object's parent
+           invalidated it (ie., set its specualtion state to failed).
+
+         * When this is a derived object that is running and the event
+           is not in its read lock holders set.
+
+              - Requirement that this is a derived object is
+                important. Consider the case that we have three write
+                events running, evt1, evt2, and evt3.  Assume evt1
+                acquires w lock on obj.  Then speculate producing
+                obj', which evt2 assumes write lock on.  Then, evt3
+                waits on obj''s lock.  When evt1 completes and we
+                transfer obj' to obj, then we speculate on obj to
+                produce obj'', which evt3 can then assume write lock
+                on.  When evt3 tries to commit, obj' is still in its
+                touched set and obj' forwards commit to root.  Root
+                does not see element in read lock holders set and
+                should check if it's in any of the derived objects,
+                rather than just rejecting.  If it's not in any of
+                derived, can then return failed.  Otherwise, forward
+                first_phase_commit to derived element.
      */
     public ICancellableFuture first_phase_commit(ActiveEvent active_event)
     {
         _lock();
-
-        // check if running first because a derivative object that is
-        // not running may not have an up to date read/write set.
-        if ((speculation_state == SpeculationState.RUNNING) &&
-            // cannot be a write lock holder without being a read lock
-            // holder, therefore this check serves for both.
-            (! read_lock_holders.containsKey(active_event.uuid)))
-        {
-            _unlock();
-            return ALWAYS_FALSE_FUTURE;
-        }
-        
-        // This is the base element that is trying to commit.  Just
-        // try to commit normally.
-        if (root_speculative)
-        {
-            boolean write_lock_holder = is_write_lock_holder(active_event);
-            ICancellableFuture to_return = null;
-            boolean completed_commit = false;
-            
-            // A SpeculativeAtomicObject can receive multiple calls to
-            // commit or backout for a particular event.  This is
-            // because if we succeed speculating, we forward messages
-            // from the succeeded object to the head object.  The head
-            // object however, may also receive a message directly.
-            // To avoid transmitting duplicate messages to hardware
-            // extenders and doing duplicate work, we keep track of
-            // whether we've already processed an apply for the target
-            // event.            
-            ICancellableFuture already_issued =
-                root_outstanding_commit_requests.get(active_event.uuid);
-            if (already_issued != null)
-                to_return = already_issued;
-            else
-            {
-                // note: to_return should be ALWAYS_TRUE_FUTURE for read
-                // only operation.
-                to_return = 
-                    hardware_first_phase_commit_hook(active_event);
-                if (to_return == null)
-                    to_return = ALWAYS_TRUE_FUTURE;
-
-                root_outstanding_commit_requests.put(active_event.uuid,to_return);
-
-                // If a read lock holder enters first phase of commit, the
-                // commit is automatically validated, allowing future
-                // events to operate on obj.  Note: should only allow this
-                // on root event.  If allow it on derivative, then can get
-                // issue where allowed a derivative read that committed on
-                // a rolled back write that it derived from.
-                if (! write_lock_holder)
-                {
-                    completed_commit = true;
-                    running_state_and_lock_held_complete_commit(active_event);
-                }
-            }
-            _unlock();
-            
-
-            if (completed_commit)
-            {
-                // remove from event's touched objects list when complete
-                // commit (this way, do not get dual complete commits for
-                // read-only events).
-                active_event.only_remove_touched_obj(this);
-            }
-            return to_return;
-        }
 
         if (speculation_state == SpeculationState.FAILED)
         {
@@ -691,6 +649,20 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // on failed/was backed out.  Any event that operated on
             // values derived from the event that failed should not be
             // able to commit.
+            _unlock();
+            return ALWAYS_FALSE_FUTURE;
+        }
+
+        
+        // check if running first because a derivative object that is
+        // not running may not have an up to date read/write set.
+        if ((speculation_state == SpeculationState.RUNNING) &&
+            // cannot be a write lock holder without being a read lock
+            // holder, therefore this check serves for both.
+            (! is_read_lock_holder(active_event)) &&
+            // if it is re
+            (! root_speculative))
+        {
             _unlock();
             return ALWAYS_FALSE_FUTURE;
         }
@@ -707,8 +679,96 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             return to_return;
         }
         
-        if (speculation_state == SpeculationState.RUNNING)
+        // This is the base element that is trying to commit.  Just
+        // try to commit normally.
+        if (root_speculative)
         {
+            if (! read_lock_holders.containsKey(active_event.uuid))
+            {
+                // means either that we should reject the commit (it
+                // has already been backed out) or that we speculated,
+                // producing a derived object that should handle the
+                // first phase of commit (see comments above method).
+
+                // first check specualted entries and determine
+                // whether should forward to it.
+                for (SpeculativeAtomicObject<T,D> derived : speculated_entries)
+                {
+                    boolean was_read_lock_holder = false;
+                    derived._lock();
+                    was_read_lock_holder =
+                        derived.is_read_lock_holder(active_event);
+                    derived._unlock();
+
+                    if (was_read_lock_holder)
+                    {
+                        _unlock();
+                        return derived.first_phase_commit(active_event);
+                    }
+                }
+                _unlock();
+                // was not held by any derived objects.  Fail commit.
+                return ALWAYS_FALSE_FUTURE;
+            }
+            else
+            {
+                // was holding read lock on root.  go ahead and
+                // process first phase of commit.
+                boolean write_lock_holder = is_write_lock_holder(active_event);
+                ICancellableFuture to_return = null;
+                boolean completed_commit = false;
+            
+                // A SpeculativeAtomicObject can receive multiple
+                // calls to commit or backout for a particular event.
+                // This is because if we succeed speculating, we
+                // forward messages from the succeeded object to the
+                // head object.  The head object however, may also
+                // receive a message directly.  To avoid transmitting
+                // duplicate messages to hardware extenders and doing
+                // duplicate work, we keep track of whether we've
+                // already processed an apply for the target event.
+                ICancellableFuture already_issued =
+                    root_outstanding_commit_requests.get(active_event.uuid);
+                if (already_issued != null)
+                    to_return = already_issued;
+                else
+                {
+                    // note: to_return should be ALWAYS_TRUE_FUTURE
+                    // for read only operation.
+                    to_return = 
+                        hardware_first_phase_commit_hook(active_event);
+                    if (to_return == null)
+                        to_return = ALWAYS_TRUE_FUTURE;
+
+                    root_outstanding_commit_requests.put(active_event.uuid,to_return);
+
+                    // If a read lock holder enters first phase of commit, the
+                    // commit is automatically validated, allowing future
+                    // events to operate on obj.  Note: should only allow this
+                    // on root event.  If allow it on derivative, then can get
+                    // issue where allowed a derivative read that committed on
+                    // a rolled back write that it derived from.
+                    if (! write_lock_holder)
+                    {
+                        completed_commit = true;
+                        running_state_and_lock_held_complete_commit(active_event);
+                    }
+                }
+                _unlock();
+            
+                if (completed_commit)
+                {
+                    // remove from event's touched objects list when complete
+                    // commit (this way, do not get dual complete commits for
+                    // read-only events).
+                    active_event.only_remove_touched_obj(this);
+                }
+                return to_return;
+            }
+        }
+        else
+        {
+            // non-root and speculation_state == SpeculationState.RUNNING
             // wait on objects that we are deriving from before trying
             // to commit.  Note, while committing, the event still
             // holds read and read/write locks on
@@ -719,10 +779,6 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             _unlock();
             return to_return;
         }
-
-        Util.logger_assert(
-            "Unknown speculation state in first_phase_commit.");
-        return null;
     }
 
     
