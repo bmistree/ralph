@@ -1,0 +1,20 @@
+
+
+
+Service ReadOnlySpeculate
+{
+    TVar Number some_num;
+    
+    some_test() returns TrueFalse
+    {
+        Number initial = 0;
+        atomically
+        {
+            initial += 1;
+            some_num;
+            speculate(some_num);
+            some_num;
+        }
+        return initial == 1;
+    }
+}
