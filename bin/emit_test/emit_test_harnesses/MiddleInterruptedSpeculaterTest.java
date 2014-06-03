@@ -67,9 +67,9 @@ public class MiddleInterruptedSpeculaterTest
             endpt,MiddleInterruptedSpeculaterThread.WhichToRun.THIRD);
         
         run_first.start();
-        Thread.sleep(10);
+        Thread.sleep(40);
         run_second.start();
-        Thread.sleep(10);
+        Thread.sleep(40);
         run_third.start();
 
         run_first.join();

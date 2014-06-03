@@ -44,7 +44,7 @@ Service MiddleInterruptedSpeculater
             num1 = 1;
             speculate(num1);
             verbatim(
-                'try{Thread.sleep(30);}catch(InterruptedException _ex){}');
+                'try{Thread.sleep(75);}catch(InterruptedException _ex){}');
             num2 = 1;
         }
     }
