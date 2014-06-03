@@ -1,18 +1,35 @@
-
-
-
-Service ReadOnlySpeculate
+Service ReadOnlySpeculateService
 {
     TVar Number some_num;
+
+    /**
+       Run this first.  It creates an event that starts speculation on some_num.
+       While speculater is running, start running double_commit_test, which
+       should perform a read on the speculated value, then reading the value
+       after it was promoted.
+     */
+    speculater()
+    {
+        atomically
+        {
+            some_num;
+            speculate(some_num);
+            verbatim('try{Thread.sleep(100);}catch(InterruptedException _ex){}');
+        }
+    }
     
-    some_test() returns TrueFalse
+    /**
+       @returns {boolean} --- True if completed without backing out.
+       False otherwise.
+     */
+    double_commit_test() returns TrueFalse
     {
         Number initial = 0;
         atomically
         {
             initial += 1;
             some_num;
-            speculate(some_num);
+            verbatim('try{Thread.sleep(500);}catch(InterruptedException _ex){}');
             some_num;
         }
         return initial == 1;

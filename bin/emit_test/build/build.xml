@@ -63,6 +63,13 @@
     </antcall>
   </target>
 
+  <target name="read_only_speculate" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="read_only_speculate.rph"/>
+      <param name="class_name" value="ReadOnlySpeculateJava"/>
+    </antcall>
+  </target>
+  
   <target name="multiple_interfaces" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="multiple_interfaces.rph"/>
@@ -555,10 +562,8 @@
         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
-        jar_SerializeNullStruct">
+        jar_SerializeNullStruct,jar_ReadOnlySpeculate">
   </target>
-
-
 
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
@@ -567,6 +572,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_ReadOnlySpeculate"
+      depends="read_only_speculate">
+  </target>
+  
   <target
       name="ralph_StructSetterGetter"
       depends="iface_basic_ralph,struct_test">
@@ -899,6 +909,12 @@
   <target name="harness_BasicSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicSetterGetter.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_ReadOnlySpeculate">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="ReadOnlySpeculate.java"/>
     </antcall>
   </target>
   
@@ -1307,6 +1323,18 @@
     </antcall>
   </target>
 
+  <property
+      name="read_only_speculate_jar"
+      value="read_only_speculate.jar"/>
+  <target
+      name="jar_ReadOnlySpeculate"
+      depends="ralph_ReadOnlySpeculate,ralph_to_byte_code,harness_ReadOnlySpeculate">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReadOnlySpeculate"/>
+      <param name="dest_jar" value="${read_only_speculate_jar}"/>
+    </antcall>
+  </target>
+  
   <property
       name="struct_setter_getter_jar"
       value="struct_setter_getter.jar"/>
