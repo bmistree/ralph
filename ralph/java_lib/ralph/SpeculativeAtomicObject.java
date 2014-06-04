@@ -872,8 +872,49 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             if (to_cancel != null)
                 to_cancel.failed();
         }
-        
+
+        // Consider the case that we have three write events running,
+        // evt1, evt2, and evt3.  Assume evt1 acquires w lock on obj.
+        // Then speculate producing obj', which evt2 assumes write
+        // lock on.  Then, evt3 waits on obj''s lock.  When evt1
+        // completes and we transfer obj' to obj, then we speculate on
+        // obj to produce obj'', which evt3 can then assume write lock
+        // on.  When evt3 tries to commit, obj' is still in its
+        // touched set and obj' forwards commit to root.  Root does
+        // not see element in read lock holders set and should check
+        // if it's in any of the derived objects, rather than just
+        // returning.  If it's not in any of derived, can then return
+        // Otherwise, forward backout message.
+        if (root_speculative)
+        {
+            if ((! is_read_lock_holder(active_event)) &&
+                (! in_waiting_events(active_event)))
+            {
+                // check if need to forward backouts to any derivatives
+                for (SpeculativeAtomicObject<T,D> derived : speculated_entries)
+                {
+                    boolean was_read_lock_holder = false;
+                    derived._lock();
+                    was_read_lock_holder =
+                        derived.is_read_lock_holder(active_event);
+                    derived._unlock();
+                    
+                    if (was_read_lock_holder)
+                    {
+                        _unlock();
+                        derived.backout(active_event);
+                        return;
+                    }
+                }
+                _unlock();
+                return;
+            }
+        }
+
+
+        // not root speculative or was a read lock holder
         boolean write_backed_out = internal_backout(active_event);
+        
         if (write_backed_out)
         {
             // If an object holding a write lock is backed out of a

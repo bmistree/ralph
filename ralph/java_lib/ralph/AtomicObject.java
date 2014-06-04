@@ -797,6 +797,11 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     {
         return read_lock_holders.containsKey(active_event.uuid);
     }
+    public boolean in_waiting_events(ActiveEvent active_event)
+    {
+        return waiting_events.containsKey(active_event.uuid);
+    }
+    
     
     /**
        Cannot be overriden by subclasses.  Use hardware hooks instead.
