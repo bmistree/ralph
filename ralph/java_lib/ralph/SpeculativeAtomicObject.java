@@ -771,11 +771,18 @@ public abstract class SpeculativeAtomicObject<T,D> extends AtomicObject<T,D>
             // non-root and speculation_state == SpeculationState.RUNNING
             // wait on objects that we are deriving from before trying
             // to commit.  Note, while committing, the event still
-            // holds read and read/write locks on
+            // holds read and read/write locks on.  Check that
+
+            // can get double commits.  In these cases, just reuse
+            // existing speculative future.
             SpeculativeFuture to_return =
-                new SpeculativeFuture(
+                outstanding_commit_requests.get(active_event.uuid);
+            if (to_return == null)
+            {
+                to_return = new SpeculativeFuture(
                     active_event, ! is_write_lock_holder(active_event));
-            outstanding_commit_requests.put(active_event.uuid,to_return);
+                outstanding_commit_requests.put(active_event.uuid,to_return);
+            }
             _unlock();
             return to_return;
         }
