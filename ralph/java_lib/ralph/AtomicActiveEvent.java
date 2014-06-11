@@ -781,7 +781,14 @@ public class AtomicActiveEvent extends ActiveEvent
         for (AtomicObject obj : t_obj)
             obj.complete_commit(this);
 
-        
+        // important: if we do not clear touched objects and enable
+        // speculation, we may hold a reference to a speculative
+        // object.  That speculative object may hold a reference to
+        // outstanding commit requests, which includes additional
+        // events, which still hold even more references, etc.... This
+        // means that we're keeping objects that we never need
+        // reachable.  And eventually we run out of memory.
+        touched_objs.clear();
         event_map.remove_event(uuid);
         
         //# FIXME: which should happen first, notifying others or
