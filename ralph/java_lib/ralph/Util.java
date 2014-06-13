@@ -28,10 +28,6 @@ public class Util
      */
     public static int MEDIUM_QUEUE_CAPACITIES = 10;
 
-    public static int PERSISTENT_NUM_THREADS = 70;
-    public static int MAX_NUM_THREADS = 200;
-    public static TimeUnit THREAD_KEEP_ALIVE_TIME = TimeUnit.SECONDS;
-
 	
     /**
      * Takes in the name of the function that another endpoint has
