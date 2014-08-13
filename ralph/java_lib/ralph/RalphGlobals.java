@@ -87,7 +87,10 @@ public class RalphGlobals implements IUUIDGenerator
         deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
         thread_pool = new ThreadPool(params.threadpool_params);
         uuid_generator = params.uuid_generator;
-        host_uuid = uuid_generator.generate_uuid();
+        // For now, generating host uuids as unique identifiers.  If
+        // accidentally use local_atom_int generator, will get
+        // collisions with other hosts.
+        host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
     }
     
     // FIXME: get rid of this?
