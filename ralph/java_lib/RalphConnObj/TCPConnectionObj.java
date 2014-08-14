@@ -6,7 +6,9 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 import ralph.Util;
 import ralph.Endpoint;
@@ -21,7 +23,9 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
 {
     private Endpoint local_endpoint = null;
     private java.net.Socket sock = null;
-	
+
+    private final ReentrantLock _mutex = new ReentrantLock();
+    
     /**
      * If not passed in a socket, then
      create a new connection to dst_host, dst_port.
@@ -46,7 +50,17 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
             e.printStackTrace();
         }
     }
-	
+
+    private void _lock()
+    {
+        _mutex.lock();
+    }
+    private void _unlock()
+    {
+        _mutex.unlock();
+    }
+    
+    
     /**
      * Actually close the socket
      * @throws IOException 
@@ -78,15 +92,23 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
     public void write(
         GeneralMessage msg_to_write, ralph.Endpoint sender_endpoint_obj)
     {
+        _lock();
         try {
             msg_to_write.writeDelimitedTo(sock.getOutputStream());
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             local_endpoint.partner_connection_failure();            
+        }
+        finally
+        {
+            _unlock();
         }
     }
 
     public void write_create_connection(CreateConnection msg_to_write)
     {
+        _lock();
         try
         {
             msg_to_write.writeDelimitedTo(sock.getOutputStream());
@@ -98,6 +120,10 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
             Util.logger_assert(
                 "Not handling IOExceptions on write_create_connection.  " +
                 "Should likely throw a NetworkException for event.");
+        }
+        finally
+        {
+            _unlock();
         }
     }
     
