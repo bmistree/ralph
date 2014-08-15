@@ -109,8 +109,8 @@ class RootStatementNode(_AstNode):
         # set up enums
         enum_ctx = EnumTypesContext(filename)
         for enum_node in self.enum_node_list:
-            enum_node.add_enum_type_obj_for_name(
-                enum_node.enum_name,enum.type,enum.line_number)
+            enum_ctx.add_enum_type_obj_for_name(
+                enum_node.enum_name,enum_node.type,enum_node.line_number)
             
         # notate all user-defined struct types.
         if struct_types_ctx is None:
@@ -1768,7 +1768,7 @@ class ImplementsListNode(_AstNode):
 
 class EnumBodyNode(_AstNode):
     def __init__(self,filename,line_number):
-        super(ImplementsListNode,self).__init__(
+        super(EnumBodyNode,self).__init__(
             filename,ast_labels.ENUM_BODY_NODE,line_number)
 
     def add_enum_field(self,identifier_node):
