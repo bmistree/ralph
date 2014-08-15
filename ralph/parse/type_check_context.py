@@ -87,7 +87,19 @@ class FilenameLineNumber(object):
         """
         self.filename = filename
         self.line_number = line_number
+
+class EnumTypesContext(object):
+    '''Maintains a dict from enums to their type objects.
+    '''
     
+    def __init__(self,filename):
+        self.filename = filename
+        self.enum_name_to_type_obj = {}
+
+    def add_enum_type_obj_for_name(self,name,type_obj,line_number,
+                                   decl_filename=None):
+        self.enum_name_to_type_obj[name] = type_obj
+        
     
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.

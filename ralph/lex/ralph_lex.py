@@ -23,6 +23,7 @@ DIVIDE_EQUAL_TOKEN = '/='
 reserved = {
     'Endpoint' : 'ENDPOINT',
     'Service' : 'SERVICE',
+    'Enum': 'ENUM',
     'in': 'IN',
     'return': 'RETURN_OPERATOR',
     'if': 'IF',

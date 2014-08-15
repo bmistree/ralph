@@ -4,8 +4,9 @@ import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type, EndpointType, WildcardType
 from ralph.parse.type import ServiceFactoryType,NullType,ServiceReferenceType
+from ralph.parse.type import EnumType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
-from ralph.parse.type_check_context import AliasContext
+from ralph.parse.type_check_context import AliasContext,EnumTypesContext
 from ralph.parse.type_check_context import FixupableObject
 
 # Type check is broken into two passes:
@@ -65,7 +66,8 @@ class _AstNode(object):
 
     
 class RootStatementNode(_AstNode):
-    def __init__(self,filename,alias_list_node,struct_node_list,endpoint_node_list):
+    def __init__(self,filename,alias_list_node,enum_node_list,struct_node_list,
+                 endpoint_node_list):
         super(RootStatementNode,self).__init__(
             filename,ast_labels.ROOT_STATEMENT,0,None)
         
@@ -77,6 +79,7 @@ class RootStatementNode(_AstNode):
         #### END DEBUG
 
         self.alias_node_list = alias_list_node.to_list()
+        self.enum_node_list = enum_node_list.to_list()
         self.interface_node_list = list(
             endpoint_node_list.endpoint_interfaces_node_list())
         self.endpoint_node_list = list(
@@ -103,6 +106,12 @@ class RootStatementNode(_AstNode):
         for alias_node in self.alias_node_list:
             alias_node.type_check_alias_pass(alias_ctx,struct_types_ctx)
 
+        # set up enums
+        enum_ctx = EnumTypesContext(filename)
+        for enum_node in self.enum_node_list:
+            enum_node.add_enum_type_obj_for_name(
+                enum_node.enum_name,enum.type,enum.line_number)
+            
         # notate all user-defined struct types.
         if struct_types_ctx is None:
             struct_types_ctx = StructTypesContext(filename,alias_ctx)
@@ -179,7 +188,24 @@ class AliasStatementNode(_AstNode):
         else:
             alias_ctx.add_endpoint_alias(
                 self.to_alias_string,self.to_alias_to_string)
-    
+
+class EnumDefinitionNode(_AstNode):
+    def __init__(self,filename,enum_name_identifier_node,enum_body_node,
+                 line_number):
+        
+        super(EnumDefinitionNode,self).__init__(
+            filename,ast_labels.ENUM_DEFINITION,line_number)
+
+        self.enum_name = enum_name_identifier_node.value
+
+        self.enum_fields_py_str_list = []
+        for field_identifier_node in enum_body_node.to_list():
+            self.enum_fields_py_str_list.append(
+                field_identifier_node.value)
+            
+        self.type = EnumType(self.enum_name,self.enum_fields_py_str_list)
+
+        
 class StructDefinitionNode(_AstNode):
     def __init__(self,filename,struct_name_identifier_node,struct_body_node,
                  line_number):
@@ -220,7 +246,6 @@ class StructDefinitionNode(_AstNode):
             to_fixup_with = self.to_fixup[field_name_to_fixup]
             struct_types_ctx.to_fixup(
                 self.struct_name,field_name_to_fixup,to_fixup_with)
-
 
     def type_check_pass_one(self,struct_types_ctx):
         self.struct_body_node.type_check_pass_one(struct_types_ctx)
@@ -1642,7 +1667,18 @@ class StructListNode(_AstNode):
     def to_list(self):
         return list(self.children)
     
+class EnumListNode(_AstNode):
+    def __init__(self,filename):
+        super(EnumListNode,self).__init__(
+            filename,ast_labels.ENUM_LIST_NODE,0)
+        
+    def add_enum_definition_node(self,enum_definition_node):
+        self._append_child(enum_definition_node)
+        
+    def to_list(self):
+        return list(self.children)
 
+    
 class AliasListNode(_AstNode):
     def __init__(self,filename):
         super(AliasListNode,self).__init__(
@@ -1725,6 +1761,18 @@ class ImplementsListNode(_AstNode):
 
     def add_variable_type_node(self,variable_type_node):
         self._append_child(variable_type_node)
+        
+    def to_list(self):
+        return list(self.children)
+
+
+class EnumBodyNode(_AstNode):
+    def __init__(self,filename,line_number):
+        super(ImplementsListNode,self).__init__(
+            filename,ast_labels.ENUM_BODY_NODE,line_number)
+
+    def add_enum_field(self,identifier_node):
+        self._append_child(identifier_node)
         
     def to_list(self):
         return list(self.children)

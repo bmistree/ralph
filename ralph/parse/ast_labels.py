@@ -71,6 +71,7 @@ METHOD_CALL = 'method_call'
 RANGE = 'range'
 
 STRUCT_DEFINITION = 'struct_definition'
+ENUM_DEFINITION = 'enum_definition'
 ENDPOINT_VARIABLE_TYPE = 'endpoint_variable'
 
 
@@ -85,8 +86,10 @@ ELSE_IFS = 'elifs'
 ELSE = 'else'
 
 STRUCT_LIST_NODE = 'struct_list_node'
+ENUM_LIST_NODE = 'enum_list_node'
 STRUCT_BODY = 'struct_body'
 IMPLEMENTS_LIST_NODE = 'implements_list_node'
+ENUM_BODY_NODE = 'enum_body_node'
 
 ALIAS_LIST_NODE = 'alias_list_node'
 

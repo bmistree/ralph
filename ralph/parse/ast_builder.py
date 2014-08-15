@@ -26,14 +26,15 @@ global_parsing_filename = 'unknown'
 
 def p_RootStatement(p):
     '''
-    RootStatement : AliasList StructList EndpointList
+    RootStatement : AliasList EnumList StructList EndpointList
     '''
     alias_list_node = p[1]
-    struct_list_node = p[2]
-    endpoint_list_node = p[3]
+    enum_list_node = p[2]
+    struct_list_node = p[3]
+    endpoint_list_node = p[4]
     p[0] = RootStatementNode(
-        global_parsing_filename,alias_list_node,struct_list_node,
-        endpoint_list_node)
+        global_parsing_filename,alias_list_node,enum_list_node,
+        struct_list_node,endpoint_list_node)
     
 def p_AliasList(p):
     '''
@@ -69,6 +70,50 @@ def p_AliasStatement(p):
         global_parsing_filename,for_struct,identifier_node,
         to_alias_to_string_node,line_number)
     
+def p_EnumList(p):
+    '''
+    EnumList : EnumList EnumDefinition
+             | Empty
+    '''
+    if len(p) == 2:
+        enum_list_node = EnumListNode(global_parsing_filename)
+    else:
+        enum_list_node = p[1]
+        enum_definition_node = p[2]
+        enum_list_node.add_enum_definition_node(enum_definition_node)
+    p[0] = enum_list_node
+
+def p_EnumDefinition(p):
+    '''
+    EnumDefinition : ENUM Identifier CURLY_LEFT EnumBody CURLY_RIGHT
+    '''
+    line_number = p.lineno(1)
+    enum_name_node = p[2]
+    # non-aliased version
+    enum_body_node = p[4]
+    p[0] = EnumDefinitionNode(
+        global_parsing_filename,enum_name_node,enum_body_node,line_number)
+
+def p_EnumBody(p):
+    '''
+    EnumBody : Identifier
+             | EnumBody COMMA Identifier
+             | Empty
+    '''
+    if len(p) == 4:
+        identifier_node = p[3]
+        enum_body_node = p[1]
+        enum_body_node.add_enum_field(identifier_node)
+    else:
+        if is_empty(p[1]):
+            enum_body_node = EnumBodyNode(global_parsing_filename,0)
+        else:
+            identifier_node = p[1]
+            enum_body_node = EnumBodyNode(
+                global_parsing_filename,identifier_node.line_number)
+            enum_body_node.add_enum_field(identifier_node)
+        
+    p[0] = enum_body_node
     
 def p_StructList(p):
     '''
