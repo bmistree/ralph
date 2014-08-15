@@ -1,0 +1,8 @@
+Enum Day
+{
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY,SUNDAY
+}
+
+Enum Empty
+{}
+

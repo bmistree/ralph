@@ -56,6 +56,14 @@
   </target>
 
   <!-- Compilation for each ralph file -->
+  <target name="enum_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="enum.rph"/>
+      <param name="class_name" value="EnumJava"/>
+    </antcall>
+  </target>
+
+  
   <target name="iface_basic_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="iface_basic_ralph.rph"/>
