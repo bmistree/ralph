@@ -3,6 +3,7 @@ from ralph.common.compiler_exceptions import CompilerException
 
 _IDENTIFIER_TOKEN = 'IDENTIFIER'
 STRUCT_TYPE_TOKEN = 'Struct'
+ENUM_TOKEN = 'Enum'
 ENDPOINT_TOKEN = 'Endpoint'
 SERVICE_TOKEN = 'Service'
 INTERFACE_TOKEN = 'Interface'

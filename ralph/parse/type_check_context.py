@@ -48,6 +48,7 @@ class AliasContext(object):
 class FixupableObject(object):
     FIXUPABLE_TYPE_STRUCT = 0
     FIXUPABLE_TYPE_ENDPOINT = 1
+    FIXUPABLE_TYPE_ENUM = 2
     
     def __init__(self,fixupable_type, fixupable_name,is_tvar):
         self.fixupable_type = fixupable_type
@@ -64,6 +65,10 @@ class FixupableObject(object):
         elif self.fixupable_type == FixupableObject.FIXUPABLE_TYPE_ENDPOINT:
             type_to_fixup_with = (
                 struct_types_ctx.endpoint_name_to_type_obj_dict[self.fixupable_name])
+        elif self.fixupable_type == FixupableObject.FIXUPABLE_TYPE_ENUM:
+            #### FIXME: Must finish writing fixupable object for enum
+            assert False
+
         #### DEBUG
         else:
             raise InternalTypeCheckException(
@@ -99,7 +104,9 @@ class EnumTypesContext(object):
     def add_enum_type_obj_for_name(self,name,type_obj,line_number,
                                    decl_filename=None):
         self.enum_name_to_type_obj[name] = type_obj
-        
+
+    def get_enum_type_obj_from_enum_name(self,name):
+        return self.enum_name_to_type_obj.get(name,None)
     
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.
@@ -119,7 +126,8 @@ class StructTypesContext(object):
         # each element is a FixupObject
         self.list_to_fixup = []
         self.alias_ctx = alias_ctx
-
+        self.enum_ctx = EnumTypesContext(filename)
+        
     def new_type_check(self,filename,alias_ctx):
         self.filename = filename
         self.alias_ctx = alias_ctx
@@ -177,7 +185,9 @@ class StructTypesContext(object):
         '''
         return self.struct_name_to_type_obj_dict.get(name,None)
 
-            
+    def get_enum_type_obj_from_enum_name(self,name):
+        return self.enum_ctx.get_enum_type_obj_from_enum_name(name)
+    
     def add_struct_type_obj_for_name(self,name,type_obj,line_number,
                                      decl_filename=None):
         if decl_filename is None:
@@ -208,7 +218,8 @@ class StructTypesContext(object):
 
     def get_endpoint_type_obj_for_name(self,name,type_obj,line_number):
         return self.endpoint_name_to_type_obj_dict[name] 
-        
+
+    
     def __iter__(self):
         return iter(self.struct_name_to_type_obj_dict.keys())
         

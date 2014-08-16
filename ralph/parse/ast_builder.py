@@ -8,6 +8,7 @@ from ralph.lex.ralph_lex import SPECULATE_ALL_TOKEN, TO_TEXT_TOKEN
 from ralph.lex.ralph_lex import SERVICE_REFERENCE_TOKEN
 from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
 from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
+from ralph.lex.ralph_lex import ENUM_TOKEN
 
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
@@ -962,6 +963,9 @@ def p_VariableType(p):
 
                  | SERVICE_REFERENCE
                  | TVAR SERVICE_REFERENCE
+
+                 | ENUM Identifier
+                 | TVAR ENUM Identifier
     '''
     if len(p) >= 11:
         # It's a map
@@ -1032,6 +1036,20 @@ def p_VariableType(p):
         p[0] = EndpointVariableTypeNode(
             global_parsing_filename,endpoint_name_node,is_tvar,line_number)
 
+    elif ((p[1] == ENUM_TOKEN) or
+           ((len(p) >= 3) and (p[2] == ENUM_TOKEN))):
+        # emitting an endpoint type
+        is_tvar = False
+        enum_name_node_index = 2
+        if len(p) == 4:
+            # enum is a tvar
+            is_tvar = True
+            enum_name_node_index = 3
+        line_number = p.lineno(1)
+        enum_name_node = p[enum_name_node_index]
+        p[0] = EnumVariableTypeNode(
+            global_parsing_filename,enum_name_node,is_tvar,line_number)
+        
     elif (
         (p[1] == SERVICE_FACTORY_TOKEN) or
         ((len(p) >= 3) and (p[2] == SERVICE_FACTORY_TOKEN))):

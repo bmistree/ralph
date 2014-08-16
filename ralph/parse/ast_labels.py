@@ -73,7 +73,7 @@ RANGE = 'range'
 STRUCT_DEFINITION = 'struct_definition'
 ENUM_DEFINITION = 'enum_definition'
 ENDPOINT_VARIABLE_TYPE = 'endpoint_variable'
-
+ENUM_VARIABLE_TYPE = 'enum_variable'
 
 ### intermediate ast nodes that get removed from tree ###
 ENDPOINT_LIST_STATEMENT = 'endpoint_list_statement'
@@ -100,5 +100,6 @@ NUMBER_TYPE = 'Number'
 SERVICE_FACTORY_TYPE = 'ServiceFactory'
 SERVICE_REFERENCE_TYPE = 'ServiceReference'
 NULL_TYPE = 'null'
+
 
 BASIC_TYPES_LIST = [BOOL_TYPE,STRING_TYPE,NUMBER_TYPE]

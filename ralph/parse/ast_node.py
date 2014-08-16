@@ -106,18 +106,19 @@ class RootStatementNode(_AstNode):
         for alias_node in self.alias_node_list:
             alias_node.type_check_alias_pass(alias_ctx,struct_types_ctx)
 
-        # set up enums
-        enum_ctx = EnumTypesContext(filename)
-        for enum_node in self.enum_node_list:
-            enum_ctx.add_enum_type_obj_for_name(
-                enum_node.enum_name,enum_node.type,enum_node.line_number)
-            
-        # notate all user-defined struct types.
+        # generate struct types ctx to use for later type checking
         if struct_types_ctx is None:
             struct_types_ctx = StructTypesContext(filename,alias_ctx)
         else:
             struct_types_ctx.new_type_check(filename,alias_ctx)
             
+        # set up enums
+        enum_ctx = struct_types_ctx.enum_ctx
+        for enum_node in self.enum_node_list:
+            enum_ctx.add_enum_type_obj_for_name(
+                enum_node.enum_name,enum_node.type,enum_node.line_number)
+            
+        # notate all user-defined struct types.
         for struct_node in self.struct_node_list:
             to_fixup = struct_node.add_struct_type(struct_types_ctx)
 
@@ -1268,6 +1269,36 @@ class StructVariableTypeNode(VariableTypeNode):
     def type_check_pass_two(self,type_check_ctx):
         pass
 
+
+class EnumVariableTypeNode(VariableTypeNode):
+    def __init__(self,filename,enum_name_identifier_node,is_tvar,
+                 line_number):
+        super(EnumVariableTypeNode,self).__init__(
+            filename,ast_labels.ENUM_VARIABLE_TYPE,line_number)
+        self.enum_name = enum_name_identifier_node.value
+        self.is_tvar = is_tvar
+
+        self.fixupable_object = FixupableObject(
+            FixupableObject.FIXUPABLE_TYPE_ENUM,
+            self.enum_name,self.is_tvar)
+
+    def get_fixupable_object(self):
+        return self.fixupable_object
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        enum_type_obj = (
+            struct_types_ctx.get_enum_type_obj_from_enum_name(
+                self.enum_name))
+        if enum_type_obj is None:
+            raise TypeCheckException(
+                self.filename,self.line_number,
+                'Unknown enum named %s.' % self.enum_name)
+        # enum_type_obj should be a EnumType object
+        self.type = enum_type_obj.clone(self.is_tvar)
+        
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+    
 class EndpointVariableTypeNode(VariableTypeNode):
     def __init__(self,filename,endpoint_name_identifier_node,is_tvar,
                  line_number):
