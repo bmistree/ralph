@@ -6,3 +6,28 @@ Enum Day
 Enum Empty
 {}
 
+Endpoint Test
+{
+    is_monday (Enum Day d) returns TrueFalse
+    {
+        if (d == Day.MONDAY)
+            return True;
+        return False;
+    }
+
+    test_monday_one() returns TrueFalse
+    {
+        return is_monday(Day.MONDAY);
+    }
+
+    test_monday_two() returns TrueFalse
+    {
+        Enum Day d = Day.MONDAY;
+        return is_monday(d);
+    }
+
+    test_not_monday() returns TrueFalse
+    {
+        return not is_monday(Day.TUESDAY);
+    }
+}
