@@ -570,7 +570,7 @@
         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
-        jar_SerializeNullStruct,jar_ReadOnlySpeculate">
+        jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -583,6 +583,11 @@
   <target
       name="ralph_ReadOnlySpeculate"
       depends="read_only_speculate">
+  </target>
+
+  <target
+      name="ralph_Enum"
+      depends="enum_ralph">
   </target>
   
   <target
@@ -913,7 +918,13 @@
         debuglevel="lines,vars,source"
         includeantruntime="false" />
   </target>
-    
+
+  <target name="harness_Enum">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="EnumTest.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_BasicSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicSetterGetter.java"/>
@@ -1331,6 +1342,18 @@
     </antcall>
   </target>
 
+  <property
+      name="enum_jar"
+      value="enum.jar"/>
+  <target
+      name="jar_Enum"
+      depends="ralph_Enum,ralph_to_byte_code,harness_Enum">
+    <antcall target="make_jar">
+      <param name="main_class" value="EnumTest"/>
+      <param name="dest_jar" value="${enum_jar}"/>
+    </antcall>
+  </target>
+  
   <property
       name="read_only_speculate_jar"
       value="read_only_speculate.jar"/>
