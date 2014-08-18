@@ -440,7 +440,7 @@ class IdentifierNode(_AstNode):
                 self.filename,self.line_number,
                 ' %s is not declared.' % self.value )
         self.type = decl_ast_node.type
-
+        
     def get_value(self):
         return self.value
 
@@ -1025,15 +1025,43 @@ class DotNode(_AstNode):
     def __init__(self,filename,left_of_dot_node, right_of_dot_node):
         super(DotNode,self).__init__(
             filename,ast_labels.DOT,left_of_dot_node.line_number)
-        
+
+        self.is_enum = False
         self.left_of_dot_node = left_of_dot_node
         self.right_of_dot_node = right_of_dot_node
 
     def type_check_pass_one(self,struct_types_ctx):
-        self.left_of_dot_node.type_check_pass_one(struct_types_ctx)
-        self.right_of_dot_node.type_check_pass_one(struct_types_ctx)
+        # Want to support accessing enum fields directly.  Ie., if we
+        # have enum Day { Monday, Tuesday ...}.  Should be able to
+        # reference fields as Day.Monday.  In these cases, we should
+        # treat the full dotnode as an enum type rather than type
+        # checking each field.
+
+        if ((self.left_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION) and
+            (self.right_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION)):
+            # an enum requires that left of dot and right of dot are
+            # identifiers.  Now check if left of dot matches any enum
+            # type already defined.
+            type_obj = struct_types_ctx.get_enum_type_obj_from_enum_name(
+                self.left_of_dot_node.get_value())
+            
+            # FIXME: Actually check that right of dot node is a valid
+            # field in the enum.
+            self.type = type_obj.clone(False)
+            self.is_enum = True
+        else:
+            # not an enum, do type checking for each separate
+            # identifier.
+            self.left_of_dot_node.type_check_pass_one(struct_types_ctx)
+            self.right_of_dot_node.type_check_pass_one(struct_types_ctx)
         
     def type_check_pass_two(self,type_check_ctx):
+
+        if self.is_enum:
+            # if dot node is an enum, do not need to worry about type
+            # checking further, already assigned it a type.
+            return
+        
         self.left_of_dot_node.type_check_pass_two(type_check_ctx)
         # for dots, need to ensure that right hand of dot exists/is
         # available.
