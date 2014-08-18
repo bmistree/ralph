@@ -795,11 +795,19 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     # emit for lists
     if isinstance(type_object,ListType):
         return emit_list_type(type_object)
-        
+
+    # FIXME: ALLOW TVAR Structs????
+    
     # emit for structs
     if isinstance(type_object,StructType):
         return type_object.struct_name
 
+    # emit for enums
+    if isinstance(type_object,EnumType):
+        if type_object.is_tvar and (not force_single_threaded):
+            return 'AtomicEnumVariable<%s>' % type_object.get_emit_name()
+        return 'NonAtomicEnumVariable<%s>' % type_object.get_emit_name()
+    
     # emit for endpoints
     if isinstance(type_object,EndpointType):
         if type_object.is_tvar and (not force_single_threaded):

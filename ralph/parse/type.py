@@ -51,13 +51,14 @@ GENERIC_TVAR_ENDPOINT_TYPE = EndpointType('Endpoint', True, 'Endpoint')
 GENERIC_ENDPOINT_TYPE = GENERIC_TVAR_ENDPOINT_TYPE.clone(False)
     
 class EnumType(Type):
-    def __init__(self,enum_name,field_list=None,alias_name=None):
+    def __init__(self,enum_name,field_list=None,is_tvar=False,alias_name=None):
         '''
         @param {list} field_list --- Each element is a string,
         naming a field in the enum.
         '''
         self.enum_name = enum_name
         self.field_list = field_list
+        self.is_tvar = is_tvar
         self.alias_name = alias_name
         
     def update_enum_type(self,field_list):
@@ -79,7 +80,7 @@ class EnumType(Type):
         canonical type to make a copy of it and assign that copy to
         that node's type field.
         '''
-        return EnumType(self.enum_name,self.field_list,self.alias_name)
+        return EnumType(self.enum_name,is_tvar,self.field_list,self.alias_name)
 
 
 class StructType(Type):

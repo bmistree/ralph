@@ -195,6 +195,49 @@ public class Variables {
         }
     }
 
+    public static class AtomicEnumVariable<T>
+        extends AtomicValueVariable<T,T>
+    {
+        public AtomicEnumVariable(
+            boolean _log_changes,T init_val, RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,init_val,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
+        public AtomicEnumVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
+        {
+            super(
+                _log_changes,null,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
+
+        @Override
+        protected SpeculativeAtomicObject<T,T>
+            duplicate_for_speculation(T to_speculate_on)
+        {
+            SpeculativeAtomicObject<T,T> to_return =
+                new AtomicEnumVariable(
+                    log_changes,to_speculate_on,ralph_globals);
+            to_return.set_derived(this);
+            return to_return;
+        }
+        @Override
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+            throws BackoutException
+        {
+            // FIXME: Should allow serializing enum types across
+            // network.
+            Util.logger_assert(
+                "FIXME: Should allow serializing enums across network.");
+        }
+    }
+    
     public static class AtomicInterfaceVariable<T>
         extends AtomicValueVariable<T,T>
     {
@@ -493,7 +536,38 @@ public class Variables {
                 "Should deserialize directly in DataConstructorRegistry.");
         }
     }
+x
+    public static class NonAtomicEnumVariable<T>
+        extends NonAtomicValueVariable<T,T>
+    {
+        public NonAtomicEnumVariable(
+            boolean _dummy_log_changes, T init_val,
+            RalphGlobals ralph_globals)
+        {
+            super(
+                init_val,
+                new ValueTypeDataWrapperFactory<T,T>(),
+                ralph_globals);
+        }
 
+        public NonAtomicEnumVariable(
+            boolean _dummy_log_changes, RalphGlobals ralph_globals)
+        {
+            super(
+                null,new ValueTypeDataWrapperFactory<T,T>(),ralph_globals);
+        }
+
+        public void serialize_as_rpc_arg(
+            ActiveEvent active_event,
+            VariablesProto.Variables.Any.Builder any_builder)
+        {
+            // FIXME: Should allow serializing enums across network.
+            any_builder.setIsTvar(false);
+            Util.logger_assert(
+                "FIXME: Should allow serializing enum variables across network");
+        }
+    }
+    
     public static class NonAtomicInterfaceVariable<T>
         extends NonAtomicValueVariable<T,T>
     {
