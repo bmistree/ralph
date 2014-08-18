@@ -4,6 +4,7 @@ from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType,WildcardType
 from ralph.parse.type import MapType,StructType,ListType,EndpointType
 from ralph.parse.type import ServiceFactoryType, ServiceReferenceType
+from ralph.parse.type import EnumType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE,NULL_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -1127,7 +1128,6 @@ def emit_list_type(type_object):
             'unknown',0,
             'Requires list type in emit_list_type')
 
-    
 def emit_internal_type(type_object):
     '''
     @param {Type or None} type_object --- None if type corresponds to
@@ -1155,13 +1155,21 @@ def emit_internal_type(type_object):
         if isinstance(type_object,EndpointType):
             return type_object.alias_name
 
+        # emit for enums
+        if isinstance(type_object,EnumType):
+            return type_object.alias_name
+
+        
         # emit for ServiceFactories
         if isinstance(type_object,ServiceFactoryType):
             return 'InternalServiceFactory'
         # emit for ServiceReference
         if isinstance(type_object,ServiceReferenceType):
             return 'InternalServiceReference'
-
+        # emit for enums
+        if isinstance(type_object,EnumType):
+            return type_object.alias_name
+        
         # emit for basic types
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
@@ -1190,7 +1198,7 @@ def emit_internal_type(type_object):
                 # FIXME: Need to support returning ServiceFactories,
                 # Services, and ServiceReferenceType
                 typer = typer.basic_type
-
+                
         if typer == BOOL_TYPE:
             return 'Boolean'
         elif typer == NUMBER_TYPE:
