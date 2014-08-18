@@ -284,6 +284,16 @@ def convert_args_text_for_dispatch(method_declaration_node):
                 '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,struct_type_name,
                  arg_vec_to_read_from))
+        elif isinstance(method_declaration_arg_node.type,EnumType):
+            internal_struct_type = emit_internal_enum_type(
+                method_declaration_arg_node.type)
+            # for enum types, just push the struct variable directly
+            # as argument to method
+            enum_type_name = method_declaration_arg_node.type.get_emit_name()
+            single_arg_string = (
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
+                (internal_struct_type, arg_name, arg_vec_to_read_from,enum_type_name,
+                 arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, EndpointType):
             # note: unable to dispatch for rpc for methods that
@@ -1003,6 +1013,16 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         return to_return
 
+    elif isinstance(type_object,EnumType):
+        java_type_text = emit_ralph_wrapped_type(type_object)
+        if initializer_node is not None:
+            initializer_text = emit_statement(emit_ctx,initializer_node)
+            to_return = (
+                'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
+        else:
+            to_return = (
+                'new  %s(false,ralph_globals)' % java_type_text)
+        return to_return
     
     #### DEBUG
     else:
@@ -1745,8 +1765,18 @@ def emit_dot_statement(emit_ctx,dot_node):
     """
     left_of_dot_node = dot_node.left_of_dot_node
     right_of_dot_node = dot_node.right_of_dot_node
-    to_return = emit_statement(emit_ctx,left_of_dot_node)
 
+    if isinstance(dot_node.type,EnumType):
+        # enums can have their fields accessed using dot.  Eg., for
+        # enum Day { MONDAY, TUESDAY, ... }
+        # Day.MONDAY is valid syntax
+        
+        # in this case, left_of_dot_node and right_of_dot_node should
+        # both be identifiers
+        enum_field_name = right_of_dot_node.get_value()
+        return dot_node.type.get_emit_name() + '.' + enum_field_name
+
+    to_return = emit_statement(emit_ctx,left_of_dot_node)
     if isinstance(left_of_dot_node.type,MapType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
