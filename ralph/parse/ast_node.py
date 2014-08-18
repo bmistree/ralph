@@ -113,10 +113,8 @@ class RootStatementNode(_AstNode):
             struct_types_ctx.new_type_check(filename,alias_ctx)
             
         # set up enums
-        enum_ctx = struct_types_ctx.enum_ctx
         for enum_node in self.enum_node_list:
-            enum_ctx.add_enum_type_obj_for_name(
-                enum_node.enum_name,enum_node.type,enum_node.line_number)
+            enum_node.add_enum_type(struct_types_ctx)
             
         # notate all user-defined struct types.
         for struct_node in self.struct_node_list:
@@ -219,6 +217,18 @@ class EnumDefinitionNode(_AstNode):
             
         self.type = EnumType(self.enum_name,self.enum_fields_py_str_list)
 
+    def add_enum_type(self,struct_types_ctx):
+        '''
+        Register enum as a defined type with no alias.
+        '''
+        enum_ctx = struct_types_ctx.enum_ctx
+        enum_ctx.add_enum_type_obj_for_name(
+            self.enum_name,self.type,self.line_number)
+
+        alias_name = (
+            struct_types_ctx.alias_ctx.get_enum_alias(self.enum_name))
+        self.type.set_alias_name(alias_name)
+        
         
 class StructDefinitionNode(_AstNode):
     def __init__(self,filename,struct_name_identifier_node,struct_body_node,
@@ -237,7 +247,6 @@ class StructDefinitionNode(_AstNode):
         
         self.type = StructType(
             self.struct_name,name_to_types_dict,False,None,initializer_dict)
-
         
     def register_struct_endpoint_fields(self,struct_types_ctx):
         '''
@@ -246,12 +255,11 @@ class StructDefinitionNode(_AstNode):
         '''
         self.struct_body_node.register_struct_endpoint_fields(struct_types_ctx)
 
-        
     def add_struct_type(self,struct_types_ctx):
         alias_name = (
             struct_types_ctx.alias_ctx.get_struct_alias(self.struct_name))
         self.type.set_alias_name(alias_name)
-        
+
         struct_types_ctx.add_struct_type_obj_for_name(
             self.struct_name,self.type,self.line_number)
 

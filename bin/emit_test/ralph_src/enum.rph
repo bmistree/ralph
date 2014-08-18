@@ -6,6 +6,7 @@ Enum Day
 Enum Empty
 {}
 
+
 Endpoint Test
 {
     is_monday (Enum Day d) returns TrueFalse

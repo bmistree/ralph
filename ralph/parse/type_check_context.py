@@ -34,12 +34,17 @@ class AliasContext(object):
     def __init__(self):
         self.struct_names_to_alias_names_dict = {}
         self.endpoint_names_to_alias_names_dict = {}
+        self.enum_names_to_alias_names_dict = {}
     def add_struct_alias(self,struct_name, struct_alias):
         self.struct_names_to_alias_names_dict[struct_name] = struct_alias
     def add_endpoint_alias(self,endpoint_name, endpoint_alias):
         self.endpoint_names_to_alias_names_dict[endpoint_name] = endpoint_alias
+    def add_enum_alias(self,enum_name, enum_alias):
+        self.enum_names_to_alias_names_dict[enum_name] = enum_alias
     def get_struct_alias(self,struct_name):
         return self.struct_names_to_alias_names_dict.get(struct_name,None)
+    def get_enum_alias(self,enum_name):
+        return self.enum_names_to_alias_names_dict.get(enum_name,None)
     def get_endpoint_alias(self,endpoint_name):
         return self.endpoint_names_to_alias_names_dict.get(
             endpoint_name,None)

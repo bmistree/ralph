@@ -62,9 +62,16 @@ class EnumType(Type):
         
     def update_enum_type(self,field_list):
         self.field_list = field_list
-        
+        if self.alias_name is not None:
+            self.enum_name = alias_name
+            
     def set_alias_name(self,new_alias_name):
         self.alias_name = new_alias_name
+
+    def get_emit_name(self):
+        if self.alias_name is None:
+            return self.enum_name
+        return self.alias_name
 
     def clone(self,is_tvar):
         '''Each user-defined enum has one canonical type.  When

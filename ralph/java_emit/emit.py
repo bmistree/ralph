@@ -1157,7 +1157,7 @@ def emit_internal_type(type_object):
 
         # emit for enums
         if isinstance(type_object,EnumType):
-            return type_object.alias_name
+            return emit_internal_enum_type(type_object)
 
         
         # emit for ServiceFactories
@@ -1166,9 +1166,6 @@ def emit_internal_type(type_object):
         # emit for ServiceReference
         if isinstance(type_object,ServiceReferenceType):
             return 'InternalServiceReference'
-        # emit for enums
-        if isinstance(type_object,EnumType):
-            return type_object.alias_name
         
         # emit for basic types
         if isinstance(type_object,BasicType):
@@ -1959,6 +1956,9 @@ def emit_for_statement(for_node,emit_ctx):
 ######### HANDLING STRUCTS ########
 def emit_internal_struct_type(struct_type):
     return struct_type.prepend_to_name('_Internal')
+
+def emit_internal_enum_type(enum_type):
+    return enum_type.get_emit_name()
 
 def emit_struct_definition(struct_name,struct_type):
     '''
