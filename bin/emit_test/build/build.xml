@@ -63,6 +63,13 @@
     </antcall>
   </target>
 
+  <target name="alias_enum_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="alias_enum.rph"/>
+      <param name="class_name" value="AliasEnumJava"/>
+    </antcall>
+  </target>
+
   
   <target name="iface_basic_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
@@ -570,7 +577,8 @@
         jar_InternalStructMethodCall,jar_ReferenceServiceFactory,
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
-        jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum">
+        jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
+        jar_AliasEnum">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -588,6 +596,11 @@
   <target
       name="ralph_Enum"
       depends="enum_ralph">
+  </target>
+
+  <target
+      name="ralph_AliasEnum"
+      depends="enum_ralph,alias_enum_ralph">
   </target>
   
   <target
@@ -922,6 +935,13 @@
   <target name="harness_Enum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="EnumTest.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_AliasEnum">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="EnumTest.java,AliasEnumTest.java"/>
     </antcall>
   </target>
   
@@ -1351,6 +1371,18 @@
     <antcall target="make_jar">
       <param name="main_class" value="EnumTest"/>
       <param name="dest_jar" value="${enum_jar}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="alias_enum_jar"
+      value="alias_enum.jar"/>
+  <target
+      name="jar_AliasEnum"
+      depends="ralph_AliasEnum,ralph_to_byte_code,harness_AliasEnum">
+    <antcall target="make_jar">
+      <param name="main_class" value="AliasEnumTest"/>
+      <param name="dest_jar" value="${alias_enum_jar}"/>
     </antcall>
   </target>
   

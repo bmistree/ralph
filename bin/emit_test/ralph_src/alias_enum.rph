@@ -1,19 +1,6 @@
+#include 'enum.rph'
+alias Enum Day as 'EnumJava.Day';
 alias Interface IEnumTest as 'EnumJava.IEnumTest';
-
-Enum Day
-{
-    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY,SUNDAY
-}
-
-Enum Empty
-{}
-
-Interface IEnumTest
-{
-    test_monday_one() returns TrueFalse;
-    test_monday_two() returns TrueFalse;
-    test_not_monday() returns TrueFalse;
-}
 
 Endpoint Test implements Interface IEnumTest
 {
