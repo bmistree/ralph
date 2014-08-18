@@ -112,6 +112,10 @@ class EnumTypesContext(object):
 
     def get_enum_type_obj_from_enum_name(self,name):
         return self.enum_name_to_type_obj.get(name,None)
+
+    def __iter__(self):
+        return iter(self.enum_name_to_type_obj.keys())
+
     
 class StructTypesContext(object):
     """Maintains a dict from struct names to their type objects.

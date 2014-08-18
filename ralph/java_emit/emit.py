@@ -35,7 +35,8 @@ import ralph.Variables.NonAtomicServiceFactoryVariable;
 import ralph.Variables.AtomicServiceFactoryVariable;
 import ralph.Variables.NonAtomicServiceReferenceVariable;
 import ralph.Variables.AtomicServiceReferenceVariable;
-
+import ralph.Variables.NonAtomicEnumVariable;
+import ralph.Variables.AtomicEnumVariable;
 
 import ralph_protobuffs.VariablesProto;
 
@@ -84,6 +85,16 @@ public class %s
             emit_struct_definition(struct_name,struct_type))
         prog_txt += '\n'
 
+    # emit individual enum types
+    prog_txt += indent_string(
+        '/*********** ENUM DEFINITIONS ******/\n')
+    enum_ctx = struct_types_ctx.enum_ctx
+    for enum_name in enum_ctx:
+        enum_type = enum_ctx.get_enum_type_obj_from_enum_name(enum_name)
+        prog_txt += indent_string(
+            emit_enum_definition(enum_name,enum_type))
+        prog_txt += '\n'
+        
     # emit individual interfaces
     prog_txt += indent_string(
         '/*********** INTERFACE DEFINITIONS ******/\n')
@@ -290,10 +301,12 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # for enum types, just push the struct variable directly
             # as argument to method
             enum_type_name = method_declaration_arg_node.type.get_emit_name()
+            wrapped_enum_type_name = (
+                'RalphObject<%s,%s>' % (enum_type_name,enum_type_name))
             single_arg_string = (
                 '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
-                (internal_struct_type, arg_name, arg_vec_to_read_from,enum_type_name,
-                 arg_vec_to_read_from))
+                (internal_struct_type, arg_name, arg_vec_to_read_from,
+                 wrapped_enum_type_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, EndpointType):
             # note: unable to dispatch for rpc for methods that
@@ -1990,13 +2003,30 @@ def emit_for_statement(for_node,emit_ctx):
     emit_ctx.pop_scope()
     return to_return
 
+######### HANDLING ENUMS ########
+def emit_enum_definition(enum_name,enum_type):
+    # do not emit aliased enums: they're already defined elsewhere
+    if enum_type.alias_name is not None:
+        return ''
+
+    to_return = 'public enum %s {' % enum_type.get_emit_name()
+
+    for i in range(0,len(enum_type.field_list)):
+        field_name = enum_type.field_list[i]
+        to_return += field_name
+        if i < len(enum_type.field_list) -1:
+            to_return += ','
+    to_return += '}'
+    return to_return
+
+def emit_internal_enum_type(enum_type):
+    return enum_type.get_emit_name()
+
+
 
 ######### HANDLING STRUCTS ########
 def emit_internal_struct_type(struct_type):
     return struct_type.prepend_to_name('_Internal')
-
-def emit_internal_enum_type(enum_type):
-    return enum_type.get_emit_name()
 
 def emit_struct_definition(struct_name,struct_type):
     '''
