@@ -536,7 +536,7 @@ public class Variables {
                 "Should deserialize directly in DataConstructorRegistry.");
         }
     }
-x
+
     public static class NonAtomicEnumVariable<T>
         extends NonAtomicValueVariable<T,T>
     {
