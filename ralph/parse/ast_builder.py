@@ -55,6 +55,7 @@ def p_AliasStatement(p):
     '''
     AliasStatement : ALIAS STRUCT_TYPE Identifier AS String SEMI_COLON
                    | ALIAS ENDPOINT Identifier AS String SEMI_COLON
+                   | ALIAS ENUM Identifier AS String SEMI_COLON
                    | ALIAS SERVICE Identifier AS String SEMI_COLON
                    | ALIAS INTERFACE Identifier AS String SEMI_COLON
     '''
@@ -62,13 +63,15 @@ def p_AliasStatement(p):
     identifier_node = p[3]
     to_alias_to_string_node = p[5]
 
-    for_struct = False
-    endpoint_or_struct_token = p[2]
-    if endpoint_or_struct_token == STRUCT_TYPE_TOKEN:
-        for_struct = True
-    
+    alias_type = AliasStatementNode.FOR_ENDPOINT_SERVICE_IFACE
+    endpoint_or_enum_or_struct_token = p[2]
+    if endpoint_or_enum_or_struct_token == STRUCT_TYPE_TOKEN:
+        alias_type = AliasStatementNode.FOR_STRUCT
+    if endpoint_or_enum_or_struct_token == ENUM_TOKEN:
+        alias_type = AliasStatementNode.FOR_ENUM
+        
     p[0] = AliasStatementNode(
-        global_parsing_filename,for_struct,identifier_node,
+        global_parsing_filename,alias_type,identifier_node,
         to_alias_to_string_node,line_number)
     
 def p_EnumList(p):

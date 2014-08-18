@@ -154,11 +154,15 @@ class RootStatementNode(_AstNode):
 
     
 class AliasStatementNode(_AstNode):
-    def __init__(self,filename,for_struct,identifier_node,
+    FOR_STRUCT = 1
+    FOR_ENDPOINT_SERVICE_IFACE = 2
+    FOR_ENUM = 3
+    
+    def __init__(self,filename,alias_type,identifier_node,
                  to_alias_to_string_node,line_number):
         super(AliasStatementNode,self).__init__(
             filename,ast_labels.ALIAS,line_number)
-        self.for_struct = for_struct
+        self.alias_type = alias_type
         self.to_alias_string = identifier_node.value
         self.to_alias_to_string = to_alias_to_string_node.value
 
@@ -176,7 +180,7 @@ class AliasStatementNode(_AstNode):
             struct_types_ctx may be None if not including any
             dependent files and will not be None if we have.
         '''
-        if self.for_struct:
+        if self.alias_type == AliasStatementNode.FOR_STRUCT:
             alias_ctx.add_struct_alias(
                 self.to_alias_string,self.to_alias_to_string)
 
@@ -185,10 +189,19 @@ class AliasStatementNode(_AstNode):
                     self.to_alias_string)
                 if type_obj is not None:
                     type_obj.set_alias_name(self.to_alias_to_string)
-            
-        else:
+        elif self.alias_type == AliasStatementNode.FOR_ENDPOINT_SERVICE_IFACE:
             alias_ctx.add_endpoint_alias(
                 self.to_alias_string,self.to_alias_to_string)
+        elif self.alias_type == AliasStatementNode.FOR_ENUM:
+            alias_ctx.add_enum_alias(
+                self.to_alias_string,self.to_alias_to_string)
+        #### DEBUG
+        else:
+            raise InternalParseException(
+                self.filename,self.line_number,
+                'Unknown alias type in AliasStatementNode')
+        #### END DEBUG
+
 
 class EnumDefinitionNode(_AstNode):
     def __init__(self,filename,enum_name_identifier_node,enum_body_node,
