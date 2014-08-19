@@ -505,10 +505,16 @@ public abstract class Endpoint
         }
         else if (general_msg.hasCommitRequest())
         {
-            String event_uuid = general_msg.getCommitRequest().getEventUuid().getData();
+            String event_uuid =
+                general_msg.getCommitRequest().getEventUuid().getData();
+            String root_host_uuid =
+                general_msg.getCommitRequest().getRootHostUuid().getData();
+            long root_timestamp =
+                general_msg.getCommitRequest().getRootTimestamp();
             RalphServiceActions.ServiceAction service_action = 
                 new RalphServiceActions.ReceiveRequestCommitAction(
-                    this,event_uuid,true);
+                    this,event_uuid,root_timestamp,root_host_uuid);
+            
             _thread_pool.add_service_action(service_action);
         }
         else if (general_msg.hasError())

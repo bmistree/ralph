@@ -27,7 +27,12 @@ public class LamportClock
     {
         return counter;
     }
-	
+
+    synchronized public long get_and_increment_int_timestamp()
+    {
+        return ++counter;
+    }
+    
     synchronized public String get_and_increment_timestamp()
     {
         // FIXME: decide on how high the clock can get.

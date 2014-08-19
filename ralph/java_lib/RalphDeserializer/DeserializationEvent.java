@@ -68,15 +68,17 @@ public class DeserializationEvent extends ActiveEvent
         return true;
     }
 
-    public FirstPhaseCommitResponseCode begin_first_phase_commit()
+    public FirstPhaseCommitResponseCode local_root_begin_first_phase_commit()
+    {
+        return FirstPhaseCommitResponseCode.SUCCEEDED;
+    }
+    public FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
+        Long root_first_phase_commit_timestamp,
+        String root_first_phase_commit_host_uuid)
     {
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
     
-    public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
-    {
-        return FirstPhaseCommitResponseCode.SUCCEEDED;
-    }
     public void second_phase_commit()
     {}
 

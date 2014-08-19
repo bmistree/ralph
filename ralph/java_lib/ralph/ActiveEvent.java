@@ -92,18 +92,24 @@ public abstract class ActiveEvent
        event_complete_queue in root object for whether the commit
        actually succeded.
      */
-    public abstract FirstPhaseCommitResponseCode begin_first_phase_commit();
+    public abstract FirstPhaseCommitResponseCode local_root_begin_first_phase_commit();
+    /**
+     * If another node initiates first phase commit, it should pass in
+     * the timestamp of the root event and the root host uuid.  The
+     * AtomicActiveEvent keeps track of these timestamps and ids so
+     * that later modules can add object versioning for atomic
+     * variables.
+     */
+    public abstract FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
+        Long root_first_phase_commit_timestamp,
+        String root_first_phase_commit_host_uuid);
+    
     public static enum FirstPhaseCommitResponseCode
     {
         FAILED, SUCCEEDED, SKIP
     }
     
-    /**
-     * If can enter Should send a message back to parent that 
-        
-     * @param from_partner
-     */
-    public abstract FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner);
+    
     public abstract void second_phase_commit();
 
     /**

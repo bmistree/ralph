@@ -217,6 +217,18 @@ public class AtomicActiveEvent extends ActiveEvent
     public final ActiveEventMap event_map;
 
     /**
+       Want to start adding version control into RalphObjects.  Keep
+       track of timestamps during commit to ensure that can establish
+       order that changes are made to objects so that we get a proper
+       object history.  All these fields should be populated in
+       begin_first_phase_commit.
+     */
+    private Long root_first_phase_commit_timestamp = null;
+    private Long local_first_phase_commit_timestamp = null;
+    private String root_first_phase_commit_host_uuid = null;
+
+    
+    /**
        When we are inside of one atomic event and encounter another
        atomic block, we increase our reference count.  We decrement
        that reference count when we leave the atomic statement.  We
@@ -566,23 +578,36 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
     @Override
-    public FirstPhaseCommitResponseCode begin_first_phase_commit()
+    public FirstPhaseCommitResponseCode local_root_begin_first_phase_commit()
     {
-        return begin_first_phase_commit(false);
+        // means that this atomic active event is a root event..  Add
+        // debugging to check.
+
+        //// DEBUG
+        if (! event_parent.is_root)
+        {
+            Util.logger_assert(
+                "Shold not receive begin_first_phase_commit on non-root event");
+        }
+        //// END DEBUG
+
+        long root_timestamp =
+            event_parent.ralph_globals.clock.get_and_increment_int_timestamp();
+        String root_host_uuid = event_parent.ralph_globals.host_uuid;
+        return non_local_root_begin_first_phase_commit(
+            root_timestamp,root_host_uuid);
     }
-	
-    /**
-     * If can enter Should send a message back to parent that 
-        
-     * @param from_partner
-     */
-    @Override    
-    public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
+
+    @Override
+    public FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
+        Long root_first_phase_commit_timestamp,
+        String root_first_phase_commit_host_uuid)
     {
+        
         // set of objects trying to push to hardware.
         Set<ICancellableFuture> obj_could_commit =
             new HashSet<ICancellableFuture>();
-        
+
         Map<String,AtomicObject> touched_objs_copy = null;
         
         try
@@ -601,6 +626,16 @@ public class AtomicActiveEvent extends ActiveEvent
                 //# message again.
                 return FirstPhaseCommitResponseCode.FAILED;
             }
+
+            // update data after skip to prevent overwriting values on
+            // root in case of cycles.
+            this.root_first_phase_commit_timestamp =
+                root_first_phase_commit_timestamp;
+            this.root_first_phase_commit_host_uuid =
+                root_first_phase_commit_host_uuid;
+            this.local_first_phase_commit_timestamp =
+                event_parent.ralph_globals.clock.get_and_increment_int_timestamp();
+
             
             state = State.STATE_PUSHING_TO_HARDWARE;
             

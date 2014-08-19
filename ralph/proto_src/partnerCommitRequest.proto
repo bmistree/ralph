@@ -11,4 +11,6 @@ option java_outer_classname = "PartnerCommitRequestProto";
 message PartnerCommitRequest
 {
     required UUID event_uuid = 1;
+    required UUID root_host_uuid = 2;
+    required uint64 root_timestamp = 3;
 }

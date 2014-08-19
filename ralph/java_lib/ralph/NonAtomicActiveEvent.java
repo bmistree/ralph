@@ -131,7 +131,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
 
     @Override
-    public FirstPhaseCommitResponseCode begin_first_phase_commit()
+    public FirstPhaseCommitResponseCode local_root_begin_first_phase_commit()
     {
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
@@ -155,9 +155,13 @@ public class NonAtomicActiveEvent extends ActiveEvent
      * @param from_partner
      */
     @Override
-    public FirstPhaseCommitResponseCode begin_first_phase_commit(boolean from_partner)
+    public FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
+        Long root_first_phase_commit_timestamp,
+        String root_first_phase_commit_host_uuid)
     {
-        return begin_first_phase_commit();
+        // non-atomic active events don't keep track of object
+        // versioning.
+        return local_root_begin_first_phase_commit();
     }
 
     public void second_phase_commit()

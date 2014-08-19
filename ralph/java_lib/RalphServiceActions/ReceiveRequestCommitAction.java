@@ -10,17 +10,19 @@ package RalphServiceActions;
  */
 public class ReceiveRequestCommitAction extends ServiceAction 
 {
-    ralph.Endpoint local_endpoint = null;
-    String event_uuid = null;
-    boolean from_partner;
-	
+    final ralph.Endpoint local_endpoint;
+    final String event_uuid;
+    final Long root_timestamp;
+    final String root_host_uuid;
+
     public ReceiveRequestCommitAction(
         ralph.Endpoint _local_endpoint, String _event_uuid,
-        boolean _from_partner)
+        Long _root_timestamp,String _root_host_uuid)
     {
         local_endpoint = _local_endpoint;
         event_uuid = _event_uuid;
-        from_partner = _from_partner;
+        root_timestamp = _root_timestamp;
+        root_host_uuid = _root_host_uuid;
     }
 	
     @Override
@@ -43,9 +45,10 @@ public class ReceiveRequestCommitAction extends ServiceAction
             //#     point.  Just ignore the request.
         }
         else
-            evt.begin_first_phase_commit(
-                from_partner || local_endpoint.get_conn_failed());
-		
+        {
+            evt.non_local_root_begin_first_phase_commit(
+                root_timestamp, root_host_uuid);
+        }
     }
 }
 
