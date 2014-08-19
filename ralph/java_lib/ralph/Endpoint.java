@@ -349,31 +349,6 @@ public abstract class Endpoint
         _thread_pool.add_service_action(req_backout_action);
     }
 
-    /**
-     * Called by another endpoint on the same host as this endpoint to
-     begin the first phase of the commit of the active event with uuid
-     "uuid."
-
-     @param {uuid} uuid --- The uuid of the _ActiveEvent that we
-     want to commit.
-
-     @param {Endpoint object} requesting_endpoint --- 
-     Endpoint object if was requested to commit by endpoint objects
-     on this same host (from endpoint object calls).
-        
-     Called by another endpoint on this endpoint (not called by
-     external non-Waldo code).
-
-     Forward the commit request to any other endpoints that were
-     touched when the event was processed on this side.
-
-    */
-    public void _receive_request_commit(String uuid,Endpoint requesting_endpoint)
-    {
-        RalphServiceActions.ServiceAction endpoint_request_commit_action = 
-            new RalphServiceActions.ReceiveRequestCommitAction(this,uuid,false);
-        _thread_pool.add_service_action(endpoint_request_commit_action);
-    }
 
     /**
        Called by another endpoint on the same host as this endpoint
