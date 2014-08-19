@@ -910,7 +910,9 @@ public abstract class Endpoint
        @param {UUID} active_event_uuid --- The uuid of the event we
        will forward a commit to our partner for.
     */
-    public void _forward_commit_request_partner(String active_event_uuid)
+    public void _forward_commit_request_partner(
+        String active_event_uuid,long root_timestamp,
+        String root_host_uuid)
     {
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
@@ -918,14 +920,23 @@ public abstract class Endpoint
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerCommitRequest.Builder commit_request_msg =
             PartnerCommitRequest.newBuilder();
+
+        // event uuid
     	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
     	event_uuid_msg.setData(active_event_uuid);
-    	
     	commit_request_msg.setEventUuid(event_uuid_msg);
-    	
+
+        // root host uuid
+    	UtilProto.UUID.Builder root_host_uuid_msg = UtilProto.UUID.newBuilder();
+    	root_host_uuid_msg.setData(root_host_uuid);
+    	commit_request_msg.setRootHostUuid(root_host_uuid_msg);
+
+        // root timestamp
+        commit_request_msg.setRootTimestamp(root_timestamp);
+
+        // actually populate general message
     	general_message.setCommitRequest(commit_request_msg);
     	_conn_obj.write(general_message.build(),this);
-    	
     }
     
 

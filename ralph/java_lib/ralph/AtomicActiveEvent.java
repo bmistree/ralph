@@ -758,7 +758,8 @@ public class AtomicActiveEvent extends ActiveEvent
         // first pahse of commit.
         event_parent.first_phase_transition_success(
             local_endpoints_whose_partners_contacted,
-            this);
+            this,this.root_first_phase_commit_timestamp,
+            this.root_first_phase_commit_host_uuid);
 
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;

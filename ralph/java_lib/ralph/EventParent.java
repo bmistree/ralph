@@ -168,7 +168,8 @@ public abstract class EventParent
     */
     public void first_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted,
-        ActiveEvent _event)
+        ActiveEvent _event, long root_commit_timestamp,
+        String root_host_uuid)
     {
         event = _event;
         //# first keep track of all events that we are waiting on
@@ -177,7 +178,9 @@ public abstract class EventParent
         {
             //# send message to partner telling it to enter first phase
             //# commit
-            endpt._forward_commit_request_partner(uuid);
+            endpt._forward_commit_request_partner(
+                uuid,root_commit_timestamp,
+                root_host_uuid);
         }
     }
 
