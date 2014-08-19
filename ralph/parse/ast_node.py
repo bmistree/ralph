@@ -1065,11 +1065,14 @@ class DotNode(_AstNode):
             # type already defined.
             type_obj = struct_types_ctx.get_enum_type_obj_from_enum_name(
                 self.left_of_dot_node.get_value())
-            
+
+            if type_obj is not None:
+                self.is_enum = True
+
+        if self.is_enum:
             # FIXME: Actually check that right of dot node is a valid
             # field in the enum.
             self.type = type_obj.clone(False)
-            self.is_enum = True
         else:
             # not an enum, do type checking for each separate
             # identifier.
