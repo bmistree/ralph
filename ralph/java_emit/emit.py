@@ -620,10 +620,10 @@ ActiveEvent active_event = _act_event_map.create_root_non_atomic_event();
             '%s to_return = %s' % (return_type, inner_method_call_text))
 
     method_body_text += inner_method_call_text
-        
+    
     # try to commit the event
     method_body_text += '''
-active_event.begin_first_phase_commit();
+active_event.local_root_begin_first_phase_commit();
 try {
     ((RootEventParent)active_event.event_parent).event_complete_queue.take();
 } catch (InterruptedException _ex) {
@@ -1483,7 +1483,7 @@ def emit_statement(emit_ctx,statement_node):
 
         // FIXME: may want to mangle this further
         FirstPhaseCommitResponseCode __ralph_internal_resp_code =
-            _active_event.begin_first_phase_commit();
+            _active_event.local_root_begin_first_phase_commit();
 
         if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
             break;
