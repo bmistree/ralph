@@ -10,8 +10,8 @@ import RalphCallResults.MessageCallResultObject;
 import java.util.Set;
 import java.util.Map;
 
-public class RootEventParent extends EventParent {
-
+public class RootEventParent extends EventParent
+{    
     /**
      * 	# indices are event uuids.  Values are bools.  When all values
      # are true in this dict, then we can transition into second
@@ -47,9 +47,9 @@ public class RootEventParent extends EventParent {
     */
     public RootEventParent(
         String _host_uuid,String _uuid, String _priority,
-        RalphGlobals _ralph_globals)
+        RalphGlobals _ralph_globals, Endpoint _local_endpoint)
     {
-        super(_host_uuid,_uuid,_priority,_ralph_globals,true);
+        super(_host_uuid,_uuid,_priority,_ralph_globals,true,_local_endpoint);
     }
 
     private void  _lock_endpoints_waiting_on_commit()

@@ -70,16 +70,20 @@ public class ActiveEventMap
     }
     
 
-    public AtomicActiveEvent create_root_atomic_event(ActiveEvent event_parent)
+    public AtomicActiveEvent create_root_atomic_event(
+        ActiveEvent event_parent, Endpoint root_endpoint)
         throws RalphExceptions.StoppedException
     {
-        return (AtomicActiveEvent)create_root_event(true,event_parent,false);
+        return (AtomicActiveEvent)create_root_event(
+            true,event_parent,false,root_endpoint);
     }
 
-    public NonAtomicActiveEvent create_root_non_atomic_event()
+    public NonAtomicActiveEvent create_root_non_atomic_event(
+        Endpoint root_endpoint)
         throws RalphExceptions.StoppedException
     {
-        return (NonAtomicActiveEvent)create_root_event(false,null,false);
+        return (NonAtomicActiveEvent)create_root_event(
+            false,null,false,root_endpoint);
     }
     
     /**
@@ -87,10 +91,12 @@ public class ActiveEventMap
        change from being super to anything else.  Cannot change from
        anything else to becoming super.
      */
-    public NonAtomicActiveEvent create_super_root_non_atomic_event()
+    public NonAtomicActiveEvent create_super_root_non_atomic_event(
+        Endpoint root_endpoint)
         throws RalphExceptions.StoppedException
     {
-        return (NonAtomicActiveEvent)create_root_event(false,null,true);
+        return (NonAtomicActiveEvent)create_root_event(
+            false,null,true,root_endpoint);
     }
 
 
@@ -108,7 +114,8 @@ public class ActiveEventMap
        endpoint and returns it.
      */
     private ActiveEvent create_root_event(
-        boolean atomic, ActiveEvent event_parent, boolean super_priority)
+        boolean atomic, ActiveEvent event_parent, boolean super_priority,
+        Endpoint root_endpoint)
         throws RalphExceptions.StoppedException
     {
         // DEBUG
@@ -119,9 +126,17 @@ public class ActiveEventMap
 
         ActiveEvent root_event = null;
         if (atomic)
-            root_event = boosted_manager.create_root_atomic_event(event_parent);
+        {
+            root_event =
+                boosted_manager.create_root_atomic_event(
+                    event_parent,root_endpoint);
+        }
         else
-            root_event = boosted_manager.create_root_non_atomic_event(super_priority);
+        {
+            root_event =
+                boosted_manager.create_root_non_atomic_event(
+                    super_priority,root_endpoint);
+        }
 
         local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
         return root_event;

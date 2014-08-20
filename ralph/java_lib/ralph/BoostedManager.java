@@ -53,18 +53,20 @@ public class BoostedManager
         ralph_globals = _ralph_globals;
     }
 
-    public ActiveEvent create_root_atomic_event(ActiveEvent atomic_parent)
+    public ActiveEvent create_root_atomic_event(
+        ActiveEvent atomic_parent, Endpoint root_endpoint)
     {
-        return create_root_event(true,atomic_parent,false);
+        return create_root_event(true,atomic_parent,false,root_endpoint);
     }
 
     /**
        @param {boolean} super_priority --- True if non atomic active
        event should have a super priority.
      */
-    public ActiveEvent create_root_non_atomic_event(boolean super_priority)
+    public ActiveEvent create_root_non_atomic_event(
+        boolean super_priority, Endpoint root_endpoint)
     {
-        return create_root_event(false,null,super_priority);
+        return create_root_event(false,null,super_priority,root_endpoint);
     }
 
     private void _lock()
@@ -84,9 +86,13 @@ public class BoostedManager
        Atomics can only inherit super priority from their super
        non-atomic parents.  Will throw error if try to create atomic
        directly with super priority.
+
+       @param requester_endpoint --- The endpoint that requests the
+       generation of this root event.
      */
     private ActiveEvent create_root_event(
-        boolean atomic,ActiveEvent atomic_parent,boolean super_priority)
+        boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
+        Endpoint requester_endpoint)
     {
         // DEBUG
         if (super_priority && atomic)
@@ -98,7 +104,8 @@ public class BoostedManager
         RootEventParent rep = 
             new RootEventParent(
                 act_event_map.local_endpoint._host_uuid,evt_uuid,null,
-                ralph_globals);
+                ralph_globals,requester_endpoint);
+        
 
         ActiveEvent root_event = null;
         if (atomic)

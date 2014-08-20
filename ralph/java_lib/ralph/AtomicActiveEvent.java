@@ -226,7 +226,6 @@ public class AtomicActiveEvent extends ActiveEvent
     private Long root_first_phase_commit_timestamp = null;
     private Long local_first_phase_commit_timestamp = null;
     private String root_first_phase_commit_host_uuid = null;
-
     
     /**
        When we are inside of one atomic event and encounter another
@@ -542,8 +541,6 @@ public class AtomicActiveEvent extends ActiveEvent
 
         return to_restore_from_atomic;
     }
-    
-
     
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -1488,7 +1485,8 @@ public class AtomicActiveEvent extends ActiveEvent
      * 
      */
     private void handle_non_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
+        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        String name_of_block_to_exec_next)
     {
 
         //// DEBUG

@@ -106,7 +106,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
     public ActiveEvent clone_atomic() throws StoppedException
     {
         atomic_child_lock();
-        atomic_child = event_map.create_root_atomic_event(this);
+        atomic_child = event_map.create_root_atomic_event(
+            this,event_parent.local_endpoint);
         atomic_child_unlock();
         return atomic_child;
     }

@@ -6,18 +6,15 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.Set;
 import RalphCallResults.MessageCallResultObject;
 
-public class PartnerEventParent extends EventParent {
-
-    private Endpoint local_endpoint = null;
-    
+public class PartnerEventParent extends EventParent
+{
     public PartnerEventParent(
         String _host_uuid, Endpoint local_endpoint, String _uuid,
         String _priority, RalphGlobals _ralph_globals)
     {
-        super(_host_uuid,_uuid,_priority,_ralph_globals,false);
-        this.local_endpoint = local_endpoint;
+        super(_host_uuid,_uuid,_priority,_ralph_globals,false,local_endpoint);
     }
-
+    
     @Override
     public void first_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted,

@@ -18,8 +18,9 @@ public abstract class ActiveEvent
     public final String uuid;
     public final EventParent event_parent;
     protected final ThreadPool thread_pool;
-
-    public ActiveEvent(EventParent _event_parent, ThreadPool _thread_pool)
+    
+    public ActiveEvent(
+        EventParent _event_parent, ThreadPool _thread_pool)
     {
         event_parent = _event_parent;
         thread_pool = _thread_pool;
