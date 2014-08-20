@@ -10,9 +10,12 @@ public class PartnerEventParent extends EventParent
 {
     public PartnerEventParent(
         String _host_uuid, Endpoint local_endpoint, String _uuid,
-        String _priority, RalphGlobals _ralph_globals)
+        String _priority, RalphGlobals _ralph_globals,
+        String _event_entry_point_name)
     {
-        super(_host_uuid,_uuid,_priority,_ralph_globals,false,local_endpoint);
+        super(
+            _host_uuid,_uuid,_priority,_ralph_globals,
+            false,local_endpoint,_event_entry_point_name);
     }
     
     @Override

@@ -34,6 +34,13 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             boolean atomic = partner_request_block_msg.getTransaction();
             String uuid = partner_request_block_msg.getEventUuid().getData();
             String priority = partner_request_block_msg.getPriority().getData();
+            String event_entry_point_name = "- - finish block event name- - ";
+            if (partner_request_block_msg.hasNameOfBlockRequesting())
+            {
+                event_entry_point_name =
+                    partner_request_block_msg.getNameOfBlockRequesting();
+            }
+            
             ralph.ActiveEvent evt = null;
 
             if (partner_request_block_msg.hasReplyToUuid())
@@ -53,7 +60,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             else
             {
                 evt = local_endpoint._act_event_map.get_or_create_partner_event(
-                    uuid,priority,atomic);
+                    uuid,priority,atomic,event_entry_point_name);
             }
             
             evt.recv_partner_sequence_call_msg(local_endpoint,partner_request_block_msg);

@@ -107,7 +107,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
     {
         atomic_child_lock();
         atomic_child = event_map.create_root_atomic_event(
-            this,event_parent.local_endpoint);
+            this,event_parent.local_endpoint,
+            event_parent.event_entry_point_name);
         atomic_child_unlock();
         return atomic_child;
     }

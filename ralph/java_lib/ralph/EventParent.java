@@ -18,7 +18,6 @@ import java.util.Set;
  */
 public abstract class EventParent
 {
-    public final Endpoint local_endpoint;
     protected final String host_uuid;
     public final String uuid;
     public final RalphGlobals ralph_globals;
@@ -28,11 +27,20 @@ public abstract class EventParent
     protected ActiveEvent event = null;
     private boolean has_been_boosted = false;
     public final boolean is_root;
+
+    public final Endpoint local_endpoint;
+    
+    /**
+       The name of the event that caused the creation of the
+       associated ActiveEvent.  (Ie., service/endpoint method name.)
+     */
+    public final String event_entry_point_name;
+
 	
     public EventParent(
         String _host_uuid,String _uuid, String _priority,
         RalphGlobals _ralph_globals,boolean _is_root,
-        Endpoint _local_endpoint)
+        Endpoint _local_endpoint, String _event_entry_point_name)
     {
         host_uuid = _host_uuid;
         ralph_globals = _ralph_globals;
@@ -45,6 +53,7 @@ public abstract class EventParent
         priority = _priority;
         is_root = _is_root;
         local_endpoint = _local_endpoint;
+        event_entry_point_name = _event_entry_point_name;
     }
     
     private void _priority_lock()

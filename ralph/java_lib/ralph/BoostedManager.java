@@ -54,9 +54,11 @@ public class BoostedManager
     }
 
     public ActiveEvent create_root_atomic_event(
-        ActiveEvent atomic_parent, Endpoint root_endpoint)
+        ActiveEvent atomic_parent, Endpoint root_endpoint,
+        String event_entry_point_name)
     {
-        return create_root_event(true,atomic_parent,false,root_endpoint);
+        return create_root_event(
+            true,atomic_parent,false,root_endpoint,event_entry_point_name);
     }
 
     /**
@@ -64,9 +66,11 @@ public class BoostedManager
        event should have a super priority.
      */
     public ActiveEvent create_root_non_atomic_event(
-        boolean super_priority, Endpoint root_endpoint)
+        boolean super_priority, Endpoint root_endpoint,
+        String event_entry_point_name)
     {
-        return create_root_event(false,null,super_priority,root_endpoint);
+        return create_root_event(
+            false,null,super_priority,root_endpoint,event_entry_point_name);
     }
 
     private void _lock()
@@ -92,7 +96,7 @@ public class BoostedManager
      */
     private ActiveEvent create_root_event(
         boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
-        Endpoint requester_endpoint)
+        Endpoint requester_endpoint, String event_entry_point_name)
     {
         // DEBUG
         if (super_priority && atomic)
@@ -104,7 +108,7 @@ public class BoostedManager
         RootEventParent rep = 
             new RootEventParent(
                 act_event_map.local_endpoint._host_uuid,evt_uuid,null,
-                ralph_globals,requester_endpoint);
+                ralph_globals,requester_endpoint,event_entry_point_name);
         
 
         ActiveEvent root_event = null;

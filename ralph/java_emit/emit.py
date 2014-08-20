@@ -598,16 +598,25 @@ def emit_external_method_body(
         # event with super priority.
         method_body_text += '''
 ActiveEvent active_event = null;
-if (%s == IsSuperFlag.SUPER)
-    active_event = _act_event_map.create_super_root_non_atomic_event(this);
+if (%(super_argument_flag)s == IsSuperFlag.SUPER)
+    active_event = _act_event_map.create_super_root_non_atomic_event(
+        this,"%(event_entry_point_name)s");
 else
-    active_event = _act_event_map.create_root_non_atomic_event(this);
-''' % super_flag_argument()
+    active_event = _act_event_map.create_root_non_atomic_event(
+        this,"%(event_entry_point_name)s");
+''' % {
+            'super_argument_flag': super_flag_argument(),
+            'event_entry_point_name': method_signature_node.method_name
+            }
     else:
         method_body_text += '''
-ActiveEvent active_event = _act_event_map.create_root_non_atomic_event(this);
-'''
-    
+ActiveEvent active_event =
+    _act_event_map.create_root_non_atomic_event(
+        this,"%(event_entry_point_name)s");
+''' % {
+            'event_entry_point_name': method_signature_node.method_name
+            }
+        
     inner_method_call_text = (
         '%s (ctx ,active_event' % method_signature_node.method_name)
     for argument_name in argument_name_text_list:
