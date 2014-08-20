@@ -24,6 +24,15 @@ public final class PartnerCommitRequestProto {
     // required uint64 root_timestamp = 3;
     boolean hasRootTimestamp();
     long getRootTimestamp();
+    
+    // required .UUID application_uuid = 4;
+    boolean hasApplicationUuid();
+    ralph_protobuffs.UtilProto.UUID getApplicationUuid();
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getApplicationUuidOrBuilder();
+    
+    // required string event_name = 5;
+    boolean hasEventName();
+    String getEventName();
   }
   public static final class PartnerCommitRequest extends
       com.google.protobuf.GeneratedMessage
@@ -90,10 +99,57 @@ public final class PartnerCommitRequestProto {
       return rootTimestamp_;
     }
     
+    // required .UUID application_uuid = 4;
+    public static final int APPLICATION_UUID_FIELD_NUMBER = 4;
+    private ralph_protobuffs.UtilProto.UUID applicationUuid_;
+    public boolean hasApplicationUuid() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public ralph_protobuffs.UtilProto.UUID getApplicationUuid() {
+      return applicationUuid_;
+    }
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getApplicationUuidOrBuilder() {
+      return applicationUuid_;
+    }
+    
+    // required string event_name = 5;
+    public static final int EVENT_NAME_FIELD_NUMBER = 5;
+    private java.lang.Object eventName_;
+    public boolean hasEventName() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getEventName() {
+      java.lang.Object ref = eventName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          eventName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getEventNameBytes() {
+      java.lang.Object ref = eventName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        eventName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       rootHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       rootTimestamp_ = 0L;
+      applicationUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      eventName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -112,11 +168,23 @@ public final class PartnerCommitRequestProto {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasApplicationUuid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEventName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!getEventUuid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
       if (!getRootHostUuid().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getApplicationUuid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -135,6 +203,12 @@ public final class PartnerCommitRequestProto {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeUInt64(3, rootTimestamp_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, applicationUuid_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getEventNameBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -156,6 +230,14 @@ public final class PartnerCommitRequestProto {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(3, rootTimestamp_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, applicationUuid_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getEventNameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -275,6 +357,7 @@ public final class PartnerCommitRequestProto {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getEventUuidFieldBuilder();
           getRootHostUuidFieldBuilder();
+          getApplicationUuidFieldBuilder();
         }
       }
       private static Builder create() {
@@ -297,6 +380,14 @@ public final class PartnerCommitRequestProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         rootTimestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (applicationUuidBuilder_ == null) {
+          applicationUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        } else {
+          applicationUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        eventName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -355,6 +446,18 @@ public final class PartnerCommitRequestProto {
           to_bitField0_ |= 0x00000004;
         }
         result.rootTimestamp_ = rootTimestamp_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (applicationUuidBuilder_ == null) {
+          result.applicationUuid_ = applicationUuid_;
+        } else {
+          result.applicationUuid_ = applicationUuidBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.eventName_ = eventName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -380,6 +483,12 @@ public final class PartnerCommitRequestProto {
         if (other.hasRootTimestamp()) {
           setRootTimestamp(other.getRootTimestamp());
         }
+        if (other.hasApplicationUuid()) {
+          mergeApplicationUuid(other.getApplicationUuid());
+        }
+        if (other.hasEventName()) {
+          setEventName(other.getEventName());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -397,11 +506,23 @@ public final class PartnerCommitRequestProto {
           
           return false;
         }
+        if (!hasApplicationUuid()) {
+          
+          return false;
+        }
+        if (!hasEventName()) {
+          
+          return false;
+        }
         if (!getEventUuid().isInitialized()) {
           
           return false;
         }
         if (!getRootHostUuid().isInitialized()) {
+          
+          return false;
+        }
+        if (!getApplicationUuid().isInitialized()) {
           
           return false;
         }
@@ -452,6 +573,20 @@ public final class PartnerCommitRequestProto {
             case 24: {
               bitField0_ |= 0x00000004;
               rootTimestamp_ = input.readUInt64();
+              break;
+            }
+            case 34: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
+              if (hasApplicationUuid()) {
+                subBuilder.mergeFrom(getApplicationUuid());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setApplicationUuid(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              eventName_ = input.readBytes();
               break;
             }
           }
@@ -661,6 +796,132 @@ public final class PartnerCommitRequestProto {
         return this;
       }
       
+      // required .UUID application_uuid = 4;
+      private ralph_protobuffs.UtilProto.UUID applicationUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> applicationUuidBuilder_;
+      public boolean hasApplicationUuid() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public ralph_protobuffs.UtilProto.UUID getApplicationUuid() {
+        if (applicationUuidBuilder_ == null) {
+          return applicationUuid_;
+        } else {
+          return applicationUuidBuilder_.getMessage();
+        }
+      }
+      public Builder setApplicationUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (applicationUuidBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          applicationUuid_ = value;
+          onChanged();
+        } else {
+          applicationUuidBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      public Builder setApplicationUuid(
+          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (applicationUuidBuilder_ == null) {
+          applicationUuid_ = builderForValue.build();
+          onChanged();
+        } else {
+          applicationUuidBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      public Builder mergeApplicationUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (applicationUuidBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              applicationUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            applicationUuid_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(applicationUuid_).mergeFrom(value).buildPartial();
+          } else {
+            applicationUuid_ = value;
+          }
+          onChanged();
+        } else {
+          applicationUuidBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      public Builder clearApplicationUuid() {
+        if (applicationUuidBuilder_ == null) {
+          applicationUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          onChanged();
+        } else {
+          applicationUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      public ralph_protobuffs.UtilProto.UUID.Builder getApplicationUuidBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getApplicationUuidFieldBuilder().getBuilder();
+      }
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getApplicationUuidOrBuilder() {
+        if (applicationUuidBuilder_ != null) {
+          return applicationUuidBuilder_.getMessageOrBuilder();
+        } else {
+          return applicationUuid_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getApplicationUuidFieldBuilder() {
+        if (applicationUuidBuilder_ == null) {
+          applicationUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                  applicationUuid_,
+                  getParentForChildren(),
+                  isClean());
+          applicationUuid_ = null;
+        }
+        return applicationUuidBuilder_;
+      }
+      
+      // required string event_name = 5;
+      private java.lang.Object eventName_ = "";
+      public boolean hasEventName() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getEventName() {
+        java.lang.Object ref = eventName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          eventName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setEventName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        eventName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearEventName() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        eventName_ = getDefaultInstance().getEventName();
+        onChanged();
+        return this;
+      }
+      void setEventName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        eventName_ = value;
+        onChanged();
+      }
+      
       // @@protoc_insertion_point(builder_scope:PartnerCommitRequest)
     }
     
@@ -687,10 +948,12 @@ public final class PartnerCommitRequestProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\032partnerCommitRequest.proto\032\nutil.proto" +
-      "\"h\n\024PartnerCommitRequest\022\031\n\nevent_uuid\030\001" +
-      " \002(\0132\005.UUID\022\035\n\016root_host_uuid\030\002 \002(\0132\005.UU" +
-      "ID\022\026\n\016root_timestamp\030\003 \002(\004B-\n\020ralph_prot" +
-      "obuffsB\031PartnerCommitRequestProto"
+      "\"\235\001\n\024PartnerCommitRequest\022\031\n\nevent_uuid\030" +
+      "\001 \002(\0132\005.UUID\022\035\n\016root_host_uuid\030\002 \002(\0132\005.U" +
+      "UID\022\026\n\016root_timestamp\030\003 \002(\004\022\037\n\020applicati" +
+      "on_uuid\030\004 \002(\0132\005.UUID\022\022\n\nevent_name\030\005 \002(\t" +
+      "B-\n\020ralph_protobuffsB\031PartnerCommitReque" +
+      "stProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -702,7 +965,7 @@ public final class PartnerCommitRequestProto {
           internal_static_PartnerCommitRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerCommitRequest_descriptor,
-              new java.lang.String[] { "EventUuid", "RootHostUuid", "RootTimestamp", },
+              new java.lang.String[] { "EventUuid", "RootHostUuid", "RootTimestamp", "ApplicationUuid", "EventName", },
               ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.class,
               ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.Builder.class);
           return null;

@@ -13,4 +13,10 @@ message PartnerCommitRequest
     required UUID event_uuid = 1;
     required UUID root_host_uuid = 2;
     required uint64 root_timestamp = 3;
+    
+    // should just be the endpoint/service id for now
+    required UUID application_uuid = 4;
+    // should be the name of the calling method that was executed to
+    // begin this event.
+    required string event_name = 5;
 }
