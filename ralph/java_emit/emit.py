@@ -599,13 +599,13 @@ def emit_external_method_body(
         method_body_text += '''
 ActiveEvent active_event = null;
 if (%s == IsSuperFlag.SUPER)
-    active_event = _act_event_map.create_super_root_non_atomic_event();
+    active_event = _act_event_map.create_super_root_non_atomic_event(this);
 else
-    active_event = _act_event_map.create_root_non_atomic_event();
+    active_event = _act_event_map.create_root_non_atomic_event(this);
 ''' % super_flag_argument()
     else:
         method_body_text += '''
-ActiveEvent active_event = _act_event_map.create_root_non_atomic_event();
+ActiveEvent active_event = _act_event_map.create_root_non_atomic_event(this);
 '''
     
     inner_method_call_text = (
