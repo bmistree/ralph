@@ -103,7 +103,9 @@ public abstract class ActiveEvent
      */
     public abstract FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
         Long root_first_phase_commit_timestamp,
-        String root_first_phase_commit_host_uuid);
+        String root_first_phase_commit_host_uuid,
+        String application_uuid, String event_name);
+
     
     public static enum FirstPhaseCommitResponseCode
     {

@@ -14,15 +14,21 @@ public class ReceiveRequestCommitAction extends ServiceAction
     final String event_uuid;
     final Long root_timestamp;
     final String root_host_uuid;
+    final String application_uuid;
+    final String event_name;
 
+    
     public ReceiveRequestCommitAction(
         ralph.Endpoint _local_endpoint, String _event_uuid,
-        Long _root_timestamp,String _root_host_uuid)
+        Long _root_timestamp,String _root_host_uuid, String _application_uuid,
+        String _event_name)
     {
         local_endpoint = _local_endpoint;
         event_uuid = _event_uuid;
         root_timestamp = _root_timestamp;
         root_host_uuid = _root_host_uuid;
+        application_uuid = _application_uuid;
+        event_name = _event_name;
     }
 	
     @Override
@@ -47,7 +53,8 @@ public class ReceiveRequestCommitAction extends ServiceAction
         else
         {
             evt.non_local_root_begin_first_phase_commit(
-                root_timestamp, root_host_uuid);
+                root_timestamp, root_host_uuid,application_uuid,
+                event_name);
         }
     }
 }

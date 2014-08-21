@@ -22,7 +22,7 @@ public class PartnerEventParent extends EventParent
     public void first_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event,long root_timestamp,
-        String root_host_uuid)
+        String root_host_uuid,String application_uuid,String event_name)
     {
         //# forwards the message to others
         super.first_phase_transition_success(
@@ -31,9 +31,7 @@ public class PartnerEventParent extends EventParent
             //# we do not have to forward the commit request back to
             //# partner: our partner must have sent it to us.	
             local_endpoints_whose_partners_contacted,_event,
-            root_timestamp,
-            root_host_uuid);
-
+            root_timestamp,root_host_uuid, application_uuid,event_name);
 
         //# tell parent endpoint that first phase has gone well and that
         //# it should wait on receiving responses from all the following

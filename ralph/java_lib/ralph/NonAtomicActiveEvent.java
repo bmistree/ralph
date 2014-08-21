@@ -135,6 +135,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
     @Override
     public FirstPhaseCommitResponseCode local_root_begin_first_phase_commit()
     {
+        // FIXME: Non-atomic events do not keep track of versioning.
+        
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
         // remove non-atomic's uuid from event map.
@@ -159,8 +161,10 @@ public class NonAtomicActiveEvent extends ActiveEvent
     @Override
     public FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
         Long root_first_phase_commit_timestamp,
-        String root_first_phase_commit_host_uuid)
+        String root_first_phase_commit_host_uuid,
+        String application_uuid, String event_name)
     {
+        // FIXME:
         // non-atomic active events don't keep track of object
         // versioning.
         return local_root_begin_first_phase_commit();

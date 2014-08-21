@@ -167,6 +167,12 @@ public abstract class EventParent
        @param {bool} partner_contacted --- True if the event has sent
        a message as part of a sequence to partner.  False otherwise.
 
+       @param application_uuid --- The uuid of the application that
+       began the event.
+
+       @param event_name --- The name of the method on the application
+       endpoint that began the event.
+       
        Sends a message back to parent that the first phase lock was
        successful.  Message also includes a list of endpoints uuids
        that this endpoint may have called.  The root event cannot
@@ -181,7 +187,8 @@ public abstract class EventParent
     public void first_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event, long root_commit_timestamp,
-        String root_host_uuid)
+        String root_host_uuid,String application_uuid,
+        String event_name)
     {
         event = _event;
         //# first keep track of all events that we are waiting on
@@ -192,7 +199,7 @@ public abstract class EventParent
             //# commit
             endpt._forward_commit_request_partner(
                 uuid,root_commit_timestamp,
-                root_host_uuid);
+                root_host_uuid,application_uuid,event_name);
         }
     }
 

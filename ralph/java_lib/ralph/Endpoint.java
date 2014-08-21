@@ -461,6 +461,7 @@ public abstract class Endpoint
             PartnerFirstPhaseResultMessage fpr = general_msg.getFirstPhaseResult();
             String event_uuid = fpr.getEventUuid().getData();
             String result_initiator_host_uuid = fpr.getSendingHostUuid().getData();
+            
             if (general_msg.getFirstPhaseResult().getSuccessful())
             {	
                 ArrayList<String> children_event_host_uuids = new ArrayList<String>();
@@ -511,9 +512,16 @@ public abstract class Endpoint
                 general_msg.getCommitRequest().getRootHostUuid().getData();
             long root_timestamp =
                 general_msg.getCommitRequest().getRootTimestamp();
+
+            String application_uuid =
+                general_msg.getCommitRequest().getApplicationUuid().getData();
+            String event_name =
+                general_msg.getCommitRequest().getEventName();
+            
             RalphServiceActions.ServiceAction service_action = 
                 new RalphServiceActions.ReceiveRequestCommitAction(
-                    this,event_uuid,root_timestamp,root_host_uuid);
+                    this,event_uuid,root_timestamp,root_host_uuid,
+                    application_uuid,event_name);
             
             _thread_pool.add_service_action(service_action);
         }
@@ -912,7 +920,8 @@ public abstract class Endpoint
     */
     public void _forward_commit_request_partner(
         String active_event_uuid,long root_timestamp,
-        String root_host_uuid)
+        String root_host_uuid,String application_uuid,
+        String event_name)
     {
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
@@ -927,13 +936,23 @@ public abstract class Endpoint
     	commit_request_msg.setEventUuid(event_uuid_msg);
 
         // root host uuid
-    	UtilProto.UUID.Builder root_host_uuid_msg = UtilProto.UUID.newBuilder();
+    	UtilProto.UUID.Builder root_host_uuid_msg =
+            UtilProto.UUID.newBuilder();
     	root_host_uuid_msg.setData(root_host_uuid);
     	commit_request_msg.setRootHostUuid(root_host_uuid_msg);
 
         // root timestamp
         commit_request_msg.setRootTimestamp(root_timestamp);
 
+        // application_uuid
+        UtilProto.UUID.Builder application_uuid_msg =
+            UtilProto.UUID.newBuilder();
+        application_uuid_msg.setData(application_uuid);
+        commit_request_msg.setApplicationUuid(application_uuid_msg);
+        
+        // event_name
+        commit_request_msg.setEventName(event_name);
+        
         // actually populate general message
     	general_message.setCommitRequest(commit_request_msg);
     	_conn_obj.write(general_message.build(),this);

@@ -591,14 +591,20 @@ public class AtomicActiveEvent extends ActiveEvent
         long root_timestamp =
             event_parent.ralph_globals.clock.get_and_increment_int_timestamp();
         String root_host_uuid = event_parent.ralph_globals.host_uuid;
+
+        String root_application_uuid = event_parent.local_endpoint._uuid;
+        String root_event_name = event_parent.event_entry_point_name;
+        
         return non_local_root_begin_first_phase_commit(
-            root_timestamp,root_host_uuid);
+            root_timestamp,root_host_uuid,root_application_uuid,
+            root_event_name);
     }
 
     @Override
     public FirstPhaseCommitResponseCode non_local_root_begin_first_phase_commit(
         Long root_first_phase_commit_timestamp,
-        String root_first_phase_commit_host_uuid)
+        String root_first_phase_commit_host_uuid,
+        String application_uuid, String event_name)
     {
         
         // set of objects trying to push to hardware.
@@ -756,7 +762,8 @@ public class AtomicActiveEvent extends ActiveEvent
         event_parent.first_phase_transition_success(
             local_endpoints_whose_partners_contacted,
             this,this.root_first_phase_commit_timestamp,
-            this.root_first_phase_commit_host_uuid);
+            this.root_first_phase_commit_host_uuid,application_uuid,
+            event_name);
 
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;

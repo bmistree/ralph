@@ -116,7 +116,7 @@ public class RootEventParent extends EventParent
     public void first_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted,
         ActiveEvent _event, long root_commit_timestamp,
-        String root_host_uuid)
+        String root_host_uuid,String application_uuid, String event_name)
     {
         // # note that we should not wait on ourselves to commit
     	_lock_endpoints_waiting_on_commit();
@@ -131,8 +131,8 @@ public class RootEventParent extends EventParent
 
         super.first_phase_transition_success(
             local_endpoints_whose_partners_contacted, _event,
-            root_commit_timestamp,
-            root_host_uuid);
+            root_commit_timestamp,root_host_uuid, application_uuid,
+            event_name);
 
         //# after first phase has completed, should check if can
         //# transition directly to second phase (ie, no other endpoints
