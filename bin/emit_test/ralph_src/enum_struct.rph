@@ -9,20 +9,21 @@ Enum bool
 
 Struct BoolHolder
 {
-    Enum bool one_value;
+    Enum bool value;
 }
 
 Service UseBool
 {
     test_true_false (TrueFalse input_value) returns TrueFalse
     {
-        Enum bool value_to_use = null;
+        Struct BoolHolder bh;
+        bh.value = null;
         if (input_value)
-            value_to_use = bool.true_t;
+            bh.value = bool.true_t;
         else
-            value_to_use = bool.false_t;
+            bh.value = bool.false_t;
 
-        if (value_to_use == bool.true_t)
+        if (bh.value == bool.true_t)
             return True;
 
         return False;
