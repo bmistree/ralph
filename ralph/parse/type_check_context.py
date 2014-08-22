@@ -71,9 +71,8 @@ class FixupableObject(object):
             type_to_fixup_with = (
                 struct_types_ctx.endpoint_name_to_type_obj_dict[self.fixupable_name])
         elif self.fixupable_type == FixupableObject.FIXUPABLE_TYPE_ENUM:
-            #### FIXME: Must finish writing fixupable object for enum
-            assert False
-
+            type_to_fixup_with = (
+                struct_types_ctx.enum_ctx.enum_name_to_type_obj[self.fixupable_name])
         #### DEBUG
         else:
             raise InternalTypeCheckException(
