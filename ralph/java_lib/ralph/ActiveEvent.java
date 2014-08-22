@@ -86,6 +86,15 @@ public abstract class ActiveEvent
        transaction, should not read from event parent queue because
        transaction is incomplete and will read it later.
 
+       Importantly, nested transactions will receive calls to
+       local_root_begin_first_phase_commit whether or not the real
+       root of all events is local or not.  Ie., if we generate an
+       atomic event remotely and then issue an rpc to another endpoint
+       that has a nested atomically block, when that endpoint exits
+       its atomically block, that endpoint will call a
+       local_root_begin_first_phase_commit, even though the true root
+       of the entire event is the first endpoint.  
+
        Note: just because the call to begin_first_phase_commit returns
        SUCCEEDED, does not mean that the actual commit succeeded, it
        just means that we were able to process the request to begin
