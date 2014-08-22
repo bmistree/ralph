@@ -63,7 +63,7 @@
     </antcall>
   </target>
 
-  <target name="enum_struct_ralph" depends="init" description="translate ralph files">
+  <target name="struct_enum_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="enum_struct.rph"/>
       <param name="class_name" value="EnumStructJava"/>
@@ -585,7 +585,7 @@
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
-        jar_AliasEnum">
+        jar_AliasEnum,jar_StructEnum">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -608,6 +608,11 @@
   <target
       name="ralph_AliasEnum"
       depends="enum_ralph,alias_enum_ralph">
+  </target>
+
+  <target
+      name="ralph_StructEnum"
+      depends="struct_enum_ralph">
   </target>
   
   <target
@@ -949,6 +954,13 @@
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
              value="EnumTest.java,AliasEnumTest.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_StructEnum">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="StructEnumTest.java"/>
     </antcall>
   </target>
   
@@ -1392,7 +1404,19 @@
       <param name="dest_jar" value="${alias_enum_jar}"/>
     </antcall>
   </target>
-  
+
+  <property
+      name="struct_enum_jar"
+      value="struct_enum.jar"/>
+  <target
+      name="jar_StructEnum"
+      depends="ralph_StructEnum,ralph_to_byte_code,harness_StructEnum">
+    <antcall target="make_jar">
+      <param name="main_class" value="StructEnumTest"/>
+      <param name="dest_jar" value="${struct_enum_jar}"/>
+    </antcall>
+  </target>
+
   <property
       name="read_only_speculate_jar"
       value="read_only_speculate.jar"/>

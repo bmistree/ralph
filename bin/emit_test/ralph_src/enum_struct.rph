@@ -4,7 +4,7 @@
  */
 Enum bool
 {
-    true, false
+    true_t, false_t
 }
 
 Struct BoolHolder
@@ -18,11 +18,11 @@ Service UseBool
     {
         Enum bool value_to_use = null;
         if (input_value)
-            value_to_use = bool.true;
+            value_to_use = bool.true_t;
         else
-            value_to_use = bool.false;
+            value_to_use = bool.false_t;
 
-        if (value_to_use == bool.true)
+        if (value_to_use == bool.true_t)
             return True;
 
         return False;
