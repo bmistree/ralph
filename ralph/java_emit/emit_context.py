@@ -24,7 +24,12 @@ class EmitContext(object):
     STATIC_MONOTONIC_ID = 0
     INTERNAL_VARIABLE_PREFIX = '__internal__'
     
-    def __init__(self):
+    def __init__(self,struct_types_ctx):
+        '''
+        @param {parse.type_check_context.StructTypesContext} struct_types_ctx
+        '''
+        self.struct_types_ctx = struct_types_ctx
+        
         # end of list is more recent scope
         self.scope_stack = []
 

@@ -99,22 +99,23 @@ public class %s
     prog_txt += indent_string(
         '/*********** INTERFACE DEFINITIONS ******/\n')
     for interface_node in root_node.interface_node_list:
-        prog_txt += indent_string(emit_interface(interface_node))
+        prog_txt += indent_string(
+            emit_interface(interface_node,struct_types_ctx))
         prog_txt += '\n'
         
     # emit individual endpoints
     prog_txt += indent_string(
         '/*********** ENDPOINT DEFINITIONS ******/\n')
     for endpt_node in root_node.endpoint_node_list:
-        prog_txt += indent_string(emit_endpt(endpt_node))
+        prog_txt += indent_string(emit_endpt(endpt_node,struct_types_ctx))
         prog_txt += '\n'
 
     prog_txt += '}' # closes class program_name
 
     return prog_txt
 
-def emit_interface(interface_node):
-    emit_ctx = EmitContext()
+def emit_interface(interface_node,struct_types_ctx):
+    emit_ctx = EmitContext(struct_types_ctx)
     emit_ctx.push_scope()
     
     # contains emitted code that actually gets returned
@@ -171,13 +172,13 @@ def produce_what_implements(variable_type_node_list):
         variable_type_node_list)
     return 'implements ' + ','.join(internal_types_text)
 
-def emit_endpt(endpt_node):
+def emit_endpt(endpt_node,struct_types_ctx):
     '''
     @param {EndpointDefinitionNode} endpt_node
 
     @returns {String}
     '''
-    emit_ctx = EmitContext()
+    emit_ctx = EmitContext(struct_types_ctx)
     emit_ctx.push_scope()
 
     implements_text = produce_what_implements(
@@ -1792,12 +1793,26 @@ def emit_dot_statement(emit_ctx,dot_node):
         # enums can have their fields accessed using dot.  Eg., for
         # enum Day { MONDAY, TUESDAY, ... }
         # Day.MONDAY is valid syntax
-        
-        # in this case, left_of_dot_node and right_of_dot_node should
-        # both be identifiers
-        enum_field_name = right_of_dot_node.get_value()
-        return dot_node.type.get_emit_name() + '.' + enum_field_name
 
+        # however, a struct with an enum field will have the same dot
+        # structure.  We distinguish between references to these two
+        # in the following way: if the left of dot node is an
+        # identifier and it appears in the 
+        if left_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
+            left_value = left_of_dot_node.get_value()
+            enum_type = (
+                emit_ctx.struct_types_ctx.get_enum_type_obj_from_enum_name(
+                    left_value))
+            if enum_type is not None:
+                # means that the left hand side of the dot was a
+                # declared enum type.  Eg., for
+                # enum Day { MONDAY, TUESDAY, ...}
+                # it was Day.
+                # in this case, left_of_dot_node and right_of_dot_node
+                # should both be identifiers
+                enum_field_name = right_of_dot_node.get_value()
+                return dot_node.type.get_emit_name() + '.' + enum_field_name
+    
     to_return = emit_statement(emit_ctx,left_of_dot_node)
     if isinstance(left_of_dot_node.type,MapType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
