@@ -1,0 +1,30 @@
+/**
+   Had a compiler bug when put enums in structs.  Adding test case to ensure
+   that it goes away.
+ */
+Enum bool
+{
+    true, false
+}
+
+Struct BoolHolder
+{
+    Enum bool one_value;
+}
+
+Service UseBool
+{
+    test_true_false (TrueFalse input_value) returns TrueFalse
+    {
+        Enum bool value_to_use = null;
+        if (input_value)
+            value_to_use = bool.true;
+        else
+            value_to_use = bool.false;
+
+        if (value_to_use == bool.true)
+            return True;
+
+        return False;
+    }
+}
