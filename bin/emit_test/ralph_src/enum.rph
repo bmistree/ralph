@@ -8,6 +8,11 @@ Enum Day
 Enum Empty
 {}
 
+Struct EmptyTester
+{
+    Enum Empty empty;
+}
+
 Interface IEnumTest
 {
     test_monday_one() returns TrueFalse;
