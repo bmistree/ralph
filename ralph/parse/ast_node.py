@@ -230,8 +230,9 @@ class EnumDefinitionNode(_AstNode):
         '''
         enum_ctx = struct_types_ctx.enum_ctx
         enum_ctx.add_enum_type_obj_for_name(
-            self.enum_name,self.type,self.line_number)
-
+            self.enum_name,self.type,self.line_number,
+            struct_types_ctx.filename)
+        
         alias_name = (
             struct_types_ctx.alias_ctx.get_enum_alias(self.enum_name))
         self.type.set_alias_name(alias_name)

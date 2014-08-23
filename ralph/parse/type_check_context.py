@@ -104,14 +104,21 @@ class EnumTypesContext(object):
     def __init__(self,filename):
         self.filename = filename
         self.enum_name_to_type_obj = {}
-
+        # values are FilenameLineNumber objects
+        self.enum_name_to_decl_point_dict = {}
+        
     def add_enum_type_obj_for_name(self,name,type_obj,line_number,
                                    decl_filename=None):
         self.enum_name_to_type_obj[name] = type_obj
+        self.enum_name_to_decl_point_dict[name] = (
+            FilenameLineNumber(decl_filename,line_number))
 
     def get_enum_type_obj_from_enum_name(self,name):
         return self.enum_name_to_type_obj.get(name,None)
 
+    def get_decl_point_from_enum_name(self,name):
+        return self.enum_name_to_decl_point_dict.get(name,None)
+    
     def __iter__(self):
         return iter(self.enum_name_to_type_obj.keys())
 
@@ -135,6 +142,10 @@ class StructTypesContext(object):
         self.list_to_fixup = []
         self.alias_ctx = alias_ctx
         self.enum_ctx = EnumTypesContext(filename)
+
+
+    def get_decl_point_from_struct_name(self,name):
+        return self.struct_name_to_decl_point_dict.get(name,None)
         
     def new_type_check(self,filename,alias_ctx):
         self.filename = filename

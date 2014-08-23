@@ -10,7 +10,7 @@ from ralph.java_emit.emit_utils import InternalEmitException
 
 def emit(root_node,struct_types_ctx,package_name,program_name):
     '''
-    @param {RootStatementNode} root_node 
+    @param {RootStatementNode} root_node
     
     @returns {String} --- Emitted program text
     '''
@@ -82,7 +82,7 @@ public class %s
     for struct_name in struct_types_ctx:
         struct_type = struct_types_ctx.get_type_obj_from_struct_name(struct_name)
         prog_txt += indent_string(
-            emit_struct_definition(struct_name,struct_type))
+            emit_struct_definition(struct_name,struct_type,struct_types_ctx))
         prog_txt += '\n'
         
     # emit individual enum types
@@ -92,7 +92,7 @@ public class %s
     for enum_name in enum_ctx:
         enum_type = enum_ctx.get_enum_type_obj_from_enum_name(enum_name)
         prog_txt += indent_string(
-            emit_enum_definition(enum_name,enum_type))
+            emit_enum_definition(enum_name,enum_type,struct_types_ctx))
         prog_txt += '\n'
         
     # emit individual interfaces
@@ -2027,10 +2027,15 @@ def emit_for_statement(for_node,emit_ctx):
     emit_ctx.pop_scope()
     return to_return
 
+
 ######### HANDLING ENUMS ########
-def emit_enum_definition(enum_name,enum_type):
-    # do not emit aliased enums: they're already defined elsewhere
-    if enum_type.alias_name is not None:
+def emit_enum_definition(enum_name,enum_type,struct_ctx):
+    
+    # Only emit enums for this file.
+    where_declared_enum = (
+        struct_ctx.enum_ctx.get_decl_point_from_enum_name(enum_name))
+    
+    if struct_ctx.filename != where_declared_enum.filename:
         return ''
 
     to_return = 'public enum %s {' % enum_type.get_emit_name()
@@ -2052,16 +2057,17 @@ def emit_internal_enum_type(enum_type):
 def emit_internal_struct_type(struct_type):
     return struct_type.prepend_to_name('_Internal')
 
-def emit_struct_definition(struct_name,struct_type):
+def emit_struct_definition(struct_name,struct_type,struct_ctx):
     '''
     Each user-defined struct has a wrapper class and an internal
     class.  (Call wrapper class' get_val and set_val to access the
     internal values of the struct.)
     '''
-
-    # do not emit aliased structs.  they are defined in other, already
-    # emitted files.
-    if struct_type.alias_name is not None:
+    # Only emit structs for this file.
+    where_declared_struct = (
+        struct_ctx.get_decl_point_from_struct_name(struct_name))
+    
+    if struct_ctx.filename != where_declared_struct.filename:
         return ''
     
     dw_constructor_text = emit_struct_data_wrapper_constructor(struct_type)
