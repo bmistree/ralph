@@ -84,7 +84,7 @@ public class %s
         prog_txt += indent_string(
             emit_struct_definition(struct_name,struct_type))
         prog_txt += '\n'
-
+        
     # emit individual enum types
     prog_txt += indent_string(
         '/*********** ENUM DEFINITIONS ******/\n')

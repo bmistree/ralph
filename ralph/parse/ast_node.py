@@ -193,6 +193,13 @@ class AliasStatementNode(_AstNode):
         elif self.alias_type == AliasStatementNode.FOR_ENUM:
             alias_ctx.add_enum_alias(
                 self.to_alias_string,self.to_alias_to_string)
+
+            if struct_types_ctx is not None:
+                type_obj = struct_types_ctx.get_enum_type_obj_from_enum_name(
+                    self.to_alias_string)
+                if type_obj is not None:
+                    type_obj.set_alias_name(self.to_alias_to_string)
+
         #### DEBUG
         else:
             raise InternalParseException(
