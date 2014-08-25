@@ -26,12 +26,16 @@ public class SingleDeviceUpdate<DeviceUpdateType>
     final public String local_lamport_time;
     final public String root_application_uuid;
     final public String event_name;
+    final private IDeviceSpecificUpdateSerializer<DeviceUpdateType>
+        update_serializer;
+
     
     public SingleDeviceUpdate(
         String _device_id, UpdateType _update_type,
         DeviceUpdateType _device_update, String _global_lamport_time,
         String _local_lamport_time,String _root_application_uuid,
-        String _event_name)
+        String _event_name,
+        IDeviceSpecificUpdateSerializer<DeviceUpdateType> _update_serializer)
     {
         device_id = _device_id;
         update_type = _update_type;
@@ -40,6 +44,7 @@ public class SingleDeviceUpdate<DeviceUpdateType>
         local_lamport_time = _local_lamport_time;
         root_application_uuid = _root_application_uuid;
         event_name = _event_name;
+        update_serializer = _update_serializer;
     }
 
     private static class GlobalLamportTimeComparator
