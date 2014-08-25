@@ -10,194 +10,714 @@ public final class PartnerRequestSequenceBlockProto {
   }
   public interface PartnerRequestSequenceBlockOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .UUID event_uuid = 1;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     boolean hasEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUID getEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
-    
+
     // required .Priority priority = 2;
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     boolean hasPriority();
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     ralph_protobuffs.UtilProto.Priority getPriority();
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     ralph_protobuffs.UtilProto.PriorityOrBuilder getPriorityOrBuilder();
-    
+
     // optional string name_of_block_requesting = 3;
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
     boolean hasNameOfBlockRequesting();
-    String getNameOfBlockRequesting();
-    
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
+    java.lang.String getNameOfBlockRequesting();
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getNameOfBlockRequestingBytes();
+
     // required .UUID reply_with_uuid = 4;
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     boolean hasReplyWithUuid();
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUID getReplyWithUuid();
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyWithUuidOrBuilder();
-    
+
     // optional .UUID reply_to_uuid = 5;
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     boolean hasReplyToUuid();
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUID getReplyToUuid();
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyToUuidOrBuilder();
-    
+
     // required .Variables arguments = 6;
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     boolean hasArguments();
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     ralph_protobuffs.VariablesProto.Variables getArguments();
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder();
-    
+
     // required bool transaction = 7;
+    /**
+     * <code>required bool transaction = 7;</code>
+     *
+     * <pre>
+     **
+     *True if the call should have transactional semantics.  False
+     *otherwise.
+     * </pre>
+     */
     boolean hasTransaction();
+    /**
+     * <code>required bool transaction = 7;</code>
+     *
+     * <pre>
+     **
+     *True if the call should have transactional semantics.  False
+     *otherwise.
+     * </pre>
+     */
     boolean getTransaction();
-    
+
     // optional .Variables return_objs = 8;
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     boolean hasReturnObjs();
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     ralph_protobuffs.VariablesProto.Variables getReturnObjs();
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder();
   }
+  /**
+   * Protobuf type {@code PartnerRequestSequenceBlock}
+   */
   public static final class PartnerRequestSequenceBlock extends
       com.google.protobuf.GeneratedMessage
       implements PartnerRequestSequenceBlockOrBuilder {
     // Use PartnerRequestSequenceBlock.newBuilder() to construct.
-    private PartnerRequestSequenceBlock(Builder builder) {
+    private PartnerRequestSequenceBlock(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private PartnerRequestSequenceBlock(boolean noInit) {}
-    
+    private PartnerRequestSequenceBlock(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final PartnerRequestSequenceBlock defaultInstance;
     public static PartnerRequestSequenceBlock getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PartnerRequestSequenceBlock getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PartnerRequestSequenceBlock(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = eventUuid_.toBuilder();
+              }
+              eventUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(eventUuid_);
+                eventUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              ralph_protobuffs.UtilProto.Priority.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = priority_.toBuilder();
+              }
+              priority_ = input.readMessage(ralph_protobuffs.UtilProto.Priority.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(priority_);
+                priority_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              nameOfBlockRequesting_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = replyWithUuid_.toBuilder();
+              }
+              replyWithUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(replyWithUuid_);
+                replyWithUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+            case 42: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = replyToUuid_.toBuilder();
+              }
+              replyToUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(replyToUuid_);
+                replyToUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
+              break;
+            }
+            case 50: {
+              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = arguments_.toBuilder();
+              }
+              arguments_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(arguments_);
+                arguments_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              transaction_ = input.readBool();
+              break;
+            }
+            case 66: {
+              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+                subBuilder = returnObjs_.toBuilder();
+              }
+              returnObjs_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(returnObjs_);
+                returnObjs_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000080;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_fieldAccessorTable;
+      return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<PartnerRequestSequenceBlock> PARSER =
+        new com.google.protobuf.AbstractParser<PartnerRequestSequenceBlock>() {
+      public PartnerRequestSequenceBlock parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PartnerRequestSequenceBlock(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PartnerRequestSequenceBlock> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
     private ralph_protobuffs.UtilProto.UUID eventUuid_;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public boolean hasEventUuid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUID getEventUuid() {
       return eventUuid_;
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
       return eventUuid_;
     }
-    
+
     // required .Priority priority = 2;
     public static final int PRIORITY_FIELD_NUMBER = 2;
     private ralph_protobuffs.UtilProto.Priority priority_;
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     public boolean hasPriority() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.Priority getPriority() {
       return priority_;
     }
+    /**
+     * <code>required .Priority priority = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.PriorityOrBuilder getPriorityOrBuilder() {
       return priority_;
     }
-    
+
     // optional string name_of_block_requesting = 3;
     public static final int NAME_OF_BLOCK_REQUESTING_FIELD_NUMBER = 3;
     private java.lang.Object nameOfBlockRequesting_;
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
     public boolean hasNameOfBlockRequesting() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public String getNameOfBlockRequesting() {
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
+    public java.lang.String getNameOfBlockRequesting() {
       java.lang.Object ref = nameOfBlockRequesting_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           nameOfBlockRequesting_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameOfBlockRequestingBytes() {
+    /**
+     * <code>optional string name_of_block_requesting = 3;</code>
+     *
+     * <pre>
+     *
+     *{String or empty} block_name --- The name of the
+     *sequence block we want to execute on the partner
+     *endpoint. (Note: this is how that sequence block is named in
+     *the source Waldo file, not how it is translated by the
+     *compiler into a function.)  It can also be empty if this is the
+     *final message sequence block's execution.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getNameOfBlockRequestingBytes() {
       java.lang.Object ref = nameOfBlockRequesting_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         nameOfBlockRequesting_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required .UUID reply_with_uuid = 4;
     public static final int REPLY_WITH_UUID_FIELD_NUMBER = 4;
     private ralph_protobuffs.UtilProto.UUID replyWithUuid_;
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     public boolean hasReplyWithUuid() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUID getReplyWithUuid() {
       return replyWithUuid_;
     }
+    /**
+     * <code>required .UUID reply_with_uuid = 4;</code>
+     *
+     * <pre>
+     *
+     *When the partner endpoint                       
+     *responds, it should place reply_with_uuid in its reply_to
+     *message field.  That way, we can determine which message the
+     *partner endpoint was replying to.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyWithUuidOrBuilder() {
       return replyWithUuid_;
     }
-    
+
     // optional .UUID reply_to_uuid = 5;
     public static final int REPLY_TO_UUID_FIELD_NUMBER = 5;
     private ralph_protobuffs.UtilProto.UUID replyToUuid_;
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     public boolean hasReplyToUuid() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUID getReplyToUuid() {
       return replyToUuid_;
     }
+    /**
+     * <code>optional .UUID reply_to_uuid = 5;</code>
+     *
+     * <pre>
+     *
+     *@param {uuid or empty} reply_to_uuid --- If this is the
+     *beginning of a sequence of messages, then leave the
+     *reply_to_uuid field empty (the message is not a reply to
+     *anything that we have seen so far).  Otherwise, put the
+     *reply_with message field of the last message that the partner
+     *said as part of this sequence in.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyToUuidOrBuilder() {
       return replyToUuid_;
     }
-    
+
     // required .Variables arguments = 6;
     public static final int ARGUMENTS_FIELD_NUMBER = 6;
     private ralph_protobuffs.VariablesProto.Variables arguments_;
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     public boolean hasArguments() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     public ralph_protobuffs.VariablesProto.Variables getArguments() {
       return arguments_;
     }
+    /**
+     * <code>required .Variables arguments = 6;</code>
+     */
     public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
       return arguments_;
     }
-    
+
     // required bool transaction = 7;
     public static final int TRANSACTION_FIELD_NUMBER = 7;
     private boolean transaction_;
+    /**
+     * <code>required bool transaction = 7;</code>
+     *
+     * <pre>
+     **
+     *True if the call should have transactional semantics.  False
+     *otherwise.
+     * </pre>
+     */
     public boolean hasTransaction() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
+    /**
+     * <code>required bool transaction = 7;</code>
+     *
+     * <pre>
+     **
+     *True if the call should have transactional semantics.  False
+     *otherwise.
+     * </pre>
+     */
     public boolean getTransaction() {
       return transaction_;
     }
-    
+
     // optional .Variables return_objs = 8;
     public static final int RETURN_OBJS_FIELD_NUMBER = 8;
     private ralph_protobuffs.VariablesProto.Variables returnObjs_;
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     public boolean hasReturnObjs() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     public ralph_protobuffs.VariablesProto.Variables getReturnObjs() {
       return returnObjs_;
     }
+    /**
+     * <code>optional .Variables return_objs = 8;</code>
+     *
+     * <pre>
+     **
+     *If this is the result of an rpc call, can contain return
+     *values.
+     * </pre>
+     */
     public ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder() {
       return returnObjs_;
     }
-    
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       priority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -212,7 +732,7 @@ public final class PartnerRequestSequenceBlockProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasEventUuid()) {
         memoizedIsInitialized = 0;
         return false;
@@ -264,7 +784,7 @@ public final class PartnerRequestSequenceBlockProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -294,12 +814,12 @@ public final class PartnerRequestSequenceBlockProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -337,94 +857,83 @@ public final class PartnerRequestSequenceBlockProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code PartnerRequestSequenceBlock}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder {
@@ -432,18 +941,21 @@ public final class PartnerRequestSequenceBlockProto {
           getDescriptor() {
         return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_fieldAccessorTable;
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -460,7 +972,7 @@ public final class PartnerRequestSequenceBlockProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (eventUuidBuilder_ == null) {
@@ -505,20 +1017,20 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDescriptor();
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_descriptor;
       }
-      
+
       public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getDefaultInstanceForType() {
         return ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock build() {
         ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock result = buildPartial();
         if (!result.isInitialized()) {
@@ -526,17 +1038,7 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock buildPartial() {
         ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock result = new ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock(this);
         int from_bitField0_ = bitField0_;
@@ -601,7 +1103,7 @@ public final class PartnerRequestSequenceBlockProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock) {
           return mergeFrom((ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock)other);
@@ -610,7 +1112,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock other) {
         if (other == ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance()) return this;
         if (other.hasEventUuid()) {
@@ -620,7 +1122,9 @@ public final class PartnerRequestSequenceBlockProto {
           mergePriority(other.getPriority());
         }
         if (other.hasNameOfBlockRequesting()) {
-          setNameOfBlockRequesting(other.getNameOfBlockRequesting());
+          bitField0_ |= 0x00000004;
+          nameOfBlockRequesting_ = other.nameOfBlockRequesting_;
+          onChanged();
         }
         if (other.hasReplyWithUuid()) {
           mergeReplyWithUuid(other.getReplyWithUuid());
@@ -640,7 +1144,7 @@ public final class PartnerRequestSequenceBlockProto {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasEventUuid()) {
           
@@ -692,107 +1196,39 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasEventUuid()) {
-                subBuilder.mergeFrom(getEventUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setEventUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 18: {
-              ralph_protobuffs.UtilProto.Priority.Builder subBuilder = ralph_protobuffs.UtilProto.Priority.newBuilder();
-              if (hasPriority()) {
-                subBuilder.mergeFrom(getPriority());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setPriority(subBuilder.buildPartial());
-              break;
-            }
-            case 26: {
-              bitField0_ |= 0x00000004;
-              nameOfBlockRequesting_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasReplyWithUuid()) {
-                subBuilder.mergeFrom(getReplyWithUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setReplyWithUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasReplyToUuid()) {
-                subBuilder.mergeFrom(getReplyToUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setReplyToUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 50: {
-              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.newBuilder();
-              if (hasArguments()) {
-                subBuilder.mergeFrom(getArguments());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setArguments(subBuilder.buildPartial());
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              transaction_ = input.readBool();
-              break;
-            }
-            case 66: {
-              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.newBuilder();
-              if (hasReturnObjs()) {
-                subBuilder.mergeFrom(getReturnObjs());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setReturnObjs(subBuilder.buildPartial());
-              break;
-            }
+        ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .UUID event_uuid = 1;
       private ralph_protobuffs.UtilProto.UUID eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> eventUuidBuilder_;
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public boolean hasEventUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getEventUuid() {
         if (eventUuidBuilder_ == null) {
           return eventUuid_;
@@ -800,6 +1236,9 @@ public final class PartnerRequestSequenceBlockProto {
           return eventUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (value == null) {
@@ -813,6 +1252,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (eventUuidBuilder_ == null) {
@@ -824,6 +1266,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder mergeEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
@@ -840,6 +1285,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder clearEventUuid() {
         if (eventUuidBuilder_ == null) {
           eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -850,11 +1298,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getEventUuidBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getEventUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
         if (eventUuidBuilder_ != null) {
           return eventUuidBuilder_.getMessageOrBuilder();
@@ -862,6 +1316,9 @@ public final class PartnerRequestSequenceBlockProto {
           return eventUuid_;
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getEventUuidFieldBuilder() {
@@ -875,14 +1332,20 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return eventUuidBuilder_;
       }
-      
+
       // required .Priority priority = 2;
       private ralph_protobuffs.UtilProto.Priority priority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.Priority, ralph_protobuffs.UtilProto.Priority.Builder, ralph_protobuffs.UtilProto.PriorityOrBuilder> priorityBuilder_;
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public boolean hasPriority() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.Priority getPriority() {
         if (priorityBuilder_ == null) {
           return priority_;
@@ -890,6 +1353,9 @@ public final class PartnerRequestSequenceBlockProto {
           return priorityBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public Builder setPriority(ralph_protobuffs.UtilProto.Priority value) {
         if (priorityBuilder_ == null) {
           if (value == null) {
@@ -903,6 +1369,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public Builder setPriority(
           ralph_protobuffs.UtilProto.Priority.Builder builderForValue) {
         if (priorityBuilder_ == null) {
@@ -914,6 +1383,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public Builder mergePriority(ralph_protobuffs.UtilProto.Priority value) {
         if (priorityBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -930,6 +1402,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public Builder clearPriority() {
         if (priorityBuilder_ == null) {
           priority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -940,11 +1415,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.Priority.Builder getPriorityBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getPriorityFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.PriorityOrBuilder getPriorityOrBuilder() {
         if (priorityBuilder_ != null) {
           return priorityBuilder_.getMessageOrBuilder();
@@ -952,6 +1433,9 @@ public final class PartnerRequestSequenceBlockProto {
           return priority_;
         }
       }
+      /**
+       * <code>required .Priority priority = 2;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.Priority, ralph_protobuffs.UtilProto.Priority.Builder, ralph_protobuffs.UtilProto.PriorityOrBuilder> 
           getPriorityFieldBuilder() {
@@ -965,23 +1449,90 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return priorityBuilder_;
       }
-      
+
       // optional string name_of_block_requesting = 3;
       private java.lang.Object nameOfBlockRequesting_ = "";
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
       public boolean hasNameOfBlockRequesting() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getNameOfBlockRequesting() {
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
+      public java.lang.String getNameOfBlockRequesting() {
         java.lang.Object ref = nameOfBlockRequesting_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           nameOfBlockRequesting_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setNameOfBlockRequesting(String value) {
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getNameOfBlockRequestingBytes() {
+        java.lang.Object ref = nameOfBlockRequesting_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          nameOfBlockRequesting_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
+      public Builder setNameOfBlockRequesting(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -990,25 +1541,78 @@ public final class PartnerRequestSequenceBlockProto {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
       public Builder clearNameOfBlockRequesting() {
         bitField0_ = (bitField0_ & ~0x00000004);
         nameOfBlockRequesting_ = getDefaultInstance().getNameOfBlockRequesting();
         onChanged();
         return this;
       }
-      void setNameOfBlockRequesting(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>optional string name_of_block_requesting = 3;</code>
+       *
+       * <pre>
+       *
+       *{String or empty} block_name --- The name of the
+       *sequence block we want to execute on the partner
+       *endpoint. (Note: this is how that sequence block is named in
+       *the source Waldo file, not how it is translated by the
+       *compiler into a function.)  It can also be empty if this is the
+       *final message sequence block's execution.
+       * </pre>
+       */
+      public Builder setNameOfBlockRequestingBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         nameOfBlockRequesting_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required .UUID reply_with_uuid = 4;
       private ralph_protobuffs.UtilProto.UUID replyWithUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> replyWithUuidBuilder_;
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public boolean hasReplyWithUuid() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID getReplyWithUuid() {
         if (replyWithUuidBuilder_ == null) {
           return replyWithUuid_;
@@ -1016,6 +1620,17 @@ public final class PartnerRequestSequenceBlockProto {
           return replyWithUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public Builder setReplyWithUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (replyWithUuidBuilder_ == null) {
           if (value == null) {
@@ -1029,6 +1644,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000008;
         return this;
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public Builder setReplyWithUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (replyWithUuidBuilder_ == null) {
@@ -1040,6 +1666,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000008;
         return this;
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public Builder mergeReplyWithUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (replyWithUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
@@ -1056,6 +1693,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000008;
         return this;
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public Builder clearReplyWithUuid() {
         if (replyWithUuidBuilder_ == null) {
           replyWithUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -1066,11 +1714,33 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getReplyWithUuidBuilder() {
         bitField0_ |= 0x00000008;
         onChanged();
         return getReplyWithUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyWithUuidOrBuilder() {
         if (replyWithUuidBuilder_ != null) {
           return replyWithUuidBuilder_.getMessageOrBuilder();
@@ -1078,6 +1748,17 @@ public final class PartnerRequestSequenceBlockProto {
           return replyWithUuid_;
         }
       }
+      /**
+       * <code>required .UUID reply_with_uuid = 4;</code>
+       *
+       * <pre>
+       *
+       *When the partner endpoint                       
+       *responds, it should place reply_with_uuid in its reply_to
+       *message field.  That way, we can determine which message the
+       *partner endpoint was replying to.
+       * </pre>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getReplyWithUuidFieldBuilder() {
@@ -1091,14 +1772,40 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return replyWithUuidBuilder_;
       }
-      
+
       // optional .UUID reply_to_uuid = 5;
       private ralph_protobuffs.UtilProto.UUID replyToUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> replyToUuidBuilder_;
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public boolean hasReplyToUuid() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID getReplyToUuid() {
         if (replyToUuidBuilder_ == null) {
           return replyToUuid_;
@@ -1106,6 +1813,19 @@ public final class PartnerRequestSequenceBlockProto {
           return replyToUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public Builder setReplyToUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (replyToUuidBuilder_ == null) {
           if (value == null) {
@@ -1119,6 +1839,19 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public Builder setReplyToUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (replyToUuidBuilder_ == null) {
@@ -1130,6 +1863,19 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public Builder mergeReplyToUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (replyToUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
@@ -1146,6 +1892,19 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public Builder clearReplyToUuid() {
         if (replyToUuidBuilder_ == null) {
           replyToUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -1156,11 +1915,37 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getReplyToUuidBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getReplyToUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyToUuidOrBuilder() {
         if (replyToUuidBuilder_ != null) {
           return replyToUuidBuilder_.getMessageOrBuilder();
@@ -1168,6 +1953,19 @@ public final class PartnerRequestSequenceBlockProto {
           return replyToUuid_;
         }
       }
+      /**
+       * <code>optional .UUID reply_to_uuid = 5;</code>
+       *
+       * <pre>
+       *
+       *@param {uuid or empty} reply_to_uuid --- If this is the
+       *beginning of a sequence of messages, then leave the
+       *reply_to_uuid field empty (the message is not a reply to
+       *anything that we have seen so far).  Otherwise, put the
+       *reply_with message field of the last message that the partner
+       *said as part of this sequence in.
+       * </pre>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getReplyToUuidFieldBuilder() {
@@ -1181,14 +1979,20 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return replyToUuidBuilder_;
       }
-      
+
       // required .Variables arguments = 6;
       private ralph_protobuffs.VariablesProto.Variables arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> argumentsBuilder_;
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public boolean hasArguments() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables getArguments() {
         if (argumentsBuilder_ == null) {
           return arguments_;
@@ -1196,6 +2000,9 @@ public final class PartnerRequestSequenceBlockProto {
           return argumentsBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public Builder setArguments(ralph_protobuffs.VariablesProto.Variables value) {
         if (argumentsBuilder_ == null) {
           if (value == null) {
@@ -1209,6 +2016,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public Builder setArguments(
           ralph_protobuffs.VariablesProto.Variables.Builder builderForValue) {
         if (argumentsBuilder_ == null) {
@@ -1220,6 +2030,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public Builder mergeArguments(ralph_protobuffs.VariablesProto.Variables value) {
         if (argumentsBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020) &&
@@ -1236,6 +2049,9 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public Builder clearArguments() {
         if (argumentsBuilder_ == null) {
           arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
@@ -1246,11 +2062,17 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Builder getArgumentsBuilder() {
         bitField0_ |= 0x00000020;
         onChanged();
         return getArgumentsFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
         if (argumentsBuilder_ != null) {
           return argumentsBuilder_.getMessageOrBuilder();
@@ -1258,6 +2080,9 @@ public final class PartnerRequestSequenceBlockProto {
           return arguments_;
         }
       }
+      /**
+       * <code>required .Variables arguments = 6;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> 
           getArgumentsFieldBuilder() {
@@ -1271,35 +2096,89 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return argumentsBuilder_;
       }
-      
+
       // required bool transaction = 7;
       private boolean transaction_ ;
+      /**
+       * <code>required bool transaction = 7;</code>
+       *
+       * <pre>
+       **
+       *True if the call should have transactional semantics.  False
+       *otherwise.
+       * </pre>
+       */
       public boolean hasTransaction() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>required bool transaction = 7;</code>
+       *
+       * <pre>
+       **
+       *True if the call should have transactional semantics.  False
+       *otherwise.
+       * </pre>
+       */
       public boolean getTransaction() {
         return transaction_;
       }
+      /**
+       * <code>required bool transaction = 7;</code>
+       *
+       * <pre>
+       **
+       *True if the call should have transactional semantics.  False
+       *otherwise.
+       * </pre>
+       */
       public Builder setTransaction(boolean value) {
         bitField0_ |= 0x00000040;
         transaction_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required bool transaction = 7;</code>
+       *
+       * <pre>
+       **
+       *True if the call should have transactional semantics.  False
+       *otherwise.
+       * </pre>
+       */
       public Builder clearTransaction() {
         bitField0_ = (bitField0_ & ~0x00000040);
         transaction_ = false;
         onChanged();
         return this;
       }
-      
+
       // optional .Variables return_objs = 8;
       private ralph_protobuffs.VariablesProto.Variables returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> returnObjsBuilder_;
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public boolean hasReturnObjs() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public ralph_protobuffs.VariablesProto.Variables getReturnObjs() {
         if (returnObjsBuilder_ == null) {
           return returnObjs_;
@@ -1307,6 +2186,15 @@ public final class PartnerRequestSequenceBlockProto {
           return returnObjsBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public Builder setReturnObjs(ralph_protobuffs.VariablesProto.Variables value) {
         if (returnObjsBuilder_ == null) {
           if (value == null) {
@@ -1320,6 +2208,15 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public Builder setReturnObjs(
           ralph_protobuffs.VariablesProto.Variables.Builder builderForValue) {
         if (returnObjsBuilder_ == null) {
@@ -1331,6 +2228,15 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public Builder mergeReturnObjs(ralph_protobuffs.VariablesProto.Variables value) {
         if (returnObjsBuilder_ == null) {
           if (((bitField0_ & 0x00000080) == 0x00000080) &&
@@ -1347,6 +2253,15 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public Builder clearReturnObjs() {
         if (returnObjsBuilder_ == null) {
           returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
@@ -1357,11 +2272,29 @@ public final class PartnerRequestSequenceBlockProto {
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Builder getReturnObjsBuilder() {
         bitField0_ |= 0x00000080;
         onChanged();
         return getReturnObjsFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       public ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder() {
         if (returnObjsBuilder_ != null) {
           return returnObjsBuilder_.getMessageOrBuilder();
@@ -1369,6 +2302,15 @@ public final class PartnerRequestSequenceBlockProto {
           return returnObjs_;
         }
       }
+      /**
+       * <code>optional .Variables return_objs = 8;</code>
+       *
+       * <pre>
+       **
+       *If this is the result of an rpc call, can contain return
+       *values.
+       * </pre>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> 
           getReturnObjsFieldBuilder() {
@@ -1382,24 +2324,24 @@ public final class PartnerRequestSequenceBlockProto {
         }
         return returnObjsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock)
     }
-    
+
     static {
       defaultInstance = new PartnerRequestSequenceBlock(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:PartnerRequestSequenceBlock)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_PartnerRequestSequenceBlock_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerRequestSequenceBlock_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -1429,9 +2371,7 @@ public final class PartnerRequestSequenceBlockProto {
           internal_static_PartnerRequestSequenceBlock_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_descriptor,
-              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", "ReturnObjs", },
-              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.class,
-              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder.class);
+              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", "ReturnObjs", });
           return null;
         }
       };
@@ -1442,6 +2382,6 @@ public final class PartnerRequestSequenceBlockProto {
           ralph_protobuffs.VariablesProto.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

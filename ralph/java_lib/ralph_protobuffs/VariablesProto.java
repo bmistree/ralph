@@ -10,144 +10,362 @@ public final class VariablesProto {
   }
   public interface VariablesOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // repeated .Variables.Any vars = 1;
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
         getVarsList();
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     ralph_protobuffs.VariablesProto.Variables.Any getVars(int index);
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     int getVarsCount();
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
         getVarsOrBuilderList();
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code Variables}
+   */
   public static final class Variables extends
       com.google.protobuf.GeneratedMessage
       implements VariablesOrBuilder {
     // Use Variables.newBuilder() to construct.
-    private Variables(Builder builder) {
+    private Variables(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Variables(boolean noInit) {}
-    
+    private Variables(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Variables defaultInstance;
     public static Variables getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Variables getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Variables(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                vars_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              vars_.add(input.readMessage(ralph_protobuffs.VariablesProto.Variables.Any.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          vars_ = java.util.Collections.unmodifiableList(vars_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.VariablesProto.internal_static_Variables_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable;
+      return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.VariablesProto.Variables.class, ralph_protobuffs.VariablesProto.Variables.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<Variables> PARSER =
+        new com.google.protobuf.AbstractParser<Variables>() {
+      public Variables parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Variables(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Variables> getParserForType() {
+      return PARSER;
+    }
+
     public interface ListOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
-      
+
       // required string element_type_identifier = 1;
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
       boolean hasElementTypeIdentifier();
-      String getElementTypeIdentifier();
-      
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
+      java.lang.String getElementTypeIdentifier();
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getElementTypeIdentifierBytes();
+
       // repeated .Variables.Any list_values = 2;
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getListValuesList();
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index);
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       int getListValuesCount();
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getListValuesOrBuilderList();
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
           int index);
     }
+    /**
+     * Protobuf type {@code Variables.List}
+     */
     public static final class List extends
         com.google.protobuf.GeneratedMessage
         implements ListOrBuilder {
       // Use List.newBuilder() to construct.
-      private List(Builder builder) {
+      private List(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
+        this.unknownFields = builder.getUnknownFields();
       }
-      private List(boolean noInit) {}
-      
+      private List(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
       private static final List defaultInstance;
       public static List getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public List getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private List(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                elementTypeIdentifier_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                  listValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                listValues_.add(input.readMessage(ralph_protobuffs.VariablesProto.Variables.Any.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            listValues_ = java.util.Collections.unmodifiableList(listValues_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_List_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.List.class, ralph_protobuffs.VariablesProto.Variables.List.Builder.class);
       }
-      
+
+      public static com.google.protobuf.Parser<List> PARSER =
+          new com.google.protobuf.AbstractParser<List>() {
+        public List parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new List(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<List> getParserForType() {
+        return PARSER;
+      }
+
       private int bitField0_;
       // required string element_type_identifier = 1;
       public static final int ELEMENT_TYPE_IDENTIFIER_FIELD_NUMBER = 1;
       private java.lang.Object elementTypeIdentifier_;
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
       public boolean hasElementTypeIdentifier() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getElementTypeIdentifier() {
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
+      public java.lang.String getElementTypeIdentifier() {
         java.lang.Object ref = elementTypeIdentifier_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             elementTypeIdentifier_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getElementTypeIdentifierBytes() {
+      /**
+       * <code>required string element_type_identifier = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getElementTypeIdentifierBytes() {
         java.lang.Object ref = elementTypeIdentifier_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           elementTypeIdentifier_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // repeated .Variables.Any list_values = 2;
       public static final int LIST_VALUES_FIELD_NUMBER = 2;
       private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> listValues_;
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getListValuesList() {
         return listValues_;
       }
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getListValuesOrBuilderList() {
         return listValues_;
       }
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       public int getListValuesCount() {
         return listValues_.size();
       }
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index) {
         return listValues_.get(index);
       }
+      /**
+       * <code>repeated .Variables.Any list_values = 2;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
           int index) {
         return listValues_.get(index);
       }
-      
+
       private void initFields() {
         elementTypeIdentifier_ = "";
         listValues_ = java.util.Collections.emptyList();
@@ -156,7 +374,7 @@ public final class VariablesProto {
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
-        
+
         if (!hasElementTypeIdentifier()) {
           memoizedIsInitialized = 0;
           return false;
@@ -170,7 +388,7 @@ public final class VariablesProto {
         memoizedIsInitialized = 1;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
@@ -182,12 +400,12 @@ public final class VariablesProto {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
@@ -201,94 +419,83 @@ public final class VariablesProto {
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       private static final long serialVersionUID = 0L;
       @java.lang.Override
       protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
-      
+
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.List parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
-      
+
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.List prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
-      
+
       @java.lang.Override
       protected Builder newBuilderForType(
           com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
+      /**
+       * Protobuf type {@code Variables.List}
+       */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
          implements ralph_protobuffs.VariablesProto.Variables.ListOrBuilder {
@@ -296,18 +503,21 @@ public final class VariablesProto {
             getDescriptor() {
           return ralph_protobuffs.VariablesProto.internal_static_Variables_List_descriptor;
         }
-        
+
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_List_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.VariablesProto.Variables.List.class, ralph_protobuffs.VariablesProto.Variables.List.Builder.class);
         }
-        
+
         // Construct using ralph_protobuffs.VariablesProto.Variables.List.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
-        
-        private Builder(BuilderParent parent) {
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -319,7 +529,7 @@ public final class VariablesProto {
         private static Builder create() {
           return new Builder();
         }
-        
+
         public Builder clear() {
           super.clear();
           elementTypeIdentifier_ = "";
@@ -332,20 +542,20 @@ public final class VariablesProto {
           }
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(buildPartial());
         }
-        
+
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VariablesProto.Variables.List.getDescriptor();
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_List_descriptor;
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.List getDefaultInstanceForType() {
           return ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.List build() {
           ralph_protobuffs.VariablesProto.Variables.List result = buildPartial();
           if (!result.isInitialized()) {
@@ -353,17 +563,7 @@ public final class VariablesProto {
           }
           return result;
         }
-        
-        private ralph_protobuffs.VariablesProto.Variables.List buildParsed()
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VariablesProto.Variables.List result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
-          }
-          return result;
-        }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.List buildPartial() {
           ralph_protobuffs.VariablesProto.Variables.List result = new ralph_protobuffs.VariablesProto.Variables.List(this);
           int from_bitField0_ = bitField0_;
@@ -385,7 +585,7 @@ public final class VariablesProto {
           onBuilt();
           return result;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof ralph_protobuffs.VariablesProto.Variables.List) {
             return mergeFrom((ralph_protobuffs.VariablesProto.Variables.List)other);
@@ -394,11 +594,13 @@ public final class VariablesProto {
             return this;
           }
         }
-        
+
         public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.List other) {
           if (other == ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance()) return this;
           if (other.hasElementTypeIdentifier()) {
-            setElementTypeIdentifier(other.getElementTypeIdentifier());
+            bitField0_ |= 0x00000001;
+            elementTypeIdentifier_ = other.elementTypeIdentifier_;
+            onChanged();
           }
           if (listValuesBuilder_ == null) {
             if (!other.listValues_.isEmpty()) {
@@ -429,7 +631,7 @@ public final class VariablesProto {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
+
         public final boolean isInitialized() {
           if (!hasElementTypeIdentifier()) {
             
@@ -443,63 +645,69 @@ public final class VariablesProto {
           }
           return true;
         }
-        
+
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
-          while (true) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  onChanged();
-                  return this;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                elementTypeIdentifier_ = input.readBytes();
-                break;
-              }
-              case 18: {
-                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
-                input.readMessage(subBuilder, extensionRegistry);
-                addListValues(subBuilder.buildPartial());
-                break;
-              }
+          ralph_protobuffs.VariablesProto.Variables.List parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.VariablesProto.Variables.List) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
             }
           }
+          return this;
         }
-        
         private int bitField0_;
-        
+
         // required string element_type_identifier = 1;
         private java.lang.Object elementTypeIdentifier_ = "";
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
         public boolean hasElementTypeIdentifier() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
-        public String getElementTypeIdentifier() {
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
+        public java.lang.String getElementTypeIdentifier() {
           java.lang.Object ref = elementTypeIdentifier_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             elementTypeIdentifier_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setElementTypeIdentifier(String value) {
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getElementTypeIdentifierBytes() {
+          java.lang.Object ref = elementTypeIdentifier_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            elementTypeIdentifier_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
+        public Builder setElementTypeIdentifier(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -508,18 +716,29 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
         public Builder clearElementTypeIdentifier() {
           bitField0_ = (bitField0_ & ~0x00000001);
           elementTypeIdentifier_ = getDefaultInstance().getElementTypeIdentifier();
           onChanged();
           return this;
         }
-        void setElementTypeIdentifier(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
+        /**
+         * <code>required string element_type_identifier = 1;</code>
+         */
+        public Builder setElementTypeIdentifierBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
           elementTypeIdentifier_ = value;
           onChanged();
+          return this;
         }
-        
+
         // repeated .Variables.Any list_values = 2;
         private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> listValues_ =
           java.util.Collections.emptyList();
@@ -529,10 +748,13 @@ public final class VariablesProto {
             bitField0_ |= 0x00000002;
            }
         }
-        
+
         private com.google.protobuf.RepeatedFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> listValuesBuilder_;
-        
+
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getListValuesList() {
           if (listValuesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(listValues_);
@@ -540,6 +762,9 @@ public final class VariablesProto {
             return listValuesBuilder_.getMessageList();
           }
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public int getListValuesCount() {
           if (listValuesBuilder_ == null) {
             return listValues_.size();
@@ -547,6 +772,9 @@ public final class VariablesProto {
             return listValuesBuilder_.getCount();
           }
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any getListValues(int index) {
           if (listValuesBuilder_ == null) {
             return listValues_.get(index);
@@ -554,6 +782,9 @@ public final class VariablesProto {
             return listValuesBuilder_.getMessage(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder setListValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
@@ -568,6 +799,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder setListValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
@@ -579,6 +813,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder addListValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
             if (value == null) {
@@ -592,6 +829,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder addListValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (listValuesBuilder_ == null) {
@@ -606,6 +846,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder addListValues(
             ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
@@ -617,6 +860,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder addListValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (listValuesBuilder_ == null) {
@@ -628,6 +874,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder addAllListValues(
             java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (listValuesBuilder_ == null) {
@@ -639,6 +888,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder clearListValues() {
           if (listValuesBuilder_ == null) {
             listValues_ = java.util.Collections.emptyList();
@@ -649,6 +901,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public Builder removeListValues(int index) {
           if (listValuesBuilder_ == null) {
             ensureListValuesIsMutable();
@@ -659,10 +914,16 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder getListValuesBuilder(
             int index) {
           return getListValuesFieldBuilder().getBuilder(index);
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getListValuesOrBuilder(
             int index) {
           if (listValuesBuilder_ == null) {
@@ -670,6 +931,9 @@ public final class VariablesProto {
             return listValuesBuilder_.getMessageOrBuilder(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getListValuesOrBuilderList() {
           if (listValuesBuilder_ != null) {
@@ -678,15 +942,24 @@ public final class VariablesProto {
             return java.util.Collections.unmodifiableList(listValues_);
           }
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addListValuesBuilder() {
           return getListValuesFieldBuilder().addBuilder(
               ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addListValuesBuilder(
             int index) {
           return getListValuesFieldBuilder().addBuilder(
               index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any list_values = 2;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getListValuesBuilderList() {
           return getListValuesFieldBuilder().getBuilderList();
@@ -705,184 +978,382 @@ public final class VariablesProto {
           }
           return listValuesBuilder_;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Variables.List)
       }
-      
+
       static {
         defaultInstance = new List(true);
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Variables.List)
     }
-    
+
     public interface MapOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
-      
+
       // required string key_type_identifier = 1;
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
       boolean hasKeyTypeIdentifier();
-      String getKeyTypeIdentifier();
-      
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
+      java.lang.String getKeyTypeIdentifier();
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getKeyTypeIdentifierBytes();
+
       // required string value_type_identifier = 2;
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
       boolean hasValueTypeIdentifier();
-      String getValueTypeIdentifier();
-      
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
+      java.lang.String getValueTypeIdentifier();
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getValueTypeIdentifierBytes();
+
       // repeated .Variables.Any map_indices = 3;
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getMapIndicesList();
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index);
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       int getMapIndicesCount();
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapIndicesOrBuilderList();
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
           int index);
-      
+
       // repeated .Variables.Any map_values = 4;
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getMapValuesList();
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index);
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       int getMapValuesCount();
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapValuesOrBuilderList();
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
           int index);
     }
+    /**
+     * Protobuf type {@code Variables.Map}
+     */
     public static final class Map extends
         com.google.protobuf.GeneratedMessage
         implements MapOrBuilder {
       // Use Map.newBuilder() to construct.
-      private Map(Builder builder) {
+      private Map(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
+        this.unknownFields = builder.getUnknownFields();
       }
-      private Map(boolean noInit) {}
-      
+      private Map(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
       private static final Map defaultInstance;
       public static Map getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public Map getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Map(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                keyTypeIdentifier_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                bitField0_ |= 0x00000002;
+                valueTypeIdentifier_ = input.readBytes();
+                break;
+              }
+              case 26: {
+                if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                  mapIndices_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>();
+                  mutable_bitField0_ |= 0x00000004;
+                }
+                mapIndices_.add(input.readMessage(ralph_protobuffs.VariablesProto.Variables.Any.PARSER, extensionRegistry));
+                break;
+              }
+              case 34: {
+                if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                  mapValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>();
+                  mutable_bitField0_ |= 0x00000008;
+                }
+                mapValues_.add(input.readMessage(ralph_protobuffs.VariablesProto.Variables.Any.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+            mapIndices_ = java.util.Collections.unmodifiableList(mapIndices_);
+          }
+          if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+            mapValues_ = java.util.Collections.unmodifiableList(mapValues_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.Map.class, ralph_protobuffs.VariablesProto.Variables.Map.Builder.class);
       }
-      
+
+      public static com.google.protobuf.Parser<Map> PARSER =
+          new com.google.protobuf.AbstractParser<Map>() {
+        public Map parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Map(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Map> getParserForType() {
+        return PARSER;
+      }
+
       private int bitField0_;
       // required string key_type_identifier = 1;
       public static final int KEY_TYPE_IDENTIFIER_FIELD_NUMBER = 1;
       private java.lang.Object keyTypeIdentifier_;
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
       public boolean hasKeyTypeIdentifier() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getKeyTypeIdentifier() {
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
+      public java.lang.String getKeyTypeIdentifier() {
         java.lang.Object ref = keyTypeIdentifier_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             keyTypeIdentifier_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getKeyTypeIdentifierBytes() {
+      /**
+       * <code>required string key_type_identifier = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getKeyTypeIdentifierBytes() {
         java.lang.Object ref = keyTypeIdentifier_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           keyTypeIdentifier_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // required string value_type_identifier = 2;
       public static final int VALUE_TYPE_IDENTIFIER_FIELD_NUMBER = 2;
       private java.lang.Object valueTypeIdentifier_;
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
       public boolean hasValueTypeIdentifier() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public String getValueTypeIdentifier() {
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
+      public java.lang.String getValueTypeIdentifier() {
         java.lang.Object ref = valueTypeIdentifier_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             valueTypeIdentifier_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getValueTypeIdentifierBytes() {
+      /**
+       * <code>required string value_type_identifier = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getValueTypeIdentifierBytes() {
         java.lang.Object ref = valueTypeIdentifier_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           valueTypeIdentifier_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // repeated .Variables.Any map_indices = 3;
       public static final int MAP_INDICES_FIELD_NUMBER = 3;
       private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapIndices_;
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapIndicesList() {
         return mapIndices_;
       }
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapIndicesOrBuilderList() {
         return mapIndices_;
       }
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       public int getMapIndicesCount() {
         return mapIndices_.size();
       }
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index) {
         return mapIndices_.get(index);
       }
+      /**
+       * <code>repeated .Variables.Any map_indices = 3;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
           int index) {
         return mapIndices_.get(index);
       }
-      
+
       // repeated .Variables.Any map_values = 4;
       public static final int MAP_VALUES_FIELD_NUMBER = 4;
       private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapValues_;
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapValuesList() {
         return mapValues_;
       }
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getMapValuesOrBuilderList() {
         return mapValues_;
       }
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       public int getMapValuesCount() {
         return mapValues_.size();
       }
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index) {
         return mapValues_.get(index);
       }
+      /**
+       * <code>repeated .Variables.Any map_values = 4;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
           int index) {
         return mapValues_.get(index);
       }
-      
+
       private void initFields() {
         keyTypeIdentifier_ = "";
         valueTypeIdentifier_ = "";
@@ -893,7 +1364,7 @@ public final class VariablesProto {
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
-        
+
         if (!hasKeyTypeIdentifier()) {
           memoizedIsInitialized = 0;
           return false;
@@ -917,7 +1388,7 @@ public final class VariablesProto {
         memoizedIsInitialized = 1;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
@@ -935,12 +1406,12 @@ public final class VariablesProto {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
@@ -962,94 +1433,83 @@ public final class VariablesProto {
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       private static final long serialVersionUID = 0L;
       @java.lang.Override
       protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
-      
+
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Map parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
-      
+
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.Map prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
-      
+
       @java.lang.Override
       protected Builder newBuilderForType(
           com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
+      /**
+       * Protobuf type {@code Variables.Map}
+       */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
          implements ralph_protobuffs.VariablesProto.Variables.MapOrBuilder {
@@ -1057,18 +1517,21 @@ public final class VariablesProto {
             getDescriptor() {
           return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_descriptor;
         }
-        
+
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.VariablesProto.Variables.Map.class, ralph_protobuffs.VariablesProto.Variables.Map.Builder.class);
         }
-        
+
         // Construct using ralph_protobuffs.VariablesProto.Variables.Map.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
-        
-        private Builder(BuilderParent parent) {
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -1081,7 +1544,7 @@ public final class VariablesProto {
         private static Builder create() {
           return new Builder();
         }
-        
+
         public Builder clear() {
           super.clear();
           keyTypeIdentifier_ = "";
@@ -1102,20 +1565,20 @@ public final class VariablesProto {
           }
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(buildPartial());
         }
-        
+
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VariablesProto.Variables.Map.getDescriptor();
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Map_descriptor;
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Map getDefaultInstanceForType() {
           return ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Map build() {
           ralph_protobuffs.VariablesProto.Variables.Map result = buildPartial();
           if (!result.isInitialized()) {
@@ -1123,17 +1586,7 @@ public final class VariablesProto {
           }
           return result;
         }
-        
-        private ralph_protobuffs.VariablesProto.Variables.Map buildParsed()
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VariablesProto.Variables.Map result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
-          }
-          return result;
-        }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Map buildPartial() {
           ralph_protobuffs.VariablesProto.Variables.Map result = new ralph_protobuffs.VariablesProto.Variables.Map(this);
           int from_bitField0_ = bitField0_;
@@ -1168,7 +1621,7 @@ public final class VariablesProto {
           onBuilt();
           return result;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof ralph_protobuffs.VariablesProto.Variables.Map) {
             return mergeFrom((ralph_protobuffs.VariablesProto.Variables.Map)other);
@@ -1177,14 +1630,18 @@ public final class VariablesProto {
             return this;
           }
         }
-        
+
         public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.Map other) {
           if (other == ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance()) return this;
           if (other.hasKeyTypeIdentifier()) {
-            setKeyTypeIdentifier(other.getKeyTypeIdentifier());
+            bitField0_ |= 0x00000001;
+            keyTypeIdentifier_ = other.keyTypeIdentifier_;
+            onChanged();
           }
           if (other.hasValueTypeIdentifier()) {
-            setValueTypeIdentifier(other.getValueTypeIdentifier());
+            bitField0_ |= 0x00000002;
+            valueTypeIdentifier_ = other.valueTypeIdentifier_;
+            onChanged();
           }
           if (mapIndicesBuilder_ == null) {
             if (!other.mapIndices_.isEmpty()) {
@@ -1241,7 +1698,7 @@ public final class VariablesProto {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
+
         public final boolean isInitialized() {
           if (!hasKeyTypeIdentifier()) {
             
@@ -1265,74 +1722,69 @@ public final class VariablesProto {
           }
           return true;
         }
-        
+
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
-          while (true) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  onChanged();
-                  return this;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                keyTypeIdentifier_ = input.readBytes();
-                break;
-              }
-              case 18: {
-                bitField0_ |= 0x00000002;
-                valueTypeIdentifier_ = input.readBytes();
-                break;
-              }
-              case 26: {
-                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
-                input.readMessage(subBuilder, extensionRegistry);
-                addMapIndices(subBuilder.buildPartial());
-                break;
-              }
-              case 34: {
-                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
-                input.readMessage(subBuilder, extensionRegistry);
-                addMapValues(subBuilder.buildPartial());
-                break;
-              }
+          ralph_protobuffs.VariablesProto.Variables.Map parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.VariablesProto.Variables.Map) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
             }
           }
+          return this;
         }
-        
         private int bitField0_;
-        
+
         // required string key_type_identifier = 1;
         private java.lang.Object keyTypeIdentifier_ = "";
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
         public boolean hasKeyTypeIdentifier() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
-        public String getKeyTypeIdentifier() {
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
+        public java.lang.String getKeyTypeIdentifier() {
           java.lang.Object ref = keyTypeIdentifier_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             keyTypeIdentifier_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setKeyTypeIdentifier(String value) {
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getKeyTypeIdentifierBytes() {
+          java.lang.Object ref = keyTypeIdentifier_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            keyTypeIdentifier_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
+        public Builder setKeyTypeIdentifier(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -1341,34 +1793,72 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
         public Builder clearKeyTypeIdentifier() {
           bitField0_ = (bitField0_ & ~0x00000001);
           keyTypeIdentifier_ = getDefaultInstance().getKeyTypeIdentifier();
           onChanged();
           return this;
         }
-        void setKeyTypeIdentifier(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
+        /**
+         * <code>required string key_type_identifier = 1;</code>
+         */
+        public Builder setKeyTypeIdentifierBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
           keyTypeIdentifier_ = value;
           onChanged();
+          return this;
         }
-        
+
         // required string value_type_identifier = 2;
         private java.lang.Object valueTypeIdentifier_ = "";
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
         public boolean hasValueTypeIdentifier() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
-        public String getValueTypeIdentifier() {
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
+        public java.lang.String getValueTypeIdentifier() {
           java.lang.Object ref = valueTypeIdentifier_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             valueTypeIdentifier_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setValueTypeIdentifier(String value) {
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getValueTypeIdentifierBytes() {
+          java.lang.Object ref = valueTypeIdentifier_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            valueTypeIdentifier_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
+        public Builder setValueTypeIdentifier(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -1377,18 +1867,29 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
         public Builder clearValueTypeIdentifier() {
           bitField0_ = (bitField0_ & ~0x00000002);
           valueTypeIdentifier_ = getDefaultInstance().getValueTypeIdentifier();
           onChanged();
           return this;
         }
-        void setValueTypeIdentifier(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000002;
+        /**
+         * <code>required string value_type_identifier = 2;</code>
+         */
+        public Builder setValueTypeIdentifierBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
           valueTypeIdentifier_ = value;
           onChanged();
+          return this;
         }
-        
+
         // repeated .Variables.Any map_indices = 3;
         private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapIndices_ =
           java.util.Collections.emptyList();
@@ -1398,10 +1899,13 @@ public final class VariablesProto {
             bitField0_ |= 0x00000004;
            }
         }
-        
+
         private com.google.protobuf.RepeatedFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> mapIndicesBuilder_;
-        
+
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapIndicesList() {
           if (mapIndicesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(mapIndices_);
@@ -1409,6 +1913,9 @@ public final class VariablesProto {
             return mapIndicesBuilder_.getMessageList();
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public int getMapIndicesCount() {
           if (mapIndicesBuilder_ == null) {
             return mapIndices_.size();
@@ -1416,6 +1923,9 @@ public final class VariablesProto {
             return mapIndicesBuilder_.getCount();
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any getMapIndices(int index) {
           if (mapIndicesBuilder_ == null) {
             return mapIndices_.get(index);
@@ -1423,6 +1933,9 @@ public final class VariablesProto {
             return mapIndicesBuilder_.getMessage(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder setMapIndices(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
@@ -1437,6 +1950,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder setMapIndices(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
@@ -1448,6 +1964,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder addMapIndices(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
             if (value == null) {
@@ -1461,6 +1980,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder addMapIndices(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapIndicesBuilder_ == null) {
@@ -1475,6 +1997,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder addMapIndices(
             ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
@@ -1486,6 +2011,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder addMapIndices(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapIndicesBuilder_ == null) {
@@ -1497,6 +2025,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder addAllMapIndices(
             java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (mapIndicesBuilder_ == null) {
@@ -1508,6 +2039,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder clearMapIndices() {
           if (mapIndicesBuilder_ == null) {
             mapIndices_ = java.util.Collections.emptyList();
@@ -1518,6 +2052,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public Builder removeMapIndices(int index) {
           if (mapIndicesBuilder_ == null) {
             ensureMapIndicesIsMutable();
@@ -1528,10 +2065,16 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder getMapIndicesBuilder(
             int index) {
           return getMapIndicesFieldBuilder().getBuilder(index);
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapIndicesOrBuilder(
             int index) {
           if (mapIndicesBuilder_ == null) {
@@ -1539,6 +2082,9 @@ public final class VariablesProto {
             return mapIndicesBuilder_.getMessageOrBuilder(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getMapIndicesOrBuilderList() {
           if (mapIndicesBuilder_ != null) {
@@ -1547,15 +2093,24 @@ public final class VariablesProto {
             return java.util.Collections.unmodifiableList(mapIndices_);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapIndicesBuilder() {
           return getMapIndicesFieldBuilder().addBuilder(
               ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapIndicesBuilder(
             int index) {
           return getMapIndicesFieldBuilder().addBuilder(
               index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any map_indices = 3;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getMapIndicesBuilderList() {
           return getMapIndicesFieldBuilder().getBuilderList();
@@ -1574,7 +2129,7 @@ public final class VariablesProto {
           }
           return mapIndicesBuilder_;
         }
-        
+
         // repeated .Variables.Any map_values = 4;
         private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> mapValues_ =
           java.util.Collections.emptyList();
@@ -1584,10 +2139,13 @@ public final class VariablesProto {
             bitField0_ |= 0x00000008;
            }
         }
-        
+
         private com.google.protobuf.RepeatedFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> mapValuesBuilder_;
-        
+
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getMapValuesList() {
           if (mapValuesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(mapValues_);
@@ -1595,6 +2153,9 @@ public final class VariablesProto {
             return mapValuesBuilder_.getMessageList();
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public int getMapValuesCount() {
           if (mapValuesBuilder_ == null) {
             return mapValues_.size();
@@ -1602,6 +2163,9 @@ public final class VariablesProto {
             return mapValuesBuilder_.getCount();
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any getMapValues(int index) {
           if (mapValuesBuilder_ == null) {
             return mapValues_.get(index);
@@ -1609,6 +2173,9 @@ public final class VariablesProto {
             return mapValuesBuilder_.getMessage(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder setMapValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
@@ -1623,6 +2190,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder setMapValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
@@ -1634,6 +2204,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder addMapValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
             if (value == null) {
@@ -1647,6 +2220,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder addMapValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (mapValuesBuilder_ == null) {
@@ -1661,6 +2237,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder addMapValues(
             ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
@@ -1672,6 +2251,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder addMapValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (mapValuesBuilder_ == null) {
@@ -1683,6 +2265,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder addAllMapValues(
             java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (mapValuesBuilder_ == null) {
@@ -1694,6 +2279,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder clearMapValues() {
           if (mapValuesBuilder_ == null) {
             mapValues_ = java.util.Collections.emptyList();
@@ -1704,6 +2292,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public Builder removeMapValues(int index) {
           if (mapValuesBuilder_ == null) {
             ensureMapValuesIsMutable();
@@ -1714,10 +2305,16 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder getMapValuesBuilder(
             int index) {
           return getMapValuesFieldBuilder().getBuilder(index);
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getMapValuesOrBuilder(
             int index) {
           if (mapValuesBuilder_ == null) {
@@ -1725,6 +2322,9 @@ public final class VariablesProto {
             return mapValuesBuilder_.getMessageOrBuilder(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getMapValuesOrBuilderList() {
           if (mapValuesBuilder_ != null) {
@@ -1733,15 +2333,24 @@ public final class VariablesProto {
             return java.util.Collections.unmodifiableList(mapValues_);
           }
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapValuesBuilder() {
           return getMapValuesFieldBuilder().addBuilder(
               ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addMapValuesBuilder(
             int index) {
           return getMapValuesFieldBuilder().addBuilder(
               index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any map_values = 4;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getMapValuesBuilderList() {
           return getMapValuesFieldBuilder().getBuilderList();
@@ -1760,136 +2369,308 @@ public final class VariablesProto {
           }
           return mapValuesBuilder_;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Variables.Map)
       }
-      
+
       static {
         defaultInstance = new Map(true);
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Variables.Map)
     }
-    
+
     public interface StructOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
-      
+
       // required string struct_identifier = 1;
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
       boolean hasStructIdentifier();
-      String getStructIdentifier();
-      
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
+      java.lang.String getStructIdentifier();
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getStructIdentifierBytes();
+
       // repeated string field_names = 2;
-      java.util.List<String> getFieldNamesList();
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      java.util.List<java.lang.String>
+      getFieldNamesList();
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
       int getFieldNamesCount();
-      String getFieldNames(int index);
-      
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      java.lang.String getFieldNames(int index);
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getFieldNamesBytes(int index);
+
       // repeated .Variables.Any field_values = 3;
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> 
           getFieldValuesList();
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index);
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       int getFieldValuesCount();
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getFieldValuesOrBuilderList();
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
           int index);
     }
+    /**
+     * Protobuf type {@code Variables.Struct}
+     */
     public static final class Struct extends
         com.google.protobuf.GeneratedMessage
         implements StructOrBuilder {
       // Use Struct.newBuilder() to construct.
-      private Struct(Builder builder) {
+      private Struct(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
+        this.unknownFields = builder.getUnknownFields();
       }
-      private Struct(boolean noInit) {}
-      
+      private Struct(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
       private static final Struct defaultInstance;
       public static Struct getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public Struct getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Struct(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                structIdentifier_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                  fieldNames_ = new com.google.protobuf.LazyStringArrayList();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                fieldNames_.add(input.readBytes());
+                break;
+              }
+              case 26: {
+                if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                  fieldValues_ = new java.util.ArrayList<ralph_protobuffs.VariablesProto.Variables.Any>();
+                  mutable_bitField0_ |= 0x00000004;
+                }
+                fieldValues_.add(input.readMessage(ralph_protobuffs.VariablesProto.Variables.Any.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            fieldNames_ = new com.google.protobuf.UnmodifiableLazyStringList(fieldNames_);
+          }
+          if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+            fieldValues_ = java.util.Collections.unmodifiableList(fieldValues_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.Struct.class, ralph_protobuffs.VariablesProto.Variables.Struct.Builder.class);
       }
-      
+
+      public static com.google.protobuf.Parser<Struct> PARSER =
+          new com.google.protobuf.AbstractParser<Struct>() {
+        public Struct parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Struct(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Struct> getParserForType() {
+        return PARSER;
+      }
+
       private int bitField0_;
       // required string struct_identifier = 1;
       public static final int STRUCT_IDENTIFIER_FIELD_NUMBER = 1;
       private java.lang.Object structIdentifier_;
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
       public boolean hasStructIdentifier() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getStructIdentifier() {
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
+      public java.lang.String getStructIdentifier() {
         java.lang.Object ref = structIdentifier_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             structIdentifier_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getStructIdentifierBytes() {
+      /**
+       * <code>required string struct_identifier = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStructIdentifierBytes() {
         java.lang.Object ref = structIdentifier_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           structIdentifier_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // repeated string field_names = 2;
       public static final int FIELD_NAMES_FIELD_NUMBER = 2;
       private com.google.protobuf.LazyStringList fieldNames_;
-      public java.util.List<String>
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      public java.util.List<java.lang.String>
           getFieldNamesList() {
         return fieldNames_;
       }
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
       public int getFieldNamesCount() {
         return fieldNames_.size();
       }
-      public String getFieldNames(int index) {
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      public java.lang.String getFieldNames(int index) {
         return fieldNames_.get(index);
       }
-      
+      /**
+       * <code>repeated string field_names = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFieldNamesBytes(int index) {
+        return fieldNames_.getByteString(index);
+      }
+
       // repeated .Variables.Any field_values = 3;
       public static final int FIELD_VALUES_FIELD_NUMBER = 3;
       private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> fieldValues_;
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getFieldValuesList() {
         return fieldValues_;
       }
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
           getFieldValuesOrBuilderList() {
         return fieldValues_;
       }
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       public int getFieldValuesCount() {
         return fieldValues_.size();
       }
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index) {
         return fieldValues_.get(index);
       }
+      /**
+       * <code>repeated .Variables.Any field_values = 3;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
           int index) {
         return fieldValues_.get(index);
       }
-      
+
       private void initFields() {
         structIdentifier_ = "";
         fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1899,7 +2680,7 @@ public final class VariablesProto {
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
-        
+
         if (!hasStructIdentifier()) {
           memoizedIsInitialized = 0;
           return false;
@@ -1913,7 +2694,7 @@ public final class VariablesProto {
         memoizedIsInitialized = 1;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
@@ -1928,12 +2709,12 @@ public final class VariablesProto {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
@@ -1956,94 +2737,83 @@ public final class VariablesProto {
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       private static final long serialVersionUID = 0L;
       @java.lang.Override
       protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
-      
+
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Struct parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
-      
+
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.Struct prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
-      
+
       @java.lang.Override
       protected Builder newBuilderForType(
           com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
+      /**
+       * Protobuf type {@code Variables.Struct}
+       */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
          implements ralph_protobuffs.VariablesProto.Variables.StructOrBuilder {
@@ -2051,18 +2821,21 @@ public final class VariablesProto {
             getDescriptor() {
           return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_descriptor;
         }
-        
+
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.VariablesProto.Variables.Struct.class, ralph_protobuffs.VariablesProto.Variables.Struct.Builder.class);
         }
-        
+
         // Construct using ralph_protobuffs.VariablesProto.Variables.Struct.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
-        
-        private Builder(BuilderParent parent) {
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -2074,7 +2847,7 @@ public final class VariablesProto {
         private static Builder create() {
           return new Builder();
         }
-        
+
         public Builder clear() {
           super.clear();
           structIdentifier_ = "";
@@ -2089,20 +2862,20 @@ public final class VariablesProto {
           }
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(buildPartial());
         }
-        
+
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VariablesProto.Variables.Struct.getDescriptor();
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Struct_descriptor;
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Struct getDefaultInstanceForType() {
           return ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Struct build() {
           ralph_protobuffs.VariablesProto.Variables.Struct result = buildPartial();
           if (!result.isInitialized()) {
@@ -2110,17 +2883,7 @@ public final class VariablesProto {
           }
           return result;
         }
-        
-        private ralph_protobuffs.VariablesProto.Variables.Struct buildParsed()
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VariablesProto.Variables.Struct result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
-          }
-          return result;
-        }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Struct buildPartial() {
           ralph_protobuffs.VariablesProto.Variables.Struct result = new ralph_protobuffs.VariablesProto.Variables.Struct(this);
           int from_bitField0_ = bitField0_;
@@ -2148,7 +2911,7 @@ public final class VariablesProto {
           onBuilt();
           return result;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof ralph_protobuffs.VariablesProto.Variables.Struct) {
             return mergeFrom((ralph_protobuffs.VariablesProto.Variables.Struct)other);
@@ -2157,11 +2920,13 @@ public final class VariablesProto {
             return this;
           }
         }
-        
+
         public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.Struct other) {
           if (other == ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance()) return this;
           if (other.hasStructIdentifier()) {
-            setStructIdentifier(other.getStructIdentifier());
+            bitField0_ |= 0x00000001;
+            structIdentifier_ = other.structIdentifier_;
+            onChanged();
           }
           if (!other.fieldNames_.isEmpty()) {
             if (fieldNames_.isEmpty()) {
@@ -2202,7 +2967,7 @@ public final class VariablesProto {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
+
         public final boolean isInitialized() {
           if (!hasStructIdentifier()) {
             
@@ -2216,68 +2981,69 @@ public final class VariablesProto {
           }
           return true;
         }
-        
+
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
-          while (true) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  onChanged();
-                  return this;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                structIdentifier_ = input.readBytes();
-                break;
-              }
-              case 18: {
-                ensureFieldNamesIsMutable();
-                fieldNames_.add(input.readBytes());
-                break;
-              }
-              case 26: {
-                ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
-                input.readMessage(subBuilder, extensionRegistry);
-                addFieldValues(subBuilder.buildPartial());
-                break;
-              }
+          ralph_protobuffs.VariablesProto.Variables.Struct parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.VariablesProto.Variables.Struct) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
             }
           }
+          return this;
         }
-        
         private int bitField0_;
-        
+
         // required string struct_identifier = 1;
         private java.lang.Object structIdentifier_ = "";
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
         public boolean hasStructIdentifier() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
-        public String getStructIdentifier() {
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
+        public java.lang.String getStructIdentifier() {
           java.lang.Object ref = structIdentifier_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             structIdentifier_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setStructIdentifier(String value) {
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getStructIdentifierBytes() {
+          java.lang.Object ref = structIdentifier_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            structIdentifier_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
+        public Builder setStructIdentifier(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -2286,18 +3052,29 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
         public Builder clearStructIdentifier() {
           bitField0_ = (bitField0_ & ~0x00000001);
           structIdentifier_ = getDefaultInstance().getStructIdentifier();
           onChanged();
           return this;
         }
-        void setStructIdentifier(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
+        /**
+         * <code>required string struct_identifier = 1;</code>
+         */
+        public Builder setStructIdentifierBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
           structIdentifier_ = value;
           onChanged();
+          return this;
         }
-        
+
         // repeated string field_names = 2;
         private com.google.protobuf.LazyStringList fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         private void ensureFieldNamesIsMutable() {
@@ -2306,18 +3083,37 @@ public final class VariablesProto {
             bitField0_ |= 0x00000002;
            }
         }
-        public java.util.List<String>
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
+        public java.util.List<java.lang.String>
             getFieldNamesList() {
           return java.util.Collections.unmodifiableList(fieldNames_);
         }
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
         public int getFieldNamesCount() {
           return fieldNames_.size();
         }
-        public String getFieldNames(int index) {
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
+        public java.lang.String getFieldNames(int index) {
           return fieldNames_.get(index);
         }
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getFieldNamesBytes(int index) {
+          return fieldNames_.getByteString(index);
+        }
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
         public Builder setFieldNames(
-            int index, String value) {
+            int index, java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -2326,7 +3122,11 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
-        public Builder addFieldNames(String value) {
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
+        public Builder addFieldNames(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -2335,25 +3135,39 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
         public Builder addAllFieldNames(
-            java.lang.Iterable<String> values) {
+            java.lang.Iterable<java.lang.String> values) {
           ensureFieldNamesIsMutable();
           super.addAll(values, fieldNames_);
           onChanged();
           return this;
         }
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
         public Builder clearFieldNames() {
           fieldNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
           bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
-        void addFieldNames(com.google.protobuf.ByteString value) {
-          ensureFieldNamesIsMutable();
+        /**
+         * <code>repeated string field_names = 2;</code>
+         */
+        public Builder addFieldNamesBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureFieldNamesIsMutable();
           fieldNames_.add(value);
           onChanged();
+          return this;
         }
-        
+
         // repeated .Variables.Any field_values = 3;
         private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> fieldValues_ =
           java.util.Collections.emptyList();
@@ -2363,10 +3177,13 @@ public final class VariablesProto {
             bitField0_ |= 0x00000004;
            }
         }
-        
+
         private com.google.protobuf.RepeatedFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> fieldValuesBuilder_;
-        
+
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getFieldValuesList() {
           if (fieldValuesBuilder_ == null) {
             return java.util.Collections.unmodifiableList(fieldValues_);
@@ -2374,6 +3191,9 @@ public final class VariablesProto {
             return fieldValuesBuilder_.getMessageList();
           }
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public int getFieldValuesCount() {
           if (fieldValuesBuilder_ == null) {
             return fieldValues_.size();
@@ -2381,6 +3201,9 @@ public final class VariablesProto {
             return fieldValuesBuilder_.getCount();
           }
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any getFieldValues(int index) {
           if (fieldValuesBuilder_ == null) {
             return fieldValues_.get(index);
@@ -2388,6 +3211,9 @@ public final class VariablesProto {
             return fieldValuesBuilder_.getMessage(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder setFieldValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (fieldValuesBuilder_ == null) {
@@ -2402,6 +3228,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder setFieldValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (fieldValuesBuilder_ == null) {
@@ -2413,6 +3242,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder addFieldValues(ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (fieldValuesBuilder_ == null) {
             if (value == null) {
@@ -2426,6 +3258,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder addFieldValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
           if (fieldValuesBuilder_ == null) {
@@ -2440,6 +3275,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder addFieldValues(
             ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (fieldValuesBuilder_ == null) {
@@ -2451,6 +3289,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder addFieldValues(
             int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
           if (fieldValuesBuilder_ == null) {
@@ -2462,6 +3303,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder addAllFieldValues(
             java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
           if (fieldValuesBuilder_ == null) {
@@ -2473,6 +3317,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder clearFieldValues() {
           if (fieldValuesBuilder_ == null) {
             fieldValues_ = java.util.Collections.emptyList();
@@ -2483,6 +3330,9 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public Builder removeFieldValues(int index) {
           if (fieldValuesBuilder_ == null) {
             ensureFieldValuesIsMutable();
@@ -2493,10 +3343,16 @@ public final class VariablesProto {
           }
           return this;
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder getFieldValuesBuilder(
             int index) {
           return getFieldValuesFieldBuilder().getBuilder(index);
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getFieldValuesOrBuilder(
             int index) {
           if (fieldValuesBuilder_ == null) {
@@ -2504,6 +3360,9 @@ public final class VariablesProto {
             return fieldValuesBuilder_.getMessageOrBuilder(index);
           }
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
              getFieldValuesOrBuilderList() {
           if (fieldValuesBuilder_ != null) {
@@ -2512,15 +3371,24 @@ public final class VariablesProto {
             return java.util.Collections.unmodifiableList(fieldValues_);
           }
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addFieldValuesBuilder() {
           return getFieldValuesFieldBuilder().addBuilder(
               ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Any.Builder addFieldValuesBuilder(
             int index) {
           return getFieldValuesFieldBuilder().addBuilder(
               index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
         }
+        /**
+         * <code>repeated .Variables.Any field_values = 3;</code>
+         */
         public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
              getFieldValuesBuilderList() {
           return getFieldValuesFieldBuilder().getBuilderList();
@@ -2539,118 +3407,275 @@ public final class VariablesProto {
           }
           return fieldValuesBuilder_;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Variables.Struct)
       }
-      
+
       static {
         defaultInstance = new Struct(true);
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Variables.Struct)
     }
-    
+
     public interface ServiceReferenceOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
-      
+
       // required string ip_addr = 1;
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
       boolean hasIpAddr();
-      String getIpAddr();
-      
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
+      java.lang.String getIpAddr();
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getIpAddrBytes();
+
       // required uint32 tcp_port = 2;
+      /**
+       * <code>required uint32 tcp_port = 2;</code>
+       *
+       * <pre>
+       * would use uint16, but those aren't defined in protocol
+       * buffers.
+       * </pre>
+       */
       boolean hasTcpPort();
+      /**
+       * <code>required uint32 tcp_port = 2;</code>
+       *
+       * <pre>
+       * would use uint16, but those aren't defined in protocol
+       * buffers.
+       * </pre>
+       */
       int getTcpPort();
-      
+
       // required .UUID service_uuid = 3;
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       boolean hasServiceUuid();
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       ralph_protobuffs.UtilProto.UUID getServiceUuid();
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder();
     }
+    /**
+     * Protobuf type {@code Variables.ServiceReference}
+     */
     public static final class ServiceReference extends
         com.google.protobuf.GeneratedMessage
         implements ServiceReferenceOrBuilder {
       // Use ServiceReference.newBuilder() to construct.
-      private ServiceReference(Builder builder) {
+      private ServiceReference(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
+        this.unknownFields = builder.getUnknownFields();
       }
-      private ServiceReference(boolean noInit) {}
-      
+      private ServiceReference(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
       private static final ServiceReference defaultInstance;
       public static ServiceReference getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public ServiceReference getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ServiceReference(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                ipAddr_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                tcpPort_ = input.readUInt32();
+                break;
+              }
+              case 26: {
+                ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                  subBuilder = serviceUuid_.toBuilder();
+                }
+                serviceUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(serviceUuid_);
+                  serviceUuid_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000004;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.ServiceReference.class, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder.class);
       }
-      
+
+      public static com.google.protobuf.Parser<ServiceReference> PARSER =
+          new com.google.protobuf.AbstractParser<ServiceReference>() {
+        public ServiceReference parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ServiceReference(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ServiceReference> getParserForType() {
+        return PARSER;
+      }
+
       private int bitField0_;
       // required string ip_addr = 1;
       public static final int IP_ADDR_FIELD_NUMBER = 1;
       private java.lang.Object ipAddr_;
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
       public boolean hasIpAddr() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getIpAddr() {
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
+      public java.lang.String getIpAddr() {
         java.lang.Object ref = ipAddr_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             ipAddr_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getIpAddrBytes() {
+      /**
+       * <code>required string ip_addr = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIpAddrBytes() {
         java.lang.Object ref = ipAddr_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           ipAddr_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // required uint32 tcp_port = 2;
       public static final int TCP_PORT_FIELD_NUMBER = 2;
       private int tcpPort_;
+      /**
+       * <code>required uint32 tcp_port = 2;</code>
+       *
+       * <pre>
+       * would use uint16, but those aren't defined in protocol
+       * buffers.
+       * </pre>
+       */
       public boolean hasTcpPort() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required uint32 tcp_port = 2;</code>
+       *
+       * <pre>
+       * would use uint16, but those aren't defined in protocol
+       * buffers.
+       * </pre>
+       */
       public int getTcpPort() {
         return tcpPort_;
       }
-      
+
       // required .UUID service_uuid = 3;
       public static final int SERVICE_UUID_FIELD_NUMBER = 3;
       private ralph_protobuffs.UtilProto.UUID serviceUuid_;
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       public boolean hasServiceUuid() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getServiceUuid() {
         return serviceUuid_;
       }
+      /**
+       * <code>required .UUID service_uuid = 3;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder() {
         return serviceUuid_;
       }
-      
+
       private void initFields() {
         ipAddr_ = "";
         tcpPort_ = 0;
@@ -2660,7 +3685,7 @@ public final class VariablesProto {
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
-        
+
         if (!hasIpAddr()) {
           memoizedIsInitialized = 0;
           return false;
@@ -2680,7 +3705,7 @@ public final class VariablesProto {
         memoizedIsInitialized = 1;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
@@ -2695,12 +3720,12 @@ public final class VariablesProto {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
@@ -2718,94 +3743,83 @@ public final class VariablesProto {
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       private static final long serialVersionUID = 0L;
       @java.lang.Override
       protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
-      
+
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.ServiceReference parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
-      
+
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.ServiceReference prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
-      
+
       @java.lang.Override
       protected Builder newBuilderForType(
           com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
+      /**
+       * Protobuf type {@code Variables.ServiceReference}
+       */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
          implements ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder {
@@ -2813,18 +3827,21 @@ public final class VariablesProto {
             getDescriptor() {
           return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_descriptor;
         }
-        
+
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.VariablesProto.Variables.ServiceReference.class, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder.class);
         }
-        
+
         // Construct using ralph_protobuffs.VariablesProto.Variables.ServiceReference.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
-        
-        private Builder(BuilderParent parent) {
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -2836,7 +3853,7 @@ public final class VariablesProto {
         private static Builder create() {
           return new Builder();
         }
-        
+
         public Builder clear() {
           super.clear();
           ipAddr_ = "";
@@ -2851,20 +3868,20 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(buildPartial());
         }
-        
+
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDescriptor();
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_ServiceReference_descriptor;
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.ServiceReference getDefaultInstanceForType() {
           return ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.ServiceReference build() {
           ralph_protobuffs.VariablesProto.Variables.ServiceReference result = buildPartial();
           if (!result.isInitialized()) {
@@ -2872,17 +3889,7 @@ public final class VariablesProto {
           }
           return result;
         }
-        
-        private ralph_protobuffs.VariablesProto.Variables.ServiceReference buildParsed()
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VariablesProto.Variables.ServiceReference result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
-          }
-          return result;
-        }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.ServiceReference buildPartial() {
           ralph_protobuffs.VariablesProto.Variables.ServiceReference result = new ralph_protobuffs.VariablesProto.Variables.ServiceReference(this);
           int from_bitField0_ = bitField0_;
@@ -2907,7 +3914,7 @@ public final class VariablesProto {
           onBuilt();
           return result;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof ralph_protobuffs.VariablesProto.Variables.ServiceReference) {
             return mergeFrom((ralph_protobuffs.VariablesProto.Variables.ServiceReference)other);
@@ -2916,11 +3923,13 @@ public final class VariablesProto {
             return this;
           }
         }
-        
+
         public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.ServiceReference other) {
           if (other == ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance()) return this;
           if (other.hasIpAddr()) {
-            setIpAddr(other.getIpAddr());
+            bitField0_ |= 0x00000001;
+            ipAddr_ = other.ipAddr_;
+            onChanged();
           }
           if (other.hasTcpPort()) {
             setTcpPort(other.getTcpPort());
@@ -2931,7 +3940,7 @@ public final class VariablesProto {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
+
         public final boolean isInitialized() {
           if (!hasIpAddr()) {
             
@@ -2951,71 +3960,69 @@ public final class VariablesProto {
           }
           return true;
         }
-        
+
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
-          while (true) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  onChanged();
-                  return this;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                ipAddr_ = input.readBytes();
-                break;
-              }
-              case 16: {
-                bitField0_ |= 0x00000002;
-                tcpPort_ = input.readUInt32();
-                break;
-              }
-              case 26: {
-                ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-                if (hasServiceUuid()) {
-                  subBuilder.mergeFrom(getServiceUuid());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setServiceUuid(subBuilder.buildPartial());
-                break;
-              }
+          ralph_protobuffs.VariablesProto.Variables.ServiceReference parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.VariablesProto.Variables.ServiceReference) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
             }
           }
+          return this;
         }
-        
         private int bitField0_;
-        
+
         // required string ip_addr = 1;
         private java.lang.Object ipAddr_ = "";
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
         public boolean hasIpAddr() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
-        public String getIpAddr() {
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
+        public java.lang.String getIpAddr() {
           java.lang.Object ref = ipAddr_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             ipAddr_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setIpAddr(String value) {
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getIpAddrBytes() {
+          java.lang.Object ref = ipAddr_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            ipAddr_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
+        public Builder setIpAddr(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -3024,46 +4031,95 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
         public Builder clearIpAddr() {
           bitField0_ = (bitField0_ & ~0x00000001);
           ipAddr_ = getDefaultInstance().getIpAddr();
           onChanged();
           return this;
         }
-        void setIpAddr(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
+        /**
+         * <code>required string ip_addr = 1;</code>
+         */
+        public Builder setIpAddrBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
           ipAddr_ = value;
           onChanged();
+          return this;
         }
-        
+
         // required uint32 tcp_port = 2;
         private int tcpPort_ ;
+        /**
+         * <code>required uint32 tcp_port = 2;</code>
+         *
+         * <pre>
+         * would use uint16, but those aren't defined in protocol
+         * buffers.
+         * </pre>
+         */
         public boolean hasTcpPort() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
+        /**
+         * <code>required uint32 tcp_port = 2;</code>
+         *
+         * <pre>
+         * would use uint16, but those aren't defined in protocol
+         * buffers.
+         * </pre>
+         */
         public int getTcpPort() {
           return tcpPort_;
         }
+        /**
+         * <code>required uint32 tcp_port = 2;</code>
+         *
+         * <pre>
+         * would use uint16, but those aren't defined in protocol
+         * buffers.
+         * </pre>
+         */
         public Builder setTcpPort(int value) {
           bitField0_ |= 0x00000002;
           tcpPort_ = value;
           onChanged();
           return this;
         }
+        /**
+         * <code>required uint32 tcp_port = 2;</code>
+         *
+         * <pre>
+         * would use uint16, but those aren't defined in protocol
+         * buffers.
+         * </pre>
+         */
         public Builder clearTcpPort() {
           bitField0_ = (bitField0_ & ~0x00000002);
           tcpPort_ = 0;
           onChanged();
           return this;
         }
-        
+
         // required .UUID service_uuid = 3;
         private ralph_protobuffs.UtilProto.UUID serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> serviceUuidBuilder_;
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public boolean hasServiceUuid() {
           return ((bitField0_ & 0x00000004) == 0x00000004);
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public ralph_protobuffs.UtilProto.UUID getServiceUuid() {
           if (serviceUuidBuilder_ == null) {
             return serviceUuid_;
@@ -3071,6 +4127,9 @@ public final class VariablesProto {
             return serviceUuidBuilder_.getMessage();
           }
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public Builder setServiceUuid(ralph_protobuffs.UtilProto.UUID value) {
           if (serviceUuidBuilder_ == null) {
             if (value == null) {
@@ -3084,6 +4143,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000004;
           return this;
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public Builder setServiceUuid(
             ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
           if (serviceUuidBuilder_ == null) {
@@ -3095,6 +4157,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000004;
           return this;
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public Builder mergeServiceUuid(ralph_protobuffs.UtilProto.UUID value) {
           if (serviceUuidBuilder_ == null) {
             if (((bitField0_ & 0x00000004) == 0x00000004) &&
@@ -3111,6 +4176,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000004;
           return this;
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public Builder clearServiceUuid() {
           if (serviceUuidBuilder_ == null) {
             serviceUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -3121,11 +4189,17 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public ralph_protobuffs.UtilProto.UUID.Builder getServiceUuidBuilder() {
           bitField0_ |= 0x00000004;
           onChanged();
           return getServiceUuidFieldBuilder().getBuilder();
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         public ralph_protobuffs.UtilProto.UUIDOrBuilder getServiceUuidOrBuilder() {
           if (serviceUuidBuilder_ != null) {
             return serviceUuidBuilder_.getMessageOrBuilder();
@@ -3133,6 +4207,9 @@ public final class VariablesProto {
             return serviceUuid_;
           }
         }
+        /**
+         * <code>required .UUID service_uuid = 3;</code>
+         */
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
             getServiceUuidFieldBuilder() {
@@ -3146,250 +4223,604 @@ public final class VariablesProto {
           }
           return serviceUuidBuilder_;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Variables.ServiceReference)
       }
-      
+
       static {
         defaultInstance = new ServiceReference(true);
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Variables.ServiceReference)
     }
-    
+
     public interface AnyOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
-      
+
       // required string var_name = 1;
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
       boolean hasVarName();
-      String getVarName();
-      
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
+      java.lang.String getVarName();
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
+      com.google.protobuf.ByteString
+          getVarNameBytes();
+
       // required bool is_tvar = 2;
+      /**
+       * <code>required bool is_tvar = 2;</code>
+       *
+       * <pre>
+       * true if when done with request, sends the variable back.
+       * </pre>
+       */
       boolean hasIsTvar();
+      /**
+       * <code>required bool is_tvar = 2;</code>
+       *
+       * <pre>
+       * true if when done with request, sends the variable back.
+       * </pre>
+       */
       boolean getIsTvar();
-      
+
       // optional double num = 3;
+      /**
+       * <code>optional double num = 3;</code>
+       */
       boolean hasNum();
+      /**
+       * <code>optional double num = 3;</code>
+       */
       double getNum();
-      
+
       // optional string text = 4;
+      /**
+       * <code>optional string text = 4;</code>
+       */
       boolean hasText();
-      String getText();
-      
+      /**
+       * <code>optional string text = 4;</code>
+       */
+      java.lang.String getText();
+      /**
+       * <code>optional string text = 4;</code>
+       */
+      com.google.protobuf.ByteString
+          getTextBytes();
+
       // optional bool true_false = 5;
+      /**
+       * <code>optional bool true_false = 5;</code>
+       */
       boolean hasTrueFalse();
+      /**
+       * <code>optional bool true_false = 5;</code>
+       */
       boolean getTrueFalse();
-      
+
       // optional .Variables.List list = 6;
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       boolean hasList();
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.List getList();
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder();
-      
+
       // optional .Variables.Map map = 7;
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       boolean hasMap();
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Map getMap();
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder();
-      
+
       // optional .Variables.Struct struct = 8;
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       boolean hasStruct();
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.Struct getStruct();
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.StructOrBuilder getStructOrBuilder();
-      
+
       // optional bytes service_factory = 9;
+      /**
+       * <code>optional bytes service_factory = 9;</code>
+       */
       boolean hasServiceFactory();
+      /**
+       * <code>optional bytes service_factory = 9;</code>
+       */
       com.google.protobuf.ByteString getServiceFactory();
-      
+
       // optional .Variables.ServiceReference service_reference = 10;
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       boolean hasServiceReference();
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference();
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder();
     }
+    /**
+     * Protobuf type {@code Variables.Any}
+     */
     public static final class Any extends
         com.google.protobuf.GeneratedMessage
         implements AnyOrBuilder {
       // Use Any.newBuilder() to construct.
-      private Any(Builder builder) {
+      private Any(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
+        this.unknownFields = builder.getUnknownFields();
       }
-      private Any(boolean noInit) {}
-      
+      private Any(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
       private static final Any defaultInstance;
       public static Any getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public Any getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Any(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                varName_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                isTvar_ = input.readBool();
+                break;
+              }
+              case 25: {
+                bitField0_ |= 0x00000004;
+                num_ = input.readDouble();
+                break;
+              }
+              case 34: {
+                bitField0_ |= 0x00000008;
+                text_ = input.readBytes();
+                break;
+              }
+              case 40: {
+                bitField0_ |= 0x00000010;
+                trueFalse_ = input.readBool();
+                break;
+              }
+              case 50: {
+                ralph_protobuffs.VariablesProto.Variables.List.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                  subBuilder = list_.toBuilder();
+                }
+                list_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.List.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(list_);
+                  list_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000020;
+                break;
+              }
+              case 58: {
+                ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000040) == 0x00000040)) {
+                  subBuilder = map_.toBuilder();
+                }
+                map_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.Map.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(map_);
+                  map_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000040;
+                break;
+              }
+              case 66: {
+                ralph_protobuffs.VariablesProto.Variables.Struct.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000080) == 0x00000080)) {
+                  subBuilder = struct_.toBuilder();
+                }
+                struct_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.Struct.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(struct_);
+                  struct_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000080;
+                break;
+              }
+              case 74: {
+                bitField0_ |= 0x00000100;
+                serviceFactory_ = input.readBytes();
+                break;
+              }
+              case 82: {
+                ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000200) == 0x00000200)) {
+                  subBuilder = serviceReference_.toBuilder();
+                }
+                serviceReference_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.ServiceReference.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(serviceReference_);
+                  serviceReference_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000200;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.Any.class, ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
       }
-      
+
+      public static com.google.protobuf.Parser<Any> PARSER =
+          new com.google.protobuf.AbstractParser<Any>() {
+        public Any parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Any(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Any> getParserForType() {
+        return PARSER;
+      }
+
       private int bitField0_;
       // required string var_name = 1;
       public static final int VAR_NAME_FIELD_NUMBER = 1;
       private java.lang.Object varName_;
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
       public boolean hasVarName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getVarName() {
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
+      public java.lang.String getVarName() {
         java.lang.Object ref = varName_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             varName_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getVarNameBytes() {
+      /**
+       * <code>required string var_name = 1;</code>
+       *
+       * <pre>
+       * for case of data internal to a map/list/struct, use a
+       * garbage var name.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getVarNameBytes() {
         java.lang.Object ref = varName_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           varName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // required bool is_tvar = 2;
       public static final int IS_TVAR_FIELD_NUMBER = 2;
       private boolean isTvar_;
+      /**
+       * <code>required bool is_tvar = 2;</code>
+       *
+       * <pre>
+       * true if when done with request, sends the variable back.
+       * </pre>
+       */
       public boolean hasIsTvar() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required bool is_tvar = 2;</code>
+       *
+       * <pre>
+       * true if when done with request, sends the variable back.
+       * </pre>
+       */
       public boolean getIsTvar() {
         return isTvar_;
       }
-      
+
       // optional double num = 3;
       public static final int NUM_FIELD_NUMBER = 3;
       private double num_;
+      /**
+       * <code>optional double num = 3;</code>
+       */
       public boolean hasNum() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>optional double num = 3;</code>
+       */
       public double getNum() {
         return num_;
       }
-      
+
       // optional string text = 4;
       public static final int TEXT_FIELD_NUMBER = 4;
       private java.lang.Object text_;
+      /**
+       * <code>optional string text = 4;</code>
+       */
       public boolean hasText() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public String getText() {
+      /**
+       * <code>optional string text = 4;</code>
+       */
+      public java.lang.String getText() {
         java.lang.Object ref = text_;
-        if (ref instanceof String) {
-          return (String) ref;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
         } else {
           com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
             text_ = s;
           }
           return s;
         }
       }
-      private com.google.protobuf.ByteString getTextBytes() {
+      /**
+       * <code>optional string text = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTextBytes() {
         java.lang.Object ref = text_;
-        if (ref instanceof String) {
+        if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
           text_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      
+
       // optional bool true_false = 5;
       public static final int TRUE_FALSE_FIELD_NUMBER = 5;
       private boolean trueFalse_;
+      /**
+       * <code>optional bool true_false = 5;</code>
+       */
       public boolean hasTrueFalse() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional bool true_false = 5;</code>
+       */
       public boolean getTrueFalse() {
         return trueFalse_;
       }
-      
+
       // optional .Variables.List list = 6;
       public static final int LIST_FIELD_NUMBER = 6;
       private ralph_protobuffs.VariablesProto.Variables.List list_;
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       public boolean hasList() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.List getList() {
         return list_;
       }
+      /**
+       * <code>optional .Variables.List list = 6;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder() {
         return list_;
       }
-      
+
       // optional .Variables.Map map = 7;
       public static final int MAP_FIELD_NUMBER = 7;
       private ralph_protobuffs.VariablesProto.Variables.Map map_;
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       public boolean hasMap() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
         return map_;
       }
+      /**
+       * <code>optional .Variables.Map map = 7;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder() {
         return map_;
       }
-      
+
       // optional .Variables.Struct struct = 8;
       public static final int STRUCT_FIELD_NUMBER = 8;
       private ralph_protobuffs.VariablesProto.Variables.Struct struct_;
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       public boolean hasStruct() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Struct getStruct() {
         return struct_;
       }
+      /**
+       * <code>optional .Variables.Struct struct = 8;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.StructOrBuilder getStructOrBuilder() {
         return struct_;
       }
-      
+
       // optional bytes service_factory = 9;
       public static final int SERVICE_FACTORY_FIELD_NUMBER = 9;
       private com.google.protobuf.ByteString serviceFactory_;
+      /**
+       * <code>optional bytes service_factory = 9;</code>
+       */
       public boolean hasServiceFactory() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
+      /**
+       * <code>optional bytes service_factory = 9;</code>
+       */
       public com.google.protobuf.ByteString getServiceFactory() {
         return serviceFactory_;
       }
-      
+
       // optional .Variables.ServiceReference service_reference = 10;
       public static final int SERVICE_REFERENCE_FIELD_NUMBER = 10;
       private ralph_protobuffs.VariablesProto.Variables.ServiceReference serviceReference_;
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       public boolean hasServiceReference() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference() {
         return serviceReference_;
       }
+      /**
+       * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder() {
         return serviceReference_;
       }
-      
+
       private void initFields() {
         varName_ = "";
         isTvar_ = false;
@@ -3406,7 +4837,7 @@ public final class VariablesProto {
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
-        
+
         if (!hasVarName()) {
           memoizedIsInitialized = 0;
           return false;
@@ -3442,7 +4873,7 @@ public final class VariablesProto {
         memoizedIsInitialized = 1;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
@@ -3478,12 +4909,12 @@ public final class VariablesProto {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
@@ -3529,94 +4960,83 @@ public final class VariablesProto {
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       private static final long serialVersionUID = 0L;
       @java.lang.Override
       protected java.lang.Object writeReplace()
           throws java.io.ObjectStreamException {
         return super.writeReplace();
       }
-      
+
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data).buildParsed();
+        return PARSER.parseFrom(data);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(data, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(java.io.InputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        Builder builder = newBuilder();
-        if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-          return builder.buildParsed();
-        } else {
-          return null;
-        }
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input).buildParsed();
+        return PARSER.parseFrom(input);
       }
       public static ralph_protobuffs.VariablesProto.Variables.Any parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return PARSER.parseFrom(input, extensionRegistry);
       }
-      
+
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables.Any prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
-      
+
       @java.lang.Override
       protected Builder newBuilderForType(
           com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         Builder builder = new Builder(parent);
         return builder;
       }
+      /**
+       * Protobuf type {@code Variables.Any}
+       */
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder>
          implements ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder {
@@ -3624,18 +5044,21 @@ public final class VariablesProto {
             getDescriptor() {
           return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_descriptor;
         }
-        
+
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable;
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.VariablesProto.Variables.Any.class, ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
         }
-        
+
         // Construct using ralph_protobuffs.VariablesProto.Variables.Any.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
-        
-        private Builder(BuilderParent parent) {
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
           super(parent);
           maybeForceBuilderInitialization();
         }
@@ -3650,7 +5073,7 @@ public final class VariablesProto {
         private static Builder create() {
           return new Builder();
         }
-        
+
         public Builder clear() {
           super.clear();
           varName_ = "";
@@ -3691,20 +5114,20 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000200);
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(buildPartial());
         }
-        
+
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return ralph_protobuffs.VariablesProto.Variables.Any.getDescriptor();
+          return ralph_protobuffs.VariablesProto.internal_static_Variables_Any_descriptor;
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Any getDefaultInstanceForType() {
           return ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance();
         }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Any build() {
           ralph_protobuffs.VariablesProto.Variables.Any result = buildPartial();
           if (!result.isInitialized()) {
@@ -3712,17 +5135,7 @@ public final class VariablesProto {
           }
           return result;
         }
-        
-        private ralph_protobuffs.VariablesProto.Variables.Any buildParsed()
-            throws com.google.protobuf.InvalidProtocolBufferException {
-          ralph_protobuffs.VariablesProto.Variables.Any result = buildPartial();
-          if (!result.isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
-          }
-          return result;
-        }
-        
+
         public ralph_protobuffs.VariablesProto.Variables.Any buildPartial() {
           ralph_protobuffs.VariablesProto.Variables.Any result = new ralph_protobuffs.VariablesProto.Variables.Any(this);
           int from_bitField0_ = bitField0_;
@@ -3787,7 +5200,7 @@ public final class VariablesProto {
           onBuilt();
           return result;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof ralph_protobuffs.VariablesProto.Variables.Any) {
             return mergeFrom((ralph_protobuffs.VariablesProto.Variables.Any)other);
@@ -3796,11 +5209,13 @@ public final class VariablesProto {
             return this;
           }
         }
-        
+
         public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables.Any other) {
           if (other == ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance()) return this;
           if (other.hasVarName()) {
-            setVarName(other.getVarName());
+            bitField0_ |= 0x00000001;
+            varName_ = other.varName_;
+            onChanged();
           }
           if (other.hasIsTvar()) {
             setIsTvar(other.getIsTvar());
@@ -3809,7 +5224,9 @@ public final class VariablesProto {
             setNum(other.getNum());
           }
           if (other.hasText()) {
-            setText(other.getText());
+            bitField0_ |= 0x00000008;
+            text_ = other.text_;
+            onChanged();
           }
           if (other.hasTrueFalse()) {
             setTrueFalse(other.getTrueFalse());
@@ -3832,7 +5249,7 @@ public final class VariablesProto {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
+
         public final boolean isInitialized() {
           if (!hasVarName()) {
             
@@ -3868,118 +5285,89 @@ public final class VariablesProto {
           }
           return true;
         }
-        
+
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
-          while (true) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  onChanged();
-                  return this;
-                }
-                break;
-              }
-              case 10: {
-                bitField0_ |= 0x00000001;
-                varName_ = input.readBytes();
-                break;
-              }
-              case 16: {
-                bitField0_ |= 0x00000002;
-                isTvar_ = input.readBool();
-                break;
-              }
-              case 25: {
-                bitField0_ |= 0x00000004;
-                num_ = input.readDouble();
-                break;
-              }
-              case 34: {
-                bitField0_ |= 0x00000008;
-                text_ = input.readBytes();
-                break;
-              }
-              case 40: {
-                bitField0_ |= 0x00000010;
-                trueFalse_ = input.readBool();
-                break;
-              }
-              case 50: {
-                ralph_protobuffs.VariablesProto.Variables.List.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.List.newBuilder();
-                if (hasList()) {
-                  subBuilder.mergeFrom(getList());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setList(subBuilder.buildPartial());
-                break;
-              }
-              case 58: {
-                ralph_protobuffs.VariablesProto.Variables.Map.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Map.newBuilder();
-                if (hasMap()) {
-                  subBuilder.mergeFrom(getMap());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setMap(subBuilder.buildPartial());
-                break;
-              }
-              case 66: {
-                ralph_protobuffs.VariablesProto.Variables.Struct.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Struct.newBuilder();
-                if (hasStruct()) {
-                  subBuilder.mergeFrom(getStruct());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setStruct(subBuilder.buildPartial());
-                break;
-              }
-              case 74: {
-                bitField0_ |= 0x00000100;
-                serviceFactory_ = input.readBytes();
-                break;
-              }
-              case 82: {
-                ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.ServiceReference.newBuilder();
-                if (hasServiceReference()) {
-                  subBuilder.mergeFrom(getServiceReference());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setServiceReference(subBuilder.buildPartial());
-                break;
-              }
+          ralph_protobuffs.VariablesProto.Variables.Any parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.VariablesProto.Variables.Any) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
             }
           }
+          return this;
         }
-        
         private int bitField0_;
-        
+
         // required string var_name = 1;
         private java.lang.Object varName_ = "";
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
         public boolean hasVarName() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
-        public String getVarName() {
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
+        public java.lang.String getVarName() {
           java.lang.Object ref = varName_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             varName_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setVarName(String value) {
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
+        public com.google.protobuf.ByteString
+            getVarNameBytes() {
+          java.lang.Object ref = varName_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            varName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
+        public Builder setVarName(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -3988,76 +5376,164 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
         public Builder clearVarName() {
           bitField0_ = (bitField0_ & ~0x00000001);
           varName_ = getDefaultInstance().getVarName();
           onChanged();
           return this;
         }
-        void setVarName(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
+        /**
+         * <code>required string var_name = 1;</code>
+         *
+         * <pre>
+         * for case of data internal to a map/list/struct, use a
+         * garbage var name.
+         * </pre>
+         */
+        public Builder setVarNameBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
           varName_ = value;
           onChanged();
+          return this;
         }
-        
+
         // required bool is_tvar = 2;
         private boolean isTvar_ ;
+        /**
+         * <code>required bool is_tvar = 2;</code>
+         *
+         * <pre>
+         * true if when done with request, sends the variable back.
+         * </pre>
+         */
         public boolean hasIsTvar() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
+        /**
+         * <code>required bool is_tvar = 2;</code>
+         *
+         * <pre>
+         * true if when done with request, sends the variable back.
+         * </pre>
+         */
         public boolean getIsTvar() {
           return isTvar_;
         }
+        /**
+         * <code>required bool is_tvar = 2;</code>
+         *
+         * <pre>
+         * true if when done with request, sends the variable back.
+         * </pre>
+         */
         public Builder setIsTvar(boolean value) {
           bitField0_ |= 0x00000002;
           isTvar_ = value;
           onChanged();
           return this;
         }
+        /**
+         * <code>required bool is_tvar = 2;</code>
+         *
+         * <pre>
+         * true if when done with request, sends the variable back.
+         * </pre>
+         */
         public Builder clearIsTvar() {
           bitField0_ = (bitField0_ & ~0x00000002);
           isTvar_ = false;
           onChanged();
           return this;
         }
-        
+
         // optional double num = 3;
         private double num_ ;
+        /**
+         * <code>optional double num = 3;</code>
+         */
         public boolean hasNum() {
           return ((bitField0_ & 0x00000004) == 0x00000004);
         }
+        /**
+         * <code>optional double num = 3;</code>
+         */
         public double getNum() {
           return num_;
         }
+        /**
+         * <code>optional double num = 3;</code>
+         */
         public Builder setNum(double value) {
           bitField0_ |= 0x00000004;
           num_ = value;
           onChanged();
           return this;
         }
+        /**
+         * <code>optional double num = 3;</code>
+         */
         public Builder clearNum() {
           bitField0_ = (bitField0_ & ~0x00000004);
           num_ = 0D;
           onChanged();
           return this;
         }
-        
+
         // optional string text = 4;
         private java.lang.Object text_ = "";
+        /**
+         * <code>optional string text = 4;</code>
+         */
         public boolean hasText() {
           return ((bitField0_ & 0x00000008) == 0x00000008);
         }
-        public String getText() {
+        /**
+         * <code>optional string text = 4;</code>
+         */
+        public java.lang.String getText() {
           java.lang.Object ref = text_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
             text_ = s;
             return s;
           } else {
-            return (String) ref;
+            return (java.lang.String) ref;
           }
         }
-        public Builder setText(String value) {
+        /**
+         * <code>optional string text = 4;</code>
+         */
+        public com.google.protobuf.ByteString
+            getTextBytes() {
+          java.lang.Object ref = text_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            text_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string text = 4;</code>
+         */
+        public Builder setText(
+            java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
@@ -4066,46 +5542,75 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>optional string text = 4;</code>
+         */
         public Builder clearText() {
           bitField0_ = (bitField0_ & ~0x00000008);
           text_ = getDefaultInstance().getText();
           onChanged();
           return this;
         }
-        void setText(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000008;
+        /**
+         * <code>optional string text = 4;</code>
+         */
+        public Builder setTextBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
           text_ = value;
           onChanged();
+          return this;
         }
-        
+
         // optional bool true_false = 5;
         private boolean trueFalse_ ;
+        /**
+         * <code>optional bool true_false = 5;</code>
+         */
         public boolean hasTrueFalse() {
           return ((bitField0_ & 0x00000010) == 0x00000010);
         }
+        /**
+         * <code>optional bool true_false = 5;</code>
+         */
         public boolean getTrueFalse() {
           return trueFalse_;
         }
+        /**
+         * <code>optional bool true_false = 5;</code>
+         */
         public Builder setTrueFalse(boolean value) {
           bitField0_ |= 0x00000010;
           trueFalse_ = value;
           onChanged();
           return this;
         }
+        /**
+         * <code>optional bool true_false = 5;</code>
+         */
         public Builder clearTrueFalse() {
           bitField0_ = (bitField0_ & ~0x00000010);
           trueFalse_ = false;
           onChanged();
           return this;
         }
-        
+
         // optional .Variables.List list = 6;
         private ralph_protobuffs.VariablesProto.Variables.List list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder> listBuilder_;
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public boolean hasList() {
           return ((bitField0_ & 0x00000020) == 0x00000020);
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.List getList() {
           if (listBuilder_ == null) {
             return list_;
@@ -4113,6 +5618,9 @@ public final class VariablesProto {
             return listBuilder_.getMessage();
           }
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public Builder setList(ralph_protobuffs.VariablesProto.Variables.List value) {
           if (listBuilder_ == null) {
             if (value == null) {
@@ -4126,6 +5634,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000020;
           return this;
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public Builder setList(
             ralph_protobuffs.VariablesProto.Variables.List.Builder builderForValue) {
           if (listBuilder_ == null) {
@@ -4137,6 +5648,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000020;
           return this;
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public Builder mergeList(ralph_protobuffs.VariablesProto.Variables.List value) {
           if (listBuilder_ == null) {
             if (((bitField0_ & 0x00000020) == 0x00000020) &&
@@ -4153,6 +5667,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000020;
           return this;
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public Builder clearList() {
           if (listBuilder_ == null) {
             list_ = ralph_protobuffs.VariablesProto.Variables.List.getDefaultInstance();
@@ -4163,11 +5680,17 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000020);
           return this;
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.List.Builder getListBuilder() {
           bitField0_ |= 0x00000020;
           onChanged();
           return getListFieldBuilder().getBuilder();
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.ListOrBuilder getListOrBuilder() {
           if (listBuilder_ != null) {
             return listBuilder_.getMessageOrBuilder();
@@ -4175,6 +5698,9 @@ public final class VariablesProto {
             return list_;
           }
         }
+        /**
+         * <code>optional .Variables.List list = 6;</code>
+         */
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.List, ralph_protobuffs.VariablesProto.Variables.List.Builder, ralph_protobuffs.VariablesProto.Variables.ListOrBuilder> 
             getListFieldBuilder() {
@@ -4188,14 +5714,20 @@ public final class VariablesProto {
           }
           return listBuilder_;
         }
-        
+
         // optional .Variables.Map map = 7;
         private ralph_protobuffs.VariablesProto.Variables.Map map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> mapBuilder_;
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public boolean hasMap() {
           return ((bitField0_ & 0x00000040) == 0x00000040);
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Map getMap() {
           if (mapBuilder_ == null) {
             return map_;
@@ -4203,6 +5735,9 @@ public final class VariablesProto {
             return mapBuilder_.getMessage();
           }
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public Builder setMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (mapBuilder_ == null) {
             if (value == null) {
@@ -4216,6 +5751,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000040;
           return this;
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public Builder setMap(
             ralph_protobuffs.VariablesProto.Variables.Map.Builder builderForValue) {
           if (mapBuilder_ == null) {
@@ -4227,6 +5765,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000040;
           return this;
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public Builder mergeMap(ralph_protobuffs.VariablesProto.Variables.Map value) {
           if (mapBuilder_ == null) {
             if (((bitField0_ & 0x00000040) == 0x00000040) &&
@@ -4243,6 +5784,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000040;
           return this;
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public Builder clearMap() {
           if (mapBuilder_ == null) {
             map_ = ralph_protobuffs.VariablesProto.Variables.Map.getDefaultInstance();
@@ -4253,11 +5797,17 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000040);
           return this;
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Map.Builder getMapBuilder() {
           bitField0_ |= 0x00000040;
           onChanged();
           return getMapFieldBuilder().getBuilder();
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.MapOrBuilder getMapOrBuilder() {
           if (mapBuilder_ != null) {
             return mapBuilder_.getMessageOrBuilder();
@@ -4265,6 +5815,9 @@ public final class VariablesProto {
             return map_;
           }
         }
+        /**
+         * <code>optional .Variables.Map map = 7;</code>
+         */
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Map, ralph_protobuffs.VariablesProto.Variables.Map.Builder, ralph_protobuffs.VariablesProto.Variables.MapOrBuilder> 
             getMapFieldBuilder() {
@@ -4278,14 +5831,20 @@ public final class VariablesProto {
           }
           return mapBuilder_;
         }
-        
+
         // optional .Variables.Struct struct = 8;
         private ralph_protobuffs.VariablesProto.Variables.Struct struct_ = ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Struct, ralph_protobuffs.VariablesProto.Variables.Struct.Builder, ralph_protobuffs.VariablesProto.Variables.StructOrBuilder> structBuilder_;
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public boolean hasStruct() {
           return ((bitField0_ & 0x00000080) == 0x00000080);
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Struct getStruct() {
           if (structBuilder_ == null) {
             return struct_;
@@ -4293,6 +5852,9 @@ public final class VariablesProto {
             return structBuilder_.getMessage();
           }
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public Builder setStruct(ralph_protobuffs.VariablesProto.Variables.Struct value) {
           if (structBuilder_ == null) {
             if (value == null) {
@@ -4306,6 +5868,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000080;
           return this;
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public Builder setStruct(
             ralph_protobuffs.VariablesProto.Variables.Struct.Builder builderForValue) {
           if (structBuilder_ == null) {
@@ -4317,6 +5882,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000080;
           return this;
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public Builder mergeStruct(ralph_protobuffs.VariablesProto.Variables.Struct value) {
           if (structBuilder_ == null) {
             if (((bitField0_ & 0x00000080) == 0x00000080) &&
@@ -4333,6 +5901,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000080;
           return this;
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public Builder clearStruct() {
           if (structBuilder_ == null) {
             struct_ = ralph_protobuffs.VariablesProto.Variables.Struct.getDefaultInstance();
@@ -4343,11 +5914,17 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000080);
           return this;
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.Struct.Builder getStructBuilder() {
           bitField0_ |= 0x00000080;
           onChanged();
           return getStructFieldBuilder().getBuilder();
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.StructOrBuilder getStructOrBuilder() {
           if (structBuilder_ != null) {
             return structBuilder_.getMessageOrBuilder();
@@ -4355,6 +5932,9 @@ public final class VariablesProto {
             return struct_;
           }
         }
+        /**
+         * <code>optional .Variables.Struct struct = 8;</code>
+         */
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.Struct, ralph_protobuffs.VariablesProto.Variables.Struct.Builder, ralph_protobuffs.VariablesProto.Variables.StructOrBuilder> 
             getStructFieldBuilder() {
@@ -4368,15 +5948,24 @@ public final class VariablesProto {
           }
           return structBuilder_;
         }
-        
+
         // optional bytes service_factory = 9;
         private com.google.protobuf.ByteString serviceFactory_ = com.google.protobuf.ByteString.EMPTY;
+        /**
+         * <code>optional bytes service_factory = 9;</code>
+         */
         public boolean hasServiceFactory() {
           return ((bitField0_ & 0x00000100) == 0x00000100);
         }
+        /**
+         * <code>optional bytes service_factory = 9;</code>
+         */
         public com.google.protobuf.ByteString getServiceFactory() {
           return serviceFactory_;
         }
+        /**
+         * <code>optional bytes service_factory = 9;</code>
+         */
         public Builder setServiceFactory(com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
@@ -4386,20 +5975,29 @@ public final class VariablesProto {
           onChanged();
           return this;
         }
+        /**
+         * <code>optional bytes service_factory = 9;</code>
+         */
         public Builder clearServiceFactory() {
           bitField0_ = (bitField0_ & ~0x00000100);
           serviceFactory_ = getDefaultInstance().getServiceFactory();
           onChanged();
           return this;
         }
-        
+
         // optional .Variables.ServiceReference service_reference = 10;
         private ralph_protobuffs.VariablesProto.Variables.ServiceReference serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.ServiceReference, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder, ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder> serviceReferenceBuilder_;
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public boolean hasServiceReference() {
           return ((bitField0_ & 0x00000200) == 0x00000200);
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.ServiceReference getServiceReference() {
           if (serviceReferenceBuilder_ == null) {
             return serviceReference_;
@@ -4407,6 +6005,9 @@ public final class VariablesProto {
             return serviceReferenceBuilder_.getMessage();
           }
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public Builder setServiceReference(ralph_protobuffs.VariablesProto.Variables.ServiceReference value) {
           if (serviceReferenceBuilder_ == null) {
             if (value == null) {
@@ -4420,6 +6021,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000200;
           return this;
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public Builder setServiceReference(
             ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder builderForValue) {
           if (serviceReferenceBuilder_ == null) {
@@ -4431,6 +6035,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000200;
           return this;
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public Builder mergeServiceReference(ralph_protobuffs.VariablesProto.Variables.ServiceReference value) {
           if (serviceReferenceBuilder_ == null) {
             if (((bitField0_ & 0x00000200) == 0x00000200) &&
@@ -4447,6 +6054,9 @@ public final class VariablesProto {
           bitField0_ |= 0x00000200;
           return this;
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public Builder clearServiceReference() {
           if (serviceReferenceBuilder_ == null) {
             serviceReference_ = ralph_protobuffs.VariablesProto.Variables.ServiceReference.getDefaultInstance();
@@ -4457,11 +6067,17 @@ public final class VariablesProto {
           bitField0_ = (bitField0_ & ~0x00000200);
           return this;
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder getServiceReferenceBuilder() {
           bitField0_ |= 0x00000200;
           onChanged();
           return getServiceReferenceFieldBuilder().getBuilder();
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         public ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder getServiceReferenceOrBuilder() {
           if (serviceReferenceBuilder_ != null) {
             return serviceReferenceBuilder_.getMessageOrBuilder();
@@ -4469,6 +6085,9 @@ public final class VariablesProto {
             return serviceReference_;
           }
         }
+        /**
+         * <code>optional .Variables.ServiceReference service_reference = 10;</code>
+         */
         private com.google.protobuf.SingleFieldBuilder<
             ralph_protobuffs.VariablesProto.Variables.ServiceReference, ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder, ralph_protobuffs.VariablesProto.Variables.ServiceReferenceOrBuilder> 
             getServiceReferenceFieldBuilder() {
@@ -4482,39 +6101,54 @@ public final class VariablesProto {
           }
           return serviceReferenceBuilder_;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Variables.Any)
       }
-      
+
       static {
         defaultInstance = new Any(true);
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Variables.Any)
     }
-    
+
     // repeated .Variables.Any vars = 1;
     public static final int VARS_FIELD_NUMBER = 1;
     private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> vars_;
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getVarsList() {
       return vars_;
     }
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
         getVarsOrBuilderList() {
       return vars_;
     }
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     public int getVarsCount() {
       return vars_.size();
     }
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     public ralph_protobuffs.VariablesProto.Variables.Any getVars(int index) {
       return vars_.get(index);
     }
+    /**
+     * <code>repeated .Variables.Any vars = 1;</code>
+     */
     public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
         int index) {
       return vars_.get(index);
     }
-    
+
     private void initFields() {
       vars_ = java.util.Collections.emptyList();
     }
@@ -4522,7 +6156,7 @@ public final class VariablesProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       for (int i = 0; i < getVarsCount(); i++) {
         if (!getVars(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -4532,7 +6166,7 @@ public final class VariablesProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -4541,12 +6175,12 @@ public final class VariablesProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       for (int i = 0; i < vars_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -4556,94 +6190,83 @@ public final class VariablesProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.VariablesProto.Variables parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.VariablesProto.Variables prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code Variables}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.VariablesProto.VariablesOrBuilder {
@@ -4651,18 +6274,21 @@ public final class VariablesProto {
           getDescriptor() {
         return ralph_protobuffs.VariablesProto.internal_static_Variables_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable;
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.VariablesProto.Variables.class, ralph_protobuffs.VariablesProto.Variables.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.VariablesProto.Variables.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4674,7 +6300,7 @@ public final class VariablesProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (varsBuilder_ == null) {
@@ -4685,20 +6311,20 @@ public final class VariablesProto {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.VariablesProto.Variables.getDescriptor();
+        return ralph_protobuffs.VariablesProto.internal_static_Variables_descriptor;
       }
-      
+
       public ralph_protobuffs.VariablesProto.Variables getDefaultInstanceForType() {
         return ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.VariablesProto.Variables build() {
         ralph_protobuffs.VariablesProto.Variables result = buildPartial();
         if (!result.isInitialized()) {
@@ -4706,17 +6332,7 @@ public final class VariablesProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.VariablesProto.Variables buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.VariablesProto.Variables result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.VariablesProto.Variables buildPartial() {
         ralph_protobuffs.VariablesProto.Variables result = new ralph_protobuffs.VariablesProto.Variables(this);
         int from_bitField0_ = bitField0_;
@@ -4732,7 +6348,7 @@ public final class VariablesProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.VariablesProto.Variables) {
           return mergeFrom((ralph_protobuffs.VariablesProto.Variables)other);
@@ -4741,7 +6357,7 @@ public final class VariablesProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.VariablesProto.Variables other) {
         if (other == ralph_protobuffs.VariablesProto.Variables.getDefaultInstance()) return this;
         if (varsBuilder_ == null) {
@@ -4773,7 +6389,7 @@ public final class VariablesProto {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         for (int i = 0; i < getVarsCount(); i++) {
           if (!getVars(i).isInitialized()) {
@@ -4783,42 +6399,26 @@ public final class VariablesProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              ralph_protobuffs.VariablesProto.Variables.Any.Builder subBuilder = ralph_protobuffs.VariablesProto.Variables.Any.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addVars(subBuilder.buildPartial());
-              break;
-            }
+        ralph_protobuffs.VariablesProto.Variables parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.VariablesProto.Variables) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // repeated .Variables.Any vars = 1;
       private java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> vars_ =
         java.util.Collections.emptyList();
@@ -4828,10 +6428,13 @@ public final class VariablesProto {
           bitField0_ |= 0x00000001;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           ralph_protobuffs.VariablesProto.Variables.Any, ralph_protobuffs.VariablesProto.Variables.Any.Builder, ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> varsBuilder_;
-      
+
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any> getVarsList() {
         if (varsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(vars_);
@@ -4839,6 +6442,9 @@ public final class VariablesProto {
           return varsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public int getVarsCount() {
         if (varsBuilder_ == null) {
           return vars_.size();
@@ -4846,6 +6452,9 @@ public final class VariablesProto {
           return varsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any getVars(int index) {
         if (varsBuilder_ == null) {
           return vars_.get(index);
@@ -4853,6 +6462,9 @@ public final class VariablesProto {
           return varsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder setVars(
           int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
@@ -4867,6 +6479,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder setVars(
           int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
@@ -4878,6 +6493,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder addVars(ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
           if (value == null) {
@@ -4891,6 +6509,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder addVars(
           int index, ralph_protobuffs.VariablesProto.Variables.Any value) {
         if (varsBuilder_ == null) {
@@ -4905,6 +6526,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder addVars(
           ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
@@ -4916,6 +6540,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder addVars(
           int index, ralph_protobuffs.VariablesProto.Variables.Any.Builder builderForValue) {
         if (varsBuilder_ == null) {
@@ -4927,6 +6554,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder addAllVars(
           java.lang.Iterable<? extends ralph_protobuffs.VariablesProto.Variables.Any> values) {
         if (varsBuilder_ == null) {
@@ -4938,6 +6568,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder clearVars() {
         if (varsBuilder_ == null) {
           vars_ = java.util.Collections.emptyList();
@@ -4948,6 +6581,9 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public Builder removeVars(int index) {
         if (varsBuilder_ == null) {
           ensureVarsIsMutable();
@@ -4958,10 +6594,16 @@ public final class VariablesProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any.Builder getVarsBuilder(
           int index) {
         return getVarsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder getVarsOrBuilder(
           int index) {
         if (varsBuilder_ == null) {
@@ -4969,6 +6611,9 @@ public final class VariablesProto {
           return varsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public java.util.List<? extends ralph_protobuffs.VariablesProto.Variables.AnyOrBuilder> 
            getVarsOrBuilderList() {
         if (varsBuilder_ != null) {
@@ -4977,15 +6622,24 @@ public final class VariablesProto {
           return java.util.Collections.unmodifiableList(vars_);
         }
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any.Builder addVarsBuilder() {
         return getVarsFieldBuilder().addBuilder(
             ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public ralph_protobuffs.VariablesProto.Variables.Any.Builder addVarsBuilder(
           int index) {
         return getVarsFieldBuilder().addBuilder(
             index, ralph_protobuffs.VariablesProto.Variables.Any.getDefaultInstance());
       }
+      /**
+       * <code>repeated .Variables.Any vars = 1;</code>
+       */
       public java.util.List<ralph_protobuffs.VariablesProto.Variables.Any.Builder> 
            getVarsBuilderList() {
         return getVarsFieldBuilder().getBuilderList();
@@ -5004,18 +6658,18 @@ public final class VariablesProto {
         }
         return varsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:Variables)
     }
-    
+
     static {
       defaultInstance = new Variables(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:Variables)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_Variables_descriptor;
   private static
@@ -5046,7 +6700,7 @@ public final class VariablesProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Variables_Any_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -5086,49 +6740,37 @@ public final class VariablesProto {
           internal_static_Variables_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_descriptor,
-              new java.lang.String[] { "Vars", },
-              ralph_protobuffs.VariablesProto.Variables.class,
-              ralph_protobuffs.VariablesProto.Variables.Builder.class);
+              new java.lang.String[] { "Vars", });
           internal_static_Variables_List_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(0);
           internal_static_Variables_List_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_List_descriptor,
-              new java.lang.String[] { "ElementTypeIdentifier", "ListValues", },
-              ralph_protobuffs.VariablesProto.Variables.List.class,
-              ralph_protobuffs.VariablesProto.Variables.List.Builder.class);
+              new java.lang.String[] { "ElementTypeIdentifier", "ListValues", });
           internal_static_Variables_Map_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(1);
           internal_static_Variables_Map_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Map_descriptor,
-              new java.lang.String[] { "KeyTypeIdentifier", "ValueTypeIdentifier", "MapIndices", "MapValues", },
-              ralph_protobuffs.VariablesProto.Variables.Map.class,
-              ralph_protobuffs.VariablesProto.Variables.Map.Builder.class);
+              new java.lang.String[] { "KeyTypeIdentifier", "ValueTypeIdentifier", "MapIndices", "MapValues", });
           internal_static_Variables_Struct_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(2);
           internal_static_Variables_Struct_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Struct_descriptor,
-              new java.lang.String[] { "StructIdentifier", "FieldNames", "FieldValues", },
-              ralph_protobuffs.VariablesProto.Variables.Struct.class,
-              ralph_protobuffs.VariablesProto.Variables.Struct.Builder.class);
+              new java.lang.String[] { "StructIdentifier", "FieldNames", "FieldValues", });
           internal_static_Variables_ServiceReference_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(3);
           internal_static_Variables_ServiceReference_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_ServiceReference_descriptor,
-              new java.lang.String[] { "IpAddr", "TcpPort", "ServiceUuid", },
-              ralph_protobuffs.VariablesProto.Variables.ServiceReference.class,
-              ralph_protobuffs.VariablesProto.Variables.ServiceReference.Builder.class);
+              new java.lang.String[] { "IpAddr", "TcpPort", "ServiceUuid", });
           internal_static_Variables_Any_descriptor =
             internal_static_Variables_descriptor.getNestedTypes().get(4);
           internal_static_Variables_Any_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Variables_Any_descriptor,
-              new java.lang.String[] { "VarName", "IsTvar", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", "ServiceReference", },
-              ralph_protobuffs.VariablesProto.Variables.Any.class,
-              ralph_protobuffs.VariablesProto.Variables.Any.Builder.class);
+              new java.lang.String[] { "VarName", "IsTvar", "Num", "Text", "TrueFalse", "List", "Map", "Struct", "ServiceFactory", "ServiceReference", });
           return null;
         }
       };
@@ -5138,6 +6780,6 @@ public final class VariablesProto {
           ralph_protobuffs.UtilProto.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

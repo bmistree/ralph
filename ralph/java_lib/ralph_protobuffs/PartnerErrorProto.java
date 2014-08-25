@@ -10,65 +10,225 @@ public final class PartnerErrorProto {
   }
   public interface PartnerErrorOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .UUID event_uuid = 1;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     boolean hasEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUID getEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
-    
+
     // required .UUID host_uuid = 2;
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     boolean hasHostUuid();
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     ralph_protobuffs.UtilProto.UUID getHostUuid();
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder();
-    
+
     // required .PartnerError.ErrorType type = 3;
+    /**
+     * <code>required .PartnerError.ErrorType type = 3;</code>
+     */
     boolean hasType();
+    /**
+     * <code>required .PartnerError.ErrorType type = 3;</code>
+     */
     ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType getType();
-    
+
     // optional string trace = 4;
+    /**
+     * <code>optional string trace = 4;</code>
+     */
     boolean hasTrace();
-    String getTrace();
+    /**
+     * <code>optional string trace = 4;</code>
+     */
+    java.lang.String getTrace();
+    /**
+     * <code>optional string trace = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getTraceBytes();
   }
+  /**
+   * Protobuf type {@code PartnerError}
+   *
+   * <pre>
+   **
+   *When an exception occurs on a partner endpoint during a sequence
+   *we want to propagate that error back to the root of the event.
+   * </pre>
+   */
   public static final class PartnerError extends
       com.google.protobuf.GeneratedMessage
       implements PartnerErrorOrBuilder {
     // Use PartnerError.newBuilder() to construct.
-    private PartnerError(Builder builder) {
+    private PartnerError(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private PartnerError(boolean noInit) {}
-    
+    private PartnerError(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final PartnerError defaultInstance;
     public static PartnerError getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PartnerError getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PartnerError(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = eventUuid_.toBuilder();
+              }
+              eventUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(eventUuid_);
+                eventUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = hostUuid_.toBuilder();
+              }
+              hostUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(hostUuid_);
+                hostUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType value = ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000004;
+                type_ = value;
+              }
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              trace_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_fieldAccessorTable;
+      return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.PartnerErrorProto.PartnerError.class, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<PartnerError> PARSER =
+        new com.google.protobuf.AbstractParser<PartnerError>() {
+      public PartnerError parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PartnerError(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PartnerError> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code PartnerError.ErrorType}
+     */
     public enum ErrorType
         implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>APPLICATION = 1;</code>
+       */
       APPLICATION(0, 1),
+      /**
+       * <code>NETWORK = 2;</code>
+       */
       NETWORK(1, 2),
       ;
-      
+
+      /**
+       * <code>APPLICATION = 1;</code>
+       */
       public static final int APPLICATION_VALUE = 1;
+      /**
+       * <code>NETWORK = 2;</code>
+       */
       public static final int NETWORK_VALUE = 2;
-      
-      
+
+
       public final int getNumber() { return value; }
-      
+
       public static ErrorType valueOf(int value) {
         switch (value) {
           case 1: return APPLICATION;
@@ -76,7 +236,7 @@ public final class PartnerErrorProto {
           default: return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<ErrorType>
           internalGetValueMap() {
         return internalValueMap;
@@ -88,7 +248,7 @@ public final class PartnerErrorProto {
                 return ErrorType.valueOf(number);
               }
             };
-      
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
           getValueDescriptor() {
         return getDescriptor().getValues().get(index);
@@ -101,11 +261,9 @@ public final class PartnerErrorProto {
           getDescriptor() {
         return ralph_protobuffs.PartnerErrorProto.PartnerError.getDescriptor().getEnumTypes().get(0);
       }
-      
-      private static final ErrorType[] VALUES = {
-        APPLICATION, NETWORK, 
-      };
-      
+
+      private static final ErrorType[] VALUES = values();
+
       public static ErrorType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
@@ -114,87 +272,122 @@ public final class PartnerErrorProto {
         }
         return VALUES[desc.getIndex()];
       }
-      
+
       private final int index;
       private final int value;
-      
+
       private ErrorType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       // @@protoc_insertion_point(enum_scope:PartnerError.ErrorType)
     }
-    
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
     private ralph_protobuffs.UtilProto.UUID eventUuid_;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public boolean hasEventUuid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUID getEventUuid() {
       return eventUuid_;
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
       return eventUuid_;
     }
-    
+
     // required .UUID host_uuid = 2;
     public static final int HOST_UUID_FIELD_NUMBER = 2;
     private ralph_protobuffs.UtilProto.UUID hostUuid_;
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     public boolean hasHostUuid() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.UUID getHostUuid() {
       return hostUuid_;
     }
+    /**
+     * <code>required .UUID host_uuid = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
       return hostUuid_;
     }
-    
+
     // required .PartnerError.ErrorType type = 3;
     public static final int TYPE_FIELD_NUMBER = 3;
     private ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType type_;
+    /**
+     * <code>required .PartnerError.ErrorType type = 3;</code>
+     */
     public boolean hasType() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>required .PartnerError.ErrorType type = 3;</code>
+     */
     public ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType getType() {
       return type_;
     }
-    
+
     // optional string trace = 4;
     public static final int TRACE_FIELD_NUMBER = 4;
     private java.lang.Object trace_;
+    /**
+     * <code>optional string trace = 4;</code>
+     */
     public boolean hasTrace() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public String getTrace() {
+    /**
+     * <code>optional string trace = 4;</code>
+     */
+    public java.lang.String getTrace() {
       java.lang.Object ref = trace_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           trace_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getTraceBytes() {
+    /**
+     * <code>optional string trace = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getTraceBytes() {
       java.lang.Object ref = trace_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         trace_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -205,7 +398,7 @@ public final class PartnerErrorProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasEventUuid()) {
         memoizedIsInitialized = 0;
         return false;
@@ -229,7 +422,7 @@ public final class PartnerErrorProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -247,12 +440,12 @@ public final class PartnerErrorProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -274,94 +467,89 @@ public final class PartnerErrorProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerErrorProto.PartnerError parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.PartnerErrorProto.PartnerError prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code PartnerError}
+     *
+     * <pre>
+     **
+     *When an exception occurs on a partner endpoint during a sequence
+     *we want to propagate that error back to the root of the event.
+     * </pre>
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder {
@@ -369,18 +557,21 @@ public final class PartnerErrorProto {
           getDescriptor() {
         return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_fieldAccessorTable;
+        return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerErrorProto.PartnerError.class, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.PartnerErrorProto.PartnerError.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -393,7 +584,7 @@ public final class PartnerErrorProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (eventUuidBuilder_ == null) {
@@ -414,20 +605,20 @@ public final class PartnerErrorProto {
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.PartnerErrorProto.PartnerError.getDescriptor();
+        return ralph_protobuffs.PartnerErrorProto.internal_static_PartnerError_descriptor;
       }
-      
+
       public ralph_protobuffs.PartnerErrorProto.PartnerError getDefaultInstanceForType() {
         return ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.PartnerErrorProto.PartnerError build() {
         ralph_protobuffs.PartnerErrorProto.PartnerError result = buildPartial();
         if (!result.isInitialized()) {
@@ -435,17 +626,7 @@ public final class PartnerErrorProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.PartnerErrorProto.PartnerError buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.PartnerErrorProto.PartnerError result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.PartnerErrorProto.PartnerError buildPartial() {
         ralph_protobuffs.PartnerErrorProto.PartnerError result = new ralph_protobuffs.PartnerErrorProto.PartnerError(this);
         int from_bitField0_ = bitField0_;
@@ -478,7 +659,7 @@ public final class PartnerErrorProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.PartnerErrorProto.PartnerError) {
           return mergeFrom((ralph_protobuffs.PartnerErrorProto.PartnerError)other);
@@ -487,7 +668,7 @@ public final class PartnerErrorProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.PartnerErrorProto.PartnerError other) {
         if (other == ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance()) return this;
         if (other.hasEventUuid()) {
@@ -500,12 +681,14 @@ public final class PartnerErrorProto {
           setType(other.getType());
         }
         if (other.hasTrace()) {
-          setTrace(other.getTrace());
+          bitField0_ |= 0x00000008;
+          trace_ = other.trace_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasEventUuid()) {
           
@@ -529,77 +712,39 @@ public final class PartnerErrorProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasEventUuid()) {
-                subBuilder.mergeFrom(getEventUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setEventUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 18: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasHostUuid()) {
-                subBuilder.mergeFrom(getHostUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setHostUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-              ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType value = ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                type_ = value;
-              }
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              trace_ = input.readBytes();
-              break;
-            }
+        ralph_protobuffs.PartnerErrorProto.PartnerError parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.PartnerErrorProto.PartnerError) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .UUID event_uuid = 1;
       private ralph_protobuffs.UtilProto.UUID eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> eventUuidBuilder_;
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public boolean hasEventUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getEventUuid() {
         if (eventUuidBuilder_ == null) {
           return eventUuid_;
@@ -607,6 +752,9 @@ public final class PartnerErrorProto {
           return eventUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (value == null) {
@@ -620,6 +768,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (eventUuidBuilder_ == null) {
@@ -631,6 +782,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder mergeEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
@@ -647,6 +801,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder clearEventUuid() {
         if (eventUuidBuilder_ == null) {
           eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -657,11 +814,17 @@ public final class PartnerErrorProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getEventUuidBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getEventUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
         if (eventUuidBuilder_ != null) {
           return eventUuidBuilder_.getMessageOrBuilder();
@@ -669,6 +832,9 @@ public final class PartnerErrorProto {
           return eventUuid_;
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getEventUuidFieldBuilder() {
@@ -682,14 +848,20 @@ public final class PartnerErrorProto {
         }
         return eventUuidBuilder_;
       }
-      
+
       // required .UUID host_uuid = 2;
       private ralph_protobuffs.UtilProto.UUID hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> hostUuidBuilder_;
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public boolean hasHostUuid() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getHostUuid() {
         if (hostUuidBuilder_ == null) {
           return hostUuid_;
@@ -697,6 +869,9 @@ public final class PartnerErrorProto {
           return hostUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public Builder setHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (hostUuidBuilder_ == null) {
           if (value == null) {
@@ -710,6 +885,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public Builder setHostUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (hostUuidBuilder_ == null) {
@@ -721,6 +899,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public Builder mergeHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (hostUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -737,6 +918,9 @@ public final class PartnerErrorProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public Builder clearHostUuid() {
         if (hostUuidBuilder_ == null) {
           hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -747,11 +931,17 @@ public final class PartnerErrorProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getHostUuidBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getHostUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
         if (hostUuidBuilder_ != null) {
           return hostUuidBuilder_.getMessageOrBuilder();
@@ -759,6 +949,9 @@ public final class PartnerErrorProto {
           return hostUuid_;
         }
       }
+      /**
+       * <code>required .UUID host_uuid = 2;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getHostUuidFieldBuilder() {
@@ -772,15 +965,24 @@ public final class PartnerErrorProto {
         }
         return hostUuidBuilder_;
       }
-      
+
       // required .PartnerError.ErrorType type = 3;
       private ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType type_ = ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType.APPLICATION;
+      /**
+       * <code>required .PartnerError.ErrorType type = 3;</code>
+       */
       public boolean hasType() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required .PartnerError.ErrorType type = 3;</code>
+       */
       public ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType getType() {
         return type_;
       }
+      /**
+       * <code>required .PartnerError.ErrorType type = 3;</code>
+       */
       public Builder setType(ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType value) {
         if (value == null) {
           throw new NullPointerException();
@@ -790,29 +992,59 @@ public final class PartnerErrorProto {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .PartnerError.ErrorType type = 3;</code>
+       */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000004);
         type_ = ralph_protobuffs.PartnerErrorProto.PartnerError.ErrorType.APPLICATION;
         onChanged();
         return this;
       }
-      
+
       // optional string trace = 4;
       private java.lang.Object trace_ = "";
+      /**
+       * <code>optional string trace = 4;</code>
+       */
       public boolean hasTrace() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public String getTrace() {
+      /**
+       * <code>optional string trace = 4;</code>
+       */
+      public java.lang.String getTrace() {
         java.lang.Object ref = trace_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           trace_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setTrace(String value) {
+      /**
+       * <code>optional string trace = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getTraceBytes() {
+        java.lang.Object ref = trace_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          trace_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string trace = 4;</code>
+       */
+      public Builder setTrace(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -821,35 +1053,46 @@ public final class PartnerErrorProto {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string trace = 4;</code>
+       */
       public Builder clearTrace() {
         bitField0_ = (bitField0_ & ~0x00000008);
         trace_ = getDefaultInstance().getTrace();
         onChanged();
         return this;
       }
-      void setTrace(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
+      /**
+       * <code>optional string trace = 4;</code>
+       */
+      public Builder setTraceBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
         trace_ = value;
         onChanged();
+        return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:PartnerError)
     }
-    
+
     static {
       defaultInstance = new PartnerError(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:PartnerError)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_PartnerError_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerError_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -875,9 +1118,7 @@ public final class PartnerErrorProto {
           internal_static_PartnerError_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerError_descriptor,
-              new java.lang.String[] { "EventUuid", "HostUuid", "Type", "Trace", },
-              ralph_protobuffs.PartnerErrorProto.PartnerError.class,
-              ralph_protobuffs.PartnerErrorProto.PartnerError.Builder.class);
+              new java.lang.String[] { "EventUuid", "HostUuid", "Type", "Trace", });
           return null;
         }
       };
@@ -887,6 +1128,6 @@ public final class PartnerErrorProto {
           ralph_protobuffs.UtilProto.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

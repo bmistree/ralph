@@ -10,117 +10,441 @@ public final class PartnerFirstPhaseResultMessageProto {
   }
   public interface PartnerFirstPhaseResultMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .UUID event_uuid = 1;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     boolean hasEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUID getEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
-    
+
     // required .UUID sending_host_uuid = 2;
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     boolean hasSendingHostUuid();
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUID getSendingHostUuid();
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder();
-    
+
     // required bool successful = 3;
+    /**
+     * <code>required bool successful = 3;</code>
+     *
+     * <pre>
+     *
+     *True if the message was successful, False otherwise.
+     * </pre>
+     */
     boolean hasSuccessful();
+    /**
+     * <code>required bool successful = 3;</code>
+     *
+     * <pre>
+     *
+     *True if the message was successful, False otherwise.
+     * </pre>
+     */
     boolean getSuccessful();
-    
+
     // repeated .UUID children_event_host_uuids = 4;
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     java.util.List<ralph_protobuffs.UtilProto.UUID> 
         getChildrenEventHostUuidsList();
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index);
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     int getChildrenEventHostUuidsCount();
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
         getChildrenEventHostUuidsOrBuilderList();
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code PartnerFirstPhaseResultMessage}
+   *
+   * <pre>
+   *
+   *We use a two-phase commit process when committing events.  A root
+   *event initiates the first phase of the commit.  When the
+   *corresponding _ActiveEvents running on hosts throughout the
+   *network attempt to perform the first phase of the commit, we must
+   *send their results back to the root.  (So that the root can
+   *determine when to backout or move on to the second phase of the
+   *commit.)  
+   *
+   *This message type is used to send the results of attempting the
+   *first phase of the commit back to a partner.  The partner will
+   *forward the message to its subscriber, which forwards to its
+   *subscriber, etc., up until it gets all the way back to the root.
+   *
+   *The first phase was either successful or not successful.
+   *
+   *If it was successful, we also pass back a list of host uuids.
+   *Each of these correspond to hosts that the root must wait on
+   *before transitioning to second phase of commit.
+   * </pre>
+   */
   public static final class PartnerFirstPhaseResultMessage extends
       com.google.protobuf.GeneratedMessage
       implements PartnerFirstPhaseResultMessageOrBuilder {
     // Use PartnerFirstPhaseResultMessage.newBuilder() to construct.
-    private PartnerFirstPhaseResultMessage(Builder builder) {
+    private PartnerFirstPhaseResultMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private PartnerFirstPhaseResultMessage(boolean noInit) {}
-    
+    private PartnerFirstPhaseResultMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final PartnerFirstPhaseResultMessage defaultInstance;
     public static PartnerFirstPhaseResultMessage getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PartnerFirstPhaseResultMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PartnerFirstPhaseResultMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = eventUuid_.toBuilder();
+              }
+              eventUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(eventUuid_);
+                eventUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = sendingHostUuid_.toBuilder();
+              }
+              sendingHostUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(sendingHostUuid_);
+                sendingHostUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              successful_ = input.readBool();
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                childrenEventHostUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              childrenEventHostUuids_.add(input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          childrenEventHostUuids_ = java.util.Collections.unmodifiableList(childrenEventHostUuids_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable;
+      return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.class, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<PartnerFirstPhaseResultMessage> PARSER =
+        new com.google.protobuf.AbstractParser<PartnerFirstPhaseResultMessage>() {
+      public PartnerFirstPhaseResultMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PartnerFirstPhaseResultMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PartnerFirstPhaseResultMessage> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
     private ralph_protobuffs.UtilProto.UUID eventUuid_;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public boolean hasEventUuid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUID getEventUuid() {
       return eventUuid_;
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
       return eventUuid_;
     }
-    
+
     // required .UUID sending_host_uuid = 2;
     public static final int SENDING_HOST_UUID_FIELD_NUMBER = 2;
     private ralph_protobuffs.UtilProto.UUID sendingHostUuid_;
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     public boolean hasSendingHostUuid() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUID getSendingHostUuid() {
       return sendingHostUuid_;
     }
+    /**
+     * <code>required .UUID sending_host_uuid = 2;</code>
+     *
+     * <pre>
+     *
+     *The uuid of the host that originated the response message.
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder() {
       return sendingHostUuid_;
     }
-    
+
     // required bool successful = 3;
     public static final int SUCCESSFUL_FIELD_NUMBER = 3;
     private boolean successful_;
+    /**
+     * <code>required bool successful = 3;</code>
+     *
+     * <pre>
+     *
+     *True if the message was successful, False otherwise.
+     * </pre>
+     */
     public boolean hasSuccessful() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>required bool successful = 3;</code>
+     *
+     * <pre>
+     *
+     *True if the message was successful, False otherwise.
+     * </pre>
+     */
     public boolean getSuccessful() {
       return successful_;
     }
-    
+
     // repeated .UUID children_event_host_uuids = 4;
     public static final int CHILDREN_EVENT_HOST_UUIDS_FIELD_NUMBER = 4;
     private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventHostUuids_;
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventHostUuidsList() {
       return childrenEventHostUuids_;
     }
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
         getChildrenEventHostUuidsOrBuilderList() {
       return childrenEventHostUuids_;
     }
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     public int getChildrenEventHostUuidsCount() {
       return childrenEventHostUuids_.size();
     }
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index) {
       return childrenEventHostUuids_.get(index);
     }
+    /**
+     * <code>repeated .UUID children_event_host_uuids = 4;</code>
+     *
+     * <pre>
+     *
+     *(Note: when not successful, there will be no elements in this
+     *list.  There may also be no elements in this list if the
+     *respondent did not issue a partner or endpoint call.)
+     * </pre>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
         int index) {
       return childrenEventHostUuids_.get(index);
     }
-    
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -131,7 +455,7 @@ public final class PartnerFirstPhaseResultMessageProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasEventUuid()) {
         memoizedIsInitialized = 0;
         return false;
@@ -161,7 +485,7 @@ public final class PartnerFirstPhaseResultMessageProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -179,12 +503,12 @@ public final class PartnerFirstPhaseResultMessageProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -206,94 +530,105 @@ public final class PartnerFirstPhaseResultMessageProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code PartnerFirstPhaseResultMessage}
+     *
+     * <pre>
+     *
+     *We use a two-phase commit process when committing events.  A root
+     *event initiates the first phase of the commit.  When the
+     *corresponding _ActiveEvents running on hosts throughout the
+     *network attempt to perform the first phase of the commit, we must
+     *send their results back to the root.  (So that the root can
+     *determine when to backout or move on to the second phase of the
+     *commit.)  
+     *
+     *This message type is used to send the results of attempting the
+     *first phase of the commit back to a partner.  The partner will
+     *forward the message to its subscriber, which forwards to its
+     *subscriber, etc., up until it gets all the way back to the root.
+     *
+     *The first phase was either successful or not successful.
+     *
+     *If it was successful, we also pass back a list of host uuids.
+     *Each of these correspond to hosts that the root must wait on
+     *before transitioning to second phase of commit.
+     * </pre>
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessageOrBuilder {
@@ -301,18 +636,21 @@ public final class PartnerFirstPhaseResultMessageProto {
           getDescriptor() {
         return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable;
+        return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.class, ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -326,7 +664,7 @@ public final class PartnerFirstPhaseResultMessageProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (eventUuidBuilder_ == null) {
@@ -351,20 +689,20 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDescriptor();
+        return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.internal_static_PartnerFirstPhaseResultMessage_descriptor;
       }
-      
+
       public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage getDefaultInstanceForType() {
         return ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage build() {
         ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage result = buildPartial();
         if (!result.isInitialized()) {
@@ -372,17 +710,7 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage buildPartial() {
         ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage result = new ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage(this);
         int from_bitField0_ = bitField0_;
@@ -420,7 +748,7 @@ public final class PartnerFirstPhaseResultMessageProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage) {
           return mergeFrom((ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage)other);
@@ -429,7 +757,7 @@ public final class PartnerFirstPhaseResultMessageProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage other) {
         if (other == ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.getDefaultInstance()) return this;
         if (other.hasEventUuid()) {
@@ -470,7 +798,7 @@ public final class PartnerFirstPhaseResultMessageProto {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasEventUuid()) {
           
@@ -500,72 +828,39 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasEventUuid()) {
-                subBuilder.mergeFrom(getEventUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setEventUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 18: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasSendingHostUuid()) {
-                subBuilder.mergeFrom(getSendingHostUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setSendingHostUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              successful_ = input.readBool();
-              break;
-            }
-            case 34: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addChildrenEventHostUuids(subBuilder.buildPartial());
-              break;
-            }
+        ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .UUID event_uuid = 1;
       private ralph_protobuffs.UtilProto.UUID eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> eventUuidBuilder_;
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public boolean hasEventUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getEventUuid() {
         if (eventUuidBuilder_ == null) {
           return eventUuid_;
@@ -573,6 +868,9 @@ public final class PartnerFirstPhaseResultMessageProto {
           return eventUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (value == null) {
@@ -586,6 +884,9 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (eventUuidBuilder_ == null) {
@@ -597,6 +898,9 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder mergeEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
@@ -613,6 +917,9 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder clearEventUuid() {
         if (eventUuidBuilder_ == null) {
           eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -623,11 +930,17 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getEventUuidBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getEventUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
         if (eventUuidBuilder_ != null) {
           return eventUuidBuilder_.getMessageOrBuilder();
@@ -635,6 +948,9 @@ public final class PartnerFirstPhaseResultMessageProto {
           return eventUuid_;
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getEventUuidFieldBuilder() {
@@ -648,14 +964,30 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return eventUuidBuilder_;
       }
-      
+
       // required .UUID sending_host_uuid = 2;
       private ralph_protobuffs.UtilProto.UUID sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> sendingHostUuidBuilder_;
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public boolean hasSendingHostUuid() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID getSendingHostUuid() {
         if (sendingHostUuidBuilder_ == null) {
           return sendingHostUuid_;
@@ -663,6 +995,14 @@ public final class PartnerFirstPhaseResultMessageProto {
           return sendingHostUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public Builder setSendingHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (sendingHostUuidBuilder_ == null) {
           if (value == null) {
@@ -676,6 +1016,14 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public Builder setSendingHostUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (sendingHostUuidBuilder_ == null) {
@@ -687,6 +1035,14 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public Builder mergeSendingHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (sendingHostUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -703,6 +1059,14 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public Builder clearSendingHostUuid() {
         if (sendingHostUuidBuilder_ == null) {
           sendingHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -713,11 +1077,27 @@ public final class PartnerFirstPhaseResultMessageProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getSendingHostUuidBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getSendingHostUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getSendingHostUuidOrBuilder() {
         if (sendingHostUuidBuilder_ != null) {
           return sendingHostUuidBuilder_.getMessageOrBuilder();
@@ -725,6 +1105,14 @@ public final class PartnerFirstPhaseResultMessageProto {
           return sendingHostUuid_;
         }
       }
+      /**
+       * <code>required .UUID sending_host_uuid = 2;</code>
+       *
+       * <pre>
+       *
+       *The uuid of the host that originated the response message.
+       * </pre>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getSendingHostUuidFieldBuilder() {
@@ -738,28 +1126,60 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return sendingHostUuidBuilder_;
       }
-      
+
       // required bool successful = 3;
       private boolean successful_ ;
+      /**
+       * <code>required bool successful = 3;</code>
+       *
+       * <pre>
+       *
+       *True if the message was successful, False otherwise.
+       * </pre>
+       */
       public boolean hasSuccessful() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required bool successful = 3;</code>
+       *
+       * <pre>
+       *
+       *True if the message was successful, False otherwise.
+       * </pre>
+       */
       public boolean getSuccessful() {
         return successful_;
       }
+      /**
+       * <code>required bool successful = 3;</code>
+       *
+       * <pre>
+       *
+       *True if the message was successful, False otherwise.
+       * </pre>
+       */
       public Builder setSuccessful(boolean value) {
         bitField0_ |= 0x00000004;
         successful_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required bool successful = 3;</code>
+       *
+       * <pre>
+       *
+       *True if the message was successful, False otherwise.
+       * </pre>
+       */
       public Builder clearSuccessful() {
         bitField0_ = (bitField0_ & ~0x00000004);
         successful_ = false;
         onChanged();
         return this;
       }
-      
+
       // repeated .UUID children_event_host_uuids = 4;
       private java.util.List<ralph_protobuffs.UtilProto.UUID> childrenEventHostUuids_ =
         java.util.Collections.emptyList();
@@ -769,10 +1189,20 @@ public final class PartnerFirstPhaseResultMessageProto {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> childrenEventHostUuidsBuilder_;
-      
+
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public java.util.List<ralph_protobuffs.UtilProto.UUID> getChildrenEventHostUuidsList() {
         if (childrenEventHostUuidsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(childrenEventHostUuids_);
@@ -780,6 +1210,16 @@ public final class PartnerFirstPhaseResultMessageProto {
           return childrenEventHostUuidsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public int getChildrenEventHostUuidsCount() {
         if (childrenEventHostUuidsBuilder_ == null) {
           return childrenEventHostUuids_.size();
@@ -787,6 +1227,16 @@ public final class PartnerFirstPhaseResultMessageProto {
           return childrenEventHostUuidsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID getChildrenEventHostUuids(int index) {
         if (childrenEventHostUuidsBuilder_ == null) {
           return childrenEventHostUuids_.get(index);
@@ -794,6 +1244,16 @@ public final class PartnerFirstPhaseResultMessageProto {
           return childrenEventHostUuidsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder setChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID value) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -808,6 +1268,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder setChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -819,6 +1289,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder addChildrenEventHostUuids(ralph_protobuffs.UtilProto.UUID value) {
         if (childrenEventHostUuidsBuilder_ == null) {
           if (value == null) {
@@ -832,6 +1312,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder addChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID value) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -846,6 +1336,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder addChildrenEventHostUuids(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -857,6 +1357,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder addChildrenEventHostUuids(
           int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -868,6 +1378,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder addAllChildrenEventHostUuids(
           java.lang.Iterable<? extends ralph_protobuffs.UtilProto.UUID> values) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -879,6 +1399,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder clearChildrenEventHostUuids() {
         if (childrenEventHostUuidsBuilder_ == null) {
           childrenEventHostUuids_ = java.util.Collections.emptyList();
@@ -889,6 +1419,16 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public Builder removeChildrenEventHostUuids(int index) {
         if (childrenEventHostUuidsBuilder_ == null) {
           ensureChildrenEventHostUuidsIsMutable();
@@ -899,10 +1439,30 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return this;
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getChildrenEventHostUuidsBuilder(
           int index) {
         return getChildrenEventHostUuidsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getChildrenEventHostUuidsOrBuilder(
           int index) {
         if (childrenEventHostUuidsBuilder_ == null) {
@@ -910,6 +1470,16 @@ public final class PartnerFirstPhaseResultMessageProto {
           return childrenEventHostUuidsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
            getChildrenEventHostUuidsOrBuilderList() {
         if (childrenEventHostUuidsBuilder_ != null) {
@@ -918,15 +1488,45 @@ public final class PartnerFirstPhaseResultMessageProto {
           return java.util.Collections.unmodifiableList(childrenEventHostUuids_);
         }
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventHostUuidsBuilder() {
         return getChildrenEventHostUuidsFieldBuilder().addBuilder(
             ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder addChildrenEventHostUuidsBuilder(
           int index) {
         return getChildrenEventHostUuidsFieldBuilder().addBuilder(
             index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
       }
+      /**
+       * <code>repeated .UUID children_event_host_uuids = 4;</code>
+       *
+       * <pre>
+       *
+       *(Note: when not successful, there will be no elements in this
+       *list.  There may also be no elements in this list if the
+       *respondent did not issue a partner or endpoint call.)
+       * </pre>
+       */
       public java.util.List<ralph_protobuffs.UtilProto.UUID.Builder> 
            getChildrenEventHostUuidsBuilderList() {
         return getChildrenEventHostUuidsFieldBuilder().getBuilderList();
@@ -945,24 +1545,24 @@ public final class PartnerFirstPhaseResultMessageProto {
         }
         return childrenEventHostUuidsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:PartnerFirstPhaseResultMessage)
     }
-    
+
     static {
       defaultInstance = new PartnerFirstPhaseResultMessage(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:PartnerFirstPhaseResultMessage)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_PartnerFirstPhaseResultMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -989,9 +1589,7 @@ public final class PartnerFirstPhaseResultMessageProto {
           internal_static_PartnerFirstPhaseResultMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerFirstPhaseResultMessage_descriptor,
-              new java.lang.String[] { "EventUuid", "SendingHostUuid", "Successful", "ChildrenEventHostUuids", },
-              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.class,
-              ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage.Builder.class);
+              new java.lang.String[] { "EventUuid", "SendingHostUuid", "Successful", "ChildrenEventHostUuids", });
           return null;
         }
       };
@@ -1001,6 +1599,6 @@ public final class PartnerFirstPhaseResultMessageProto {
           ralph_protobuffs.UtilProto.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

@@ -10,72 +10,196 @@ public final class PromotionProto {
   }
   public interface PromotionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .UUID event_uuid = 1;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     boolean hasEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUID getEventUuid();
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
-    
+
     // required .Priority new_priority = 2;
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     boolean hasNewPriority();
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     ralph_protobuffs.UtilProto.Priority getNewPriority();
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     ralph_protobuffs.UtilProto.PriorityOrBuilder getNewPriorityOrBuilder();
   }
+  /**
+   * Protobuf type {@code Promotion}
+   */
   public static final class Promotion extends
       com.google.protobuf.GeneratedMessage
       implements PromotionOrBuilder {
     // Use Promotion.newBuilder() to construct.
-    private Promotion(Builder builder) {
+    private Promotion(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Promotion(boolean noInit) {}
-    
+    private Promotion(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Promotion defaultInstance;
     public static Promotion getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Promotion getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Promotion(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = eventUuid_.toBuilder();
+              }
+              eventUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(eventUuid_);
+                eventUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              ralph_protobuffs.UtilProto.Priority.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = newPriority_.toBuilder();
+              }
+              newPriority_ = input.readMessage(ralph_protobuffs.UtilProto.Priority.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(newPriority_);
+                newPriority_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.PromotionProto.internal_static_Promotion_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.PromotionProto.internal_static_Promotion_fieldAccessorTable;
+      return ralph_protobuffs.PromotionProto.internal_static_Promotion_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.PromotionProto.Promotion.class, ralph_protobuffs.PromotionProto.Promotion.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<Promotion> PARSER =
+        new com.google.protobuf.AbstractParser<Promotion>() {
+      public Promotion parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Promotion(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Promotion> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
     private ralph_protobuffs.UtilProto.UUID eventUuid_;
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public boolean hasEventUuid() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUID getEventUuid() {
       return eventUuid_;
     }
+    /**
+     * <code>required .UUID event_uuid = 1;</code>
+     */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
       return eventUuid_;
     }
-    
+
     // required .Priority new_priority = 2;
     public static final int NEW_PRIORITY_FIELD_NUMBER = 2;
     private ralph_protobuffs.UtilProto.Priority newPriority_;
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     public boolean hasNewPriority() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.Priority getNewPriority() {
       return newPriority_;
     }
+    /**
+     * <code>required .Priority new_priority = 2;</code>
+     */
     public ralph_protobuffs.UtilProto.PriorityOrBuilder getNewPriorityOrBuilder() {
       return newPriority_;
     }
-    
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       newPriority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -84,7 +208,7 @@ public final class PromotionProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasEventUuid()) {
         memoizedIsInitialized = 0;
         return false;
@@ -104,7 +228,7 @@ public final class PromotionProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -116,12 +240,12 @@ public final class PromotionProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -135,94 +259,83 @@ public final class PromotionProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PromotionProto.Promotion parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.PromotionProto.Promotion prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code Promotion}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.PromotionProto.PromotionOrBuilder {
@@ -230,18 +343,21 @@ public final class PromotionProto {
           getDescriptor() {
         return ralph_protobuffs.PromotionProto.internal_static_Promotion_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.PromotionProto.internal_static_Promotion_fieldAccessorTable;
+        return ralph_protobuffs.PromotionProto.internal_static_Promotion_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PromotionProto.Promotion.class, ralph_protobuffs.PromotionProto.Promotion.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.PromotionProto.Promotion.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -254,7 +370,7 @@ public final class PromotionProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (eventUuidBuilder_ == null) {
@@ -271,20 +387,20 @@ public final class PromotionProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.PromotionProto.Promotion.getDescriptor();
+        return ralph_protobuffs.PromotionProto.internal_static_Promotion_descriptor;
       }
-      
+
       public ralph_protobuffs.PromotionProto.Promotion getDefaultInstanceForType() {
         return ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.PromotionProto.Promotion build() {
         ralph_protobuffs.PromotionProto.Promotion result = buildPartial();
         if (!result.isInitialized()) {
@@ -292,17 +408,7 @@ public final class PromotionProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.PromotionProto.Promotion buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.PromotionProto.Promotion result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.PromotionProto.Promotion buildPartial() {
         ralph_protobuffs.PromotionProto.Promotion result = new ralph_protobuffs.PromotionProto.Promotion(this);
         int from_bitField0_ = bitField0_;
@@ -327,7 +433,7 @@ public final class PromotionProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.PromotionProto.Promotion) {
           return mergeFrom((ralph_protobuffs.PromotionProto.Promotion)other);
@@ -336,7 +442,7 @@ public final class PromotionProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.PromotionProto.Promotion other) {
         if (other == ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance()) return this;
         if (other.hasEventUuid()) {
@@ -348,7 +454,7 @@ public final class PromotionProto {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasEventUuid()) {
           
@@ -368,61 +474,39 @@ public final class PromotionProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = ralph_protobuffs.UtilProto.UUID.newBuilder();
-              if (hasEventUuid()) {
-                subBuilder.mergeFrom(getEventUuid());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setEventUuid(subBuilder.buildPartial());
-              break;
-            }
-            case 18: {
-              ralph_protobuffs.UtilProto.Priority.Builder subBuilder = ralph_protobuffs.UtilProto.Priority.newBuilder();
-              if (hasNewPriority()) {
-                subBuilder.mergeFrom(getNewPriority());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setNewPriority(subBuilder.buildPartial());
-              break;
-            }
+        ralph_protobuffs.PromotionProto.Promotion parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.PromotionProto.Promotion) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .UUID event_uuid = 1;
       private ralph_protobuffs.UtilProto.UUID eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> eventUuidBuilder_;
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public boolean hasEventUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID getEventUuid() {
         if (eventUuidBuilder_ == null) {
           return eventUuid_;
@@ -430,6 +514,9 @@ public final class PromotionProto {
           return eventUuidBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (value == null) {
@@ -443,6 +530,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder setEventUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
         if (eventUuidBuilder_ == null) {
@@ -454,6 +544,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder mergeEventUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
@@ -470,6 +563,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000001;
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public Builder clearEventUuid() {
         if (eventUuidBuilder_ == null) {
           eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
@@ -480,11 +576,17 @@ public final class PromotionProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUID.Builder getEventUuidBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getEventUuidFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
         if (eventUuidBuilder_ != null) {
           return eventUuidBuilder_.getMessageOrBuilder();
@@ -492,6 +594,9 @@ public final class PromotionProto {
           return eventUuid_;
         }
       }
+      /**
+       * <code>required .UUID event_uuid = 1;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getEventUuidFieldBuilder() {
@@ -505,14 +610,20 @@ public final class PromotionProto {
         }
         return eventUuidBuilder_;
       }
-      
+
       // required .Priority new_priority = 2;
       private ralph_protobuffs.UtilProto.Priority newPriority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.Priority, ralph_protobuffs.UtilProto.Priority.Builder, ralph_protobuffs.UtilProto.PriorityOrBuilder> newPriorityBuilder_;
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public boolean hasNewPriority() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.Priority getNewPriority() {
         if (newPriorityBuilder_ == null) {
           return newPriority_;
@@ -520,6 +631,9 @@ public final class PromotionProto {
           return newPriorityBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public Builder setNewPriority(ralph_protobuffs.UtilProto.Priority value) {
         if (newPriorityBuilder_ == null) {
           if (value == null) {
@@ -533,6 +647,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public Builder setNewPriority(
           ralph_protobuffs.UtilProto.Priority.Builder builderForValue) {
         if (newPriorityBuilder_ == null) {
@@ -544,6 +661,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public Builder mergeNewPriority(ralph_protobuffs.UtilProto.Priority value) {
         if (newPriorityBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -560,6 +680,9 @@ public final class PromotionProto {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public Builder clearNewPriority() {
         if (newPriorityBuilder_ == null) {
           newPriority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -570,11 +693,17 @@ public final class PromotionProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.Priority.Builder getNewPriorityBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getNewPriorityFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       public ralph_protobuffs.UtilProto.PriorityOrBuilder getNewPriorityOrBuilder() {
         if (newPriorityBuilder_ != null) {
           return newPriorityBuilder_.getMessageOrBuilder();
@@ -582,6 +711,9 @@ public final class PromotionProto {
           return newPriority_;
         }
       }
+      /**
+       * <code>required .Priority new_priority = 2;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.Priority, ralph_protobuffs.UtilProto.Priority.Builder, ralph_protobuffs.UtilProto.PriorityOrBuilder> 
           getNewPriorityFieldBuilder() {
@@ -595,24 +727,24 @@ public final class PromotionProto {
         }
         return newPriorityBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:Promotion)
     }
-    
+
     static {
       defaultInstance = new Promotion(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:Promotion)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_Promotion_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Promotion_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -636,9 +768,7 @@ public final class PromotionProto {
           internal_static_Promotion_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Promotion_descriptor,
-              new java.lang.String[] { "EventUuid", "NewPriority", },
-              ralph_protobuffs.PromotionProto.Promotion.class,
-              ralph_protobuffs.PromotionProto.Promotion.Builder.class);
+              new java.lang.String[] { "EventUuid", "NewPriority", });
           return null;
         }
       };
@@ -648,6 +778,6 @@ public final class PromotionProto {
           ralph_protobuffs.UtilProto.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

@@ -10,50 +10,129 @@ public final class PartnerStopProto {
   }
   public interface PartnerStopOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required bool dummy = 1;
+    /**
+     * <code>required bool dummy = 1;</code>
+     */
     boolean hasDummy();
+    /**
+     * <code>required bool dummy = 1;</code>
+     */
     boolean getDummy();
   }
+  /**
+   * Protobuf type {@code PartnerStop}
+   */
   public static final class PartnerStop extends
       com.google.protobuf.GeneratedMessage
       implements PartnerStopOrBuilder {
     // Use PartnerStop.newBuilder() to construct.
-    private PartnerStop(Builder builder) {
+    private PartnerStop(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private PartnerStop(boolean noInit) {}
-    
+    private PartnerStop(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final PartnerStop defaultInstance;
     public static PartnerStop getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PartnerStop getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PartnerStop(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              dummy_ = input.readBool();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_fieldAccessorTable;
+      return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ralph_protobuffs.PartnerStopProto.PartnerStop.class, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<PartnerStop> PARSER =
+        new com.google.protobuf.AbstractParser<PartnerStop>() {
+      public PartnerStop parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PartnerStop(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PartnerStop> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required bool dummy = 1;
     public static final int DUMMY_FIELD_NUMBER = 1;
     private boolean dummy_;
+    /**
+     * <code>required bool dummy = 1;</code>
+     */
     public boolean hasDummy() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required bool dummy = 1;</code>
+     */
     public boolean getDummy() {
       return dummy_;
     }
-    
+
     private void initFields() {
       dummy_ = false;
     }
@@ -61,7 +140,7 @@ public final class PartnerStopProto {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasDummy()) {
         memoizedIsInitialized = 0;
         return false;
@@ -69,7 +148,7 @@ public final class PartnerStopProto {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -78,12 +157,12 @@ public final class PartnerStopProto {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -93,94 +172,83 @@ public final class PartnerStopProto {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static ralph_protobuffs.PartnerStopProto.PartnerStop parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(ralph_protobuffs.PartnerStopProto.PartnerStop prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code PartnerStop}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder {
@@ -188,18 +256,21 @@ public final class PartnerStopProto {
           getDescriptor() {
         return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_fieldAccessorTable;
+        return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerStopProto.PartnerStop.class, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder.class);
       }
-      
+
       // Construct using ralph_protobuffs.PartnerStopProto.PartnerStop.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -210,27 +281,27 @@ public final class PartnerStopProto {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         dummy_ = false;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_protobuffs.PartnerStopProto.PartnerStop.getDescriptor();
+        return ralph_protobuffs.PartnerStopProto.internal_static_PartnerStop_descriptor;
       }
-      
+
       public ralph_protobuffs.PartnerStopProto.PartnerStop getDefaultInstanceForType() {
         return ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
       }
-      
+
       public ralph_protobuffs.PartnerStopProto.PartnerStop build() {
         ralph_protobuffs.PartnerStopProto.PartnerStop result = buildPartial();
         if (!result.isInitialized()) {
@@ -238,17 +309,7 @@ public final class PartnerStopProto {
         }
         return result;
       }
-      
-      private ralph_protobuffs.PartnerStopProto.PartnerStop buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        ralph_protobuffs.PartnerStopProto.PartnerStop result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public ralph_protobuffs.PartnerStopProto.PartnerStop buildPartial() {
         ralph_protobuffs.PartnerStopProto.PartnerStop result = new ralph_protobuffs.PartnerStopProto.PartnerStop(this);
         int from_bitField0_ = bitField0_;
@@ -261,7 +322,7 @@ public final class PartnerStopProto {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof ralph_protobuffs.PartnerStopProto.PartnerStop) {
           return mergeFrom((ralph_protobuffs.PartnerStopProto.PartnerStop)other);
@@ -270,7 +331,7 @@ public final class PartnerStopProto {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(ralph_protobuffs.PartnerStopProto.PartnerStop other) {
         if (other == ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance()) return this;
         if (other.hasDummy()) {
@@ -279,7 +340,7 @@ public final class PartnerStopProto {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasDummy()) {
           
@@ -287,79 +348,76 @@ public final class PartnerStopProto {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              dummy_ = input.readBool();
-              break;
-            }
+        ralph_protobuffs.PartnerStopProto.PartnerStop parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (ralph_protobuffs.PartnerStopProto.PartnerStop) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required bool dummy = 1;
       private boolean dummy_ ;
+      /**
+       * <code>required bool dummy = 1;</code>
+       */
       public boolean hasDummy() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required bool dummy = 1;</code>
+       */
       public boolean getDummy() {
         return dummy_;
       }
+      /**
+       * <code>required bool dummy = 1;</code>
+       */
       public Builder setDummy(boolean value) {
         bitField0_ |= 0x00000001;
         dummy_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required bool dummy = 1;</code>
+       */
       public Builder clearDummy() {
         bitField0_ = (bitField0_ & ~0x00000001);
         dummy_ = false;
         onChanged();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:PartnerStop)
     }
-    
+
     static {
       defaultInstance = new PartnerStop(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:PartnerStop)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_PartnerStop_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerStop_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -382,9 +440,7 @@ public final class PartnerStopProto {
           internal_static_PartnerStop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerStop_descriptor,
-              new java.lang.String[] { "Dummy", },
-              ralph_protobuffs.PartnerStopProto.PartnerStop.class,
-              ralph_protobuffs.PartnerStopProto.PartnerStop.Builder.class);
+              new java.lang.String[] { "Dummy", });
           return null;
         }
       };
@@ -393,6 +449,6 @@ public final class PartnerStopProto {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }
