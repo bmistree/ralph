@@ -11,18 +11,3 @@ $(JAVA_GENERATED_FILES) : %_pb2.java : %.proto
 .PHONY : clean
 clean :
 	rm $(JAVA_COMPILE_FOLDER)/*_pb2.java
-
-
-# to add python compile, uncomment lines at top, and use the following
-# for clean, etc.
-
-# .PHONY : all_proto
-# all_proto : $(GENERATED_FILES)
-
-# $(GENERATED_FILES) : %_pb2.py : %.proto
-# 	protoc -I=. --python_out=$(COMPILE_FOLDER) $<
-
-# .PHONY : clean
-# clean :
-# 	rm $(COMPILE_FOLDER)/*_pb2.py
-
