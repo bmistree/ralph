@@ -18,7 +18,7 @@
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
-      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.5.0.jar"/>
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">

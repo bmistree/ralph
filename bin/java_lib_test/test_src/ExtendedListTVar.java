@@ -111,7 +111,8 @@ public class ExtendedListTVar
         {
             // load values into list
             ActiveEvent event =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! list_tvar.get_val(event).get_len_boxed(event).equals(0.0))
                 return false;
@@ -127,7 +128,7 @@ public class ExtendedListTVar
                 return false;
 
             // commit changes
-            event.begin_first_phase_commit();
+            event.local_root_begin_first_phase_commit();
             RootEventParent event_parent =
                 (RootEventParent)event.event_parent;
             ResultType commit_resp =
@@ -138,7 +139,8 @@ public class ExtendedListTVar
             
             // check that list maintains inserted value
             event =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! list_tvar.get_val(event).get_len_boxed(event).equals(3.0))
                 return false;
@@ -150,7 +152,7 @@ public class ExtendedListTVar
                 return false;
 
             // commit read changes
-            event.begin_first_phase_commit();
+            event.local_root_begin_first_phase_commit();
             event_parent =
                 (RootEventParent)event.event_parent;
             commit_resp =
@@ -180,9 +182,11 @@ public class ExtendedListTVar
         try
         {
             ActiveEvent writer =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent reader =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! list_tvar.get_val(reader).get_val_on_key(reader,new Integer(0)).equals(
                     TO_INSERT_0.doubleValue()))
@@ -196,8 +200,8 @@ public class ExtendedListTVar
             list_tvar.get_val(writer).append(
                 writer,new_val);
             
-            reader.begin_first_phase_commit();
-            writer.begin_first_phase_commit();
+            reader.local_root_begin_first_phase_commit();
+            writer.local_root_begin_first_phase_commit();
 
             RootEventParent reader_event_parent =
                 (RootEventParent)reader.event_parent;
@@ -236,9 +240,11 @@ public class ExtendedListTVar
         try
         {
             ActiveEvent rdr1 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent rdr2 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             // read all values with active event rdr1
             if (! list_tvar.get_val(rdr1).get_val_on_key(
@@ -263,8 +269,8 @@ public class ExtendedListTVar
                 return false;
             
             
-            rdr1.begin_first_phase_commit();
-            rdr2.begin_first_phase_commit();
+            rdr1.local_root_begin_first_phase_commit();
+            rdr2.local_root_begin_first_phase_commit();
 
             ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
             ((RootEventParent)rdr2.event_parent).event_complete_queue.take();

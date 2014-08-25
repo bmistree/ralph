@@ -54,17 +54,19 @@ public class NonAtomic
             for (int i =0; i < 20; ++i)
             {
                 ActiveEvent reader =
-                    endpt._act_event_map.create_root_non_atomic_event();
+                    endpt._act_event_map.create_root_non_atomic_event(
+                        endpt,"dummy");
                 ActiveEvent writer =
-                    endpt._act_event_map.create_root_non_atomic_event();
+                    endpt._act_event_map.create_root_non_atomic_event(
+                        endpt,"dummy");
 
                 // atomics reader/writers would not be able to execute
                 // in parallel.
                 num_tvar.get_val(reader);
                 num_tvar.set_val(writer,new Double(359));
 
-                reader.begin_first_phase_commit();
-                writer.begin_first_phase_commit();
+                reader.local_root_begin_first_phase_commit();
+                writer.local_root_begin_first_phase_commit();
                 
                 RootEventParent reader_event_parent =
                     (RootEventParent)reader.event_parent;
@@ -98,14 +100,15 @@ public class NonAtomic
             for (int i = 0; i < 20; ++i)
             {
                 ActiveEvent reader =
-                    endpt._act_event_map.create_root_non_atomic_event();
+                    endpt._act_event_map.create_root_non_atomic_event(
+                        endpt,"dummy");
 
                 if (! num_tvar.get_val(reader).equals(
                         TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
                 {
                     return false;
                 }
-                reader.begin_first_phase_commit();
+                reader.local_root_begin_first_phase_commit();
                 RootEventParent reader_event_parent =
                     (RootEventParent)reader.event_parent;
                 ResultType reader_commit_resp =

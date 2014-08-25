@@ -161,9 +161,15 @@ public class TestClassUtil
         ConnectionObj conn_obj)
     {
         VariableStore vstore = new VariableStore(false);
-        RalphGlobals ralph_globals =
-            new RalphGlobals(next_tcp_service_connection_listening_port);
+
+        RalphGlobals.Parameters ralph_globals_parameters =
+            new RalphGlobals.Parameters();
+        ralph_globals_parameters.tcp_port_to_listen_for_connections_on =
+            next_tcp_service_connection_listening_port;
         next_tcp_service_connection_listening_port += 1;
+        
+        RalphGlobals ralph_globals =
+            new RalphGlobals(ralph_globals_parameters);
         
         // adding a number tvar
         vstore.add_var(

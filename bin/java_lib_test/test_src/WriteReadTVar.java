@@ -54,9 +54,11 @@ public class WriteReadTVar
         try
         {
             ActiveEvent writer =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent reader =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! num_tvar.get_val(reader).equals(
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
@@ -67,8 +69,8 @@ public class WriteReadTVar
             num_tvar.set_val(writer,TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL + 1);
 
             
-            reader.begin_first_phase_commit();
-            writer.begin_first_phase_commit();
+            reader.local_root_begin_first_phase_commit();
+            writer.local_root_begin_first_phase_commit();
 
             RootEventParent reader_event_parent =
                 (RootEventParent)reader.event_parent;
@@ -108,9 +110,11 @@ public class WriteReadTVar
         try
         {
             ActiveEvent rdr1 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent rdr2 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             
             if (! num_tvar.get_val(rdr1).equals(
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
@@ -120,8 +124,8 @@ public class WriteReadTVar
                     TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL))
                 return false;
 
-            rdr1.begin_first_phase_commit();
-            rdr2.begin_first_phase_commit();
+            rdr1.local_root_begin_first_phase_commit();
+            rdr2.local_root_begin_first_phase_commit();
 
             ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
             ((RootEventParent)rdr2.event_parent).event_complete_queue.take();

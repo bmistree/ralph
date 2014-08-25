@@ -57,7 +57,8 @@ public class MapTVarConflict
         {
             // load values into map
             ActiveEvent event =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! map_tvar.get_val(event).get_len_boxed(event).equals(0.0))
                 return false;
@@ -72,7 +73,7 @@ public class MapTVarConflict
                 return false;
 
             // commit changes
-            event.begin_first_phase_commit();
+            event.local_root_begin_first_phase_commit();
             RootEventParent event_parent =
                 (RootEventParent)event.event_parent;
             ResultType commit_resp =
@@ -83,7 +84,8 @@ public class MapTVarConflict
             
             // check that map maintains inserted value
             event =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! map_tvar.get_val(event).get_len_boxed(event).equals(1.0))
                 return false;
@@ -94,7 +96,7 @@ public class MapTVarConflict
                 return false;
 
             // commit read changes
-            event.begin_first_phase_commit();
+            event.local_root_begin_first_phase_commit();
             event_parent =
                 (RootEventParent)event.event_parent;
             commit_resp =
@@ -125,9 +127,11 @@ public class MapTVarConflict
         try
         {
             ActiveEvent writer =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent reader =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
 
             if (! map_tvar.get_val(reader).get_val_on_key(reader,INSERTION_INDEX).equals(
                     ORIGINAL_VAL_INSERTED.doubleValue()))
@@ -140,8 +144,8 @@ public class MapTVarConflict
             map_tvar.get_val(writer).set_val_on_key(
                 writer,INSERTION_INDEX,new_val);
             
-            reader.begin_first_phase_commit();
-            writer.begin_first_phase_commit();
+            reader.local_root_begin_first_phase_commit();
+            writer.local_root_begin_first_phase_commit();
 
             RootEventParent reader_event_parent =
                 (RootEventParent)reader.event_parent;
@@ -180,9 +184,11 @@ public class MapTVarConflict
         try
         {
             ActiveEvent rdr1 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             ActiveEvent rdr2 =
-                endpt._act_event_map.create_root_atomic_event(null);
+                endpt._act_event_map.create_root_atomic_event(
+                    null,endpt,"dummy");
             
             if (! map_tvar.get_val(rdr1).get_val_on_key(
                     rdr1,INSERTION_INDEX).equals(ORIGINAL_VAL_INSERTED.doubleValue()))
@@ -192,8 +198,8 @@ public class MapTVarConflict
                     rdr2,INSERTION_INDEX).equals(ORIGINAL_VAL_INSERTED.doubleValue()))
                 return false;
             
-            rdr1.begin_first_phase_commit();
-            rdr2.begin_first_phase_commit();
+            rdr1.local_root_begin_first_phase_commit();
+            rdr2.local_root_begin_first_phase_commit();
 
             ((RootEventParent)rdr1.event_parent).event_complete_queue.take();
             ((RootEventParent)rdr2.event_parent).event_complete_queue.take();

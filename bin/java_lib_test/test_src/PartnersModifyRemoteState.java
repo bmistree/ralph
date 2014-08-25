@@ -7,7 +7,6 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.Variables;
 import ralph.ActiveEvent;
-import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
 import java.util.ArrayList;
 import ralph.RootEventParent;
@@ -61,11 +60,12 @@ public class PartnersModifyRemoteState
                         false,endpta.ralph_globals);
                 
                 ActiveEvent root_event =
-                    endpta._act_event_map.create_root_atomic_event(null);
+                    endpta._act_event_map.create_root_atomic_event(
+                        null,endpta,"dummy");
                 ExecutingEventContext ctx = endpta.create_context();
 
-                ArrayList<RPCArgObject> arg_list = new ArrayList<RPCArgObject>();
-                arg_list.add(new RPCArgObject(num_var,true));
+                ArrayList<RalphObject> arg_list = new ArrayList<RalphObject>();
+                arg_list.add(num_var);
                 
                 ctx.hide_partner_call(
                     endpta, root_event,"test_increment_local_num",true,
@@ -79,7 +79,7 @@ public class PartnersModifyRemoteState
                     return false;
 
                 // check that can commit changes.
-                root_event.begin_first_phase_commit();
+                root_event.local_root_begin_first_phase_commit();
                 RootEventParent root_event_parent =
                     (RootEventParent)root_event.event_parent;
                 ResultType commit_resp =

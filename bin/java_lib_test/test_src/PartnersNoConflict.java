@@ -7,7 +7,6 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.Variables;
 import ralph.ActiveEvent;
-import ralph.RPCArgObject;
 import ralph.ExecutingEventContext;
 import java.util.ArrayList;
 import ralph.RootEventParent;
@@ -86,7 +85,8 @@ public class PartnersNoConflict
         try
         {
             ActiveEvent root_event =
-                endpta._act_event_map.create_root_atomic_event(null);
+                endpta._act_event_map.create_root_atomic_event(
+                    null,endpta,"dummy");
             ExecutingEventContext ctx = endpta.create_context();
                         
             // grab num object from base scope
@@ -116,10 +116,10 @@ public class PartnersNoConflict
             
             // Issue rpc call to partner
             // set up rpc arguments: pass all as references
-            ArrayList<RPCArgObject> arg_list = new ArrayList<RPCArgObject>();
-            arg_list.add(new RPCArgObject(num_obj,num_arg_ref));
-            arg_list.add(new RPCArgObject(bool_var,bool_arg_ref));
-            arg_list.add(new RPCArgObject(string_var,string_arg_ref));
+            ArrayList<RalphObject> arg_list = new ArrayList<RalphObject>();
+            arg_list.add(num_obj);
+            arg_list.add(bool_var);
+            arg_list.add(string_var);
             
             // actually make call with arguments on partner endpoint
             ctx.hide_partner_call(
@@ -127,7 +127,7 @@ public class PartnersNoConflict
                 arg_list,null);
             
             // check that commit worked
-            root_event.begin_first_phase_commit();
+            root_event.local_root_begin_first_phase_commit();
             RootEventParent root_event_parent =
                 (RootEventParent)root_event.event_parent;
             ResultType commit_resp =
@@ -139,7 +139,8 @@ public class PartnersNoConflict
             // check that the methods on partner endpoint updated the
             // values of local variables correctly
             ActiveEvent check_event =
-                endpta._act_event_map.create_root_atomic_event(null);
+                endpta._act_event_map.create_root_atomic_event(
+                    null,endpta,"dummy");
             
             // determine what the lcal values should be
             double expected_final_double_value =
@@ -177,7 +178,7 @@ public class PartnersNoConflict
             num_obj.set_val(
                 check_event,
                 TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL);
-            check_event.begin_first_phase_commit();
+            check_event.local_root_begin_first_phase_commit();
         }
         catch (Exception ex)
         {
@@ -203,15 +204,16 @@ public class PartnersNoConflict
         try
         {
             ActiveEvent root_event =
-                endpta._act_event_map.create_root_atomic_event(null);
+                endpta._act_event_map.create_root_atomic_event(
+                    null,endpta,"dummy");
 
             ExecutingEventContext ctx = endpta.create_context();
 
             ctx.hide_partner_call(
                 endpta, root_event,"test_partner_method",true,
-                new ArrayList<RPCArgObject> (),null);
+                new ArrayList<RalphObject> (),null);
 
-            root_event.begin_first_phase_commit();
+            root_event.local_root_begin_first_phase_commit();
             
             RootEventParent root_event_parent =
                 (RootEventParent)root_event.event_parent;
