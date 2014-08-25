@@ -18,7 +18,7 @@ public class SingleDeviceVersionResponse
 
     final private SortedSet<SingleDeviceUpdate> update_set =
         new TreeSet<SingleDeviceUpdate>(
-            SingleDeviceUpdate.GLOBAL_LAMPORT_TIME_COMPARATOR);
+            SingleDeviceUpdate.ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
 
     public SingleDeviceVersionResponse(String _device_id)
     {
