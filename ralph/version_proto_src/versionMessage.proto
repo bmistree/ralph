@@ -1,0 +1,7 @@
+option java_package = "ralph_version_protobuffs";
+option java_outer_classname = "VersionMessageProto";
+
+message VersionMessage
+{
+    required uint64 timestamp = 1;
+}
