@@ -13,6 +13,7 @@
   <!-- global properties for this build file -->
   <property name="build.dir" location="${real_dir}/classes"/>
   <property name="proto.dir" location="${real_dir}/../ralph_protobuffs/"/>
+  <property name="version_proto_dir" location="${real_dir}/../ralph_version_protobuffs/"/>
   <property name="exceptions.dir" location="${real_dir}/../RalphExceptions/"/>
   <property name="ralph.dir" location="${real_dir}/../ralph/"/>  
   <property name="connections.dir" location="${real_dir}/../RalphConnObj/"/>
@@ -45,6 +46,18 @@
         />
   </target>
 
+  <target name="compile_version_proto" depends="init" description="compile version msg protos">
+    <javac
+        srcdir="${version_proto_dir}"
+        destdir="${build.dir}"
+        classpath="${protobuf_path}"
+        includeantruntime="false"
+        debug="true"
+        debuglevel="lines,vars,source"
+        />
+  </target>
+
+  
   <target name="compile_exceptions" depends="init" description="compile sources for exceptions">
     <javac srcdir="${exceptions.dir}" destdir="${build.dir}" debug="true"
            debuglevel="lines,vars,source" includeantruntime="false" />
@@ -52,14 +65,16 @@
 
   <target
       name="compile_all"
-      depends="init,compile_proto,compile_exceptions"
+      depends="init,compile_proto,compile_version_proto,compile_exceptions"
       description="compile all libs for project">
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:
                 ${atomic_wrappers.dir}:${data_wrappers.dir}:${ralph_extended_dir}:
                 ${ralph_deserializer_dir}:${ralph_service_connection_listener_dir}:${ralph_versions_dir}"
         destdir="${build.dir}"
-        classpath="${build.dir}/ralph_protobuffs/*.class:${protobuf_path}"
+        classpath="${build.dir}/ralph_protobuffs/*.class:
+                   ${build.dir}/ralph_version_protobuffs/*.class:
+                   ${protobuf_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false" />

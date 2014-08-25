@@ -1,6 +1,8 @@
 package RalphVersions;
 
+import com.google.protobuf.ByteString;
+
 public interface IDeviceSpecificUpdateSerializer<DeviceUpdateType>
 {
-    public byte[] serialize(DeviceUpdateType to_serialize);
+    public ByteString serialize(DeviceUpdateType to_serialize);
 }
