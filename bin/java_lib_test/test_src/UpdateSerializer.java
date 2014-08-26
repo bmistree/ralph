@@ -34,6 +34,7 @@ public class UpdateSerializer
         {
             ByteBuffer bb = ByteBuffer.allocate(SIZE_OF_INT_IN_BYTES);
             bb.putInt(to_serialize);
+            bb.rewind();
             return ByteString.copyFrom(bb);
         }
     }
@@ -80,7 +81,7 @@ public class UpdateSerializer
         {
             to_return = bb.getInt();
         }
-        catch(Exception _ex)
+        catch(Exception ex)
         {
             ex.printStackTrace();
             had_exception.set(true);
