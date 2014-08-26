@@ -11,7 +11,7 @@ import ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateLi
    Should be extended, eg., to serialize a message to be sent over the
    wire.
  */
-public class SingleDeviceVersionResponse
+public class SingleDeviceUpdateList
 {
     /**
        Should be unique to device
@@ -22,7 +22,7 @@ public class SingleDeviceVersionResponse
         new TreeSet<SingleDeviceUpdate>(
             SingleDeviceUpdate.ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
 
-    public SingleDeviceVersionResponse(String _device_id)
+    public SingleDeviceUpdateList(String _device_id)
     {
         device_id = _device_id;
     }
