@@ -6,5 +6,6 @@ import "singleDeviceUpdate.proto";
 message SingleDeviceUpdateListMessage
 {
     required string device_id = 1;
+    // stored in order of increasing root commit lamport time.
     repeated SingleDeviceUpdateMessage update_list = 2;
 }
