@@ -11,97 +11,82 @@ public final class SingleDeviceUpdateProto {
   public interface SingleDeviceUpdateMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string device_id = 1;
+    // required .SingleDeviceUpdateMessage.UpdateType update_type = 1;
     /**
-     * <code>required string device_id = 1;</code>
-     */
-    boolean hasDeviceId();
-    /**
-     * <code>required string device_id = 1;</code>
-     */
-    java.lang.String getDeviceId();
-    /**
-     * <code>required string device_id = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getDeviceIdBytes();
-
-    // required .SingleDeviceUpdateMessage.UpdateType update_type = 2;
-    /**
-     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
      */
     boolean hasUpdateType();
     /**
-     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
      */
     ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType getUpdateType();
 
-    // required uint64 root_commit_lamport_time = 3;
+    // required uint64 root_commit_lamport_time = 2;
     /**
-     * <code>required uint64 root_commit_lamport_time = 3;</code>
+     * <code>required uint64 root_commit_lamport_time = 2;</code>
      */
     boolean hasRootCommitLamportTime();
     /**
-     * <code>required uint64 root_commit_lamport_time = 3;</code>
+     * <code>required uint64 root_commit_lamport_time = 2;</code>
      */
     long getRootCommitLamportTime();
 
-    // required uint64 local_lamport_time = 4;
+    // required uint64 local_lamport_time = 3;
     /**
-     * <code>required uint64 local_lamport_time = 4;</code>
+     * <code>required uint64 local_lamport_time = 3;</code>
      */
     boolean hasLocalLamportTime();
     /**
-     * <code>required uint64 local_lamport_time = 4;</code>
+     * <code>required uint64 local_lamport_time = 3;</code>
      */
     long getLocalLamportTime();
 
-    // required .UUID root_application_uuid = 5;
+    // required .UUID root_application_uuid = 4;
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     boolean hasRootApplicationUuid();
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     ralph_version_protobuffs.UtilProto.UUID getRootApplicationUuid();
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     ralph_version_protobuffs.UtilProto.UUIDOrBuilder getRootApplicationUuidOrBuilder();
 
-    // required string event_name = 6;
+    // required string event_name = 5;
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     boolean hasEventName();
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     java.lang.String getEventName();
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     com.google.protobuf.ByteString
         getEventNameBytes();
 
-    // required .UUID event_uuid = 7;
+    // required .UUID event_uuid = 6;
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     boolean hasEventUuid();
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     ralph_version_protobuffs.UtilProto.UUID getEventUuid();
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     ralph_version_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
 
-    // required bytes update_msg_data = 8;
+    // required bytes update_msg_data = 7;
     /**
-     * <code>required bytes update_msg_data = 8;</code>
+     * <code>required bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
@@ -110,7 +95,7 @@ public final class SingleDeviceUpdateProto {
      */
     boolean hasUpdateMsgData();
     /**
-     * <code>required bytes update_msg_data = 8;</code>
+     * <code>required bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
@@ -170,35 +155,30 @@ public final class SingleDeviceUpdateProto {
               }
               break;
             }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              deviceId_ = input.readBytes();
-              break;
-            }
-            case 16: {
+            case 8: {
               int rawValue = input.readEnum();
               ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType value = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
+                unknownFields.mergeVarintField(1, rawValue);
               } else {
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000001;
                 updateType_ = value;
               }
               break;
             }
-            case 24: {
-              bitField0_ |= 0x00000004;
+            case 16: {
+              bitField0_ |= 0x00000002;
               rootCommitLamportTime_ = input.readUInt64();
               break;
             }
-            case 32: {
-              bitField0_ |= 0x00000008;
+            case 24: {
+              bitField0_ |= 0x00000004;
               localLamportTime_ = input.readUInt64();
               break;
             }
-            case 42: {
+            case 34: {
               ralph_version_protobuffs.UtilProto.UUID.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
                 subBuilder = rootApplicationUuid_.toBuilder();
               }
               rootApplicationUuid_ = input.readMessage(ralph_version_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
@@ -206,17 +186,17 @@ public final class SingleDeviceUpdateProto {
                 subBuilder.mergeFrom(rootApplicationUuid_);
                 rootApplicationUuid_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               break;
             }
-            case 50: {
-              bitField0_ |= 0x00000020;
+            case 42: {
+              bitField0_ |= 0x00000010;
               eventName_ = input.readBytes();
               break;
             }
-            case 58: {
+            case 50: {
               ralph_version_protobuffs.UtilProto.UUID.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000040) == 0x00000040)) {
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
                 subBuilder = eventUuid_.toBuilder();
               }
               eventUuid_ = input.readMessage(ralph_version_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
@@ -224,11 +204,11 @@ public final class SingleDeviceUpdateProto {
                 subBuilder.mergeFrom(eventUuid_);
                 eventUuid_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000020;
               break;
             }
-            case 66: {
-              bitField0_ |= 0x00000080;
+            case 58: {
+              bitField0_ |= 0x00000040;
               updateMsgData_ = input.readBytes();
               break;
             }
@@ -363,130 +343,87 @@ public final class SingleDeviceUpdateProto {
     }
 
     private int bitField0_;
-    // required string device_id = 1;
-    public static final int DEVICE_ID_FIELD_NUMBER = 1;
-    private java.lang.Object deviceId_;
+    // required .SingleDeviceUpdateMessage.UpdateType update_type = 1;
+    public static final int UPDATE_TYPE_FIELD_NUMBER = 1;
+    private ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType updateType_;
     /**
-     * <code>required string device_id = 1;</code>
+     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
      */
-    public boolean hasDeviceId() {
+    public boolean hasUpdateType() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string device_id = 1;</code>
-     */
-    public java.lang.String getDeviceId() {
-      java.lang.Object ref = deviceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          deviceId_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string device_id = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDeviceIdBytes() {
-      java.lang.Object ref = deviceId_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        deviceId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required .SingleDeviceUpdateMessage.UpdateType update_type = 2;
-    public static final int UPDATE_TYPE_FIELD_NUMBER = 2;
-    private ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType updateType_;
-    /**
-     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
-     */
-    public boolean hasUpdateType() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+     * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
      */
     public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType getUpdateType() {
       return updateType_;
     }
 
-    // required uint64 root_commit_lamport_time = 3;
-    public static final int ROOT_COMMIT_LAMPORT_TIME_FIELD_NUMBER = 3;
+    // required uint64 root_commit_lamport_time = 2;
+    public static final int ROOT_COMMIT_LAMPORT_TIME_FIELD_NUMBER = 2;
     private long rootCommitLamportTime_;
     /**
-     * <code>required uint64 root_commit_lamport_time = 3;</code>
+     * <code>required uint64 root_commit_lamport_time = 2;</code>
      */
     public boolean hasRootCommitLamportTime() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required uint64 root_commit_lamport_time = 3;</code>
+     * <code>required uint64 root_commit_lamport_time = 2;</code>
      */
     public long getRootCommitLamportTime() {
       return rootCommitLamportTime_;
     }
 
-    // required uint64 local_lamport_time = 4;
-    public static final int LOCAL_LAMPORT_TIME_FIELD_NUMBER = 4;
+    // required uint64 local_lamport_time = 3;
+    public static final int LOCAL_LAMPORT_TIME_FIELD_NUMBER = 3;
     private long localLamportTime_;
     /**
-     * <code>required uint64 local_lamport_time = 4;</code>
+     * <code>required uint64 local_lamport_time = 3;</code>
      */
     public boolean hasLocalLamportTime() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required uint64 local_lamport_time = 4;</code>
+     * <code>required uint64 local_lamport_time = 3;</code>
      */
     public long getLocalLamportTime() {
       return localLamportTime_;
     }
 
-    // required .UUID root_application_uuid = 5;
-    public static final int ROOT_APPLICATION_UUID_FIELD_NUMBER = 5;
+    // required .UUID root_application_uuid = 4;
+    public static final int ROOT_APPLICATION_UUID_FIELD_NUMBER = 4;
     private ralph_version_protobuffs.UtilProto.UUID rootApplicationUuid_;
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     public boolean hasRootApplicationUuid() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     public ralph_version_protobuffs.UtilProto.UUID getRootApplicationUuid() {
       return rootApplicationUuid_;
     }
     /**
-     * <code>required .UUID root_application_uuid = 5;</code>
+     * <code>required .UUID root_application_uuid = 4;</code>
      */
     public ralph_version_protobuffs.UtilProto.UUIDOrBuilder getRootApplicationUuidOrBuilder() {
       return rootApplicationUuid_;
     }
 
-    // required string event_name = 6;
-    public static final int EVENT_NAME_FIELD_NUMBER = 6;
+    // required string event_name = 5;
+    public static final int EVENT_NAME_FIELD_NUMBER = 5;
     private java.lang.Object eventName_;
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     public boolean hasEventName() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     public java.lang.String getEventName() {
       java.lang.Object ref = eventName_;
@@ -503,7 +440,7 @@ public final class SingleDeviceUpdateProto {
       }
     }
     /**
-     * <code>required string event_name = 6;</code>
+     * <code>required string event_name = 5;</code>
      */
     public com.google.protobuf.ByteString
         getEventNameBytes() {
@@ -519,33 +456,33 @@ public final class SingleDeviceUpdateProto {
       }
     }
 
-    // required .UUID event_uuid = 7;
-    public static final int EVENT_UUID_FIELD_NUMBER = 7;
+    // required .UUID event_uuid = 6;
+    public static final int EVENT_UUID_FIELD_NUMBER = 6;
     private ralph_version_protobuffs.UtilProto.UUID eventUuid_;
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     public boolean hasEventUuid() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     public ralph_version_protobuffs.UtilProto.UUID getEventUuid() {
       return eventUuid_;
     }
     /**
-     * <code>required .UUID event_uuid = 7;</code>
+     * <code>required .UUID event_uuid = 6;</code>
      */
     public ralph_version_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
       return eventUuid_;
     }
 
-    // required bytes update_msg_data = 8;
-    public static final int UPDATE_MSG_DATA_FIELD_NUMBER = 8;
+    // required bytes update_msg_data = 7;
+    public static final int UPDATE_MSG_DATA_FIELD_NUMBER = 7;
     private com.google.protobuf.ByteString updateMsgData_;
     /**
-     * <code>required bytes update_msg_data = 8;</code>
+     * <code>required bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
@@ -553,10 +490,10 @@ public final class SingleDeviceUpdateProto {
      * </pre>
      */
     public boolean hasUpdateMsgData() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>required bytes update_msg_data = 8;</code>
+     * <code>required bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
@@ -568,7 +505,6 @@ public final class SingleDeviceUpdateProto {
     }
 
     private void initFields() {
-      deviceId_ = "";
       updateType_ = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.STAGE;
       rootCommitLamportTime_ = 0L;
       localLamportTime_ = 0L;
@@ -582,10 +518,6 @@ public final class SingleDeviceUpdateProto {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasDeviceId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasUpdateType()) {
         memoizedIsInitialized = 0;
         return false;
@@ -630,28 +562,25 @@ public final class SingleDeviceUpdateProto {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getDeviceIdBytes());
+        output.writeEnum(1, updateType_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, updateType_.getNumber());
+        output.writeUInt64(2, rootCommitLamportTime_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeUInt64(3, rootCommitLamportTime_);
+        output.writeUInt64(3, localLamportTime_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeUInt64(4, localLamportTime_);
+        output.writeMessage(4, rootApplicationUuid_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(5, rootApplicationUuid_);
+        output.writeBytes(5, getEventNameBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(6, getEventNameBytes());
+        output.writeMessage(6, eventUuid_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeMessage(7, eventUuid_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeBytes(8, updateMsgData_);
+        output.writeBytes(7, updateMsgData_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -664,35 +593,31 @@ public final class SingleDeviceUpdateProto {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getDeviceIdBytes());
+          .computeEnumSize(1, updateType_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, updateType_.getNumber());
+          .computeUInt64Size(2, rootCommitLamportTime_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(3, rootCommitLamportTime_);
+          .computeUInt64Size(3, localLamportTime_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(4, localLamportTime_);
+          .computeMessageSize(4, rootApplicationUuid_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, rootApplicationUuid_);
+          .computeBytesSize(5, getEventNameBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, getEventNameBytes());
+          .computeMessageSize(6, eventUuid_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, eventUuid_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, updateMsgData_);
+          .computeBytesSize(7, updateMsgData_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -812,30 +737,28 @@ public final class SingleDeviceUpdateProto {
 
       public Builder clear() {
         super.clear();
-        deviceId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         updateType_ = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.STAGE;
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         rootCommitLamportTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         localLamportTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (rootApplicationUuidBuilder_ == null) {
           rootApplicationUuid_ = ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance();
         } else {
           rootApplicationUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         eventName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         if (eventUuidBuilder_ == null) {
           eventUuid_ = ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance();
         } else {
           eventUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         updateMsgData_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -867,41 +790,37 @@ public final class SingleDeviceUpdateProto {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.deviceId_ = deviceId_;
+        result.updateType_ = updateType_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.updateType_ = updateType_;
+        result.rootCommitLamportTime_ = rootCommitLamportTime_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.rootCommitLamportTime_ = rootCommitLamportTime_;
+        result.localLamportTime_ = localLamportTime_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
-        }
-        result.localLamportTime_ = localLamportTime_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
         }
         if (rootApplicationUuidBuilder_ == null) {
           result.rootApplicationUuid_ = rootApplicationUuid_;
         } else {
           result.rootApplicationUuid_ = rootApplicationUuidBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
         }
         result.eventName_ = eventName_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
         }
         if (eventUuidBuilder_ == null) {
           result.eventUuid_ = eventUuid_;
         } else {
           result.eventUuid_ = eventUuidBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
         }
         result.updateMsgData_ = updateMsgData_;
         result.bitField0_ = to_bitField0_;
@@ -920,11 +839,6 @@ public final class SingleDeviceUpdateProto {
 
       public Builder mergeFrom(ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage other) {
         if (other == ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.getDefaultInstance()) return this;
-        if (other.hasDeviceId()) {
-          bitField0_ |= 0x00000001;
-          deviceId_ = other.deviceId_;
-          onChanged();
-        }
         if (other.hasUpdateType()) {
           setUpdateType(other.getUpdateType());
         }
@@ -938,7 +852,7 @@ public final class SingleDeviceUpdateProto {
           mergeRootApplicationUuid(other.getRootApplicationUuid());
         }
         if (other.hasEventName()) {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000010;
           eventName_ = other.eventName_;
           onChanged();
         }
@@ -953,10 +867,6 @@ public final class SingleDeviceUpdateProto {
       }
 
       public final boolean isInitialized() {
-        if (!hasDeviceId()) {
-          
-          return false;
-        }
         if (!hasUpdateType()) {
           
           return false;
@@ -1015,194 +925,120 @@ public final class SingleDeviceUpdateProto {
       }
       private int bitField0_;
 
-      // required string device_id = 1;
-      private java.lang.Object deviceId_ = "";
+      // required .SingleDeviceUpdateMessage.UpdateType update_type = 1;
+      private ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType updateType_ = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.STAGE;
       /**
-       * <code>required string device_id = 1;</code>
+       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
        */
-      public boolean hasDeviceId() {
+      public boolean hasUpdateType() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string device_id = 1;</code>
-       */
-      public java.lang.String getDeviceId() {
-        java.lang.Object ref = deviceId_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          deviceId_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string device_id = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDeviceIdBytes() {
-        java.lang.Object ref = deviceId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          deviceId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string device_id = 1;</code>
-       */
-      public Builder setDeviceId(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        deviceId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string device_id = 1;</code>
-       */
-      public Builder clearDeviceId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        deviceId_ = getDefaultInstance().getDeviceId();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string device_id = 1;</code>
-       */
-      public Builder setDeviceIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        deviceId_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required .SingleDeviceUpdateMessage.UpdateType update_type = 2;
-      private ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType updateType_ = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.STAGE;
-      /**
-       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
-       */
-      public boolean hasUpdateType() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType getUpdateType() {
         return updateType_;
       }
       /**
-       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
        */
       public Builder setUpdateType(ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000001;
         updateType_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 2;</code>
+       * <code>required .SingleDeviceUpdateMessage.UpdateType update_type = 1;</code>
        */
       public Builder clearUpdateType() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000001);
         updateType_ = ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.UpdateType.STAGE;
         onChanged();
         return this;
       }
 
-      // required uint64 root_commit_lamport_time = 3;
+      // required uint64 root_commit_lamport_time = 2;
       private long rootCommitLamportTime_ ;
       /**
-       * <code>required uint64 root_commit_lamport_time = 3;</code>
+       * <code>required uint64 root_commit_lamport_time = 2;</code>
        */
       public boolean hasRootCommitLamportTime() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required uint64 root_commit_lamport_time = 3;</code>
+       * <code>required uint64 root_commit_lamport_time = 2;</code>
        */
       public long getRootCommitLamportTime() {
         return rootCommitLamportTime_;
       }
       /**
-       * <code>required uint64 root_commit_lamport_time = 3;</code>
+       * <code>required uint64 root_commit_lamport_time = 2;</code>
        */
       public Builder setRootCommitLamportTime(long value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000002;
         rootCommitLamportTime_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint64 root_commit_lamport_time = 3;</code>
+       * <code>required uint64 root_commit_lamport_time = 2;</code>
        */
       public Builder clearRootCommitLamportTime() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         rootCommitLamportTime_ = 0L;
         onChanged();
         return this;
       }
 
-      // required uint64 local_lamport_time = 4;
+      // required uint64 local_lamport_time = 3;
       private long localLamportTime_ ;
       /**
-       * <code>required uint64 local_lamport_time = 4;</code>
+       * <code>required uint64 local_lamport_time = 3;</code>
        */
       public boolean hasLocalLamportTime() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required uint64 local_lamport_time = 4;</code>
+       * <code>required uint64 local_lamport_time = 3;</code>
        */
       public long getLocalLamportTime() {
         return localLamportTime_;
       }
       /**
-       * <code>required uint64 local_lamport_time = 4;</code>
+       * <code>required uint64 local_lamport_time = 3;</code>
        */
       public Builder setLocalLamportTime(long value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000004;
         localLamportTime_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint64 local_lamport_time = 4;</code>
+       * <code>required uint64 local_lamport_time = 3;</code>
        */
       public Builder clearLocalLamportTime() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         localLamportTime_ = 0L;
         onChanged();
         return this;
       }
 
-      // required .UUID root_application_uuid = 5;
+      // required .UUID root_application_uuid = 4;
       private ralph_version_protobuffs.UtilProto.UUID rootApplicationUuid_ = ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_version_protobuffs.UtilProto.UUID, ralph_version_protobuffs.UtilProto.UUID.Builder, ralph_version_protobuffs.UtilProto.UUIDOrBuilder> rootApplicationUuidBuilder_;
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public boolean hasRootApplicationUuid() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUID getRootApplicationUuid() {
         if (rootApplicationUuidBuilder_ == null) {
@@ -1212,7 +1048,7 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public Builder setRootApplicationUuid(ralph_version_protobuffs.UtilProto.UUID value) {
         if (rootApplicationUuidBuilder_ == null) {
@@ -1224,11 +1060,11 @@ public final class SingleDeviceUpdateProto {
         } else {
           rootApplicationUuidBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public Builder setRootApplicationUuid(
           ralph_version_protobuffs.UtilProto.UUID.Builder builderForValue) {
@@ -1238,15 +1074,15 @@ public final class SingleDeviceUpdateProto {
         } else {
           rootApplicationUuidBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public Builder mergeRootApplicationUuid(ralph_version_protobuffs.UtilProto.UUID value) {
         if (rootApplicationUuidBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
               rootApplicationUuid_ != ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance()) {
             rootApplicationUuid_ =
               ralph_version_protobuffs.UtilProto.UUID.newBuilder(rootApplicationUuid_).mergeFrom(value).buildPartial();
@@ -1257,11 +1093,11 @@ public final class SingleDeviceUpdateProto {
         } else {
           rootApplicationUuidBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public Builder clearRootApplicationUuid() {
         if (rootApplicationUuidBuilder_ == null) {
@@ -1270,19 +1106,19 @@ public final class SingleDeviceUpdateProto {
         } else {
           rootApplicationUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUID.Builder getRootApplicationUuidBuilder() {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         onChanged();
         return getRootApplicationUuidFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUIDOrBuilder getRootApplicationUuidOrBuilder() {
         if (rootApplicationUuidBuilder_ != null) {
@@ -1292,7 +1128,7 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required .UUID root_application_uuid = 5;</code>
+       * <code>required .UUID root_application_uuid = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_version_protobuffs.UtilProto.UUID, ralph_version_protobuffs.UtilProto.UUID.Builder, ralph_version_protobuffs.UtilProto.UUIDOrBuilder> 
@@ -1308,16 +1144,16 @@ public final class SingleDeviceUpdateProto {
         return rootApplicationUuidBuilder_;
       }
 
-      // required string event_name = 6;
+      // required string event_name = 5;
       private java.lang.Object eventName_ = "";
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public boolean hasEventName() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public java.lang.String getEventName() {
         java.lang.Object ref = eventName_;
@@ -1331,7 +1167,7 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public com.google.protobuf.ByteString
           getEventNameBytes() {
@@ -1347,53 +1183,53 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public Builder setEventName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000010;
         eventName_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public Builder clearEventName() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         eventName_ = getDefaultInstance().getEventName();
         onChanged();
         return this;
       }
       /**
-       * <code>required string event_name = 6;</code>
+       * <code>required string event_name = 5;</code>
        */
       public Builder setEventNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000010;
         eventName_ = value;
         onChanged();
         return this;
       }
 
-      // required .UUID event_uuid = 7;
+      // required .UUID event_uuid = 6;
       private ralph_version_protobuffs.UtilProto.UUID eventUuid_ = ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_version_protobuffs.UtilProto.UUID, ralph_version_protobuffs.UtilProto.UUID.Builder, ralph_version_protobuffs.UtilProto.UUIDOrBuilder> eventUuidBuilder_;
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public boolean hasEventUuid() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUID getEventUuid() {
         if (eventUuidBuilder_ == null) {
@@ -1403,7 +1239,7 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public Builder setEventUuid(ralph_version_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
@@ -1415,11 +1251,11 @@ public final class SingleDeviceUpdateProto {
         } else {
           eventUuidBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000020;
         return this;
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public Builder setEventUuid(
           ralph_version_protobuffs.UtilProto.UUID.Builder builderForValue) {
@@ -1429,15 +1265,15 @@ public final class SingleDeviceUpdateProto {
         } else {
           eventUuidBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000020;
         return this;
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public Builder mergeEventUuid(ralph_version_protobuffs.UtilProto.UUID value) {
         if (eventUuidBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
               eventUuid_ != ralph_version_protobuffs.UtilProto.UUID.getDefaultInstance()) {
             eventUuid_ =
               ralph_version_protobuffs.UtilProto.UUID.newBuilder(eventUuid_).mergeFrom(value).buildPartial();
@@ -1448,11 +1284,11 @@ public final class SingleDeviceUpdateProto {
         } else {
           eventUuidBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000020;
         return this;
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public Builder clearEventUuid() {
         if (eventUuidBuilder_ == null) {
@@ -1461,19 +1297,19 @@ public final class SingleDeviceUpdateProto {
         } else {
           eventUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUID.Builder getEventUuidBuilder() {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000020;
         onChanged();
         return getEventUuidFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       public ralph_version_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder() {
         if (eventUuidBuilder_ != null) {
@@ -1483,7 +1319,7 @@ public final class SingleDeviceUpdateProto {
         }
       }
       /**
-       * <code>required .UUID event_uuid = 7;</code>
+       * <code>required .UUID event_uuid = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_version_protobuffs.UtilProto.UUID, ralph_version_protobuffs.UtilProto.UUID.Builder, ralph_version_protobuffs.UtilProto.UUIDOrBuilder> 
@@ -1499,10 +1335,10 @@ public final class SingleDeviceUpdateProto {
         return eventUuidBuilder_;
       }
 
-      // required bytes update_msg_data = 8;
+      // required bytes update_msg_data = 7;
       private com.google.protobuf.ByteString updateMsgData_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes update_msg_data = 8;</code>
+       * <code>required bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
@@ -1510,10 +1346,10 @@ public final class SingleDeviceUpdateProto {
        * </pre>
        */
       public boolean hasUpdateMsgData() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required bytes update_msg_data = 8;</code>
+       * <code>required bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
@@ -1524,7 +1360,7 @@ public final class SingleDeviceUpdateProto {
         return updateMsgData_;
       }
       /**
-       * <code>required bytes update_msg_data = 8;</code>
+       * <code>required bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
@@ -1535,13 +1371,13 @@ public final class SingleDeviceUpdateProto {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000080;
+  bitField0_ |= 0x00000040;
         updateMsgData_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bytes update_msg_data = 8;</code>
+       * <code>required bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
@@ -1549,7 +1385,7 @@ public final class SingleDeviceUpdateProto {
        * </pre>
        */
       public Builder clearUpdateMsgData() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000040);
         updateMsgData_ = getDefaultInstance().getUpdateMsgData();
         onChanged();
         return this;
@@ -1580,17 +1416,17 @@ public final class SingleDeviceUpdateProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030singleDeviceUpdate.proto\032\nutil.proto\"\312" +
-      "\002\n\031SingleDeviceUpdateMessage\022\021\n\tdevice_i" +
-      "d\030\001 \002(\t\022:\n\013update_type\030\002 \002(\0162%.SingleDev" +
-      "iceUpdateMessage.UpdateType\022 \n\030root_comm" +
-      "it_lamport_time\030\003 \002(\004\022\032\n\022local_lamport_t" +
-      "ime\030\004 \002(\004\022$\n\025root_application_uuid\030\005 \002(\013" +
-      "2\005.UUID\022\022\n\nevent_name\030\006 \002(\t\022\031\n\nevent_uui" +
-      "d\030\007 \002(\0132\005.UUID\022\027\n\017update_msg_data\030\010 \002(\014\"" +
-      "2\n\nUpdateType\022\t\n\005STAGE\020\000\022\014\n\010COMPLETE\020\001\022\013" +
-      "\n\007BACKOUT\020\002B3\n\030ralph_version_protobuffsB",
-      "\027SingleDeviceUpdateProto"
+      "\n\030singleDeviceUpdate.proto\032\nutil.proto\"\267" +
+      "\002\n\031SingleDeviceUpdateMessage\022:\n\013update_t" +
+      "ype\030\001 \002(\0162%.SingleDeviceUpdateMessage.Up" +
+      "dateType\022 \n\030root_commit_lamport_time\030\002 \002" +
+      "(\004\022\032\n\022local_lamport_time\030\003 \002(\004\022$\n\025root_a" +
+      "pplication_uuid\030\004 \002(\0132\005.UUID\022\022\n\nevent_na" +
+      "me\030\005 \002(\t\022\031\n\nevent_uuid\030\006 \002(\0132\005.UUID\022\027\n\017u" +
+      "pdate_msg_data\030\007 \002(\014\"2\n\nUpdateType\022\t\n\005ST" +
+      "AGE\020\000\022\014\n\010COMPLETE\020\001\022\013\n\007BACKOUT\020\002B3\n\030ralp" +
+      "h_version_protobuffsB\027SingleDeviceUpdate",
+      "Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1602,7 +1438,7 @@ public final class SingleDeviceUpdateProto {
           internal_static_SingleDeviceUpdateMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_SingleDeviceUpdateMessage_descriptor,
-              new java.lang.String[] { "DeviceId", "UpdateType", "RootCommitLamportTime", "LocalLamportTime", "RootApplicationUuid", "EventName", "EventUuid", "UpdateMsgData", });
+              new java.lang.String[] { "UpdateType", "RootCommitLamportTime", "LocalLamportTime", "RootApplicationUuid", "EventName", "EventUuid", "UpdateMsgData", });
           return null;
         }
       };

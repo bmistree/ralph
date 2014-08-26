@@ -5,22 +5,21 @@ import "util.proto";
 
 message SingleDeviceUpdateMessage
 {
-    required string device_id = 1;
     enum UpdateType
     {
         STAGE = 0;
         COMPLETE = 1;
         BACKOUT = 2;
     }
-    required UpdateType update_type = 2;
+    required UpdateType update_type = 1;
 
-    required uint64 root_commit_lamport_time = 3;
-    required uint64 local_lamport_time = 4;
-    required UUID root_application_uuid = 5;
-    required string event_name = 6;
-    required UUID event_uuid = 7;
+    required uint64 root_commit_lamport_time = 2;
+    required uint64 local_lamport_time = 3;
+    required UUID root_application_uuid = 4;
+    required string event_name = 5;
+    required UUID event_uuid = 6;
 
     // Serialized version of update.  May, for instance, be a
     // serialized protocol buffer that can deserialize later.
-    required bytes update_msg_data = 8;
+    required bytes update_msg_data = 7;
 }

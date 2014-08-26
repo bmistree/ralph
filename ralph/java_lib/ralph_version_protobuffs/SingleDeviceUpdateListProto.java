@@ -8,7 +8,7 @@ public final class SingleDeviceUpdateListProto {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface SingleDeviceUpdateListOrBuilder
+  public interface SingleDeviceUpdateListMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // required string device_id = 1;
@@ -52,24 +52,24 @@ public final class SingleDeviceUpdateListProto {
         int index);
   }
   /**
-   * Protobuf type {@code SingleDeviceUpdateList}
+   * Protobuf type {@code SingleDeviceUpdateListMessage}
    */
-  public static final class SingleDeviceUpdateList extends
+  public static final class SingleDeviceUpdateListMessage extends
       com.google.protobuf.GeneratedMessage
-      implements SingleDeviceUpdateListOrBuilder {
-    // Use SingleDeviceUpdateList.newBuilder() to construct.
-    private SingleDeviceUpdateList(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements SingleDeviceUpdateListMessageOrBuilder {
+    // Use SingleDeviceUpdateListMessage.newBuilder() to construct.
+    private SingleDeviceUpdateListMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private SingleDeviceUpdateList(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private SingleDeviceUpdateListMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final SingleDeviceUpdateList defaultInstance;
-    public static SingleDeviceUpdateList getDefaultInstance() {
+    private static final SingleDeviceUpdateListMessage defaultInstance;
+    public static SingleDeviceUpdateListMessage getDefaultInstance() {
       return defaultInstance;
     }
 
-    public SingleDeviceUpdateList getDefaultInstanceForType() {
+    public SingleDeviceUpdateListMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -79,7 +79,7 @@ public final class SingleDeviceUpdateListProto {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private SingleDeviceUpdateList(
+    private SingleDeviceUpdateListMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -132,28 +132,28 @@ public final class SingleDeviceUpdateListProto {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateList_descriptor;
+      return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateListMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateList_fieldAccessorTable
+      return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateListMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.class, ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.Builder.class);
+              ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.class, ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<SingleDeviceUpdateList> PARSER =
-        new com.google.protobuf.AbstractParser<SingleDeviceUpdateList>() {
-      public SingleDeviceUpdateList parsePartialFrom(
+    public static com.google.protobuf.Parser<SingleDeviceUpdateListMessage> PARSER =
+        new com.google.protobuf.AbstractParser<SingleDeviceUpdateListMessage>() {
+      public SingleDeviceUpdateListMessage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new SingleDeviceUpdateList(input, extensionRegistry);
+        return new SingleDeviceUpdateListMessage(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SingleDeviceUpdateList> getParserForType() {
+    public com.google.protobuf.Parser<SingleDeviceUpdateListMessage> getParserForType() {
       return PARSER;
     }
 
@@ -298,53 +298,53 @@ public final class SingleDeviceUpdateListProto {
       return super.writeReplace();
     }
 
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(byte[] data)
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(java.io.InputStream input)
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseDelimitedFrom(java.io.InputStream input)
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseDelimitedFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parseFrom(
+    public static ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -353,7 +353,7 @@ public final class SingleDeviceUpdateListProto {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList prototype) {
+    public static Builder newBuilder(ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -365,24 +365,24 @@ public final class SingleDeviceUpdateListProto {
       return builder;
     }
     /**
-     * Protobuf type {@code SingleDeviceUpdateList}
+     * Protobuf type {@code SingleDeviceUpdateListMessage}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListOrBuilder {
+       implements ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateList_descriptor;
+        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateListMessage_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateList_fieldAccessorTable
+        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateListMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.class, ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.Builder.class);
+                ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.class, ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.Builder.class);
       }
 
-      // Construct using ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.newBuilder()
+      // Construct using ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -420,23 +420,23 @@ public final class SingleDeviceUpdateListProto {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateList_descriptor;
+        return ralph_version_protobuffs.SingleDeviceUpdateListProto.internal_static_SingleDeviceUpdateListMessage_descriptor;
       }
 
-      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList getDefaultInstanceForType() {
-        return ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.getDefaultInstance();
+      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage getDefaultInstanceForType() {
+        return ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.getDefaultInstance();
       }
 
-      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList build() {
-        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList result = buildPartial();
+      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage build() {
+        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList buildPartial() {
-        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList result = new ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList(this);
+      public ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage buildPartial() {
+        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage result = new ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -458,16 +458,16 @@ public final class SingleDeviceUpdateListProto {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList) {
-          return mergeFrom((ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList)other);
+        if (other instanceof ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage) {
+          return mergeFrom((ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList other) {
-        if (other == ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList.getDefaultInstance()) return this;
+      public Builder mergeFrom(ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage other) {
+        if (other == ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage.getDefaultInstance()) return this;
         if (other.hasDeviceId()) {
           bitField0_ |= 0x00000001;
           deviceId_ = other.deviceId_;
@@ -521,11 +521,11 @@ public final class SingleDeviceUpdateListProto {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList parsedMessage = null;
+        ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateList) e.getUnfinishedMessage();
+          parsedMessage = (ralph_version_protobuffs.SingleDeviceUpdateListProto.SingleDeviceUpdateListMessage) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -850,22 +850,22 @@ public final class SingleDeviceUpdateListProto {
         return updateListBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:SingleDeviceUpdateList)
+      // @@protoc_insertion_point(builder_scope:SingleDeviceUpdateListMessage)
     }
 
     static {
-      defaultInstance = new SingleDeviceUpdateList(true);
+      defaultInstance = new SingleDeviceUpdateListMessage(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:SingleDeviceUpdateList)
+    // @@protoc_insertion_point(class_scope:SingleDeviceUpdateListMessage)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_SingleDeviceUpdateList_descriptor;
+    internal_static_SingleDeviceUpdateListMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_SingleDeviceUpdateList_fieldAccessorTable;
+      internal_static_SingleDeviceUpdateListMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -876,22 +876,22 @@ public final class SingleDeviceUpdateListProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\034singleDeviceUpdateList.proto\032\030singleDe" +
-      "viceUpdate.proto\"\\\n\026SingleDeviceUpdateLi" +
-      "st\022\021\n\tdevice_id\030\001 \002(\t\022/\n\013update_list\030\002 \003" +
-      "(\0132\032.SingleDeviceUpdateMessageB7\n\030ralph_" +
-      "version_protobuffsB\033SingleDeviceUpdateLi" +
-      "stProto"
+      "viceUpdate.proto\"c\n\035SingleDeviceUpdateLi" +
+      "stMessage\022\021\n\tdevice_id\030\001 \002(\t\022/\n\013update_l" +
+      "ist\030\002 \003(\0132\032.SingleDeviceUpdateMessageB7\n" +
+      "\030ralph_version_protobuffsB\033SingleDeviceU" +
+      "pdateListProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_SingleDeviceUpdateList_descriptor =
+          internal_static_SingleDeviceUpdateListMessage_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_SingleDeviceUpdateList_fieldAccessorTable = new
+          internal_static_SingleDeviceUpdateListMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_SingleDeviceUpdateList_descriptor,
+              internal_static_SingleDeviceUpdateListMessage_descriptor,
               new java.lang.String[] { "DeviceId", "UpdateList", });
           return null;
         }

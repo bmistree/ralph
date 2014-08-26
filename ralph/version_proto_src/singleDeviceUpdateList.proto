@@ -3,7 +3,7 @@ option java_outer_classname = "SingleDeviceUpdateListProto";
 
 import "singleDeviceUpdate.proto";
 
-message SingleDeviceUpdateList
+message SingleDeviceUpdateListMessage
 {
     required string device_id = 1;
     repeated SingleDeviceUpdateMessage update_list = 2;

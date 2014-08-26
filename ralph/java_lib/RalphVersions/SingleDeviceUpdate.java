@@ -104,7 +104,6 @@ public class SingleDeviceUpdate<DeviceUpdateType>
         to_return.setEventUuid(event_uuid_builder);
 
         // Set all other fields
-        to_return.setDeviceId(device_id);
         to_return.setUpdateType(update_type.protobuf_enum());
         to_return.setRootCommitLamportTime(root_commit_lamport_time);
         to_return.setLocalLamportTime(local_lamport_time);
