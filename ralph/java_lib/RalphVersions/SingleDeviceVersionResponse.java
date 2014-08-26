@@ -44,7 +44,9 @@ public class SingleDeviceVersionResponse
                     String root_application_uuid,
                     String event_name,String event_uuid)
     {
-
+        // FIXME: longs are signed.  Given that, check that the > <
+        // comparisons below are valid.
+        
         SingleDeviceUpdateListMessage.Builder to_return =
             SingleDeviceUpdateListMessage.newBuilder();
         to_return.setDeviceId(device_id);
