@@ -1,5 +1,6 @@
 package java_lib_test;
 
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.nio.ByteBuffer;
 
@@ -17,6 +18,7 @@ public class UpdateSerializer
     private final static int SIZE_OF_INT_IN_BYTES = 4;
     private final static AtomicBoolean had_exception =
         new AtomicBoolean(false);
+    private final static Random rand = new Random();
     
     public static void main(String [] args)
     {
@@ -26,6 +28,17 @@ public class UpdateSerializer
             TestClassUtil.print_failure(test_name);
     }
 
+    public static boolean run_test()
+    {
+        for (int i = 0; i < 1000; ++i)
+        {
+            int to_test = rand.nextInt();
+            if (! run_single_test(to_test))
+                return false;
+        }
+        return true;
+    }
+    
     private static class IntegerDeviceUpdateSerializer
         implements IDeviceSpecificUpdateSerializer<Integer>
     {
@@ -39,7 +52,7 @@ public class UpdateSerializer
         }
     }
     
-    public static boolean run_test()
+    public static boolean run_single_test(Integer update_data)
     {
         String device_id = "device";
         long root_commit_lamport_time = 1L;
@@ -48,8 +61,6 @@ public class UpdateSerializer
         String event_name = "event_name";
         String event_uuid = "event_uuid";
 
-        Integer update_data = 1;
-        
         SingleDeviceUpdate<Integer> sd_update =
             new SingleDeviceUpdate (
                 device_id,
