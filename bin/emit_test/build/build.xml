@@ -22,7 +22,7 @@
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
-      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.4.1.jar"/>
+      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.5.0.jar"/>
   <property
       name="proto_jar_dir" location="${lib_build_path}/../"/>
   <property name="ralph_compiler_py" location="${emit_test_dir}/../../emit_file.py"/>

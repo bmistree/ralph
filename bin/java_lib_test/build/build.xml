@@ -40,7 +40,7 @@
     <javac
         srcdir="${src.dir}"
         destdir="${build.dir}"
-        classpath="${lib_class_path}"
+        classpath="${lib_class_path}:${proto_class_path}"
         debug="true"
         debuglevel="lines,vars,source"
         includeantruntime="false" />
@@ -53,10 +53,26 @@
       depends=
         "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
          run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
-         run_NonAtomic,run_MapTVar,run_ListTVar,run_ExtendedListTVar">
+         run_NonAtomic,run_MapTVar,run_ListTVar,run_ExtendedListTVar,
+         run_UpdateSerializer">
   </target>
   
   <!-- List individual tests -->
+  <target
+      name="run_UpdateSerializer"
+      depends="compile_all"
+      description="Run update serialization test.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.UpdateSerializer"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}:
+                   ${build.dir}/ralph_version_protobuffs/*.class:">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
+  
   <target
       name="run_WriteReadVarStack"
       depends="compile_all"
