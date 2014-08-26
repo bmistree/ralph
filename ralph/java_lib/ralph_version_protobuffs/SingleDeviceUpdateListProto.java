@@ -29,24 +29,44 @@ public final class SingleDeviceUpdateListProto {
     // repeated .SingleDeviceUpdateMessage update_list = 2;
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     java.util.List<ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage> 
         getUpdateListList();
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage getUpdateList(int index);
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     int getUpdateListCount();
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     java.util.List<? extends ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder> 
         getUpdateListOrBuilderList();
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder getUpdateListOrBuilder(
         int index);
@@ -206,12 +226,20 @@ public final class SingleDeviceUpdateListProto {
     private java.util.List<ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage> updateList_;
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     public java.util.List<ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage> getUpdateListList() {
       return updateList_;
     }
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     public java.util.List<? extends ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder> 
         getUpdateListOrBuilderList() {
@@ -219,18 +247,30 @@ public final class SingleDeviceUpdateListProto {
     }
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     public int getUpdateListCount() {
       return updateList_.size();
     }
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage getUpdateList(int index) {
       return updateList_.get(index);
     }
     /**
      * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+     *
+     * <pre>
+     * stored in order of increasing root commit lamport time.
+     * </pre>
      */
     public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder getUpdateListOrBuilder(
         int index) {
@@ -625,6 +665,10 @@ public final class SingleDeviceUpdateListProto {
 
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public java.util.List<ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage> getUpdateListList() {
         if (updateListBuilder_ == null) {
@@ -635,6 +679,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public int getUpdateListCount() {
         if (updateListBuilder_ == null) {
@@ -645,6 +693,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage getUpdateList(int index) {
         if (updateListBuilder_ == null) {
@@ -655,6 +707,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder setUpdateList(
           int index, ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage value) {
@@ -672,6 +728,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder setUpdateList(
           int index, ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder builderForValue) {
@@ -686,6 +746,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder addUpdateList(ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage value) {
         if (updateListBuilder_ == null) {
@@ -702,6 +766,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder addUpdateList(
           int index, ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage value) {
@@ -719,6 +787,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder addUpdateList(
           ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder builderForValue) {
@@ -733,6 +805,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder addUpdateList(
           int index, ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder builderForValue) {
@@ -747,6 +823,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder addAllUpdateList(
           java.lang.Iterable<? extends ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage> values) {
@@ -761,6 +841,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder clearUpdateList() {
         if (updateListBuilder_ == null) {
@@ -774,6 +858,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public Builder removeUpdateList(int index) {
         if (updateListBuilder_ == null) {
@@ -787,6 +875,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder getUpdateListBuilder(
           int index) {
@@ -794,6 +886,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder getUpdateListOrBuilder(
           int index) {
@@ -804,6 +900,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public java.util.List<? extends ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessageOrBuilder> 
            getUpdateListOrBuilderList() {
@@ -815,6 +915,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder addUpdateListBuilder() {
         return getUpdateListFieldBuilder().addBuilder(
@@ -822,6 +926,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder addUpdateListBuilder(
           int index) {
@@ -830,6 +938,10 @@ public final class SingleDeviceUpdateListProto {
       }
       /**
        * <code>repeated .SingleDeviceUpdateMessage update_list = 2;</code>
+       *
+       * <pre>
+       * stored in order of increasing root commit lamport time.
+       * </pre>
        */
       public java.util.List<ralph_version_protobuffs.SingleDeviceUpdateProto.SingleDeviceUpdateMessage.Builder> 
            getUpdateListBuilderList() {
