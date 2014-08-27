@@ -592,7 +592,7 @@
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
-        jar_AliasEnum,jar_StructEnum">
+        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -962,6 +962,12 @@
     </antcall>
   </target>
 
+  <target name="harness_VersionQuerier">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionQuerier.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_AliasEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
@@ -1393,6 +1399,20 @@
     </antcall>
   </target>
 
+  <property
+      name="version_querier_jar"
+      value="version_querier.jar"/>
+  <target
+      name="jar_VersionQuerier"
+      depends="ralph_AtomicNumberIncrementer,
+               ralph_to_byte_code,
+               harness_VersionQuerier">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionQuerier"/>
+      <param name="dest_jar" value="${version_querier_jar}"/>
+    </antcall>
+  </target>
+  
   <property
       name="enum_jar"
       value="enum.jar"/>
