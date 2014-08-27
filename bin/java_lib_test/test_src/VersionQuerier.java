@@ -8,8 +8,10 @@ import ralph.LamportClock;
 import ralph.RalphGlobals;
 
 import RalphVersions.VersionManager;
+import RalphVersions.IVersionManager;
 import RalphVersions.SingleDeviceUpdate;
 import RalphVersions.SingleDeviceUpdateList;
+import RalphVersions.VersionServer.ServerThread;
 
 
 /**
@@ -25,8 +27,14 @@ public class VersionQuerier
     private final static String ROOT_APPLICATION_UUID = "root_app_uuid";
     private final static String EVENT_NAME = "event_name";
     private final static String EVENT_UUID = "event_uuid";
+
+    private final static String VERSION_SERVER_IP_ADDRESS = "127.0.0.1";
+    private final static int VERSION_SERVER_PORT_NUMBER = 39201;
+    
     private final static int num_updates_to_test = 1000;
     private final static Random rand = new Random();
+
+    
     
     public static void main(String [] args)
     {
@@ -53,10 +61,23 @@ public class VersionQuerier
         List<Integer> update_values =
             insert_random_updates(single_device_update_list);
 
+        // actually start running the version server
+        start_version_server(version_manager);
+        
         
         return true;
     }
 
+    public static void start_version_server(IVersionManager version_manager)
+    {
+        ServerThread server_thread =
+            new ServerThread(
+                version_manager, VERSION_SERVER_IP_ADDRESS,
+                VERSION_SERVER_PORT_NUMBER);
+        server_thread.start();
+    }
+
+    
     /**
        Returns a list of integers that contains the updates pushed to
        the device in order of their root_commit_lamport_times.
