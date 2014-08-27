@@ -4,21 +4,20 @@ import ralph.CommitMetadata;
 
 /**
    Committer should notify version service of changes using this
-   interface.
+   interface.  Should use one per device.
  */
-public interface IVersionListener<VersionType>
+public interface IVersionListener<DataType>
 {
     /**
-       Called as a result of first_phase_commit.
+       Called as a result of first_phase_commit.nnnn
      */
-    public void stage_delta(
-        String device_id, VersionType staged_version,CommitMetadata metadata);
+    public void stage_delta(DataType staged_data,CommitMetadata metadata);
     
     /**
        Do not require the completed data because should already have a
        record of it from stage_delta.
      */
-    public void complete_delta(String device_id, CommitMetadata metadata);
+    public void complete_delta(CommitMetadata metadata);
     
     /**
        Only called for versions that have been staged, and
@@ -28,5 +27,5 @@ public interface IVersionListener<VersionType>
        Do not require the completed data because should already have a
        record of it from stage_delta.
      */
-    public void backout_delta(String device_id, CommitMetadata metadata);
+    public void backout_delta(CommitMetadata metadata);
 }
