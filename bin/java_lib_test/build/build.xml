@@ -54,7 +54,7 @@
         "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
          run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
          run_NonAtomic,run_MapTVar,run_ListTVar,run_ExtendedListTVar,
-         run_UpdateSerializer">
+         run_UpdateSerializer,run_VersionQuerier">
   </target>
   
   <!-- List individual tests -->
@@ -72,7 +72,20 @@
     </java>
   </target>
 
-  
+  <target
+      name="run_VersionQuerier"
+      depends="compile_all"
+      description="Run version querier test.">
+    <java
+        dir="${build.dir}"
+        classname="java_lib_test.VersionQuerier"
+        fork="yes"
+        classpath="${build.dir}:${proto_class_path}:
+                   ${build.dir}/ralph_version_protobuffs/*.class:">
+        <arg line="${args}"/>
+    </java>
+  </target>
+
   <target
       name="run_WriteReadVarStack"
       depends="compile_all"
