@@ -40,6 +40,11 @@ public class SingleDeviceUpdate<DeviceUpdateType>
      */
     final public String device_id;
     final public UpdateType update_type;
+    /**
+       Note that this can be null, and will be null when have
+       UpdateType of COMPLETE or BACKOUT.  This is because can
+       presumably recover previous state from history and STAGE.
+     */
     final public DeviceUpdateType device_update;
     /**
        When root issued a commit request, what time did its lamport
@@ -108,7 +113,11 @@ public class SingleDeviceUpdate<DeviceUpdateType>
         to_return.setRootCommitLamportTime(root_commit_lamport_time);
         to_return.setLocalLamportTime(local_lamport_time);
         to_return.setEventName(event_name);
-        to_return.setUpdateMsgData(update_serializer.serialize(device_update));
+        if (device_update != null)
+        {
+            to_return.setUpdateMsgData(
+                update_serializer.serialize(device_update));
+        }
         
         return to_return;
     }
