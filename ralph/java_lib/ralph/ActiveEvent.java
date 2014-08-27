@@ -19,6 +19,15 @@ public abstract class ActiveEvent
     public final EventParent event_parent;
     protected final ThreadPool thread_pool;
     
+    /**
+       Want to start adding version control into RalphObjects.  Keep
+       track of timestamps during commit to ensure that can establish
+       order that changes are made to objects so that we get a proper
+       object history.  These fields should be populated in
+       begin_first_phase_commit.
+     */
+    public CommitMetadata commit_metadata = null;
+    
     public ActiveEvent(
         EventParent _event_parent, ThreadPool _thread_pool)
     {

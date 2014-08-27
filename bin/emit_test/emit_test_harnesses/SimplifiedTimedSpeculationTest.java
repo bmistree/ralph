@@ -220,13 +220,15 @@ public class SimplifiedTimedSpeculationTest
         @Override
         protected void hardware_complete_commit_hook(ActiveEvent active_event)
         {
-            extended_hardware_overrides.hardware_complete_commit_hook(active_event);
+            extended_hardware_overrides.hardware_complete_commit_hook(
+                active_event,active_event.commit_metadata);
         }            
 
         @Override
         protected void hardware_backout_hook(ActiveEvent active_event)
         {
-            extended_hardware_overrides.hardware_backout_hook(active_event);
+            extended_hardware_overrides.hardware_backout_hook(
+                active_event,active_event.commit_metadata);
         }
 
         @Override

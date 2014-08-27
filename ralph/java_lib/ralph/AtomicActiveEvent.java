@@ -215,17 +215,6 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
     public final ActiveEventMap event_map;
-
-    /**
-       Want to start adding version control into RalphObjects.  Keep
-       track of timestamps during commit to ensure that can establish
-       order that changes are made to objects so that we get a proper
-       object history.  All these fields should be populated in
-       begin_first_phase_commit.
-     */
-    private Long root_first_phase_commit_timestamp = null;
-    private Long local_first_phase_commit_timestamp = null;
-    private String root_first_phase_commit_host_uuid = null;
     
     /**
        When we are inside of one atomic event and encounter another
@@ -646,13 +635,9 @@ public class AtomicActiveEvent extends ActiveEvent
 
             // update data after skip to prevent overwriting values on
             // root in case of cycles.
-            this.root_first_phase_commit_timestamp =
-                root_first_phase_commit_timestamp;
-            this.root_first_phase_commit_host_uuid =
-                root_first_phase_commit_host_uuid;
-            this.local_first_phase_commit_timestamp =
-                event_parent.ralph_globals.clock.get_and_increment_int_timestamp();
-
+            this.commit_metadata = new CommitMetadata(
+                root_first_phase_commit_timestamp,
+                application_uuid,event_name,uuid);
             
             state = State.STATE_PUSHING_TO_HARDWARE;
             
@@ -775,10 +760,11 @@ public class AtomicActiveEvent extends ActiveEvent
         // first pahse of commit.
         event_parent.first_phase_transition_success(
             local_endpoints_whose_partners_contacted,
-            this,this.root_first_phase_commit_timestamp,
-            this.root_first_phase_commit_host_uuid,application_uuid,
-            event_name);
-
+            this,commit_metadata.root_commit_lamport_time,
+            root_first_phase_commit_host_uuid,
+            commit_metadata.root_application_uuid,
+            commit_metadata.event_name);
+        
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
