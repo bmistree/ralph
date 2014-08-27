@@ -62,17 +62,13 @@ public class UpdateSerializer
         String event_uuid = "event_uuid";
 
         SingleDeviceUpdate<Integer> sd_update =
-            new SingleDeviceUpdate (
-                device_id,
-                SingleDeviceUpdate.UpdateType.STAGE,
-                update_data,
-                root_commit_lamport_time,local_lamport_time,
-                root_application_uuid,event_name,event_uuid,
-                new IntegerDeviceUpdateSerializer());
-        
+            generate_int_single_device_update(
+                device_id, root_commit_lamport_time,
+                local_lamport_time, root_application_uuid,
+                event_name, event_uuid, update_data);
+            
         SingleDeviceUpdateMessage.Builder builder = sd_update.produce_msg();
         SingleDeviceUpdateMessage msg = builder.build();
-
 
         Integer deserialized_data = produce_data_from_device_update(msg);
 
@@ -82,7 +78,25 @@ public class UpdateSerializer
         return deserialized_data.equals(update_data);
     }
 
-    private static Integer produce_data_from_device_update(
+    public static SingleDeviceUpdate<Integer> generate_int_single_device_update(
+        String device_id, long root_commit_lamport_time,
+        long local_lamport_time, String root_application_uuid,
+        String event_name,String event_uuid,
+        Integer update_data)
+    {
+        SingleDeviceUpdate<Integer> sd_update =
+            new SingleDeviceUpdate (
+                device_id,
+                SingleDeviceUpdate.UpdateType.STAGE,
+                update_data,
+                root_commit_lamport_time,local_lamport_time,
+                root_application_uuid,event_name,event_uuid,
+                new IntegerDeviceUpdateSerializer());
+
+        return sd_update;
+    }
+
+    public static Integer produce_data_from_device_update(
         SingleDeviceUpdateMessage msg)
     {
         ByteString msg_data = msg.getUpdateMsgData();
