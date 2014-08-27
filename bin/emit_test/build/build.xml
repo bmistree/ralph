@@ -63,6 +63,13 @@
     </antcall>
   </target>
 
+  <target name="atomic_number_incrementer" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_number_incrementer.rph"/>
+      <param name="class_name" value="AtomicNumberIncrementerJava"/>
+    </antcall>
+  </target>
+  
   <target name="struct_enum_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="enum_struct.rph"/>
@@ -603,6 +610,11 @@
   <target
       name="ralph_Enum"
       depends="enum_ralph">
+  </target>
+
+  <target
+      name="ralph_AtomicNumberIncrementer"
+      depends="atomic_number_incrementer">
   </target>
 
   <target

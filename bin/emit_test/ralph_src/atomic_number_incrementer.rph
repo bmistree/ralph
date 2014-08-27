@@ -1,0 +1,25 @@
+Struct WrappedNum
+{
+    TVar Number num;
+}
+
+Service AtomicNumberIncrementer
+{
+    TVar Struct WrappedNum wrapped_num = null;
+
+    set_wrapped_num(Struct WrappedNum wrapped_num_)
+    {
+        wrapped_num = wrapped_num_;
+    }
+
+    increment() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            wrapped_num.num += 1;
+            to_return = wrapped_num.num;
+        }
+        return to_return;
+    }
+}
