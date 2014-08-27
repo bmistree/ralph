@@ -163,7 +163,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 local_endpoint.partner_connection_failure();
                 break;
             }
-            local_endpoint._receive_msg_from_partner(gm);			
+            local_endpoint._receive_msg_from_partner(gm);            
         }
     }
 	
