@@ -20,6 +20,9 @@ message SingleDeviceUpdateMessage
     required UUID event_uuid = 6;
 
     // Serialized version of update.  May, for instance, be a
-    // serialized protocol buffer that can deserialize later.
-    required bytes update_msg_data = 7;
+    // serialized protocol buffer that can deserialize later.  Note
+    // that this is optional because backout and complete do not
+    // populate the update.  This is because we can presumably infer
+    // the data from the stage command that necessarily preceded it.
+    optional bytes update_msg_data = 7;
 }

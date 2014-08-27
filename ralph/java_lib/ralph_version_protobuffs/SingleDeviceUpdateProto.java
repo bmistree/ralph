@@ -84,22 +84,28 @@ public final class SingleDeviceUpdateProto {
      */
     ralph_version_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
 
-    // required bytes update_msg_data = 7;
+    // optional bytes update_msg_data = 7;
     /**
-     * <code>required bytes update_msg_data = 7;</code>
+     * <code>optional bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
-     * serialized protocol buffer that can deserialize later.
+     * serialized protocol buffer that can deserialize later.  Note
+     * that this is optional because backout and complete do not
+     * populate the update.  This is because we can presumably infer
+     * the data from the stage command that necessarily preceded it.
      * </pre>
      */
     boolean hasUpdateMsgData();
     /**
-     * <code>required bytes update_msg_data = 7;</code>
+     * <code>optional bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
-     * serialized protocol buffer that can deserialize later.
+     * serialized protocol buffer that can deserialize later.  Note
+     * that this is optional because backout and complete do not
+     * populate the update.  This is because we can presumably infer
+     * the data from the stage command that necessarily preceded it.
      * </pre>
      */
     com.google.protobuf.ByteString getUpdateMsgData();
@@ -478,26 +484,32 @@ public final class SingleDeviceUpdateProto {
       return eventUuid_;
     }
 
-    // required bytes update_msg_data = 7;
+    // optional bytes update_msg_data = 7;
     public static final int UPDATE_MSG_DATA_FIELD_NUMBER = 7;
     private com.google.protobuf.ByteString updateMsgData_;
     /**
-     * <code>required bytes update_msg_data = 7;</code>
+     * <code>optional bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
-     * serialized protocol buffer that can deserialize later.
+     * serialized protocol buffer that can deserialize later.  Note
+     * that this is optional because backout and complete do not
+     * populate the update.  This is because we can presumably infer
+     * the data from the stage command that necessarily preceded it.
      * </pre>
      */
     public boolean hasUpdateMsgData() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>required bytes update_msg_data = 7;</code>
+     * <code>optional bytes update_msg_data = 7;</code>
      *
      * <pre>
      * Serialized version of update.  May, for instance, be a
-     * serialized protocol buffer that can deserialize later.
+     * serialized protocol buffer that can deserialize later.  Note
+     * that this is optional because backout and complete do not
+     * populate the update.  This is because we can presumably infer
+     * the data from the stage command that necessarily preceded it.
      * </pre>
      */
     public com.google.protobuf.ByteString getUpdateMsgData() {
@@ -539,10 +551,6 @@ public final class SingleDeviceUpdateProto {
         return false;
       }
       if (!hasEventUuid()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasUpdateMsgData()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -888,10 +896,6 @@ public final class SingleDeviceUpdateProto {
           return false;
         }
         if (!hasEventUuid()) {
-          
-          return false;
-        }
-        if (!hasUpdateMsgData()) {
           
           return false;
         }
@@ -1335,36 +1339,45 @@ public final class SingleDeviceUpdateProto {
         return eventUuidBuilder_;
       }
 
-      // required bytes update_msg_data = 7;
+      // optional bytes update_msg_data = 7;
       private com.google.protobuf.ByteString updateMsgData_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes update_msg_data = 7;</code>
+       * <code>optional bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
-       * serialized protocol buffer that can deserialize later.
+       * serialized protocol buffer that can deserialize later.  Note
+       * that this is optional because backout and complete do not
+       * populate the update.  This is because we can presumably infer
+       * the data from the stage command that necessarily preceded it.
        * </pre>
        */
       public boolean hasUpdateMsgData() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required bytes update_msg_data = 7;</code>
+       * <code>optional bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
-       * serialized protocol buffer that can deserialize later.
+       * serialized protocol buffer that can deserialize later.  Note
+       * that this is optional because backout and complete do not
+       * populate the update.  This is because we can presumably infer
+       * the data from the stage command that necessarily preceded it.
        * </pre>
        */
       public com.google.protobuf.ByteString getUpdateMsgData() {
         return updateMsgData_;
       }
       /**
-       * <code>required bytes update_msg_data = 7;</code>
+       * <code>optional bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
-       * serialized protocol buffer that can deserialize later.
+       * serialized protocol buffer that can deserialize later.  Note
+       * that this is optional because backout and complete do not
+       * populate the update.  This is because we can presumably infer
+       * the data from the stage command that necessarily preceded it.
        * </pre>
        */
       public Builder setUpdateMsgData(com.google.protobuf.ByteString value) {
@@ -1377,11 +1390,14 @@ public final class SingleDeviceUpdateProto {
         return this;
       }
       /**
-       * <code>required bytes update_msg_data = 7;</code>
+       * <code>optional bytes update_msg_data = 7;</code>
        *
        * <pre>
        * Serialized version of update.  May, for instance, be a
-       * serialized protocol buffer that can deserialize later.
+       * serialized protocol buffer that can deserialize later.  Note
+       * that this is optional because backout and complete do not
+       * populate the update.  This is because we can presumably infer
+       * the data from the stage command that necessarily preceded it.
        * </pre>
        */
       public Builder clearUpdateMsgData() {
@@ -1423,7 +1439,7 @@ public final class SingleDeviceUpdateProto {
       "(\004\022\032\n\022local_lamport_time\030\003 \002(\004\022$\n\025root_a" +
       "pplication_uuid\030\004 \002(\0132\005.UUID\022\022\n\nevent_na" +
       "me\030\005 \002(\t\022\031\n\nevent_uuid\030\006 \002(\0132\005.UUID\022\027\n\017u" +
-      "pdate_msg_data\030\007 \002(\014\"2\n\nUpdateType\022\t\n\005ST" +
+      "pdate_msg_data\030\007 \001(\014\"2\n\nUpdateType\022\t\n\005ST" +
       "AGE\020\000\022\014\n\010COMPLETE\020\001\022\013\n\007BACKOUT\020\002B3\n\030ralp" +
       "h_version_protobuffsB\027SingleDeviceUpdate",
       "Proto"
