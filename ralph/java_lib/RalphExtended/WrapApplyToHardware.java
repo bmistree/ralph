@@ -63,10 +63,13 @@ public class WrapApplyToHardware<T> extends ServiceAction
         state_controller.release_lock();
 
         // notify version listener.
-        if (undo_changes)
-            version_listener.backout_delta(commit_metadata);
-        else
-            version_listener.complete_delta(commit_metadata);
+        if (version_listener != null)
+        {
+            if (undo_changes)
+                version_listener.backout_delta(commit_metadata);
+            else
+                version_listener.complete_delta(commit_metadata);
+        }
 
         
         if (application_successful)
