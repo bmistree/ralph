@@ -125,7 +125,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
        of this method.
      */
     public ICancellableFuture hardware_first_phase_commit_hook(
-        ActiveEvent active_event, CommitMetadata commit_metadata)
+        ActiveEvent active_event)
     {
         try
         {
@@ -167,13 +167,16 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
                 // notify version listener that we are staging a change.
                 if (version_listener != null)
-                    version_listener.stage_delta(state_to_push,commit_metadata);
+                {
+                    version_listener.stage_delta(
+                        state_to_push,active_event.commit_metadata);
+                }
                 
                 state_controller.move_state_pushing_changes(state_to_push);
                 WrapApplyToHardware<HardwareChangeApplierType> to_apply_to_hardware =
                     new WrapApplyToHardware<HardwareChangeApplierType>(
                         state_to_push,false,state_controller,hardware_applier,version_listener,
-                        commit_metadata);
+                        active_event.commit_metadata);
 
                 ralph_globals.thread_pool.add_service_action(
                     to_apply_to_hardware);
@@ -227,8 +230,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         }
     }
 
-    public void hardware_backout_hook(
-        ActiveEvent active_event, CommitMetadata commit_metadata)
+    public void hardware_backout_hook(ActiveEvent active_event)
     {
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
@@ -297,7 +299,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 new WrapApplyToHardware<HardwareChangeApplierType>(
                     state_controller.get_dirty_on_hardware(),
                     true,state_controller,hardware_applier,
-                    version_listener, commit_metadata);
+                    version_listener, active_event.commit_metadata);
 
 
             ralph_globals.thread_pool.add_service_action(to_undo_wrapper);
@@ -314,11 +316,11 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     }
 
     public boolean hardware_first_phase_commit_speculative_hook(
-        SpeculativeFuture sf,CommitMetadata commit_metadata)
+        SpeculativeFuture sf)
     {
         ActiveEvent active_event = sf.event;
         Future<Boolean> bool =
-            hardware_first_phase_commit_hook(active_event,commit_metadata);
+            hardware_first_phase_commit_hook(active_event);
         ralph_globals.thread_pool.add_service_action(
             new LinkFutureBooleans(bool,sf));
 
