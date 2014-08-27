@@ -172,9 +172,10 @@ public class SimplifiedTimedSpeculationTest
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
                     this,this,spec_listener,
-                    _should_speculate,ralph_globals);
+                    null, // not keeping track of versioning.
+                    _should_speculate, ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
-
+            
             should_speculate = _should_speculate;
             time_to_delay_on_apply = _time_to_delay_on_apply;
             locked_list = _locked_list;
@@ -221,14 +222,14 @@ public class SimplifiedTimedSpeculationTest
         protected void hardware_complete_commit_hook(ActiveEvent active_event)
         {
             extended_hardware_overrides.hardware_complete_commit_hook(
-                active_event,active_event.commit_metadata);
+                active_event);
         }            
 
         @Override
         protected void hardware_backout_hook(ActiveEvent active_event)
         {
             extended_hardware_overrides.hardware_backout_hook(
-                active_event,active_event.commit_metadata);
+                active_event);
         }
 
         @Override
