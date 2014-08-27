@@ -93,7 +93,6 @@ public class VersionQuerier
     private static List<Integer> query_for_updates()
     {
         Socket sock = null;
-
         try
         {
             sock = new Socket(
@@ -115,7 +114,7 @@ public class VersionQuerier
         vm_builder.setRequest(request);
         vm_builder.setTimestamp(ralph_globals.clock.get_int_timestamp());
         VersionMessage version_message = vm_builder.build();
-        
+
         // send query to version manager
         try
         {
@@ -127,7 +126,6 @@ public class VersionQuerier
             return null;
         }
 
-        
         // listen for response
         VersionMessage vm = null;
         try
@@ -140,7 +138,7 @@ public class VersionQuerier
             e.printStackTrace();
             return null;
         }
-
+        
         if (! vm.hasResponse())
             return null;
         
@@ -183,6 +181,8 @@ public class VersionQuerier
                     EVENT_NAME,
                     EVENT_UUID,
                     update_value);
+
+            single_device_update_list.add_device_update(sd_update);
             to_return.add(update_value);
         }
         return to_return;
