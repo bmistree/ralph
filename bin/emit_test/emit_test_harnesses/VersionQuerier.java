@@ -1,11 +1,19 @@
 package emit_test_harnesses;
 
+import com.google.protobuf.ByteString;
+
+import java.nio.ByteBuffer;
+
 import RalphConnObj.SingleSideConnection;
 
 import RalphExtended.IHardwareChangeApplier;
 import RalphExtended.IHardwareStateSupplier;
 import RalphExtended.ISpeculateListener;
 import RalphExtended.ExtendedHardwareOverrides;
+
+import RalphVersions.VersionListener;
+import RalphVersions.VersionManager;
+import RalphVersions.IDeviceSpecificUpdateSerializer;
 
 import ralph.RalphGlobals;
 import ralph.Variables.AtomicNumberVariable;
@@ -20,6 +28,7 @@ import ralph_emitted.AtomicNumberIncrementerJava._InternalWrappedNum;
 public class VersionQuerier
 {
     private final static RalphGlobals ralph_globals = new RalphGlobals();
+    private final static int NUM_TIMES_TO_INCREMENT = 1000;
     
     public static void main(String[] args)
     {
@@ -41,6 +50,9 @@ public class VersionQuerier
                 generate_internal_wrapped_num();
             
             service.set_wrapped_num(internal_wrapped_num);
+
+            for (int i = 0; i < NUM_TIMES_TO_INCREMENT; ++i)
+                service.increment();
         }
         catch(Exception ex)
         {
@@ -54,8 +66,16 @@ public class VersionQuerier
 
     public static _InternalWrappedNum generate_internal_wrapped_num()
     {
+        VersionManager version_manager =
+            new VersionManager(ralph_globals.clock);
+        VersionListener<Double> version_listener =
+            new VersionListener(
+                ralph_globals.clock,version_manager, "dummy_device_id",
+                new DoubleSerializer());
+        
         _InternalWrappedNum to_return = new _InternalWrappedNum(ralph_globals);
-        AtomicNumber atomic_number = new AtomicNumber(ralph_globals);
+        AtomicNumber atomic_number =
+            new AtomicNumber(ralph_globals,version_listener);
         to_return.num = atomic_number;
         return to_return;
     }
@@ -69,6 +89,19 @@ public class VersionQuerier
             // ignore.
         }
     }
+
+    private static class DoubleSerializer
+        implements IDeviceSpecificUpdateSerializer<Double>
+    {
+        private final int SIZE_OF_DOUBLE_IN_BYTES = 64;
+        public ByteString serialize(Double to_serialize)
+        {
+            ByteBuffer bb = ByteBuffer.allocate(SIZE_OF_DOUBLE_IN_BYTES);
+            bb.putDouble(to_serialize);
+            bb.rewind();
+            return ByteString.copyFrom(bb);
+        }   
+    }
     
     public static class AtomicNumber
         extends AtomicNumberVariable
@@ -76,14 +109,16 @@ public class VersionQuerier
     {
         private final ExtendedHardwareOverrides<Double> extended_hardware_overrides;
 
-        public AtomicNumber(RalphGlobals ralph_globals)
+        public AtomicNumber(
+            RalphGlobals ralph_globals,
+            VersionListener<Double> version_listener)
         {
             super(false,new Double(0),ralph_globals);
             
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
                     this,this,new SpeculateListener(),
-                    null, // not yet keeping track of versioning.
+                    version_listener,
                     false, // should not speculate
                     ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
