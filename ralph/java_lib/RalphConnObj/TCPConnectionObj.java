@@ -226,10 +226,13 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         {
             ServerSocket sock = null;
 			
-            try {
+            try
+            {
                 sock = new ServerSocket(port_listen_on);
-                sock.setSoTimeout(1000);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
                 synchronization_listening_queue.add(new Boolean(false));	
                 return;
             }

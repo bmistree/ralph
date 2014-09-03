@@ -32,7 +32,6 @@ public class ServerThread extends Thread
         try
         {
             sock = new ServerSocket(port_to_listen_on);
-            sock.setSoTimeout(1000);
         }
         catch (IOException e)
         {
