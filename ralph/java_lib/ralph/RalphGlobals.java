@@ -52,6 +52,7 @@ public class RalphGlobals implements IUUIDGenerator
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
+    public final boolean logging_on;
     
     public RalphGlobals()
     {
@@ -60,6 +61,7 @@ public class RalphGlobals implements IUUIDGenerator
     
     public RalphGlobals(Parameters params)
     {
+        logging_on = params.logging_on;
         ip_addr_to_listen_for_connections_on =
             params.ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
