@@ -23,6 +23,7 @@ public class RalphGlobals implements IUUIDGenerator
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
+        public boolean logging_on = false;
     }
 
     /**
@@ -44,22 +45,37 @@ public class RalphGlobals implements IUUIDGenerator
         Collections.synchronizedList(new ArrayList<Stoppable>());
 
     // set in constructor
-    private IUUIDGenerator uuid_generator;
-    public String host_uuid;    
-    public String ip_addr_to_listen_for_connections_on;
-    public int tcp_port_to_listen_for_connections_on;
-    public DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
-    private ConnectionListener connection_listener;
-    public ThreadPool thread_pool;
+    private final IUUIDGenerator uuid_generator;
+    public final String host_uuid;    
+    public final String ip_addr_to_listen_for_connections_on;
+    public final int tcp_port_to_listen_for_connections_on;
+    public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
+    private final ConnectionListener connection_listener;
+    public final ThreadPool thread_pool;
     
     public RalphGlobals()
     {
-        init(DEFAULT_PARAMETERS);
+        this(DEFAULT_PARAMETERS);
     }
     
     public RalphGlobals(Parameters params)
     {
-        init(params);
+        ip_addr_to_listen_for_connections_on =
+            params.ip_addr_to_listen_for_connections_on;
+        tcp_port_to_listen_for_connections_on =
+            params.tcp_port_to_listen_for_connections_on;
+        deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
+        
+        connection_listener =
+            new ConnectionListener(
+                all_endpoints,params.tcp_port_to_listen_for_connections_on);
+
+        thread_pool = new ThreadPool(params.threadpool_params);
+        uuid_generator = params.uuid_generator;
+        // For now, generating host uuids as unique identifiers.  If
+        // accidentally use local_atom_int generator, will get
+        // collisions with other hosts.
+        host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
     }
 
     @Override
@@ -71,26 +87,6 @@ public class RalphGlobals implements IUUIDGenerator
     public String generate_local_uuid()
     {
         return UUIDGenerators.LOCAL_ATOM_INT_UUID_GENERATOR.generate_uuid();
-    }
-    
-    private void init(Parameters params)
-    {
-        ip_addr_to_listen_for_connections_on =
-            params.ip_addr_to_listen_for_connections_on;
-        tcp_port_to_listen_for_connections_on =
-            params.tcp_port_to_listen_for_connections_on;
-        deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
-        
-        connection_listener =
-            new ConnectionListener(
-                all_endpoints,params.tcp_port_to_listen_for_connections_on);
-        deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
-        thread_pool = new ThreadPool(params.threadpool_params);
-        uuid_generator = params.uuid_generator;
-        // For now, generating host uuids as unique identifiers.  If
-        // accidentally use local_atom_int generator, will get
-        // collisions with other hosts.
-        host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
     }
     
     // FIXME: get rid of this?
