@@ -592,7 +592,7 @@
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
-        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier">
+        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -1048,6 +1048,12 @@
     </antcall>
   </target>
 
+  <target name="harness_ManyListOps">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="ManyListOps.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_NestedStructs">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="NestedStructs.java"/>
@@ -1569,6 +1575,19 @@
     </antcall>
   </target>
 
+  <property
+      name="many_list_ops_jar"
+      value="many_list_ops.jar"/>
+  <target
+      name="jar_ManyListOps"
+      depends="ralph_AtomicList,ralph_to_byte_code,harness_ManyListOps">
+    <antcall target="make_jar">
+      <param name="main_class" value="ManyListOps"/>
+      <param name="dest_jar" value="${many_list_ops_jar}"/>
+    </antcall>
+  </target>
+
+  
   <property
       name="nested_structs_jar"
       value="nested_structs.jar"/>
