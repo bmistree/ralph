@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import RalphVersions.ILocalVersionManager;
+
 import RalphServiceConnectionListener.ConnectionListener;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
@@ -23,7 +25,9 @@ public class RalphGlobals implements IUUIDGenerator
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
-        public boolean logging_on = false;
+
+        // null means that we should not perform any logging.
+        public ILocalVersionManager local_version_manager = null;
     }
 
     /**
@@ -52,7 +56,7 @@ public class RalphGlobals implements IUUIDGenerator
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
-    public final boolean logging_on;
+    public final ILocalVersionManager local_version_manager;
     
     public RalphGlobals()
     {
@@ -61,7 +65,7 @@ public class RalphGlobals implements IUUIDGenerator
     
     public RalphGlobals(Parameters params)
     {
-        logging_on = params.logging_on;
+        local_version_manager = params.local_version_manager;
         ip_addr_to_listen_for_connections_on =
             params.ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =

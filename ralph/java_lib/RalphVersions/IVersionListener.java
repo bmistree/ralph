@@ -9,7 +9,7 @@ import ralph.CommitMetadata;
 public interface IVersionListener<DataType>
 {
     /**
-       Called as a result of first_phase_commit.nnnn
+       Called as a result of first_phase_commit.
      */
     public void stage_delta(DataType staged_data,CommitMetadata metadata);
     
