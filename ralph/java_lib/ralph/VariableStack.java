@@ -1,20 +1,22 @@
 package ralph;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class VariableStack
 {
     // indices at end are at top of stack.
-    private ArrayList<VariableStore> scope_stack =
-        new ArrayList<VariableStore>();
+    private final List<VariableStore> scope_stack;
     
     public VariableStack()
-    {}
+    {
+        this(new ArrayList<VariableStore>());
+    }
 
     /**
     only used when forking, do not use otherwise
     */
-    public VariableStack(ArrayList<VariableStore> new_stack)
+    public VariableStack(List<VariableStore> new_stack)
     {
         scope_stack = new_stack;
     }
@@ -23,7 +25,7 @@ public class VariableStack
     public VariableStack fork_stack()
     {
         return new VariableStack(
-            (ArrayList<VariableStore>)scope_stack.clone());
+            new ArrayList<VariableStore>(scope_stack));
     }
 
     /**
