@@ -57,6 +57,8 @@ public class RalphGlobals implements IUUIDGenerator
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
     public final ILocalVersionManager local_version_manager;
+    public final BaseTypeVersionHelpers base_type_version_helpers;
+    
     
     public RalphGlobals()
     {
@@ -82,6 +84,8 @@ public class RalphGlobals implements IUUIDGenerator
         // accidentally use local_atom_int generator, will get
         // collisions with other hosts.
         host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
+
+        base_type_version_helpers = new BaseTypeVersionHelpers(this);
     }
 
     @Override

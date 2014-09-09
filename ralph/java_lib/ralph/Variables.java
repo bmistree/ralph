@@ -17,7 +17,8 @@ import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceReferenceTypeDataWrapperFactory;
 
 
-public class Variables {
+public class Variables
+{
     public final static NumberTypeDataWrapperFactory
         number_value_type_data_wrapper_factory =
         new NumberTypeDataWrapperFactory();

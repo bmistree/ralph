@@ -10,12 +10,52 @@ public class SerializableToByteArray
 {
     public final static SingletonSerializer SERIALIZER =
         new SingletonSerializer();
+
+    public final static SingletonDoubleSerializer DOUBLE_SERIALIZER =
+        new SingletonDoubleSerializer();
+
+    public final static SingletonStringSerializer STRING_SERIALIZER =
+        new SingletonStringSerializer();
+
+    public final static SingletonBooleanSerializer BOOLEAN_SERIALIZER =
+        new SingletonBooleanSerializer();
+
+        
+    private static class SingletonDoubleSerializer
+        implements ILocalDeltaSerializer<Double>
+    {
+        @Override
+        public byte[] serialize(Double to_serialize)
+        {
+            return SERIALIZER.serialize(to_serialize);
+        }
+    }
+                                                   
+    private static class SingletonStringSerializer
+        implements ILocalDeltaSerializer<String>
+    {
+        @Override
+        public byte[] serialize(String to_serialize)
+        {
+            return SERIALIZER.serialize(to_serialize);
+        }
+    }
+
+    private static class SingletonBooleanSerializer
+        implements ILocalDeltaSerializer<Boolean>
+    {
+        @Override
+        public byte[] serialize(Boolean to_serialize)
+        {
+            return SERIALIZER.serialize(to_serialize);
+        }
+    }
     
     private static class SingletonSerializer
         implements ILocalDeltaSerializer<Serializable>
     {
         @Override
-            public byte[] serialize(Serializable to_serialize)
+        public byte[] serialize(Serializable to_serialize)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream out = null;
