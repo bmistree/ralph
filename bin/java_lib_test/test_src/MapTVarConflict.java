@@ -31,8 +31,8 @@ public class MapTVarConflict
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
 
-        AtomicMapVariable<Double,Double,Double> map_tvar =
-            (AtomicMapVariable<Double,Double,Double>)
+        AtomicMapVariable<Double,Double> map_tvar =
+            (AtomicMapVariable<Double,Double>)
             endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.MAP_TVAR_NAME);
 
@@ -51,7 +51,7 @@ public class MapTVarConflict
 
     public static boolean test_add_values(
         Endpoint endpt,
-        AtomicMapVariable<Double,Double,Double> map_tvar)
+        AtomicMapVariable<Double,Double> map_tvar)
     {
         try
         {
@@ -122,7 +122,7 @@ public class MapTVarConflict
      */
     public static boolean test_preempted_read(
         Endpoint endpt,
-        AtomicMapVariable<Double,Double,Double> map_tvar)
+        AtomicMapVariable<Double,Double> map_tvar)
     {
         try
         {
@@ -179,7 +179,7 @@ public class MapTVarConflict
      */
     public static boolean test_concurrent_read(
         Endpoint endpt,
-        AtomicMapVariable<Double,Double,Double> map_tvar)
+        AtomicMapVariable<Double,Double> map_tvar)
     {
         try
         {
