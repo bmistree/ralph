@@ -44,7 +44,7 @@ public class HardwareFailureTest
             new ExtendedInternalHardwareList(hardware_id,endpt);
         
         to_return.list =
-            new AtomicListVariable<Double,Double>(
+            new AtomicListVariable<Double>(
                 false,internal_hardware_list,
                 BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                 endpt.ralph_globals);
@@ -99,7 +99,7 @@ public class HardwareFailureTest
        lock object so that cannot continue operations on it.
      */
     private static class ExtendedInternalHardwareList
-        extends ExtendedInternalAtomicList<Double,Double>
+        extends ExtendedInternalAtomicList<Double>
         implements Runnable
     {
         private boolean next_time_fail_commit = false;
@@ -123,7 +123,7 @@ public class HardwareFailureTest
            @see discussion above hardware_failed private variable.
          */
         @Override
-        protected ListTypeDataWrapper<Double,Double>  acquire_read_lock(
+        protected ListTypeDataWrapper<Double>  acquire_read_lock(
             ActiveEvent active_event) throws BackoutException
         {
             // if hardware has failed, cannot operate on data anymore:
@@ -134,7 +134,7 @@ public class HardwareFailureTest
                 throw new BackoutException();
 
             return
-                (ListTypeDataWrapper<Double,Double>)
+                (ListTypeDataWrapper<Double>)
                 super.acquire_read_lock(active_event);
         }
 
@@ -142,14 +142,14 @@ public class HardwareFailureTest
            @see discussion above hardware_failed private variable.
          */
         @Override
-        protected ListTypeDataWrapper<Double,Double> acquire_write_lock(
+        protected ListTypeDataWrapper<Double> acquire_write_lock(
             ActiveEvent active_event) throws BackoutException
         {
             if (hardware_failed)
                 throw new BackoutException();
 
             return
-                (ListTypeDataWrapper<Double,Double>)super.acquire_write_lock(
+                (ListTypeDataWrapper<Double>)super.acquire_write_lock(
                     active_event);
         }
         
@@ -158,7 +158,7 @@ public class HardwareFailureTest
          */
         @Override
         protected ICancellableFuture apply_changes_to_hardware(
-            ListTypeDataWrapper<Double,Double> dirty)
+            ListTypeDataWrapper<Double> dirty)
         {
             if (next_time_fail_commit)
             {
@@ -173,7 +173,7 @@ public class HardwareFailureTest
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<Double,Double> to_undo)
+            ListTypeDataWrapper<Double> to_undo)
         {
             undo_changes_called.set(true);
         }

@@ -22,7 +22,7 @@ public class ReturnListTest
             ListEndpoint endpt = new ListEndpoint(
                 new RalphGlobals(),new SingleSideConnection());
 
-            NonAtomicInternalList<String,String> result =
+            NonAtomicInternalList<String> result =
                 endpt.test_return_list();
 
             int list_size = result.get_len(null);

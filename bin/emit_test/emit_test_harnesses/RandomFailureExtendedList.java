@@ -76,7 +76,7 @@ public class RandomFailureExtendedList
 
 
     private static class SynchronizedNumberInternalList
-        extends ExtendedInternalAtomicList<Double,Double>
+        extends ExtendedInternalAtomicList<Double>
     {
         public List<Double> synchronized_list = new ArrayList<Double>();
         private boolean return_false = true;
@@ -91,7 +91,7 @@ public class RandomFailureExtendedList
          */
         @Override
         protected ICancellableFuture apply_changes_to_hardware(
-            ListTypeDataWrapper<Double,Double> dirty)
+            ListTypeDataWrapper<Double> dirty)
         {
             // first, apply changes to synchronized list.  Then, following the
             // changes, randomly fail or pass.  
@@ -99,7 +99,7 @@ public class RandomFailureExtendedList
             {
                 if (dirty.is_add_key_tuple(op_tuple))
                 {
-                    RalphObject<Double,Double> what_added =
+                    RalphObject<Double> what_added =
                         op_tuple.what_added_or_removed;
                     int index = op_tuple.key;
                     try {
@@ -132,7 +132,7 @@ public class RandomFailureExtendedList
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<Double,Double> to_undo)
+            ListTypeDataWrapper<Double> to_undo)
         {
             // go backwards through list and do the opposite of the op
             // tuple
@@ -148,7 +148,7 @@ public class RandomFailureExtendedList
                 else if (to_undo.is_delete_key_tuple(op_tuple))
                 {
                     int index = op_tuple.key;
-                    RalphObject<Double,Double> what_removed =
+                    RalphObject<Double> what_removed =
                         op_tuple.what_added_or_removed;
                     try {
                         Double what_re_adding =
