@@ -61,7 +61,6 @@ import java.util.ArrayList;
 import java.util.List;
 import ralph.Util;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.HashMap;
 import ralph_protobuffs.VariablesProto.Variables;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -245,7 +244,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
     This method returns a text string that contains all the argument
     casts necessary to call internal methods.  Eg.,
 
-    Double arg0 = ((RalphObject<Double,Double>)args[0]).get_val(null);
+    Double arg0 = ((RalphObject<Double>)args[0]).get_val(null);
 
     Note that it is dumb that we deserialize into a locked object,
     instead of the value directly.  Should change.
@@ -284,7 +283,8 @@ def convert_args_text_for_dispatch(method_declaration_node):
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
             single_arg_string = (
-                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(active_event);\n''' % (arg_name,arg_vec_to_read_from))
+                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory>) %s).get_val(active_event);\n''' %
+                (arg_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
@@ -303,7 +303,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # as argument to method
             enum_type_name = method_declaration_arg_node.type.get_emit_name()
             wrapped_enum_type_name = (
-                'RalphObject<%s,%s>' % (enum_type_name,enum_type_name))
+                'RalphObject<%s>' % (enum_type_name))
             single_arg_string = (
                 '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,
@@ -335,11 +335,11 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
     Takes in a method's declared argument ast node and returns a
     string for a RalphObject of that type.  Eg., if
     method_declaration_arg_node has type Number, return
-      RalphObject<Double,Double>, Double
+      RalphObject<Double>, Double
     String, return:
-      RalphObject<String,String>, String
+      RalphObject<String>, String
     Boolean, return:
-      RalphObject<Boolean,Boolean>, Boolean
+      RalphObject<Boolean>, Boolean
     '''
     if isinstance(method_declaration_arg_node.type,BasicType):
         arg_basic_type = method_declaration_arg_node.type.basic_type
@@ -356,7 +356,7 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
                 method_declaration_arg_node.line_number,
                 'Unknown basic type when emitting.')
         #### END DEBUG
-        return ('RalphObject<%s,%s>' % (java_type,java_type)), java_type
+        return ('RalphObject<%s>' % (java_type)), java_type
     
     #### DEBUG
     else:
@@ -418,8 +418,8 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
         # trying to add something like:
         # else if (to_exec_internal_name.equals("test_partner_args_method"))
         # {
-        #     RalphObject<Double,Double> num_obj =
-        #         (RalphObject<Double,Double>)args[0];
+        #     RalphObject<Double> num_obj =
+        #         (RalphObject<Double>)args[0];
         #     _test_partner_args_method(active_event, ctx, num_obj);
         #     ctx.hide_sequence_completed_call(this, active_event);
         # }
@@ -1097,7 +1097,6 @@ def emit_internal_map_type(type_object):
         key_type_node.type)
     value_internal_type_text = emit_internal_type(
         value_type_node.type)
-    dewaldoify_type_text = value_internal_type_text
 
     if type_object.is_tvar:
         internal_map_var_type = 'AtomicInternalMap'
@@ -1106,14 +1105,13 @@ def emit_internal_map_type(type_object):
         
     return (
         internal_map_var_type +
-        ('<%s,%s,%s>' %
-         (key_internal_type_text,value_internal_type_text,dewaldoify_type_text)))
+        ('<%s,%s>' %
+         (key_internal_type_text,value_internal_type_text)))
 
 def emit_internal_list_type(type_object):
     element_type_node = type_object.element_type_node
     element_type_text = emit_internal_type(
         element_type_node.type)
-    dewaldoify_type_text = element_type_text
 
     if type_object.is_tvar:
         internal_map_var_type = 'AtomicInternalList'
@@ -1122,8 +1120,7 @@ def emit_internal_list_type(type_object):
         
     return (
         internal_map_var_type +
-        ('<%s,%s>' %
-         (element_type_text,dewaldoify_type_text)))
+        ('<%s>' % element_type_text))
 
 
 def emit_map_type(type_object):
@@ -1136,7 +1133,7 @@ def emit_map_type(type_object):
             key_type_node.type)
         value_internal_type_text = emit_internal_type(
             value_type_node.type)
-        dewaldoify_type_text = value_internal_type_text
+
 
         map_var_type = 'NonAtomicMapVariable'
         if type_object.is_tvar:
@@ -1144,9 +1141,9 @@ def emit_map_type(type_object):
 
         # FIXME: May not be dewaldo-ifying maps correctly
         to_return = (
-            '%s<%s,%s,%s>' %
+            '%s<%s,%s>' %
             (map_var_type,key_internal_type_text,
-             value_internal_type_text,dewaldoify_type_text))
+             value_internal_type_text))
 
         return to_return
     else:
@@ -1161,7 +1158,6 @@ def emit_list_type(type_object):
         element_type_node = type_object.element_type_node
         element_internal_type_text = emit_internal_type(
             element_type_node.type)
-        dewaldoify_type_text = element_internal_type_text
 
         list_var_type = 'NonAtomicListVariable'
         if type_object.is_tvar:
@@ -1169,9 +1165,8 @@ def emit_list_type(type_object):
 
         # FIXME: May not be dewaldo-ifying lists correctly
         to_return = (
-            '%s<%s,%s>' %
-            (list_var_type,element_internal_type_text,
-             dewaldoify_type_text))
+            '%s<%s>' %
+            (list_var_type,element_internal_type_text))
 
         return to_return
     else:
@@ -2096,8 +2091,8 @@ def emit_struct_data_wrapper_constructor(struct_type):
     struct_name = struct_type.struct_name
     internal_struct_name = emit_internal_struct_type(struct_type)
     data_wrapper_type_text = (
-        'ValueTypeDataWrapperFactory<%s,%s>' %
-        (internal_struct_name,internal_struct_name))
+        'ValueTypeDataWrapperFactory<%s>' %
+        (internal_struct_name))
 
     data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
         struct_name)
@@ -2254,7 +2249,7 @@ def emit_struct_map_wrapper(struct_type):
     
     # ensure locked wrappers
     locked_wrappers_text = '''
-public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
+public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s>
 {
     @Override
     public String get_serialization_label()
@@ -2263,15 +2258,14 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
     }
 
     @Override
-    public RalphObject<%s,%s> ensure_atomic_object(
+    public RalphObject<%s> ensure_atomic_object(
         %s object_to_ensure, RalphGlobals ralph_globals)
     {
         return new %s(false,object_to_ensure,ralph_globals);
     }
 }
-''' % (struct_name,internal_struct_name,internal_struct_name,
-       struct_name,
-       internal_struct_name,internal_struct_name,internal_struct_name,
+''' % (struct_name,internal_struct_name,struct_name,
+       internal_struct_name,internal_struct_name,
        struct_name)
 
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
@@ -2300,8 +2294,8 @@ def emit_struct_wrapper(struct_type):
     ##### External wrapped struct
     # FIXME: structs are always atomic.
     external_struct_definition_text = '''
-public static class %s extends AtomicValueVariable<%s,%s>
-{''' % (struct_name, internal_struct_name, internal_struct_name)
+public static class %s extends AtomicValueVariable<%s>
+{''' % (struct_name, internal_struct_name)
 
     data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
         struct_name)
@@ -2345,7 +2339,7 @@ public void serialize_as_rpc_arg(
     
     external_struct_definition_constructor += '''
 @Override
-protected SpeculativeAtomicObject<%s, %s>
+protected SpeculativeAtomicObject<%s>
       duplicate_for_speculation(%s to_speculate_on)
 {
     ///FIXME: must finish speculation for user-defined structs
@@ -2353,7 +2347,7 @@ protected SpeculativeAtomicObject<%s, %s>
         "Have not finished duplicate_for_speculation for structs.");
     return null;
 }
-''' % (internal_struct_name,internal_struct_name,internal_struct_name)
+''' % (internal_struct_name,internal_struct_name)
 
 
     # when pass a struct into a method, should clone the struct's
