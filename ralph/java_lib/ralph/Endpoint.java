@@ -306,14 +306,14 @@ public abstract class Endpoint
     /**
        FIXME: Should I remove this?  Is it still useful?
      */
-    protected NonAtomicInternalList<Double> _produce_range(
+    protected NonAtomicInternalList<Double,Double> _produce_range(
         Double start,Double end, Double increment)
     {
-        NonAtomicInternalList<Double> to_return =
+        NonAtomicInternalList<Double,Double> to_return =
             new NonAtomicInternalList(ralph_globals);
 
-        List<RalphObject<Double>> init_val =
-            new ArrayList<RalphObject<Double>>();
+        List<RalphObject<Double,Double>> init_val =
+            new ArrayList<RalphObject<Double,Double>>();
         for (int i = start.intValue(); i < end.intValue();
              i = i + increment.intValue())
         {
@@ -323,7 +323,7 @@ public abstract class Endpoint
         }
         
         to_return.init(
-            new ListTypeDataWrapperFactory<Double>(),
+            new ListTypeDataWrapperFactory<Double,Double>(),
             init_val,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
 

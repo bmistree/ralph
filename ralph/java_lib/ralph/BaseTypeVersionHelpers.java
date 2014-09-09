@@ -9,6 +9,18 @@ public class BaseTypeVersionHelpers
     public final VersionHelper<Double> DOUBLE_VERSION_HELPER;
     public final VersionHelper<String> STRING_VERSION_HELPER;
     public final VersionHelper<Boolean> BOOLEAN_VERSION_HELPER;
+
+    /**
+       For now, just setting map, list, enum, and service factory
+       version helpers to null.
+     */
+    public final VersionHelper MAP_VERSION_HELPER = null;
+    public final VersionHelper LIST_VERSION_HELPER = null;
+    public final VersionHelper ENUM_VERSION_HELPER = null;
+    public final VersionHelper INTERFACE_VERSION_HELPER = null;
+    public final VersionHelper SERVICE_FACTORY_VERSION_HELPER = null;
+    public final VersionHelper SERVICE_REFERENCE_VERSION_HELPER = null;
+    
     
     public BaseTypeVersionHelpers(RalphGlobals ralph_globals)
     {

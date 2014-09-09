@@ -11,7 +11,7 @@ import RalphDataWrappers.ListTypeDataWrapper;
 /**
  * @param <V> --- The Java type of data that are elements in the list
  */
-public interface RalphInternalListInterface<V> 
+public interface RalphInternalListInterface<V,ValueDeltaType> 
 {
     public void insert(
         ActiveEvent active_event, Double index_to_insert_in,
@@ -21,7 +21,7 @@ public interface RalphInternalListInterface<V>
         V what_to_insert) throws BackoutException;
     public void insert(
         ActiveEvent active_event, Integer key,
-        RalphObject<V> to_insert)  throws BackoutException;
+        RalphObject<V,ValueDeltaType> to_insert)  throws BackoutException;
 
     
     public V get_val_on_key(
@@ -45,10 +45,10 @@ public interface RalphInternalListInterface<V>
     public void set_val_on_key(
         ActiveEvent active_event, Double key, V to_write) throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V> to_write)
+        ActiveEvent active_event, Integer key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, Double key, RalphObject<V> to_write)
+        ActiveEvent active_event, Double key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException;
     public boolean return_internal_val_from_container();
 
@@ -59,7 +59,7 @@ public interface RalphInternalListInterface<V>
        Must guarantee that will only read from the returned value, not
        write to it.
      */
-    public List<RalphObject<V>> get_iterable(ActiveEvent active_event)
+    public List<RalphObject<V,ValueDeltaType>> get_iterable(ActiveEvent active_event)
         throws BackoutException;
     
     

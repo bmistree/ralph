@@ -15,8 +15,8 @@ import ralph.ActiveEvent;
  * @param <T> --- The actual java type of the values holding (ie,
  * outside of locked object)
  */
-public class ListTypeDataWrapper<T>
-    extends DataWrapper<List<RalphObject<T>>>{
+public class ListTypeDataWrapper<ValueType,DeltaValueType>
+    extends DataWrapper<List<RalphObject<ValueType,DeltaValueType>>>{
 	
     public class OpTuple
     {
@@ -26,9 +26,10 @@ public class ListTypeDataWrapper<T>
 		
         public int type;
         public Integer key;
-        public RalphObject<T> what_added_or_removed = null;
+        public RalphObject<ValueType,DeltaValueType> what_added_or_removed = null;
         public OpTuple(
-            int _type, Integer _key, RalphObject<T> _what_added_or_removed)
+            int _type, Integer _key,
+            RalphObject<ValueType,DeltaValueType> _what_added_or_removed)
         {
             type = _type;
             key = _key;
@@ -47,13 +48,17 @@ public class ListTypeDataWrapper<T>
     public List <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public ListTypeDataWrapper(List<RalphObject<T>> v, boolean _log_changes)
+    public ListTypeDataWrapper(
+        List<RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
     {
-        super( new ArrayList<RalphObject<T>>(v),_log_changes);
+        super(
+            new ArrayList<RalphObject<ValueType,DeltaValueType>>(v),
+            _log_changes);
         log_changes = _log_changes;
     }
 	
-    public ListTypeDataWrapper(ListTypeDataWrapper<T> v, boolean _log_changes)
+    public ListTypeDataWrapper(
+        ListTypeDataWrapper<ValueType,DeltaValueType> v, boolean _log_changes)
     {
         super(v.val,_log_changes);
         log_changes = _log_changes;
@@ -76,7 +81,8 @@ public class ListTypeDataWrapper<T>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,Integer key, RalphObject<T> to_write,
+        ActiveEvent active_event,Integer key,
+        RalphObject<ValueType,DeltaValueType> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if ((log_changes) && (! incorporating_deltas))
@@ -87,18 +93,18 @@ public class ListTypeDataWrapper<T>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,Integer key, RalphObject<T> to_write)
+        ActiveEvent active_event,Integer key,
+        RalphObject<ValueType,DeltaValueType> to_write)
         throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
 	
-	
     public void del_key(
         ActiveEvent active_event, Integer key_to_delete,
         boolean incorporating_deltas)
     {
-        RalphObject<T> what_removed =
+        RalphObject<ValueType,DeltaValueType> what_removed =
             val.remove(key_to_delete.intValue());
     	if (log_changes && (! incorporating_deltas))
             partner_change_log.add(delete_key_tuple(key_to_delete,what_removed));
@@ -110,7 +116,8 @@ public class ListTypeDataWrapper<T>
     }
     
     public void append(
-        ActiveEvent active_event, RalphObject<T> new_object,
+        ActiveEvent active_event,
+        RalphObject<ValueType,DeltaValueType> new_object,
         boolean incorporating_deltas) throws BackoutException
     {
         Integer key_added = new Integer(val.size());        
@@ -120,7 +127,8 @@ public class ListTypeDataWrapper<T>
     }
     
     public void append(
-        ActiveEvent active_event, RalphObject<T> new_object)
+        ActiveEvent active_event,
+        RalphObject<ValueType,DeltaValueType> new_object)
         throws BackoutException
     {
     	append(active_event,new_object,false);
@@ -135,7 +143,8 @@ public class ListTypeDataWrapper<T>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        RalphObject<T> new_val, boolean incorporating_deltas)
+        RalphObject<ValueType,DeltaValueType> new_val,
+        boolean incorporating_deltas)
         throws BackoutException
     {
         Integer key_added = new Integer(val.size());
@@ -146,12 +155,13 @@ public class ListTypeDataWrapper<T>
     
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        RalphObject<T> new_val) throws BackoutException
+        RalphObject<ValueType,DeltaValueType> new_val) throws BackoutException
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
 
-    public OpTuple delete_key_tuple(Integer _key, RalphObject<T> what_removed)
+    public OpTuple delete_key_tuple(
+        Integer _key, RalphObject<ValueType,DeltaValueType> what_removed)
     {
         return new OpTuple(OpTuple.DELETE_FLAG,_key,what_removed);
     }
@@ -160,7 +170,8 @@ public class ListTypeDataWrapper<T>
         return opt.type == OpTuple.DELETE_FLAG;
     }
 
-    public OpTuple add_key_tuple(Integer _key, RalphObject<T> what_added)
+    public OpTuple add_key_tuple(
+        Integer _key, RalphObject<ValueType,DeltaValueType> what_added)
     {
         return new OpTuple(OpTuple.ADD_FLAG,_key,what_added);
     }

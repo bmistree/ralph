@@ -15,22 +15,25 @@ import RalphDataWrappers.MapTypeDataWrapperSupplier;
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
  * Strings).
  * @param <V> --- The Java type of data that the keys should point to.
+ * @param <ValueDeltaType> --- The type of data held by the values in
+ * the map that should get passed to the versionhelper.
  */
-public class NonAtomicInternalMap<K,V> 
+public class NonAtomicInternalMap<K,V,ValueDeltaType> 
     extends NonAtomicObject <
     // The internal values that these are holding
-    Map<K,RalphObject<V>>
+    Map<K,RalphObject<V,ValueDeltaType>>,
+    VersionMapDeltas
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
-               RalphInternalMapInterface<K,V>
+        RalphInternalMapInterface<K,V,ValueDeltaType>
 {
     public enum IndexType{
         DOUBLE,STRING,BOOLEAN
     };
 
-    private MapTypeDataWrapper<K,V> reference_type_val = null;
-    private RalphInternalMap<K,V> internal_map = null;
-    public EnsureAtomicWrapper<V> locked_wrapper = null;
+    private MapTypeDataWrapper<K,V,ValueDeltaType> reference_type_val = null;
+    private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
+    public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     public IndexType index_type;
@@ -38,19 +41,20 @@ public class NonAtomicInternalMap<K,V>
     public NonAtomicInternalMap(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        internal_map = new RalphInternalMap<K,V>(ralph_globals);
+        version_helper = VersionMapDeltas.MAP_VERSION_HELPER;
+        internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
     }
     public void init(
-        MapTypeDataWrapperFactory<K,V> mtdwf,
-        Map<K,RalphObject<V>>init_val,
+        MapTypeDataWrapperFactory<K,V,ValueDeltaType> mtdwf,
+        Map<K,RalphObject<V,ValueDeltaType>>init_val,
         IndexType _index_type,
-        EnsureAtomicWrapper<V>_locked_wrapper)
+        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
         index_type = _index_type;
         
         locked_wrapper = _locked_wrapper;
         reference_type_val =
-            (MapTypeDataWrapper<K, V>)mtdwf.construct(init_val, false);
+            (MapTypeDataWrapper<K, V,ValueDeltaType>)mtdwf.construct(init_val, false);
         val = reference_type_val;
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this,index_type);
@@ -75,14 +79,14 @@ public class NonAtomicInternalMap<K,V>
 
     /** MapTypeDataWrapperSupplier Interface */
     @Override    
-    public MapTypeDataWrapper<K,V> get_val_read(
+    public MapTypeDataWrapper<K,V,ValueDeltaType> get_val_read(
         ActiveEvent active_event) throws BackoutException
     {
         // do not need to acquire read lock: non-atomic
         return reference_type_val;
     }
     @Override    
-    public MapTypeDataWrapper<K,V> get_val_write(
+    public MapTypeDataWrapper<K,V,ValueDeltaType> get_val_write(
         ActiveEvent active_event) throws BackoutException
     {
         // do not need to acquire write lock: non-atomic
@@ -118,8 +122,8 @@ public class NonAtomicInternalMap<K,V>
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, K key, RalphObject<V> to_write)
-        throws BackoutException
+        ActiveEvent active_event, K key,
+        RalphObject<V,ValueDeltaType> to_write) throws BackoutException
     {
         internal_map.set_val_on_key(active_event,key,to_write);
     }

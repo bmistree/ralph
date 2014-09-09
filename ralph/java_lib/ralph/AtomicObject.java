@@ -24,7 +24,8 @@ import RalphServiceActions.AtomicObjectTryNextAction;
 /**
  * @param <T> --- The java type of the internal data
  */
-public abstract class AtomicObject<T> extends RalphObject<T> 
+public abstract class AtomicObject<T,DeltaType>
+    extends RalphObject<T,DeltaType> 
 {
     public final String uuid;
     public boolean log_changes;
@@ -57,7 +58,7 @@ public abstract class AtomicObject<T> extends RalphObject<T>
     
     //# write_lock_holder is EventCachedPriorityObj
     protected EventCachedPriorityObj write_lock_holder = null; 
-
+    
     private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
@@ -105,7 +106,6 @@ public abstract class AtomicObject<T> extends RalphObject<T>
 
             return 1;
         }
-
         
         /**
            Compares by descending event uuids.
@@ -150,29 +150,36 @@ public abstract class AtomicObject<T> extends RalphObject<T>
 	
     public void init_multithreaded_locked_object(
         ValueTypeDataWrapperFactory<T> vtdwc,
+        VersionHelper<DeltaType> _version_helper,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = vtdwc;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
+        version_helper = _version_helper;
     }
 
     public void init_multithreaded_locked_object(
         MapTypeDataWrapperFactory rtdwc,
-        boolean _log_changes, T init_val)
+        VersionHelper<DeltaType> _version_helper,
+        boolean _log_changes, 
+        T init_val)
     {
         data_wrapper_constructor = rtdwc;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
+        version_helper = _version_helper;
     }
 
     public void init_multithreaded_locked_object(
         ListTypeDataWrapperFactory rtdwc,
+        VersionHelper<DeltaType> _version_helper,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = rtdwc;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
+        version_helper = _version_helper;
     }
 
     

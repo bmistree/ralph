@@ -12,7 +12,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
  * Strings).
  * @param <V> --- The Java type of data that are elements in the list
  */
-public interface RalphInternalMapInterface<K,V> 
+public interface RalphInternalMapInterface<K,V,ValueDeltaType> 
 {
     public V get_val_on_key(ActiveEvent active_event, K key)
         throws BackoutException;
@@ -30,7 +30,7 @@ public interface RalphInternalMapInterface<K,V>
     public void set_val_on_key(
         ActiveEvent active_event, K key, V to_write) throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, K key, RalphObject<V> to_write)
+        ActiveEvent active_event, K key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException;
     
     public boolean return_internal_val_from_container();

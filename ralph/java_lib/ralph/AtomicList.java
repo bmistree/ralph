@@ -1,7 +1,7 @@
 package ralph;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.List;
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -24,47 +24,59 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  *     LockedListVariable< Number > >
  * 
  */
-public class AtomicList<V>
+public class AtomicList<V,ValueDeltaType>
     extends AtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return AtomicListContainer.
     // when call set val, must pass in a AtomicListContainer
-    AtomicInternalList<V>>
+    AtomicInternalList<V,ValueDeltaType>,
+    // version helper gets passed in delta of this type.
+    AtomicInternalList<V,ValueDeltaType>
+    >
 {
-    private EnsureAtomicWrapper<V> locked_wrapper = null;
+    private EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
 
     public final static String deserialization_label = "Atomic List";
     
     public AtomicList(
-        boolean _log_changes,EnsureAtomicWrapper<V> locked_wrapper,
+        boolean _log_changes,EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+        VersionHelper<AtomicInternalList<V,ValueDeltaType>> version_helper,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.locked_wrapper = locked_wrapper;
         
-        AtomicInternalList<V> init_val =
-            new AtomicInternalList<V>(ralph_globals);
+        AtomicInternalList<V,ValueDeltaType> init_val =
+            new AtomicInternalList<V,ValueDeltaType>(ralph_globals);
         init_val.init_multithreaded_list_container(
             _log_changes,
-            new ListTypeDataWrapperFactory<V>(),
-            new ArrayList<RalphObject<V>>(),
+            new ListTypeDataWrapperFactory<V,ValueDeltaType>(),
+            new ArrayList<RalphObject<V,ValueDeltaType>>(),
             locked_wrapper);
 
         init_atomic_value_variable(
             _log_changes, init_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<V>>());
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,ValueDeltaType>>(),
+            version_helper);
     }
     
-
     @Override
-    protected SpeculativeAtomicObject<AtomicInternalList<V>>
-        duplicate_for_speculation(AtomicInternalList<V> to_speculate_on)
+    protected
+        // return type
+        SpeculativeAtomicObject<
+            AtomicInternalList<V,ValueDeltaType>,
+            AtomicInternalList<V,ValueDeltaType>>
+        // function name and arguments
+        duplicate_for_speculation(AtomicInternalList<V,ValueDeltaType> to_speculate_on)
     {
-        SpeculativeAtomicObject<AtomicInternalList<V>> to_return =
+        SpeculativeAtomicObject<
+            AtomicInternalList<V,ValueDeltaType>,
+            AtomicInternalList<V,ValueDeltaType>> to_return =
             new AtomicList(
                 log_changes,
                 to_speculate_on,
                 locked_wrapper,
+                version_helper,
                 ralph_globals);
         
         to_return.set_derived(this);
@@ -79,37 +91,43 @@ public class AtomicList<V>
      */
     public AtomicList(
         boolean _log_changes,
-        AtomicInternalList<V> internal_val,
-        EnsureAtomicWrapper<V> locked_wrapper,RalphGlobals ralph_globals)
+        AtomicInternalList<V,ValueDeltaType> internal_val,
+        EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+        VersionHelper<AtomicInternalList<V,ValueDeltaType>> version_helper,
+        RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.locked_wrapper = locked_wrapper;
         
         init_atomic_value_variable(
             _log_changes, internal_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<V>>());
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,ValueDeltaType>>(),
+            version_helper);
     }
 
     
     public AtomicList(
         boolean _log_changes,
-        ArrayList<RalphObject<V>> init_val,boolean incorporating_deltas,
-        EnsureAtomicWrapper<V> locked_wrapper,RalphGlobals ralph_globals)
+        List<RalphObject<V,ValueDeltaType>> init_val,boolean incorporating_deltas,
+        EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+        VersionHelper<AtomicInternalList<V,ValueDeltaType>> version_helper,
+        RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.locked_wrapper = locked_wrapper;
         
-        AtomicInternalList<V> init_val_2 =
-            new AtomicInternalList<V>(ralph_globals);
+        AtomicInternalList<V,ValueDeltaType> init_val_2 =
+            new AtomicInternalList<V,ValueDeltaType>(ralph_globals);
         init_val_2.init_multithreaded_list_container(
             _log_changes,
-            new ListTypeDataWrapperFactory<V>(),
-            new ArrayList<RalphObject<V>>(),
+            new ListTypeDataWrapperFactory<V,ValueDeltaType>(),
+            new ArrayList<RalphObject<V,ValueDeltaType>>(),
             locked_wrapper);
 
         init_atomic_value_variable(
             _log_changes, init_val_2,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<V>>());
+            new ValueTypeDataWrapperFactory<AtomicInternalList<V,ValueDeltaType>>(),
+            version_helper);
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -125,21 +143,22 @@ public class AtomicList<V>
         VariablesProto.Variables.Any.Builder any_builder)
         throws BackoutException
     {
-        AtomicInternalList<V> internal_val =
+        AtomicInternalList<V,ValueDeltaType> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
     }
 
     public void load_init_vals(
-        ArrayList<RalphObject<V>> init_val, boolean incorporating_deltas)
+        List<RalphObject<V,ValueDeltaType>> init_val, boolean incorporating_deltas)
     {
         if (init_val == null)
             return;
 
         //FIXME probably inefficient to add each field separately
-        for (RalphObject<V> to_load: init_val)
+        for (RalphObject<V,ValueDeltaType> to_load: init_val)
         {
-            ListTypeDataWrapper<V>casted_wrapper = (ListTypeDataWrapper<V>)val.val.val;
+            ListTypeDataWrapper<V,ValueDeltaType>casted_wrapper =
+                (ListTypeDataWrapper<V,ValueDeltaType>)val.val.val;
             // single threaded variables will not throw backout exceptions.
             try {                
                 casted_wrapper.append(

@@ -14,15 +14,12 @@ import ralph.Util;
 import RalphExceptions.BackoutException;
 
 /**
- * 
- * @author bmistree
- *
  * @param <K> --- The key type
  * @param <T> --- The actual java type of the values holding (ie,
  * outside of locked object)
  */
-public class MapTypeDataWrapper<K,T>
-    extends DataWrapper<Map<K,RalphObject<T>>>{
+public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
+    extends DataWrapper<Map<K,RalphObject<ValueType,DeltaValueType>>>{
 	
     class OpTuple
     {
@@ -52,13 +49,17 @@ public class MapTypeDataWrapper<K,T>
     private List <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public MapTypeDataWrapper(Map<K,RalphObject<T>> v, boolean _log_changes)
+    public MapTypeDataWrapper(
+        Map<K,RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
     {
-        super( new HashMap<K,RalphObject<T>>(v),_log_changes);
+        super(
+            new HashMap<K,RalphObject<ValueType,DeltaValueType>>(v),
+            _log_changes);
         log_changes = _log_changes;
     }
 	
-    public MapTypeDataWrapper(MapTypeDataWrapper<K,T> v, boolean _log_changes)
+    public MapTypeDataWrapper(
+        MapTypeDataWrapper<K,ValueType,DeltaValueType> v, boolean _log_changes)
     {
         super(v.val,_log_changes);
         log_changes = _log_changes;
@@ -82,7 +83,8 @@ public class MapTypeDataWrapper<K,T>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,K key, RalphObject<T> to_write,
+        ActiveEvent active_event,K key,
+        RalphObject<ValueType,DeltaValueType> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if (! val.containsKey(key))
@@ -99,7 +101,8 @@ public class MapTypeDataWrapper<K,T>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,K key, RalphObject<T> to_write) throws BackoutException
+        ActiveEvent active_event,K key,
+        RalphObject<ValueType,DeltaValueType> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
@@ -128,7 +131,8 @@ public class MapTypeDataWrapper<K,T>
 
     public void add_key(
         ActiveEvent active_event, K key_added,
-        RalphObject<T> new_object, boolean incorporating_deltas)
+        RalphObject<ValueType,DeltaValueType> new_object,
+        boolean incorporating_deltas)
     {
     	/*
           if self.log_changes and (not incorporating_deltas):
@@ -144,7 +148,8 @@ public class MapTypeDataWrapper<K,T>
     }
     
     public void add_key(
-        ActiveEvent active_event,K key_to_add,RalphObject<T> new_object)
+        ActiveEvent active_event,K key_to_add,
+        RalphObject<ValueType,DeltaValueType> new_object)
     {
     	add_key(active_event,key_to_add,new_object,false);
     }
@@ -159,14 +164,14 @@ public class MapTypeDataWrapper<K,T>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        RalphObject<T> new_val, boolean incorporating_deltas)
+        RalphObject<ValueType,DeltaValueType> new_val, boolean incorporating_deltas)
     {
     	Util.logger_assert("Cannot insert on map");
     }
 
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        RalphObject<T> new_val)
+        RalphObject<ValueType,DeltaValueType> new_val)
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
@@ -178,14 +183,14 @@ public class MapTypeDataWrapper<K,T>
      * @param incorporating_deltas
      */
     public void append(
-        ActiveEvent active_event, RalphObject<T> new_val,
+        ActiveEvent active_event, RalphObject<ValueType,DeltaValueType> new_val,
         boolean incorporating_deltas)
     {
     	Util.logger_assert("Can only append to list");
     }
     
     public void append(
-        ActiveEvent active_event, RalphObject<T> new_val)
+        ActiveEvent active_event, RalphObject<ValueType,DeltaValueType> new_val)
     {
     	append(active_event,new_val,false);
     }

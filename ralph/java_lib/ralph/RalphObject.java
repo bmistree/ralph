@@ -6,15 +6,27 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @param <T> --- The internal, Java type of the data
+ * @param <DeltaType> --- The type that gets passed to the version
+ * helper for logging.
  */
-public abstract class RalphObject<T>
+public abstract class RalphObject<T,DeltaType>
 {
     private AtomicFactory atomic_factory = null;
     private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
-	
-    public RalphObject<T> copy(
+
+    /**
+       May be null.  Gets set in initializer.  Used to save deltas of
+       a version.
+     */
+    protected VersionHelper<DeltaType> version_helper = null;
+
+
+    /**
+       FIXME: can we get rid of this?
+     */
+    public RalphObject<T,DeltaType> copy(
         ActiveEvent active_event, boolean log_changes,
         boolean multi_threaded) throws BackoutException
     {
@@ -51,6 +63,7 @@ public abstract class RalphObject<T>
     public void deserialize_rpc(
         RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
     {
+        // FIXME: should just declare this abstract.
         Util.logger_assert("FIXME: objects override deserialize_rpc.");
     }
     

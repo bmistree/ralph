@@ -25,13 +25,13 @@ import ralph.RalphGlobals;
    This is the base class of something that does that.
    
  */
-public interface EnsureAtomicWrapper<V>
+public interface EnsureAtomicWrapper<V,DeltaType>
 {
     /**
        Used to determine how to deserialize internal data.
      */
     public String get_serialization_label();
     
-    public RalphObject<V> ensure_atomic_object(
+    public RalphObject<V,DeltaType> ensure_atomic_object(
         V object_to_ensure,RalphGlobals ralph_globals);
 }

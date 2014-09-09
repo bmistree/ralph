@@ -77,7 +77,7 @@
                    ${protobuf_path}"
         debug="true"
         debuglevel="lines,vars,source"
-        includeantruntime="false" />
+        includeantruntime="false"/>
   </target>
 
   

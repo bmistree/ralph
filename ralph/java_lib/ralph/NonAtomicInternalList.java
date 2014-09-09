@@ -9,36 +9,42 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
 
 /**
- * @param <V> --- The Java type of data that the values should point to.
+ * @param <V> --- The Java type of data that the values should point
+ * to.
+ * @param <DeltaType> --- The type that should be passed to the
+ * version helper for each internal value.  NOT for the entire list.
  */
-public class NonAtomicInternalList<V> 
+public class NonAtomicInternalList<V,ValueDeltaType> 
     extends NonAtomicObject <
     // The internal values that these are holding
-    List<RalphObject<V>>
+    List<RalphObject<V,ValueDeltaType>>,
+    // The type that gets passed to internal version helper.
+    VersionListDeltas
     >
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
-               RalphInternalListInterface<V>
+        RalphInternalListInterface<V,ValueDeltaType>
 {    
-    private ListTypeDataWrapper<V> reference_type_val = null;
-    private RalphInternalList<V> internal_list = null;
-    public EnsureAtomicWrapper<V> locked_wrapper = null;
+    private ListTypeDataWrapper<V,ValueDeltaType> reference_type_val = null;
+    private RalphInternalList<V,ValueDeltaType> internal_list = null;
+    public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     
     public NonAtomicInternalList(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        internal_list = new RalphInternalList<V>(ralph_globals);
+        version_helper = VersionListDeltas.LIST_VERSION_HELPER;
+        internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
     }
     public void init(
-        ListTypeDataWrapperFactory<V> ltdwf,
-        List<RalphObject<V>>init_val,
-        EnsureAtomicWrapper<V>_locked_wrapper)
+        ListTypeDataWrapperFactory<V,ValueDeltaType> ltdwf,
+        List<RalphObject<V,ValueDeltaType>>init_val,
+        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
         locked_wrapper = _locked_wrapper;
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
         
         reference_type_val =
-            (ListTypeDataWrapper<V>)ltdwf.construct(init_val, false); 
+            (ListTypeDataWrapper<V,ValueDeltaType>)ltdwf.construct(init_val, false); 
         val = reference_type_val;		
     }
 
@@ -61,14 +67,14 @@ public class NonAtomicInternalList<V>
 
     /** ListTypeDataWrapperSupplier Interface */
     @Override    
-    public ListTypeDataWrapper<V> get_val_read(
+    public ListTypeDataWrapper<V,ValueDeltaType> get_val_read(
         ActiveEvent active_event) throws BackoutException
     {
         // do not need to acquire read lock: non-atomic
         return reference_type_val;
     }
     @Override    
-    public ListTypeDataWrapper<V> get_val_write(
+    public ListTypeDataWrapper<V,ValueDeltaType> get_val_write(
         ActiveEvent active_event) throws BackoutException
     {
         // do not need to acquire write lock: non-atomic
@@ -93,7 +99,7 @@ public class NonAtomicInternalList<V>
     @Override    
     public void insert(
         ActiveEvent active_event, Integer key,
-        RalphObject<V> to_insert)  throws BackoutException
+        RalphObject<V,ValueDeltaType> to_insert)  throws BackoutException
     {
         internal_list.insert(active_event,key,to_insert);
     }
@@ -142,14 +148,14 @@ public class NonAtomicInternalList<V>
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V> to_write)
+        ActiveEvent active_event, Integer key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException
     {
         internal_list.set_val_on_key(active_event,key,to_write);
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, Double key, RalphObject<V> to_write)
+        ActiveEvent active_event, Double key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException
     {
         internal_list.set_val_on_key(active_event,key,to_write);
@@ -172,9 +178,9 @@ public class NonAtomicInternalList<V>
     {
         return internal_list.get_len_boxed(active_event);
     }
-    
+
     @Override
-    public List<RalphObject<V>> get_iterable(ActiveEvent active_event)
+    public List<RalphObject<V,ValueDeltaType>> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
         return internal_list.get_iterable(active_event);

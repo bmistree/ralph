@@ -51,7 +51,7 @@ public class Variables
     /** Atomics */
     
     public static class AtomicNumberVariable
-        extends AtomicValueVariable<Double>
+        extends AtomicValueVariable<Double,Double>
     {
         public AtomicNumberVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -60,25 +60,29 @@ public class Variables
                 _log_changes,
                 new Double(((Number) init_val).doubleValue()),
                 number_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
         
         @Override
-        protected SpeculativeAtomicObject<Double>
+        protected SpeculativeAtomicObject<Double,Double>
             duplicate_for_speculation(Double to_speculate_on)
         {
-            SpeculativeAtomicObject<Double> to_return =
+            SpeculativeAtomicObject<Double,Double> to_return =
                 new AtomicNumberVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
             return to_return;
         }
         
-        public AtomicNumberVariable(boolean _log_changes,RalphGlobals ralph_globals)
+        public AtomicNumberVariable(
+            boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_number,
-                number_value_type_data_wrapper_factory,ralph_globals);
+                number_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
+                ralph_globals);
         }
         
         @Override
@@ -101,21 +105,25 @@ public class Variables
     }
 
     public static class AtomicTextVariable
-        extends AtomicValueVariable<String>
+        extends AtomicValueVariable<String,String>
     {
         public AtomicTextVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(String)init_val,
-                text_value_type_data_wrapper_factory,ralph_globals);
+                text_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                ralph_globals);
         }
         public AtomicTextVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_text,
-                text_value_type_data_wrapper_factory,ralph_globals);
+                text_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                ralph_globals);
         }
         @Override
         public void serialize_as_rpc_arg(
@@ -137,10 +145,10 @@ public class Variables
         }
         
         @Override
-        protected SpeculativeAtomicObject<String>
+        protected SpeculativeAtomicObject<String,String>
             duplicate_for_speculation(String to_speculate_on)
         {
-            SpeculativeAtomicObject<String> to_return =
+            SpeculativeAtomicObject<String,String> to_return =
                 new AtomicTextVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -149,21 +157,25 @@ public class Variables
     }
 	
     public static class AtomicTrueFalseVariable
-        extends AtomicValueVariable<Boolean>
+        extends AtomicValueVariable<Boolean,Boolean>
     {
         public AtomicTrueFalseVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(Boolean)init_val,
-                true_false_value_type_data_wrapper_factory,ralph_globals);
+                true_false_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                ralph_globals);
         }
         public AtomicTrueFalseVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_tf,
-                true_false_value_type_data_wrapper_factory,ralph_globals);
+                true_false_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                ralph_globals);
         }
         @Override
         public void serialize_as_rpc_arg(
@@ -185,10 +197,10 @@ public class Variables
         }
         
         @Override
-        protected SpeculativeAtomicObject<Boolean>
+        protected SpeculativeAtomicObject<Boolean,Boolean>
             duplicate_for_speculation(Boolean to_speculate_on)
         {
-            SpeculativeAtomicObject<Boolean> to_return =
+            SpeculativeAtomicObject<Boolean,Boolean> to_return =
                 new AtomicTrueFalseVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -197,7 +209,7 @@ public class Variables
     }
 
     public static class AtomicEnumVariable<T>
-        extends AtomicValueVariable<T>
+        extends AtomicValueVariable<T,T>
     {
         public AtomicEnumVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
@@ -205,6 +217,7 @@ public class Variables
             super(
                 _log_changes,init_val,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicEnumVariable(
@@ -213,14 +226,15 @@ public class Variables
             super(
                 _log_changes,null,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
                 ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<T>
+        protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)
         {
-            SpeculativeAtomicObject<T> to_return =
+            SpeculativeAtomicObject<T,T> to_return =
                 new AtomicEnumVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -240,7 +254,7 @@ public class Variables
     }
     
     public static class AtomicInterfaceVariable<T>
-        extends AtomicValueVariable<T>
+        extends AtomicValueVariable<T,T>
     {
         public AtomicInterfaceVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
@@ -248,6 +262,7 @@ public class Variables
             super(
                 _log_changes,init_val,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicInterfaceVariable(
@@ -256,14 +271,15 @@ public class Variables
             super(
                 _log_changes,null,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<T>
+        protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)
         {
-            SpeculativeAtomicObject<T> to_return =
+            SpeculativeAtomicObject<T,T> to_return =
                 new AtomicInterfaceVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -281,30 +297,39 @@ public class Variables
     }
     
     public static class AtomicServiceFactoryVariable
-        extends AtomicValueVariable<InternalServiceFactory>
+        extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
         public AtomicServiceFactoryVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(InternalServiceFactory)init_val,
-                service_factory_value_type_data_wrapper_factory,ralph_globals);
+                service_factory_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
+                ralph_globals);
         }
         public AtomicServiceFactoryVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_service_factory,
-                service_factory_value_type_data_wrapper_factory,ralph_globals);
+                service_factory_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
+                ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<InternalServiceFactory>
+        protected
+            // return type
+            SpeculativeAtomicObject<
+                InternalServiceFactory,InternalServiceFactory>
+            // method name and arguments
             duplicate_for_speculation(InternalServiceFactory to_speculate_on)
         {
-            SpeculativeAtomicObject<InternalServiceFactory> to_return =
-                new AtomicServiceFactoryVariable(
-                    log_changes,to_speculate_on,ralph_globals);
+            SpeculativeAtomicObject<InternalServiceFactory,InternalServiceFactory>
+                to_return =
+                    new AtomicServiceFactoryVariable(
+                        log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
             return to_return;
         }
@@ -349,28 +374,32 @@ public class Variables
     }
     
     public static class AtomicServiceReferenceVariable
-        extends AtomicValueVariable<InternalServiceReference>
+        extends AtomicValueVariable<InternalServiceReference,InternalServiceReference>
     {
         public AtomicServiceReferenceVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,(InternalServiceReference)init_val,
-                service_reference_value_type_data_wrapper_factory,ralph_globals);
+                service_reference_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
+                ralph_globals);
         }
         public AtomicServiceReferenceVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,default_service_reference,
-                service_reference_value_type_data_wrapper_factory,ralph_globals);
+                service_reference_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
+                ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<InternalServiceReference>
+        protected SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference>
             duplicate_for_speculation(InternalServiceReference to_speculate_on)
         {
-            SpeculativeAtomicObject<InternalServiceReference> to_return =
+            SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference> to_return =
                 new AtomicServiceReferenceVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -422,7 +451,7 @@ public class Variables
     }
     
     public static class NonAtomicNumberVariable
-        extends NonAtomicValueVariable<Double>
+        extends NonAtomicValueVariable<Double,Double>
     {
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes, Double init_val,
@@ -431,6 +460,7 @@ public class Variables
             super(
                 init_val,
                 number_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -439,7 +469,9 @@ public class Variables
         {
             super(
                 default_number,
-                number_value_type_data_wrapper_factory,ralph_globals);
+                number_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
+                ralph_globals);
         }
         @Override
         public void serialize_as_rpc_arg(
@@ -461,7 +493,7 @@ public class Variables
     }
 
     public static class NonAtomicTextVariable
-        extends NonAtomicValueVariable<String>
+        extends NonAtomicValueVariable<String,String>
     {
         public NonAtomicTextVariable(
             boolean _dummy_log_changes,String init_val,
@@ -469,7 +501,9 @@ public class Variables
         {
             super(
                 init_val,
-                text_value_type_data_wrapper_factory,ralph_globals);
+                text_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                ralph_globals);
         }
 		
         public NonAtomicTextVariable(
@@ -477,7 +511,9 @@ public class Variables
         {
             super(
                 default_text,
-                text_value_type_data_wrapper_factory,ralph_globals);
+                text_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                ralph_globals);
         }
         @Override
         public void serialize_as_rpc_arg(
@@ -500,7 +536,7 @@ public class Variables
     }
 
     public static class NonAtomicTrueFalseVariable
-        extends NonAtomicValueVariable<Boolean>
+        extends NonAtomicValueVariable<Boolean,Boolean>
     {
         public NonAtomicTrueFalseVariable(
             boolean _dummy_log_changes, Boolean init_val,
@@ -508,7 +544,9 @@ public class Variables
         {
             super(
                 init_val,
-                true_false_value_type_data_wrapper_factory,ralph_globals);
+                true_false_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                ralph_globals);
         }
 
         public NonAtomicTrueFalseVariable(
@@ -516,7 +554,9 @@ public class Variables
         {
             super(
                 default_tf,
-                true_false_value_type_data_wrapper_factory,ralph_globals);
+                true_false_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -539,7 +579,7 @@ public class Variables
     }
 
     public static class NonAtomicEnumVariable<T>
-        extends NonAtomicValueVariable<T>
+        extends NonAtomicValueVariable<T,T>
     {
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
@@ -548,6 +588,7 @@ public class Variables
             super(
                 init_val,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -555,7 +596,9 @@ public class Variables
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                null,new ValueTypeDataWrapperFactory<T>(),ralph_globals);
+                null,new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
+                ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -570,7 +613,7 @@ public class Variables
     }
     
     public static class NonAtomicInterfaceVariable<T>
-        extends NonAtomicValueVariable<T>
+        extends NonAtomicValueVariable<T,T>
     {
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, T init_val,
@@ -579,6 +622,7 @@ public class Variables
             super(
                 init_val,
                 new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -586,7 +630,9 @@ public class Variables
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                null,new ValueTypeDataWrapperFactory<T>(),ralph_globals);
+                null,new ValueTypeDataWrapperFactory<T>(),
+                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
+                ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -600,7 +646,7 @@ public class Variables
     }
     
     public static class NonAtomicServiceFactoryVariable
-        extends NonAtomicValueVariable<InternalServiceFactory>
+        extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
     {
         public NonAtomicServiceFactoryVariable(
             boolean _log_changes,InternalServiceFactory init_val,
@@ -609,6 +655,7 @@ public class Variables
             super(
                 init_val,
                 service_factory_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
                 ralph_globals);
         }
         public NonAtomicServiceFactoryVariable(
@@ -617,6 +664,7 @@ public class Variables
             super(
                 default_service_factory,
                 service_factory_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -642,7 +690,7 @@ public class Variables
 
 
     public static class NonAtomicServiceReferenceVariable
-        extends NonAtomicValueVariable<InternalServiceReference>
+        extends NonAtomicValueVariable<InternalServiceReference,InternalServiceReference>
     {
         public NonAtomicServiceReferenceVariable(
             boolean _log_changes,InternalServiceReference init_val,
@@ -651,6 +699,7 @@ public class Variables
             super(
                 init_val,
                 service_reference_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
                 ralph_globals);
         }
         public NonAtomicServiceReferenceVariable(
@@ -659,6 +708,7 @@ public class Variables
             super(
                 default_service_reference,
                 service_reference_value_type_data_wrapper_factory,
+                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -683,96 +733,120 @@ public class Variables
     }
 
     
-        
     /************ Handling maps ********/
     //non-atomic
-    public static class NonAtomicMapVariable <K,V>
-        extends NonAtomicMap<K,V>
+    public static class NonAtomicMapVariable <K,V,ValueDeltaType>
+        extends NonAtomicMap<K,V,ValueDeltaType>
     {
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(_index_type,locked_wrapper,ralph_globals);
+            super(
+                _index_type,locked_wrapper,
+                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals);
         }
 
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalMap<K,V> internal_val,
+            NonAtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(internal_val,_index_type,locked_wrapper,ralph_globals);
+            super(
+                internal_val,_index_type,locked_wrapper,
+                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals);
         }
     }
 
     // atomic
-    public static class AtomicMapVariable <K,V>
-        extends AtomicMap<K,V>
+    public static class AtomicMapVariable <K,V,ValueDeltaType>
+        extends AtomicMap<K,V,ValueDeltaType>
     {
         public AtomicMapVariable(
             boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(_log_changes,_index_type,locked_wrapper,ralph_globals);
+            super(
+                _log_changes,_index_type,locked_wrapper,
+                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals);
         }
 
         public AtomicMapVariable(
             boolean _log_changes,
-            AtomicInternalMap<K,V> internal_val,
+            AtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,internal_val,_index_type,locked_wrapper,
+                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
                 ralph_globals);
         }        
     }
     
     /************ Handling Lists ********/
-    public static class AtomicListVariable <V>
-        extends AtomicList<V>
+    public static class AtomicListVariable <V,ValueDeltaType>
+        extends AtomicList<V,ValueDeltaType>
     {
         public AtomicListVariable(
-            boolean _log_changes,EnsureAtomicWrapper<V> locked_wrapper,
+            boolean _log_changes,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(_log_changes,locked_wrapper,ralph_globals);
+            super(
+                _log_changes,locked_wrapper,
+                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                ralph_globals);
         }
 
 
         public AtomicListVariable(
-            boolean _log_changes,AtomicInternalList<V> internal_val,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            boolean _log_changes,
+            AtomicInternalList<V,ValueDeltaType> internal_val,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(_log_changes,internal_val,locked_wrapper,ralph_globals);
+            super(
+                _log_changes,internal_val,locked_wrapper,
+                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                ralph_globals);
         }
     }
 
-    public static class NonAtomicListVariable <V>
-        extends NonAtomicList<V>
+    public static class NonAtomicListVariable <V,ValueDeltaType>
+        extends NonAtomicList<V,ValueDeltaType>
     {
         public NonAtomicListVariable(
-            boolean _dummy_log_changes, EnsureAtomicWrapper<V> locked_wrapper,
+            boolean _dummy_log_changes,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(locked_wrapper,ralph_globals);
+            super(
+                locked_wrapper,
+                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                ralph_globals);
         }
 
         public NonAtomicListVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalList<V> internal_val,
-            EnsureAtomicWrapper<V> locked_wrapper,
+            NonAtomicInternalList<V,ValueDeltaType> internal_val,
+            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             RalphGlobals ralph_globals)
         {
-            super(internal_val,locked_wrapper,ralph_globals);
+            super(
+                internal_val,locked_wrapper,
+                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                ralph_globals);
         }
     }
 }

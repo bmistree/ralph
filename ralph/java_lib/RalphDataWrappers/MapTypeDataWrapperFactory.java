@@ -5,28 +5,23 @@ import ralph.RalphObject;
 import ralph.ActiveEvent;
 
 /**
- * 
- * @author bmistree
- *
- * key, value, returned from dewaldoify
- *
  * @param <K> --- Key for the map
  * @param <V> --- Java variables in the hashmap
  */
 
-public class MapTypeDataWrapperFactory<K,V>
+public class MapTypeDataWrapperFactory<K,V,ValueDeltaType>
     extends DataWrapperFactory<
     // The actual internal data that will be held by the data wrapper
-    Map<K,RalphObject<V>>
+    Map<K,RalphObject<V,ValueDeltaType>>
     >
 {
 
     @Override
-    public DataWrapper<Map<K, RalphObject<V>>>
+    public DataWrapper<Map<K, RalphObject<V,ValueDeltaType>>>
         construct(
-            Map<K, RalphObject<V>> _val, boolean log_changes) 
+            Map<K, RalphObject<V,ValueDeltaType>> _val, boolean log_changes) 
     {
-        return new MapTypeDataWrapper<K,V>(_val,log_changes);
+        return new MapTypeDataWrapper<K,V,ValueDeltaType>(_val,log_changes);
     }
 	
 }

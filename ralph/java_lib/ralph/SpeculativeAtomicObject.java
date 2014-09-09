@@ -84,15 +84,16 @@ import RalphServiceActions.SpeculativeObjectPromoteAction;
       
 
  */
-public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
+public abstract class SpeculativeAtomicObject<T,DeltaType>
+    extends AtomicObject<T,DeltaType>
 {
     /**
        0th index is eldest element that we are speculating on.  Last
        index is most recent.
      */
-    private List<SpeculativeAtomicObject<T>> speculated_entries =
-        new ArrayList<SpeculativeAtomicObject<T>>();
-    private SpeculativeAtomicObject<T> speculating_on = null;
+    private List<SpeculativeAtomicObject<T,DeltaType>> speculated_entries =
+        new ArrayList<SpeculativeAtomicObject<T,DeltaType>>();
+    private SpeculativeAtomicObject<T,DeltaType> speculating_on = null;
 
     /**
        Note: both of these are only used by derivative objects.
@@ -148,7 +149,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
        objects point to their root object.  Value gets set in
        set_derived.
      */
-    private SpeculativeAtomicObject<T> root_object = null;
+    private SpeculativeAtomicObject<T,DeltaType> root_object = null;
 
     /**
        Only really used on root object.
@@ -177,7 +178,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
        See note above root_speculative.  Should be called immediately
        after duplicate_for_speculation.
      */
-    protected void set_derived(SpeculativeAtomicObject<T> root_object)
+    protected void set_derived(SpeculativeAtomicObject<T,DeltaType> root_object)
     {
         this.root_object = root_object;
         root_speculative = false;
@@ -244,7 +245,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
     }
     
     
-    protected abstract SpeculativeAtomicObject<T>
+    protected abstract SpeculativeAtomicObject<T,DeltaType>
         duplicate_for_speculation(T to_speculate_on);
     
     /**
@@ -373,11 +374,11 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         // Step 0: find associated to_speculate_on
         // FIXME: is this safe?
 
-        ArrayList<SpeculativeAtomicObject<T>> to_iter_over =
+        List<SpeculativeAtomicObject<T,DeltaType>> to_iter_over =
             new ArrayList(speculated_entries);
         to_iter_over.add(0,this);
             
-        for (SpeculativeAtomicObject<T> spec_obj : to_iter_over)
+        for (SpeculativeAtomicObject<T,DeltaType> spec_obj : to_iter_over)
         {
             try
             {
@@ -408,7 +409,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         // duplicate to speculate on top of.  In that case,
         // derived_holding_lock_on will become non-null and we should
         // release it at the end of this method.
-        SpeculativeAtomicObject<T> derived_holding_lock_on = null;
+        SpeculativeAtomicObject<T,DeltaType> derived_holding_lock_on = null;
 
         
         // must determine what to speculate on.  Rule: only allowed to
@@ -461,7 +462,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
 
         if (force_val_reset)
         {
-            for (SpeculativeAtomicObject<T> spec_obj : to_iter_over)
+            for (SpeculativeAtomicObject<T,DeltaType> spec_obj : to_iter_over)
             {
                 spec_obj._lock();
                 spec_obj.val =
@@ -474,15 +475,14 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         }
         
         // step 1
-        SpeculativeAtomicObject<T> to_speculate_on_wrapper =
+        SpeculativeAtomicObject<T,DeltaType> to_speculate_on_wrapper =
             duplicate_for_speculation(to_speculate_on);
 
         // step 2
         speculated_entries.add(to_speculate_on_wrapper);
 
         // step 3
-        Map<String,WaitingElement<T>> prev_waiting_elements =
-            null;
+        Map<String,WaitingElement<T>> prev_waiting_elements = null;
         Map<String,EventCachedPriorityObj> prev_read_events = null;
         if (speculating_on == null)
         {
@@ -692,7 +692,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
 
                 // first check specualted entries and determine
                 // whether should forward to it.
-                for (SpeculativeAtomicObject<T> derived : speculated_entries)
+                for (SpeculativeAtomicObject<T,DeltaType> derived : speculated_entries)
                 {
                     boolean was_read_lock_holder = false;
                     derived._lock();
@@ -898,7 +898,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
                 (! in_waiting_events(active_event)))
             {
                 // check if need to forward backouts to any derivatives
-                for (SpeculativeAtomicObject<T> derived : speculated_entries)
+                for (SpeculativeAtomicObject<T,DeltaType> derived : speculated_entries)
                 {
                     boolean was_read_lock_holder = false;
                     derived._lock();
@@ -1003,7 +1003,8 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
 
        FIXME: check if the above policy could result in livelock.
      */
-    private void backout_derived_from(SpeculativeAtomicObject<T> to_backout)
+    private void backout_derived_from(
+        SpeculativeAtomicObject<T,DeltaType> to_backout)
     {
         //// DEBUG: should only be called on root object
         if (! root_speculative)
@@ -1015,7 +1016,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         _lock();
         for (int i =0; i < speculated_entries.size(); ++i)
         {
-            SpeculativeAtomicObject<T> spec_obj = speculated_entries.get(i);
+            SpeculativeAtomicObject<T,DeltaType> spec_obj = speculated_entries.get(i);
             if (spec_obj == to_backout)
             {
                 // remove all derivatives that were based on this
@@ -1283,7 +1284,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         {
             while (! speculated_entries.isEmpty())
             {
-                SpeculativeAtomicObject<T> eldest_spec =
+                SpeculativeAtomicObject<T,DeltaType> eldest_spec =
                     speculated_entries.get(0);
 
                 // 2 from above: if ref_count != 0, will unlock before
@@ -1480,7 +1481,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
             if (already_processing)
                 return internal_acquire_read_lock(active_event,_mutex);
 
-            for (SpeculativeAtomicObject<T> derivative_object :
+            for (SpeculativeAtomicObject<T,DeltaType> derivative_object :
                      speculated_entries)
             {
                 already_processing =
@@ -1570,7 +1571,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
         
         for (int i = 0; i < num_invalidations_to_perform; ++i)
         {
-            SpeculativeAtomicObject<T> spec_on =
+            SpeculativeAtomicObject<T,DeltaType> spec_on =
                 speculated_entries.get(index_to_invalidate_from);
             spec_on.derived_from_failed();
             speculated_entries.remove(index_to_invalidate_from);
@@ -1626,7 +1627,7 @@ public abstract class SpeculativeAtomicObject<T> extends AtomicObject<T>
             // handling this event.
             for (int i = 0; i < speculated_entries.size(); ++i)
             {
-                SpeculativeAtomicObject<T> derivative_object =
+                SpeculativeAtomicObject<T,DeltaType> derivative_object =
                     speculated_entries.get(i);
                 
                 already_processing =

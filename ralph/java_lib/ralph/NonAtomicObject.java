@@ -9,8 +9,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @param <T> --- The java type of the internal data
+ * @param <DeltaType> --- The type that gets passed to the version
+ * helper for logging.
  */
-public abstract class NonAtomicObject<T> extends RalphObject<T>
+public abstract class NonAtomicObject<T,DeltaType>
+    extends RalphObject<T,DeltaType>
 {
     public final String uuid;
     private DataWrapperFactory<T> data_wrapper_constructor;
@@ -23,10 +26,11 @@ public abstract class NonAtomicObject<T> extends RalphObject<T>
 	
     public void init(
         ValueTypeDataWrapperFactory<T> vtdwc,
-        T init_val)
+        T init_val,VersionHelper<DeltaType> _version_helper)
     {
         data_wrapper_constructor = vtdwc;
         val = data_wrapper_constructor.construct(init_val,false);
+        version_helper = _version_helper;
     }
 	
 	
