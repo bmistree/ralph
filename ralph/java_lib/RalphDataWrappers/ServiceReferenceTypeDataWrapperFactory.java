@@ -4,13 +4,13 @@ import ralph.InternalServiceReference;
 
 
 public class ServiceReferenceTypeDataWrapperFactory
-    extends ValueTypeDataWrapperFactory<InternalServiceReference,InternalServiceReference>
+    extends ValueTypeDataWrapperFactory<InternalServiceReference>
 {	
     @Override
-    public DataWrapper<InternalServiceReference, InternalServiceReference> construct(
+    public DataWrapper<InternalServiceReference> construct(
         InternalServiceReference _val, boolean log_changes)
     {
-        return new ValueTypeDataWrapper<InternalServiceReference,InternalServiceReference>(
+        return new ValueTypeDataWrapper<InternalServiceReference>(
             _val,log_changes);
     }
 }

@@ -4,8 +4,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphDataWrappers.DataWrapperFactory;
 import RalphDataWrappers.DataWrapper;
 
-public class WaitingElement <T,D>
-    implements Comparable<WaitingElement<T,D>>
+public class WaitingElement <T>
+    implements Comparable<WaitingElement<T>>
 {
     
     // Each event has a priority associated with it.  This priority
@@ -21,24 +21,24 @@ public class WaitingElement <T,D>
 	
     public ActiveEvent event;
     private boolean read;
-    DataWrapperFactory<T,D> data_wrapper_constructor;
+    DataWrapperFactory<T> data_wrapper_constructor;
 	
     // Acquire write lock and acquire read lock block reading this
     // queue if they cannot instantly acquire the write/read lock when
     // add a waiting element, that waiting element's read or write
     // blocks.  The way that it blocks is by listening at a threadsafe
     // queue.  This is that queue.
-    public static class UnwaitElement<T,D>
+    public static class UnwaitElement<T>
     {
         public boolean successful;
         // can be null
-        public DataWrapper<T,D> result;
+        public DataWrapper<T> result;
 
         /**
            @param _result --- If null, means that operation was not
            successful and waiter should throw backout.
          */
-        public UnwaitElement(DataWrapper<T,D> _result)
+        public UnwaitElement(DataWrapper<T> _result)
         {
             successful = (_result != null);
             result = _result;
@@ -67,7 +67,7 @@ public class WaitingElement <T,D>
      */
     public WaitingElement(
         ActiveEvent active_event,String _priority,boolean _read, 
-        DataWrapperFactory<T,D> _data_wrapper_constructor,boolean _log_changes)
+        DataWrapperFactory<T> _data_wrapper_constructor,boolean _log_changes)
     {
         event = active_event;
         cached_priority = _priority;
@@ -124,7 +124,7 @@ public class WaitingElement <T,D>
         queue.add(new UnwaitElement(null));
     }
     
-    public int compareTo(WaitingElement<T,D> o2) 
+    public int compareTo(WaitingElement<T> o2) 
     {
         if (o2.cached_priority.equals(cached_priority))
             return 0;

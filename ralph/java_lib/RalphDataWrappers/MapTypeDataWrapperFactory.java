@@ -1,6 +1,6 @@
 package RalphDataWrappers;
 
-import java.util.HashMap;
+import java.util.Map;
 import ralph.RalphObject;
 import ralph.ActiveEvent;
 
@@ -12,24 +12,21 @@ import ralph.ActiveEvent;
  *
  * @param <K> --- Key for the map
  * @param <V> --- Java variables in the hashmap
- * @param <D> --- What the java variables in the hashmap should
- * dewaldoify into (if they are locked objects)
  */
 
-public class MapTypeDataWrapperFactory<K,V,D> 	
+public class MapTypeDataWrapperFactory<K,V>
     extends DataWrapperFactory<
     // The actual internal data that will be held by the data wrapper
-    HashMap<K,RalphObject<V,D>>, 
-    // what you get when you call dewaldoify on the data wrapper
-    HashMap<K,D> >
+    Map<K,RalphObject<V>>
+    >
 {
 
     @Override
-    public DataWrapper<HashMap<K, RalphObject<V,D>>, HashMap<K,D>>
+    public DataWrapper<Map<K, RalphObject<V>>>
         construct(
-            HashMap<K, RalphObject<V,D>> _val, boolean log_changes) 
+            Map<K, RalphObject<V>> _val, boolean log_changes) 
     {
-        return new MapTypeDataWrapper<K,V,D>(_val,log_changes);
+        return new MapTypeDataWrapper<K,V>(_val,log_changes);
     }
 	
 }

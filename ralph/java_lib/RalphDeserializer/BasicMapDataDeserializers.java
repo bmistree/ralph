@@ -181,8 +181,8 @@ public class BasicMapDataDeserializers
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            AtomicMapVariable<IndexType,ValueType,ValueType> outer_map =
-                new AtomicMapVariable<IndexType,ValueType,ValueType>(
+            AtomicMapVariable<IndexType,ValueType> outer_map =
+                new AtomicMapVariable<IndexType,ValueType>(
                     false,index_type,wrapper,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
@@ -275,8 +275,8 @@ public class BasicMapDataDeserializers
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            NonAtomicMapVariable<IndexType,ValueType,ValueType> outer_map =
-                new NonAtomicMapVariable<IndexType,ValueType,ValueType>(
+            NonAtomicMapVariable<IndexType,ValueType> outer_map =
+                new NonAtomicMapVariable<IndexType,ValueType>(
                     false,index_type,wrapper,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();

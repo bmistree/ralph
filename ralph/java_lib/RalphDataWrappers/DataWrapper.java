@@ -5,9 +5,8 @@ import ralph.ActiveEvent;
 
 /**
  * @param <T> --- Type of internal data holding
- * @param <D> --- Type of data when dewaldoified
  */
-public class DataWrapper<T,D>
+public class DataWrapper<T>
 {
     public T val;
     protected boolean has_been_written_since_last_msg = false;
@@ -40,10 +39,4 @@ public class DataWrapper<T,D>
     	has_been_written_since_last_msg = false;
         return to_return;
     }
-
-    public D de_waldoify(ActiveEvent active_event) throws BackoutException
-    {
-    	return (D)val;
-    }
-	
 }

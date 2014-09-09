@@ -1,6 +1,7 @@
 package ralph;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.HashSet;
@@ -265,7 +266,7 @@ public class AtomicActiveEvent extends ActiveEvent
      //# and complete commit.  On backout, must run through each and
      //# call backout.
      */
-    HashMap<String,AtomicObject>touched_objs = 
+    Map<String,AtomicObject>touched_objs = 
         new HashMap<String,AtomicObject>();
 
     /**
@@ -333,7 +334,7 @@ public class AtomicActiveEvent extends ActiveEvent
      //# (@see
      //# waldoExecutingEvent._ExecutingEventContext.to_reply_with_uuid.)
      */
-    private final HashMap<String,
+    private final Map<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
 
@@ -486,7 +487,7 @@ public class AtomicActiveEvent extends ActiveEvent
         }
          
         _touched_objs_lock();
-        HashMap<String,AtomicObject> touched_objs_copy = 
+        Map<String,AtomicObject> touched_objs_copy = 
             new HashMap<String,AtomicObject>(touched_objs);
         _touched_objs_unlock();
 
@@ -817,7 +818,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // holding this lock however because the complete_commit call
         // to each of the objects in touched_objs attempts to acquire
         // the lock of each AtomicObject.
-        ArrayList<AtomicObject> t_obj = new ArrayList(touched_objs.values());
+        List<AtomicObject> t_obj = new ArrayList(touched_objs.values());
         for (AtomicObject obj : t_obj)
             obj.complete_commit(this);
 
@@ -977,7 +978,7 @@ public class AtomicActiveEvent extends ActiveEvent
     public void _backout_touched_objs()
     {
         _touched_objs_lock();
-        HashMap<String,AtomicObject> copied_touched_objs = touched_objs;
+        Map<String,AtomicObject> copied_touched_objs = touched_objs;
         touched_objs = new HashMap<String,AtomicObject>();
         _touched_objs_unlock();
         
@@ -1155,7 +1156,7 @@ public class AtomicActiveEvent extends ActiveEvent
        this was the last message sent in a sequence and we're not
        waiting on a reply.
 
-       @param {ArrayList} args --- The positional arguments inserted
+       @param {List} args --- The positional arguments inserted
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
@@ -1171,7 +1172,7 @@ public class AtomicActiveEvent extends ActiveEvent
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RalphObject>args,RalphObject result)
+        boolean first_msg,List<RalphObject>args,RalphObject result)
     {
         boolean partner_call_requested = false;
         _lock();
@@ -1294,7 +1295,7 @@ public class AtomicActiveEvent extends ActiveEvent
        */
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {
         event_parent.receive_successful_first_phase_commit_msg(
             event_uuid,msg_originator_host_uuid,
@@ -1403,7 +1404,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
 
         // grab all arguments from message
-        ArrayList <RalphObject> args =
+        List <RalphObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
                 msg.getArguments(),endpt_recvd_on.ralph_globals);
 

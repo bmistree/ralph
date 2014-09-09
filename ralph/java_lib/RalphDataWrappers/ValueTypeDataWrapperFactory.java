@@ -1,12 +1,11 @@
 package RalphDataWrappers;
 
-
-public class ValueTypeDataWrapperFactory<T,D>
-    extends DataWrapperFactory<T,D>
+public class ValueTypeDataWrapperFactory<T>
+    extends DataWrapperFactory<T>
 {	
     @Override
-    public DataWrapper<T,D> construct(T _val, boolean log_changes)
+    public DataWrapper<T> construct(T _val, boolean log_changes)
     {
-        return new ValueTypeDataWrapper<T,D>(_val,log_changes);
+        return new ValueTypeDataWrapper<T>(_val,log_changes);
     }
 }

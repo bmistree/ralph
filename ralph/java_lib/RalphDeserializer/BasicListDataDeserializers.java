@@ -80,8 +80,8 @@ public class BasicListDataDeserializers
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            AtomicListVariable<ElementType,ElementType> outer_list =
-                new AtomicListVariable<ElementType,ElementType>(
+            AtomicListVariable<ElementType> outer_list =
+                new AtomicListVariable<ElementType>(
                     false,wrapper,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
@@ -156,8 +156,8 @@ public class BasicListDataDeserializers
         {
             // create an atomic list variable, then, independently
             // populate each of its fields.
-            NonAtomicListVariable<ElementType,ElementType> outer_list =
-                new NonAtomicListVariable<ElementType,ElementType>(
+            NonAtomicListVariable<ElementType> outer_list =
+                new NonAtomicListVariable<ElementType>(
                     false,wrapper,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();

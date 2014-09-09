@@ -17,8 +17,8 @@ import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
 
 public class ExtendedVariables
 {
-    public static abstract class ExtendedInternalAtomicList<T,D>
-        extends AtomicInternalList<T,D>
+    public static abstract class ExtendedInternalAtomicList<T>
+        extends AtomicInternalList<T>
     {
         // This contains changes that we pushed to hardware, but haven't
         // committed.
@@ -26,23 +26,23 @@ public class ExtendedVariables
         // methods: backout, first_phase_commit, and complete_commit.
         // Locks in AtomicActiveEvent ensure that these won't run
         // concurrently
-        private ListTypeDataWrapper<T,D> dirty_op_tuples_on_hardware = null;
+        private ListTypeDataWrapper<T> dirty_op_tuples_on_hardware = null;
         
         public ExtendedInternalAtomicList(
-            EnsureAtomicWrapper<T,D>_locked_wrapper,
+            EnsureAtomicWrapper<T>_locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(ralph_globals);
             init_multithreaded_list_container(
-                true,new ListTypeDataWrapperFactory<T,D>(),
-                new ArrayList<RalphObject<T,D>>(),
+                true,new ListTypeDataWrapperFactory<T>(),
+                new ArrayList<RalphObject<T>>(),
                 _locked_wrapper);
         }
 
         protected abstract ICancellableFuture apply_changes_to_hardware(
-            ListTypeDataWrapper<T,D> dirty);
+            ListTypeDataWrapper<T> dirty);
         protected abstract void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<T,D> to_undo);
+            ListTypeDataWrapper<T> to_undo);
         
 
         /**
@@ -100,7 +100,7 @@ public class ExtendedVariables
             
             // log that any changes that we are making will need to be
             // undone if the event backs out.
-            dirty_op_tuples_on_hardware = (ListTypeDataWrapper<T,D>)dirty_val;
+            dirty_op_tuples_on_hardware = (ListTypeDataWrapper<T>)dirty_val;
             return apply_changes_to_hardware(dirty_op_tuples_on_hardware);
         }
 

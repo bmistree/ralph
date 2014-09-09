@@ -2,6 +2,7 @@ package ralph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
@@ -16,42 +17,38 @@ import RalphDataWrappers.MapTypeDataWrapperSupplier;
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
  * Strings).
  * @param <V> --- The Java type of data that the keys should point to.
- * @param <D> --- The Java type of data that the internal locked
- * objects should dewaldoify into
  */
-public class AtomicInternalMap<K,V,D> 
+public class AtomicInternalMap<K,V> 
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
-    HashMap<K,RalphObject<V,D>>,
-    // When call dewaldoify on this container, what we should get back
-    HashMap<K,D>
+    Map<K,RalphObject<V>>
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
-               RalphInternalMapInterface<K,V,D>    
+               RalphInternalMapInterface<K,V>
 {
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     public NonAtomicInternalMap.IndexType index_type;
-    private MapTypeDataWrapper<K,V,D> reference_type_val = null;
-    private RalphInternalMap<K,V,D> internal_map = null;
-    public EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    private MapTypeDataWrapper<K,V> reference_type_val = null;
+    private RalphInternalMap<K,V> internal_map = null;
+    public EnsureAtomicWrapper<V> locked_wrapper = null;
     
     public AtomicInternalMap(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        internal_map = new RalphInternalMap<K,V,D>(ralph_globals);
+        internal_map = new RalphInternalMap<K,V>(ralph_globals);
     }
 
     @Override
-    protected SpeculativeAtomicObject<HashMap<K,RalphObject<V,D>>,HashMap<K,D>>
-        duplicate_for_speculation(HashMap<K,RalphObject<V,D>> to_speculate_on)
+    protected SpeculativeAtomicObject<Map<K,RalphObject<V>>>
+        duplicate_for_speculation(Map<K,RalphObject<V>> to_speculate_on)
     {
-        AtomicInternalMap <K,V,D> to_return =
+        AtomicInternalMap <K,V> to_return =
             new AtomicInternalMap(ralph_globals);
         to_return.set_derived(this);
         to_return.init_multithreaded_map_container(
             log_changes,
-            (MapTypeDataWrapperFactory<K,V,D>)data_wrapper_constructor,
+            (MapTypeDataWrapperFactory<K,V>)data_wrapper_constructor,
             to_speculate_on,
             index_type,locked_wrapper);
 
@@ -61,10 +58,10 @@ public class AtomicInternalMap<K,V,D>
     
     public void init_multithreaded_map_container(
         boolean _log_changes,
-        MapTypeDataWrapperFactory<K,V,D> rtdwc,
-        HashMap<K,RalphObject<V,D>>init_val,
+        MapTypeDataWrapperFactory<K,V> rtdwc,
+        Map<K,RalphObject<V>>init_val,
         NonAtomicInternalMap.IndexType _index_type,
-        EnsureAtomicWrapper<V,D>_locked_wrapper)
+        EnsureAtomicWrapper<V>_locked_wrapper)
     {
         index_type = _index_type;
         locked_wrapper = _locked_wrapper;
@@ -100,24 +97,24 @@ public class AtomicInternalMap<K,V,D>
 
     /** MapTypeDataWrapperSupplier Interface */
     @Override    
-    public MapTypeDataWrapper<K,V,D> get_val_read(
+    public MapTypeDataWrapper<K,V> get_val_read(
         ActiveEvent active_event) throws BackoutException
     {
-        MapTypeDataWrapper<K,V,D> wrapped_val =
-            (MapTypeDataWrapper<K,V,D>)acquire_read_lock(active_event);
+        MapTypeDataWrapper<K,V> wrapped_val =
+            (MapTypeDataWrapper<K,V>)acquire_read_lock(active_event);
         return wrapped_val;
     }
     @Override    
-    public MapTypeDataWrapper<K,V,D> get_val_write(
+    public MapTypeDataWrapper<K,V> get_val_write(
         ActiveEvent active_event) throws BackoutException
     {
-        MapTypeDataWrapper<K,V,D> wrapped_val =
-            (MapTypeDataWrapper<K,V,D>)acquire_write_lock(active_event);
+        MapTypeDataWrapper<K,V> wrapped_val =
+            (MapTypeDataWrapper<K,V>)acquire_write_lock(active_event);
         return wrapped_val;
     }
 
 
-    /** RalphInternalMapInterface<K,V,D> Interface */
+    /** RalphInternalMapInterface<K,V> Interface */
     @Override
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
     {
@@ -147,7 +144,7 @@ public class AtomicInternalMap<K,V,D>
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, K key, RalphObject<V,D> to_write) throws BackoutException
+        ActiveEvent active_event, K key, RalphObject<V> to_write) throws BackoutException
     {
         internal_map.set_val_on_key(active_event,key,to_write);
     }

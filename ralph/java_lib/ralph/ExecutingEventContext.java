@@ -54,7 +54,7 @@ public class ExecutingEventContext
        have to return one or more of these objects as references when
        return result of rpc.
      */
-    private ArrayList<RalphObject> args_to_reply_with = null;
+    private List<RalphObject> args_to_reply_with = null;
     
     boolean msg_send_initialized_bit = false;
 
@@ -99,7 +99,7 @@ public class ExecutingEventContext
      */
     public ExecutingEventContext (
         VariableStack _var_stack,
-        ArrayList<RalphObject> _args_to_reply_with)
+        List<RalphObject> _args_to_reply_with)
     {
         var_stack = _var_stack.fork_stack();
         args_to_reply_with = _args_to_reply_with;
@@ -231,7 +231,7 @@ public class ExecutingEventContext
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {ArrayList} args --- The positional arguments inserted
+       @param {List} args --- The positional arguments inserted
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
@@ -257,7 +257,7 @@ public class ExecutingEventContext
        */
     public RalphObject hide_partner_call(
         Endpoint endpoint, ActiveEvent active_event,
-        String func_name, boolean first_msg,ArrayList<RalphObject> args,
+        String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException,StoppedException
     {
@@ -386,10 +386,10 @@ public class ExecutingEventContext
         return to_return;
     }
 
-    public static ArrayList<RalphObject> deserialize_rpc_args_list(
+    public static List<RalphObject> deserialize_rpc_args_list(
         VariablesProto.Variables variables,RalphGlobals ralph_globals)
     {
-        ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
+        List<RalphObject> to_return = new ArrayList<RalphObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())
@@ -408,10 +408,10 @@ public class ExecutingEventContext
        Returns positional values.  If references_only is true, then
        put null values in for the non-references.
      */
-    public static ArrayList<RalphObject> deserialize_variables_list(
+    public static List<RalphObject> deserialize_variables_list(
         VariablesProto.Variables variables, RalphGlobals ralph_globals)
     {
-        ArrayList<RalphObject> to_return = new ArrayList<RalphObject>();
+        List<RalphObject> to_return = new ArrayList<RalphObject>();
 
         // run through variables and turn into map
         for (VariablesProto.Variables.Any variable : variables.getVarsList())

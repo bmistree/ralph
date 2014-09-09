@@ -1,7 +1,6 @@
 package RalphDeserializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.MessageCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
@@ -113,10 +112,12 @@ public class DeserializationEvent extends ActiveEvent
             "Should never receive a backout exception in " +
             "deserialization event");
     }
+
+    @Override
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RalphObject>args,RalphObject result)
+        boolean first_msg,List<RalphObject>args,RalphObject result)
     {
         Util.logger_assert(
             "Should never issue_partner_sequence_block_call " +
@@ -131,9 +132,10 @@ public class DeserializationEvent extends ActiveEvent
         return dummy_priority;
     }
 
+    @Override
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {}
 
     public void complete_commit_and_forward_complete_msg(

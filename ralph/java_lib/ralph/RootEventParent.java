@@ -1,6 +1,6 @@
 package ralph;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -17,7 +17,7 @@ public class RootEventParent extends EventParent
      # are true in this dict, then we can transition into second
      # phase commit.
     */
-    private HashMap<String,Boolean> endpoints_waiting_on_commit =
+    private Map<String,Boolean> endpoints_waiting_on_commit =
         new HashMap<String,Boolean>();
     
     /**
@@ -94,7 +94,7 @@ public class RootEventParent extends EventParent
     @Override
     public void put_exception(
         Exception error, 
-        HashMap<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
+        Map<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
     {
     	if (RalphExceptions.NetworkException.class.isInstance(error))
     	{
@@ -196,7 +196,7 @@ public class RootEventParent extends EventParent
     @Override
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {
     	_lock_endpoints_waiting_on_commit();
     	endpoints_waiting_on_commit.put(msg_originator_host_uuid, true);

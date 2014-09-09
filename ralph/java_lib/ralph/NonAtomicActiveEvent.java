@@ -1,6 +1,7 @@
 package ralph;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -39,7 +40,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     private AtomicActiveEvent atomic_child = null;
     private final ReentrantLock _atomic_child_mutex = new ReentrantLock();
     
-    private final HashMap<String,
+    private final Map<String,
     	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
     
@@ -315,7 +316,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        this was the last message sent in a sequence and we're not
        waiting on a reply.
 
-       @param {ArrayList} args --- The positional arguments inserted
+       @param {List} args --- The positional arguments inserted
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
@@ -330,7 +331,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RalphObject>args,RalphObject result)
+        boolean first_msg,List<RalphObject>args,RalphObject result)
     {
         
         //# code is listening on threadsafe result_queue.  when we
@@ -436,7 +437,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        */
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {
         Util.logger_assert(
             "Non-atomic should not receive first phase commit.");
@@ -540,7 +541,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         //#### END DEBUG
 
         // grab all arguments from message
-        ArrayList <RalphObject> args =
+        List <RalphObject> args =
             ExecutingEventContext.deserialize_rpc_args_list(
                 msg.getArguments(),endpt_recvd_msg_on.ralph_globals);
         

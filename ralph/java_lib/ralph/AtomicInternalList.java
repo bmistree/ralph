@@ -1,7 +1,6 @@
 package ralph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -11,38 +10,34 @@ import RalphDataWrappers.ListTypeDataWrapperSupplier;
 
 /**
  * @param <V> --- The Java type of data that are elements in the list
- * @param <D> --- The Java type of data that elements should
- * dewaldoify into.
  */
-public class AtomicInternalList<V,D> 
+public class AtomicInternalList<V> 
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
-    ArrayList<RalphObject<V,D>>,
-    // When call dewaldoify on this container, what we should get back
-    ArrayList<D>
+    List<RalphObject<V>>
     >
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
-               RalphInternalListInterface<V,D>
+               RalphInternalListInterface<V>
 {
-    private RalphInternalList<V,D> internal_list = null;
-    public EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    private RalphInternalList<V> internal_list = null;
+    public EnsureAtomicWrapper<V> locked_wrapper = null;
     
     public AtomicInternalList(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        internal_list = new RalphInternalList<V,D>(ralph_globals);
+        internal_list = new RalphInternalList<V>(ralph_globals);
     }
 
     @Override
-    protected SpeculativeAtomicObject<ArrayList<RalphObject<V,D>>,ArrayList<D>>
-        duplicate_for_speculation(ArrayList<RalphObject<V,D>> to_speculate_on)
+    protected SpeculativeAtomicObject<List<RalphObject<V>>>
+        duplicate_for_speculation(List<RalphObject<V>> to_speculate_on)
     {
-        AtomicInternalList<V,D> to_return = 
+        AtomicInternalList<V> to_return = 
             new AtomicInternalList(ralph_globals);
         to_return.set_derived(this);
         to_return.init_multithreaded_list_container(
             log_changes,
-            (ListTypeDataWrapperFactory<V,D>)data_wrapper_constructor,
+            (ListTypeDataWrapperFactory<V>)data_wrapper_constructor,
             to_speculate_on,
             locked_wrapper);
 
@@ -52,9 +47,9 @@ public class AtomicInternalList<V,D>
     
     public void init_multithreaded_list_container(
         boolean _log_changes,
-        ListTypeDataWrapperFactory<V,D> ltdwf,
-        ArrayList<RalphObject<V,D>>init_val,
-        EnsureAtomicWrapper<V,D>_locked_wrapper)
+        ListTypeDataWrapperFactory<V> ltdwf,
+        List<RalphObject<V>>init_val,
+        EnsureAtomicWrapper<V>_locked_wrapper)
     {
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
@@ -90,25 +85,25 @@ public class AtomicInternalList<V,D>
     
     /** ListTypeDataWrapperSupplier Interface */
     @Override    
-    public ListTypeDataWrapper<V,D> get_val_read(
+    public ListTypeDataWrapper<V> get_val_read(
         ActiveEvent active_event) throws BackoutException
     {
-        ListTypeDataWrapper<V,D> wrapped_val =
-            (ListTypeDataWrapper<V,D>)acquire_read_lock(active_event);
+        ListTypeDataWrapper<V> wrapped_val =
+            (ListTypeDataWrapper<V>)acquire_read_lock(active_event);
         return wrapped_val;
     }
     @Override    
-    public ListTypeDataWrapper<V,D> get_val_write(
+    public ListTypeDataWrapper<V> get_val_write(
         ActiveEvent active_event) throws BackoutException
     {
-        ListTypeDataWrapper<V,D> wrapped_val =
-            (ListTypeDataWrapper<V,D>)acquire_write_lock(active_event);
+        ListTypeDataWrapper<V> wrapped_val =
+            (ListTypeDataWrapper<V>)acquire_write_lock(active_event);
         return wrapped_val;
     }
 
     
 
-    /** RalphInternalListInterface<V,D> Interface */
+    /** RalphInternalListInterface<V> Interface */
     @Override    
     public void insert(
         ActiveEvent active_event, Double index_to_insert_in,
@@ -126,7 +121,7 @@ public class AtomicInternalList<V,D>
     @Override    
     public void insert(
         ActiveEvent active_event, Integer key,
-        RalphObject<V,D> to_insert)  throws BackoutException
+        RalphObject<V> to_insert)  throws BackoutException
     {
         internal_list.insert(active_event,key,to_insert);
     }
@@ -176,14 +171,14 @@ public class AtomicInternalList<V,D>
     
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
+        ActiveEvent active_event, Integer key, RalphObject<V> to_write)
         throws BackoutException
     {
         internal_list.set_val_on_key(active_event,key,to_write);
     }
     @Override
     public void set_val_on_key(
-        ActiveEvent active_event, Double key, RalphObject<V,D> to_write)
+        ActiveEvent active_event, Double key, RalphObject<V> to_write)
         throws BackoutException
     {
         internal_list.set_val_on_key(active_event,key,to_write);
@@ -208,7 +203,7 @@ public class AtomicInternalList<V,D>
     }
     
     @Override
-    public ArrayList<RalphObject<V,D>> get_iterable(ActiveEvent active_event)
+    public List<RalphObject<V>> get_iterable(ActiveEvent active_event)
         throws BackoutException
     {
         return internal_list.get_iterable(active_event);

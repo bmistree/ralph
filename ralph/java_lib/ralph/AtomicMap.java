@@ -12,8 +12,7 @@ import RalphDataWrappers.MapTypeDataWrapper;
 /**
  * @param <K>  ---- The keys used for indexing
  * @param <V>  ---- The type of each internal value in the internal hash map
- * @param <D>  ---- The type that each value in the internal hash map would dewaldoify into
- * 
+ *
  * A map of numbers to strings:
  * 
  * LockedMapVariable<Number,String,HashMap<String,Number>>
@@ -22,53 +21,50 @@ import RalphDataWrappers.MapTypeDataWrapper;
  * 
  * LockedMapVariable<
  *     Number,
- *     LockedMapVariable< Number, String, HashMap<String,Number > >
- *     HashMap<Number,HashMap<String,Number>>>
+ *     LockedMapVariable< Number, String > >
  * 
  */
-public class AtomicMap<K,V,D>
+public class AtomicMap<K,V>
     extends AtomicValueVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return NonAtomicInternalMap.
     // when call set val, must pass in a NonAtomicInternalMap
-    AtomicInternalMap<K,V,D>, 
-    // what will return when call de_waldoify.
-    D>    
+    AtomicInternalMap<K,V>>
 {
     public final static String deserialization_label = "Atomic Map";
     
     private NonAtomicInternalMap.IndexType index_type = null;
-    private EnsureAtomicWrapper<V,D> locked_wrapper = null;
+    private EnsureAtomicWrapper<V> locked_wrapper = null;
     
     public AtomicMap(
         boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper,
+        EnsureAtomicWrapper<V> locked_wrapper,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
         
-        AtomicInternalMap<K,V,D> init_val =
-            new AtomicInternalMap<K,V,D>(ralph_globals);
+        AtomicInternalMap<K,V> init_val =
+            new AtomicInternalMap<K,V>(ralph_globals);
         init_val.init_multithreaded_map_container(
             _log_changes,
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
+            new MapTypeDataWrapperFactory<K,V>(),
+            new HashMap<K,RalphObject<V>>(),
             index_type,
             locked_wrapper);
 
         init_atomic_value_variable(
             _log_changes, init_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V>>());
     }
 
     @Override
-    protected SpeculativeAtomicObject<AtomicInternalMap<K,V,D>, D>
-        duplicate_for_speculation(AtomicInternalMap<K,V,D> to_speculate_on)
+    protected SpeculativeAtomicObject<AtomicInternalMap<K,V>>
+        duplicate_for_speculation(AtomicInternalMap<K,V> to_speculate_on)
     {
-        SpeculativeAtomicObject<AtomicInternalMap<K,V,D>, D> to_return =
+        SpeculativeAtomicObject<AtomicInternalMap<K,V>> to_return =
             new AtomicMap(
                 log_changes,
                 to_speculate_on,
@@ -87,9 +83,9 @@ public class AtomicMap<K,V,D>
      */
     public AtomicMap(
         boolean _log_changes,
-        AtomicInternalMap<K,V,D> internal_val,
+        AtomicInternalMap<K,V> internal_val,
         NonAtomicInternalMap.IndexType index_type,        
-        EnsureAtomicWrapper<V,D> locked_wrapper,RalphGlobals ralph_globals)
+        EnsureAtomicWrapper<V> locked_wrapper,RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.index_type = index_type;
@@ -97,31 +93,31 @@ public class AtomicMap<K,V,D>
 
         init_atomic_value_variable(
             _log_changes, internal_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V>>());
     }
 
     
     public AtomicMap(
         boolean _log_changes,
-        HashMap<K,RalphObject<V,D>> init_val,boolean incorporating_deltas,
+        HashMap<K,RalphObject<V>> init_val,boolean incorporating_deltas,
         NonAtomicInternalMap.IndexType index_type,
-        EnsureAtomicWrapper<V,D> locked_wrapper, RalphGlobals ralph_globals)
+        EnsureAtomicWrapper<V> locked_wrapper, RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
-        AtomicInternalMap<K,V,D> init_val_2 =
-            new AtomicInternalMap<K,V,D>(ralph_globals);
+        AtomicInternalMap<K,V> init_val_2 =
+            new AtomicInternalMap<K,V>(ralph_globals);
         init_val_2.init_multithreaded_map_container(
             _log_changes,
-            new MapTypeDataWrapperFactory<K,V,D>(),
-            new HashMap<K,RalphObject<V,D>>(),
+            new MapTypeDataWrapperFactory<K,V>(),
+            new HashMap<K,RalphObject<V>>(),
             index_type,
             locked_wrapper);
 
         init_atomic_value_variable(
             _log_changes, init_val_2,
-            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V,D>,D>());
+            new ValueTypeDataWrapperFactory<AtomicInternalMap<K,V>>());
 
         load_init_vals(init_val,incorporating_deltas);
     }
@@ -131,22 +127,22 @@ public class AtomicMap<K,V,D>
         VariablesProto.Variables.Any.Builder any_builder)
         throws BackoutException
     {
-        AtomicInternalMap<K,V,D> internal_val =
+        AtomicInternalMap<K,V> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
         any_builder.setIsTvar(true);
     }
     
     public void load_init_vals(
-        HashMap<K,RalphObject<V,D>> init_val, boolean incorporating_deltas)
+        HashMap<K,RalphObject<V>> init_val, boolean incorporating_deltas)
     {
         if (init_val == null)
             return;
 
         //FIXME probably inefficient to add each field separately
-        for (Entry<K, RalphObject<V,D>> entry : init_val.entrySet())
+        for (Entry<K, RalphObject<V>> entry : init_val.entrySet())
         {
-            MapTypeDataWrapper<K,V,D>casted_wrapper = (MapTypeDataWrapper<K,V,D>)val.val.val;
+            MapTypeDataWrapper<K,V>casted_wrapper = (MapTypeDataWrapper<K,V>)val.val.val;
 
             // single threaded variables will not throw backout exceptions.
             try {

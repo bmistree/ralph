@@ -1,7 +1,6 @@
 package ralph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
@@ -11,9 +10,8 @@ import RalphDataWrappers.ListTypeDataWrapper;
 
 /**
  * @param <V> --- The Java type of data that are elements in the list
- * @param <D> --- The Java type of data that elements should dewaldoify into.
  */
-public interface RalphInternalListInterface<V,D> 
+public interface RalphInternalListInterface<V> 
 {
     public void insert(
         ActiveEvent active_event, Double index_to_insert_in,
@@ -23,7 +21,7 @@ public interface RalphInternalListInterface<V,D>
         V what_to_insert) throws BackoutException;
     public void insert(
         ActiveEvent active_event, Integer key,
-        RalphObject<V,D> to_insert)  throws BackoutException;
+        RalphObject<V> to_insert)  throws BackoutException;
 
     
     public V get_val_on_key(
@@ -47,10 +45,10 @@ public interface RalphInternalListInterface<V,D>
     public void set_val_on_key(
         ActiveEvent active_event, Double key, V to_write) throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, Integer key, RalphObject<V,D> to_write)
+        ActiveEvent active_event, Integer key, RalphObject<V> to_write)
         throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, Double key, RalphObject<V,D> to_write)
+        ActiveEvent active_event, Double key, RalphObject<V> to_write)
         throws BackoutException;
     public boolean return_internal_val_from_container();
 
@@ -61,7 +59,7 @@ public interface RalphInternalListInterface<V,D>
        Must guarantee that will only read from the returned value, not
        write to it.
      */
-    public ArrayList<RalphObject<V,D>> get_iterable(ActiveEvent active_event)
+    public List<RalphObject<V>> get_iterable(ActiveEvent active_event)
         throws BackoutException;
     
     

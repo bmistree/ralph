@@ -1,6 +1,6 @@
 package RalphDataWrappers;
 
-public class ValueTypeDataWrapper<T,D> extends DataWrapper<T,D>
+public class ValueTypeDataWrapper<T> extends DataWrapper<T>
 {
     public ValueTypeDataWrapper(T _val, boolean log_changes)
     {

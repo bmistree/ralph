@@ -5,20 +5,16 @@ import ralph_protobuffs.VariablesProto;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 
- * @author bmistree
- *
  * @param <T> --- The internal, Java type of the data
- * @param <D> --- The java type that gets returned when call dewaldoify
  */
-public abstract class RalphObject<T,D>
+public abstract class RalphObject<T>
 {
     private AtomicFactory atomic_factory = null;
     private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
 	
-    public RalphObject<T,D> copy(
+    public RalphObject<T> copy(
         ActiveEvent active_event, boolean log_changes,
         boolean multi_threaded) throws BackoutException
     {
@@ -91,7 +87,4 @@ public abstract class RalphObject<T,D>
     public abstract void complete_commit(ActiveEvent active_event);
 
     public abstract void backout(ActiveEvent active_event);
-
-    public abstract D de_waldoify(
-        ActiveEvent active_event) throws BackoutException;
 }

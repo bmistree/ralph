@@ -1,14 +1,10 @@
 package ralph;
 
 /**
- * 
- * @author bmistree
- *
  * @param <T> --- The internal, java, type of the data
- * @param <D> --- The java type of the data that is returned when call dewaldoify
  */
-public interface AtomicFactory<T,D>
+public interface AtomicFactory<T>
 {
-    public AtomicObject<T,D> construct(
+    public AtomicObject<T> construct(
         String host_uuid, boolean log_changes, Object init_val);
 }

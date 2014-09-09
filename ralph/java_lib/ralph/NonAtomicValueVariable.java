@@ -1,9 +1,12 @@
 package ralph;
+
+import java.io.Serializable;
+
 import RalphExceptions.BackoutException;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 
-public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
+public abstract class NonAtomicValueVariable<T> extends NonAtomicObject<T>
 {
     public NonAtomicValueVariable(RalphGlobals ralph_globals)
     {
@@ -12,7 +15,7 @@ public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
 
     public NonAtomicValueVariable(
         T init_val,
-        ValueTypeDataWrapperFactory<T,D> vtdwc,
+        ValueTypeDataWrapperFactory<T> vtdwc,
         RalphGlobals ralph_globals)
     {
         super (ralph_globals);
@@ -21,7 +24,7 @@ public abstract class NonAtomicValueVariable<T,D> extends NonAtomicObject<T,D>
     
     public void init_non_atomic_value_variable(
         T init_val,
-        ValueTypeDataWrapperFactory<T,D> vtdwc)
+        ValueTypeDataWrapperFactory<T> vtdwc)
     {
         init(vtdwc,init_val);
     }

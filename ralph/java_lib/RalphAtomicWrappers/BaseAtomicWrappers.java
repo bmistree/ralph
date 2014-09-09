@@ -29,7 +29,7 @@ public class BaseAtomicWrappers
     
     /**** Single threaded wrappers for base variables */
     private static class NonAtomicNumberWrapper
-        implements EnsureAtomicWrapper<Double,Double>
+        implements EnsureAtomicWrapper<Double>
     {
         @Override
         public String get_serialization_label()
@@ -38,7 +38,7 @@ public class BaseAtomicWrappers
         }
         
         @Override
-        public RalphObject<Double,Double> ensure_atomic_object(
+        public RalphObject<Double> ensure_atomic_object(
             Double object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicNumberVariable(
@@ -47,7 +47,7 @@ public class BaseAtomicWrappers
     }
 
     private static class NonAtomicTrueFalseWrapper
-        implements EnsureAtomicWrapper<Boolean,Boolean>
+        implements EnsureAtomicWrapper<Boolean>
     {
         @Override
         public String get_serialization_label()
@@ -56,7 +56,7 @@ public class BaseAtomicWrappers
         }
         
         @Override
-        public RalphObject<Boolean,Boolean>ensure_atomic_object(
+        public RalphObject<Boolean>ensure_atomic_object(
             Boolean object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicTrueFalseVariable(
@@ -65,7 +65,7 @@ public class BaseAtomicWrappers
     }
     
     private static class NonAtomicTextWrapper
-        implements EnsureAtomicWrapper<String,String>
+        implements EnsureAtomicWrapper<String>
     {
         @Override
         public String get_serialization_label()
@@ -74,7 +74,7 @@ public class BaseAtomicWrappers
         }
         
         @Override
-        public RalphObject<String,String>ensure_atomic_object(
+        public RalphObject<String>ensure_atomic_object(
             String object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.NonAtomicTextVariable(
@@ -84,7 +84,7 @@ public class BaseAtomicWrappers
 
     /**** Multithreaded wrappers for base variables */
     private static class AtomicNumberWrapper
-        implements EnsureAtomicWrapper<Double,Double>
+        implements EnsureAtomicWrapper<Double>
     {
         @Override
         public String get_serialization_label()
@@ -92,7 +92,7 @@ public class BaseAtomicWrappers
             return ATOMIC_NUMBER_LABEL;
         }
         @Override
-        public RalphObject<Double,Double> ensure_atomic_object(
+        public RalphObject<Double> ensure_atomic_object(
             Double object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicNumberVariable(
@@ -101,7 +101,7 @@ public class BaseAtomicWrappers
     }
 
     private static class AtomicTrueFalseWrapper
-        implements EnsureAtomicWrapper<Boolean,Boolean>
+        implements EnsureAtomicWrapper<Boolean>
     {
         @Override
         public String get_serialization_label()
@@ -109,7 +109,7 @@ public class BaseAtomicWrappers
             return ATOMIC_TRUE_FALSE_LABEL;
         }
         @Override
-        public RalphObject<Boolean,Boolean>ensure_atomic_object(
+        public RalphObject<Boolean>ensure_atomic_object(
             Boolean object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicTrueFalseVariable(
@@ -118,7 +118,7 @@ public class BaseAtomicWrappers
     }
     
     private static class AtomicTextWrapper
-        implements EnsureAtomicWrapper<String,String>
+        implements EnsureAtomicWrapper<String>
     {
         @Override
         public String get_serialization_label()
@@ -126,7 +126,7 @@ public class BaseAtomicWrappers
             return ATOMIC_TEXT_LABEL;
         }
         @Override
-        public RalphObject<String,String>ensure_atomic_object(
+        public RalphObject<String>ensure_atomic_object(
             String object_to_ensure,RalphGlobals ralph_globals)
         {
             return new Variables.AtomicTextVariable(

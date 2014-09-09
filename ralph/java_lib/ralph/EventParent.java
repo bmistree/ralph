@@ -1,7 +1,7 @@
 package ralph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
@@ -138,7 +138,7 @@ public abstract class EventParent
        */
     public abstract void put_exception(
         Exception error,
-        HashMap<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map);
+        Map<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map);
 
 
 
@@ -160,7 +160,7 @@ public abstract class EventParent
 	
     public abstract void receive_successful_first_phase_commit_msg(
         String event_uuid,String msg_originator_host_uuid,
-        ArrayList<String>children_event_host_uuids);
+        List<String>children_event_host_uuids);
 
 
     /**

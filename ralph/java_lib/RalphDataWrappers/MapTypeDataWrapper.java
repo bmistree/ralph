@@ -1,7 +1,9 @@
 package RalphDataWrappers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -18,11 +20,9 @@ import RalphExceptions.BackoutException;
  * @param <K> --- The key type
  * @param <T> --- The actual java type of the values holding (ie,
  * outside of locked object)
- * @param <D> --- What the java variables in the hashmap should
- * dewaldoify into (if they are locked objects)
  */
-public class MapTypeDataWrapper<K,T,D>
-    extends DataWrapper<HashMap<K,RalphObject<T,D>>, HashMap<K,D>>{
+public class MapTypeDataWrapper<K,T>
+    extends DataWrapper<Map<K,RalphObject<T>>>{
 	
     class OpTuple
     {
@@ -49,30 +49,19 @@ public class MapTypeDataWrapper<K,T,D>
      * object so can send deltas across network to partners.
      * (Note: only used for log_changes data.)
      */
-    private ArrayList <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
+    private List <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
 
 	
-    public MapTypeDataWrapper(HashMap<K,RalphObject<T,D>> v, boolean _log_changes)
+    public MapTypeDataWrapper(Map<K,RalphObject<T>> v, boolean _log_changes)
     {
-        super( (HashMap<K,RalphObject<T,D>>)v.clone(),_log_changes);
+        super( new HashMap<K,RalphObject<T>>(v),_log_changes);
         log_changes = _log_changes;
     }
 	
-    public MapTypeDataWrapper(MapTypeDataWrapper<K,T,D> v, boolean _log_changes)
+    public MapTypeDataWrapper(MapTypeDataWrapper<K,T> v, boolean _log_changes)
     {
         super(v.val,_log_changes);
         log_changes = _log_changes;
-    }
-	
-    public HashMap<K,D> de_waldoify(ActiveEvent active_event) throws BackoutException
-    {
-        HashMap<K,D>to_return_map = new HashMap<K,D>();			
-        for (Map.Entry<K, RalphObject<T,D>> entry : val.entrySet())
-        {
-            RalphObject<T,D> locked_obj = entry.getValue();
-            to_return_map.put(entry.getKey(), locked_obj.de_waldoify(active_event) );
-        }		
-        return to_return_map;        
     }
 	
 	
@@ -93,7 +82,7 @@ public class MapTypeDataWrapper<K,T,D>
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,K key, RalphObject<T,D> to_write,
+        ActiveEvent active_event,K key, RalphObject<T> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
         if (! val.containsKey(key))
@@ -110,7 +99,7 @@ public class MapTypeDataWrapper<K,T,D>
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,K key, RalphObject<T,D> to_write) throws BackoutException
+        ActiveEvent active_event,K key, RalphObject<T> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
@@ -139,7 +128,7 @@ public class MapTypeDataWrapper<K,T,D>
 
     public void add_key(
         ActiveEvent active_event, K key_added,
-        RalphObject<T,D> new_object, boolean incorporating_deltas)
+        RalphObject<T> new_object, boolean incorporating_deltas)
     {
     	/*
           if self.log_changes and (not incorporating_deltas):
@@ -155,7 +144,7 @@ public class MapTypeDataWrapper<K,T,D>
     }
     
     public void add_key(
-        ActiveEvent active_event,K key_to_add,RalphObject<T,D> new_object)
+        ActiveEvent active_event,K key_to_add,RalphObject<T> new_object)
     {
     	add_key(active_event,key_to_add,new_object,false);
     }
@@ -170,14 +159,14 @@ public class MapTypeDataWrapper<K,T,D>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        RalphObject<T,D> new_val, boolean incorporating_deltas)
+        RalphObject<T> new_val, boolean incorporating_deltas)
     {
     	Util.logger_assert("Cannot insert on map");
     }
 
     public void insert(
         ActiveEvent active_event,int where_to_insert,
-        RalphObject<T,D> new_val)
+        RalphObject<T> new_val)
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
@@ -189,14 +178,14 @@ public class MapTypeDataWrapper<K,T,D>
      * @param incorporating_deltas
      */
     public void append(
-        ActiveEvent active_event, RalphObject<T,D> new_val,
+        ActiveEvent active_event, RalphObject<T> new_val,
         boolean incorporating_deltas)
     {
     	Util.logger_assert("Can only append to list");
     }
     
     public void append(
-        ActiveEvent active_event, RalphObject<T,D> new_val)
+        ActiveEvent active_event, RalphObject<T> new_val)
     {
     	append(active_event,new_val,false);
     }

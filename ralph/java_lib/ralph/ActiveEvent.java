@@ -1,8 +1,7 @@
 
 package ralph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.MessageCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
@@ -204,7 +203,7 @@ public abstract class ActiveEvent
        this was the last message sent in a sequence and we're not
        waiting on a reply.
 
-       @param {ArrayList} args --- The positional arguments inserted
+       @param {List} args --- The positional arguments inserted
        into the call as an rpc.  Includes whether the argument is a
        reference or not (ie, we should update the variable's value on
        the caller).
@@ -219,7 +218,7 @@ public abstract class ActiveEvent
     public abstract boolean issue_partner_sequence_block_call(
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
-        boolean first_msg,ArrayList<RalphObject>args,RalphObject result);
+        boolean first_msg,List<RalphObject>args,RalphObject result);
     
 
     public abstract String get_priority();
@@ -242,7 +241,7 @@ public abstract class ActiveEvent
        */
     public abstract void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids);
+        List<String> children_event_host_uuids);
 
 
     /**

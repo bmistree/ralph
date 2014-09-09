@@ -1,6 +1,7 @@
 package ralph;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,16 +23,13 @@ import RalphServiceActions.AtomicObjectTryNextAction;
 
 /**
  * @param <T> --- The java type of the internal data
- * @param <D> --- The type that gets returned from dewaldoify.  Not
- * entirely true If this is an internal container, then contains what
- * each value in map/list would dewaldoify to.
  */
-public abstract class AtomicObject<T,D> extends RalphObject<T,D> 
+public abstract class AtomicObject<T> extends RalphObject<T> 
 {
     public final String uuid;
     public boolean log_changes;
-    public DataWrapperFactory<T,D> data_wrapper_constructor;
-    public DataWrapper<T,D> val = null;
+    public DataWrapperFactory<T> data_wrapper_constructor;
+    public DataWrapper<T> val = null;
     protected ReentrantLock _mutex = new ReentrantLock();
 
     /**
@@ -49,7 +47,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        easier (null pointer exceptions when shouldn't be allowed to
        operate on dirty_val).
      */
-    public DataWrapper<T,D> dirty_val = null;
+    public DataWrapper<T> dirty_val = null;
 		
     //# If write_lock_holder is not null, then the only element in
     //# read_lock_holders is the write lock holder.
@@ -63,8 +61,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     private AtomicObjectTryNextAction try_next_action = null;
     
     //# A dict of event uuids to WaitingEventTypes
-    protected Map<String,WaitingElement<T,D>>waiting_events =
-        new HashMap<String,WaitingElement<T,D>>();
+    protected Map<String,WaitingElement<T>>waiting_events =
+        new HashMap<String,WaitingElement<T>>();
 
     //# In try_next, can cause events to backout.  If we do cause
     //# other events to backout, then backout calls try_next.  This
@@ -151,7 +149,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     }
 	
     public void init_multithreaded_locked_object(
-        ValueTypeDataWrapperFactory<T,D> vtdwc,
+        ValueTypeDataWrapperFactory<T> vtdwc,
         boolean _log_changes, T init_val)
     {
         data_wrapper_constructor = vtdwc;
@@ -192,7 +190,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _mutex.unlock();
     }
 
-    protected abstract DataWrapper<T,D> acquire_read_lock(ActiveEvent active_event)
+    protected abstract DataWrapper<T> acquire_read_lock(ActiveEvent active_event)
         throws BackoutException;
         
     
@@ -233,7 +231,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
 
      Blocks until has acquired.
     */
-    protected DataWrapper<T,D> internal_acquire_read_lock(
+    protected DataWrapper<T> internal_acquire_read_lock(
         ActiveEvent active_event,ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
@@ -263,7 +261,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if ((write_lock_holder != null) &&
             (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
-            DataWrapper<T,D> to_return = dirty_val;
+            DataWrapper<T> to_return = dirty_val;
             if (to_unlock != null)
                 to_unlock.unlock();            
             _unlock();
@@ -274,7 +272,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if (read_lock_holders.containsKey(active_event.uuid))
         {
             //# already allowed to read the variable
-            DataWrapper<T,D> to_return = val;
+            DataWrapper<T> to_return = val;
             if (to_unlock != null)
                 to_unlock.unlock();
             
@@ -287,7 +285,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# check 2a
         if (write_lock_holder == null)
         {
-            DataWrapper<T,D> to_return = val;
+            DataWrapper<T> to_return = val;
             read_lock_holders.put(
             	active_event.uuid,
             	new EventCachedPriorityObj(active_event,cached_priority));
@@ -317,7 +315,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
                     active_event.uuid,
                     new EventCachedPriorityObj(active_event,cached_priority));
                 		
-                DataWrapper<T,D> to_return = val;
+                DataWrapper<T> to_return = val;
                 
                 if (to_unlock != null)
                     to_unlock.unlock();                
@@ -329,7 +327,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# Condition 2c + 3
         //
         //# create a waiting read element
-        WaitingElement<T,D> waiting_element = new WaitingElement(
+        WaitingElement<T> waiting_element = new WaitingElement(
             active_event,cached_priority,true,data_wrapper_constructor,log_changes);
 
         waiting_events.put(active_event.uuid, waiting_element);
@@ -340,8 +338,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         _unlock();
 
 
-        WaitingElement.UnwaitElement<T,D> unwait_element = null;
-        DataWrapper<T,D> to_return = null;
+        WaitingElement.UnwaitElement<T> unwait_element = null;
+        DataWrapper<T> to_return = null;
         try {
             unwait_element = waiting_element.queue.take();
             to_return = unwait_element.result;
@@ -358,7 +356,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         return to_return;
     }
 
-    protected abstract DataWrapper<T,D> acquire_write_lock(ActiveEvent active_event)
+    protected abstract DataWrapper<T> acquire_write_lock(ActiveEvent active_event)
         throws BackoutException;
     
     /**
@@ -376,7 +374,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      * @return
      * @throws BackoutException 
      */
-    protected DataWrapper<T,D> internal_acquire_write_lock(
+    protected DataWrapper<T> internal_acquire_write_lock(
         ActiveEvent active_event, ReentrantLock to_unlock) throws BackoutException
     {
         _lock();
@@ -405,7 +403,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         if ((write_lock_holder != null) &&
             (active_event.uuid.equals(write_lock_holder.event.uuid)))
         {
-            DataWrapper<T,D> to_return = dirty_val;
+            DataWrapper<T> to_return = dirty_val;
             if (to_unlock != null)
                 to_unlock.unlock();
             
@@ -424,7 +422,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             read_lock_holders.put(
                 active_event.uuid,
                 new EventCachedPriorityObj(active_event,cached_priority));
-            DataWrapper<T,D> to_return = dirty_val;
+            DataWrapper<T> to_return = dirty_val;
             if (to_unlock != null)
                 to_unlock.unlock();
             
@@ -446,7 +444,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
                     new EventCachedPriorityObj(active_event,cached_priority);
 
                 dirty_val = data_wrapper_constructor.construct(val.val,log_changes);
-                DataWrapper<T,D> to_return = dirty_val;
+                DataWrapper<T> to_return = dirty_val;
                 
                 if (to_unlock != null)
                     to_unlock.unlock();
@@ -457,7 +455,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
 
         //# case 3: add to wait queue and wait
-        WaitingElement <T,D> write_waiting_event = new WaitingElement<T,D>(
+        WaitingElement <T> write_waiting_event = new WaitingElement<T>(
             active_event,cached_priority,false,data_wrapper_constructor,
             log_changes);
         waiting_events.put(active_event.uuid, write_waiting_event);
@@ -466,8 +464,8 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             to_unlock.unlock();
         _unlock();
 
-        WaitingElement.UnwaitElement<T,D> unwait_element = null;
-        DataWrapper<T,D> to_return = null;
+        WaitingElement.UnwaitElement<T> unwait_element = null;
+        DataWrapper<T> to_return = null;
         try {
             unwait_element = write_waiting_event.queue.take();
             to_return = unwait_element.result;
@@ -529,13 +527,6 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         ralph_globals.thread_pool.add_service_action(try_next_action);
     }
     
-    public D de_waldoify(ActiveEvent active_event) throws BackoutException
-    {
-        DataWrapper<T,D> wrapped_val = acquire_read_lock(active_event);
-        return wrapped_val.de_waldoify(active_event);
-    }
-
-
     /**
        Identical documentation to
        internal_request_backout_and_release_lock.
@@ -595,7 +586,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
 		
         //# un-jam threadsafe queue waiting for event
-        WaitingElement<T,D> waiting_event =
+        WaitingElement<T> waiting_event =
             waiting_events.remove(active_event.uuid);
         if (waiting_event != null)
         {
@@ -612,7 +603,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
      those deltas.
      * @param active_event
      */
-    public DataWrapper<T,D> get_dirty_wrapped_val(
+    public DataWrapper<T> get_dirty_wrapped_val(
         ActiveEvent active_event)
     {
         Util.logger_assert(
@@ -835,7 +826,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         }
 
         //# un-jam threadsafe queue waiting for event
-        WaitingElement<T,D> waiting_event =
+        WaitingElement<T> waiting_event =
             waiting_events.remove(active_event.uuid);
         
         if (waiting_event != null)
@@ -906,13 +897,13 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# before iterating through them.  This is so that we can
         //# prevent deadlock when two different objects are iterating
         //# through their lists.
-        ArrayList<EventCachedPriorityObj> read_lock_holder_event_cached_priorities =
+        List<EventCachedPriorityObj> read_lock_holder_event_cached_priorities =
             new ArrayList<EventCachedPriorityObj>(read_lock_holders.values());
         Collections.sort(
             read_lock_holder_event_cached_priorities,
             EventCachedPriorityObj.UUID_DESCENDING_COMPARATOR);
 
-        ArrayList<ActiveEvent> to_backout_list =
+        List<ActiveEvent> to_backout_list =
             new ArrayList<ActiveEvent>();
         boolean can_backout_all = true;
         for (EventCachedPriorityObj event_cached_priority_obj :
@@ -1075,7 +1066,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
     public void set_val(ActiveEvent active_event,T new_val)
         throws BackoutException
     {
-        DataWrapper<T,D> to_write_on = acquire_write_lock(active_event);
+        DataWrapper<T> to_write_on = acquire_write_lock(active_event);
         to_write_on.write(new_val);
         if (active_event.immediate_complete())
         {
@@ -1114,7 +1105,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
        waiting write.  False otherwise.
     */
     private boolean try_schedule_write_waiting_event(
-        WaitingElement<T,D> waiting_event)
+        WaitingElement<T> waiting_event)
     {    
     	//#### DEBUG
         if (! waiting_event.is_write())
@@ -1189,14 +1180,14 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
         //# Phase 1 from above:
         //# sort event priorities from high to low to determine if should add
         //# them.
-        ArrayList<WaitingElement<T,D>> _waiting_events =
-            new ArrayList<WaitingElement<T,D>>(waiting_events.values());
+        List<WaitingElement<T>> _waiting_events =
+            new ArrayList<WaitingElement<T>>(waiting_events.values());
     	Collections.sort(_waiting_events);
 
         //# Phase 2 from above
         //# Run through all waiting events.  If the waiting event is a
         //# write, first check that
-        for (WaitingElement<T,D> waiting_event : _waiting_events)
+        for (WaitingElement<T> waiting_event : _waiting_events)
         {
             if (waiting_event.is_write())
             {
@@ -1226,7 +1217,7 @@ public abstract class AtomicObject<T,D> extends RalphObject<T,D>
             return val.val;
     	}
 
-        DataWrapper<T,D>data_wrapper = acquire_read_lock(active_event);
+        DataWrapper<T>data_wrapper = acquire_read_lock(active_event);
         if (active_event.immediate_complete())
         {
             // non-atomics should immediately commit their changes.  Note:

@@ -50,7 +50,7 @@ public class Variables {
     /** Atomics */
     
     public static class AtomicNumberVariable
-        extends AtomicValueVariable<Double,Double>
+        extends AtomicValueVariable<Double>
     {
         public AtomicNumberVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -63,10 +63,10 @@ public class Variables {
         }
         
         @Override
-        protected SpeculativeAtomicObject<Double,Double>
+        protected SpeculativeAtomicObject<Double>
             duplicate_for_speculation(Double to_speculate_on)
         {
-            SpeculativeAtomicObject<Double,Double> to_return =
+            SpeculativeAtomicObject<Double> to_return =
                 new AtomicNumberVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -100,7 +100,7 @@ public class Variables {
     }
 
     public static class AtomicTextVariable
-        extends AtomicValueVariable<String,String>
+        extends AtomicValueVariable<String>
     {
         public AtomicTextVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -136,10 +136,10 @@ public class Variables {
         }
         
         @Override
-        protected SpeculativeAtomicObject<String,String>
+        protected SpeculativeAtomicObject<String>
             duplicate_for_speculation(String to_speculate_on)
         {
-            SpeculativeAtomicObject<String,String> to_return =
+            SpeculativeAtomicObject<String> to_return =
                 new AtomicTextVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -148,7 +148,7 @@ public class Variables {
     }
 	
     public static class AtomicTrueFalseVariable
-        extends AtomicValueVariable<Boolean,Boolean>
+        extends AtomicValueVariable<Boolean>
     {
         public AtomicTrueFalseVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -184,10 +184,10 @@ public class Variables {
         }
         
         @Override
-        protected SpeculativeAtomicObject<Boolean,Boolean>
+        protected SpeculativeAtomicObject<Boolean>
             duplicate_for_speculation(Boolean to_speculate_on)
         {
-            SpeculativeAtomicObject<Boolean,Boolean> to_return =
+            SpeculativeAtomicObject<Boolean> to_return =
                 new AtomicTrueFalseVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -196,14 +196,14 @@ public class Variables {
     }
 
     public static class AtomicEnumVariable<T>
-        extends AtomicValueVariable<T,T>
+        extends AtomicValueVariable<T>
     {
         public AtomicEnumVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,init_val,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
         public AtomicEnumVariable(
@@ -211,15 +211,15 @@ public class Variables {
         {
             super(
                 _log_changes,null,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<T,T>
+        protected SpeculativeAtomicObject<T>
             duplicate_for_speculation(T to_speculate_on)
         {
-            SpeculativeAtomicObject<T,T> to_return =
+            SpeculativeAtomicObject<T> to_return =
                 new AtomicEnumVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -239,14 +239,14 @@ public class Variables {
     }
     
     public static class AtomicInterfaceVariable<T>
-        extends AtomicValueVariable<T,T>
+        extends AtomicValueVariable<T>
     {
         public AtomicInterfaceVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,init_val,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
         public AtomicInterfaceVariable(
@@ -254,15 +254,15 @@ public class Variables {
         {
             super(
                 _log_changes,null,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
 
         @Override
-        protected SpeculativeAtomicObject<T,T>
+        protected SpeculativeAtomicObject<T>
             duplicate_for_speculation(T to_speculate_on)
         {
-            SpeculativeAtomicObject<T,T> to_return =
+            SpeculativeAtomicObject<T> to_return =
                 new AtomicInterfaceVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -280,7 +280,7 @@ public class Variables {
     }
     
     public static class AtomicServiceFactoryVariable
-        extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
+        extends AtomicValueVariable<InternalServiceFactory>
     {
         public AtomicServiceFactoryVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -298,10 +298,10 @@ public class Variables {
         }
 
         @Override
-        protected SpeculativeAtomicObject<InternalServiceFactory,InternalServiceFactory>
+        protected SpeculativeAtomicObject<InternalServiceFactory>
             duplicate_for_speculation(InternalServiceFactory to_speculate_on)
         {
-            SpeculativeAtomicObject<InternalServiceFactory,InternalServiceFactory> to_return =
+            SpeculativeAtomicObject<InternalServiceFactory> to_return =
                 new AtomicServiceFactoryVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -348,7 +348,7 @@ public class Variables {
     }
     
     public static class AtomicServiceReferenceVariable
-        extends AtomicValueVariable<InternalServiceReference,InternalServiceReference>
+        extends AtomicValueVariable<InternalServiceReference>
     {
         public AtomicServiceReferenceVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -366,10 +366,10 @@ public class Variables {
         }
 
         @Override
-        protected SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference>
+        protected SpeculativeAtomicObject<InternalServiceReference>
             duplicate_for_speculation(InternalServiceReference to_speculate_on)
         {
-            SpeculativeAtomicObject<InternalServiceReference,InternalServiceReference> to_return =
+            SpeculativeAtomicObject<InternalServiceReference> to_return =
                 new AtomicServiceReferenceVariable(
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
@@ -421,7 +421,7 @@ public class Variables {
     }
     
     public static class NonAtomicNumberVariable
-        extends NonAtomicValueVariable<Double,Double>
+        extends NonAtomicValueVariable<Double>
     {
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes, Double init_val,
@@ -460,7 +460,7 @@ public class Variables {
     }
 
     public static class NonAtomicTextVariable
-        extends NonAtomicValueVariable<String,String>
+        extends NonAtomicValueVariable<String>
     {
         public NonAtomicTextVariable(
             boolean _dummy_log_changes,String init_val,
@@ -499,7 +499,7 @@ public class Variables {
     }
 
     public static class NonAtomicTrueFalseVariable
-        extends NonAtomicValueVariable<Boolean,Boolean>
+        extends NonAtomicValueVariable<Boolean>
     {
         public NonAtomicTrueFalseVariable(
             boolean _dummy_log_changes, Boolean init_val,
@@ -538,7 +538,7 @@ public class Variables {
     }
 
     public static class NonAtomicEnumVariable<T>
-        extends NonAtomicValueVariable<T,T>
+        extends NonAtomicValueVariable<T>
     {
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
@@ -546,7 +546,7 @@ public class Variables {
         {
             super(
                 init_val,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
 
@@ -554,7 +554,7 @@ public class Variables {
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                null,new ValueTypeDataWrapperFactory<T,T>(),ralph_globals);
+                null,new ValueTypeDataWrapperFactory<T>(),ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -569,7 +569,7 @@ public class Variables {
     }
     
     public static class NonAtomicInterfaceVariable<T>
-        extends NonAtomicValueVariable<T,T>
+        extends NonAtomicValueVariable<T>
     {
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, T init_val,
@@ -577,7 +577,7 @@ public class Variables {
         {
             super(
                 init_val,
-                new ValueTypeDataWrapperFactory<T,T>(),
+                new ValueTypeDataWrapperFactory<T>(),
                 ralph_globals);
         }
 
@@ -585,7 +585,7 @@ public class Variables {
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                null,new ValueTypeDataWrapperFactory<T,T>(),ralph_globals);
+                null,new ValueTypeDataWrapperFactory<T>(),ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -599,7 +599,7 @@ public class Variables {
     }
     
     public static class NonAtomicServiceFactoryVariable
-        extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
+        extends NonAtomicValueVariable<InternalServiceFactory>
     {
         public NonAtomicServiceFactoryVariable(
             boolean _log_changes,InternalServiceFactory init_val,
@@ -641,7 +641,7 @@ public class Variables {
 
 
     public static class NonAtomicServiceReferenceVariable
-        extends NonAtomicValueVariable<InternalServiceReference,InternalServiceReference>
+        extends NonAtomicValueVariable<InternalServiceReference>
     {
         public NonAtomicServiceReferenceVariable(
             boolean _log_changes,InternalServiceReference init_val,
@@ -685,13 +685,13 @@ public class Variables {
         
     /************ Handling maps ********/
     //non-atomic
-    public static class NonAtomicMapVariable <K,V,D>
-        extends NonAtomicMap<K,V,D>
+    public static class NonAtomicMapVariable <K,V>
+        extends NonAtomicMap<K,V>
     {
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(_index_type,locked_wrapper,ralph_globals);
@@ -699,9 +699,9 @@ public class Variables {
 
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalMap<K,V,D> internal_val,
+            NonAtomicInternalMap<K,V> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(internal_val,_index_type,locked_wrapper,ralph_globals);
@@ -709,13 +709,13 @@ public class Variables {
     }
 
     // atomic
-    public static class AtomicMapVariable <K,V,D>
-        extends AtomicMap<K,V,D>
+    public static class AtomicMapVariable <K,V>
+        extends AtomicMap<K,V>
     {
         public AtomicMapVariable(
             boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(_log_changes,_index_type,locked_wrapper,ralph_globals);
@@ -723,9 +723,9 @@ public class Variables {
 
         public AtomicMapVariable(
             boolean _log_changes,
-            AtomicInternalMap<K,V,D> internal_val,
+            AtomicInternalMap<K,V> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(
@@ -735,11 +735,11 @@ public class Variables {
     }
     
     /************ Handling Lists ********/
-    public static class AtomicListVariable <V,D>
-        extends AtomicList<V,D>
+    public static class AtomicListVariable <V>
+        extends AtomicList<V>
     {
         public AtomicListVariable(
-            boolean _log_changes,EnsureAtomicWrapper<V,D> locked_wrapper,
+            boolean _log_changes,EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(_log_changes,locked_wrapper,ralph_globals);
@@ -747,19 +747,19 @@ public class Variables {
 
 
         public AtomicListVariable(
-            boolean _log_changes,AtomicInternalList<V,D> internal_val,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            boolean _log_changes,AtomicInternalList<V> internal_val,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(_log_changes,internal_val,locked_wrapper,ralph_globals);
         }
     }
 
-    public static class NonAtomicListVariable <V,D>
-        extends NonAtomicList<V,D>
+    public static class NonAtomicListVariable <V>
+        extends NonAtomicList<V>
     {
         public NonAtomicListVariable(
-            boolean _dummy_log_changes, EnsureAtomicWrapper<V,D> locked_wrapper,
+            boolean _dummy_log_changes, EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(locked_wrapper,ralph_globals);
@@ -767,8 +767,8 @@ public class Variables {
 
         public NonAtomicListVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalList<V,D> internal_val,
-            EnsureAtomicWrapper<V,D> locked_wrapper,
+            NonAtomicInternalList<V> internal_val,
+            EnsureAtomicWrapper<V> locked_wrapper,
             RalphGlobals ralph_globals)
         {
             super(internal_val,locked_wrapper,ralph_globals);

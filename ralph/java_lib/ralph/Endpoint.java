@@ -1,6 +1,8 @@
 package ralph;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -96,12 +98,12 @@ public abstract class Endpoint
     private boolean _partner_stop_called = false;
     private boolean _stop_complete = false;
 	
-    private ArrayList<ArrayBlockingQueue<Object>> _stop_blocking_queues =
+    private List<ArrayBlockingQueue<Object>> _stop_blocking_queues =
         new ArrayList<ArrayBlockingQueue<Object>>();
 	
     //# holds callbacks to call when stop is complete
     private int _stop_listener_id_assigner = 0;
-    private HashMap<Integer,StopListener> _stop_listeners =
+    private Map<Integer,StopListener> _stop_listeners =
         new HashMap<Integer,StopListener>();
     
     private boolean _conn_failed = false;
@@ -189,14 +191,14 @@ public abstract class Endpoint
     /**
        Used to construct a context when receive rpc call from partner.
        
-       @param {ArrayList<RalphObject>} rpc_args --- RPC arguments
+       @param {List<RalphObject>} rpc_args --- RPC arguments
        supplied by caller.
        
        @param {boolean} transactional --- Whether or not the rpc
        requested was transactional.
      */
     public ExecutingEventContext create_context_for_recv_rpc(
-        ArrayList<RalphObject> rpc_args)
+        List<RalphObject> rpc_args)
     {
         return new ExecutingEventContext(
             global_var_stack,rpc_args);
@@ -301,14 +303,17 @@ public abstract class Endpoint
         _partner_host_uuid = uuid;
     }
 
-    protected NonAtomicInternalList<Double,Double> _produce_range(
+    /**
+       FIXME: Should I remove this?  Is it still useful?
+     */
+    protected NonAtomicInternalList<Double> _produce_range(
         Double start,Double end, Double increment)
     {
-        NonAtomicInternalList<Double,Double> to_return =
+        NonAtomicInternalList<Double> to_return =
             new NonAtomicInternalList(ralph_globals);
 
-        ArrayList<RalphObject<Double,Double>> init_val =
-            new ArrayList<RalphObject<Double,Double>>();
+        List<RalphObject<Double>> init_val =
+            new ArrayList<RalphObject<Double>>();
         for (int i = start.intValue(); i < end.intValue();
              i = i + increment.intValue())
         {
@@ -318,7 +323,7 @@ public abstract class Endpoint
         }
         
         to_return.init(
-            new ListTypeDataWrapperFactory<Double,Double>(),
+            new ListTypeDataWrapperFactory<Double>(),
             init_val,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
 
@@ -464,7 +469,7 @@ public abstract class Endpoint
             
             if (general_msg.getFirstPhaseResult().getSuccessful())
             {	
-                ArrayList<String> children_event_host_uuids = new ArrayList<String>();
+                List<String> children_event_host_uuids = new ArrayList<String>();
                 for (int i = 0; i < fpr.getChildrenEventHostUuidsCount(); ++i)
                 {
                     String child_event_uuid = fpr.getChildrenEventHostUuids(i).getData();
@@ -673,7 +678,7 @@ public abstract class Endpoint
     */
     public void _forward_first_phase_commit_successful(
         String event_uuid,String host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
         general_message.setTimestamp(_clock.get_int_timestamp());
@@ -779,7 +784,7 @@ public abstract class Endpoint
     */    
     public void  _receive_first_phase_commit_successful(
         String event_uuid,String host_uuid,
-        ArrayList<String> children_event_host_uuids)
+        List<String> children_event_host_uuids)
     {
       
         RalphServiceActions.ServiceAction service_action = 

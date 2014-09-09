@@ -11,9 +11,8 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
  * Strings).
  * @param <V> --- The Java type of data that are elements in the list
- * @param <D> --- The Java type of data that elements should dewaldoify into.
  */
-public interface RalphInternalMapInterface<K,V,D> 
+public interface RalphInternalMapInterface<K,V> 
 {
     public V get_val_on_key(ActiveEvent active_event, K key)
         throws BackoutException;
@@ -31,7 +30,7 @@ public interface RalphInternalMapInterface<K,V,D>
     public void set_val_on_key(
         ActiveEvent active_event, K key, V to_write) throws BackoutException;
     public void set_val_on_key(
-        ActiveEvent active_event, K key, RalphObject<V,D> to_write)
+        ActiveEvent active_event, K key, RalphObject<V> to_write)
         throws BackoutException;
     
     public boolean return_internal_val_from_container();

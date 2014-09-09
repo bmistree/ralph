@@ -8,19 +8,13 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 
- * @author bmistree
- *
  * @param <T> --- The java type of the internal data
- * @param <D> --- The type that gets returned from dewaldoify.  Not
- * entirely true If this is an internal container, then contains what
- * each value in map/list would dewaldoify to.
  */
-public abstract class NonAtomicObject<T,D> extends RalphObject<T,D>
+public abstract class NonAtomicObject<T> extends RalphObject<T>
 {
     public final String uuid;
-    private DataWrapperFactory<T,D> data_wrapper_constructor;
-    public DataWrapper<T,D> val = null;
+    private DataWrapperFactory<T> data_wrapper_constructor;
+    public DataWrapper<T> val = null;
     
     public NonAtomicObject(RalphGlobals ralph_globals)
     {
@@ -28,7 +22,7 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D>
     }
 	
     public void init(
-        ValueTypeDataWrapperFactory<T,D> vtdwc,
+        ValueTypeDataWrapperFactory<T> vtdwc,
         T init_val)
     {
         data_wrapper_constructor = vtdwc;
@@ -98,11 +92,5 @@ public abstract class NonAtomicObject<T,D> extends RalphObject<T,D>
          transaction will just create a new single threaded variable.
         */
         return;
-    }
-
-    @Override
-    public D de_waldoify(ActiveEvent active_event) throws BackoutException
-    {
-        return val.de_waldoify(active_event);
     }
 }

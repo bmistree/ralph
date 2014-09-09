@@ -1,7 +1,8 @@
 package ralph;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.Set;
 import RalphCallResults.MessageCallResultObject;
@@ -36,7 +37,7 @@ public class PartnerEventParent extends EventParent
         //# tell parent endpoint that first phase has gone well and that
         //# it should wait on receiving responses from all the following
         //# endpoint uuids before entering second phase
-        ArrayList<String> children_hosts = new ArrayList<String>();
+        List<String> children_hosts = new ArrayList<String>();
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             children_hosts.add(endpt._partner_host_uuid);
 
@@ -81,7 +82,7 @@ public class PartnerEventParent extends EventParent
     @Override
     public void put_exception(
         Exception error,
-        HashMap<String, ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
+        Map<String, ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
     {
         local_endpoint._propagate_back_exception(
             uuid,get_priority(),error);		
@@ -95,7 +96,7 @@ public class PartnerEventParent extends EventParent
     @Override
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        ArrayList<String> children_event_host_uuids) 
+        List<String> children_event_host_uuids) 
     {
         local_endpoint._forward_first_phase_commit_successful(
             uuid, msg_originator_host_uuid, children_event_host_uuids);
