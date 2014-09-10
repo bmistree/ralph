@@ -64,6 +64,21 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         return to_return;
     }
 
+    /**
+       Log completed commit, if ralph globals designates to.
+     */
+    @Override
+    public void complete_write_commit_log(
+        ActiveEvent active_event)
+    {
+        RalphGlobals ralph_globals = active_event.event_parent.ralph_globals;
+        // do not do anything
+        if (ralph_globals.local_version_manager == null)
+            return;
+        
+        Util.logger_warn("FIXME: Must instantiate logging for atomic maps.");
+    }
+
     
     public void init_multithreaded_map_container(
         boolean _log_changes,

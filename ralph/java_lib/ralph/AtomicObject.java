@@ -653,20 +653,27 @@ public abstract class AtomicObject<T,DeltaType>
     public abstract void complete_commit(ActiveEvent active_event);
 
     /**
+       Gets called from within lock.  Ie., can use it to access
+       dirty_val.  version_helper gets called in this method to
+       actually write log.
+     */
+    public abstract void complete_write_commit_log(
+        ActiveEvent active_event);
+    
+    /**
        Cannot be overridden by subclassses.  Use
        hardware_complete_hook instead.
      */
     final protected boolean internal_complete_commit(ActiveEvent active_event)
     {
         boolean write_lock_holder_completed = false;
-        
         _lock();
 
         hardware_complete_commit_hook(active_event);
-        
-        if ((write_lock_holder != null) &&
-            active_event.uuid.equals(write_lock_holder.event.uuid))
+
+        if (is_write_lock_holder(active_event))
         {
+            complete_write_commit_log(active_event);
             write_lock_holder_completed = true;
             val.write(dirty_val.val);
             write_lock_holder= null;

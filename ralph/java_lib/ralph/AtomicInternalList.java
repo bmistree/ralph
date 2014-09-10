@@ -33,6 +33,21 @@ public class AtomicInternalList<V,ValueDeltaType>
         version_helper = VersionListDeltas.LIST_VERSION_HELPER;
     }
 
+    /**
+       Log completed commit, if ralph globals designates to.
+     */
+    @Override
+    public void complete_write_commit_log(
+        ActiveEvent active_event)
+    {
+        RalphGlobals ralph_globals = active_event.event_parent.ralph_globals;
+        // do not do anything
+        if (ralph_globals.local_version_manager == null)
+            return;
+        
+        Util.logger_warn("FIXME: Must instantiate logging for atomic lists.");
+    }
+    
     @Override
     protected
         // return type
