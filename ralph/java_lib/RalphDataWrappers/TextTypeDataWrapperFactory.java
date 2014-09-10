@@ -11,7 +11,6 @@ public class TextTypeDataWrapperFactory
         if (val != null)
             new_val = new String(val);
         
-        return new ValueTypeDataWrapper<String>(
-            new_val,log_changes);
+        return new ValueTypeDataWrapper<String>(new_val);
     }
 }

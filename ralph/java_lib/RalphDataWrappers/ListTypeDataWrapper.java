@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 import ralph.RalphObject;
 import RalphExceptions.BackoutException;
 import ralph.ActiveEvent;
+
+
 
 /**
  * @param <T> --- The actual java type of the values holding (ie,
@@ -37,31 +40,40 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
         }		
 		
     }
-    private boolean log_changes;
-    protected boolean has_been_written_since_last_msg = false;
+    private final boolean log_changes;
 	
     /*
      * tracks all insertions, removals, etc. made to this reference
      * object so can send deltas across network to partners.
      * (Note: only used for log_changes data.)
      */
-    public List <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
+    private final List <OpTuple> change_log;
 
 	
     public ListTypeDataWrapper(
         List<RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
     {
-        super(
-            new ArrayList<RalphObject<ValueType,DeltaValueType>>(v),
-            _log_changes);
+        super(new ArrayList<RalphObject<ValueType,DeltaValueType>>(v));
+        if (_log_changes)
+            change_log = new ArrayList<OpTuple>();
+        else
+            change_log = null;
+        
         log_changes = _log_changes;
     }
-	
+
+    /**
+       Reference is unmodifiable.
+     */
+    public List<OpTuple> get_unmodifiable_change_log()
+    {
+        return Collections.unmodifiableList(change_log);
+    }
+    
     public ListTypeDataWrapper(
         ListTypeDataWrapper<ValueType,DeltaValueType> v, boolean _log_changes)
     {
-        super(v.val,_log_changes);
-        log_changes = _log_changes;
+        this(v.val,_log_changes);
     }
 	
     /**
@@ -86,7 +98,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
         boolean incorporating_deltas) throws BackoutException
     {
         if ((log_changes) && (! incorporating_deltas))
-            partner_change_log.add(write_key_tuple(key));
+            change_log.add(write_key_tuple(key));
 
         val.get(key).set_val(active_event,to_write.get_val(active_event));
         return;	
@@ -107,7 +119,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
         RalphObject<ValueType,DeltaValueType> what_removed =
             val.remove(key_to_delete.intValue());
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(delete_key_tuple(key_to_delete,what_removed));
+            change_log.add(delete_key_tuple(key_to_delete,what_removed));
     }
     
     public void del_key(ActiveEvent active_event,Integer key_to_delete)
@@ -122,7 +134,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     {
         Integer key_added = new Integer(val.size());        
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(add_key_tuple(key_added,new_object));
+            change_log.add(add_key_tuple(key_added,new_object));
     	val.add(key_added,new_object);        
     }
     
@@ -149,7 +161,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     {
         Integer key_added = new Integer(val.size());
         if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(add_key_tuple(key_added,new_val));
+            change_log.add(add_key_tuple(key_added,new_val));
     	val.add(where_to_insert,new_val);
     }
     

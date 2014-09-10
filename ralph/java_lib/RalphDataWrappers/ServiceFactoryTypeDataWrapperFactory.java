@@ -10,7 +10,6 @@ public class ServiceFactoryTypeDataWrapperFactory
     public DataWrapper<InternalServiceFactory> construct(
         InternalServiceFactory _val, boolean log_changes)
     {
-        return new ValueTypeDataWrapper<InternalServiceFactory>(
-            _val,log_changes);
+        return new ValueTypeDataWrapper<InternalServiceFactory>(_val);
     }
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
+
 import ralph.RalphObject;
 import ralph.ActiveEvent;
 import ralph.Util;
@@ -37,34 +39,42 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
 		
     }
 	
-    private boolean log_changes;
-    protected boolean has_been_written_since_last_msg = false;
-	
+    private final boolean log_changes;
 	
     /*
      * tracks all insertions, removals, etc. made to this reference
      * object so can send deltas across network to partners.
      * (Note: only used for log_changes data.)
      */
-    private List <OpTuple> partner_change_log = new ArrayList<OpTuple>(); 
+    private final List <OpTuple> change_log;
 
-	
     public MapTypeDataWrapper(
         Map<K,RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
     {
-        super(
-            new HashMap<K,RalphObject<ValueType,DeltaValueType>>(v),
-            _log_changes);
+        super(new HashMap<K,RalphObject<ValueType,DeltaValueType>>(v));
+        
+        if (_log_changes)
+            change_log = new ArrayList<OpTuple>();
+        else
+            change_log = null;
+        
         log_changes = _log_changes;
     }
 	
     public MapTypeDataWrapper(
         MapTypeDataWrapper<K,ValueType,DeltaValueType> v, boolean _log_changes)
     {
-        super(v.val,_log_changes);
-        log_changes = _log_changes;
+        this(v.val,_log_changes);
     }
-	
+
+    /**
+       Reference is unmodifiable.
+     */
+    public List<OpTuple> get_unmodifiable_change_log()
+    {
+        return Collections.unmodifiableList(change_log);
+    }
+    
 	
     /**
      * @param {bool} incorporating_deltas --- True if we are setting
@@ -94,7 +104,7 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
         }
 			
         if ((log_changes) && (! incorporating_deltas))
-            partner_change_log.add(write_key_tuple(key));
+            change_log.add(write_key_tuple(key));
 
         val.get(key).set_val(active_event,to_write.get_val(active_event));
         return;	
@@ -115,11 +125,11 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
     {
     	/*
           if self.log_changes and (not incorporating_deltas):
-          self.partner_change_log.append(delete_key_tuple(key_to_delete))            
+          self.change_log.append(delete_key_tuple(key_to_delete))            
           del self.val[key_to_delete]
         */
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(delete_key_tuple(key_to_delete));
+            change_log.add(delete_key_tuple(key_to_delete));
         val.remove(key_to_delete);	
     }
     
@@ -136,13 +146,13 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
     {
     	/*
           if self.log_changes and (not incorporating_deltas):
-          self.partner_change_log.append(add_key_tuple(key_added))
+          self.change_log.append(add_key_tuple(key_added))
 
           self.val[key_added] = new_val
         */
     	
     	if (log_changes && (! incorporating_deltas))
-            partner_change_log.add(add_key_tuple(key_added));
+            change_log.add(add_key_tuple(key_added));
     	
     	val.put(key_added,new_object);    	
     }

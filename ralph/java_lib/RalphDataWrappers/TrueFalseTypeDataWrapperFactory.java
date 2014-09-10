@@ -11,7 +11,6 @@ public class TrueFalseTypeDataWrapperFactory
         if (val != null)
             new_val = new Boolean(val);
         
-        return new ValueTypeDataWrapper<Boolean>(
-            new_val,log_changes);
+        return new ValueTypeDataWrapper<Boolean>(new_val);
     }
 }

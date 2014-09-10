@@ -95,7 +95,8 @@ public class RandomFailureExtendedList
         {
             // first, apply changes to synchronized list.  Then, following the
             // changes, randomly fail or pass.  
-            for (ListTypeDataWrapper.OpTuple op_tuple : dirty.partner_change_log)
+            for (ListTypeDataWrapper.OpTuple op_tuple :
+                     dirty.get_unmodifiable_change_log())
             {
                 if (dirty.is_add_key_tuple(op_tuple))
                 {
@@ -136,10 +137,11 @@ public class RandomFailureExtendedList
         {
             // go backwards through list and do the opposite of the op
             // tuple
-            for (int i = to_undo.partner_change_log.size() -1; i >= 0; --i)
+            List<ListTypeDataWrapper<Double,Double>.OpTuple> change_log =
+                to_undo.get_unmodifiable_change_log();
+            for (int i = change_log.size() -1; i >= 0; --i)
             {
-                ListTypeDataWrapper.OpTuple op_tuple =
-                    to_undo.partner_change_log.get(i);
+                ListTypeDataWrapper.OpTuple op_tuple = change_log.get(i);
                 if (to_undo.is_add_key_tuple(op_tuple))
                 {
                     int index = op_tuple.key;

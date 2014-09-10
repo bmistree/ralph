@@ -2,8 +2,8 @@ package RalphDataWrappers;
 
 public class ValueTypeDataWrapper<T> extends DataWrapper<T>
 {
-    public ValueTypeDataWrapper(T _val, boolean log_changes)
+    public ValueTypeDataWrapper(T _val)
     {
-        super(_val, log_changes);
+        super(_val);
     }
 }

@@ -9,7 +9,7 @@ import ralph.ActiveEvent;
 public class DataWrapper<T>
 {
     public T val;
-    public DataWrapper(T _val, boolean log_changes)
+    public DataWrapper(T _val)
     {
         val= _val;
     }

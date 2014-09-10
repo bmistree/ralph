@@ -10,7 +10,6 @@ public class ServiceReferenceTypeDataWrapperFactory
     public DataWrapper<InternalServiceReference> construct(
         InternalServiceReference _val, boolean log_changes)
     {
-        return new ValueTypeDataWrapper<InternalServiceReference>(
-            _val,log_changes);
+        return new ValueTypeDataWrapper<InternalServiceReference>(_val);
     }
 }

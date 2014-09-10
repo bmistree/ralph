@@ -11,6 +11,6 @@ public class NumberTypeDataWrapperFactory
         Double new_val = null;
         if (val != null)
             new_val = new Double(val);
-        return new ValueTypeDataWrapper<Double>(new_val,log_changes);
+        return new ValueTypeDataWrapper<Double>(new_val);
     }
 }
