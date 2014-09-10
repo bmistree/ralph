@@ -27,8 +27,8 @@ public class WriteReadVarStack
     public static Double get_number_from_stack (
         VariableStack vstack, String var_name)
     {
-        RalphObject<Double> lo =
-            (RalphObject<Double>)vstack.get_var_if_exists(var_name);
+        RalphObject<Double,Double> lo =
+            (RalphObject<Double,Double>)vstack.get_var_if_exists(var_name);
 
         Double val = null;
         try
@@ -47,8 +47,8 @@ public class WriteReadVarStack
     public static void set_number_on_stack(
         VariableStack vstack,String var_name,Double val_to_set_to)
     {
-        RalphObject<Double> lo =
-            (RalphObject<Double>)vstack.get_var_if_exists(var_name);
+        RalphObject<Double,Double> lo =
+            (RalphObject<Double,Double>)vstack.get_var_if_exists(var_name);
         try
         {
             lo.set_val(null,val_to_set_to);

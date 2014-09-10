@@ -34,8 +34,8 @@ public class ListTVarConflict
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
 
-        AtomicListVariable<Double> list_tvar =
-            (AtomicListVariable<Double>)
+        AtomicListVariable<Double,Double> list_tvar =
+            (AtomicListVariable<Double,Double>)
             endpt.global_var_stack.get_var_if_exists(
                 TestClassUtil.DefaultEndpoint.LIST_TVAR_NAME);
 
@@ -54,7 +54,7 @@ public class ListTVarConflict
 
     public static boolean test_add_values(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -126,7 +126,7 @@ public class ListTVarConflict
      */
     public static boolean test_preempted_read(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -184,7 +184,7 @@ public class ListTVarConflict
      */
     public static boolean test_concurrent_read(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {

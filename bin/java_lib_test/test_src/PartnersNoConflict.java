@@ -90,8 +90,8 @@ public class PartnersNoConflict
             ExecutingEventContext ctx = endpta.create_context();
                         
             // grab num object from base scope
-            RalphObject<Double> num_obj =
-                (RalphObject<Double>)endpta.global_var_stack.get_var_if_exists(
+            RalphObject<Double,Double> num_obj =
+                (RalphObject<Double,Double>)endpta.global_var_stack.get_var_if_exists(
                     endpta.NUM_TVAR_NAME);
 
             // push a new scope onto scope stack and then add boolean

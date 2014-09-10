@@ -86,21 +86,21 @@ public class TestClassUtil
             }
             else if (to_exec_internal_name.equals("test_increment_local_num"))
             {
-                RalphObject<Double> arg =
-                    (RalphObject<Double>)args[0];
+                RalphObject<Double,Double> arg =
+                    (RalphObject<Double,Double>)args[0];
 
                 _test_increment_local_num(active_event,ctx,arg);
             }
             else if (to_exec_internal_name.equals("test_partner_args_method"))
             {
-                RalphObject<Double> num_obj =
-                    (RalphObject<Double>)args[0];
+                RalphObject<Double,Double> num_obj =
+                    (RalphObject<Double,Double>)args[0];
 
-                RalphObject<Boolean> bool_obj =
-                    (RalphObject<Boolean>) args[1];
+                RalphObject<Boolean,Boolean> bool_obj =
+                    (RalphObject<Boolean,Boolean>) args[1];
 
-                RalphObject<String> string_obj =
-                    (RalphObject<String>) args[2];
+                RalphObject<String,String> string_obj =
+                    (RalphObject<String,String>) args[2];
 
                 _test_partner_args_method(
                     active_event, ctx, num_obj,bool_obj,string_obj);
@@ -122,11 +122,11 @@ public class TestClassUtil
 
 	public void _test_increment_local_num(
             ActiveEvent active_event,ExecutingEventContext ctx,
-            RalphObject<Double>to_return)
+            RalphObject<Double,Double>to_return)
             throws BackoutException
         {
-            RalphObject<Double> num_obj =
-                (RalphObject<Double>)ctx.var_stack.get_var_if_exists(
+            RalphObject<Double,Double> num_obj =
+                (RalphObject<Double,Double>)ctx.var_stack.get_var_if_exists(
                     NUM_TVAR_NAME);            
             
             double current_val =
@@ -140,9 +140,9 @@ public class TestClassUtil
         
 	public void _test_partner_args_method(
             ActiveEvent active_event,ExecutingEventContext ctx,
-            RalphObject<Double> num_obj,
-            RalphObject<Boolean> bool_obj,
-            RalphObject<String> string_obj)
+            RalphObject<Double,Double> num_obj,
+            RalphObject<Boolean,Boolean> bool_obj,
+            RalphObject<String,String> string_obj)
             throws BackoutException
         {
             Double num = num_obj.get_val(active_event);
@@ -181,7 +181,7 @@ public class TestClassUtil
 
         vstore.add_var(
             DefaultEndpoint.MAP_TVAR_NAME,
-            new AtomicMapVariable<Double,Double>(
+            new AtomicMapVariable<Double,Double,Double>(
                 false,
                 NonAtomicInternalMap.IndexType.DOUBLE,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
@@ -189,7 +189,7 @@ public class TestClassUtil
 
         vstore.add_var(
             DefaultEndpoint.LIST_TVAR_NAME,
-            new AtomicListVariable<Double>(
+            new AtomicListVariable<Double,Double>(
                 false,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
                 ralph_globals));

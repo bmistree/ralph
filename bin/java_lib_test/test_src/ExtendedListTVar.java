@@ -50,19 +50,19 @@ public class ExtendedListTVar
         }
         @Override
         protected ICancellableFuture apply_changes_to_hardware(
-            ListTypeDataWrapper<Double> dirty)
+            ListTypeDataWrapper<Double,Double> dirty)
         {
             global_number_times_apply_changes_to_hardware_called += 1.0;
             return ALWAYS_TRUE_FUTURE;
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<Double> to_undo)
+            ListTypeDataWrapper<Double,Double> to_undo)
         { }
     }
 
     
-    public static AtomicListVariable<Double> create_extended_list(
+    public static AtomicListVariable<Double,Double> create_extended_list(
         RalphGlobals ralph_globals)
     {
         // generate an internal extended list
@@ -70,8 +70,8 @@ public class ExtendedListTVar
             new TestExtendedInternalAtomicNumberList(ralph_globals);
 
         // wrap the internal extended list
-        AtomicListVariable<Double> to_return =
-            new AtomicListVariable<Double>(
+        AtomicListVariable<Double,Double> to_return =
+            new AtomicListVariable<Double,Double>(
                 false,
                 extended_internal_list,
                 BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
@@ -82,7 +82,7 @@ public class ExtendedListTVar
     {
         Endpoint endpt = TestClassUtil.create_default_single_endpoint();
 
-        AtomicListVariable<Double> extended_list_tvar =
+        AtomicListVariable<Double,Double> extended_list_tvar =
             create_extended_list(endpt.ralph_globals);
         endpt.global_var_stack.add_var(EXTENDED_LIST_NAME,extended_list_tvar);
         
@@ -105,7 +105,7 @@ public class ExtendedListTVar
 
     public static boolean test_add_values(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -177,7 +177,7 @@ public class ExtendedListTVar
      */
     public static boolean test_preempted_read(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
@@ -235,7 +235,7 @@ public class ExtendedListTVar
      */
     public static boolean test_concurrent_read(
         Endpoint endpt,
-        AtomicListVariable<Double> list_tvar)
+        AtomicListVariable<Double,Double> list_tvar)
     {
         try
         {
