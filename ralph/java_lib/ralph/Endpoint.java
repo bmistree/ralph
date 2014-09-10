@@ -323,7 +323,7 @@ public abstract class Endpoint
         }
         
         to_return.init(
-            new ListTypeDataWrapperFactory<Double,Double>(),
+            new ListTypeDataWrapperFactory<Double,Double>(java.lang.Double.class),
             init_val,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
 

@@ -795,58 +795,62 @@ public class Variables
     }
     
     /************ Handling Lists ********/
-    public static class AtomicListVariable <V,ValueDeltaType>
-        extends AtomicList<V,ValueDeltaType>
+    public static class AtomicListVariable <ValueType,ValueDeltaType>
+        extends AtomicList<ValueType,ValueDeltaType>
     {
         public AtomicListVariable(
             boolean _log_changes,
-            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
+            Class<ValueType> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,locked_wrapper,
                 ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
-                ralph_globals);
+                value_type_class,ralph_globals);
         }
 
 
         public AtomicListVariable(
             boolean _log_changes,
-            AtomicInternalList<V,ValueDeltaType> internal_val,
-            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            AtomicInternalList<ValueType,ValueDeltaType> internal_val,
+            EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
+            Class<ValueType> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,internal_val,locked_wrapper,
                 ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
-                ralph_globals);
+                value_type_class, ralph_globals);
         }
     }
 
-    public static class NonAtomicListVariable <V,ValueDeltaType>
-        extends NonAtomicList<V,ValueDeltaType>
+    public static class NonAtomicListVariable <ValueType,ValueDeltaType>
+        extends NonAtomicList<ValueType,ValueDeltaType>
     {
         public NonAtomicListVariable(
             boolean _dummy_log_changes,
-            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
+            Class<ValueType> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 locked_wrapper,
                 ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
-                ralph_globals);
+                value_type_class,ralph_globals);
         }
 
         public NonAtomicListVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalList<V,ValueDeltaType> internal_val,
-            EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            NonAtomicInternalList<ValueType,ValueDeltaType> internal_val,
+            EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
+            Class<ValueType> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 internal_val,locked_wrapper,
                 ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
-                ralph_globals);
+                value_type_class,ralph_globals);
         }
     }
 }

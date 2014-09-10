@@ -30,9 +30,12 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
      */
     private final List <ContainerOpTuple<Integer,ValueType,DeltaValueType>> change_log;
 
+    private final Class<ValueType> value_type_class;
 	
     public ListTypeDataWrapper(
-        List<RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
+        List<RalphObject<ValueType,DeltaValueType>> v,
+        Class<ValueType> _value_type_class,
+        boolean _log_changes)
     {
         super(new ArrayList<RalphObject<ValueType,DeltaValueType>>(v));
         if (_log_changes)
@@ -41,6 +44,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
             change_log = null;
         
         log_changes = _log_changes;
+        value_type_class = _value_type_class;
     }
 
     /**
@@ -53,9 +57,10 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     }
     
     public ListTypeDataWrapper(
-        ListTypeDataWrapper<ValueType,DeltaValueType> v, boolean _log_changes)
+        ListTypeDataWrapper<ValueType,DeltaValueType> v,
+        Class<ValueType> _value_type_class, boolean _log_changes)
     {
-        this(v.val,_log_changes);
+        this(v.val,_value_type_class, _log_changes);
     }
 	
     /**

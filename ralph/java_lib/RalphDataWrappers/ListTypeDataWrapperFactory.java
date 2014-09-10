@@ -3,21 +3,31 @@ package RalphDataWrappers;
 import java.util.List;
 import ralph.RalphObject;
 /**
- * @param <V> --- Java variables in the array list
+ * @param <ValueType> --- Java variables in the array list
  */
 
-public class ListTypeDataWrapperFactory<V,ValueDeltaType>
+public class ListTypeDataWrapperFactory<ValueType,ValueDeltaType>
     extends DataWrapperFactory<
     // The actual internal data that will be held by the data wrapper
-    List<RalphObject<V,ValueDeltaType>>>
+    List<RalphObject<ValueType,ValueDeltaType>>>
     
 {
-    @Override
-    public DataWrapper<List<RalphObject<V,ValueDeltaType>>>
-        construct(
-            List<RalphObject<V,ValueDeltaType>> _val, boolean log_changes) 
+    final private Class<ValueType> value_type_class;
+    public ListTypeDataWrapperFactory(
+        Class<ValueType> _value_type_class)
     {
-        return new ListTypeDataWrapper<V,ValueDeltaType>(_val,log_changes);
+        value_type_class = _value_type_class;
+    }
+    
+    @Override
+    public DataWrapper<List<RalphObject<ValueType,ValueDeltaType>>>
+        construct(
+            List<RalphObject<ValueType,ValueDeltaType>> _val,
+            boolean log_changes) 
+    {
+        return
+            new ListTypeDataWrapper<ValueType,ValueDeltaType>(
+                _val,value_type_class,log_changes);
     }
 }
 

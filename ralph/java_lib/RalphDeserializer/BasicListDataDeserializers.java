@@ -34,37 +34,47 @@ public class BasicListDataDeserializers
     private final static AtomListDeserializer<Double> atom_num_list_constructor =
         new AtomListDeserializer<Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
+            java.lang.Double.class);
     private final static AtomListDeserializer<String> atom_text_list_constructor =
         new AtomListDeserializer<String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+            java.lang.String.class);
     private final static AtomListDeserializer<Boolean> atom_tf_list_constructor =
         new AtomListDeserializer<Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            java.lang.Boolean.class);
     // non-atomic list constructors
     private final static NonAtomListDeserializer<Double> non_atom_num_list_constructor =
         new NonAtomListDeserializer<Double>(
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
+            java.lang.Double.class);
     private final static NonAtomListDeserializer<String> non_atom_text_list_constructor =
         new NonAtomListDeserializer<String>(
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
+            java.lang.String.class);
     private final static NonAtomListDeserializer<Boolean> non_atom_tf_list_constructor =
         new NonAtomListDeserializer<Boolean>(
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
-            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER);
+            BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
+            java.lang.Boolean.class);
 
     public static class AtomListDeserializer<ElementType>
         implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
+        private final Class<ElementType>element_type_class;
         
-        public AtomListDeserializer(String element_label,EnsureAtomicWrapper _wrapper)
+        public AtomListDeserializer(String element_label,EnsureAtomicWrapper _wrapper,
+            Class<ElementType> _element_type_class)
         {
             wrapper = _wrapper;
+            element_type_class = _element_type_class;
+            
             Deserializer deserializer =
                 Deserializer.get_instance();
             
@@ -82,7 +92,7 @@ public class BasicListDataDeserializers
             // populate each of its fields.
             AtomicListVariable<ElementType,ElementType> outer_list =
                 new AtomicListVariable<ElementType,ElementType>(
-                    false,wrapper,ralph_globals);
+                    false,wrapper,element_type_class,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
 
@@ -137,10 +147,14 @@ public class BasicListDataDeserializers
         implements DataDeserializer
     {
         private final EnsureAtomicWrapper wrapper;
+        private final Class<ElementType>element_type_class;
         
-        public NonAtomListDeserializer(String element_label,EnsureAtomicWrapper _wrapper)
+        public NonAtomListDeserializer(
+            String element_label,EnsureAtomicWrapper _wrapper,
+            Class<ElementType>_element_type_class)
         {
             wrapper = _wrapper;
+            element_type_class = _element_type_class;
             Deserializer deserializer =
                 Deserializer.get_instance();
             
@@ -158,7 +172,7 @@ public class BasicListDataDeserializers
             // populate each of its fields.
             NonAtomicListVariable<ElementType,ElementType> outer_list =
                 new NonAtomicListVariable<ElementType,ElementType>(
-                    false,wrapper,ralph_globals);
+                    false,wrapper,element_type_class,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
 
