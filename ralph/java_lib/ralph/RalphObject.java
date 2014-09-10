@@ -22,24 +22,6 @@ public abstract class RalphObject<T,DeltaType>
      */
     protected VersionHelper<DeltaType> version_helper = null;
 
-
-    /**
-       FIXME: can we get rid of this?
-     */
-    public RalphObject<T,DeltaType> copy(
-        ActiveEvent active_event, boolean log_changes,
-        boolean multi_threaded) throws BackoutException
-    {
-        if (multi_threaded)
-        {
-            return atomic_factory.construct(
-                host_uuid,log_changes,get_val(active_event));
-        }
-		
-        return non_atomic_factory.construct(
-            host_uuid,log_changes,get_val(active_event));
-    }
-
     /**
        Mostly used when deserializing one locked object (to_swap_with)
        into another.  this.
