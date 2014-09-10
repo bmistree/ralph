@@ -6,8 +6,8 @@ import RalphExceptions.BackoutException;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 
-public abstract class NonAtomicValueVariable<T,DeltaType>
-    extends NonAtomicObject<T,DeltaType>
+public abstract class NonAtomicValueVariable<T>
+    extends NonAtomicObject<T,T>
 {
     public NonAtomicValueVariable(RalphGlobals ralph_globals)
     {
@@ -17,7 +17,7 @@ public abstract class NonAtomicValueVariable<T,DeltaType>
     public NonAtomicValueVariable(
         T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper,
+        VersionHelper<T> version_helper,
         RalphGlobals ralph_globals)
     {
         super (ralph_globals);
@@ -26,7 +26,7 @@ public abstract class NonAtomicValueVariable<T,DeltaType>
     
     public void init_non_atomic_value_variable(
         T init_val,ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper)
+        VersionHelper<T> version_helper)
     {
         init(vtdwc,init_val,version_helper);
     }

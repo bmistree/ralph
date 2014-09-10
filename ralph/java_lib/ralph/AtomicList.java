@@ -26,11 +26,10 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  */
 public class AtomicList<V,ValueDeltaType>
     extends AtomicValueVariable<
-    // this wraps a locked container object.  Ie,
-    // calling get_val on this will return AtomicListContainer.
-    // when call set val, must pass in a AtomicListContainer
-    AtomicInternalList<V,ValueDeltaType>,
-    // version helper gets passed in delta of this type.
+    // this wraps a locked container object.  Ie, calling get_val on
+    // this will return AtomicListContainer.  when call set val, must
+    // pass in a AtomicListContainer.  Note:version helper gets passed
+    // in delta of this type.
     AtomicInternalList<V,ValueDeltaType>
     >
 {

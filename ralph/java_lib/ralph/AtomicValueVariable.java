@@ -7,13 +7,13 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.DataWrapper;
 
-public abstract class AtomicValueVariable<T,DeltaType>
-    extends SpeculativeAtomicObject<T,DeltaType> 
+public abstract class AtomicValueVariable<T>
+    extends SpeculativeAtomicObject<T,T> 
 {
     public AtomicValueVariable(
         boolean _log_changes, T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper,
+        VersionHelper<T> version_helper,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
@@ -29,7 +29,7 @@ public abstract class AtomicValueVariable<T,DeltaType>
     public void init_atomic_value_variable(
         boolean _log_changes, T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper)
+        VersionHelper<T> version_helper)
     {
         init_multithreaded_locked_object(
             vtdwc,version_helper,_log_changes,init_val);

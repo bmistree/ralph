@@ -29,8 +29,7 @@ public abstract class NonAtomicList<V,DeltaType>
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return NonAtomicInternalList.
     // when call set val, must pass in a NonAtomicInternalList
-    NonAtomicInternalList<V,DeltaType>,
-    // the type that the version helper for this nonatomic list gets
+    // Note: the type that the version helper for this nonatomic list gets
     // passed.
     NonAtomicInternalList<V,DeltaType>
     >

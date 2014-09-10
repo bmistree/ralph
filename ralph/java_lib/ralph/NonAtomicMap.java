@@ -28,12 +28,10 @@ import RalphDataWrappers.MapTypeDataWrapper;
  */
 public abstract class NonAtomicMap<K,V,ValueDeltaType>
     extends NonAtomicValueVariable<
-    // this wraps a locked container object.  Ie,
-    // calling get_val on this will return NonAtomicInternalMap.
-    // when call set val, must pass in a NonAtomicInternalMap
-    NonAtomicInternalMap<K,V,ValueDeltaType>,
-    // this is the type that is sent into the version helper for
-    // logging.
+    // this wraps a locked container object.  Ie, calling get_val on
+    // this will return NonAtomicInternalMap.  when call set val, must
+    // pass in a NonAtomicInternalMap Note: this is the type that is
+    // sent into the version helper for logging.
     NonAtomicInternalMap<K,V,ValueDeltaType>
     >
 {

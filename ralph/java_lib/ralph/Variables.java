@@ -51,7 +51,7 @@ public class Variables
     /** Atomics */
     
     public static class AtomicNumberVariable
-        extends AtomicValueVariable<Double,Double>
+        extends AtomicValueVariable<Double>
     {
         public AtomicNumberVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -105,7 +105,7 @@ public class Variables
     }
 
     public static class AtomicTextVariable
-        extends AtomicValueVariable<String,String>
+        extends AtomicValueVariable<String>
     {
         public AtomicTextVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -157,7 +157,7 @@ public class Variables
     }
 	
     public static class AtomicTrueFalseVariable
-        extends AtomicValueVariable<Boolean,Boolean>
+        extends AtomicValueVariable<Boolean>
     {
         public AtomicTrueFalseVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -209,7 +209,7 @@ public class Variables
     }
 
     public static class AtomicEnumVariable<T>
-        extends AtomicValueVariable<T,T>
+        extends AtomicValueVariable<T>
     {
         public AtomicEnumVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
@@ -254,7 +254,7 @@ public class Variables
     }
     
     public static class AtomicInterfaceVariable<T>
-        extends AtomicValueVariable<T,T>
+        extends AtomicValueVariable<T>
     {
         public AtomicInterfaceVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
@@ -297,7 +297,7 @@ public class Variables
     }
     
     public static class AtomicServiceFactoryVariable
-        extends AtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
+        extends AtomicValueVariable<InternalServiceFactory>
     {
         public AtomicServiceFactoryVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -374,7 +374,7 @@ public class Variables
     }
     
     public static class AtomicServiceReferenceVariable
-        extends AtomicValueVariable<InternalServiceReference,InternalServiceReference>
+        extends AtomicValueVariable<InternalServiceReference>
     {
         public AtomicServiceReferenceVariable(
             boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
@@ -451,7 +451,7 @@ public class Variables
     }
     
     public static class NonAtomicNumberVariable
-        extends NonAtomicValueVariable<Double,Double>
+        extends NonAtomicValueVariable<Double>
     {
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes, Double init_val,
@@ -493,7 +493,7 @@ public class Variables
     }
 
     public static class NonAtomicTextVariable
-        extends NonAtomicValueVariable<String,String>
+        extends NonAtomicValueVariable<String>
     {
         public NonAtomicTextVariable(
             boolean _dummy_log_changes,String init_val,
@@ -536,7 +536,7 @@ public class Variables
     }
 
     public static class NonAtomicTrueFalseVariable
-        extends NonAtomicValueVariable<Boolean,Boolean>
+        extends NonAtomicValueVariable<Boolean>
     {
         public NonAtomicTrueFalseVariable(
             boolean _dummy_log_changes, Boolean init_val,
@@ -579,7 +579,7 @@ public class Variables
     }
 
     public static class NonAtomicEnumVariable<T>
-        extends NonAtomicValueVariable<T,T>
+        extends NonAtomicValueVariable<T>
     {
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
@@ -613,7 +613,7 @@ public class Variables
     }
     
     public static class NonAtomicInterfaceVariable<T>
-        extends NonAtomicValueVariable<T,T>
+        extends NonAtomicValueVariable<T>
     {
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, T init_val,
@@ -646,7 +646,7 @@ public class Variables
     }
     
     public static class NonAtomicServiceFactoryVariable
-        extends NonAtomicValueVariable<InternalServiceFactory,InternalServiceFactory>
+        extends NonAtomicValueVariable<InternalServiceFactory>
     {
         public NonAtomicServiceFactoryVariable(
             boolean _log_changes,InternalServiceFactory init_val,
@@ -690,7 +690,7 @@ public class Variables
 
 
     public static class NonAtomicServiceReferenceVariable
-        extends NonAtomicValueVariable<InternalServiceReference,InternalServiceReference>
+        extends NonAtomicValueVariable<InternalServiceReference>
     {
         public NonAtomicServiceReferenceVariable(
             boolean _log_changes,InternalServiceReference init_val,
