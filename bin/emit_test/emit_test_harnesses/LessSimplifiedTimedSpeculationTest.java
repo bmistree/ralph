@@ -134,11 +134,11 @@ public class LessSimplifiedTimedSpeculationTest
 
     private static class SpeculateListener implements ISpeculateListener
     {
-        private final AtomicListVariable<Double> locked_list;
+        private final AtomicListVariable<Double,Double> locked_list;
         private final InternalSwitchGuard internal_lock_number;
 
         public SpeculateListener(
-            AtomicListVariable<Double> _locked_list,
+            AtomicListVariable<Double,Double> _locked_list,
             InternalSwitchGuard _internal_lock_number)
         {
             locked_list = _locked_list;
@@ -150,7 +150,7 @@ public class LessSimplifiedTimedSpeculationTest
         {
             internal_lock_number.speculate(active_event);
             // speculate on internal list
-            AtomicInternalList<Double> internal_list =
+            AtomicInternalList<Double,Double> internal_list =
                 locked_list.val.val;
             internal_list.speculate(active_event);
         }
@@ -168,13 +168,13 @@ public class LessSimplifiedTimedSpeculationTest
             ExtendedHardwareOverrides<Double> extended_hardware_overrides;
         private int time_to_delay_on_apply;
         private boolean should_speculate;
-        private final AtomicListVariable<Double> locked_list;
+        private final AtomicListVariable<Double,Double> locked_list;
         private final SpeculateListener spec_listener;
         
         public InternalSwitchGuard(
             RalphGlobals ralph_globals, boolean _should_speculate,
             int _time_to_delay_on_apply,
-            AtomicListVariable<Double> _locked_list)
+            AtomicListVariable<Double,Double> _locked_list)
         {
             super(false,new Double(0),ralph_globals);
             spec_listener = new SpeculateListener(_locked_list,this);

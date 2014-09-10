@@ -26,6 +26,7 @@ public class HardwareFailureTest
 {
     final static AtomicBoolean problem = new AtomicBoolean(false);
     final static AtomicBoolean undo_changes_called = new AtomicBoolean(false);
+    final static RalphGlobals ralph_globals = new RalphGlobals();
     
     public static void main(String [] args)
     {
@@ -44,7 +45,7 @@ public class HardwareFailureTest
             new ExtendedInternalHardwareList(hardware_id,endpt);
         
         to_return.list =
-            new AtomicListVariable<Double>(
+            new AtomicListVariable<Double,Double>(
                 false,internal_hardware_list,
                 BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
                 endpt.ralph_globals);
@@ -57,7 +58,7 @@ public class HardwareFailureTest
         try
         {
             HardwareOwner endpt = new HardwareOwner(
-                new RalphGlobals(), new SingleSideConnection());
+                ralph_globals, new SingleSideConnection());
 
             double hardware_id = 1.0;
             _InternalPieceOfHardware hardware_to_add =
@@ -123,7 +124,7 @@ public class HardwareFailureTest
            @see discussion above hardware_failed private variable.
          */
         @Override
-        protected ListTypeDataWrapper<Double>  acquire_read_lock(
+        protected ListTypeDataWrapper<Double,Double>  acquire_read_lock(
             ActiveEvent active_event) throws BackoutException
         {
             // if hardware has failed, cannot operate on data anymore:
@@ -134,7 +135,7 @@ public class HardwareFailureTest
                 throw new BackoutException();
 
             return
-                (ListTypeDataWrapper<Double>)
+                (ListTypeDataWrapper<Double,Double>)
                 super.acquire_read_lock(active_event);
         }
 
@@ -142,14 +143,14 @@ public class HardwareFailureTest
            @see discussion above hardware_failed private variable.
          */
         @Override
-        protected ListTypeDataWrapper<Double> acquire_write_lock(
+        protected ListTypeDataWrapper<Double,Double> acquire_write_lock(
             ActiveEvent active_event) throws BackoutException
         {
             if (hardware_failed)
                 throw new BackoutException();
 
             return
-                (ListTypeDataWrapper<Double>)super.acquire_write_lock(
+                (ListTypeDataWrapper<Double,Double>)super.acquire_write_lock(
                     active_event);
         }
         
@@ -158,7 +159,7 @@ public class HardwareFailureTest
          */
         @Override
         protected ICancellableFuture apply_changes_to_hardware(
-            ListTypeDataWrapper<Double> dirty)
+            ListTypeDataWrapper<Double,Double> dirty)
         {
             if (next_time_fail_commit)
             {
@@ -173,7 +174,7 @@ public class HardwareFailureTest
         }
         @Override
         protected void undo_dirty_changes_to_hardware(
-            ListTypeDataWrapper<Double> to_undo)
+            ListTypeDataWrapper<Double,Double> to_undo)
         {
             undo_changes_called.set(true);
         }

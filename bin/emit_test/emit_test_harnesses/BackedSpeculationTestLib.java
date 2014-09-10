@@ -85,11 +85,11 @@ public class BackedSpeculationTestLib
             internal_switch_guard = _internal_switch_guard;
         }
 
-        private AtomicInternalList<Double> get_internal_ft_list()
+        private AtomicInternalList<Double,Double> get_internal_ft_list()
         {
-            AtomicListVariable<Double> ft_list =
+            AtomicListVariable<Double,Double> ft_list =
                 internal_switch.dummy_flow_table;
-            AtomicInternalList<Double> internal_ft_list = null;
+            AtomicInternalList<Double,Double> internal_ft_list = null;
 
             if (ft_list.dirty_val != null)
                 internal_ft_list = ft_list.dirty_val.val;
@@ -103,7 +103,7 @@ public class BackedSpeculationTestLib
         @Override
         public void speculate(ActiveEvent active_event)
         {
-            AtomicInternalList<Double>
+            AtomicInternalList<Double,Double>
                 internal_ft_list = get_internal_ft_list();
             internal_ft_list.speculate(active_event);
             internal_switch_guard.speculate(active_event);
