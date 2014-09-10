@@ -4,6 +4,7 @@ import ralph_emitted.ManyOpsAtomicListFailJava.TVarListEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.ExtendedVariables.ExtendedInternalAtomicList;
+import RalphDataWrappers.ContainerOpTuple;
 import java.lang.Math;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ralph.ICancellableFuture;
 import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
 import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
+
 
 
 public class RandomFailureExtendedList
@@ -95,10 +97,10 @@ public class RandomFailureExtendedList
         {
             // first, apply changes to synchronized list.  Then, following the
             // changes, randomly fail or pass.  
-            for (ListTypeDataWrapper.OpTuple op_tuple :
+            for (ContainerOpTuple<Integer,Double,Double> op_tuple :
                      dirty.get_unmodifiable_change_log())
             {
-                if (dirty.is_add_key_tuple(op_tuple))
+                if (op_tuple.type == ContainerOpTuple.OpType.ADD)
                 {
                     RalphObject<Double,Double> what_added =
                         op_tuple.what_added_or_removed;
@@ -112,7 +114,7 @@ public class RandomFailureExtendedList
                         had_other_issue.set(true);
                     }
                 }
-                else if (dirty.is_delete_key_tuple(op_tuple))
+                else if (op_tuple.type == ContainerOpTuple.OpType.DELETE)
                 {
                     int index = op_tuple.key;
                     Double what_removed = synchronized_list.remove(index);
@@ -137,17 +139,18 @@ public class RandomFailureExtendedList
         {
             // go backwards through list and do the opposite of the op
             // tuple
-            List<ListTypeDataWrapper<Double,Double>.OpTuple> change_log =
+            List<ContainerOpTuple<Integer,Double,Double>> change_log =
                 to_undo.get_unmodifiable_change_log();
             for (int i = change_log.size() -1; i >= 0; --i)
             {
-                ListTypeDataWrapper.OpTuple op_tuple = change_log.get(i);
-                if (to_undo.is_add_key_tuple(op_tuple))
+                ContainerOpTuple<Integer,Double,Double> op_tuple =
+                    change_log.get(i);
+                if (op_tuple.type == ContainerOpTuple.OpType.ADD)
                 {
                     int index = op_tuple.key;
                     Double undo_add = synchronized_list.remove(index);
                 }
-                else if (to_undo.is_delete_key_tuple(op_tuple))
+                else if (op_tuple.type == ContainerOpTuple.OpType.DELETE)
                 {
                     int index = op_tuple.key;
                     RalphObject<Double,Double> what_removed =

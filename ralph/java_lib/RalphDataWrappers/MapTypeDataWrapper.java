@@ -16,28 +16,12 @@ import ralph.Util;
 import RalphExceptions.BackoutException;
 
 /**
- * @param <K> --- The key type
+ * @param <KeyType> --- The key type
  * @param <T> --- The actual java type of the values holding (ie,
  * outside of locked object)
  */
-public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
-    extends DataWrapper<Map<K,RalphObject<ValueType,DeltaValueType>>>{
-	
-    class OpTuple
-    {
-        public static final int DELETE_FLAG = 0;
-        public static final int ADD_FLAG = 1;
-        public static final int WRITE_FLAG = 2;
-		
-        public int type;
-        public K key;
-        public OpTuple(int _type, K _key)
-        {
-            type = _type;
-            key = _key;
-        }		
-		
-    }
+public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
+    extends DataWrapper<Map<KeyType,RalphObject<ValueType,DeltaValueType>>>{
 	
     private final boolean log_changes;
 	
@@ -46,15 +30,20 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
      * object so can send deltas across network to partners.
      * (Note: only used for log_changes data.)
      */
-    private final List <OpTuple> change_log;
+    private final List <ContainerOpTuple<KeyType,ValueType,DeltaValueType>>
+        change_log;
 
     public MapTypeDataWrapper(
-        Map<K,RalphObject<ValueType,DeltaValueType>> v, boolean _log_changes)
+        Map<KeyType,RalphObject<ValueType,DeltaValueType>> v,
+        boolean _log_changes)
     {
-        super(new HashMap<K,RalphObject<ValueType,DeltaValueType>>(v));
+        super(new HashMap<KeyType,RalphObject<ValueType,DeltaValueType>>(v));
         
         if (_log_changes)
-            change_log = new ArrayList<OpTuple>();
+        {
+            change_log =
+                new ArrayList<ContainerOpTuple<KeyType,ValueType,DeltaValueType>>();
+        }
         else
             change_log = null;
         
@@ -62,7 +51,8 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
     }
 	
     public MapTypeDataWrapper(
-        MapTypeDataWrapper<K,ValueType,DeltaValueType> v, boolean _log_changes)
+        MapTypeDataWrapper<KeyType,ValueType,DeltaValueType> v,
+        boolean _log_changes)
     {
         this(v.val,_log_changes);
     }
@@ -70,7 +60,8 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
     /**
        Reference is unmodifiable.
      */
-    public List<OpTuple> get_unmodifiable_change_log()
+    public List<ContainerOpTuple<KeyType,ValueType,DeltaValueType>>
+        get_unmodifiable_change_log()
     {
         return Collections.unmodifiableList(change_log);
     }
@@ -88,12 +79,12 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
      * @param to_write
      * @param incorporating_deltas
      * 
-     * To ensure that we aren't copying references to value variables, we actually 
-     * call get_val on to_write and use that value.
+     * To ensure that we aren't copying references to value variables,
+     * we actually call get_val on to_write and use that value.
      * 
      */
     public void set_val_on_key(
-        ActiveEvent active_event,K key,
+        ActiveEvent active_event,KeyType key,
         RalphObject<ValueType,DeltaValueType> to_write,
         boolean incorporating_deltas) throws BackoutException
     {
@@ -104,61 +95,47 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
         }
 			
         if ((log_changes) && (! incorporating_deltas))
-            change_log.add(write_key_tuple(key));
+            change_log.add(write_key_tuple(key,to_write));
 
         val.get(key).set_val(active_event,to_write.get_val(active_event));
         return;	
     }
 		
     public void set_val_on_key(
-        ActiveEvent active_event,K key,
+        ActiveEvent active_event,KeyType key,
         RalphObject<ValueType,DeltaValueType> to_write) throws BackoutException
     {
         set_val_on_key(active_event,key,to_write,false);
     }
-	
-	
 
     public void del_key(
-        ActiveEvent active_event, K key_to_delete,
+        ActiveEvent active_event, KeyType key_to_delete,
         boolean incorporating_deltas)
     {
-    	/*
-          if self.log_changes and (not incorporating_deltas):
-          self.change_log.append(delete_key_tuple(key_to_delete))            
-          del self.val[key_to_delete]
-        */
     	if (log_changes && (! incorporating_deltas))
             change_log.add(delete_key_tuple(key_to_delete));
-        val.remove(key_to_delete);	
+        val.remove(key_to_delete);
     }
     
-    public void del_key(ActiveEvent active_event,K key_to_delete)
+    public void del_key(
+        ActiveEvent active_event,KeyType key_to_delete)
     {
     	del_key(active_event,key_to_delete,false);
     }
     
-
     public void add_key(
-        ActiveEvent active_event, K key_added,
+        ActiveEvent active_event, KeyType key_added,
         RalphObject<ValueType,DeltaValueType> new_object,
         boolean incorporating_deltas)
     {
-    	/*
-          if self.log_changes and (not incorporating_deltas):
-          self.change_log.append(add_key_tuple(key_added))
-
-          self.val[key_added] = new_val
-        */
-    	
     	if (log_changes && (! incorporating_deltas))
-            change_log.add(add_key_tuple(key_added));
+            change_log.add(add_key_tuple(key_added,new_object));
     	
     	val.put(key_added,new_object);    	
     }
     
     public void add_key(
-        ActiveEvent active_event,K key_to_add,
+        ActiveEvent active_event,KeyType key_to_add,
         RalphObject<ValueType,DeltaValueType> new_object)
     {
     	add_key(active_event,key_to_add,new_object,false);
@@ -174,7 +151,8 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
      */
     public void insert(
         ActiveEvent active_event, int where_to_insert,
-        RalphObject<ValueType,DeltaValueType> new_val, boolean incorporating_deltas)
+        RalphObject<ValueType,DeltaValueType> new_val,
+        boolean incorporating_deltas)
     {
     	Util.logger_assert("Cannot insert on map");
     }
@@ -205,32 +183,22 @@ public class MapTypeDataWrapper<K,ValueType,DeltaValueType>
     	append(active_event,new_val,false);
     }
 
-    
-
-    public OpTuple delete_key_tuple(K _key)
+    public ContainerOpTuple<KeyType,ValueType,DeltaValueType> delete_key_tuple(KeyType _key)
     {
-        return new OpTuple(OpTuple.DELETE_FLAG,_key);
+        return
+            new ContainerOpTuple<KeyType,ValueType,DeltaValueType>(
+                ContainerOpTuple.OpType.DELETE,_key,null);
     }
-    public boolean is_delete_key_tuple(OpTuple opt)
+    public ContainerOpTuple <KeyType,ValueType,DeltaValueType> add_key_tuple(
+        KeyType _key,RalphObject<ValueType,DeltaValueType> what_added)
     {
-        return opt.type == OpTuple.DELETE_FLAG;
+        return new ContainerOpTuple<KeyType,ValueType,DeltaValueType>(
+            ContainerOpTuple.OpType.ADD,_key,what_added);
     }
-
-    public OpTuple add_key_tuple(K _key)
+    public ContainerOpTuple<KeyType,ValueType,DeltaValueType> write_key_tuple(
+        KeyType _key,RalphObject<ValueType,DeltaValueType> what_written)
     {
-        return new OpTuple(OpTuple.ADD_FLAG,_key);
+        return new <KeyType,ValueType,DeltaValueType>ContainerOpTuple(
+            ContainerOpTuple.OpType.WRITE,_key,what_written);
     }
-    public boolean is_add_key_tuple(OpTuple opt)
-    {
-        return opt.type == OpTuple.ADD_FLAG;
-    }
-	
-    public OpTuple write_key_tuple(K _key)
-    {
-        return new OpTuple(OpTuple.WRITE_FLAG,_key);
-    }
-    public boolean is_write_key(OpTuple opt)
-    {
-        return opt.type == OpTuple.WRITE_FLAG;
-    }	
 }

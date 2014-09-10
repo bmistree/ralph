@@ -19,27 +19,8 @@ import ralph.ActiveEvent;
  * outside of locked object)
  */
 public class ListTypeDataWrapper<ValueType,DeltaValueType>
-    extends DataWrapper<List<RalphObject<ValueType,DeltaValueType>>>{
-	
-    public class OpTuple
-    {
-        public static final int DELETE_FLAG = 0;
-        public static final int ADD_FLAG = 1;
-        public static final int WRITE_FLAG = 2;
-		
-        public int type;
-        public Integer key;
-        public RalphObject<ValueType,DeltaValueType> what_added_or_removed = null;
-        public OpTuple(
-            int _type, Integer _key,
-            RalphObject<ValueType,DeltaValueType> _what_added_or_removed)
-        {
-            type = _type;
-            key = _key;
-            what_added_or_removed = _what_added_or_removed;
-        }		
-		
-    }
+    extends DataWrapper<List<RalphObject<ValueType,DeltaValueType>>>
+{
     private final boolean log_changes;
 	
     /*
@@ -47,7 +28,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
      * object so can send deltas across network to partners.
      * (Note: only used for log_changes data.)
      */
-    private final List <OpTuple> change_log;
+    private final List <ContainerOpTuple<Integer,ValueType,DeltaValueType>> change_log;
 
 	
     public ListTypeDataWrapper(
@@ -55,7 +36,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     {
         super(new ArrayList<RalphObject<ValueType,DeltaValueType>>(v));
         if (_log_changes)
-            change_log = new ArrayList<OpTuple>();
+            change_log = new ArrayList<ContainerOpTuple<Integer,ValueType,DeltaValueType>>();
         else
             change_log = null;
         
@@ -65,7 +46,7 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     /**
        Reference is unmodifiable.
      */
-    public List<OpTuple> get_unmodifiable_change_log()
+    public List<ContainerOpTuple<Integer,ValueType,DeltaValueType>> get_unmodifiable_change_log()
     {
         return Collections.unmodifiableList(change_log);
     }
@@ -171,33 +152,27 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     {
     	insert(active_event,where_to_insert,new_val,false);
     }
-
-    public OpTuple delete_key_tuple(
+    
+    private ContainerOpTuple<Integer,ValueType,DeltaValueType> delete_key_tuple(
         Integer _key, RalphObject<ValueType,DeltaValueType> what_removed)
     {
-        return new OpTuple(OpTuple.DELETE_FLAG,_key,what_removed);
-    }
-    public boolean is_delete_key_tuple(OpTuple opt)
-    {
-        return opt.type == OpTuple.DELETE_FLAG;
+        return
+            new ContainerOpTuple<Integer,ValueType,DeltaValueType>(
+                ContainerOpTuple.OpType.DELETE,_key,what_removed);
     }
 
-    public OpTuple add_key_tuple(
+    private ContainerOpTuple <Integer,ValueType,DeltaValueType>add_key_tuple(
         Integer _key, RalphObject<ValueType,DeltaValueType> what_added)
     {
-        return new OpTuple(OpTuple.ADD_FLAG,_key,what_added);
-    }
-    public boolean is_add_key_tuple(OpTuple opt)
-    {
-        return opt.type == OpTuple.ADD_FLAG;
+        return
+            new ContainerOpTuple<Integer,ValueType,DeltaValueType>(
+                ContainerOpTuple.OpType.ADD,_key,what_added);
     }
 	
-    public OpTuple write_key_tuple(Integer _key)
+    private ContainerOpTuple write_key_tuple(Integer _key)
     {
-        return new OpTuple(OpTuple.WRITE_FLAG,_key,null);
+        return
+            new ContainerOpTuple<Integer,ValueType,DeltaValueType>(
+                ContainerOpTuple.OpType.WRITE,_key,null);
     }
-    public boolean is_write_key(OpTuple opt)
-    {
-        return opt.type == OpTuple.WRITE_FLAG;
-    }	
 }
