@@ -46,7 +46,8 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
     /**
        Reference is unmodifiable.
      */
-    public List<ContainerOpTuple<Integer,ValueType,DeltaValueType>> get_unmodifiable_change_log()
+    public List<ContainerOpTuple<Integer,ValueType,DeltaValueType>>
+        get_unmodifiable_change_log()
     {
         return Collections.unmodifiableList(change_log);
     }

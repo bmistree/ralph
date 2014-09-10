@@ -24,7 +24,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
     Map<K,RalphObject<V,ValueDeltaType>>,
-    VersionMapDeltas
+    VersionMapDeltas<K,V,ValueDeltaType>
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
         RalphInternalMapInterface<K,V,ValueDeltaType>
@@ -48,7 +48,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             Map<K,RalphObject<V,ValueDeltaType>>,
-            VersionMapDeltas>
+            VersionMapDeltas<K,V,ValueDeltaType>>
         // function name and arguments
         duplicate_for_speculation(Map<K,RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
@@ -76,8 +76,14 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         if (ralph_globals.local_version_manager == null)
             return;
 
-        Util.logger_warn(
-            "FIXME: Must instantiate logging for atomic maps.");
+        MapTypeDataWrapper<K,V,ValueDeltaType> map_dirty_val =
+            (MapTypeDataWrapper<K,V,ValueDeltaType>) dirty_val;
+        
+        VersionMapDeltas<K,V,ValueDeltaType> deltas =
+            new VersionMapDeltas<K,V,ValueDeltaType>(
+                map_dirty_val.get_unmodifiable_change_log());
+        version_helper.save_version(
+            uuid, deltas,active_event.commit_metadata);
     }
 
     

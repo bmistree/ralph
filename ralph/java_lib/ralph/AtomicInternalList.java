@@ -18,7 +18,7 @@ public class AtomicInternalList<V,ValueDeltaType>
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
     List<RalphObject<V,ValueDeltaType>>,
-    VersionListDeltas
+    VersionListDeltas<V,ValueDeltaType>
     >
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
         RalphInternalListInterface<V,ValueDeltaType>
@@ -45,8 +45,15 @@ public class AtomicInternalList<V,ValueDeltaType>
         // do not do anything
         if (ralph_globals.local_version_manager == null)
             return;
+
+        ListTypeDataWrapper<V,ValueDeltaType> list_dirty_val =
+            (ListTypeDataWrapper<V,ValueDeltaType>) dirty_val;
         
-        Util.logger_warn("FIXME: Must instantiate logging for atomic lists.");
+        VersionListDeltas<V,ValueDeltaType> deltas =
+            new VersionListDeltas<V,ValueDeltaType>(
+                list_dirty_val.get_unmodifiable_change_log());
+        version_helper.save_version(
+            uuid, deltas,active_event.commit_metadata);
     }
     
     @Override
@@ -54,7 +61,7 @@ public class AtomicInternalList<V,ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             List<RalphObject<V,ValueDeltaType>>,
-            VersionListDeltas>
+            VersionListDeltas<V,ValueDeltaType>>
         // function name and arguments
         duplicate_for_speculation(List<RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
