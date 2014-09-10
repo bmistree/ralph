@@ -19,6 +19,17 @@ public abstract class ActiveEvent
     protected final ThreadPool thread_pool;
     
     /**
+       FIXME.
+       
+       Note: this really should be final.  But deserialization event
+       needs to set it because it may not have RalphGlobal at correct
+       time.  This is because do not have singleton for ralph globals
+       to allow simpler testing (instantiating multiple partners with
+       different ralph globals).
+     */
+    protected RalphGlobals ralph_globals;
+    
+    /**
        Want to start adding version control into RalphObjects.  Keep
        track of timestamps during commit to ensure that can establish
        order that changes are made to objects so that we get a proper
@@ -28,18 +39,33 @@ public abstract class ActiveEvent
     public CommitMetadata commit_metadata = null;
     
     public ActiveEvent(
-        EventParent _event_parent, ThreadPool _thread_pool)
+        EventParent _event_parent, ThreadPool _thread_pool,
+        RalphGlobals _ralph_globals)
     {
-        event_parent = _event_parent;
-        thread_pool = _thread_pool;
-        uuid = event_parent.get_uuid();
+        this(
+            _event_parent.get_uuid(),_event_parent,_thread_pool,
+            _ralph_globals);
     }
     public ActiveEvent(
-        String _uuid, EventParent _event_parent, ThreadPool _thread_pool)
+        String _uuid, EventParent _event_parent, ThreadPool _thread_pool,
+        RalphGlobals _ralph_globals)
     {
         uuid = _uuid;
         event_parent = _event_parent;
         thread_pool = _thread_pool;
+        ralph_globals = _ralph_globals;
+    }
+
+    /**
+       FIXME: See note above ralph_globals.
+     */
+    public void set_ralph_globals(RalphGlobals _ralph_globals)
+    {
+        ralph_globals = _ralph_globals;
+    }
+    public RalphGlobals get_ralph_globals()
+    {
+        return ralph_globals;
     }
     
     

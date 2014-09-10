@@ -45,9 +45,10 @@ public class NonAtomicActiveEvent extends ActiveEvent
     	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
     
     public NonAtomicActiveEvent(
-        EventParent _event_parent, ActiveEventMap _event_map)
+        EventParent _event_parent, ActiveEventMap _event_map,
+        RalphGlobals _ralph_globals)
     {
-        super(_event_parent,null);
+        super(_event_parent,null,_ralph_globals);
         event_map = _event_map;
     }
 

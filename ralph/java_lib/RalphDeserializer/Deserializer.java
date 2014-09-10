@@ -63,7 +63,7 @@ public class Deserializer
     // reuse same event when deserializing
     private final static DeserializationEvent const_deserialization_event =
         new DeserializationEvent();
-    public static ActiveEvent dummy_deserialization_active_event()
+    public static DeserializationEvent dummy_deserialization_active_event()
     {
         return const_deserialization_event;
     }
@@ -73,7 +73,7 @@ public class Deserializer
         // protected so that nothing else can create a new version of
         // this class
     }
-
+    
     public static Deserializer get_instance()
     {
         return instance;

@@ -40,7 +40,8 @@ public class AtomicInternalList<V,ValueDeltaType>
     public void complete_write_commit_log(
         ActiveEvent active_event)
     {
-        RalphGlobals ralph_globals = active_event.event_parent.ralph_globals;
+        RalphGlobals ralph_globals = active_event.get_ralph_globals();
+        
         // do not do anything
         if (ralph_globals.local_version_manager == null)
             return;

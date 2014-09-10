@@ -118,12 +118,13 @@ public class BoostedManager
                 new AtomicActiveEvent(
                     rep,
                     act_event_map.local_endpoint._thread_pool,
-                    act_event_map,atomic_parent);
+                    act_event_map,atomic_parent,ralph_globals);
         }
         else
-            root_event = new NonAtomicActiveEvent(rep,act_event_map);
-
-        
+        {
+            root_event =
+                new NonAtomicActiveEvent(rep,act_event_map,ralph_globals);
+        }
 
         // trying to hold lock for as short a time as possible.  Add
         // event to list and then generate its priority.

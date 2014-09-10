@@ -224,11 +224,11 @@ public class ActiveEventMap
                 if (atomic)
                 {
                     new_event = new AtomicActiveEvent(
-                        pep,local_endpoint._thread_pool,this,null);
+                        pep,local_endpoint._thread_pool,this,null,ralph_globals);
                 }
                 else
-                    new_event = new NonAtomicActiveEvent(pep,this);
-                
+                    new_event = new NonAtomicActiveEvent(pep,this,ralph_globals);
+
                 local_endpoint.ralph_globals.all_events.put(uuid,new_event);
                 to_return = new_event;
             }

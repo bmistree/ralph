@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphDeserializer.Deserializer;
+import RalphDeserializer.DeserializationEvent;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -433,6 +434,9 @@ public class ExecutingEventContext
         VariablesProto.Variables.Any variable,RalphGlobals ralph_globals)
     {
         Deserializer deserializer = Deserializer.get_instance();
+        DeserializationEvent evt =
+            deserializer.dummy_deserialization_active_event();
+        evt.set_ralph_globals(ralph_globals);
         return deserializer.deserialize(variable,ralph_globals);
     }
 }

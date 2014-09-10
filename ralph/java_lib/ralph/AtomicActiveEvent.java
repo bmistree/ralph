@@ -359,9 +359,9 @@ public class AtomicActiveEvent extends ActiveEvent
     public AtomicActiveEvent(
         EventParent _event_parent, ThreadPool _thread_pool,
         ActiveEventMap _event_map,
-        ActiveEvent _to_restore_from_atomic)
+        ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals)
     {
-        super(_event_parent,_thread_pool);
+        super(_event_parent,_thread_pool,_ralph_globals);
         event_map = _event_map;
         to_restore_from_atomic = _to_restore_from_atomic;
     }

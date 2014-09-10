@@ -18,6 +18,7 @@ import ralph.AtomicObject;
 import ralph.Endpoint;
 import ralph.ExecutingEventContext;
 import ralph.RalphObject;
+import ralph.RalphGlobals;
 
 
 public class DeserializationEvent extends ActiveEvent
@@ -31,7 +32,7 @@ public class DeserializationEvent extends ActiveEvent
     
     public DeserializationEvent()
     {
-        super(DESERIALIZATION_UUID, null,null);
+        super(DESERIALIZATION_UUID, null,null,null);
     }
     
     public ActiveEvent clone_atomic() throws StoppedException
