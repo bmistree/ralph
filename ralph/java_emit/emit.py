@@ -2295,8 +2295,8 @@ def emit_struct_wrapper(struct_type):
     ##### External wrapped struct
     # FIXME: structs are always atomic.
     external_struct_definition_text = '''
-public static class %s extends AtomicValueVariable<%s,%s>
-{''' % (struct_name, internal_struct_name,internal_struct_name)
+public static class %s extends AtomicValueVariable<%s>
+{''' % (struct_name, internal_struct_name)
 
     data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
         struct_name)
