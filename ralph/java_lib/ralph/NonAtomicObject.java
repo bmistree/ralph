@@ -63,24 +63,6 @@ public abstract class NonAtomicObject<T,DeltaType>
         return false;
     }
 
-    /**
-     *
-     @returns {bool} --- True if the object has been written to
-     since we sent the last message.  False otherwise.  (Including
-     if event has been preempted.)
-     * @param active_event
-     * @return
-     */
-    @Override
-    public boolean get_and_reset_has_been_written_since_last_msg(
-        ActiveEvent active_event) 
-    {
-        // check if active event even has ability to write to variable
-        boolean has_been_written =
-            val.get_and_reset_has_been_written_since_last_msg();
-        return has_been_written;
-    }
-
     @Override
     public void complete_commit(ActiveEvent active_event)
     {

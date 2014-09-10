@@ -70,14 +70,6 @@ public abstract class RalphObject<T,DeltaType>
        container should call get_val on it.  False otherwise.
     */
     public abstract boolean return_internal_val_from_container();
-
-    /**
-     * @returns {bool} --- True if the object has been written to
-     since we sent the last message.  False otherwise.  (Including
-     if event has been preempted.)
-    */
-    public abstract boolean get_and_reset_has_been_written_since_last_msg(
-        ActiveEvent active_event);
     
     public abstract void complete_commit(ActiveEvent active_event);
 

@@ -618,30 +618,6 @@ public abstract class AtomicObject<T,DeltaType>
         return null;
     }
 
-    /**
-       @returns {bool} --- True if the object has been written to
-       since we sent the last message.  False otherwise.  (Including
-       if event has been preempted.)
-    */
-    public boolean get_and_reset_has_been_written_since_last_msg(
-        ActiveEvent active_event)
-    {
-        boolean has_been_written = false;
-        _lock();
-
-        //# check if active event even has ability to write to variable
-        if (write_lock_holder != null)
-        {
-            if (write_lock_holder.event.uuid.equals(active_event.uuid))
-            {
-                has_been_written =
-                    dirty_val.get_and_reset_has_been_written_since_last_msg();
-            }
-        }
-        _unlock();
-        return has_been_written;
-    }
-
     
     /**
        Both readers and writers can complete commits.  If it's a
@@ -1089,8 +1065,6 @@ public abstract class AtomicObject<T,DeltaType>
             complete_commit(active_event);
         }
     }
-
-    
 
     /**
        CALLED FROM WITHIN LOCK HOLDER

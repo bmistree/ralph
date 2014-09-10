@@ -75,8 +75,9 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         // do not do anything
         if (ralph_globals.local_version_manager == null)
             return;
-        
-        Util.logger_warn("FIXME: Must instantiate logging for atomic maps.");
+
+        Util.logger_warn(
+            "FIXME: Must instantiate logging for atomic maps.");
     }
 
     
