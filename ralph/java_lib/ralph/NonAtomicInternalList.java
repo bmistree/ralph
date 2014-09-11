@@ -22,7 +22,7 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     VersionListDeltas
     >
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
-        RalphInternalListInterface<V,ValueDeltaType>
+        RalphInternalListInterface<V,ValueDeltaType>, IReference
 {    
     private ListTypeDataWrapper<V,ValueDeltaType> reference_type_val = null;
     private RalphInternalList<V,ValueDeltaType> internal_list = null;
@@ -237,5 +237,11 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     {
         internal_list.clear(active_event);
     }
-
+    
+    /** IReference interface */
+    @Override
+    public String uuid()
+    {
+        return uuid;
+    }
 }
