@@ -740,10 +740,17 @@ try
         initializer = argument_name
 
         if isinstance(argument_type,MapType):
+            key_type = argument_type.from_type_node.type
+            value_type = argument_type.to_type_node.type
+            key_type_class = class_from_element_type(key_type)
+            value_type_class = class_from_element_type(value_type)
+            
             new_ralph_variable = (
-                'new %s (false,%s,%s.index_type,%s.locked_wrapper,ralph_globals)'
+                'new %s (false,%s,%s.index_type,%s.locked_wrapper,%s,%s,ralph_globals)'
                 %
-                (java_type_statement,argument_name,argument_name,argument_name))
+                (java_type_statement,argument_name,argument_name,argument_name,
+                 key_type_class,value_type_class))
+            
         elif isinstance(argument_type,ListType):
             element_type = argument_type.element_type_node.type
             element_type_class = class_from_element_type(element_type)
@@ -945,7 +952,11 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         # require EnsureAtomicWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
+        key_type = type_object.from_type_node.type
         value_type_wrapper = list_map_wrappers(value_type)
+
+        key_type_class = class_from_element_type(key_type)
+        value_type_class = class_from_element_type(value_type)
 
         internal_val_txt = ''
         if initializer_node is not None:
@@ -953,9 +964,9 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             internal_val_txt = 'null,'
 
         to_return = (
-            'new %s(false,%s%s,%s,ralph_globals)' %
+            'new %s(false,%s%s,%s,%s,%s,ralph_globals)' %
             (java_type_text,internal_val_txt,java_map_index_type_text,
-             value_type_wrapper))
+             value_type_wrapper,key_type_class,value_type_class))
         
         return to_return
 
@@ -2272,12 +2283,14 @@ def emit_struct_map_deserializer(struct_type):
             to_return += '''
     private final static {type_text} {var_name} =
         new {type_text} ({key_label}, "{value_label}", {wrapper},
-                         {index_type});
+                         {index_type}, {index_type_class}, {value_type_class});
     '''.format(type_text=type_text,var_name = var_name,
                key_label=key_label_text,value_label=struct_name,
                index_type=index_type_text,
-               wrapper=struct_locked_wrapper_name)
-            
+               wrapper=struct_locked_wrapper_name,
+               index_type_class = java_key_type_text + '.class',
+               value_type_class = internal_struct_name + '.class')
+
     return to_return
 
 
