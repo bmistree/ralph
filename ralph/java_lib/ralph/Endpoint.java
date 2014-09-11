@@ -138,18 +138,24 @@ public abstract class Endpoint
        peered and endpoint global data for this endpoint.  Will not
        add or remove any peered or endpoint global variables.  Will
        only make calls on them.
+
+       @param{EndpointConstructorObj} endpoint_constructor_obj --- Can
+       be used to instantiate a version of this class, using construct
+       method.
     */
     public Endpoint (
         RalphGlobals ralph_globals,
         RalphConnObj.ConnectionObj conn_obj,
-        VariableStore global_var_store)
+        VariableStore global_var_store,
+        EndpointConstructorObj endpoint_constructor_obj)
     {
         _uuid = ralph_globals.generate_local_uuid();
         this.ralph_globals = ralph_globals;
 
         // snapshot mapping of endpoint variable names to ralph
         // objects.
-        global_var_store.save_root_reachable_data(ralph_globals,_uuid);
+        global_var_store.save_root_reachable_data(
+            ralph_globals,_uuid,endpoint_constructor_obj);
         
         _clock = ralph_globals.clock;
         _act_event_map =

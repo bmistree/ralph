@@ -205,7 +205,7 @@ def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
 public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
 {
-    super(ralph_globals,conn_obj,new VariableStore(false));
+    super(ralph_globals,conn_obj,new VariableStore(false),factory);
 }
 
 public static class %s_ConstructorObj implements EndpointConstructorObj

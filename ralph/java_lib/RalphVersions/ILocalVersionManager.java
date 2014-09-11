@@ -1,6 +1,7 @@
 package RalphVersions;
 
 import ralph.CommitMetadata;
+import ralph.EndpointConstructorObj;
 
 public interface ILocalVersionManager
 {
@@ -38,7 +39,20 @@ public interface ILocalVersionManager
      */
     public void save_endpoint_global_mapping(
         String variable_name, String object_uuid,String endpoint_uuid,
-        long local_lamport_time);
+        String endpoint_constructor_class_name,long local_lamport_time);
+
+    /**
+       Want to be able to regenerate endpoints.  To do this, use
+       endpoint constructor objects, which automatically build an
+       endpoint for us.  Note: although this may be called multiple
+       times with the same object, may only save one version of the
+       object.  Classname of this constructor object should match
+       endpoint_constructor_class_name in
+       save_endpoint_global_mapping.
+     */
+    public void save_endpoint_constructor_obj(
+        EndpointConstructorObj endpoint_constructor_obj);
+
     
     /**
        No longer will receive udpates from this versioned object.

@@ -92,9 +92,13 @@ public class VariableStore
        mapping between endpoint-visible variable names and their
        uuids.  This way, can reconstruct an endpoint, rather than just
        reconstruct a bunch of individual objects.
+
+       @param endpoint_constructor_obj --- Can be used to reconstitute
+       the object that is being saved.
      */
     public void save_root_reachable_data(
-        RalphGlobals ralph_globals,String endpoint_uuid)
+        RalphGlobals ralph_globals,String endpoint_uuid,
+        EndpointConstructorObj endpoint_constructor_obj)
     {
         // logging is off: no need to stamp data as being reachable.
         if (ralph_globals.local_version_manager == null)
@@ -102,6 +106,9 @@ public class VariableStore
 
         long local_lamport_time =
             ralph_globals.clock.get_and_increment_int_timestamp();
+
+        String endpoint_constructor_class_name =
+            endpoint_constructor_obj.getClass().getName();
         
         for (Entry<String,RalphObject> entry : name_to_var_map.entrySet())
         {
@@ -109,7 +116,7 @@ public class VariableStore
             RalphObject ralph_object = entry.getValue();
             ralph_globals.local_version_manager.save_endpoint_global_mapping(
                 var_name, ralph_object.uuid(),endpoint_uuid,
-                local_lamport_time);
+                endpoint_constructor_class_name,local_lamport_time);
         }
     }
     
