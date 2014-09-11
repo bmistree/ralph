@@ -203,24 +203,25 @@ public static class %s extends Endpoint %s {
 
 def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
-public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
+public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
 {
     super(ralph_globals,conn_obj,factory);
 }
 
-public static class %s_ConstructorObj implements EndpointConstructorObj
+public static class %(endpoint_name)s_ConstructorObj implements EndpointConstructorObj
 {
     @Override
     public Endpoint construct (RalphGlobals ralph_globals, ConnectionObj conn_obj)
     {
-        return new %s(ralph_globals,conn_obj);
+        return new %(endpoint_name)s(ralph_globals,conn_obj);
     }
 }
 
-public final static EndpointConstructorObj factory = new %s_ConstructorObj();
+public final static EndpointConstructorObj factory = new %(endpoint_name)s_ConstructorObj();
 
-''' % (endpt_node.name,endpt_node.name,endpt_node.name,endpt_node.name)
+''' % {'endpoint_name': endpt_node.name}
     return constructor_text
+
 
 def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
     '''
