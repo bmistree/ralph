@@ -1,13 +1,15 @@
 package ralph;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ArrayList;
+import java.util.List;
 import RalphExceptions.BackoutException;
 
 public class VariableStore 
 {
-    private HashMap<String,RalphObject> name_to_var_map = 
+    private final Map<String,RalphObject> name_to_var_map = 
         new HashMap<String, RalphObject>();
 
     /**
@@ -15,9 +17,9 @@ public class VariableStore
        frame goes out of scope compared to a block.  When a function
        frame goes out of scope, execute all pending defer blocks.
      */
-    private boolean function_scope = true;
+    private final boolean function_scope;
     // highest indices get run first; lowest indices get run last.
-    private ArrayList<DeferBlock> defer_stack = null;
+    private List<DeferBlock> defer_stack = null;
     
     public VariableStore(boolean _function_scope)
     {
@@ -85,6 +87,33 @@ public class VariableStore
     }
 
     /**
+       Should only be called on global variable store used by endpoint
+       (likely in endpoint constructor).  We want to keep track of
+       mapping between endpoint-visible variable names and their
+       uuids.  This way, can reconstruct an endpoint, rather than just
+       reconstruct a bunch of individual objects.
+     */
+    public void save_root_reachable_data(
+        RalphGlobals ralph_globals,String endpoint_uuid)
+    {
+        // logging is off: no need to stamp data as being reachable.
+        if (ralph_globals.local_version_manager == null)
+            return;
+
+        long local_lamport_time =
+            ralph_globals.clock.get_and_increment_int_timestamp();
+        
+        for (Entry<String,RalphObject> entry : name_to_var_map.entrySet())
+        {
+            String var_name = entry.getKey();
+            RalphObject ralph_object = entry.getValue();
+            ralph_globals.local_version_manager.save_endpoint_global_mapping(
+                var_name, ralph_object.uuid(),endpoint_uuid,
+                local_lamport_time);
+        }
+    }
+    
+    /**
      *
      @param {String} unique_name --- 
      @returns {RalphObject or null} --- None if variable does
@@ -94,7 +123,6 @@ public class VariableStore
     {
         return name_to_var_map.get(unique_name);
     }
-
 }
 
 

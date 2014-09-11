@@ -79,4 +79,12 @@ public abstract class NonAtomicObject<T,DeltaType>
         */
         return;
     }
+
+
+    /** Implements IReference interface*/
+    @Override
+    public final String uuid()
+    {
+        return uuid;
+    }
 }

@@ -25,6 +25,22 @@ public interface ILocalVersionManager
         String object_uuid, byte[] delta, CommitMetadata commit_metadata);
 
     /**
+       Want to explicitly preserve mapping between endpoint variable
+       names and the ralph objects that they point to.  Whenever we
+       initially create an endpoint, we call this function to log the
+       newly-created data.  Note that there are two differences
+       between the data that this method stores and the data stored by
+       save_version_data.  The first is that the mapping stored here
+       has not completed its transaction.  Ie., the changes here may
+       never actually commit.  Secondly, because the mapping stored
+       here is not part of a transaction, we do not have a
+       commit_metadata object to log.
+     */
+    public void save_endpoint_global_mapping(
+        String variable_name, String object_uuid,String endpoint_uuid,
+        long local_lamport_time);
+    
+    /**
        No longer will receive udpates from this versioned object.
        Note: not guaranteed to be called by object.  Similarly, may
        not be called as soon as versioned object is no longer

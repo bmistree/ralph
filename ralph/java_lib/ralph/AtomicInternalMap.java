@@ -27,7 +27,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     VersionMapDeltas<K,V,ValueDeltaType>
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
-        RalphInternalMapInterface<K,V,ValueDeltaType>, IReference
+        RalphInternalMapInterface<K,V,ValueDeltaType>
 {
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
@@ -243,12 +243,5 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     public void clear(ActiveEvent active_event) throws BackoutException
     {
         internal_map.clear(active_event);
-    }
-
-    /** IReference interface */
-    @Override
-    public String uuid()
-    {
-        return uuid;
     }
 }

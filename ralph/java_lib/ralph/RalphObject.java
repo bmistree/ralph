@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <DeltaType> --- The type that gets passed to the version
  * helper for logging.
  */
-public abstract class RalphObject<T,DeltaType>
+public abstract class RalphObject<T,DeltaType> implements IReference
 {
     private AtomicFactory atomic_factory = null;
     private NonAtomicFactory non_atomic_factory = null;

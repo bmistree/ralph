@@ -1249,4 +1249,12 @@ public abstract class AtomicObject<T,DeltaType>
     	boolean in_running_state = active_event.add_touched_obj(this);
         return in_running_state;
     }
+
+
+    /** Implements IReference interface*/
+    @Override
+    public final String uuid()
+    {
+        return uuid;
+    }
 }

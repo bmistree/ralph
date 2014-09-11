@@ -25,7 +25,7 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     VersionMapDeltas
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
-        RalphInternalMapInterface<K,V,ValueDeltaType>, IReference
+        RalphInternalMapInterface<K,V,ValueDeltaType>
 {
     public enum IndexType{
         DOUBLE,STRING,BOOLEAN
@@ -186,12 +186,5 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     public void clear(ActiveEvent active_event) throws BackoutException
     {
         internal_map.clear(active_event);
-    }
-
-    /** IReference interface */
-    @Override
-    public String uuid()
-    {
-        return uuid;
     }
 }

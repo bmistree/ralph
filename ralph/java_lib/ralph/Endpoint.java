@@ -146,6 +146,10 @@ public abstract class Endpoint
     {
         _uuid = ralph_globals.generate_local_uuid();
         this.ralph_globals = ralph_globals;
+
+        // snapshot mapping of endpoint variable names to ralph
+        // objects.
+        global_var_store.save_root_reachable_data(ralph_globals,_uuid);
         
         _clock = ralph_globals.clock;
         _act_event_map =
