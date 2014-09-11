@@ -41,7 +41,8 @@ Service WrappedSwitch
     remove_entry_switch(Number index)
     {
         write_lock();
-        internal_switch.dummy_flow_table.remove(index);
+        if (internal_switch.dummy_flow_table.size() > index)
+            internal_switch.dummy_flow_table.remove(index);
     }
 
     add_entry_switch(Number to_add)
