@@ -1,9 +1,11 @@
 package emit_test_harnesses;
 
+import java.util.List;
 import ralph_emitted.AtomicPartnerJava.SideA;
 import ralph_emitted.AtomicPartnerJava.SideB;
 import RalphConnObj.TCPConnectionObj;
 import ralph.RalphGlobals;
+import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
@@ -99,6 +101,13 @@ public class AtomicTCPPartnerCall
             }
             return to_return;
         }
+        @Override
+        public Endpoint construct(
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            List<RalphObject> internal_val_list)
+        {
+            return construct(globals,conn_obj);
+        }        
     }
     
     private static class SideBConstructor implements EndpointConstructorObj
@@ -114,6 +123,13 @@ public class AtomicTCPPartnerCall
                 _ex.printStackTrace();
             }
             return side_b;
+        }
+        @Override
+        public Endpoint construct(
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            List<RalphObject> internal_val_list)
+        {
+            return construct(globals,conn_obj);
         }
     }
 

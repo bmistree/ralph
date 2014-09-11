@@ -1,15 +1,19 @@
 package emit_test_harnesses;
 
+import java.io.IOException;
+import java.util.List;
+
 import ralph_emitted.BasicPartnerJava.SideA;
 import ralph_emitted.BasicPartnerJava.SideB;
 import ralph_emitted.WrappedPartnerJava.SingleSidedHolder;
 import RalphConnObj.SingleSideConnection;
 import RalphConnObj.TCPConnectionObj;
 import ralph.RalphGlobals;
+import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
-import java.io.IOException;
+
 
 public class WrappedTCPPartnerCall
 {
@@ -101,6 +105,13 @@ public class WrappedTCPPartnerCall
             }
             return to_return;
         }
+        @Override
+        public Endpoint construct(
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            List<RalphObject> internal_val_list)
+        {
+            return construct(globals,conn_obj);
+        }
     }
     
     private static class SideBConstructor implements EndpointConstructorObj
@@ -115,6 +126,13 @@ public class WrappedTCPPartnerCall
                 _ex.printStackTrace();
             }
             return side_b;
+        }
+        @Override
+        public Endpoint construct(
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            List<RalphObject> internal_val_list)
+        {
+            return construct(globals,conn_obj);
         }
     }
 
