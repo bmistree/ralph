@@ -43,21 +43,13 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
-        // FIXME: I'm pretty sure that the type signature for the locked object above
-        // is incorrect: it shouldn't be D, right?			
-        super(ralph_globals);
+        this(
+            new NonAtomicInternalList<ValueType,DeltaType>(ralph_globals),
+            locked_wrapper,version_helper,value_type_class,ralph_globals);
         
-        NonAtomicInternalList<ValueType,DeltaType> init_val =
-            new NonAtomicInternalList<ValueType,DeltaType>(ralph_globals);
-
-        init_val.init(
+        this.val.val.init(
             new ListTypeDataWrapperFactory<ValueType,DeltaType>(value_type_class),
             new ArrayList<RalphObject<ValueType,DeltaType>>(),locked_wrapper);
-
-        init_non_atomic_value_variable(
-            init_val,
-            new ValueTypeDataWrapperFactory<NonAtomicInternalList<ValueType,DeltaType>>(),
-            version_helper);
     }
 
     /**
@@ -81,32 +73,6 @@ public abstract class NonAtomicList<ValueType,DeltaType>
             version_helper);
     }
 
-    public NonAtomicList(
-        List<RalphObject<ValueType,DeltaType>> init_val,boolean incorporating_deltas,
-        EnsureAtomicWrapper<ValueType,DeltaType> locked_wrapper,
-        VersionHelper<
-            NonAtomicInternalList<ValueType,DeltaType>> version_helper,
-        Class<ValueType> value_type_class,
-        RalphGlobals ralph_globals)
-    {
-        super(ralph_globals);
-        
-        NonAtomicInternalList<ValueType,DeltaType> init_val_2 =
-            new NonAtomicInternalList<ValueType,DeltaType>(ralph_globals);
-        init_val_2.init(
-            new ListTypeDataWrapperFactory<ValueType,DeltaType>(value_type_class),
-            new ArrayList<RalphObject<ValueType,DeltaType>>(),
-            locked_wrapper);
-        
-        init_non_atomic_value_variable(
-            init_val_2,
-            new ValueTypeDataWrapperFactory<NonAtomicInternalList<ValueType,DeltaType>>(),
-            version_helper);
-
-        load_init_vals(init_val,incorporating_deltas);
-    }
-
-
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,
         Variables.Any.Builder any_builder) throws BackoutException
@@ -119,29 +85,5 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     public boolean return_internal_val_from_container()
     {
         return false;
-    }
-    
-    public void load_init_vals(
-        List<RalphObject<ValueType,DeltaType>> init_val, boolean incorporating_deltas)
-    {
-        if (init_val == null)
-            return;
-
-        //FIXME probably inefficient to add each field separately
-        for (RalphObject<ValueType,DeltaType> to_load: init_val)
-        {
-            ListTypeDataWrapper<ValueType,DeltaType>casted_wrapper =
-                (ListTypeDataWrapper<ValueType,DeltaType>)val.val.val;
-            // single threaded variables will not throw backout exceptions.
-            try {                
-                casted_wrapper.append(
-                    null, to_load, incorporating_deltas);
-            } catch (BackoutException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                Util.logger_assert(
-                    "Did not consider effect of backout when loading");
-            }
-        }
     }
 }
