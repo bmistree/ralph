@@ -745,10 +745,12 @@ try
                 %
                 (java_type_statement,argument_name,argument_name,argument_name))
         elif isinstance(argument_type,ListType):
+            element_type = argument_type.element_type_node.type
+            element_type_class = class_from_element_type(element_type)
             new_ralph_variable = (
-                'new %s (false,%s,%s.locked_wrapper,ralph_globals)'
-                %
-                (java_type_statement,argument_name,argument_name))
+                'new %s (false,%s,%s.locked_wrapper,%s,ralph_globals)' %
+                (java_type_statement,argument_name,argument_name,
+                 element_type_class))
 
         elif isinstance(argument_type,StructType):
             new_ralph_variable = (
@@ -907,7 +909,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         initializer_text = None
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
-
+            
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_text is None:
             return 'new %s (false,ralph_globals)' % java_type_text
@@ -959,8 +961,8 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
     elif isinstance(type_object,ListType):
         java_type_text = emit_ralph_wrapped_type(type_object)
-        
-        # FIXME: currently, disallowing initializing maps
+
+        # FIXME: currently, disallowing initializing lists
         if initializer_node is not None:
             if initializer_node.label != NULL_TYPE:
                 raise InternalEmitException(
@@ -970,16 +972,18 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         
         # require EnsureAtomicWrapper object to 
         element_type = type_object.element_type_node.type
+        element_type_class = class_from_element_type(element_type)
         element_type_wrapper = list_map_wrappers(element_type)
-
+        
         internal_val_txt = ''
         if initializer_node is not None:
             # internal val should be null
             internal_val_txt = 'null,'
             
         to_return = (
-            'new %s(false,%s%s,ralph_globals)' %
-            (java_type_text,internal_val_txt,element_type_wrapper))
+            'new %s(false,%s%s,%s,ralph_globals)' %
+            (java_type_text,internal_val_txt,element_type_wrapper,
+             element_type_class))
         return to_return
     
     elif isinstance(type_object,StructType):
@@ -1054,6 +1058,40 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
+def class_from_element_type(element_type):
+    '''
+    @param {TypeObject} element_type
+    
+    When constructing lists or maps, we need to pass in the class
+    object associated with the list's/map's parameterized type.  For
+    instance, for
+
+    List<Double>, we'd want to pass in java.lang.Double.class so that
+    versioning can log type of object we are versioning as well as the
+    contents of that object.
+    '''
+    if isinstance(element_type,BasicType):
+        element_basic_type = element_type.basic_type
+        if element_basic_type == NUMBER_TYPE:
+            return 'java.lang.Double.class'
+        elif element_basic_type == STRING_TYPE:
+            return 'java.lang.String.class'
+        elif element_basic_type == BOOL_TYPE:
+            return 'java.lang.Boolean.class'
+        #### DEBUG
+        else:
+            raise InternalEmitException('unknown',0,'Unknown basic type.')
+        #### END DEBUG
+    elif isinstance(element_type,StructType):
+        internal_struct_name = emit_internal_struct_type(element_type)        
+        return internal_struct_name + '.class'
+    else:
+        # FIXME: Currently disallowing containers holding elements to
+        # anything beyond number, string, boolean, or struct types.
+        raise InternalEmitException(
+            'unknown',0,
+            'FIXME: Still need to emit wrappers for non-basic value types.')
+    
 def list_map_wrappers(element_type):
     '''The type object of a list's elements or a map's values.
     '''
@@ -1675,7 +1713,7 @@ _ctx.hide_partner_call(
             statement_node.var_name)
 
         declaration_statement = (
-            '%s %s = %s;' %
+            '%s %s = %s; ' %
             (java_type_statement,internal_var_name,new_expression))
 
         # should not add to var context if we're in the middle of
@@ -2186,10 +2224,10 @@ def emit_struct_list_deserializer(struct_type):
         
         to_return += '''
 private final static {type_text} {var_name} =
-    new {type_text} ("{label}", {wrapper});
+    new {type_text} ("{label}", {wrapper},{value_type_class});
 '''.format(type_text=type_text,var_name = var_name,label=struct_name,
-           wrapper=struct_locked_wrapper_name)
-            
+           wrapper=struct_locked_wrapper_name,
+           value_type_class= internal_struct_name+ '.class')
     return to_return
 
 def emit_struct_map_deserializer(struct_type):

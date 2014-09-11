@@ -85,7 +85,9 @@ public class RandomFailureExtendedList
 
         public SynchronizedNumberInternalList(RalphGlobals ralph_globals)
         {
-            super(BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,ralph_globals);
+            super(
+                BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
+                Double.class,ralph_globals);
         }
         
         /**

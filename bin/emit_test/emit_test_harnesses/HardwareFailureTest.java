@@ -48,7 +48,7 @@ public class HardwareFailureTest
             new AtomicListVariable<Double,Double>(
                 false,internal_hardware_list,
                 BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
-                endpt.ralph_globals);
+                Double.class,endpt.ralph_globals);
 
         return to_return;
     }
@@ -115,7 +115,7 @@ public class HardwareFailureTest
         {
             super(
                 BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
-                _endpt.ralph_globals);
+                Double.class,_endpt.ralph_globals);
             endpt = _endpt;
             hardware_id = _hardware_id;
         }
