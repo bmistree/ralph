@@ -39,7 +39,33 @@ public class AtomicList<ValueType, ValueDeltaType>
     private final Class<ValueType> value_type_class;
     
     public AtomicList(
-        boolean _log_changes,EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
+        boolean _log_changes,
+        EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
+        VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
+        Class<ValueType> _value_type_class,
+        RalphGlobals ralph_globals)
+    {
+        this(
+            _log_changes,
+            new AtomicInternalList<ValueType, ValueDeltaType>(ralph_globals),
+            locked_wrapper,version_helper,_value_type_class,ralph_globals);
+        
+        this.val.val.init_multithreaded_list_container(
+            _log_changes,
+            new ListTypeDataWrapperFactory<ValueType, ValueDeltaType>(_value_type_class),
+            new ArrayList<RalphObject<ValueType, ValueDeltaType>>(),
+            locked_wrapper);
+    }
+
+    /**
+       When pass an argument into a method call, should unwrap
+       internal value and put it into another MultiThreadedList.  This
+       constructor is for this.
+     */
+    public AtomicList(
+        boolean _log_changes,
+        AtomicInternalList<ValueType, ValueDeltaType> internal_val,
+        EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
         VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
         Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
@@ -47,19 +73,10 @@ public class AtomicList<ValueType, ValueDeltaType>
         super(ralph_globals);
         this.locked_wrapper = locked_wrapper;
         
-        AtomicInternalList<ValueType, ValueDeltaType> init_val =
-            new AtomicInternalList<ValueType, ValueDeltaType>(ralph_globals);
-        init_val.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<ValueType, ValueDeltaType>(_value_type_class),
-            new ArrayList<RalphObject<ValueType, ValueDeltaType>>(),
-            locked_wrapper);
-
         init_atomic_value_variable(
-            _log_changes, init_val,
+            _log_changes, internal_val,
             new ValueTypeDataWrapperFactory<AtomicInternalList<ValueType, ValueDeltaType>>(),
             version_helper);
-
         value_type_class = _value_type_class;
     }
     
@@ -87,60 +104,6 @@ public class AtomicList<ValueType, ValueDeltaType>
         return to_return;
     }
 
-    
-    /**
-       When pass an argument into a method call, should unwrap
-       internal value and put it into another MultiThreadedList.
-       This constructor is for this.
-     */
-    public AtomicList(
-        boolean _log_changes,
-        AtomicInternalList<ValueType, ValueDeltaType> internal_val,
-        EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
-        Class<ValueType> _value_type_class,
-        RalphGlobals ralph_globals)
-    {
-        super(ralph_globals);
-        this.locked_wrapper = locked_wrapper;
-        
-        init_atomic_value_variable(
-            _log_changes, internal_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<ValueType, ValueDeltaType>>(),
-            version_helper);
-        value_type_class = _value_type_class;
-    }
-
-    
-    public AtomicList(
-        boolean _log_changes,
-        List<RalphObject<ValueType, ValueDeltaType>> init_val,boolean incorporating_deltas,
-        EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
-        Class<ValueType> _value_type_class,
-        RalphGlobals ralph_globals)
-    {
-        super(ralph_globals);
-        this.locked_wrapper = locked_wrapper;
-
-        // FIXME: use delegating constructors instead.
-        
-        AtomicInternalList<ValueType, ValueDeltaType> init_val_2 =
-            new AtomicInternalList<ValueType, ValueDeltaType>(ralph_globals);
-        init_val_2.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<ValueType, ValueDeltaType>(_value_type_class),
-            new ArrayList<RalphObject<ValueType, ValueDeltaType>>(),
-            locked_wrapper);
-
-        init_atomic_value_variable(
-            _log_changes, init_val_2,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<ValueType, ValueDeltaType>>(),
-            version_helper);
-
-        load_init_vals(init_val,incorporating_deltas);
-        value_type_class = _value_type_class;
-    }
     
     public boolean return_internal_val_from_container()
     {
