@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
 import ralph.Util;
+import ralph.IReference;
 
 public class SerializableToByteArray
 {
@@ -20,6 +21,22 @@ public class SerializableToByteArray
     public final static SingletonBooleanSerializer BOOLEAN_SERIALIZER =
         new SingletonBooleanSerializer();
 
+    public final static SingletonReferenceSerializer REFERENCE_SERIALIZER =
+        new SingletonReferenceSerializer();
+
+
+    private static class SingletonReferenceSerializer
+        implements ILocalDeltaSerializer<IReference>
+    {
+        @Override
+        public byte[] serialize(IReference to_serialize)
+        {
+            String uuid = to_serialize.uuid();
+            if (uuid == null)
+                uuid = "null";
+            return STRING_SERIALIZER.serialize(uuid);
+        }
+    }
         
     private static class SingletonDoubleSerializer
         implements ILocalDeltaSerializer<Double>

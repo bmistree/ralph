@@ -3,12 +3,14 @@ package ralph;
 import static RalphVersions.SerializableToByteArray.DOUBLE_SERIALIZER;
 import static RalphVersions.SerializableToByteArray.STRING_SERIALIZER;
 import static RalphVersions.SerializableToByteArray.BOOLEAN_SERIALIZER;
+import static RalphVersions.SerializableToByteArray.REFERENCE_SERIALIZER;
 
 public class BaseTypeVersionHelpers
 {
     public final VersionHelper<Double> DOUBLE_VERSION_HELPER;
     public final VersionHelper<String> STRING_VERSION_HELPER;
     public final VersionHelper<Boolean> BOOLEAN_VERSION_HELPER;
+    public final VersionHelper<IReference> REFERENCE_VERSION_HELPER;
 
     /**
        For now, just setting map, list, enum, and service factory
@@ -32,5 +34,9 @@ public class BaseTypeVersionHelpers
         
         BOOLEAN_VERSION_HELPER =
             new VersionHelper<Boolean> (ralph_globals,BOOLEAN_SERIALIZER);
+
+        REFERENCE_VERSION_HELPER =
+            new VersionHelper<IReference> (
+                ralph_globals, REFERENCE_SERIALIZER);
     }
 }

@@ -63,7 +63,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             index_type,
             locked_wrapper);
     }
-
+    
     /**
        When pass an argument into a method call, should unwrap
        internal value and put it into another MultiThreadedMap.
