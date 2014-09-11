@@ -120,28 +120,4 @@ public class AtomicList<ValueType, ValueDeltaType>
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
     }
-
-    public void load_init_vals(
-        List<RalphObject<ValueType, ValueDeltaType>> init_val, boolean incorporating_deltas)
-    {
-        if (init_val == null)
-            return;
-
-        //FIXME probably inefficient to add each field separately
-        for (RalphObject<ValueType, ValueDeltaType> to_load: init_val)
-        {
-            ListTypeDataWrapper<ValueType, ValueDeltaType>casted_wrapper =
-                (ListTypeDataWrapper<ValueType, ValueDeltaType>)val.val.val;
-            // single threaded variables will not throw backout exceptions.
-            try {                
-                casted_wrapper.append(
-                    null, to_load, incorporating_deltas);
-            } catch (BackoutException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                Util.logger_assert(
-                    "Did not consider effect of backout in load");
-            }
-        }
-    }
 }
