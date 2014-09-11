@@ -222,8 +222,28 @@ local_version_manager.save_endpoint_global_mapping(
     factory.getClass().getName(), local_lamport_time);''' %
         { 'variable_name': internal_var_name })
         
-    # line up wiht internal if statements
+    # line up with internal if statements
     version_mapping_text = indent_string(version_mapping_text,2)
+
+    # this text is used in endpointconstructorobject.  Its purpose is
+    # to initialize internal data of endpoint to internal_values_list,
+    # specified in construct method.
+    version_unmapping_text = ''
+    for initializer_index in range(0, len(endpt_variable_decl_node_list)):
+        endpt_variable_decl_node = (
+            endpt_variable_decl_node_list[initializer_index])
+
+        java_type_statement = emit_ralph_wrapped_type(
+            endpt_variable_decl_node.type)
+        var_name = endpt_variable_decl_node.var_name
+        internal_var_name = emit_ctx.lookup_internal_var_name(var_name)
+        version_unmapping_text += '''
+to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get( %(initializer_index)i);
+''' % {'internal_var_name': internal_var_name,
+       'initializer_index': initializer_index,
+       'variable_type': java_type_statement}
+    # line up with construct method
+    version_unmapping_text = indent_string(version_unmapping_text,2)
     
     constructor_text = '''
 public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
@@ -248,12 +268,23 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     {
         return new %(endpoint_name)s(ralph_globals,conn_obj);
     }
+
+    @Override
+    public Endpoint construct (
+        RalphGlobals ralph_globals, ConnectionObj conn_obj,
+        List<RalphObject> internal_values_list)
+    {
+        %(endpoint_name)s to_return =  new %(endpoint_name)s(ralph_globals,conn_obj);
+        %(version_unmapping_text)s
+        return to_return;
+    }
 }
 
 public final static EndpointConstructorObj factory = new %(endpoint_name)s_ConstructorObj();
 
 ''' % ({'endpoint_name': endpt_node.name,
-        'version_mapping_text': version_mapping_text})
+        'version_mapping_text': version_mapping_text,
+        'version_unmapping_text': version_unmapping_text})
     return constructor_text
 
 
