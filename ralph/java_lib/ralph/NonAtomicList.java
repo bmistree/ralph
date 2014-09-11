@@ -25,21 +25,20 @@ import RalphDataWrappers.ListTypeDataWrapper;
  * 
  */
 public abstract class NonAtomicList<ValueType,DeltaType>
-    extends NonAtomicValueVariable<
+    extends NonAtomicVariable<
     // this wraps a locked container object.  Ie,
     // calling get_val on this will return NonAtomicInternalList.
     // when call set val, must pass in a NonAtomicInternalList
     // Note: the type that the version helper for this nonatomic list gets
     // passed.
-    NonAtomicInternalList<ValueType,DeltaType>
-    >
+    NonAtomicInternalList<ValueType,DeltaType>,
+    IReference>
 {
     public final static String deserialization_label = "NonAtomic List";
     
     public NonAtomicList(
         EnsureAtomicWrapper<ValueType,DeltaType> locked_wrapper,
-        VersionHelper<
-            NonAtomicInternalList<ValueType,DeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -60,13 +59,11 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     public NonAtomicList(
         NonAtomicInternalList<ValueType,DeltaType> internal_val,
         EnsureAtomicWrapper<ValueType,DeltaType> locked_wrapper,
-        VersionHelper<
-            NonAtomicInternalList<ValueType,DeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        
         init_non_atomic_value_variable(
             internal_val,
             new ValueTypeDataWrapperFactory<NonAtomicInternalList<ValueType,DeltaType>>(),

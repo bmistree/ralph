@@ -1,22 +1,17 @@
 package ralph;
 
-import RalphDataWrappers.ValueTypeDataWrapperFactory;
-
-public abstract class AtomicValueVariable<T>
-    extends AtomicVariable<T,T>
+public abstract class AtomicReferenceVariable<ValueType extends IReference>
+    extends AtomicVariable<ValueType, IReference>
 {
-    public AtomicValueVariable(
-        boolean _log_changes, T init_val,
-        ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<T> version_helper,
-        RalphGlobals ralph_globals)
+    public AtomicReferenceVariable(RalphGlobals ralph_globals)
     {
-        super(_log_changes,init_val,vtdwc,version_helper,ralph_globals);
+        super(ralph_globals);
     }
 
-    public AtomicValueVariable(RalphGlobals ralph_globals)
+    @Override
+    public boolean return_internal_val_from_container() 
     {
-        super (ralph_globals);
+        return false;
     }
     
     /**

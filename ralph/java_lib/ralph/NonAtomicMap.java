@@ -27,12 +27,13 @@ import RalphDataWrappers.MapTypeDataWrapper;
  *     LockedMapVariable< Number, String>>
  */
 public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
-    extends NonAtomicValueVariable<
+    extends NonAtomicVariable<
     // this wraps a locked container object.  Ie, calling get_val on
     // this will return NonAtomicInternalMap.  when call set val, must
     // pass in a NonAtomicInternalMap Note: this is the type that is
     // sent into the version helper for logging.
-    NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>
+    NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>,
+    IReference
     >
 {
     public final static String deserialization_label = "NonAtomic Map";
@@ -44,7 +45,7 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
     public NonAtomicMap(
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
-        VersionHelper<NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -71,7 +72,7 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_val,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
-        VersionHelper<NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {

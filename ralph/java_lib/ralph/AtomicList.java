@@ -25,13 +25,12 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  * 
  */
 public class AtomicList<ValueType, ValueDeltaType>
-    extends AtomicValueVariable<
+    extends AtomicReferenceVariable<
     // this wraps a locked container object.  Ie, calling get_val on
     // this will return AtomicListContainer.  when call set val, must
     // pass in a AtomicListContainer.  Note:version helper gets passed
     // in delta of this type.
-    AtomicInternalList<ValueType, ValueDeltaType>
-    >
+    AtomicInternalList<ValueType, ValueDeltaType>>
 {
     private EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper = null;
 
@@ -41,7 +40,7 @@ public class AtomicList<ValueType, ValueDeltaType>
     public AtomicList(
         boolean _log_changes,
         EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -66,7 +65,7 @@ public class AtomicList<ValueType, ValueDeltaType>
         boolean _log_changes,
         AtomicInternalList<ValueType, ValueDeltaType> internal_val,
         EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalList<ValueType, ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -85,13 +84,14 @@ public class AtomicList<ValueType, ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             AtomicInternalList<ValueType, ValueDeltaType>,
-            AtomicInternalList<ValueType, ValueDeltaType>>
+            IReference>
         // function name and arguments
         duplicate_for_speculation(AtomicInternalList<ValueType, ValueDeltaType> to_speculate_on)
     {
         SpeculativeAtomicObject<
             AtomicInternalList<ValueType, ValueDeltaType>,
-            AtomicInternalList<ValueType, ValueDeltaType>> to_return =
+            IReference>
+            to_return =
             new AtomicList(
                 log_changes,
                 to_speculate_on,
@@ -103,13 +103,6 @@ public class AtomicList<ValueType, ValueDeltaType>
         to_return.set_derived(this);
         return to_return;
     }
-
-    
-    public boolean return_internal_val_from_container()
-    {
-        return false;
-    }
-
 
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,

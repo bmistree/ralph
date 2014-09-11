@@ -26,7 +26,7 @@ import RalphDataWrappers.MapTypeDataWrapper;
  * 
  */
 public class AtomicMap<KeyType,ValueType,ValueDeltaType>
-    extends AtomicValueVariable<
+    extends AtomicReferenceVariable<
     // this wraps a locked container object.  Ie, calling get_val on
     // this will return NonAtomicInternalMap.  when call set val, must
     // pass in a NonAtomicInternalMap Note: version helper gets passed
@@ -46,7 +46,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -74,7 +74,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_val,
         NonAtomicInternalMap.IndexType index_type,        
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
-        VersionHelper<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        VersionHelper<IReference> version_helper,
         Class<KeyType> key_type_class,Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
@@ -96,14 +96,14 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             AtomicInternalMap<KeyType,ValueType,ValueDeltaType>,
-            AtomicInternalMap<KeyType,ValueType,ValueDeltaType>>
+            IReference>
         // function name and arguments
         duplicate_for_speculation(
             AtomicInternalMap<KeyType,ValueType,ValueDeltaType> to_speculate_on)
     {
         SpeculativeAtomicObject<
             AtomicInternalMap<KeyType,ValueType,ValueDeltaType>,
-            AtomicInternalMap<KeyType,ValueType,ValueDeltaType>> to_return =
+            IReference> to_return =
             new AtomicMap(
                 log_changes,
                 to_speculate_on,
@@ -129,4 +129,5 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
         any_builder.setIsTvar(true);
     }
+
 }

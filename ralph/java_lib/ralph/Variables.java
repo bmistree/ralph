@@ -447,7 +447,6 @@ public class Variables
             Util.logger_assert(
                 "Should deserialize directly in DataConstructorRegistry.");
         }
-
     }
     
     public static class NonAtomicNumberVariable
@@ -747,7 +746,7 @@ public class Variables
         {
             super(
                 _index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
 
@@ -761,7 +760,7 @@ public class Variables
         {
             super(
                 internal_val,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
     }
@@ -779,7 +778,7 @@ public class Variables
         {
             super(
                 _log_changes,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class, ralph_globals);
         }
 
@@ -793,7 +792,7 @@ public class Variables
         {
             super(
                 _log_changes,internal_val,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
+                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
                 key_type_class,value_type_class, ralph_globals);
         }        
     }
