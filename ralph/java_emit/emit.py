@@ -53,6 +53,8 @@ import ralph.NonAtomicInternalMap.IndexType;
 import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
 
+import RalphVersions.ILocalVersionManager;
+
 import RalphConnObj.ConnectionObj;
 import RalphConnObj.SingleSideConnection;
 import RalphExceptions.*;
@@ -187,7 +189,6 @@ def emit_endpt(endpt_node,struct_types_ctx):
 public static class %s extends Endpoint %s {
 ''' % (endpt_node.name, implements_text)
 
-    
     endpt_class_body = emit_endpt_variable_declarations(
         emit_ctx,endpt_node.body_node.variable_declaration_nodes)
     endpt_class_body += '\n'
@@ -202,10 +203,42 @@ public static class %s extends Endpoint %s {
 
 
 def emit_constructor(emit_ctx,endpt_node):
+    # when initially construct an endpoint/service, if versioning is
+    # on, should map the endpoint's global variables to the ralph
+    # objects that they point to.  These mappings can then be used
+    # during reconstruction to rebuild the endpoint and its associated
+    # state.
+    version_mapping_text = ''
+
+    # each element of the following list is a DeclarationStatementNode
+    endpt_variable_decl_node_list = (
+        endpt_node.body_node.variable_declaration_nodes)
+    for endpt_variable_decl_node in endpt_variable_decl_node_list:
+        var_name = endpt_variable_decl_node.var_name
+        internal_var_name = emit_ctx.lookup_internal_var_name(var_name)
+        version_mapping_text += ('''
+local_version_manager.save_endpoint_global_mapping(
+    "%(variable_name)s",%(variable_name)s.uuid(), _uuid,
+    factory.getClass().getName(), local_lamport_time);''' %
+        { 'variable_name': internal_var_name })
+        
+    # line up wiht internal if statements
+    version_mapping_text = indent_string(version_mapping_text,2)
+    
     constructor_text = '''
 public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
 {
     super(ralph_globals,conn_obj,factory);
+
+    if (ralph_globals.local_version_manager != null)
+    {
+        long local_lamport_time =
+            ralph_globals.clock.get_and_increment_int_timestamp();
+        // map names of endpoint variables to their local values.
+        ILocalVersionManager local_version_manager =
+            ralph_globals.local_version_manager;
+        %(version_mapping_text)s
+    }
 }
 
 public static class %(endpoint_name)s_ConstructorObj implements EndpointConstructorObj
@@ -219,7 +252,8 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
 
 public final static EndpointConstructorObj factory = new %(endpoint_name)s_ConstructorObj();
 
-''' % {'endpoint_name': endpt_node.name}
+''' % ({'endpoint_name': endpt_node.name,
+        'version_mapping_text': version_mapping_text})
     return constructor_text
 
 
