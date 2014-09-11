@@ -25,12 +25,6 @@ import RalphCallResults.MessageCallResultObject;
 public class ExecutingEventContext
 {
     /**
-       @param {VariableStack} var_stack --- Keeps track of all data
-       used by executing event.
-    */
-    public VariableStack var_stack = null;
-
-    /**
        We can be listening to more than one open threadsafe message
        queue.  If endpoint A waits on its partner, and, while
        waiting, its partner executes a series of endpoint calls so
@@ -74,10 +68,8 @@ public class ExecutingEventContext
        Use this constructor when creating a new event context not in
        response to another endpoint's rpc request.
      */
-    public ExecutingEventContext (VariableStack _var_stack)
-    {
-        var_stack = _var_stack.fork_stack();
-    }
+    public ExecutingEventContext ()
+    {}
 
     public static void serialize_as_rpc_arg(
         ActiveEvent active_event, RalphObject to_serialize,
@@ -98,11 +90,8 @@ public class ExecutingEventContext
        of an rpc call from another node.  Keeps track of which objects
        need to return from the rpc call (in array list).
      */
-    public ExecutingEventContext (
-        VariableStack _var_stack,
-        List<RalphObject> _args_to_reply_with)
+    public ExecutingEventContext (List<RalphObject> _args_to_reply_with)
     {
-        var_stack = _var_stack.fork_stack();
         args_to_reply_with = _args_to_reply_with;
     }
     

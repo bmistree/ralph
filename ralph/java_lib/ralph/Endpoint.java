@@ -82,8 +82,6 @@ public abstract class Endpoint
     private final ReentrantLock _conn_obj_mutex = new ReentrantLock();
     private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
-
-    public VariableStack global_var_stack = new VariableStack();
 	
     public ThreadPool _thread_pool = null;
     private AllEndpoints _all_endpoints = null;
@@ -134,11 +132,6 @@ public abstract class Endpoint
        @param {ConnectionObject} conn_obj --- Used to write messages
        to partner endpoint.
 
-       @param {_VariableStore} global_var_store --- Contains the
-       peered and endpoint global data for this endpoint.  Will not
-       add or remove any peered or endpoint global variables.  Will
-       only make calls on them.
-
        @param{EndpointConstructorObj} endpoint_constructor_obj --- Can
        be used to instantiate a version of this class, using construct
        method.
@@ -146,17 +139,11 @@ public abstract class Endpoint
     public Endpoint (
         RalphGlobals ralph_globals,
         RalphConnObj.ConnectionObj conn_obj,
-        VariableStore global_var_store,
         EndpointConstructorObj endpoint_constructor_obj)
     {
         _uuid = ralph_globals.generate_local_uuid();
         this.ralph_globals = ralph_globals;
 
-        // snapshot mapping of endpoint variable names to ralph
-        // objects.
-        global_var_store.save_root_reachable_data(
-            ralph_globals,_uuid,endpoint_constructor_obj);
-        
         _clock = ralph_globals.clock;
         _act_event_map =
             new ActiveEventMap(
@@ -164,8 +151,6 @@ public abstract class Endpoint
                 ralph_globals);
         _conn_obj = conn_obj;
 
-        global_var_stack.push(global_var_store);
-        
         _thread_pool = ralph_globals.thread_pool;
         _all_endpoints = ralph_globals.all_endpoints;
         _all_endpoints.add_endpoint(this);
@@ -195,7 +180,7 @@ public abstract class Endpoint
      */
     public ExecutingEventContext create_context()
     {
-        return new ExecutingEventContext(global_var_stack);
+        return new ExecutingEventContext();
     }
     
     /**
@@ -210,8 +195,7 @@ public abstract class Endpoint
     public ExecutingEventContext create_context_for_recv_rpc(
         List<RalphObject> rpc_args)
     {
-        return new ExecutingEventContext(
-            global_var_stack,rpc_args);
+        return new ExecutingEventContext(rpc_args);
     }
 
     public void update_connection_obj(
@@ -854,14 +838,6 @@ public abstract class Endpoint
 
      @param {ActiveEvent} active_event --- The active event that
      is requesting the message to be sent.
-
-     @param {VariableStack} sequence_local_var_stack --- We convert
-     all changes that we have made to both peered data and sequence
-     local data to maps of deltas so that the partner endpoint can
-     apply the changes.  We use the sequence_local_store to get
-     changes that invalidation_listener has made to sequence local
-     data.  (For peered data, we can just use
-     self._global_var_store.)
 
      @param{Builder} serialized_results --- Can be null.  Serialized
      value of all returned objects.

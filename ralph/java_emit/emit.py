@@ -205,7 +205,7 @@ def emit_constructor(emit_ctx,endpt_node):
     constructor_text = '''
 public %s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
 {
-    super(ralph_globals,conn_obj,new VariableStore(false),factory);
+    super(ralph_globals,conn_obj,factory);
 }
 
 public static class %s_ConstructorObj implements EndpointConstructorObj
@@ -523,7 +523,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     # all method bodies are defined in try-finally blocks.  At
     # beginning of try-finally, push to context var stack.  At end,
     # pop from it.
-    body += '\n} finally {_ctx.var_stack.pop();}'
+    body += '\n} finally {}'
     internal_method_text = signature_plus_head + indent_string(body) + '\n}'
     
     return external_method_text + internal_method_text
@@ -698,8 +698,6 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
         StoppedException
     {
         try {
-        _ctx.var_stack.push(true); // true because function var scope
-        _ctx.var_stack.add_var('SomeVar',SomeVar);
     '''
     to_return,argument_name_text_list = emit_internal_method_signature(
         emit_ctx,method_signature_node)
@@ -716,8 +714,6 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     to_return += indent_string('''
 try
 {
-    _ctx.var_stack.push(true);//true because func scope
-
 ''')
 
 
@@ -772,9 +768,6 @@ try
         to_return +=indent_string(
             '%s %s = %s;\n' %
             (java_type_statement,internal_arg_name,new_ralph_variable),2)
-        to_return += indent_string(
-            '\n_ctx.var_stack.add_var("%s",%s);\n' %
-            (internal_arg_name,internal_arg_name),2)
 
     return to_return
 
@@ -1524,7 +1517,6 @@ def emit_statement(emit_ctx,statement_node):
         // what to actually execute inside of atomic block
         try
         {
-            _ctx.var_stack.push(false);
 %s
         }
         catch (BackoutException _be)
@@ -1533,7 +1525,6 @@ def emit_statement(emit_ctx,statement_node):
         }
         finally
         {
-            _ctx.var_stack.pop();
         }
 
         // FIXME: may want to mangle this further
@@ -1727,19 +1718,10 @@ _ctx.hide_partner_call(
             '%s %s = %s; ' %
             (java_type_statement,internal_var_name,new_expression))
 
-        # should not add to var context if we're in the middle of
-        # declaring endpoint global variables.  
-        if not emit_ctx.get_in_endpoint_global_vars():
-            # no ; at end, because caller will place one on.
-            context_stack_push_statement = (
-                '_ctx.var_stack.add_var("%s",%s)' % 
-                (internal_var_name,internal_var_name))
-        else:
-            declaration_statement = 'private ' + declaration_statement;
-            context_stack_push_statement = ''
+        if emit_ctx.get_in_endpoint_global_vars():
+            declaration_statement = 'private ' + declaration_statement
             
-        return (
-            declaration_statement + '\n' + context_stack_push_statement)
+        return declaration_statement + '\n'
 
     elif statement_node.label == ast_labels.RETURN:
         return_text = 'return'
@@ -1785,8 +1767,6 @@ _ctx.hide_partner_call(
         to_return = '{\n'
 
         scope_body_text = 'try \n {\n'
-        scope_body_text += indent_string('_ctx.var_stack.push(false);\n')
-
         
         # Any variable declared in this scope should be removed after
         # this scope statement: so push on a scope to emit_ctx and
@@ -1802,7 +1782,7 @@ _ctx.hide_partner_call(
         emit_ctx.pop_scope()
 
         scope_body_text +='}\n'
-        scope_body_text += 'finally { _ctx.var_stack.pop();}\n'
+        scope_body_text += 'finally {}\n'
         to_return += indent_string(scope_body_text) + '\n}\n'
         
         return to_return
@@ -2009,9 +1989,8 @@ def emit_for_statement(for_node,emit_ctx):
     '''
     # first add a scope so that any variable decalred in the for
     # loop's predicate will only be local to the for loop.
-    to_return = '_ctx.var_stack.push(false);\n'
+    to_return = ''
     emit_ctx.push_scope()
-
     
     # add new variable to emit_ctx stack
     emit_ctx.add_var_name(for_node.variable_node.value)
@@ -2059,12 +2038,10 @@ def emit_for_statement(for_node,emit_ctx):
 {
     try
     {
-        _ctx.var_stack.push(false);
         %s
     }
     finally
     {
-        _ctx.var_stack.pop();
     }
 }
 ''' % indent_string(internal_statement_text)
