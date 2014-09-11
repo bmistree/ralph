@@ -45,9 +45,9 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  */
 public abstract class Endpoint 
 {
-    public String _host_uuid = null;
+    public final String _host_uuid;
 	
-    private LamportClock _clock = null;
+    private final LamportClock _clock;
 
     /**
        Can update the connection object of a service factory.  This
@@ -120,7 +120,7 @@ public abstract class Endpoint
      */
     public String _partner_host_uuid = null;
 
-    public RalphGlobals ralph_globals = null;
+    public final RalphGlobals ralph_globals;
     
     /**
        @param {RalphGlobals} ralph_globals --- Contains common utilities
@@ -137,8 +137,7 @@ public abstract class Endpoint
        method.
     */
     public Endpoint (
-        RalphGlobals ralph_globals,
-        RalphConnObj.ConnectionObj conn_obj,
+        RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
         EndpointConstructorObj endpoint_constructor_obj)
     {
         _uuid = ralph_globals.generate_local_uuid();
