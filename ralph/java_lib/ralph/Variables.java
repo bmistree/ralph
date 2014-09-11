@@ -742,12 +742,13 @@ public class Variables
             boolean _dummy_log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 _index_type,locked_wrapper,
                 ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
-                ralph_globals);
+                key_type_class, value_type_class,ralph_globals);
         }
 
         public NonAtomicMapVariable(
@@ -755,12 +756,13 @@ public class Variables
             NonAtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 internal_val,_index_type,locked_wrapper,
                 ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
-                ralph_globals);
+                key_type_class, value_type_class,ralph_globals);
         }
     }
 
@@ -772,12 +774,13 @@ public class Variables
             boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,_index_type,locked_wrapper,
                 ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
-                ralph_globals);
+                key_type_class, value_type_class, ralph_globals);
         }
 
         public AtomicMapVariable(
@@ -785,12 +788,13 @@ public class Variables
             AtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,internal_val,_index_type,locked_wrapper,
                 ralph_globals.base_type_version_helpers.MAP_VERSION_HELPER,
-                ralph_globals);
+                key_type_class,value_type_class, ralph_globals);
         }        
     }
     

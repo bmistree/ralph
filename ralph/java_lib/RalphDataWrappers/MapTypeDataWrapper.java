@@ -21,10 +21,13 @@ import RalphExceptions.BackoutException;
  * outside of locked object)
  */
 public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
-    extends DataWrapper<Map<KeyType,RalphObject<ValueType,DeltaValueType>>>{
-	
+    extends DataWrapper<Map<KeyType,RalphObject<ValueType,DeltaValueType>>>
+{
     private final boolean log_changes;
-	
+
+    private final Class<KeyType> key_type_class;
+    private final Class<ValueType> value_type_class;
+    
     /*
      * tracks all insertions, removals, etc. made to this reference
      * object so can send deltas across network to partners.
@@ -35,9 +38,13 @@ public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
 
     public MapTypeDataWrapper(
         Map<KeyType,RalphObject<ValueType,DeltaValueType>> v,
+        Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         boolean _log_changes)
     {
         super(new HashMap<KeyType,RalphObject<ValueType,DeltaValueType>>(v));
+
+        key_type_class = _key_type_class;
+        value_type_class = _value_type_class;
         
         if (_log_changes)
         {
@@ -49,12 +56,13 @@ public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
         
         log_changes = _log_changes;
     }
-	
+
     public MapTypeDataWrapper(
         MapTypeDataWrapper<KeyType,ValueType,DeltaValueType> v,
+        Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         boolean _log_changes)
     {
-        this(v.val,_log_changes);
+        this(v.val,_key_type_class,_value_type_class,_log_changes);
     }
 
     /**

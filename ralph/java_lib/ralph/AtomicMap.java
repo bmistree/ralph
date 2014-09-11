@@ -39,20 +39,26 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     private NonAtomicInternalMap.IndexType index_type = null;
     private EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper = null;
     
+    private final Class<KeyType> key_type_class;
+    private final Class<ValueType> value_type_class;
+    
     public AtomicMap(
         boolean _log_changes,
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
         this(
             _log_changes,
             new AtomicInternalMap<KeyType,ValueType,ValueDeltaType>(ralph_globals),
-            index_type,locked_wrapper,version_helper,ralph_globals);
+            index_type,locked_wrapper,version_helper,_key_type_class,
+            _value_type_class,ralph_globals);
         this.val.val.init_multithreaded_map_container(
             _log_changes,
-            new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(),
+            new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
+                _key_type_class,_value_type_class),
             new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
             index_type,
             locked_wrapper);
@@ -69,12 +75,15 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap.IndexType index_type,        
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>> version_helper,
+        Class<KeyType> key_type_class,Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
         super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
-
+        this.key_type_class = key_type_class;
+        this.value_type_class = value_type_class;
+        
         init_atomic_value_variable(
             _log_changes, internal_val,
             new ValueTypeDataWrapperFactory<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
@@ -101,6 +110,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
                 index_type,
                 locked_wrapper,
                 version_helper,
+                key_type_class,value_type_class,
                 ralph_globals);
 
         
