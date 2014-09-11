@@ -592,13 +592,19 @@
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
-        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps">
+        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
+        jar_VersionedSetterGetter">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
   <target
       name="ralph_BasicSetterGetter"
+      depends="iface_basic_ralph,basic_ralph">
+  </target>
+
+  <target
+      name="ralph_VersionedSetterGetter"
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
@@ -988,6 +994,12 @@
     </antcall>
   </target>
 
+  <target name="harness_VersionedSetterGetter">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedSetterGetter.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_ReadOnlySpeculate">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReadOnlySpeculate.java"/>
@@ -1405,6 +1417,18 @@
     </antcall>
   </target>
 
+  <property
+      name="versioned_setter_getter_jar"
+      value="versioned_setter_getter.jar"/>
+  <target
+      name="jar_VersionedSetterGetter"
+      depends="ralph_VersionedSetterGetter,ralph_to_byte_code,harness_VersionedSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedSetterGetter"/>
+      <param name="dest_jar" value="${versioned_setter_getter_jar}"/>
+    </antcall>
+  </target>
+  
   <property
       name="version_querier_jar"
       value="version_querier.jar"/>
