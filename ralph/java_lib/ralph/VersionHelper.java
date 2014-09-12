@@ -8,8 +8,8 @@ import RalphVersions.ILocalDeltaSerializer;
  */
 public class VersionHelper<DataType> implements Versionable<DataType>
 {
-    private final RalphGlobals ralph_globals;
-    private final ILocalDeltaSerializer<DataType> serializer;
+    protected final RalphGlobals ralph_globals;
+    protected final ILocalDeltaSerializer<DataType> serializer;
 
     public VersionHelper(
         RalphGlobals _ralph_globals,

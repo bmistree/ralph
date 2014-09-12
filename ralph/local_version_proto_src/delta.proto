@@ -1,0 +1,43 @@
+option java_package = "ralph_local_version_protobuffs";
+option java_outer_classname = "DeltaProto";
+
+message Delta
+{
+    enum ContainerOpType
+    {
+        DELETE = 0;
+        ADD = 1;
+        WRITE = 2;
+        CLEAR = 3;
+    }
+    
+    message ContainerDelta
+    {
+        required ContainerOpType op_type = 1;
+        // note that for lists, keys can only be numbers
+        required ValueType key = 2;
+        // only necessary if added or wrote a field
+        optional ReferenceType what_added_or_written = 3;
+    }
+
+    message ValueType
+    {
+        // value types for serialization.
+        optional double num = 1;
+        optional string text = 2;
+        optional bool tf = 3;
+    }
+
+    message ReferenceType
+    {
+        // nothing inside means that we should set reference to null.
+        optional string reference = 1;
+    }
+    
+
+    optional ValueType value = 1;
+    optional ReferenceType reference = 2;
+    // repeated because may transactionally perform multiple
+    // operations on same container.
+    repeated ContainerDelta container_delta = 3;
+}

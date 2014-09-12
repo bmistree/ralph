@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import ralph.Util;
 import ralph.IReference;
 
-import ralph_local_version_protobuffs.ObjectProto.Object;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
 
 
 public class SerializableToByteArray
@@ -32,11 +32,13 @@ public class SerializableToByteArray
         public byte[] serialize(IReference to_serialize)
         {
             String uuid = to_serialize.uuid();
-            if (uuid == null)
-                uuid = "null";
+            Delta.ReferenceType.Builder reference =
+                Delta.ReferenceType.newBuilder();
+            if (uuid != null)
+                reference.setReference(uuid);
 
-            Object.Builder proto_buff = Object.newBuilder();
-            proto_buff.setReference(uuid);
+            Delta.Builder proto_buff = Delta.newBuilder();
+            proto_buff.setReference(reference);
             return proto_buff.build().toByteArray();
         }
     }
@@ -47,8 +49,11 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(Double to_serialize)
         {
-            Object.Builder proto_buff = Object.newBuilder();
-            proto_buff.setNum(to_serialize.doubleValue());
+            Delta.ValueType.Builder value =
+                Delta.ValueType.newBuilder();
+            value.setNum(to_serialize.doubleValue());
+            Delta.Builder proto_buff = Delta.newBuilder();
+            proto_buff.setValue(value);
             return proto_buff.build().toByteArray();
         }
     }
@@ -59,8 +64,11 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(String to_serialize)
         {
-            Object.Builder proto_buff = Object.newBuilder();
-            proto_buff.setText(to_serialize);
+            Delta.ValueType.Builder value =
+                Delta.ValueType.newBuilder();
+            value.setText(to_serialize);
+            Delta.Builder proto_buff = Delta.newBuilder();
+            proto_buff.setValue(value);
             return proto_buff.build().toByteArray();
         }
     }
@@ -71,8 +79,11 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(Boolean to_serialize)
         {
-            Object.Builder proto_buff = Object.newBuilder();
-            proto_buff.setTf(to_serialize.booleanValue());
+            Delta.ValueType.Builder value =
+                Delta.ValueType.newBuilder();
+            value.setTf(to_serialize.booleanValue());
+            Delta.Builder proto_buff = Delta.newBuilder();
+            proto_buff.setValue(value);
             return proto_buff.build().toByteArray();
         }
     }
