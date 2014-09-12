@@ -74,7 +74,7 @@ public abstract class ActiveEvent
        must have a non-null commit_metadata object.  This method
        rebuilds commit_metadata object for commit to tvar.
      */
-    public final void update_commit_metadata()
+    public void update_commit_metadata()
     {
         long local_timestamp =
             ralph_globals.clock.get_and_increment_int_timestamp();

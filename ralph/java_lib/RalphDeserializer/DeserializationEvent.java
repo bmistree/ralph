@@ -19,7 +19,7 @@ import ralph.Endpoint;
 import ralph.ExecutingEventContext;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
-
+import ralph.CommitMetadata;
 
 public class DeserializationEvent extends ActiveEvent
 {
@@ -79,6 +79,21 @@ public class DeserializationEvent extends ActiveEvent
     {
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
+
+    @Override
+    public void update_commit_metadata()
+    {
+        long local_timestamp =
+            ralph_globals.clock.get_and_increment_int_timestamp();
+        String root_host_uuid = ralph_globals.host_uuid;
+        String root_application_uuid = "deserialization";
+        String root_event_name = "deserialization";
+
+        commit_metadata =
+            new CommitMetadata(
+                local_timestamp,root_application_uuid,root_event_name,uuid);
+    }
+
     
     public void second_phase_commit()
     {}
