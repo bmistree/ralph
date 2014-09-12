@@ -5,6 +5,10 @@ import static RalphVersions.ObjectToDelta.STRING_SERIALIZER;
 import static RalphVersions.ObjectToDelta.BOOLEAN_SERIALIZER;
 import static RalphVersions.ObjectToDelta.REFERENCE_SERIALIZER;
 
+import static RalphVersions.MapDeltasToDelta.DOUBLE_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.MapDeltasToDelta.STRING_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.MapDeltasToDelta.BOOLEAN_KEYED_MAP_DELTA_SERIALIZER;
+
 public class BaseTypeVersionHelpers
 {
     public final VersionHelper<Double> DOUBLE_VERSION_HELPER;
@@ -12,6 +16,13 @@ public class BaseTypeVersionHelpers
     public final VersionHelper<Boolean> BOOLEAN_VERSION_HELPER;
     public final VersionHelper<IReference> REFERENCE_VERSION_HELPER;
 
+    public final InternalMapTypeVersionHelper<Double>
+        DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+    public final InternalMapTypeVersionHelper<String>
+        STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+    public final InternalMapTypeVersionHelper<Boolean>
+        BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+    
     /**
        For now, just setting map, list, enum, and service factory
        version helpers to null.
@@ -38,5 +49,17 @@ public class BaseTypeVersionHelpers
         REFERENCE_VERSION_HELPER =
             new VersionHelper<IReference> (
                 ralph_globals, REFERENCE_SERIALIZER);
+
+        DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
+            new InternalMapTypeVersionHelper<Double>(
+                ralph_globals, DOUBLE_KEYED_MAP_DELTA_SERIALIZER);
+        
+        STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
+            new InternalMapTypeVersionHelper<String>(
+                ralph_globals, STRING_KEYED_MAP_DELTA_SERIALIZER);
+
+        BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
+            new InternalMapTypeVersionHelper<Boolean>(
+                ralph_globals, BOOLEAN_KEYED_MAP_DELTA_SERIALIZER);
     }
 }

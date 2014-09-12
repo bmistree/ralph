@@ -5,9 +5,9 @@ import java.util.List;
 import RalphDataWrappers.ContainerOpTuple;
 
 /**
-   FIXME: must fill this class in.  Class just tracks series of
-   operations on an individual map.  Gets eventually passed to a
-   VersionHelper that logs all version map changes.
+   Class just tracks series of operations on an individual map.  Gets
+   eventually passed to a VersionHelper that logs all version map
+   changes.
  */
 public class VersionMapDeltas<KeyType,ValueType,ValueDeltaType>
 {
