@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import ralph.Util;
 import ralph.IReference;
 
+
+
 public class SerializableToByteArray
 {
     public final static SingletonSerializer SERIALIZER =
