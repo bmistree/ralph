@@ -38,10 +38,12 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     // and deserializing data.
     public IndexType index_type;
     
-    public NonAtomicInternalMap(RalphGlobals ralph_globals)
+    public NonAtomicInternalMap(
+        RalphGlobals ralph_globals,
+        VersionHelper<VersionMapDeltas> internal_version_helper)
     {
         super(ralph_globals);
-        version_helper = VersionMapDeltas.MAP_VERSION_HELPER;
+        version_helper = internal_version_helper;
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
     }
     public void init(

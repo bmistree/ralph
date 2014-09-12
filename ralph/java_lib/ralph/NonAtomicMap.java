@@ -46,12 +46,14 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
+        InternalMapTypeVersionHelper<KeyType> internal_version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
         
         this(
-            new NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>(ralph_globals),
+            new NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
+                ralph_globals,internal_version_helper),
             index_type,locked_wrapper,version_helper,_key_type_class,
             _value_type_class,ralph_globals);
 

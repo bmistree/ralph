@@ -11,15 +11,6 @@ import RalphDataWrappers.ContainerOpTuple;
  */
 public class VersionMapDeltas<KeyType,ValueType,ValueDeltaType>
 {
-    public final static VersionHelper MAP_VERSION_HELPER = null;
-
-    public final static
-        VersionHelper<AtomicInternalMap> ATOMIC_INTERNAL_MAP_VERSION_HELPER =
-            null;
-    public final static
-        VersionHelper<NonAtomicInternalMap> NON_ATOMIC_INTERNAL_MAP_VERSION_HELPER =
-            null;
-
     // immutable list
     public final List<ContainerOpTuple<KeyType,ValueType,ValueDeltaType>> deltas;
     public VersionMapDeltas(
