@@ -738,6 +738,7 @@ public class Variables
             NonAtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            InternalMapTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {

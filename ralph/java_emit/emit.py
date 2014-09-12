@@ -806,12 +806,24 @@ try
             value_type = argument_type.to_type_node.type
             key_type_class = class_from_element_type(key_type)
             value_type_class = class_from_element_type(value_type)
+
+            internal_map_version_helper = (
+                internal_map_version_helper_from_map_type(argument_type))
             
-            new_ralph_variable = (
-                'new %s (false,%s,%s.index_type,%s.locked_wrapper,%s,%s,ralph_globals)'
-                %
-                (java_type_statement,argument_name,argument_name,argument_name,
-                 key_type_class,value_type_class))
+            new_ralph_variable = '''
+new %(java_type_statement)s (
+    false,
+    %(argument_name)s,
+    %(argument_name)s.index_type,
+    %(argument_name)s.locked_wrapper,
+    %(internal_map_version_helper)s,
+    %(key_type_class)s,
+    %(value_type_class)s,ralph_globals)
+''' % { 'java_type_statement': java_type_statement,
+        'argument_name': argument_name,
+        'key_type_class': key_type_class,
+        'value_type_class': value_type_class,
+        'internal_map_version_helper': internal_map_version_helper}
             
         elif isinstance(argument_type,ListType):
             element_type = argument_type.element_type_node.type
@@ -982,7 +994,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         return 'new %s (false,%s,ralph_globals)' % (java_type_text,initializer_text)
     elif isinstance(type_object,MapType):
         java_type_text = emit_ralph_wrapped_type(type_object)
-        
+
         # FIXME: currently, disallowing initializing maps
         if initializer_node is not None:
             if initializer_node.label != NULL_TYPE:
@@ -994,7 +1006,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         index_basic_type = type_object.from_type_node.type.basic_type
         if index_basic_type == NUMBER_TYPE:
             java_map_index_type_text = (
-                'NonAtomicInternalMap.IndexType.DOUBLE')            
+                'NonAtomicInternalMap.IndexType.DOUBLE')
         elif index_basic_type == STRING_TYPE:
             java_map_index_type_text = (
                 'NonAtomicInternalMap.IndexType.STRING')
@@ -1007,6 +1019,9 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                 'Unknown',0,
                 'Map only accepts value types for indices')
         #### END DEBUG
+
+        internal_map_version_helper = (
+            internal_map_version_helper_from_map_type(type_object))
         
         # require EnsureAtomicWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
@@ -1019,13 +1034,27 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
         internal_val_txt = ''
         if initializer_node is not None:
-            # internal val should be null
+            # internal val should be null. note comma at end of
+            # statement means that we do not include comma in
+            # initializer.
             internal_val_txt = 'null,'
 
-        to_return = (
-            'new %s(false,%s%s,%s,%s,%s,ralph_globals)' %
-            (java_type_text,internal_val_txt,java_map_index_type_text,
-             value_type_wrapper,key_type_class,value_type_class))
+        to_return = '''
+new %(java_type_text)s  (
+    false,
+    %(internal_val_text)s  
+    %(java_map_index_type_text)s,
+    %(value_type_wrapper)s,
+    %(internal_map_version_helper)s,
+    %(key_type_class)s,
+    %(value_type_class)s,ralph_globals)
+''' % { 'java_type_text': java_type_text,
+        'internal_val_text': internal_val_txt,
+        'java_map_index_type_text': java_map_index_type_text,
+        'value_type_wrapper': value_type_wrapper,
+        'key_type_class': key_type_class,
+        'value_type_class': value_type_class,
+        'internal_map_version_helper': internal_map_version_helper}
         
         return to_return
 
@@ -1128,6 +1157,37 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             'Can only construct new expression from basic, map, or struct type')
     #### END DEBUG    
 
+
+def internal_map_version_helper_from_map_type(map_type):
+    '''
+    @param {TypeObject} map_type --- Type of map.
+    
+    @returns{string} --- internal version helper associated with
+    internal map with given index type.
+    '''
+    index_basic_type = map_type.from_type_node.type.basic_type
+    if index_basic_type == NUMBER_TYPE:
+        internal_map_version_helper = (
+            'ralph.BaseTypeVersionHelpers.' +
+            'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')
+    elif index_basic_type == STRING_TYPE:
+        internal_map_version_helper = (
+            'ralph.BaseTypeVersionHelpers.' +
+            'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')
+    elif index_basic_type == BOOL_TYPE:
+        internal_map_version_helper = (
+            'ralph.BaseTypeVersionHelpers.' +
+            'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')
+    #### DEBUG
+    else:
+        raise InternalEmitException(
+            'Unknown',0,
+            'Map only accepts value types for indices')
+    #### END DEBUG
+
+    return internal_map_version_helper
+
+    
 def class_from_element_type(element_type):
     '''
     @param {TypeObject} element_type
@@ -2297,21 +2357,28 @@ def emit_struct_map_deserializer(struct_type):
     key_tuples = (
         ('Double',
          'BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL',
-         'NonAtomicInternalMap.IndexType.DOUBLE'),
+         'NonAtomicInternalMap.IndexType.DOUBLE',
+         'ralph.BaseTypeVersionHelpers.' +
+            'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'),
         
         ('String',
          'BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL',
-         'NonAtomicInternalMap.IndexType.STRING'),
+         'NonAtomicInternalMap.IndexType.STRING',
+         'ralph.BaseTypeVersionHelpers.' +
+           'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'),
         
         ('Boolean',
          'BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL',
-         'NonAtomicInternalMap.IndexType.BOOLEAN'))
+         'NonAtomicInternalMap.IndexType.BOOLEAN',
+         'ralph.BaseTypeVersionHelpers.' +
+           'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'))
     
     for constructor_text in ('AtomMapDeserializer','NonAtomMapDeserializer'):
         for key_tuple in key_tuples:
             java_key_type_text = key_tuple[0]
             key_label_text = key_tuple[1]
             index_type_text = key_tuple[2]
+            version_helper_text = key_tuple[3]
             
             # needs to be unique across struct names and
             # atom/non-atom, and key types
@@ -2326,11 +2393,15 @@ def emit_struct_map_deserializer(struct_type):
             to_return += '''
     private final static {type_text} {var_name} =
         new {type_text} ({key_label}, "{value_label}", {wrapper},
-                         {index_type}, {index_type_class}, {value_type_class});
-    '''.format(type_text=type_text,var_name = var_name,
-               key_label=key_label_text,value_label=struct_name,
+                         {index_type}, {version_helper_text}, {index_type_class},
+                         {value_type_class});
+    '''.format(type_text=type_text,
+               var_name = var_name,
+               key_label=key_label_text,
+               value_label=struct_name,
                index_type=index_type_text,
                wrapper=struct_locked_wrapper_name,
+               version_helper_text=version_helper_text,
                index_type_class = java_key_type_text + '.class',
                value_type_class = internal_struct_name + '.class')
 
