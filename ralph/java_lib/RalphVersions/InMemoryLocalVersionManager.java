@@ -14,6 +14,8 @@ import java.util.SortedSet;
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 
+import ralph_local_version_protobuffs.DeltaProto.Delta;
+
 public class InMemoryLocalVersionManager implements ILocalVersionManager
 {
     // key is the event_uuid held by CommitMetadata
@@ -40,7 +42,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
 
     @Override
     synchronized public void save_version_data(
-        String object_uuid, byte[] delta, CommitMetadata commit_metadata)
+        String object_uuid, Delta delta, CommitMetadata commit_metadata)
     {
         if (! object_history_map.containsKey(object_uuid))
         {
@@ -141,7 +143,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         }
         
         public void add_delta (
-            long root_lamport_time, byte[] delta, String commit_metadata_event_uuid)
+            long root_lamport_time, Delta delta, String commit_metadata_event_uuid)
         {
             history.add(
                 new SingleObjectChange(
@@ -152,15 +154,15 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         private class SingleObjectChange
         {
             public final long root_lamport_time;
-            public final byte[] byte_delta;
+            public final Delta delta;
             public final String commit_metadata_event_uuid;
 
             public SingleObjectChange(
-                long root_lamport_time, byte[] byte_delta,
+                long root_lamport_time, Delta delta,
                 String commit_metadata_event_uuid)
             {
                 this.root_lamport_time = root_lamport_time;
-                this.byte_delta = byte_delta;
+                this.delta = delta;
                 this.commit_metadata_event_uuid = commit_metadata_event_uuid;
             }
         }

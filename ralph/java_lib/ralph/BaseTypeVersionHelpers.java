@@ -1,9 +1,9 @@
 package ralph;
 
-import static RalphVersions.SerializableToByteArray.DOUBLE_SERIALIZER;
-import static RalphVersions.SerializableToByteArray.STRING_SERIALIZER;
-import static RalphVersions.SerializableToByteArray.BOOLEAN_SERIALIZER;
-import static RalphVersions.SerializableToByteArray.REFERENCE_SERIALIZER;
+import static RalphVersions.ObjectToDelta.DOUBLE_SERIALIZER;
+import static RalphVersions.ObjectToDelta.STRING_SERIALIZER;
+import static RalphVersions.ObjectToDelta.BOOLEAN_SERIALIZER;
+import static RalphVersions.ObjectToDelta.REFERENCE_SERIALIZER;
 
 public class BaseTypeVersionHelpers
 {

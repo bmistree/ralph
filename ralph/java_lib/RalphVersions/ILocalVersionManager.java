@@ -3,6 +3,8 @@ package RalphVersions;
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 
+import ralph_local_version_protobuffs.DeltaProto.Delta;
+
 public interface ILocalVersionManager
 {
     /**
@@ -23,7 +25,7 @@ public interface ILocalVersionManager
        @param commit_metadata --- See note above save_commit_metadata.
      */
     public void save_version_data(
-        String object_uuid, byte[] delta, CommitMetadata commit_metadata);
+        String object_uuid, Delta delta, CommitMetadata commit_metadata);
 
     /**
        Want to explicitly preserve mapping between endpoint variable
