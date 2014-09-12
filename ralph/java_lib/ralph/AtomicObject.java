@@ -1062,7 +1062,8 @@ public abstract class AtomicObject<T,DeltaType>
         {
             // nonatomics only operate for a single get or set and do not
             // backout their changes.
-            active_event.update_commit_metadata();
+            if (active_event != null)
+                active_event.update_commit_metadata();
             complete_commit(active_event);
         }
     }

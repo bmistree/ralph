@@ -111,7 +111,8 @@ public class AtomicInternalList<V,ValueDeltaType>
             // it's fine to presuppose this commit without backout because
             // we've defined non-atomic events to never backout of their
             // currrent commits.
-            active_event.update_commit_metadata();
+            if (active_event != null)
+                active_event.update_commit_metadata();
             complete_commit(active_event);
         }
     }
