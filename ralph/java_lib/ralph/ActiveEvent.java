@@ -68,6 +68,24 @@ public abstract class ActiveEvent
         return ralph_globals;
     }
     
+    /**
+       NonatomicActive events that immediately commit their changes to
+       a tvar-d object must log their version change.  To do so, they
+       must have a non-null commit_metadata object.  This method
+       rebuilds commit_metadata object for commit to tvar.
+     */
+    public final void update_commit_metadata()
+    {
+        long local_timestamp =
+            ralph_globals.clock.get_and_increment_int_timestamp();
+        String root_host_uuid = ralph_globals.host_uuid;
+        String root_application_uuid = event_parent.local_endpoint._uuid;
+        String root_event_name = event_parent.event_entry_point_name;
+
+        commit_metadata =
+            new CommitMetadata(
+                local_timestamp,root_application_uuid,root_event_name,uuid);
+    }
     
     /**
        When we enter an atomic block from a non-atomic block, we
