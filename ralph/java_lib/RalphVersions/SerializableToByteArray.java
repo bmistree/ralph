@@ -7,13 +7,11 @@ import java.io.ObjectOutputStream;
 import ralph.Util;
 import ralph.IReference;
 
+import ralph_local_version_protobuffs.ObjectProto.Object;
 
 
 public class SerializableToByteArray
 {
-    public final static SingletonSerializer SERIALIZER =
-        new SingletonSerializer();
-
     public final static SingletonDoubleSerializer DOUBLE_SERIALIZER =
         new SingletonDoubleSerializer();
 
@@ -36,7 +34,10 @@ public class SerializableToByteArray
             String uuid = to_serialize.uuid();
             if (uuid == null)
                 uuid = "null";
-            return STRING_SERIALIZER.serialize(uuid);
+
+            Object.Builder proto_buff = Object.newBuilder();
+            proto_buff.setReference(uuid);
+            return proto_buff.build().toByteArray();
         }
     }
         
@@ -46,7 +47,9 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(Double to_serialize)
         {
-            return SERIALIZER.serialize(to_serialize);
+            Object.Builder proto_buff = Object.newBuilder();
+            proto_buff.setNum(to_serialize.doubleValue());
+            return proto_buff.build().toByteArray();
         }
     }
                                                    
@@ -56,7 +59,9 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(String to_serialize)
         {
-            return SERIALIZER.serialize(to_serialize);
+            Object.Builder proto_buff = Object.newBuilder();
+            proto_buff.setText(to_serialize);
+            return proto_buff.build().toByteArray();
         }
     }
 
@@ -66,30 +71,9 @@ public class SerializableToByteArray
         @Override
         public byte[] serialize(Boolean to_serialize)
         {
-            return SERIALIZER.serialize(to_serialize);
-        }
-    }
-    
-    private static class SingletonSerializer
-        implements ILocalDeltaSerializer<Serializable>
-    {
-        @Override
-        public byte[] serialize(Serializable to_serialize)
-        {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream out = null;
-            try
-            {
-                out = new ObjectOutputStream(bos);   
-                out.writeObject(to_serialize);
-                return bos.toByteArray();
-            }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-                Util.logger_assert("Exception while serializing object");
-            }
-            return null;
+            Object.Builder proto_buff = Object.newBuilder();
+            proto_buff.setTf(to_serialize.booleanValue());
+            return proto_buff.build().toByteArray();
         }
     }
 }
