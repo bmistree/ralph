@@ -33,13 +33,13 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         new HashMap<String,InMemoryEndpointInitializationHistory>();
 
     @Override
-    public void save_commit_metadata(CommitMetadata commit_metadata)
+    synchronized public void save_commit_metadata(CommitMetadata commit_metadata)
     {
         commit_metadata_map.put(commit_metadata.event_uuid,commit_metadata);
     }
 
     @Override
-    public void save_version_data(
+    synchronized public void save_version_data(
         String object_uuid, byte[] delta, CommitMetadata commit_metadata)
     {
         if (! object_history_map.containsKey(object_uuid))
@@ -56,7 +56,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     }
 
     @Override
-    public void save_endpoint_global_mapping(
+    synchronized public void save_endpoint_global_mapping(
         String variable_name, String object_uuid,String endpoint_uuid,
         String endpoint_constructor_class_name,long local_lamport_time)
     {
@@ -75,7 +75,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     }
 
     @Override
-    public void save_endpoint_constructor_obj(
+    synchronized public void save_endpoint_constructor_obj(
         EndpointConstructorObj endpoint_constructor_obj)
     {
         endpoint_constructor_map.put(
