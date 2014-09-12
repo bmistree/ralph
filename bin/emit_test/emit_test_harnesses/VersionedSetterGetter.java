@@ -4,7 +4,7 @@ import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
-
+import ralph.VersioningInfo;
 import RalphVersions.InMemoryLocalVersionManager;
 
 /**
@@ -27,7 +27,8 @@ public class VersionedSetterGetter
         try
         {
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
-            parameters.local_version_manager = new InMemoryLocalVersionManager();
+            VersioningInfo.instance.local_version_manager =
+                new InMemoryLocalVersionManager();
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
             ISetterGetter endpt = new SetterGetter(

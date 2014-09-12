@@ -12,6 +12,9 @@ public class LamportClock
         all_endpoints = _all_endpoints;
     }
 
+    public LamportClock()
+    {}
+
     /**
      @returns {str} --- Fixed width string time since epoch as
      float in seconds.  First ten digits are seconds.  Then the six

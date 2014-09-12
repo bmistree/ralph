@@ -73,7 +73,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     {
         RalphGlobals ralph_globals = active_event.get_ralph_globals();
         // do not do anything
-        if (ralph_globals.local_version_manager == null)
+        if (VersioningInfo.instance.local_version_manager == null)
             return;
 
         MapTypeDataWrapper<K,V,ValueDeltaType> map_dirty_val =

@@ -5,11 +5,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import RalphVersions.ILocalVersionManager;
-
 import RalphServiceConnectionListener.ConnectionListener;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
+
+/**
+   Have a sort of tortured approach to RalphGlobals.  RalphGlobals is
+   supposed to be a singleton.  However, a lot of the testing code
+   relies on being able to run both sides of a connection in a single
+   process.  Therefore, even though we primarily use RalphGlobals as a
+   singleton, we also pass it through as an argument to a bunch of
+   objects.  Should eventually change test code.
+ */
 
 public class RalphGlobals implements IUUIDGenerator
 {
@@ -25,9 +32,6 @@ public class RalphGlobals implements IUUIDGenerator
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
-
-        // null means that we should not perform any logging.
-        public ILocalVersionManager local_version_manager = null;
     }
 
     /**
@@ -56,9 +60,6 @@ public class RalphGlobals implements IUUIDGenerator
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
-    public final ILocalVersionManager local_version_manager;
-    public final BaseTypeVersionHelpers base_type_version_helpers;
-    
     
     public RalphGlobals()
     {
@@ -67,7 +68,6 @@ public class RalphGlobals implements IUUIDGenerator
     
     public RalphGlobals(Parameters params)
     {
-        local_version_manager = params.local_version_manager;
         ip_addr_to_listen_for_connections_on =
             params.ip_addr_to_listen_for_connections_on;
         tcp_port_to_listen_for_connections_on =
@@ -84,8 +84,6 @@ public class RalphGlobals implements IUUIDGenerator
         // accidentally use local_atom_int generator, will get
         // collisions with other hosts.
         host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
-
-        base_type_version_helpers = new BaseTypeVersionHelpers(this);
     }
 
     @Override

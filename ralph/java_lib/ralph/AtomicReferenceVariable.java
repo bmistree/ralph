@@ -23,7 +23,7 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     {
         RalphGlobals ralph_globals = active_event.ralph_globals;
         // do not do anything
-        if ((ralph_globals.local_version_manager == null) ||
+        if ((VersioningInfo.instance.local_version_manager == null) ||
             (version_helper == null))
         {
             return;

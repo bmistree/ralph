@@ -250,13 +250,13 @@ public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj)
 {
     super(ralph_globals,conn_obj,factory);
 
-    if (ralph_globals.local_version_manager != null)
+    if (VersioningInfo.instance.local_version_manager != null)
     {
         long local_lamport_time =
             ralph_globals.clock.get_and_increment_int_timestamp();
         // map names of endpoint variables to their local values.
         ILocalVersionManager local_version_manager =
-            ralph_globals.local_version_manager;
+            VersioningInfo.instance.local_version_manager;
         %(version_mapping_text)s
     }
 }

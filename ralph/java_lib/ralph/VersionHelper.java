@@ -1,6 +1,7 @@
 package ralph;
 
 import RalphVersions.ILocalDeltaSerializer;
+import RalphVersions.ILocalVersionManager;
 
 /**
    Each basic type should have a static VersionHelper that it shares.
@@ -8,34 +9,39 @@ import RalphVersions.ILocalDeltaSerializer;
  */
 public class VersionHelper<DataType> implements Versionable<DataType>
 {
-    protected final RalphGlobals ralph_globals;
     protected final ILocalDeltaSerializer<DataType> serializer;
-
     public VersionHelper(
-        RalphGlobals _ralph_globals,
         ILocalDeltaSerializer<DataType> _serializer)
     {
-        ralph_globals = _ralph_globals;
         serializer = _serializer;
     }
 
     public void save_version(
         String uuid, DataType to_version,CommitMetadata commit_metadata)
     {
+        // perform this call dynamically so that can dynamically turn
+        // versioning off and on.
+        ILocalVersionManager local_version_manager =
+            VersioningInfo.instance.local_version_manager;
         // not performing any local versioning
-        if (ralph_globals.local_version_manager == null)
+        if (local_version_manager == null)
             return;
-        
-        ralph_globals.local_version_manager.save_version_data(
+
+        local_version_manager.save_version_data(
             uuid,serializer.serialize(to_version),commit_metadata);
     }
     
     public void close_version(String uuid)
     {
+        // perform this call dynamically so that can dynamically turn
+        // versioning off and on.
+        ILocalVersionManager local_version_manager =
+            VersioningInfo.instance.local_version_manager;
+        
         // not performing any local versioning
-        if (ralph_globals.local_version_manager == null)
+        if (local_version_manager == null)
             return;
 
-        ralph_globals.local_version_manager.close_versioned_object(uuid);
+        local_version_manager.close_versioned_object(uuid);
     }
 }

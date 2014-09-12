@@ -16,6 +16,16 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceFactoryTypeDataWrapperFactory;
 import RalphDataWrappers.ServiceReferenceTypeDataWrapperFactory;
 
+import static ralph.BaseTypeVersionHelpers.DOUBLE_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.STRING_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.BOOLEAN_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.REFERENCE_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.INTERFACE_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.LIST_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.MAP_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
 public class Variables
 {
@@ -60,8 +70,7 @@ public class Variables
                 _log_changes,
                 new Double(((Number) init_val).doubleValue()),
                 number_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
-                ralph_globals);
+                DOUBLE_VERSION_HELPER,ralph_globals);
         }
         
         @Override
@@ -80,8 +89,7 @@ public class Variables
         {
             super(
                 _log_changes,default_number,
-                number_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
+                number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
         
@@ -112,8 +120,7 @@ public class Variables
         {
             super(
                 _log_changes,(String)init_val,
-                text_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicTextVariable(
@@ -121,8 +128,7 @@ public class Variables
         {
             super(
                 _log_changes,default_text,
-                text_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
         @Override
@@ -164,8 +170,7 @@ public class Variables
         {
             super(
                 _log_changes,(Boolean)init_val,
-                true_false_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicTrueFalseVariable(
@@ -173,8 +178,7 @@ public class Variables
         {
             super(
                 _log_changes,default_tf,
-                true_false_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
         @Override
@@ -216,8 +220,7 @@ public class Variables
         {
             super(
                 _log_changes,init_val,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicEnumVariable(
@@ -225,8 +228,7 @@ public class Variables
         {
             super(
                 _log_changes,null,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -261,8 +263,7 @@ public class Variables
         {
             super(
                 _log_changes,init_val,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
         public AtomicInterfaceVariable(
@@ -270,8 +271,7 @@ public class Variables
         {
             super(
                 _log_changes,null,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -305,8 +305,7 @@ public class Variables
             super(
                 _log_changes,(InternalServiceFactory)init_val,
                 service_factory_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
         public AtomicServiceFactoryVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
@@ -314,8 +313,7 @@ public class Variables
             super(
                 _log_changes,default_service_factory,
                 service_factory_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
 
         @Override
@@ -382,8 +380,7 @@ public class Variables
             super(
                 _log_changes,(InternalServiceReference)init_val,
                 service_reference_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
         public AtomicServiceReferenceVariable(
             boolean _log_changes,RalphGlobals ralph_globals)
@@ -391,8 +388,7 @@ public class Variables
             super(
                 _log_changes,default_service_reference,
                 service_reference_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
 
         @Override
@@ -458,8 +454,7 @@ public class Variables
         {
             super(
                 init_val,
-                number_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
+                number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -468,8 +463,7 @@ public class Variables
         {
             super(
                 default_number,
-                number_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.DOUBLE_VERSION_HELPER,
+                number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
         @Override
@@ -500,8 +494,7 @@ public class Variables
         {
             super(
                 init_val,
-                text_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
 		
@@ -510,8 +503,7 @@ public class Variables
         {
             super(
                 default_text,
-                text_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.STRING_VERSION_HELPER,
+                text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
         @Override
@@ -543,8 +535,7 @@ public class Variables
         {
             super(
                 init_val,
-                true_false_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -553,8 +544,7 @@ public class Variables
         {
             super(
                 default_tf,
-                true_false_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.BOOLEAN_VERSION_HELPER,
+                true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -586,8 +576,7 @@ public class Variables
         {
             super(
                 init_val,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -595,8 +584,7 @@ public class Variables
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
             super(
-                null,new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.ENUM_VERSION_HELPER,
+                null,new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -620,8 +608,7 @@ public class Variables
         {
             super(
                 init_val,
-                new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
 
@@ -630,8 +617,7 @@ public class Variables
         {
             super(
                 null,new ValueTypeDataWrapperFactory<T>(),
-                ralph_globals.base_type_version_helpers.INTERFACE_VERSION_HELPER,
-                ralph_globals);
+                INTERFACE_VERSION_HELPER, ralph_globals);
         }
 
         public void serialize_as_rpc_arg(
@@ -654,8 +640,7 @@ public class Variables
             super(
                 init_val,
                 service_factory_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
         public NonAtomicServiceFactoryVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
@@ -663,8 +648,7 @@ public class Variables
             super(
                 default_service_factory,
                 service_factory_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_FACTORY_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
 
         @Override
@@ -698,8 +682,7 @@ public class Variables
             super(
                 init_val,
                 service_reference_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
         public NonAtomicServiceReferenceVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
@@ -707,8 +690,7 @@ public class Variables
             super(
                 default_service_reference,
                 service_reference_value_type_data_wrapper_factory,
-                ralph_globals.base_type_version_helpers.SERVICE_REFERENCE_VERSION_HELPER,
-                ralph_globals);
+                SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
 
         @Override
@@ -745,8 +727,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
+                _index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
 
@@ -759,8 +740,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                internal_val,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
+                internal_val,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
     }
@@ -777,8 +757,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
+                _log_changes,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class, ralph_globals);
         }
 
@@ -792,8 +771,8 @@ public class Variables
         {
             super(
                 _log_changes,internal_val,_index_type,locked_wrapper,
-                ralph_globals.base_type_version_helpers.REFERENCE_VERSION_HELPER,
-                key_type_class,value_type_class, ralph_globals);
+                REFERENCE_VERSION_HELPER,key_type_class,value_type_class,
+                ralph_globals);
         }        
     }
     
@@ -808,8 +787,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,locked_wrapper,
-                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                _log_changes,locked_wrapper,LIST_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
 
@@ -822,8 +800,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,internal_val,locked_wrapper,
-                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                _log_changes,internal_val,locked_wrapper,LIST_VERSION_HELPER,
                 value_type_class, ralph_globals);
         }
     }
@@ -838,8 +815,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                locked_wrapper,
-                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                locked_wrapper,LIST_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
 
@@ -851,8 +827,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                internal_val,locked_wrapper,
-                ralph_globals.base_type_version_helpers.LIST_VERSION_HELPER,
+                internal_val,locked_wrapper,LIST_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
     }
