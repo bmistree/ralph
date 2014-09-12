@@ -49,11 +49,10 @@ public class ObjectToDelta
         @Override
         public Delta serialize(Double to_serialize)
         {
-            Delta.ValueType.Builder value =
-                Delta.ValueType.newBuilder();
-            value.setNum(to_serialize.doubleValue());
             Delta.Builder proto_buff = Delta.newBuilder();
-            proto_buff.setValue(value);
+            proto_buff.setValue(
+                ObjectToValueType.DOUBLE_SERIALIZER.serialize_value_type(
+                    to_serialize));
             return proto_buff.build();
         }
     }
@@ -64,11 +63,10 @@ public class ObjectToDelta
         @Override
         public Delta serialize(String to_serialize)
         {
-            Delta.ValueType.Builder value =
-                Delta.ValueType.newBuilder();
-            value.setText(to_serialize);
             Delta.Builder proto_buff = Delta.newBuilder();
-            proto_buff.setValue(value);
+            proto_buff.setValue(
+                ObjectToValueType.STRING_SERIALIZER.serialize_value_type(
+                    to_serialize));
             return proto_buff.build();
         }
     }
@@ -79,11 +77,10 @@ public class ObjectToDelta
         @Override
         public Delta serialize(Boolean to_serialize)
         {
-            Delta.ValueType.Builder value =
-                Delta.ValueType.newBuilder();
-            value.setTf(to_serialize.booleanValue());
             Delta.Builder proto_buff = Delta.newBuilder();
-            proto_buff.setValue(value);
+            proto_buff.setValue(
+                ObjectToValueType.BOOLEAN_SERIALIZER.serialize_value_type(
+                    to_serialize));
             return proto_buff.build();
         }
     }
