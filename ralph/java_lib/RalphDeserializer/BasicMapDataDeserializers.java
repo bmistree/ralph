@@ -19,6 +19,12 @@ import ralph.ActiveEvent;
 import static RalphDeserializer.Deserializer.dummy_deserialization_active_event;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
+import ralph.InternalMapTypeVersionHelper;
+
+import static ralph.BaseTypeVersionHelpers.DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+import static ralph.BaseTypeVersionHelpers.BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
+
 
 public class BasicMapDataDeserializers
 {
@@ -40,6 +46,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE,
+            DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Double.class,Double.class);
     private final static AtomMapDeserializer<Double,String> atom_num_text_map_constructor =
         new AtomMapDeserializer<Double,String>(
@@ -47,6 +54,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE,
+            DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Double.class,String.class);
     private final static AtomMapDeserializer<Double,Boolean> atom_num_tf_map_constructor =
         new AtomMapDeserializer<Double,Boolean>(
@@ -54,6 +62,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.DOUBLE,
+            DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Double.class,Boolean.class);
     // text indices
     private final static AtomMapDeserializer<String,Double> atom_text_num_map_constructor =
@@ -62,6 +71,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING,
+            STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             String.class,Double.class);
     private final static AtomMapDeserializer<String,String> atom_text_text_map_constructor =
         new AtomMapDeserializer<String,String>(
@@ -69,6 +79,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING,
+            STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             String.class,String.class);
     private final static AtomMapDeserializer<String,Boolean> atom_text_tf_map_constructor =
         new AtomMapDeserializer<String,Boolean>(
@@ -76,6 +87,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.STRING,
+            STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             String.class,Boolean.class);
     // tf indices
     private final static AtomMapDeserializer<Boolean,Double> atom_tf_num_map_constructor =
@@ -84,6 +96,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN,
+            BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Boolean.class,Double.class);
     private final static AtomMapDeserializer<Boolean,String> atom_tf_text_map_constructor =
         new AtomMapDeserializer<Boolean,String>(
@@ -91,6 +104,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN,
+            BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Boolean.class,String.class);
     private final static AtomMapDeserializer<Boolean,Boolean> atom_tf_tf_map_constructor =
         new AtomMapDeserializer<Boolean,Boolean>(
@@ -98,6 +112,7 @@ public class BasicMapDataDeserializers
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL,
             BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_WRAPPER,
             NonAtomicInternalMap.IndexType.BOOLEAN,
+            BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
             Boolean.class,Boolean.class);
     
 
@@ -179,13 +194,17 @@ public class BasicMapDataDeserializers
 
         private final Class<IndexType> index_type_class;
         private final Class<ValueType> value_type_class;
+        private final InternalMapTypeVersionHelper<IndexType>
+            internal_version_helper;
         
         public AtomMapDeserializer(
             String index_label,String value_label,EnsureAtomicWrapper _wrapper,
             NonAtomicInternalMap.IndexType _index_type,
+            InternalMapTypeVersionHelper<IndexType> internal_version_helper,
             Class<IndexType> index_type_class,
             Class<ValueType> value_type_class)
         {
+            this.internal_version_helper = internal_version_helper;
             this.index_type_class = index_type_class;
             this.value_type_class = value_type_class;
             
@@ -209,8 +228,8 @@ public class BasicMapDataDeserializers
             // populate each of its fields.
             AtomicMapVariable<IndexType,ValueType,ValueType> outer_map =
                 new AtomicMapVariable<IndexType,ValueType,ValueType>(
-                    false,index_type,wrapper,index_type_class,
-                    value_type_class,ralph_globals);
+                    false,index_type,wrapper,internal_version_helper,
+                    index_type_class,value_type_class,ralph_globals);
             RalphObject to_return = null;
             ActiveEvent evt = dummy_deserialization_active_event();
             

@@ -47,14 +47,16 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
+        InternalMapTypeVersionHelper<KeyType> internal_version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
         this(
             _log_changes,
-            new AtomicInternalMap<KeyType,ValueType,ValueDeltaType>(ralph_globals),
-            index_type,locked_wrapper,version_helper,_key_type_class,
-            _value_type_class,ralph_globals);
+            new AtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
+                ralph_globals,internal_version_helper),
+            index_type,locked_wrapper,version_helper,
+            _key_type_class,_value_type_class,ralph_globals);
         this.val.val.init_multithreaded_map_container(
             _log_changes,
             new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(

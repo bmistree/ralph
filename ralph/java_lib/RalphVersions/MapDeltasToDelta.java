@@ -1,5 +1,7 @@
 package RalphVersions;
 
+import java.util.List;
+
 import RalphDataWrappers.ContainerOpTuple;
 
 import ralph.Util;
@@ -8,8 +10,7 @@ import ralph_local_version_protobuffs.DeltaProto.Delta;
 
 
 public class MapDeltasToDelta <KeyType>
-    implements ILocalDeltaSerializer<
-        VersionMapDeltas<KeyType,Object,Object>>
+    implements ILocalDeltaSerializer<VersionMapDeltas>
 {
     public static final MapDeltasToDelta<Double> DOUBLE_KEYED_MAP_DELTA_SERIALIZER =
         new MapDeltasToDelta(ObjectToValueType.DOUBLE_SERIALIZER);
@@ -28,11 +29,11 @@ public class MapDeltasToDelta <KeyType>
 
     @Override
     public Delta serialize(
-        VersionMapDeltas<KeyType,Object,Object> to_serialize)
+        VersionMapDeltas to_serialize)
     {
         Delta.Builder to_return = Delta.newBuilder();
-        for (ContainerOpTuple<KeyType,Object,Object> op_tuple :
-                 to_serialize.deltas)
+        List<ContainerOpTuple> to_iter_over = to_serialize.deltas;
+        for (ContainerOpTuple op_tuple : to_iter_over)
         {
             Delta.ContainerDelta.Builder container_delta =
                 Delta.ContainerDelta.newBuilder();
@@ -73,7 +74,8 @@ public class MapDeltasToDelta <KeyType>
 
             
             container_delta.setKey(
-                key_type_serializer.serialize_value_type(op_tuple.key));
+                key_type_serializer.serialize_value_type(
+                    (KeyType)op_tuple.key));
             to_return.addContainerDelta(container_delta);
         }
         return to_return.build();

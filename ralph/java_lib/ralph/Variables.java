@@ -753,12 +753,14 @@ public class Variables
             boolean _log_changes,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            InternalMapTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
-                key_type_class, value_type_class, ralph_globals);
+                _log_changes,_index_type,locked_wrapper,
+                REFERENCE_VERSION_HELPER,internal_version_helper,
+                key_type_class, value_type_class,ralph_globals);
         }
 
         public AtomicMapVariable(
@@ -766,6 +768,7 @@ public class Variables
             AtomicInternalMap<K,V,ValueDeltaType> internal_val,
             NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
+            InternalMapTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {

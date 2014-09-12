@@ -24,7 +24,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
     Map<K,RalphObject<V,ValueDeltaType>>,
-    VersionMapDeltas<K,V,ValueDeltaType>
+    VersionMapDeltas
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
         RalphInternalMapInterface<K,V,ValueDeltaType>
@@ -36,11 +36,14 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     
-    public AtomicInternalMap(RalphGlobals ralph_globals)
+    public AtomicInternalMap(
+        RalphGlobals ralph_globals,
+        VersionHelper<VersionMapDeltas> internal_version_helper)
     {
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
-        version_helper = VersionMapDeltas.MAP_VERSION_HELPER;
+        //version_helper = VersionMapDeltas.MAP_VERSION_HELPER;
+        version_helper = internal_version_helper;
     }
 
     @Override
@@ -48,12 +51,12 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             Map<K,RalphObject<V,ValueDeltaType>>,
-            VersionMapDeltas<K,V,ValueDeltaType>>
+            VersionMapDeltas>
         // function name and arguments
         duplicate_for_speculation(Map<K,RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
         AtomicInternalMap <K,V,ValueDeltaType> to_return =
-            new AtomicInternalMap(ralph_globals);
+            new AtomicInternalMap(ralph_globals,version_helper);
         to_return.set_derived(this);
         to_return.init_multithreaded_map_container(
             log_changes,
