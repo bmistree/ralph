@@ -24,7 +24,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     extends SpeculativeAtomicObject <
     // The internal values that these are holding
     Map<K,RalphObject<V,ValueDeltaType>>,
-    VersionMapDeltas
+    VersionContainerDeltas
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
         RalphInternalMapInterface<K,V,ValueDeltaType>
@@ -38,11 +38,11 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     
     public AtomicInternalMap(
         RalphGlobals ralph_globals,
-        VersionHelper<VersionMapDeltas> internal_version_helper)
+        VersionHelper<VersionContainerDeltas> internal_version_helper)
     {
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
-        //version_helper = VersionMapDeltas.MAP_VERSION_HELPER;
+        //version_helper = VersionContainerDeltas.MAP_VERSION_HELPER;
         version_helper = internal_version_helper;
     }
 
@@ -51,7 +51,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         // return type
         SpeculativeAtomicObject<
             Map<K,RalphObject<V,ValueDeltaType>>,
-            VersionMapDeltas>
+            VersionContainerDeltas>
         // function name and arguments
         duplicate_for_speculation(Map<K,RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
@@ -82,8 +82,8 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         MapTypeDataWrapper<K,V,ValueDeltaType> map_dirty_val =
             (MapTypeDataWrapper<K,V,ValueDeltaType>) dirty_val;
         
-        VersionMapDeltas<K,V,ValueDeltaType> deltas =
-            new VersionMapDeltas<K,V,ValueDeltaType>(
+        VersionContainerDeltas<K,V,ValueDeltaType> deltas =
+            new VersionContainerDeltas<K,V,ValueDeltaType>(
                 map_dirty_val.get_unmodifiable_change_log());
         version_helper.save_version(
             uuid, deltas,active_event.commit_metadata);

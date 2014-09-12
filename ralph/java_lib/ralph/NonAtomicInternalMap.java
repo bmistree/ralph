@@ -22,7 +22,7 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     extends NonAtomicObject <
     // The internal values that these are holding
     Map<K,RalphObject<V,ValueDeltaType>>,
-    VersionMapDeltas
+    VersionContainerDeltas
     >
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
         RalphInternalMapInterface<K,V,ValueDeltaType>
@@ -40,7 +40,7 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     
     public NonAtomicInternalMap(
         RalphGlobals ralph_globals,
-        VersionHelper<VersionMapDeltas> internal_version_helper)
+        VersionHelper<VersionContainerDeltas> internal_version_helper)
     {
         super(ralph_globals);
         version_helper = internal_version_helper;

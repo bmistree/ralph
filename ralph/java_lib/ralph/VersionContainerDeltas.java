@@ -9,11 +9,11 @@ import RalphDataWrappers.ContainerOpTuple;
    eventually passed to a VersionHelper that logs all version map
    changes.
  */
-public class VersionMapDeltas<KeyType,ValueType,ValueDeltaType>
+public class VersionContainerDeltas<KeyType,ValueType,ValueDeltaType>
 {
     // immutable list
     public final List<ContainerOpTuple<KeyType,ValueType,ValueDeltaType>> deltas;
-    public VersionMapDeltas(
+    public VersionContainerDeltas(
         List<ContainerOpTuple<KeyType,ValueType,ValueDeltaType>> _deltas)
     {
         deltas = _deltas;

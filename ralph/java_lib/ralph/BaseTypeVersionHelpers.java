@@ -5,9 +5,9 @@ import static RalphVersions.ObjectToDelta.STRING_SERIALIZER;
 import static RalphVersions.ObjectToDelta.BOOLEAN_SERIALIZER;
 import static RalphVersions.ObjectToDelta.REFERENCE_SERIALIZER;
 
-import static RalphVersions.MapDeltasToDelta.DOUBLE_KEYED_MAP_DELTA_SERIALIZER;
-import static RalphVersions.MapDeltasToDelta.STRING_KEYED_MAP_DELTA_SERIALIZER;
-import static RalphVersions.MapDeltasToDelta.BOOLEAN_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.ContainerDeltasToDelta.DOUBLE_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.ContainerDeltasToDelta.STRING_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.ContainerDeltasToDelta.BOOLEAN_KEYED_MAP_DELTA_SERIALIZER;
 
 public class BaseTypeVersionHelpers
 {
