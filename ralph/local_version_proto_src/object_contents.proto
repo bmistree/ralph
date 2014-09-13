@@ -5,24 +5,7 @@ import "delta.proto";
 
 message ObjectContents
 {
-    message Number
-    {
-        required Delta.ValueType val = 1;
-    }
-    
-    message Text
-    {
-        required Delta.ValueType val = 1;
-    }
-
-    message TrueFalse
-    {
-        required Delta.ValueType val = 1;
-    }
-
     required string uuid = 1;
     required bool atomic = 2;
-    optional Number num = 3;
-    optional Text text = 4;
-    optional TrueFalse tf = 5;
+    optional Delta.ValueType val_type = 3;
 }
