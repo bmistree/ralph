@@ -11,8 +11,6 @@ import RalphDataWrappers.ContainerOpTuple;
  */
 public class VersionContainerDeltas<KeyType,ValueType,ValueDeltaType>
 {
-    public final static VersionHelper LIST_VERSION_HELPER = null;
-    
     // immutable list
     public final List<ContainerOpTuple<KeyType,ValueType,ValueDeltaType>> deltas;
     public VersionContainerDeltas(

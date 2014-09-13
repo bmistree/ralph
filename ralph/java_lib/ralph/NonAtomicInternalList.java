@@ -31,7 +31,7 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     public NonAtomicInternalList(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        version_helper = VersionContainerDeltas.LIST_VERSION_HELPER;
+        version_helper = BaseTypeVersionHelpers.INTERNAL_LIST_TYPE_VERSION_HELPER;
         internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
     }
     public void init(

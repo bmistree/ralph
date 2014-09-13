@@ -19,7 +19,7 @@ import ralph.ActiveEvent;
 import static RalphDeserializer.Deserializer.dummy_deserialization_active_event;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 
-import ralph.InternalMapTypeVersionHelper;
+import ralph.InternalContainerTypeVersionHelper;
 
 import static ralph.BaseTypeVersionHelpers.DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER;
@@ -203,13 +203,13 @@ public class BasicMapDataDeserializers
 
         private final Class<IndexType> index_type_class;
         private final Class<ValueType> value_type_class;
-        private final InternalMapTypeVersionHelper<IndexType>
+        private final InternalContainerTypeVersionHelper<IndexType>
             internal_version_helper;
         
         public AtomMapDeserializer(
             String index_label,String value_label,EnsureAtomicWrapper _wrapper,
             NonAtomicInternalMap.IndexType _index_type,
-            InternalMapTypeVersionHelper<IndexType> internal_version_helper,
+            InternalContainerTypeVersionHelper<IndexType> internal_version_helper,
             Class<IndexType> index_type_class,
             Class<ValueType> value_type_class)
         {
@@ -311,13 +311,13 @@ public class BasicMapDataDeserializers
         private final Class<IndexType> index_type_class;
         private final Class<ValueType> value_type_class;
 
-        private final InternalMapTypeVersionHelper<IndexType>
+        private final InternalContainerTypeVersionHelper<IndexType>
             internal_version_helper;
         
         public NonAtomMapDeserializer(
             String index_label,String value_label,EnsureAtomicWrapper _wrapper,
             NonAtomicInternalMap.IndexType _index_type,
-            InternalMapTypeVersionHelper<IndexType> internal_version_helper,
+            InternalContainerTypeVersionHelper<IndexType> internal_version_helper,
             Class<IndexType> _index_type_class,
             Class<ValueType> _value_type_class)
         {

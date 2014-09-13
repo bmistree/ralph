@@ -2,10 +2,10 @@ package ralph;
 
 import RalphVersions.ContainerDeltasToDelta;
 
-public class InternalMapTypeVersionHelper<KeyType>
+public class InternalContainerTypeVersionHelper<KeyType>
     extends VersionHelper<VersionContainerDeltas>
 {
-    public InternalMapTypeVersionHelper(
+    public InternalContainerTypeVersionHelper(
         ContainerDeltasToDelta<KeyType> _serializer)
     {
         super(_serializer);

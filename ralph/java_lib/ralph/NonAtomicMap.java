@@ -46,7 +46,7 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
-        InternalMapTypeVersionHelper<KeyType> internal_version_helper,
+        InternalContainerTypeVersionHelper<KeyType> internal_version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {

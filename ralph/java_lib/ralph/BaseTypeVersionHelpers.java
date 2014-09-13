@@ -8,6 +8,7 @@ import static RalphVersions.ObjectToDelta.REFERENCE_SERIALIZER;
 import static RalphVersions.ContainerDeltasToDelta.DOUBLE_KEYED_MAP_DELTA_SERIALIZER;
 import static RalphVersions.ContainerDeltasToDelta.STRING_KEYED_MAP_DELTA_SERIALIZER;
 import static RalphVersions.ContainerDeltasToDelta.BOOLEAN_KEYED_MAP_DELTA_SERIALIZER;
+import static RalphVersions.ContainerDeltasToDelta.INTEGER_KEYED_LIST_DELTA_SERIALIZER;
 
 public class BaseTypeVersionHelpers
 {
@@ -20,18 +21,23 @@ public class BaseTypeVersionHelpers
     public final static VersionHelper<IReference> REFERENCE_VERSION_HELPER =
         new VersionHelper<IReference> (REFERENCE_SERIALIZER);
 
-    public final static InternalMapTypeVersionHelper<Double>
+    public final static InternalContainerTypeVersionHelper<Double>
         DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
-        new InternalMapTypeVersionHelper<Double>(
+        new InternalContainerTypeVersionHelper<Double>(
             DOUBLE_KEYED_MAP_DELTA_SERIALIZER);
-    public final static InternalMapTypeVersionHelper<String>
+    public final static InternalContainerTypeVersionHelper<String>
         STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
-        new InternalMapTypeVersionHelper<String>(
+        new InternalContainerTypeVersionHelper<String>(
             STRING_KEYED_MAP_DELTA_SERIALIZER);
-    public final static InternalMapTypeVersionHelper<Boolean>
+    public final static InternalContainerTypeVersionHelper<Boolean>
         BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
-        new InternalMapTypeVersionHelper<Boolean>(
+        new InternalContainerTypeVersionHelper<Boolean>(
                 BOOLEAN_KEYED_MAP_DELTA_SERIALIZER);
+
+    public final static InternalContainerTypeVersionHelper
+        INTERNAL_LIST_TYPE_VERSION_HELPER =
+        new InternalContainerTypeVersionHelper<Integer>(
+            INTEGER_KEYED_LIST_DELTA_SERIALIZER);
     
     public final static VersionHelper MAP_VERSION_HELPER = null;
     public final static VersionHelper LIST_VERSION_HELPER = null;

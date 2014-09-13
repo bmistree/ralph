@@ -30,7 +30,7 @@ public class AtomicInternalList<V,ValueDeltaType>
     {
         super(ralph_globals);
         internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
-        version_helper = VersionContainerDeltas.LIST_VERSION_HELPER;
+        version_helper = BaseTypeVersionHelpers.INTERNAL_LIST_TYPE_VERSION_HELPER;
     }
 
     /**
