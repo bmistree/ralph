@@ -18,6 +18,8 @@ public class ContainerDeltasToDelta <KeyType>
         new ContainerDeltasToDelta(ObjectToValueType.STRING_SERIALIZER);
     public static final ContainerDeltasToDelta<Boolean> BOOLEAN_KEYED_MAP_DELTA_SERIALIZER =
         new ContainerDeltasToDelta(ObjectToValueType.BOOLEAN_SERIALIZER);
+    public static final ContainerDeltasToDelta<Integer> INTEGER_KEYED_LIST_DELTA_SERIALIZER =
+        new ContainerDeltasToDelta(ObjectToValueType.INTEGER_SERIALIZER);
     
     private final ILocalValueTypeSerializer<KeyType> key_type_serializer;
 

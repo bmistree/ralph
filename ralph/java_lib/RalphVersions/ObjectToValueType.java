@@ -7,6 +7,8 @@ public class ObjectToValueType
 {
     public final static DoubleToValueType DOUBLE_SERIALIZER =
         new DoubleToValueType();
+    public final static IntegerToValueType INTEGER_SERIALIZER =
+        new IntegerToValueType();
     public final static StringToValueType STRING_SERIALIZER =
         new StringToValueType();
     public final static BooleanToValueType BOOLEAN_SERIALIZER =
@@ -26,6 +28,20 @@ public class ObjectToValueType
         }
     }
 
+    // FIXME: serializes down to double because have no real integer
+    // type in the language.
+    protected static class IntegerToValueType
+        implements ILocalValueTypeSerializer<Integer>
+    {
+        @Override
+        public ValueType serialize_value_type(Integer to_serialize)
+        {
+            return DOUBLE_SERIALIZER.serialize_value_type(
+                to_serialize.doubleValue());
+        }
+    }
+
+    
     protected static class StringToValueType
         implements ILocalValueTypeSerializer<String>
     {
