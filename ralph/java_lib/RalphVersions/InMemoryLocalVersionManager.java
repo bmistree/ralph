@@ -34,6 +34,18 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     private final Map<String,InMemoryEndpointInitializationHistory> endpoint_initialization_map =
         new HashMap<String,InMemoryEndpointInitializationHistory>();
 
+    /**
+       @returns --- -1 if object does not exist.
+     */
+    synchronized public int object_history_size (String obj_uuid)
+    {
+        InMemoryObjectHistory obj_history = object_history_map.get(obj_uuid);
+        if (obj_history == null)
+            return -1;
+        
+        return obj_history.history.size();
+    }
+    
     @Override
     synchronized public void save_commit_metadata(CommitMetadata commit_metadata)
     {
@@ -133,7 +145,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
 
     private static class InMemoryObjectHistory
     {
-        final SortedSet history = new TreeSet<SingleObjectChange>(
+        final public SortedSet history = new TreeSet<SingleObjectChange>(
             ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
         final String object_uuid;
 
