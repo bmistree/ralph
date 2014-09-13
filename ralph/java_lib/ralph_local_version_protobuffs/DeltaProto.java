@@ -1912,14 +1912,26 @@ public final class DeltaProto {
       // optional string reference = 1;
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       boolean hasReference();
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       java.lang.String getReference();
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       com.google.protobuf.ByteString
           getReferenceBytes();
@@ -2025,12 +2037,20 @@ public final class DeltaProto {
       private java.lang.Object reference_;
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       public boolean hasReference() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       public java.lang.String getReference() {
         java.lang.Object ref = reference_;
@@ -2048,6 +2068,10 @@ public final class DeltaProto {
       }
       /**
        * <code>optional string reference = 1;</code>
+       *
+       * <pre>
+       * nothing inside means that we should set reference to null.
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getReferenceBytes() {
@@ -2296,12 +2320,20 @@ public final class DeltaProto {
         private java.lang.Object reference_ = "";
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public boolean hasReference() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public java.lang.String getReference() {
           java.lang.Object ref = reference_;
@@ -2316,6 +2348,10 @@ public final class DeltaProto {
         }
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public com.google.protobuf.ByteString
             getReferenceBytes() {
@@ -2332,6 +2368,10 @@ public final class DeltaProto {
         }
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public Builder setReference(
             java.lang.String value) {
@@ -2345,6 +2385,10 @@ public final class DeltaProto {
         }
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public Builder clearReference() {
           bitField0_ = (bitField0_ & ~0x00000001);
@@ -2354,6 +2398,10 @@ public final class DeltaProto {
         }
         /**
          * <code>optional string reference = 1;</code>
+         *
+         * <pre>
+         * nothing inside means that we should set reference to null.
+         * </pre>
          */
         public Builder setReferenceBytes(
             com.google.protobuf.ByteString value) {

@@ -15,7 +15,7 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
-
+    
     /**
        May be null.  Gets set in initializer.  Used to save deltas of
        a version.
