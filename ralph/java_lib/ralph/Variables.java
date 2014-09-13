@@ -22,8 +22,6 @@ import static ralph.BaseTypeVersionHelpers.BOOLEAN_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.REFERENCE_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.INTERFACE_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
-import static ralph.BaseTypeVersionHelpers.LIST_VERSION_HELPER;
-import static ralph.BaseTypeVersionHelpers.MAP_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
@@ -793,7 +791,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,locked_wrapper,LIST_VERSION_HELPER,
+                _log_changes,locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
 
@@ -806,7 +804,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,internal_val,locked_wrapper,LIST_VERSION_HELPER,
+                _log_changes,internal_val,locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class, ralph_globals);
         }
     }
@@ -821,7 +819,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                locked_wrapper,LIST_VERSION_HELPER,
+                locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
 
@@ -833,7 +831,7 @@ public class Variables
             RalphGlobals ralph_globals)
         {
             super(
-                internal_val,locked_wrapper,LIST_VERSION_HELPER,
+                internal_val,locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class,ralph_globals);
         }
     }
