@@ -19,7 +19,7 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     // The internal values that these are holding
     List<RalphObject<V,ValueDeltaType>>,
     // The type that gets passed to internal version helper.
-    VersionListDeltas
+    VersionContainerDeltas
     >
     implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
         RalphInternalListInterface<V,ValueDeltaType>
@@ -31,7 +31,7 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     public NonAtomicInternalList(RalphGlobals ralph_globals)
     {
         super(ralph_globals);
-        version_helper = VersionListDeltas.LIST_VERSION_HELPER;
+        version_helper = VersionContainerDeltas.LIST_VERSION_HELPER;
         internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
     }
     public void init(
