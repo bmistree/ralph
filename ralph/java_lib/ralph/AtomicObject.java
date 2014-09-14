@@ -1196,7 +1196,7 @@ public abstract class AtomicObject<T,DeltaType>
         in_try_next = false;
         _unlock();
     }
-
+    
     @Override
     public T get_val(ActiveEvent active_event) throws BackoutException
     {
