@@ -21,16 +21,6 @@ public abstract class AtomicVariable<T,DeltaType>
             vtdwc,version_helper,_log_changes,init_val);
     }
 
-    // FIXME: may want to delete this.
-    public void init_atomic_value_variable(
-        boolean _log_changes, T init_val,
-        ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper)
-    {
-        init_multithreaded_locked_object(
-            vtdwc,version_helper,_log_changes,init_val);
-    }
-        
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
