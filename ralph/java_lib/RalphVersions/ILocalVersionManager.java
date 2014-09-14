@@ -4,6 +4,7 @@ import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public interface ILocalVersionManager
 {
@@ -43,6 +44,13 @@ public interface ILocalVersionManager
         String variable_name, String object_uuid,String endpoint_uuid,
         String endpoint_constructor_class_name,long local_lamport_time);
 
+    /**
+       When initially construct an object, log its contents so that
+       can reconstruct it from start.
+     */
+    public void save_object_constructor(
+        String object_uuid, ObjectContents obj_contents);
+    
     /**
        Want to be able to regenerate endpoints.  To do this, use
        endpoint constructor objects, which automatically build an

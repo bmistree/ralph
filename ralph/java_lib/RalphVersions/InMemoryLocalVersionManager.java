@@ -15,6 +15,7 @@ import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class InMemoryLocalVersionManager implements ILocalVersionManager
 {
@@ -56,11 +57,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     synchronized public void save_version_data(
         String object_uuid, Delta delta, CommitMetadata commit_metadata)
     {
-        if (! object_history_map.containsKey(object_uuid))
-        {
-            object_history_map.put(
-                object_uuid, new InMemoryObjectHistory(object_uuid));
-        }
+        check_and_insert_in_memory_object_history(object_uuid);
         InMemoryObjectHistory object_history =
             object_history_map.get(object_uuid);
 
@@ -69,6 +66,29 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
             commit_metadata.event_uuid);
     }
 
+    @Override
+    synchronized public void save_object_constructor(
+        String object_uuid, ObjectContents obj_contents)
+    {
+        check_and_insert_in_memory_object_history(object_uuid);
+        InMemoryObjectHistory object_history =
+            object_history_map.get(object_uuid);
+        object_history.set_construction_contents(obj_contents);
+    }
+
+    /**
+       Insert an entry for object history in object_history_map.
+     */
+    synchronized private void check_and_insert_in_memory_object_history(
+        String object_uuid)
+    {
+        if (! object_history_map.containsKey(object_uuid))
+        {
+            object_history_map.put(
+                object_uuid, new InMemoryObjectHistory(object_uuid));
+        }
+    }
+    
     @Override
     synchronized public void save_endpoint_global_mapping(
         String variable_name, String object_uuid,String endpoint_uuid,
@@ -149,13 +169,21 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
             ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
         final String object_uuid;
 
+        public ObjectContents initial_construction_contents = null;
+        
         public InMemoryObjectHistory(String object_uuid)
         {
             this.object_uuid = object_uuid;
         }
+
+        public void set_construction_contents(ObjectContents contents)
+        {
+            initial_construction_contents = contents;
+        }
         
         public void add_delta (
-            long root_lamport_time, Delta delta, String commit_metadata_event_uuid)
+            long root_lamport_time, Delta delta,
+            String commit_metadata_event_uuid)
         {
             history.add(
                 new SingleObjectChange(
