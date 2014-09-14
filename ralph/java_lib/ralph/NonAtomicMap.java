@@ -79,15 +79,14 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
-        super(ralph_globals);
-        key_type_class = _key_type_class;
-        value_type_class = _value_type_class;
-
-        init_non_atomic_value_variable(
+        super(
             internal_val,
             new ValueTypeDataWrapperFactory<
                 NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
-            version_helper);
+            version_helper,ralph_globals);
+
+        key_type_class = _key_type_class;
+        value_type_class = _value_type_class;
     }
 
     @Override

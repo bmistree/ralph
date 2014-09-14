@@ -65,11 +65,11 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
-        super(ralph_globals);
-        init_non_atomic_value_variable(
+        super(
             internal_val,
-            new ValueTypeDataWrapperFactory<NonAtomicInternalList<ValueType,DeltaType>>(),
-            version_helper);
+            new ValueTypeDataWrapperFactory<
+                NonAtomicInternalList<ValueType,DeltaType>>(),
+            version_helper,ralph_globals);
     }
 
     public void serialize_as_rpc_arg(

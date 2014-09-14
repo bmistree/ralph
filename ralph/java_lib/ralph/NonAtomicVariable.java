@@ -9,11 +9,6 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 public abstract class NonAtomicVariable<T,DeltaType>
     extends NonAtomicObject<T,DeltaType>
 {
-    public NonAtomicVariable(RalphGlobals ralph_globals)
-    {
-        super(ralph_globals);
-    }
-
     public NonAtomicVariable(
         T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
@@ -22,13 +17,6 @@ public abstract class NonAtomicVariable<T,DeltaType>
     {
         super (ralph_globals);
         init(vtdwc,init_val, version_helper);
-    }
-    
-    public void init_non_atomic_value_variable(
-        T init_val,ValueTypeDataWrapperFactory<T> vtdwc,
-        VersionHelper<DeltaType> version_helper)
-    {
-        init(vtdwc,init_val,version_helper);
     }
 
     @Override
