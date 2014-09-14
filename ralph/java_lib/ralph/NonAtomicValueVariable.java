@@ -11,9 +11,4 @@ public abstract class NonAtomicValueVariable<T>
     {
         super(init_val,vtdwc,version_helper,ralph_globals);
     }
-
-    public NonAtomicValueVariable(RalphGlobals ralph_globals)
-    {
-        super (ralph_globals);
-    }
 }

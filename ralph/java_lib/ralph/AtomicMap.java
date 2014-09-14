@@ -82,6 +82,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         Class<KeyType> key_type_class,Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
+        
         super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
