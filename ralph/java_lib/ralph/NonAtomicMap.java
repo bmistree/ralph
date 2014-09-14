@@ -11,6 +11,8 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 /**
  * @param <K>  ---- The keys used for indexing
  * @param <V> ---- The type of each internal value in the internal
@@ -84,11 +86,21 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
 
         init_non_atomic_value_variable(
             internal_val,
-            new ValueTypeDataWrapperFactory<NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
+            new ValueTypeDataWrapperFactory<
+                NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
             version_helper);
     }
 
-    
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+        throws BackoutException
+    {
+        NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
+            get_val(active_event);
+        return ralph.Variables.serialize_reference(internal_map,false,uuid());
+    }
+
+    @Override
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,Variables.Any.Builder any_builder)
         throws BackoutException

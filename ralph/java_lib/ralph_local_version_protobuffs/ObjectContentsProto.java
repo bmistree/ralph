@@ -49,6 +49,20 @@ public final class ObjectContentsProto {
      * <code>optional .Delta.ValueType val_type = 3;</code>
      */
     ralph_local_version_protobuffs.DeltaProto.Delta.ValueTypeOrBuilder getValTypeOrBuilder();
+
+    // optional .Delta.ReferenceType ref_type = 4;
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    boolean hasRefType();
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType();
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder();
   }
   /**
    * Protobuf type {@code ObjectContents}
@@ -122,6 +136,19 @@ public final class ObjectContentsProto {
                 valType_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000004;
+              break;
+            }
+            case 34: {
+              ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = refType_.toBuilder();
+              }
+              refType_ = input.readMessage(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(refType_);
+                refType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
               break;
             }
           }
@@ -245,10 +272,33 @@ public final class ObjectContentsProto {
       return valType_;
     }
 
+    // optional .Delta.ReferenceType ref_type = 4;
+    public static final int REF_TYPE_FIELD_NUMBER = 4;
+    private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType refType_;
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    public boolean hasRefType() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType() {
+      return refType_;
+    }
+    /**
+     * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+     */
+    public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder() {
+      return refType_;
+    }
+
     private void initFields() {
       uuid_ = "";
       atomic_ = false;
       valType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ValueType.getDefaultInstance();
+      refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -279,6 +329,9 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(3, valType_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(4, refType_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -299,6 +352,10 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, valType_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, refType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -409,6 +466,7 @@ public final class ObjectContentsProto {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getValTypeFieldBuilder();
+          getRefTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -427,6 +485,12 @@ public final class ObjectContentsProto {
           valTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (refTypeBuilder_ == null) {
+          refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+        } else {
+          refTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -471,6 +535,14 @@ public final class ObjectContentsProto {
         } else {
           result.valType_ = valTypeBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (refTypeBuilder_ == null) {
+          result.refType_ = refType_;
+        } else {
+          result.refType_ = refTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -497,6 +569,9 @@ public final class ObjectContentsProto {
         }
         if (other.hasValType()) {
           mergeValType(other.getValType());
+        }
+        if (other.hasRefType()) {
+          mergeRefType(other.getRefType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -757,6 +832,123 @@ public final class ObjectContentsProto {
         return valTypeBuilder_;
       }
 
+      // optional .Delta.ReferenceType ref_type = 4;
+      private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> refTypeBuilder_;
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public boolean hasRefType() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType() {
+        if (refTypeBuilder_ == null) {
+          return refType_;
+        } else {
+          return refTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public Builder setRefType(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+        if (refTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          refType_ = value;
+          onChanged();
+        } else {
+          refTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public Builder setRefType(
+          ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder builderForValue) {
+        if (refTypeBuilder_ == null) {
+          refType_ = builderForValue.build();
+          onChanged();
+        } else {
+          refTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public Builder mergeRefType(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+        if (refTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              refType_ != ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance()) {
+            refType_ =
+              ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.newBuilder(refType_).mergeFrom(value).buildPartial();
+          } else {
+            refType_ = value;
+          }
+          onChanged();
+        } else {
+          refTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public Builder clearRefType() {
+        if (refTypeBuilder_ == null) {
+          refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+          onChanged();
+        } else {
+          refTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder getRefTypeBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getRefTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder() {
+        if (refTypeBuilder_ != null) {
+          return refTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return refType_;
+        }
+      }
+      /**
+       * <code>optional .Delta.ReferenceType ref_type = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> 
+          getRefTypeFieldBuilder() {
+        if (refTypeBuilder_ == null) {
+          refTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder>(
+                  refType_,
+                  getParentForChildren(),
+                  isClean());
+          refType_ = null;
+        }
+        return refTypeBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObjectContents)
     }
 
@@ -782,9 +974,10 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"R\n\016" +
+      "\n\025object_contents.proto\032\013delta.proto\"z\n\016" +
       "ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030\002" +
       " \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueType" +
+      "\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceType" +
       "B5\n\036ralph_local_version_protobuffsB\023Obje" +
       "ctContentsProto"
     };
@@ -798,7 +991,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_descriptor,
-              new java.lang.String[] { "Uuid", "Atomic", "ValType", });
+              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", });
           return null;
         }
       };

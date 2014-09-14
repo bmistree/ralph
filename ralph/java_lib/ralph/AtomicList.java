@@ -9,7 +9,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
-
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <V>  ---- The type of each internal value in the internal arraylist
@@ -104,6 +104,16 @@ public class AtomicList<ValueType, ValueDeltaType>
         return to_return;
     }
 
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+        throws BackoutException
+    {
+        AtomicInternalList<ValueType,ValueDeltaType> internal_list = 
+            get_val(active_event);
+        return Variables.serialize_reference(internal_list,true,uuid());
+    }
+
+    @Override
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,
         VariablesProto.Variables.Any.Builder any_builder)

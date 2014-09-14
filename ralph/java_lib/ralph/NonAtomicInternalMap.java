@@ -11,6 +11,8 @@ import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
  * Strings).
@@ -62,6 +64,19 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
             _locked_wrapper,this,this,index_type);
     }
 
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+    {
+        // FIXME: May eventually want to fill this in (eg., if
+        // replacing serialization code.  Currently, it's unnecessary
+        // because we just use this method for serializing version
+        // histories.
+        Util.logger_assert(
+            "FIXME: currently, disallowing direct " +
+            "serialization of nonatomicinternalmap.");
+        return null;
+    }
+    
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)

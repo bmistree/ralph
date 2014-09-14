@@ -1,8 +1,10 @@
 package ralph;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
-import java.util.concurrent.locks.ReentrantLock;
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <T> --- The internal, Java type of the data
@@ -15,6 +17,12 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     private NonAtomicFactory non_atomic_factory = null;
 	
     protected String host_uuid = null;
+
+    /**
+       Returns the current contents of the object.  
+     */
+    public abstract ObjectContents serialize_contents(
+        ActiveEvent active_event) throws BackoutException;
     
     /**
        May be null.  Gets set in initializer.  Used to save deltas of

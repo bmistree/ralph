@@ -10,6 +10,8 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 /**
  * @param <KeyType>  ---- The keys used for indexing
  * @param <ValueType>  ---- The type of each internal value in the internal hash map
@@ -92,7 +94,15 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             version_helper);
     }
 
-    
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+        throws BackoutException
+    {
+        AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
+            get_val(active_event);
+        return Variables.serialize_reference(internal_map,true,uuid());
+    }
+
     @Override
     protected
         // return type

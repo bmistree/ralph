@@ -10,6 +10,8 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 /**
  * @param <V> ---- The type of each internal value in the internal
  * list
@@ -79,6 +81,15 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
     }
 
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+        throws BackoutException
+    {
+        NonAtomicInternalList<ValueType,DeltaType> internal_list = 
+            get_val(active_event);
+        return ralph.Variables.serialize_reference(internal_list,false,uuid());
+    }
+    
     public boolean return_internal_val_from_container()
     {
         return false;

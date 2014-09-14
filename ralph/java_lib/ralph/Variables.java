@@ -25,6 +25,9 @@ import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
+
 public class Variables
 {
     public final static NumberTypeDataWrapperFactory
@@ -56,6 +59,21 @@ public class Variables
 
     final static InternalServiceReference default_service_reference = null;
 
+    public static ObjectContents serialize_reference (
+        RalphObject held_reference,boolean atomic,String holder_uuid)
+    {
+        Delta.ReferenceType.Builder reference_type_builder =
+            Delta.ReferenceType.newBuilder();
+        reference_type_builder.setReference(held_reference.uuid());
+        ObjectContents.Builder contents_builder =
+            ObjectContents.newBuilder();
+        contents_builder.setRefType(reference_type_builder);
+        contents_builder.setUuid(holder_uuid);
+        contents_builder.setAtomic(atomic);
+        return contents_builder.build();
+    }
+
+    
     /** Atomics */
     
     public static class AtomicNumberVariable
@@ -69,6 +87,35 @@ public class Variables
                 new Double(((Number) init_val).doubleValue()),
                 number_value_type_data_wrapper_factory,
                 DOUBLE_VERSION_HELPER,ralph_globals);
+        }
+
+        /**
+           @param {ActiveEvent} active_event --- Can be null, in which
+           case will return internal value without taking any locks.
+         */
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return AtomicNumberVariable.serialize_num_contents(
+                active_event,this,true);
+        }
+
+        public static ObjectContents serialize_num_contents(
+            ActiveEvent active_event,RalphObject<Double,Double> ralph_object,
+            boolean atomic) throws BackoutException
+        {
+            Double contents = ralph_object.get_val(active_event);
+            Delta.ValueType.Builder value_type_builder =
+                Delta.ValueType.newBuilder();
+            value_type_builder.setNum(contents.doubleValue());
+            
+            ObjectContents.Builder contents_builder =
+                ObjectContents.newBuilder();
+            contents_builder.setValType(value_type_builder);
+            contents_builder.setUuid(ralph_object.uuid());
+            contents_builder.setAtomic(atomic);
+            return contents_builder.build();
         }
         
         @Override
@@ -129,6 +176,37 @@ public class Variables
                 text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
+
+        /**
+           @param {ActiveEvent} active_event --- Can be null, in which
+           case will return internal value without taking any locks.
+         */
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return AtomicTextVariable.serialize_text_contents(
+                active_event,this,true);
+        }
+
+        public static ObjectContents serialize_text_contents(
+            ActiveEvent active_event,RalphObject<String,String> ralph_object,
+            boolean atomic) throws BackoutException
+        {
+            String contents = ralph_object.get_val(active_event);
+            Delta.ValueType.Builder value_type_builder =
+                Delta.ValueType.newBuilder();
+            value_type_builder.setText(contents);
+            
+            ObjectContents.Builder contents_builder =
+                ObjectContents.newBuilder();
+            contents_builder.setValType(value_type_builder);
+            contents_builder.setUuid(ralph_object.uuid());
+            contents_builder.setAtomic(atomic);
+            return contents_builder.build();
+        }
+
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -179,6 +257,39 @@ public class Variables
                 true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
+
+        /**
+           @param {ActiveEvent} active_event --- Can be null, in which
+           case will return internal value without taking any locks.
+         */
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return
+                AtomicTrueFalseVariable.serialize_true_false_contents(
+                    active_event,this,true);
+        }
+
+        public static ObjectContents serialize_true_false_contents(
+            ActiveEvent active_event,RalphObject<Boolean,Boolean> ralph_object,
+            boolean atomic) throws BackoutException
+        {
+            Boolean contents = ralph_object.get_val(active_event);
+            Delta.ValueType.Builder value_type_builder =
+                Delta.ValueType.newBuilder();
+            value_type_builder.setTf(contents.booleanValue());
+            
+            ObjectContents.Builder contents_builder =
+                ObjectContents.newBuilder();
+            contents_builder.setValType(value_type_builder);
+            contents_builder.setUuid(ralph_object.uuid());
+            contents_builder.setAtomic(atomic);
+            return contents_builder.build();
+        }
+
+
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -231,6 +342,15 @@ public class Variables
         }
 
         @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing enum variables.
+            Util.logger_assert("FIXME: fill in serialization for enums");
+            return null;
+        }
+        
+        @Override
         protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)
         {
@@ -272,7 +392,16 @@ public class Variables
                 new ValueTypeDataWrapperFactory<T>(),INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
-
+        
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing interface variables.
+            Util.logger_assert("FIXME: fill in serialization for interfaces");
+            return null;
+        }
+        
         @Override
         protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)
@@ -314,6 +443,16 @@ public class Variables
                 SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
 
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing service factories variables.
+            Util.logger_assert(
+                "FIXME: fill in serialization for service factories");
+            return null;
+        }
+        
         @Override
         protected
             // return type
@@ -441,6 +580,16 @@ public class Variables
             Util.logger_assert(
                 "Should deserialize directly in DataConstructorRegistry.");
         }
+
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing service reference variables.
+            Util.logger_assert(
+                "FIXME: fill in serialization for service references");
+            return null;
+        }
     }
     
     public static class NonAtomicNumberVariable
@@ -455,7 +604,14 @@ public class Variables
                 number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
-
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return AtomicNumberVariable.serialize_num_contents(
+                active_event,this,false);
+        }
+        
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
@@ -504,6 +660,15 @@ public class Variables
                 text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
+
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return AtomicTextVariable.serialize_text_contents(
+                active_event,this,false);
+        }
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -537,6 +702,14 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            return AtomicTrueFalseVariable.serialize_true_false_contents(
+                active_event,this,false);
+        }
+        
         public NonAtomicTrueFalseVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
@@ -586,6 +759,16 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing enum variables.
+            Util.logger_assert("FIXME: fill in serialization for enums");
+            return null;
+        }
+
+        @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
             VariablesProto.Variables.Any.Builder any_builder)
@@ -610,6 +793,16 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing interface variables.
+            Util.logger_assert("FIXME: fill in interface variable");
+            return null;
+        }
+
+        
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
         {
@@ -649,6 +842,16 @@ public class Variables
                 SERVICE_FACTORY_VERSION_HELPER,ralph_globals);
         }
 
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing service factories variables.
+            Util.logger_assert(
+                "FIXME: fill in serialization for service factories");
+            return null;
+        }
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -709,6 +912,17 @@ public class Variables
             Util.logger_assert(
                 "Should deserialize directly in DataConstructorRegistry.");
         }
+        
+        @Override
+        public ObjectContents serialize_contents(ActiveEvent active_event)
+            throws BackoutException
+        {
+            // FIXME: add code for serializing service reference variables.
+            Util.logger_assert(
+                "FIXME: fill in serialization for service references");
+            return null;
+        }
+        
     }
 
     

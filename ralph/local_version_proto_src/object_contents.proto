@@ -8,4 +8,5 @@ message ObjectContents
     required string uuid = 1;
     required bool atomic = 2;
     optional Delta.ValueType val_type = 3;
+    optional Delta.ReferenceType ref_type = 4;
 }

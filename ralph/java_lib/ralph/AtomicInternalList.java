@@ -8,6 +8,8 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 /**
  * @param <V> --- The Java type of data that are elements in the list
  *
@@ -91,6 +93,20 @@ public class AtomicInternalList<V,ValueDeltaType>
             _locked_wrapper,this,this);
     }
 
+    @Override
+    public ObjectContents serialize_contents(ActiveEvent active_event)
+    {
+        // FIXME: May eventually want to fill this in (eg., if
+        // replacing serialization code.  Currently, it's unnecessary
+        // because we just use this method for serializing version
+        // histories.
+        Util.logger_assert(
+            "FIXME: currently, disallowing direct " +
+            "serialization of atomicinternallist.");
+        return null;
+    }
+
+    
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
