@@ -73,6 +73,8 @@ import RalphCallResults.RootCallResult;
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 public class %s
 {
 ''' % (package_name,program_name)
@@ -2475,6 +2477,17 @@ public %s (boolean log_operations, RalphGlobals ralph_globals)
         /** FIXME: emitting a null logger for structs.*/
         null,
         ralph_globals);
+}
+
+@Override
+public ObjectContents serialize_contents(ActiveEvent active_event)
+{
+    /**
+      FIXME: add method for serializing contents of structs.
+    */ 
+    Util.logger_assert(
+        "FIXME: add method for serializing contents of structs.");
+    return null;
 }
 
 @Override
