@@ -21,11 +21,7 @@ public abstract class AtomicVariable<T,DeltaType>
             vtdwc,version_helper,_log_changes,init_val);
     }
 
-    public AtomicVariable(RalphGlobals ralph_globals)
-    {
-        super (ralph_globals);
-    }
-
+    // FIXME: may want to delete this.
     public void init_atomic_value_variable(
         boolean _log_changes, T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,

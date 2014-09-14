@@ -82,17 +82,16 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         Class<KeyType> key_type_class,Class<ValueType> value_type_class,
         RalphGlobals ralph_globals)
     {
+        super(
+            _log_changes,internal_val,
+            new ValueTypeDataWrapperFactory<
+                AtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
+            version_helper,ralph_globals);
         
-        super(ralph_globals);
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
         this.key_type_class = key_type_class;
         this.value_type_class = value_type_class;
-        
-        init_atomic_value_variable(
-            _log_changes, internal_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
-            version_helper);
     }
 
     @Override

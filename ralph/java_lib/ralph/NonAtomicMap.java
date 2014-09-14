@@ -52,7 +52,6 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
-        
         this(
             new NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
                 ralph_globals,internal_version_helper),

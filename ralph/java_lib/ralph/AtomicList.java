@@ -69,14 +69,14 @@ public class AtomicList<ValueType, ValueDeltaType>
         Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
-        super(ralph_globals);
-        this.locked_wrapper = locked_wrapper;
+        super(
+            _log_changes,internal_val,
+            new ValueTypeDataWrapperFactory<
+                AtomicInternalList<ValueType,ValueDeltaType>>(),
+            version_helper,ralph_globals);
         
-        init_atomic_value_variable(
-            _log_changes, internal_val,
-            new ValueTypeDataWrapperFactory<AtomicInternalList<ValueType, ValueDeltaType>>(),
-            version_helper);
-        value_type_class = _value_type_class;
+        this.locked_wrapper = locked_wrapper;
+        this.value_type_class = _value_type_class;
     }
     
     @Override
