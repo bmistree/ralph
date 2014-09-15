@@ -68,7 +68,7 @@ public class VersionedSetterGetter
                 if (gotten_boolean != new_boolean)
                     return false;
             }
-
+            
             return true;
         }
         catch(Exception _ex)

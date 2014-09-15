@@ -27,8 +27,8 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         new HashMap<String,EndpointConstructorObj>();
 
     // key is the endpoint uuid
-    private final Map<String,InMemoryEndpointInitializationHistory> endpoint_initialization_map =
-        new HashMap<String,InMemoryEndpointInitializationHistory>();
+    private final Map<String,EndpointInitializationHistory> endpoint_initialization_map =
+        new HashMap<String,EndpointInitializationHistory>();
 
     /**
        @returns null if does not exist.
@@ -89,12 +89,12 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         {
             endpoint_initialization_map.put(
                 endpoint_uuid,
-                new InMemoryEndpointInitializationHistory(
+                new EndpointInitializationHistory(
                     endpoint_uuid,endpoint_constructor_class_name,
                     local_lamport_time));
         }
         
-        InMemoryEndpointInitializationHistory endpoint_initialization_history =
+        EndpointInitializationHistory endpoint_initialization_history =
             endpoint_initialization_map.get(endpoint_uuid);
         endpoint_initialization_history.add_variable(variable_name,object_uuid);
     }
@@ -112,43 +112,5 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     public void close_versioned_object(String object_uuid)
     {
         // Do nothing for now.
-    }
-    
-    private class InMemoryEndpointInitializationHistory
-    {
-        public final String endpoint_uuid;
-        public final String endpoint_constructor_class_name;
-        public final long local_lamport_time;
-        // tuple is name of variable and uuid of object (not
-        // endpoint).
-        public final List<NameUUIDTuple> variable_list =
-            new ArrayList<NameUUIDTuple>();
-        
-        public InMemoryEndpointInitializationHistory(
-            String endpoint_uuid, String endpoint_constructor_class_name,
-            long local_lamport_time)
-        {
-            this.endpoint_uuid = endpoint_uuid;
-            this.endpoint_constructor_class_name =
-                endpoint_constructor_class_name;
-            this.local_lamport_time = local_lamport_time;
-        }
-
-        public void add_variable(String name, String object_uuid)
-        {
-            variable_list.add(
-                new NameUUIDTuple(name,object_uuid));
-        }
-
-        public class NameUUIDTuple
-        {
-            public final String name;
-            public final String uuid;
-            public NameUUIDTuple(String name, String uuid)
-            {
-                this.name = name;
-                this.uuid = uuid;
-            }
-        }
     }
 }
