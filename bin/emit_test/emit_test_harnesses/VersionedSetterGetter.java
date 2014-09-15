@@ -151,11 +151,13 @@ public class VersionedSetterGetter
             RalphObject ralph_object =
                 ObjectContentsDeserializers.deserialize(
                     initial_contents,ralph_globals);
-
-            // note: still need to play the deltas forward.
-            // currently, just putting in initial values for
-            // endpoints.
-
+            // plays deltas forward when reconstructing object.  note
+            // that using null for reconstruction context, because
+            // should be able to reconstruct only from history.  Also
+            // note that using null as third argument, indicating that
+            // we should replay all changes on top of object.
+            ralph_object.replay(null,obj_history,null);
+            
             endpt_initialization_vars.add(ralph_object);
         }
 
