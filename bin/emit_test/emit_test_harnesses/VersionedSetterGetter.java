@@ -1,11 +1,26 @@
 package emit_test_harnesses;
 
+import java.util.Map;
+import java.util.HashMap;
+
+import java.util.List;
+import java.util.ArrayList;
+
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
+import ralph.RalphObject;
+import ralph.Endpoint;
+import ralph.EndpointConstructorObj;
 import RalphVersions.InMemoryLocalVersionManager;
+import RalphVersions.EndpointInitializationHistory;
+import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
+import RalphVersions.ObjectHistory;
+import RalphVersions.ObjectContentsDeserializers;
+
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
    Record all changes to endpoint, and then try to replay them.  Note:
@@ -27,11 +42,13 @@ public class VersionedSetterGetter
         try
         {
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
-            VersioningInfo.instance.local_version_manager =
+            InMemoryLocalVersionManager in_memory_version_manager =
                 new InMemoryLocalVersionManager();
+            VersioningInfo.instance.local_version_manager =
+                in_memory_version_manager;
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
-            ISetterGetter endpt = new SetterGetter(
+            SetterGetter endpt = new SetterGetter(
                 ralph_globals,new SingleSideConnection());
 
             
@@ -68,6 +85,27 @@ public class VersionedSetterGetter
                 if (gotten_boolean != new_boolean)
                     return false;
             }
+
+            // now, tries to replay changes to endpoint.  First,
+            // identify the variables that were initialized as part of
+            Map<String,EndpointConstructorObj> constructor_map =
+                new HashMap<String,EndpointConstructorObj>();
+            constructor_map.put(
+                SetterGetter.factory.getClass().getName(),
+                SetterGetter.factory);
+            
+            ISetterGetter replayed_endpt = (ISetterGetter) rebuild_endpoint(
+                in_memory_version_manager,endpt._uuid,
+                constructor_map,ralph_globals);
+
+            if (!endpt.get_text().equals(replayed_endpt.get_text()))
+                return false;
+
+            if (!endpt.get_number().equals(replayed_endpt.get_number()))
+                return false;
+            
+            if (!endpt.get_tf().equals(replayed_endpt.get_tf()))
+                return false;
             
             return true;
         }
@@ -76,5 +114,53 @@ public class VersionedSetterGetter
             _ex.printStackTrace();
             return false;
         }
+    }
+
+    /**
+       @param endpt_constructor_class_name_to_obj --- Keys are
+       endpoint constructor object class names, values are
+       EndpointConstructorObjs.
+     */
+    public static Endpoint rebuild_endpoint(
+        InMemoryLocalVersionManager local_version_manager,
+        String endpoint_uuid,
+        Map<String,EndpointConstructorObj> endpt_constructor_class_name_to_obj,
+        RalphGlobals ralph_globals)
+    {
+        EndpointInitializationHistory endpt_history =
+            local_version_manager.get_endpoint_initialization_history(
+                endpoint_uuid);
+        EndpointConstructorObj endpt_constructor_obj =
+            endpt_constructor_class_name_to_obj.get(
+                endpt_history.endpoint_constructor_class_name);
+
+        // repopulate all initial ralph objects that get placed in
+        // endpoint.
+        List<RalphObject> endpt_initialization_vars =
+            new ArrayList<RalphObject>();
+        
+        for (NameUUIDTuple name_uuid_tuple : endpt_history.variable_list)
+        {
+            String obj_uuid = name_uuid_tuple.uuid;
+            ObjectHistory obj_history =
+                local_version_manager.get_object_history(obj_uuid);
+
+            ObjectContents initial_contents =
+                obj_history.initial_construction_contents;
+            
+            RalphObject ralph_object =
+                ObjectContentsDeserializers.deserialize(
+                    initial_contents,ralph_globals);
+
+            // note: still need to play the deltas forward.
+            // currently, just putting in initial values for
+            // endpoints.
+
+            endpt_initialization_vars.add(ralph_object);
+        }
+
+        return endpt_constructor_obj.construct(
+            ralph_globals,new SingleSideConnection(),
+            endpt_initialization_vars);
     }
 }
