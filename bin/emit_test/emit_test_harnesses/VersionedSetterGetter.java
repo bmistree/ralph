@@ -101,8 +101,10 @@ public class VersionedSetterGetter
                 in_memory_version_manager,endpt._uuid,
                 constructor_map,ralph_globals);
 
-            if (!endpt.get_text().equals(replayed_endpt.get_text()))
-                return false;
+            // NOTE: non-atomics are not under version control, and
+            // operations to them are therefore not logged.
+            // if (!endpt.get_text().equals(replayed_endpt.get_text()))
+            //     return false;
 
             if (!endpt.get_number().equals(replayed_endpt.get_number()))
                 return false;
