@@ -1,15 +1,10 @@
 package RalphVersions;
 
-import java.util.Comparator;
-
 import java.util.Map;
 import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
-
-import java.util.TreeSet;
-import java.util.SortedSet;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
@@ -24,8 +19,8 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         new HashMap<String,CommitMetadata>();
 
     // key is object uuid
-    private final Map<String,InMemoryObjectHistory> object_history_map =
-        new HashMap<String,InMemoryObjectHistory>();
+    private final Map<String,ObjectHistory> object_history_map =
+        new HashMap<String,ObjectHistory>();
 
     // key is the classname of the endpoint constructor object.
     private final Map<String,EndpointConstructorObj> endpoint_constructor_map =
@@ -40,7 +35,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
      */
     synchronized public int object_history_size (String obj_uuid)
     {
-        InMemoryObjectHistory obj_history = object_history_map.get(obj_uuid);
+        ObjectHistory obj_history = object_history_map.get(obj_uuid);
         if (obj_history == null)
             return -1;
         
@@ -58,7 +53,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         String object_uuid, Delta delta, CommitMetadata commit_metadata)
     {
         check_and_insert_in_memory_object_history(object_uuid);
-        InMemoryObjectHistory object_history =
+        ObjectHistory object_history =
             object_history_map.get(object_uuid);
 
         object_history.add_delta(
@@ -71,7 +66,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         String object_uuid, ObjectContents obj_contents)
     {
         check_and_insert_in_memory_object_history(object_uuid);
-        InMemoryObjectHistory object_history =
+        ObjectHistory object_history =
             object_history_map.get(object_uuid);
         object_history.set_construction_contents(obj_contents);
     }
@@ -85,7 +80,7 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         if (! object_history_map.containsKey(object_uuid))
         {
             object_history_map.put(
-                object_uuid, new InMemoryObjectHistory(object_uuid));
+                object_uuid, new ObjectHistory(object_uuid));
         }
     }
     
@@ -116,7 +111,6 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
             endpoint_constructor_obj.getClass().getName(),
             endpoint_constructor_obj);
     }
-
 
     @Override
     public void close_versioned_object(String object_uuid)
@@ -160,64 +154,5 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
                 this.uuid = uuid;
             }
         }
-    }
-    
-
-    private static class InMemoryObjectHistory
-    {
-        final public SortedSet history = new TreeSet<SingleObjectChange>(
-            ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
-        final String object_uuid;
-
-        public ObjectContents initial_construction_contents = null;
-        
-        public InMemoryObjectHistory(String object_uuid)
-        {
-            this.object_uuid = object_uuid;
-        }
-
-        public void set_construction_contents(ObjectContents contents)
-        {
-            initial_construction_contents = contents;
-        }
-        
-        public void add_delta (
-            long root_lamport_time, Delta delta,
-            String commit_metadata_event_uuid)
-        {
-            history.add(
-                new SingleObjectChange(
-                    root_lamport_time,delta,commit_metadata_event_uuid));
-        }
-
-        
-        private class SingleObjectChange
-        {
-            public final long root_lamport_time;
-            public final Delta delta;
-            public final String commit_metadata_event_uuid;
-
-            public SingleObjectChange(
-                long root_lamport_time, Delta delta,
-                String commit_metadata_event_uuid)
-            {
-                this.root_lamport_time = root_lamport_time;
-                this.delta = delta;
-                this.commit_metadata_event_uuid = commit_metadata_event_uuid;
-            }
-        }
-
-        private static class RootCommitLamportTimeComparator
-            implements Comparator<SingleObjectChange>
-        {
-            @Override
-                public int compare(SingleObjectChange a, SingleObjectChange b)
-            {
-                return Long.valueOf(a.root_lamport_time).compareTo(
-                    Long.valueOf(b.root_lamport_time));
-            }
-        }
-        public static RootCommitLamportTimeComparator ROOT_COMMIT_LAMPORT_TIME_COMPARATOR =
-            new RootCommitLamportTimeComparator();
     }
 }

@@ -77,7 +77,7 @@ public class UpdateSerializer
         
         return deserialized_data.equals(update_data);
     }
-
+    
     public static SingleDeviceUpdate<Integer> generate_int_single_device_update(
         String device_id, long root_commit_lamport_time,
         long local_lamport_time, String root_application_uuid,
