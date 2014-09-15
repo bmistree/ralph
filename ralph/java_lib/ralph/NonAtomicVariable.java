@@ -43,7 +43,7 @@ public abstract class NonAtomicVariable<T,DeltaType>
                 uuid(), obj_contents);
         }
     }
-
+    
     @Override
     public void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)

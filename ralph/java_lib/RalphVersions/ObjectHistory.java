@@ -3,6 +3,7 @@ package RalphVersions;
 import java.util.Comparator;
 import java.util.TreeSet;
 import java.util.SortedSet;
+import java.util.Set;
 
 import ralph.RalphObject;
 import RalphExceptions.BackoutException;
@@ -42,6 +43,64 @@ public class ObjectHistory
                 root_lamport_time,delta,commit_metadata_event_uuid));
     }
 
+    public static void replay_number(
+        RalphObject<Double,Double> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+
+            SingleObjectChange.number_incorporate_single_object_change(
+                change,to_replay_on);
+        }
+    }
+
+    public static void replay_text(
+        RalphObject<String,String> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+
+            SingleObjectChange.text_incorporate_single_object_change(
+                change,to_replay_on);
+        }
+    }
+
+    public static void replay_tf(
+        RalphObject<Boolean,Boolean> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+
+            SingleObjectChange.true_false_incorporate_single_object_change(
+                change,to_replay_on);
+        }
+    }
+
+    
 
     public static class SingleObjectChange
     {
@@ -57,7 +116,7 @@ public class ObjectHistory
             this.delta = delta;
             this.commit_metadata_event_uuid = commit_metadata_event_uuid;
         }
-
+        
         public static void number_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<Double,Double> to_incorporate_into)

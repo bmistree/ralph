@@ -25,6 +25,9 @@ import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
+import RalphVersions.ObjectHistory;
+import RalphVersions.IReconstructionContext;
+
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 
@@ -89,6 +92,14 @@ public class Variables
                 DOUBLE_VERSION_HELPER,ralph_globals);
         }
 
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_number(this,obj_history,to_play_until);
+        }
+        
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
            case will return internal value without taking any locks.
@@ -177,6 +188,14 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_text(this,obj_history,to_play_until);
+        }
+        
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
            case will return internal value without taking any locks.
@@ -258,6 +277,14 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_tf(this,obj_history,to_play_until);
+        }
+
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
            case will return internal value without taking any locks.
@@ -270,7 +297,7 @@ public class Variables
                 AtomicTrueFalseVariable.serialize_true_false_contents(
                     active_event,this,true);
         }
-
+        
         public static ObjectContents serialize_true_false_contents(
             ActiveEvent active_event,RalphObject<Boolean,Boolean> ralph_object,
             boolean atomic) throws BackoutException
@@ -611,6 +638,14 @@ public class Variables
             return AtomicNumberVariable.serialize_num_contents(
                 active_event,this,false);
         }
+
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_number(this,obj_history,to_play_until);
+        }
         
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
@@ -620,6 +655,7 @@ public class Variables
                 number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -661,6 +697,14 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_text(this,obj_history,to_play_until);
+        }
+        
         @Override
         public ObjectContents serialize_contents(ActiveEvent active_event)
             throws BackoutException
@@ -708,6 +752,14 @@ public class Variables
         {
             return AtomicTrueFalseVariable.serialize_true_false_contents(
                 active_event,this,false);
+        }
+
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.replay_tf(this,obj_history,to_play_until);
         }
         
         public NonAtomicTrueFalseVariable(

@@ -5,6 +5,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import RalphVersions.ObjectHistory;
+import RalphVersions.IReconstructionContext;
+
 
 /**
  * @param <T> --- The internal, Java type of the data
@@ -29,6 +32,25 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        a version.
      */
     protected VersionHelper<DeltaType> version_helper = null;
+
+    /**
+       After regenerating an object from its constructor, need to be
+       able to replay its changes on top of it.
+     */
+    // public abstract void replay (
+    //     IReconstructionContext reconstruction_context,
+    //     ObjectHistory obj_history,Long to_play_until);
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        // Note: should be abstract, but implementing this method as
+        // assert --- allows compiling and testing even though replay
+        // isn't implemented for a number of objects.
+        Util.logger_assert(
+            "Replay not overridden in atomicvariable.");
+    }
+
     
     /**
        Mostly used when deserializing one locked object (to_swap_with)

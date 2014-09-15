@@ -14,7 +14,6 @@ public abstract class AtomicValueVariable<T>
         super(_log_changes,init_val,vtdwc,version_helper,ralph_globals);
     }
 
-    
     /**
        Log completed commit, if ralph globals designates to.
      */
