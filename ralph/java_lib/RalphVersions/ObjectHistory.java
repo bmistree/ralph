@@ -4,6 +4,9 @@ import java.util.Comparator;
 import java.util.TreeSet;
 import java.util.SortedSet;
 
+import ralph.RalphObject;
+import RalphExceptions.BackoutException;
+
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -40,7 +43,7 @@ public class ObjectHistory
     }
 
 
-    private class SingleObjectChange
+    public static class SingleObjectChange
     {
         public final long root_lamport_time;
         public final Delta delta;
@@ -54,6 +57,31 @@ public class ObjectHistory
             this.delta = delta;
             this.commit_metadata_event_uuid = commit_metadata_event_uuid;
         }
+
+        public static void number_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<Double,Double> to_incorporate_into)
+        {
+            double internal_number = change.delta.getValue().getNum();
+            to_incorporate_into.direct_set_val(internal_number);
+        }
+
+        public static void text_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<String,String> to_incorporate_into)
+        {
+            String internal_string = change.delta.getValue().getText();
+            to_incorporate_into.direct_set_val(internal_string);
+        }
+        
+        public static void true_false_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<Boolean,Boolean> to_incorporate_into)
+        {
+            boolean internal_bool = change.delta.getValue().getTf();
+            to_incorporate_into.direct_set_val(internal_bool);
+        }
+        
     }
 
     private static class RootCommitLamportTimeComparator

@@ -363,6 +363,15 @@ public abstract class AtomicObject<T,DeltaType>
         return to_return;
     }
 
+    /**
+       NOTE: Unsafe.  Must use external mechanism to ensure that no
+       read-write conflict.
+     */
+    public void direct_set_val(T new_val)
+    {
+        val.val = new_val;
+    }
+    
     protected abstract DataWrapper<T> acquire_write_lock(ActiveEvent active_event)
         throws BackoutException;
     

@@ -32,7 +32,11 @@ public abstract class NonAtomicObject<T,DeltaType>
         val = data_wrapper_constructor.construct(init_val,false);
         version_helper = _version_helper;
     }
-	
+
+    public void direct_set_val(T new_val)
+    {
+        val.val = new_val;
+    }
 	
     @Override
     public void update_event_priority(String uuid, String new_priority)

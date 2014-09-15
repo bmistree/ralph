@@ -56,6 +56,11 @@ public abstract class RalphObject<T,DeltaType> implements IReference
         // FIXME: should just declare this abstract.
         Util.logger_assert("FIXME: objects override deserialize_rpc.");
     }
+
+    /**
+       Assumes no other writers.  Set directly on internal value.
+     */
+    public abstract void direct_set_val(T new_val);
     
     /**
      * 
