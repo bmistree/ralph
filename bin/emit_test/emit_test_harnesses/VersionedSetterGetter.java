@@ -54,24 +54,27 @@ public class VersionedSetterGetter
             
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
+            double new_number = original_internal_number + ((double)1);
             for (int i = 0; i < 20; ++i)
             {
-                double new_number = original_internal_number + ((double)1);
                 endpt.set_number(new_number);
                 double gotten_number = endpt.get_number().doubleValue();
                 if (gotten_number != new_number)
                     return false;
+
+                new_number += 1.0;
             }
 
             // testing texts
             String original_internal_text = endpt.get_text();
+            String new_text = original_internal_text + "hello";
             for (int i = 0; i < 20; ++i)
             {
-                String new_text = original_internal_text + "hello";
                 endpt.set_text(new_text);
                 String gotten_text = endpt.get_text();
                 if (! new_text.equals(gotten_text))
                     return false;
+                new_text += "hello";
             }
 
             // testing tfs
