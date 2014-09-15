@@ -31,15 +31,11 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
         new HashMap<String,InMemoryEndpointInitializationHistory>();
 
     /**
-       @returns --- -1 if object does not exist.
+       @returns null if does not exist.
      */
-    synchronized public int object_history_size (String obj_uuid)
+    synchronized public ObjectHistory get_object_history(String obj_uuid)
     {
-        ObjectHistory obj_history = object_history_map.get(obj_uuid);
-        if (obj_history == null)
-            return -1;
-        
-        return obj_history.history.size();
+        return object_history_map.get(obj_uuid);
     }
     
     @Override

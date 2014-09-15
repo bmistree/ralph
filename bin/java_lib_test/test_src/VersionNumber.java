@@ -12,6 +12,7 @@ import ralph.RalphObject;
 import ralph.RootEventParent;
 import ralph.Variables.AtomicNumberVariable;
 import RalphVersions.InMemoryLocalVersionManager;
+import RalphVersions.ObjectHistory;
 import RalphConnObj.SingleSideConnection;
 import RalphCallResults.RootCallResult.ResultType;
 
@@ -65,10 +66,13 @@ public class VersionNumber
 
             // first check that the number of changes to the object is
             // the same as the size of the object's history.
-            int obj_history_size =
-                local_version_manager.object_history_size(atom_num.uuid());
+            ObjectHistory obj_history =
+                local_version_manager.get_object_history(atom_num.uuid());
 
-            if (obj_history_size != updates_set.size())
+            if (obj_history == null)
+                return false;
+
+            if (obj_history.history.size() != updates_set.size())
                 return false;
         }
         catch (Exception ex)
