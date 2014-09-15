@@ -2,6 +2,7 @@ package java_lib_test;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 
 import ralph.RalphGlobals;
 import ralph.ActiveEvent;
@@ -23,6 +24,7 @@ import RalphExceptions.StoppedException;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectContentsDeserializers;
+import RalphVersions.ObjectHistory.SingleObjectChange;
 
 public class VersionNumber
 {
@@ -92,13 +94,32 @@ public class VersionNumber
             // fine because I started with integers.
             if (! initial_replayed_internal_val.equals(initial_value))
                 return false;
+
+            // compare updates against logged updates
+            int updates_set_index = 0;
+            Set <SingleObjectChange> single_object_change_set =
+                obj_history.history;
+            for (SingleObjectChange change : single_object_change_set)
+            {
+                SingleObjectChange.number_incorporate_single_object_change(
+                    change,replayed_atom_num);
+                Double replayed_val = replayed_atom_num.get_val(null);
+                Double actual_val = updates_set.get(updates_set_index);
+                
+                // warning: I know it's not great that I'm testing
+                // equality of floating point numbers, but it'll
+                // likely be fine because I started with integers.
+                if (!actual_val.equals(replayed_val))
+                    return false;
+                
+                ++updates_set_index;
+            }
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
             return false;
         }
-
         return true;
     }
 
