@@ -20,6 +20,11 @@ public class ObjectHistory
         this.object_uuid = object_uuid;
     }
 
+    public ObjectContents get_construction_contents()
+    {
+        return initial_construction_contents;
+    }
+    
     public void set_construction_contents(ObjectContents contents)
     {
         initial_construction_contents = contents;

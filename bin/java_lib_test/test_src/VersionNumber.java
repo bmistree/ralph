@@ -21,6 +21,8 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import RalphVersions.ObjectContentsDeserializers;
 
 public class VersionNumber
 {
@@ -73,6 +75,22 @@ public class VersionNumber
                 return false;
 
             if (obj_history.history.size() != updates_set.size())
+                return false;
+
+            // now replay object and see if it matches
+            ObjectContents construction_contents =
+                obj_history.get_construction_contents();
+            
+            AtomicNumberVariable replayed_atom_num =
+                (AtomicNumberVariable) ObjectContentsDeserializers.deserialize(
+                    construction_contents,ralph_globals);
+
+            Double initial_replayed_internal_val =
+                replayed_atom_num.get_val(null);
+            // warning: I know it's not great that I'm testing
+            // equality of floating point numbers, but it'll likely be
+            // fine because I started with integers.
+            if (! initial_replayed_internal_val.equals(initial_value))
                 return false;
         }
         catch (Exception ex)
