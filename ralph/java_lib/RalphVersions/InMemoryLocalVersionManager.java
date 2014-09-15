@@ -37,6 +37,15 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     {
         return object_history_map.get(obj_uuid);
     }
+
+    /**
+       @returns null if does not exist.
+     */
+    synchronized public EndpointInitializationHistory
+        get_endpoint_initialization_history(String endpoint_uuid)
+    {
+        return endpoint_initialization_map.get(endpoint_uuid);
+    }
     
     @Override
     synchronized public void save_commit_metadata(CommitMetadata commit_metadata)
