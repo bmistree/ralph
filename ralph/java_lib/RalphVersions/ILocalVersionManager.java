@@ -27,6 +27,13 @@ public interface ILocalVersionManager
        @returns null if does not exist.
      */
     public ObjectHistory get_full_object_history(String obj_uuid);
+
+    /**
+       @returns null if does not exist.
+     */
+    public EndpointConstructorObj get_endpoint_constructor_obj(
+        String endpoint_constructor_obj_classname);
+
     
     /**
        @param lower_range --- null if should query from earliest

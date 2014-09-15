@@ -32,6 +32,17 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
 
     /**
        @returns null if does not exist.
+    */
+    @Override
+    synchronized public EndpointConstructorObj get_endpoint_constructor_obj(
+        String endpoint_constructor_obj_classname)
+    {
+        return endpoint_constructor_map.get(
+            endpoint_constructor_obj_classname);
+    }
+    
+    /**
+       @returns null if does not exist.
      */
     @Override
     synchronized public ObjectHistory get_full_object_history(String obj_uuid)

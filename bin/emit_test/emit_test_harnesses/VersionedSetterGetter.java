@@ -90,17 +90,9 @@ public class VersionedSetterGetter
                     return false;
             }
 
-            // now, tries to replay changes to endpoint.  First,
-            // identify the variables that were initialized as part of
-            Map<String,EndpointConstructorObj> constructor_map =
-                new HashMap<String,EndpointConstructorObj>();
-            constructor_map.put(
-                SetterGetter.factory.getClass().getName(),
-                SetterGetter.factory);
-            
+            // now, tries to replay changes to endpoint.  
             ISetterGetter replayed_endpt = (ISetterGetter) rebuild_endpoint(
-                in_memory_version_manager,endpt._uuid,
-                constructor_map,ralph_globals);
+                in_memory_version_manager,endpt._uuid,ralph_globals);
 
             // NOTE: non-atomics are not under version control, and
             // operations to them are therefore not logged.
@@ -130,14 +122,13 @@ public class VersionedSetterGetter
     public static Endpoint rebuild_endpoint(
         ILocalVersionManager local_version_manager,
         String endpoint_uuid,
-        Map<String,EndpointConstructorObj> endpt_constructor_class_name_to_obj,
         RalphGlobals ralph_globals)
     {
         EndpointInitializationHistory endpt_history =
             local_version_manager.get_endpoint_initialization_history(
                 endpoint_uuid);
         EndpointConstructorObj endpt_constructor_obj =
-            endpt_constructor_class_name_to_obj.get(
+            local_version_manager.get_endpoint_constructor_obj(
                 endpt_history.endpoint_constructor_class_name);
 
         // repopulate all initial ralph objects that get placed in
