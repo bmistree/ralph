@@ -32,6 +32,7 @@ public class RalphGlobals implements IUUIDGenerator
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
+        public boolean logging_on = false;
     }
 
     /**
