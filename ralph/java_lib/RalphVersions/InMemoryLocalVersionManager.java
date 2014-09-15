@@ -33,14 +33,27 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     /**
        @returns null if does not exist.
      */
-    synchronized public ObjectHistory get_object_history(String obj_uuid)
+    @Override
+    synchronized public ObjectHistory get_full_object_history(String obj_uuid)
     {
         return object_history_map.get(obj_uuid);
     }
 
+    @Override
+    synchronized public ObjectHistory get_ranged_object_history(
+        String obj_uuid,Long lower_range, Long upper_range)
+    {
+        if (!object_history_map.containsKey(obj_uuid))
+            return null;
+
+        ObjectHistory obj_history = object_history_map.get(obj_uuid);
+        return obj_history.produce_range(lower_range,upper_range);
+    }
+    
     /**
        @returns null if does not exist.
      */
+    @Override
     synchronized public EndpointInitializationHistory
         get_endpoint_initialization_history(String endpoint_uuid)
     {
@@ -48,7 +61,8 @@ public class InMemoryLocalVersionManager implements ILocalVersionManager
     }
     
     @Override
-    synchronized public void save_commit_metadata(CommitMetadata commit_metadata)
+    synchronized public void save_commit_metadata(
+        CommitMetadata commit_metadata)
     {
         commit_metadata_map.put(commit_metadata.event_uuid,commit_metadata);
     }

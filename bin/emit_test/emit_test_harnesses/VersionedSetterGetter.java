@@ -15,6 +15,7 @@ import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 import RalphVersions.InMemoryLocalVersionManager;
+import RalphVersions.ILocalVersionManager;
 import RalphVersions.EndpointInitializationHistory;
 import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
 import RalphVersions.ObjectHistory;
@@ -127,7 +128,7 @@ public class VersionedSetterGetter
        EndpointConstructorObjs.
      */
     public static Endpoint rebuild_endpoint(
-        InMemoryLocalVersionManager local_version_manager,
+        ILocalVersionManager local_version_manager,
         String endpoint_uuid,
         Map<String,EndpointConstructorObj> endpt_constructor_class_name_to_obj,
         RalphGlobals ralph_globals)
@@ -148,7 +149,7 @@ public class VersionedSetterGetter
         {
             String obj_uuid = name_uuid_tuple.uuid;
             ObjectHistory obj_history =
-                local_version_manager.get_object_history(obj_uuid);
+                local_version_manager.get_full_object_history(obj_uuid);
 
             ObjectContents initial_contents =
                 obj_history.initial_construction_contents;

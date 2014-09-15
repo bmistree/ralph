@@ -13,8 +13,9 @@ import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class ObjectHistory
 {
-    final public SortedSet history = new TreeSet<SingleObjectChange>(
-        ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
+    final public SortedSet<SingleObjectChange> history =
+        new TreeSet<SingleObjectChange>(
+            ROOT_COMMIT_LAMPORT_TIME_COMPARATOR);
     final String object_uuid;
 
     public ObjectContents initial_construction_contents = null;
@@ -24,6 +25,39 @@ public class ObjectHistory
         this.object_uuid = object_uuid;
     }
 
+    /**
+       @param lower_range --- null if should query from earliest
+       record.
+
+       @param upper_range --- null if should query to latest record.
+       
+       @returns ObjectHistory object with SingleObjectChange values
+       only between lower_range and upper_range.
+     */
+    public ObjectHistory produce_range(Long lower_range,Long upper_range)
+    {
+        ObjectHistory to_return = new ObjectHistory(object_uuid);
+
+        // FIXME: linear search for start.  Probably could use binary
+        // search instead.
+        for (SingleObjectChange change : history)
+        {
+            if ((lower_range != null) &&
+                (change.root_lamport_time < lower_range))
+            {
+                continue;
+            }
+            if ((upper_range != null) &&
+                (change.root_lamport_time > upper_range))
+            {
+                break;
+            }
+
+            to_return.history.add(change);
+        }
+        return to_return;
+    }
+    
     public ObjectContents get_construction_contents()
     {
         return initial_construction_contents;
