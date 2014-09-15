@@ -29,7 +29,7 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        a version.
      */
     protected VersionHelper<DeltaType> version_helper = null;
-
+    
     /**
        Mostly used when deserializing one locked object (to_swap_with)
        into another.  this.
