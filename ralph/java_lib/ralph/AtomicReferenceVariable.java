@@ -4,14 +4,15 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 
 public abstract class AtomicReferenceVariable<ValueType extends IReference>
     extends AtomicVariable<ValueType, IReference>
-    implements IReplayableReferenceHolder
+    implements IInternalReferenceHolder
 {
     /**
        When we are replaying reference variables, we first must
        construct them.  Then we replay what they were pointing to.
-       This field holds what the reference was pointing to.
+       This field should hold the name of the reference that this
+       object was pointing to when it was constructed.  
      */
-    private String ref_to_replay_from = null;
+    private String initial_reference = null;
     
     public AtomicReferenceVariable(
         boolean _log_changes, ValueType init_val,
@@ -24,17 +25,21 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
             additional_serialization_contents);
     }
 
+    /*** IInitialReferenceHolder methods */
+    
     @Override
-    public String get_ref_to_replay_from()
+    public String get_initial_reference()
     {
-        return ref_to_replay_from;
+        return initial_reference;
     }
 
     @Override
-    public void set_ref_to_replay_from(String new_ref_to_replay_from)
+    public void set_initial_reference(String new_initial_reference)
     {
-        ref_to_replay_from = new_ref_to_replay_from;
+        initial_reference = new_initial_reference;
     }
+
+    /***** AtomicVariable methods */
     
     @Override
     public boolean return_internal_val_from_container() 

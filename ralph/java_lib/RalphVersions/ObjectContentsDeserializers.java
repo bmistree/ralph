@@ -55,7 +55,7 @@ public class ObjectContentsDeserializers
             else if (obj_contents.hasMapType())
             {                
                 ObjectContents.Map map = obj_contents.getMapType();
-                String ref_to_replay_from = map.getRefType().getReference();
+                String initial_reference = map.getRefType().getReference();
                 IAtomicMapVariableFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
                         map.getKeyTypeClassName(),map.getValTypeClassName());
@@ -66,7 +66,7 @@ public class ObjectContentsDeserializers
                 }
                 Variables.AtomicMapVariable to_return =
                     factory.construct(ralph_globals);
-                to_return.set_ref_to_replay_from(ref_to_replay_from);
+                to_return.set_initial_reference(initial_reference);
                 return to_return;
             }
             

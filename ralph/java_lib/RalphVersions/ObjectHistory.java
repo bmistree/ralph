@@ -7,7 +7,7 @@ import java.util.Set;
 
 import ralph.RalphObject;
 import RalphExceptions.BackoutException;
-import ralph.IReplayableReferenceHolder;
+import ralph.IInternalReferenceHolder;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -81,24 +81,23 @@ public class ObjectHistory
     // FIXME: for all replayers, could probably just zoom to last
     // value and set there instead of setting each time in for loop.
 
-    
     /**
        Sets the ref_to_replay_from field of reference.
      */
-    public static void replay_reference(
-        IReplayableReferenceHolder to_replay_on,
+    public static String find_reference(
         ObjectHistory obj_history,Long to_play_until)
     {
+        String to_return = null;
         for (SingleObjectChange change : obj_history.history)
         {
             if ((to_play_until != null) &&
                 (change.root_lamport_time > to_play_until))
             {
-                return;
+                return to_return;
             }
-            SingleObjectChange.reference_holder_incorporate_single_object_change(
-                change,to_replay_on);
+            to_return = change.delta.getReference().getReference();
         }
+        return to_return;
     }
     
     public static void replay_number(
@@ -195,14 +194,6 @@ public class ObjectHistory
         {
             boolean internal_bool = change.delta.getValue().getTf();
             to_incorporate_into.direct_set_val(internal_bool);
-        }
-
-        public static void reference_holder_incorporate_single_object_change(
-            SingleObjectChange change, IReplayableReferenceHolder holder)
-        {
-            String ref_to_replay_from =
-                change.delta.getReference().getReference();
-            holder.set_ref_to_replay_from(ref_to_replay_from);
         }
     }
 
