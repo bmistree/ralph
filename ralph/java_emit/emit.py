@@ -265,7 +265,9 @@ public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj)
 
 public static class %(endpoint_name)s_ConstructorObj implements EndpointConstructorObj
 {
-    private %(endpoint_name)s_ConstructorObj()
+    // This should be public because need to be able to build object
+    // when sending over reference factories.
+    public %(endpoint_name)s_ConstructorObj()
     {
         ILocalVersionManager local_version_manager =
             VersioningInfo.instance.local_version_manager;
