@@ -5,6 +5,13 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 public abstract class AtomicReferenceVariable<ValueType extends IReference>
     extends AtomicVariable<ValueType, IReference>
 {
+    /**
+       When we are replaying reference variables, we first must
+       construct them.  Then we replay what they were pointing to.
+       This field holds what the reference was pointing to.
+     */
+    private String ref_to_replay_from = null;
+    
     public AtomicReferenceVariable(
         boolean _log_changes, ValueType init_val,
         ValueTypeDataWrapperFactory<ValueType> vtdwc,
@@ -14,6 +21,16 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         super(
             _log_changes,init_val,vtdwc,version_helper,ralph_globals,
             additional_serialization_contents);
+    }
+
+    public String get_ref_to_replay_from()
+    {
+        return ref_to_replay_from;
+    }
+
+    public void set_ref_to_replay_from(String new_ref_to_replay_from)
+    {
+        ref_to_replay_from = new_ref_to_replay_from;
     }
     
     @Override
