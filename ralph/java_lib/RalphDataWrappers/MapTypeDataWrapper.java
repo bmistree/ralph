@@ -12,6 +12,7 @@ import java.util.Collections;
 import ralph.RalphObject;
 import ralph.ActiveEvent;
 import ralph.Util;
+import ralph.VersioningInfo;
 
 import RalphExceptions.BackoutException;
 
@@ -45,16 +46,21 @@ public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
 
         key_type_class = _key_type_class;
         value_type_class = _value_type_class;
+
+        // either perform logging if global logging switch is on, or
+        // if explicitly told to.
+        log_changes =
+            (VersioningInfo.instance.local_version_manager != null) ||
+            _log_changes;
         
-        if (_log_changes)
+        if (log_changes)
         {
             change_log =
                 new ArrayList<ContainerOpTuple<KeyType,ValueType,DeltaValueType>>();
         }
         else
             change_log = null;
-        
-        log_changes = _log_changes;
+
     }
 
     public MapTypeDataWrapper(

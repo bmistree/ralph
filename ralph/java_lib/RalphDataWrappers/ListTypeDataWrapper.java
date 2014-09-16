@@ -11,7 +11,7 @@ import java.util.Collections;
 import ralph.RalphObject;
 import RalphExceptions.BackoutException;
 import ralph.ActiveEvent;
-
+import ralph.VersioningInfo;
 
 
 /**
@@ -38,12 +38,22 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
         boolean _log_changes)
     {
         super(new ArrayList<RalphObject<ValueType,DeltaValueType>>(v));
-        if (_log_changes)
-            change_log = new ArrayList<ContainerOpTuple<Integer,ValueType,DeltaValueType>>();
+
+        // either perform logging if global logging switch is on, or
+        // if explicitly told to.
+        log_changes =
+            (VersioningInfo.instance.local_version_manager != null) ||
+            _log_changes;
+        
+        if (log_changes)
+        {
+            change_log =
+                new ArrayList<
+                    ContainerOpTuple<Integer,ValueType,DeltaValueType>>();
+        }
         else
             change_log = null;
-        
-        log_changes = _log_changes;
+
         value_type_class = _value_type_class;
     }
 
