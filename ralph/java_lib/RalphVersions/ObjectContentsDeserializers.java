@@ -4,6 +4,8 @@ import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.Util;
 import ralph.Variables;
+import ralph.ContainerFactorySingleton;
+import ralph.IAtomicMapVariableFactory;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -14,6 +16,10 @@ public class ObjectContentsDeserializers
     public static RalphObject deserialize(
         ObjectContents obj_contents, RalphGlobals ralph_globals)
     {
+        // See note on top of force_initialization in
+        // BaseAtomicMapVariableFactory.
+        ralph.BaseAtomicMapVariableFactory.instance.force_initialization();
+        
         if (obj_contents.getAtomic())
         {
             // deserialize atomics
@@ -46,6 +52,20 @@ public class ObjectContentsDeserializers
                 //// END DEBUG
 
             }
+            else if (obj_contents.hasMapType())
+            {                
+                ObjectContents.Map map = obj_contents.getMapType();
+                IAtomicMapVariableFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
+                        map.getKeyTypeClassName(),map.getValTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize map.");
+                }
+                return factory.construct(ralph_globals);
+            }
+            
             // must have reference type
             Util.logger_assert(
                 "FIXME: must allow deserializing reference types");

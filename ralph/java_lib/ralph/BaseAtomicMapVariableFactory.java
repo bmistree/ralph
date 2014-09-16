@@ -19,21 +19,34 @@ import static ralph.BaseTypeVersionHelpers.BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSI
 
 public class BaseAtomicMapVariableFactory
 {
+    // Java uses a lazy class loader and lazy initialization.  What
+    // this means is that side effect of registering all these
+    // factories with containerfactory may not happen, unless code
+    // that needs them to be registered first touches a field in this
+    // class.
+    public final static BaseAtomicMapVariableFactory instance =
+        new BaseAtomicMapVariableFactory();
+    public void force_initialization(){}
+
+    private BaseAtomicMapVariableFactory()
+    {}
+
+    
     // can keep this private because side effect is that adding to
-    // ContainerFactorySingleton.
-    private final static AtomicMapVariableFactory<Double,Double,Double>
+    // ContainerFactorySingleton.  
+    public final static AtomicMapVariableFactory<Double,Double,Double>
         double_double_factory = new AtomicMapVariableFactory(
             Double.class,Double.class,IndexType.DOUBLE,
             ATOMIC_NUMBER_WRAPPER,
             DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
-    private final static AtomicMapVariableFactory<Double,String,String>
+    public final static AtomicMapVariableFactory<Double,String,String>
         double_string_factory = new AtomicMapVariableFactory(
             Double.class,String.class,IndexType.DOUBLE,
             ATOMIC_TEXT_WRAPPER,
             DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
-    private final static AtomicMapVariableFactory<Double,Boolean,Boolean>
+    public final static AtomicMapVariableFactory<Double,Boolean,Boolean>
         double_boolean_factory = new AtomicMapVariableFactory(
             Double.class,Boolean.class,IndexType.DOUBLE,
             ATOMIC_TRUE_FALSE_WRAPPER,
@@ -41,38 +54,38 @@ public class BaseAtomicMapVariableFactory
 
 
     // String keyed
-    private final static AtomicMapVariableFactory<String,Double,Double>
+    public final static AtomicMapVariableFactory<String,Double,Double>
         string_double_factory = new AtomicMapVariableFactory(
             String.class,Double.class,IndexType.STRING,
             ATOMIC_NUMBER_WRAPPER,
             STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
-    private final static AtomicMapVariableFactory<String,String,String>
+    public final static AtomicMapVariableFactory<String,String,String>
         string_string_factory = new AtomicMapVariableFactory(
             String.class,String.class,IndexType.STRING,
             ATOMIC_TEXT_WRAPPER,
             STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
-    private final static AtomicMapVariableFactory<String,Boolean,Boolean>
+    public final static AtomicMapVariableFactory<String,Boolean,Boolean>
         string_boolean_factory = new AtomicMapVariableFactory(
             String.class,Boolean.class,IndexType.STRING,
             ATOMIC_TRUE_FALSE_WRAPPER,
             STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
     // Boolean keyed
-    private final static AtomicMapVariableFactory<Boolean,Double,Double>
+    public final static AtomicMapVariableFactory<Boolean,Double,Double>
         boolean_double_factory = new AtomicMapVariableFactory(
             String.class,Double.class,IndexType.BOOLEAN,
             ATOMIC_NUMBER_WRAPPER,
             BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
     
-    private final static AtomicMapVariableFactory<Boolean,String,String>
+    public final static AtomicMapVariableFactory<Boolean,String,String>
         boolean_string_factory = new AtomicMapVariableFactory(
             String.class,String.class,IndexType.BOOLEAN,
             ATOMIC_TEXT_WRAPPER,
             BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
 
-    private final static AtomicMapVariableFactory<Boolean,Boolean,Boolean>
+    public final static AtomicMapVariableFactory<Boolean,Boolean,Boolean>
         boolean_boolean_factory = new AtomicMapVariableFactory(
             String.class,Boolean.class,IndexType.BOOLEAN,
             ATOMIC_TRUE_FALSE_WRAPPER,
