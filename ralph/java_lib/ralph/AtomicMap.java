@@ -11,6 +11,8 @@ import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
+
 
 /**
  * @param <KeyType>  ---- The keys used for indexing
@@ -100,8 +102,34 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     {
         AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
-        return Variables.serialize_reference(internal_map,true,uuid());
+
+        return AtomicMap.serialize_map_reference(
+            uuid(),internal_map.uuid(),key_type_class.getName(),
+            value_type_class.getName(),true);
     }
+
+    public static ObjectContents serialize_map_reference(
+        String holder_uuid,String internal_uuid, String key_type_class_name,
+        String value_type_class_name, boolean atomic)
+    {
+        Delta.ReferenceType.Builder ref_type_builder =
+            Delta.ReferenceType.newBuilder();
+        ref_type_builder.setReference(internal_uuid);
+
+        ObjectContents.Map.Builder map_builder =
+            ObjectContents.Map.newBuilder();
+        map_builder.setRefType(ref_type_builder);
+        map_builder.setKeyTypeClassName(key_type_class_name);
+        map_builder.setValTypeClassName(value_type_class_name);
+
+        ObjectContents.Builder contents_builder =
+            ObjectContents.newBuilder();
+        contents_builder.setUuid(holder_uuid);
+        contents_builder.setAtomic(atomic);
+        contents_builder.setMapType(map_builder);
+        return contents_builder.build();
+    }
+
 
     @Override
     protected

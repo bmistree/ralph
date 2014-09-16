@@ -95,7 +95,10 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
     {
         NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
-        return ralph.Variables.serialize_reference(internal_map,false,uuid());
+
+        return AtomicMap.serialize_map_reference(
+            uuid(),internal_map.uuid(),key_type_class.getName(),
+            value_type_class.getName(),false);
     }
 
     @Override
