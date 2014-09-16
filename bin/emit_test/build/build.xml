@@ -598,7 +598,7 @@
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
-        jar_VersionedSetterGetter">
+        jar_VersionedSetterGetter,jar_VersionedMap">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -613,6 +613,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_VersionedMap"
+      depends="atomic_map">
+  </target>
+  
   <target
       name="ralph_ReadOnlySpeculate"
       depends="read_only_speculate">
@@ -973,6 +978,12 @@
     </antcall>
   </target>
 
+  <target name="harness_VersionedMap">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedMap.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_VersionQuerier">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionQuerier.java"/>
@@ -1436,7 +1447,19 @@
     </antcall>
   </target>
 
-  
+  <property
+      name="versioned_map_jar"
+      value="versioned_map.jar"/>
+  <target
+      name="jar_VersionedMap"
+      depends="ralph_VersionedMap,ralph_to_byte_code,harness_VersionedMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedMap"/>
+      <param name="dest_jar" value="${versioned_map_jar}"/>
+      <param name="config_properties" value="${log_config}"/>
+    </antcall>
+  </target>
+
   <property
       name="version_querier_jar"
       value="version_querier.jar"/>
