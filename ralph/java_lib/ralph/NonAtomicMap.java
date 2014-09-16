@@ -83,22 +83,43 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
             internal_val,
             new ValueTypeDataWrapperFactory<
                 NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
-            version_helper,ralph_globals);
+            version_helper,ralph_globals,
+            // additional serialization contents gets passed back to
+            // serialize_contents as Object.
+            new AtomicMap.AdditionalAtomicMapSerializationContents(
+                _key_type_class.getName(),_value_type_class.getName()));
 
         key_type_class = _key_type_class;
         value_type_class = _value_type_class;
     }
 
     @Override
-    public ObjectContents serialize_contents(ActiveEvent active_event)
+    public ObjectContents serialize_contents(
+        ActiveEvent active_event, Object additional_serialization_contents)
         throws BackoutException
     {
+        String key_type_name = null;
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+        {
+            key_type_name = key_type_class.getName();
+            value_type_name = value_type_class.getName();
+        }
+        else
+        {
+            AtomicMap.AdditionalAtomicMapSerializationContents add_ser_contents =
+                (AtomicMap.AdditionalAtomicMapSerializationContents)
+                additional_serialization_contents;
+            key_type_name = add_ser_contents.key_class_name;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+        
         NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
 
         return AtomicMap.serialize_map_reference(
-            uuid(),internal_map.uuid(),key_type_class.getName(),
-            value_type_class.getName(),false);
+            uuid(),internal_map.uuid(),key_type_name, value_type_name,
+            false);
     }
 
     @Override

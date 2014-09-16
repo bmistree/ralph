@@ -73,7 +73,7 @@ public class AtomicList<ValueType, ValueDeltaType>
             _log_changes,internal_val,
             new ValueTypeDataWrapperFactory<
                 AtomicInternalList<ValueType,ValueDeltaType>>(),
-            version_helper,ralph_globals);
+            version_helper,ralph_globals,null);
         
         this.locked_wrapper = locked_wrapper;
         this.value_type_class = _value_type_class;
@@ -105,7 +105,8 @@ public class AtomicList<ValueType, ValueDeltaType>
     }
 
     @Override
-    public ObjectContents serialize_contents(ActiveEvent active_event)
+    public ObjectContents serialize_contents(
+        ActiveEvent active_event,Object additional_serialization_contents)
         throws BackoutException
     {
         AtomicInternalList<ValueType,ValueDeltaType> internal_list = 

@@ -9,9 +9,11 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         boolean _log_changes, ValueType init_val,
         ValueTypeDataWrapperFactory<ValueType> vtdwc,
         VersionHelper<IReference> version_helper,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals,Object additional_serialization_contents)
     {
-        super(_log_changes,init_val,vtdwc,version_helper,ralph_globals);
+        super(
+            _log_changes,init_val,vtdwc,version_helper,ralph_globals,
+            additional_serialization_contents);
     }
     
     @Override

@@ -88,7 +88,12 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             _log_changes,internal_val,
             new ValueTypeDataWrapperFactory<
                 AtomicInternalMap<KeyType,ValueType,ValueDeltaType>>(),
-            version_helper,ralph_globals);
+            version_helper,ralph_globals,
+
+            // additional serialization contents gets passed back to
+            // serialize_contents as Object.
+            new AdditionalAtomicMapSerializationContents(
+                key_type_class.getName(),value_type_class.getName()));
         
         this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
@@ -97,15 +102,32 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     }
 
     @Override
-    public ObjectContents serialize_contents(ActiveEvent active_event)
+    public ObjectContents serialize_contents(
+        ActiveEvent active_event, Object additional_serialization_contents)
         throws BackoutException
     {
+        String key_type_name = null;
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+        {
+            key_type_name = key_type_class.getName();
+            value_type_name = value_type_class.getName();
+        }
+        else
+        {
+            AdditionalAtomicMapSerializationContents add_ser_contents =
+                (AdditionalAtomicMapSerializationContents)
+                additional_serialization_contents;
+            key_type_name = add_ser_contents.key_class_name;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+        
         AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
 
         return AtomicMap.serialize_map_reference(
-            uuid(),internal_map.uuid(),key_type_class.getName(),
-            value_type_class.getName(),true);
+            uuid(),internal_map.uuid(),key_type_name,value_type_name,
+            true);
     }
 
     public static ObjectContents serialize_map_reference(
@@ -170,4 +192,17 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         any_builder.setIsTvar(true);
     }
 
+    public static class AdditionalAtomicMapSerializationContents
+    {
+        public final String key_class_name;
+        public final String val_class_name;
+        
+        public AdditionalAtomicMapSerializationContents(
+            String _key_class_name, String _val_class_name)
+        {
+            key_class_name = _key_class_name;
+            val_class_name = _val_class_name;
+        }
+    }
+    
 }

@@ -22,10 +22,16 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     protected String host_uuid = null;
 
     /**
-       Returns the current contents of the object.  
+       Returns the current contents of the object.
+
+       @param active_event --- Can be null
+
+       @param add_contents --- Metadata that an object may pass in for
+       serialization.
      */
     public abstract ObjectContents serialize_contents(
-        ActiveEvent active_event) throws BackoutException;
+        ActiveEvent active_event,Object add_contents)
+        throws BackoutException;
     
     /**
        May be null.  Gets set in initializer.  Used to save deltas of

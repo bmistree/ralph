@@ -69,7 +69,7 @@ public abstract class NonAtomicList<ValueType,DeltaType>
             internal_val,
             new ValueTypeDataWrapperFactory<
                 NonAtomicInternalList<ValueType,DeltaType>>(),
-            version_helper,ralph_globals);
+            version_helper,ralph_globals,null);
     }
 
     public void serialize_as_rpc_arg(
@@ -82,7 +82,8 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     }
 
     @Override
-    public ObjectContents serialize_contents(ActiveEvent active_event)
+    public ObjectContents serialize_contents(
+        ActiveEvent active_event, Object additional_serialization_contents)
         throws BackoutException
     {
         NonAtomicInternalList<ValueType,DeltaType> internal_list = 

@@ -2492,7 +2492,8 @@ public %s (boolean log_operations, RalphGlobals ralph_globals)
 }
 
 @Override
-public ObjectContents serialize_contents(ActiveEvent active_event)
+public ObjectContents serialize_contents(
+    ActiveEvent active_event, Object additional_serialization_info)
 {
     /**
       FIXME: add method for serializing contents of structs.

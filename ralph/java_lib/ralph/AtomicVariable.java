@@ -17,7 +17,8 @@ public abstract class AtomicVariable<T,DeltaType>
         boolean _log_changes, T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
         VersionHelper<DeltaType> version_helper,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals,
+        Object additional_serialization_contents)
     {
         super(ralph_globals);
         init_multithreaded_locked_object(
@@ -30,7 +31,8 @@ public abstract class AtomicVariable<T,DeltaType>
             ObjectContents obj_contents = null;
             try
             {
-                obj_contents = serialize_contents(null);
+                obj_contents = serialize_contents(
+                    null,additional_serialization_contents);
             }
             catch (BackoutException backout_exception)
             {

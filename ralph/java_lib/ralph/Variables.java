@@ -105,7 +105,8 @@ public class Variables
            case will return internal value without taking any locks.
          */
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return AtomicNumberVariable.serialize_num_contents(
@@ -201,7 +202,8 @@ public class Variables
            case will return internal value without taking any locks.
          */
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return AtomicTextVariable.serialize_text_contents(
@@ -290,7 +292,8 @@ public class Variables
            case will return internal value without taking any locks.
          */
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return
@@ -369,7 +372,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing enum variables.
@@ -421,7 +425,8 @@ public class Variables
         }
         
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing interface variables.
@@ -471,7 +476,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing service factories variables.
@@ -609,7 +615,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing service reference variables.
@@ -632,7 +639,8 @@ public class Variables
                 ralph_globals);
         }
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return AtomicNumberVariable.serialize_num_contents(
@@ -706,7 +714,8 @@ public class Variables
         }
         
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return AtomicTextVariable.serialize_text_contents(
@@ -747,7 +756,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             return AtomicTrueFalseVariable.serialize_true_false_contents(
@@ -812,7 +822,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing enum variables.
@@ -846,7 +857,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing interface variables.
@@ -895,7 +907,8 @@ public class Variables
         }
 
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing service factories variables.
@@ -966,7 +979,8 @@ public class Variables
         }
         
         @Override
-        public ObjectContents serialize_contents(ActiveEvent active_event)
+        public ObjectContents serialize_contents(
+            ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
             // FIXME: add code for serializing service reference variables.

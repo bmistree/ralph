@@ -70,7 +70,8 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     }
 
     @Override
-    public ObjectContents serialize_contents(ActiveEvent active_event)
+    public ObjectContents serialize_contents(
+        ActiveEvent active_event,Object additional_serialization_contents)
     {
         // FIXME: May eventually want to fill this in (eg., if
         // replacing serialization code.  Currently, it's unnecessary

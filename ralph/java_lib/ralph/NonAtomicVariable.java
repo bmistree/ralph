@@ -16,7 +16,8 @@ public abstract class NonAtomicVariable<T,DeltaType>
         T init_val,
         ValueTypeDataWrapperFactory<T> vtdwc,
         VersionHelper<DeltaType> version_helper,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals,
+        Object additional_serialization_contents)
     {
         super (ralph_globals);
         init(vtdwc,init_val, version_helper);
@@ -28,7 +29,8 @@ public abstract class NonAtomicVariable<T,DeltaType>
             ObjectContents obj_contents = null;
             try
             {
-                obj_contents = serialize_contents(null);
+                obj_contents = serialize_contents(
+                    null,additional_serialization_contents);
             }
             catch (BackoutException backout_exception)
             {

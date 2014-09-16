@@ -11,7 +11,7 @@ public abstract class AtomicValueVariable<T>
         VersionHelper<T> version_helper,
         RalphGlobals ralph_globals)
     {
-        super(_log_changes,init_val,vtdwc,version_helper,ralph_globals);
+        super(_log_changes,init_val,vtdwc,version_helper,ralph_globals,null);
     }
 
     /**
