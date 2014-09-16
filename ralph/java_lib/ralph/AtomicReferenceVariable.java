@@ -1,6 +1,8 @@
 package ralph;
 
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
 
 public abstract class AtomicReferenceVariable<ValueType extends IReference>
     extends AtomicVariable<ValueType, IReference>
@@ -63,5 +65,27 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         }
         version_helper.save_version(
             uuid,dirty_val.val,active_event.commit_metadata);
+    }
+    
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        String reference_to_use =
+            ObjectHistory.find_reference(obj_history,to_play_until);
+
+        if (reference_to_use == null)
+        {
+            if (initial_reference == null)
+            {
+                Util.logger_assert(
+                    "Require a reference to replay from");
+            }
+            reference_to_use = initial_reference;
+        }
+        ValueType rebuilt_internal_val =
+            (ValueType) reconstruction_context.get_constructed_object(
+                reference_to_use, to_play_until);
+        direct_set_val(rebuilt_internal_val);
     }
 }
