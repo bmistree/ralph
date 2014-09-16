@@ -1057,7 +1057,7 @@ public class Variables
                 _log_changes,internal_val,_index_type,locked_wrapper,
                 REFERENCE_VERSION_HELPER,key_type_class,value_type_class,
                 ralph_globals);
-        }        
+        }
     }
     
     /************ Handling Lists ********/

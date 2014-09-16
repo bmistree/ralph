@@ -46,7 +46,6 @@ public class ObjectContentsDeserializers
                 //// END DEBUG
 
             }
-            
             // must have reference type
             Util.logger_assert(
                 "FIXME: must allow deserializing reference types");
