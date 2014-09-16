@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ralph.RalphObject;
 import RalphExceptions.BackoutException;
+import ralph.IReplayableReferenceHolder;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -77,6 +78,29 @@ public class ObjectHistory
                 root_lamport_time,delta,commit_metadata_event_uuid));
     }
 
+    // FIXME: for all replayers, could probably just zoom to last
+    // value and set there instead of setting each time in for loop.
+
+    
+    /**
+       Sets the ref_to_replay_from field of reference.
+     */
+    public static void replay_reference(
+        IReplayableReferenceHolder to_replay_on,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        for (SingleObjectChange change : obj_history.history)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            SingleObjectChange.reference_holder_incorporate_single_object_change(
+                change,to_replay_on);
+        }
+    }
+    
     public static void replay_number(
         RalphObject<Double,Double> to_replay_on,
         ObjectHistory obj_history,Long to_play_until)
@@ -90,7 +114,6 @@ public class ObjectHistory
             {
                 return;
             }
-
             SingleObjectChange.number_incorporate_single_object_change(
                 change,to_replay_on);
         }
@@ -135,7 +158,6 @@ public class ObjectHistory
     }
 
     
-
     public static class SingleObjectChange
     {
         public final long root_lamport_time;
@@ -174,7 +196,14 @@ public class ObjectHistory
             boolean internal_bool = change.delta.getValue().getTf();
             to_incorporate_into.direct_set_val(internal_bool);
         }
-        
+
+        public static void reference_holder_incorporate_single_object_change(
+            SingleObjectChange change, IReplayableReferenceHolder holder)
+        {
+            String ref_to_replay_from =
+                change.delta.getReference().getReference();
+            holder.set_ref_to_replay_from(ref_to_replay_from);
+        }
     }
 
     private static class RootCommitLamportTimeComparator
