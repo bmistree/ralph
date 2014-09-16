@@ -39,6 +39,7 @@ import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
 
 import ralph_protobuffs.VariablesProto;
+import ralph.BaseAtomicMapVariableFactory.AtomicMapVariableFactory;
 
 import RalphDeserializer.Deserializer;
 import RalphDeserializer.DataDeserializer;
@@ -2237,6 +2238,7 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
     internal_struct_definition_text = emit_internal_struct(struct_type)
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
     struct_deserializer = emit_struct_deserializer(struct_type)
+    contents_deserializer = emit_struct_content_deserializer(struct_type)
     struct_list_deserializers = (
         emit_struct_list_deserializer(struct_type))
     struct_map_deserializers = (
@@ -2249,8 +2251,52 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
         struct_map_wrapper + '\n' +
         struct_deserializer + '\n' +
         struct_list_deserializers + '\n' +
-        struct_map_deserializers)
+        struct_map_deserializers + '\n' +
+        contents_deserializer )
 
+
+def emit_struct_content_deserializer(struct_type):
+    '''
+    Registers map variable factories associated with this struct.
+    '''
+    internal_struct_name = emit_internal_struct_type(struct_type)
+    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
+        struct_type)
+
+    param_tuples = (
+        ('Double',
+         'NonAtomicInternalMap.IndexType.DOUBLE',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
+        ('String',
+         'NonAtomicInternalMap.IndexType.STRING',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
+        ('Boolean',
+         'NonAtomicInternalMap.IndexType.BOOLEAN',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
+     
+    text = ''
+    for params in param_tuples:
+        key_type = params[0]
+        index_type = params[1]
+        version_helper = params[2]
+        
+        text += '''
+private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,%(internal_struct_name)s>
+    %(key_type)s_atom_map_serializer_%(internal_struct_name)s =
+        new AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,%(internal_struct_name)s> (
+            %(key_type)s.class, %(internal_struct_name)s.class,%(index_type)s,
+            %(struct_locked_wrapper_name)s,%(version_helper)s);
+''' % { 'key_type': key_type,
+        'index_type': index_type,
+        'struct_locked_wrapper_name': struct_locked_wrapper_name,
+        'internal_struct_name': internal_struct_name,
+        'version_helper': version_helper}
+
+    return text
+    
 def emit_struct_data_wrapper_constructor(struct_type):
     '''
     Each user-defined struct has its own data wrapper const

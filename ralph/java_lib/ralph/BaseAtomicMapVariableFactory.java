@@ -78,7 +78,7 @@ public class BaseAtomicMapVariableFactory
             ATOMIC_TRUE_FALSE_WRAPPER,
             BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER);
     
-    private static class AtomicMapVariableFactory<KeyType,ValueType,ValueDeltaType>
+    public static class AtomicMapVariableFactory<KeyType,ValueType,ValueDeltaType>
         implements IAtomicMapVariableFactory
     {
         private final Class <KeyType> key_type_class;
