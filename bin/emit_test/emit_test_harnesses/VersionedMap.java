@@ -3,6 +3,8 @@ package emit_test_harnesses;
 import ralph_emitted.AtomicMapJava.TVarMapEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.VersioningInfo;
+import RalphVersions.VersionUtil;
 
 public class VersionedMap
 {
@@ -18,8 +20,9 @@ public class VersionedMap
     {
         try
         {
+            RalphGlobals ralph_globals = new RalphGlobals();
             TVarMapEndpoint endpt = new TVarMapEndpoint(
-                new RalphGlobals(), new SingleSideConnection());
+                ralph_globals, new SingleSideConnection());
 
             for (int i = 0; i < 20; ++i)
                 endpt.put_number((double)i, (double)i);
@@ -31,7 +34,11 @@ public class VersionedMap
             // values equal to keys.
 
             // FIXME: must now replay
-            
+            // now, tries to replay changes to endpoint.  
+            TVarMapEndpoint replayed_endpt =
+                (TVarMapEndpoint) VersionUtil.rebuild_endpoint(
+                    VersioningInfo.instance.local_version_manager,
+                    endpt._uuid,ralph_globals);
             
             return true;
         }
