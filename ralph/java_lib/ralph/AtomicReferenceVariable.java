@@ -4,6 +4,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 
 public abstract class AtomicReferenceVariable<ValueType extends IReference>
     extends AtomicVariable<ValueType, IReference>
+    implements IReplayableReferenceHolder
 {
     /**
        When we are replaying reference variables, we first must
@@ -23,11 +24,13 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
             additional_serialization_contents);
     }
 
+    @Override
     public String get_ref_to_replay_from()
     {
         return ref_to_replay_from;
     }
 
+    @Override
     public void set_ref_to_replay_from(String new_ref_to_replay_from)
     {
         ref_to_replay_from = new_ref_to_replay_from;

@@ -9,6 +9,8 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -129,7 +131,7 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             uuid(),internal_map.uuid(),key_type_name,value_type_name,
             true);
     }
-
+    
     public static ObjectContents serialize_map_reference(
         String holder_uuid,String internal_uuid, String key_type_class_name,
         String value_type_class_name, boolean atomic)
