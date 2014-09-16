@@ -14,7 +14,6 @@ import ralph.VersioningInfo;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
-import RalphVersions.InMemoryLocalVersionManager;
 import RalphVersions.ILocalVersionManager;
 import RalphVersions.EndpointInitializationHistory;
 import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
@@ -43,10 +42,8 @@ public class VersionedSetterGetter
         try
         {
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
-            InMemoryLocalVersionManager in_memory_version_manager =
-                new InMemoryLocalVersionManager();
-            VersioningInfo.instance.local_version_manager =
-                in_memory_version_manager;
+            ILocalVersionManager in_memory_version_manager =
+                VersioningInfo.instance.local_version_manager;
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
             SetterGetter endpt = new SetterGetter(

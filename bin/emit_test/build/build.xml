@@ -11,6 +11,11 @@
     
   <!-- global properties for this build file -->
   <property name="build.dir" location="${emit_test_dir}/classes"/>
+  <property name="config_dir" location="${emit_test_dir}/config"/>
+
+  <property name="no_log_config" location="${emit_test_dir}/no_log_config/config.properties"/>
+  <property name="log_config" location="${emit_test_dir}/log_config/config.properties"/>
+  
   <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
   
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
@@ -1414,6 +1419,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicSetterGetter"/>
       <param name="dest_jar" value="${basic_setter_getter_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1426,8 +1432,10 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedSetterGetter"/>
       <param name="dest_jar" value="${versioned_setter_getter_jar}"/>
+      <param name="config_properties" value="${log_config}"/>
     </antcall>
   </target>
+
   
   <property
       name="version_querier_jar"
@@ -1440,6 +1448,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionQuerier"/>
       <param name="dest_jar" value="${version_querier_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -1452,6 +1461,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="EnumTest"/>
       <param name="dest_jar" value="${enum_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1464,6 +1474,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AliasEnumTest"/>
       <param name="dest_jar" value="${alias_enum_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1476,6 +1487,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="StructEnumTest"/>
       <param name="dest_jar" value="${struct_enum_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1488,6 +1500,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ReadOnlySpeculate"/>
       <param name="dest_jar" value="${read_only_speculate_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -1500,6 +1513,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="StructSetterGetter"/>
       <param name="dest_jar" value="${struct_setter_getter_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1512,6 +1526,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicInternalMethodCall"/>
       <param name="dest_jar" value="${basic_internal_method_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1524,6 +1539,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicTestAtomically"/>
       <param name="dest_jar" value="${basic_test_atomically_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1536,6 +1552,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicPartnerCall"/>
       <param name="dest_jar" value="${basic_partner_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1548,6 +1565,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="TCPPartnerCall"/>
       <param name="dest_jar" value="${tcp_partner_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1560,6 +1578,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="MapTester"/>
       <param name="dest_jar" value="${map_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1572,6 +1591,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicMapTester"/>
       <param name="dest_jar" value="${atomic_map_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1584,6 +1604,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ListTester"/>
       <param name="dest_jar" value="${list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1596,6 +1617,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicListTester"/>
       <param name="dest_jar" value="${atomic_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1608,6 +1630,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ManyListOps"/>
       <param name="dest_jar" value="${many_list_ops_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1621,6 +1644,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="NestedStructs"/>
       <param name="dest_jar" value="${nested_structs_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1633,6 +1657,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ForList"/>
       <param name="dest_jar" value="${for_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1645,6 +1670,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ForMap"/>
       <param name="dest_jar" value="${for_map_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1657,6 +1683,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="StructLibraries"/>
       <param name="dest_jar" value="${struct_libraries_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1669,6 +1696,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="InterruptedTestAtomically"/>
       <param name="dest_jar" value="${interrupted_atomically_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -1681,6 +1709,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="EndpointCalls"/>
       <param name="dest_jar" value="${endpoint_calls_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1694,6 +1723,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="InterruptedEndpointCallAtomically"/>
       <param name="dest_jar" value="${interrupted_endpoint_call_atomically_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -1706,6 +1736,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="PromotionTest"/>
       <param name="dest_jar" value="${promotion_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1720,6 +1751,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SuperInterruptedTestAtomically"/>
       <param name="dest_jar" value="${super_interrupted_atomically_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1732,6 +1764,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="HardwareFailureTest"/>
       <param name="dest_jar" value="${hardware_failure_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1744,6 +1777,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ReturnListTest"/>
       <param name="dest_jar" value="${return_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1756,6 +1790,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="WoundWaitTest"/>
       <param name="dest_jar" value="${wound_wait_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1768,6 +1803,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicPartnerCall"/>
       <param name="dest_jar" value="${atomic_partner_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1780,6 +1816,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicTCPPartnerCall"/>
       <param name="dest_jar" value="${atomic_tcp_partner_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1792,6 +1829,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="RandomFailureExtendedList"/>
       <param name="dest_jar" value="${random_failure_extended_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1804,6 +1842,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicListAppend"/>
       <param name="dest_jar" value="${atomic_list_append_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1817,6 +1856,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="WrappedTCPPartnerCall"/>
       <param name="dest_jar" value="${wrapped_partner_tcp_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1829,6 +1869,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="LinkedTests"/>
       <param name="dest_jar" value="${linked_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1842,6 +1883,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SingleSideServiceFactoryTest"/>
       <param name="dest_jar" value="${single_side_service_factory_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1855,6 +1897,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="PartnerSendServiceFactoryTest"/>
       <param name="dest_jar" value="${partner_service_factory_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1868,6 +1911,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="EndpointStructListTest"/>
       <param name="dest_jar" value="${endpoint_struct_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1881,6 +1925,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicSpeculationTest"/>
       <param name="dest_jar" value="${basic_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1893,6 +1938,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="NullTest"/>
       <param name="dest_jar" value="${null_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1906,6 +1952,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="InternalCreateServiceTest"/>
       <param name="dest_jar" value="${internal_create_service_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1918,6 +1965,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SelfTest"/>
       <param name="dest_jar" value="${self_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1931,6 +1979,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ContainerSpeculationTest"/>
       <param name="dest_jar" value="${container_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1943,6 +1992,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="Range"/>
       <param name="dest_jar" value="${range_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1956,6 +2006,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ReadReadWriteTest"/>
       <param name="dest_jar" value="${read_read_write_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1969,6 +2020,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="InterruptedSpeculaterTest"/>
       <param name="dest_jar" value="${interrupted_speculater_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1982,6 +2034,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="MiddleInterruptedSpeculaterTest"/>
       <param name="dest_jar" value="${middle_interrupted_speculater_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -1995,6 +2048,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AlwaysWorksBackedSpeculationTest"/>
       <param name="dest_jar" value="${always_works_backed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2008,6 +2062,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="RandomDelaysAlwaysWorksBackedSpeculationTest"/>
       <param name="dest_jar" value="${random_delays_always_works_backed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2021,6 +2076,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="RandomFailuresBackedSpeculationTest"/>
       <param name="dest_jar" value="${random_failures_backed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2034,6 +2090,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicStructTest"/>
       <param name="dest_jar" value="${atomic_struct_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2047,6 +2104,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="TextManipulation"/>
       <param name="dest_jar" value="${text_manipulation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2060,6 +2118,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="LotsOfBackoutsTest"/>
       <param name="dest_jar" value="${lots_of_backouts_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2073,6 +2132,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="TimedAlwaysWorksBackedSpeculationTest"/>
       <param name="dest_jar" value="${timed_always_works_backed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2086,6 +2146,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SimplifiedTimedSpeculationTest"/>
       <param name="dest_jar" value="${simplified_timed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -2099,6 +2160,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="PartnerCallReturn"/>
       <param name="dest_jar" value="${partner_call_return_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2112,6 +2174,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeNumberListTest"/>
       <param name="dest_jar" value="${serialize_number_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -2125,6 +2188,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeTextListTest"/>
       <param name="dest_jar" value="${serialize_text_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2138,6 +2202,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeTrueFalseListTest"/>
       <param name="dest_jar" value="${serialize_true_false_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2152,6 +2217,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="StructSerialization"/>
       <param name="dest_jar" value="${serialize_struct_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2165,6 +2231,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ListOfStructsSerialization"/>
       <param name="dest_jar" value="${list_of_structs_serialization_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2178,6 +2245,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="LessSimplifiedTimedSpeculationTest"/>
       <param name="dest_jar" value="${less_simplified_timed_backed_speculation_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2191,6 +2259,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeNumberNumberMapTest"/>
       <param name="dest_jar" value="${serialize_number_number_map_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2204,6 +2273,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeMapOfStructs"/>
       <param name="dest_jar" value="${serialize_map_of_structs_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2217,6 +2287,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="InternalStructMethodCallTest"/>
       <param name="dest_jar" value="${internal_struct_method_call_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2230,6 +2301,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="ReferenceServiceFactoryTest"/>
       <param name="dest_jar" value="${reference_service_factory_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2243,6 +2315,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="MultipleInterfacesTest"/>
       <param name="dest_jar" value="${multiple_interfaces_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2256,6 +2329,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeStructWithMap"/>
       <param name="dest_jar" value="${serialize_struct_with_map_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2269,6 +2343,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeStructWithStruct"/>
       <param name="dest_jar" value="${serialize_struct_with_struct_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2282,6 +2357,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeStructWithList"/>
       <param name="dest_jar" value="${serialize_struct_with_list_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
 
@@ -2295,6 +2371,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="SerializeNullStruct"/>
       <param name="dest_jar" value="${serialize_null_struct_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   
@@ -2310,10 +2387,12 @@
         <attribute name="Class-Path" value="${build.dir}:${proto_class_path}"/>
       </manifest>
       <fileset dir="${build.dir}"/>
+      <fileset file="${config_properties}"/>
       <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
     </jar>
   </target>
 
+  
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
