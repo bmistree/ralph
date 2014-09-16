@@ -265,6 +265,16 @@ public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj)
 
 public static class %(endpoint_name)s_ConstructorObj implements EndpointConstructorObj
 {
+    private %(endpoint_name)s_ConstructorObj()
+    {
+        ILocalVersionManager local_version_manager =
+            VersioningInfo.instance.local_version_manager;
+        if (local_version_manager != null)
+        {
+            local_version_manager.save_endpoint_constructor_obj(this);
+        }
+    }
+
     @Override
     public Endpoint construct (RalphGlobals ralph_globals, ConnectionObj conn_obj)
     {
