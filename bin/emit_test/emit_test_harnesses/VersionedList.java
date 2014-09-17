@@ -3,6 +3,11 @@ package emit_test_harnesses;
 import ralph_emitted.AtomicListJava.TVarListEndpoint;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
+import ralph.VersioningInfo;
+import RalphVersions.VersionUtil;
+import RalphVersions.ReconstructionContext;
+import RalphVersions.IReconstructionContext;
+
 
 public class VersionedList
 {
@@ -44,6 +49,21 @@ public class VersionedList
             // remove every other (see += 2 at end)
             for (int i = 0; i < num_to_initially_add; i += 2)
                 endpt.remove(0.);
+
+            // Now replay
+            IReconstructionContext reconstruction_context =
+                new ReconstructionContext(
+                    VersioningInfo.instance.local_version_manager,
+                    ralph_globals);
+
+            // now, tries to replay changes to endpoint.  
+            TVarListEndpoint replayed_endpt =
+                (TVarListEndpoint) VersionUtil.rebuild_endpoint(
+                    VersioningInfo.instance.local_version_manager,
+                    endpt._uuid,ralph_globals,reconstruction_context);
+
+            if (! replayed_endpt.get_size().equals(endpt.get_size()))
+                return false;
             
             return true;
         }
