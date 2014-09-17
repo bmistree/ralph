@@ -42,8 +42,6 @@ public class VersionedMap
                     VersioningInfo.instance.local_version_manager,
                     ralph_globals);
 
-            
-            // FIXME: must now replay
             // now, tries to replay changes to endpoint.  
             TVarMapEndpoint replayed_endpt =
                 (TVarMapEndpoint) VersionUtil.rebuild_endpoint(
