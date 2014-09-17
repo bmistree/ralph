@@ -164,7 +164,33 @@ public class RalphInternalMap<K,V,ValueDeltaType>
 
         check_immediate_commit(active_event);
     }
-    
+
+    /**
+       Caller must ensure that there will be no conflicts when
+       writing.  Used for deserialization, not real operations.
+     */
+    @Override
+    public void direct_set_val_on_key(K key, V to_write)
+    {
+        RalphObject<V,ValueDeltaType> wrapped_to_write =
+            locked_wrapper.ensure_atomic_object(to_write,ralph_globals);
+        direct_set_val_on_key(key,wrapped_to_write);
+    }
+    /**
+       Caller must ensure that there will be no conflicts when
+       writing.  Used for deserialization, not real operations.
+     */
+    @Override
+    public void direct_set_val_on_key(
+        K key, RalphObject<V,ValueDeltaType> to_write)
+    {
+        MapTypeDataWrapper<K,V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        // write directly to internal value.... caller must ensure no
+        // conflicts when writing.
+        wrapped_val.val.put(key,to_write);
+    }
+
 
     @Override
     public void set_val_on_key(

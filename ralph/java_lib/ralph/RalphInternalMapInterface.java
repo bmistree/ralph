@@ -32,6 +32,16 @@ public interface RalphInternalMapInterface<K,V,ValueDeltaType>
     public void set_val_on_key(
         ActiveEvent active_event, K key, RalphObject<V,ValueDeltaType> to_write)
         throws BackoutException;
+
+    /**
+       Should only be called during deserialization.  Writes directly
+       to internal val.  Caller must ensure no contention.
+     */
+    public void direct_set_val_on_key(K key, V to_write);
+    public void direct_set_val_on_key(
+        K key, RalphObject<V,ValueDeltaType> to_write);
+
+
     
     public boolean return_internal_val_from_container();
     

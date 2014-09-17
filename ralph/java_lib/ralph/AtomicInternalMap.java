@@ -72,7 +72,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this,_index_type);
     }
-    
+
     @Override
     protected
         // return type
@@ -200,6 +200,17 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         return wrapped_val;
     }
 
+    /**
+       Returns authoritative internal value.  Caller must ensure no
+       read-write conflicts.  Mostly should be used for
+       deserialization.
+     */
+    @Override
+    public MapTypeDataWrapper<K,V,ValueDeltaType> direct_get_val()
+    {
+        return (MapTypeDataWrapper<K,V,ValueDeltaType>)val;
+    }
+        
 
     /** RalphInternalMapInterface<K,V> Interface */
     @Override
@@ -223,6 +234,17 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         any_builder.setIsTvar(true);
     }
 
+    @Override
+    public void direct_set_val_on_key(K key, V to_write)
+    {
+        internal_map.direct_set_val_on_key(key,to_write);
+    }
+    @Override
+    public void direct_set_val_on_key(
+        K key, RalphObject<V,ValueDeltaType> to_write)
+    {
+        internal_map.direct_set_val_on_key(key,to_write);
+    }
     
     @Override
     public void set_val_on_key(

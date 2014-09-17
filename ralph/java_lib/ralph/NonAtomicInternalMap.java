@@ -123,6 +123,19 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
         return reference_type_val;
     }
 
+    /**
+       Returns authoritative internal value.  Caller must ensure no
+       read-write conflicts.  Mostly should be used for
+       deserialization.
+     */
+    @Override
+    public MapTypeDataWrapper<K,V,ValueDeltaType> direct_get_val()
+    {
+        // subtype of maptypedatawrapper supplier
+        return reference_type_val;
+    }
+    
+    
     /** RalphInternalMapInterface<K,V> Interface */
     @Override
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
@@ -158,6 +171,18 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
         internal_map.set_val_on_key(active_event,key,to_write);
     }
 
+    @Override
+    public void direct_set_val_on_key(K key, V to_write)
+    {
+        internal_map.direct_set_val_on_key(key,to_write);
+    }
+    @Override
+    public void direct_set_val_on_key(
+        K key, RalphObject<V,ValueDeltaType> to_write)
+    {
+        internal_map.direct_set_val_on_key(key,to_write);
+    }
+    
     @Override
     public boolean return_internal_val_from_container()
     {
