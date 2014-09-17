@@ -69,6 +69,28 @@ public class ObjectContentsDeserializers
                 to_return.set_initial_reference(initial_reference);
                 return to_return;
             }
+            else if (obj_contents.hasInternalMapType())
+            {
+                ObjectContents.InternalMap internal_map =
+                    obj_contents.getInternalMapType();
+
+                // Creating an internal map in a very hackish way:
+                // creating an atomic map and then reaching into it to
+                // get internal map.
+                IAtomicMapVariableFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
+                        internal_map.getKeyTypeClassName(),
+                        internal_map.getValTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize internalmap.");
+                }
+
+                Variables.AtomicMapVariable to_return_wrapper =
+                    factory.construct(ralph_globals);
+                return (RalphObject) to_return_wrapper.val.val;
+            }
             
             // must have reference type
             Util.logger_assert(
