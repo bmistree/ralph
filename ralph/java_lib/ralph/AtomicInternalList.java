@@ -44,7 +44,9 @@ public class AtomicInternalList<V,ValueDeltaType>
             ltdwf,version_helper,_log_changes, init_val,
             // For now, passing no additional serialization arguments
             // into atomic object.
-            null);
+            new AtomicList.AdditionalAtomicListSerializationContents(
+                ltdwf.value_type_class.getName()));
+
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
     }
@@ -92,7 +94,6 @@ public class AtomicInternalList<V,ValueDeltaType>
 
         return to_return;
     }
-
     
     @Override
     public ObjectContents serialize_contents(

@@ -205,5 +205,4 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             val_class_name = _val_class_name;
         }
     }
-    
 }

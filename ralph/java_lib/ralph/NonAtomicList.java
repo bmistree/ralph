@@ -68,7 +68,13 @@ public abstract class NonAtomicList<ValueType,DeltaType>
             internal_val,
             new ValueTypeDataWrapperFactory<
                 NonAtomicInternalList<ValueType,DeltaType>>(),
-            version_helper,ralph_globals,null);
+            version_helper,ralph_globals,
+
+            // additional serialization contents gets passed back to
+            // serialize_contents as Object.
+            new AtomicList.AdditionalAtomicListSerializationContents(
+                value_type_class.getName()));
+
     }
 
     public void serialize_as_rpc_arg(

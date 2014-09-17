@@ -72,7 +72,11 @@ public class AtomicList<ValueType, ValueDeltaType>
             _log_changes,internal_val,
             new ValueTypeDataWrapperFactory<
                 AtomicInternalList<ValueType,ValueDeltaType>>(),
-            version_helper,ralph_globals,null);
+            version_helper,ralph_globals,
+            // additional serialization contents gets passed back to
+            // serialize_contents as Object.
+            new AdditionalAtomicListSerializationContents(
+                _value_type_class.getName()));
         
         this.locked_wrapper = locked_wrapper;
         this.value_type_class = _value_type_class;
@@ -122,5 +126,16 @@ public class AtomicList<ValueType, ValueDeltaType>
         AtomicInternalList<ValueType, ValueDeltaType> internal_val =
             get_val(active_event);
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
+    }
+
+    public static class AdditionalAtomicListSerializationContents
+    {
+        public final String val_class_name;
+        
+        public AdditionalAtomicListSerializationContents(
+            String _val_class_name)
+        {
+            val_class_name = _val_class_name;
+        }
     }
 }

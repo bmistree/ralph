@@ -12,7 +12,7 @@ public class ListTypeDataWrapperFactory<ValueType,ValueDeltaType>
     List<RalphObject<ValueType,ValueDeltaType>>>
     
 {
-    final private Class<ValueType> value_type_class;
+    final public Class<ValueType> value_type_class;
     public ListTypeDataWrapperFactory(
         Class<ValueType> _value_type_class)
     {
