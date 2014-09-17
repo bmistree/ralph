@@ -50,11 +50,13 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
         version_helper = internal_version_helper;
-
         index_type = _index_type;
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
-            rtdwc, version_helper,_log_changes, init_val);
+            rtdwc, version_helper,_log_changes, init_val,
+            // For now, passing no additional serialization arguments
+            // into atomic object.
+            null);
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this,_index_type);
     }

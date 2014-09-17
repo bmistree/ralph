@@ -19,7 +19,10 @@ import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 
+import RalphVersions.ILocalVersionManager;
 import RalphServiceActions.AtomicObjectTryNextAction;
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
 
 /**
  * @param <T> --- The java type of the internal data
@@ -149,39 +152,44 @@ public abstract class AtomicObject<T,DeltaType>
     }
 	
     public void init_multithreaded_locked_object(
-        ValueTypeDataWrapperFactory<T> vtdwc,
+        DataWrapperFactory<T> dw_factory,
         VersionHelper<DeltaType> _version_helper,
-        boolean _log_changes, T init_val)
+        boolean _log_changes, T init_val,
+        Object additional_serialization_contents)
     {
-        data_wrapper_constructor = vtdwc;
+        data_wrapper_constructor = dw_factory;
         log_changes = _log_changes;
         val = data_wrapper_constructor.construct(init_val,log_changes);
         version_helper = _version_helper;
+        log_obj_constructor_during_init(additional_serialization_contents);
     }
 
-    public void init_multithreaded_locked_object(
-        MapTypeDataWrapperFactory rtdwc,
-        VersionHelper<DeltaType> _version_helper,
-        boolean _log_changes, 
-        T init_val)
+    protected void log_obj_constructor_during_init(
+        Object additional_serialization_contents)
     {
-        data_wrapper_constructor = rtdwc;
-        log_changes = _log_changes;
-        val = data_wrapper_constructor.construct(init_val,log_changes);
-        version_helper = _version_helper;
+        ILocalVersionManager local_version_manager =
+            VersioningInfo.instance.local_version_manager;
+        if (local_version_manager != null)
+        {
+            ObjectContents obj_contents = null;
+            try
+            {
+                obj_contents = serialize_contents(
+                    null,additional_serialization_contents);
+            }
+            catch (BackoutException backout_exception)
+            {
+                backout_exception.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected backout when constructing" +
+                    "object: no other threads can access." );
+            }
+            // using null as active_event argument for
+            // serialize_contents, gets internal value right away.
+            local_version_manager.save_object_constructor(
+                uuid(), obj_contents);
+        }
     }
-
-    public void init_multithreaded_locked_object(
-        ListTypeDataWrapperFactory rtdwc,
-        VersionHelper<DeltaType> _version_helper,
-        boolean _log_changes, T init_val)
-    {
-        data_wrapper_constructor = rtdwc;
-        log_changes = _log_changes;
-        val = data_wrapper_constructor.construct(init_val,log_changes);
-        version_helper = _version_helper;
-    }
-
     
     public void _lock()
     {

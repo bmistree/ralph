@@ -41,7 +41,10 @@ public class AtomicInternalList<V,ValueDeltaType>
 
         locked_wrapper = _locked_wrapper;
         init_multithreaded_locked_object(
-            ltdwf,version_helper,_log_changes, init_val);
+            ltdwf,version_helper,_log_changes, init_val,
+            // For now, passing no additional serialization arguments
+            // into atomic object.
+            null);
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
     }
