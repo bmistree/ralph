@@ -331,4 +331,41 @@ public class AtomicInternalList<V,ValueDeltaType>
     {
         internal_list.clear(active_event);
     }
+
+    /**
+       Returns authoritative internal value.  Caller must ensure no
+       read-write conflicts.  Mostly should be used for
+       deserialization.
+     */
+    @Override
+    public ListTypeDataWrapper<V,ValueDeltaType> direct_get_val()
+    {
+        return (ListTypeDataWrapper<V,ValueDeltaType>)val;
+    }
+    
+    /**
+       Direct operations are used during deserialization.  Caller must
+       ensure no read-write conflicts.
+     */
+    @Override
+    public void direct_append(V what_to_insert)
+    {
+        internal_list.direct_append(what_to_insert);
+    }
+    @Override
+    public void direct_append(RalphObject<V,ValueDeltaType> what_to_insert)
+    {
+        internal_list.direct_append(what_to_insert);
+    }
+    @Override
+    public void direct_set_val_on_key(Integer key, V to_write)
+    {
+        internal_list.direct_set_val_on_key(key,to_write);
+    }
+    @Override
+    public void direct_set_val_on_key(
+        Integer key, RalphObject<V,ValueDeltaType> to_write)
+    {
+        internal_list.direct_set_val_on_key(key,to_write);
+    }
 }

@@ -295,4 +295,43 @@ public class RalphInternalList<V,ValueDeltaType>
         wrapped_val.val.clear();
         check_immediate_commit(active_event);
     }
+
+
+    /**
+       Direct operations are used during deserialization.  Caller must
+       ensure no read-write conflicts.
+     */
+    @Override
+    public void direct_append(V what_to_insert)
+    {
+        RalphObject<V,ValueDeltaType> wrapped_to_insert =
+            locked_wrapper.ensure_atomic_object(
+                what_to_insert,ralph_globals);
+        
+        direct_append(wrapped_to_insert);
+    }
+    @Override
+    public void direct_append(RalphObject<V,ValueDeltaType> what_to_insert)
+    {
+        ListTypeDataWrapper<V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.add(what_to_insert);
+    }
+    @Override
+    public void direct_set_val_on_key(Integer key, V to_write)
+    {
+        RalphObject<V,ValueDeltaType> wrapped_to_write =
+            locked_wrapper.ensure_atomic_object(
+                to_write,ralph_globals);
+        direct_set_val_on_key(key,wrapped_to_write);
+    }
+    
+    @Override
+    public void direct_set_val_on_key(
+        Integer key, RalphObject<V,ValueDeltaType> to_write)
+    {
+        ListTypeDataWrapper<V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.set(key,to_write);
+    }
 }

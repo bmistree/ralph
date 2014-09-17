@@ -52,6 +52,17 @@ public interface RalphInternalListInterface<V,ValueDeltaType>
         throws BackoutException;
     public boolean return_internal_val_from_container();
 
+    /**
+       Direct operations are used during deserialization.  Caller must
+       ensure no read-write conflicts.
+     */
+    public void direct_append(V what_to_insert);
+    public void direct_append(RalphObject<V,ValueDeltaType> what_to_insert);
+    public void direct_set_val_on_key(Integer key, V to_write);
+    public void direct_set_val_on_key(
+        Integer key, RalphObject<V,ValueDeltaType> to_write);
+
+    
     public int get_len(ActiveEvent active_event) throws BackoutException;
     public Double get_len_boxed(ActiveEvent active_event) throws BackoutException;
 
