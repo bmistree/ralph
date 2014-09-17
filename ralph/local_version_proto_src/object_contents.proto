@@ -20,6 +20,11 @@ message ObjectContents
         required string key_type_class_name = 1;
         required string val_type_class_name = 2;
     }
+
+    message InternalList
+    {
+        required string val_type_class_name = 1;
+    }
         
     required string uuid = 1;
     required bool atomic = 2;
@@ -30,4 +35,5 @@ message ObjectContents
     
     optional Map map_type = 5;
     optional InternalMap internal_map_type = 6;
+    optional InternalList internal_list_type = 7;
 }
