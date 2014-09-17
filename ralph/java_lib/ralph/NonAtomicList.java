@@ -9,6 +9,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
+import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -37,19 +38,20 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     IReference>
 {
     public final static String deserialization_label = "NonAtomic List";
+    public final Class<ValueType> value_type_class;
     
     public NonAtomicList(
         EnsureAtomicWrapper<ValueType,DeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
-        Class<ValueType> value_type_class,
+        Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
         this(
             new NonAtomicInternalList<ValueType,DeltaType>(
                 ralph_globals,
-                new ListTypeDataWrapperFactory<ValueType,DeltaType>(value_type_class),
+                new ListTypeDataWrapperFactory<ValueType,DeltaType>(_value_type_class),
                 new ArrayList<RalphObject<ValueType,DeltaType>>(),locked_wrapper),
-            locked_wrapper,version_helper,value_type_class,ralph_globals);
+            locked_wrapper,version_helper,_value_type_class,ralph_globals);
     }
 
     /**
@@ -61,7 +63,7 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         NonAtomicInternalList<ValueType,DeltaType> internal_val,
         EnsureAtomicWrapper<ValueType,DeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
-        Class<ValueType> value_type_class,
+        Class<ValueType> _value_type_class,
         RalphGlobals ralph_globals)
     {
         super(
@@ -73,7 +75,9 @@ public abstract class NonAtomicList<ValueType,DeltaType>
             // additional serialization contents gets passed back to
             // serialize_contents as Object.
             new AtomicList.AdditionalAtomicListSerializationContents(
-                value_type_class.getName()));
+                _value_type_class.getName()));
+        
+        value_type_class = _value_type_class;
 
     }
 
@@ -91,9 +95,23 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         ActiveEvent active_event, Object additional_serialization_contents)
         throws BackoutException
     {
+        String value_type_name = null;
+
+        if (additional_serialization_contents == null)
+            value_type_name = value_type_class.getName();
+        else
+        {
+            AdditionalAtomicListSerializationContents add_ser_contents =
+                (AdditionalAtomicListSerializationContents)
+                additional_serialization_contents;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+
         NonAtomicInternalList<ValueType,DeltaType> internal_list = 
             get_val(active_event);
-        return ralph.Variables.serialize_reference(internal_list,false,uuid());
+
+        return AtomicList.serialize_list_reference(
+            uuid(),internal_list.uuid(),value_type_name,false);
     }
     
     public boolean return_internal_val_from_container()

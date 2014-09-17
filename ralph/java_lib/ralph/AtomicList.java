@@ -10,7 +10,9 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
 
+    
 /**
  * @param <V>  ---- The type of each internal value in the internal arraylist
  *
@@ -112,11 +114,45 @@ public class AtomicList<ValueType, ValueDeltaType>
         ActiveEvent active_event,Object additional_serialization_contents)
         throws BackoutException
     {
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+            value_type_name = value_type_class.getName();
+        else
+        {
+            AdditionalAtomicListSerializationContents add_ser_contents =
+                (AdditionalAtomicListSerializationContents)
+                additional_serialization_contents;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+
         AtomicInternalList<ValueType,ValueDeltaType> internal_list = 
             get_val(active_event);
-        return Variables.serialize_reference(internal_list,true,uuid());
+
+        return AtomicList.serialize_list_reference(
+            uuid(),internal_list.uuid(),value_type_name,true);
     }
 
+    public static ObjectContents serialize_list_reference(
+        String holder_uuid,String internal_uuid,
+        String value_type_class_name, boolean atomic)
+    {
+        Delta.ReferenceType.Builder ref_type_builder =
+            Delta.ReferenceType.newBuilder();
+        ref_type_builder.setReference(internal_uuid);
+
+        ObjectContents.List.Builder list_builder =
+            ObjectContents.List.newBuilder();
+        list_builder.setRefType(ref_type_builder);
+        list_builder.setValTypeClassName(value_type_class_name);
+
+        ObjectContents.Builder contents_builder =
+            ObjectContents.newBuilder();
+        contents_builder.setUuid(holder_uuid);
+        contents_builder.setAtomic(atomic);
+        contents_builder.setListType(list_builder);
+        return contents_builder.build();
+    }
+    
     @Override
     public void serialize_as_rpc_arg(
         ActiveEvent active_event,
