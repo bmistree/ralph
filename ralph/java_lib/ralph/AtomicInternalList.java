@@ -7,6 +7,7 @@ import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
+import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -27,6 +28,7 @@ public class AtomicInternalList<V,ValueDeltaType>
 {
     private RalphInternalList<V,ValueDeltaType> internal_list = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
+    private final Class<V> value_type_class;
     
     public AtomicInternalList(
         RalphGlobals ralph_globals,
@@ -47,6 +49,7 @@ public class AtomicInternalList<V,ValueDeltaType>
             new AtomicList.AdditionalAtomicListSerializationContents(
                 ltdwf.value_type_class.getName()));
 
+        value_type_class = ltdwf.value_type_class;
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
     }
@@ -99,14 +102,26 @@ public class AtomicInternalList<V,ValueDeltaType>
     public ObjectContents serialize_contents(
         ActiveEvent active_event,Object additional_serialization_contents)
     {
-        // FIXME: May eventually want to fill this in (eg., if
-        // replacing serialization code.  Currently, it's unnecessary
-        // because we just use this method for serializing version
-        // histories.
-        Util.logger_assert(
-            "FIXME: currently, disallowing direct " +
-            "serialization of atomicinternallist.");
-        return null;
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+            value_type_name = value_type_class.getName();
+        else
+        {
+            AdditionalAtomicListSerializationContents add_ser_contents =
+                (AdditionalAtomicListSerializationContents)
+                additional_serialization_contents;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+
+        ObjectContents.InternalList.Builder internal_list_builder =
+            ObjectContents.InternalList.newBuilder();
+        internal_list_builder.setValTypeClassName(value_type_name);
+
+        ObjectContents.Builder to_return = ObjectContents.newBuilder();
+        to_return.setInternalListType(internal_list_builder);
+        to_return.setUuid(uuid());
+        to_return.setAtomic(true);
+        return to_return.build();
     }
 
     
