@@ -95,8 +95,8 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
         boolean incorporating_deltas) throws BackoutException
     {
         if ((log_changes) && (! incorporating_deltas))
-            change_log.add(write_key_tuple(key));
-
+            change_log.add(write_key_tuple(key,to_write));
+        
         val.get(key).set_val(active_event,to_write.get_val(active_event));
     }
 		
@@ -183,11 +183,12 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
             new ContainerOpTuple<Integer,ValueType,DeltaValueType>(
                 ContainerOpTuple.OpType.ADD,_key,what_added);
     }
-	
-    private ContainerOpTuple write_key_tuple(Integer _key)
+
+    private ContainerOpTuple write_key_tuple(
+        Integer _key,RalphObject<ValueType,DeltaValueType> what_written)
     {
         return
             new ContainerOpTuple<Integer,ValueType,DeltaValueType>(
-                ContainerOpTuple.OpType.WRITE,_key,null);
+                ContainerOpTuple.OpType.WRITE,_key,what_written);
     }
 }
