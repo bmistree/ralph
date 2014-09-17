@@ -40,7 +40,8 @@ public interface RalphInternalMapInterface<K,V,ValueDeltaType>
     public void direct_set_val_on_key(K key, V to_write);
     public void direct_set_val_on_key(
         K key, RalphObject<V,ValueDeltaType> to_write);
-
+    public void direct_remove_val_on_key(K key);
+    public void direct_clear();
 
     
     public boolean return_internal_val_from_container();

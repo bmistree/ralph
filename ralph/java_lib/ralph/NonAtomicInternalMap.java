@@ -182,6 +182,18 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     {
         internal_map.direct_set_val_on_key(key,to_write);
     }
+    @Override
+    public void direct_remove_val_on_key(K key)
+    {
+        internal_map.direct_remove_val_on_key(key);
+    }
+    @Override
+    public void direct_clear()
+    {
+        internal_map.direct_clear();
+    }
+
+    
     
     @Override
     public boolean return_internal_val_from_container()

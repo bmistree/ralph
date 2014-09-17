@@ -190,7 +190,21 @@ public class RalphInternalMap<K,V,ValueDeltaType>
         // conflicts when writing.
         wrapped_val.val.put(key,to_write);
     }
-
+    @Override
+    public void direct_remove_val_on_key(K key)
+    {
+        MapTypeDataWrapper<K,V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.remove(key);
+    }
+    @Override
+    public void direct_clear()
+    {
+        MapTypeDataWrapper<K,V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.clear();
+    }
+    
 
     @Override
     public void set_val_on_key(
