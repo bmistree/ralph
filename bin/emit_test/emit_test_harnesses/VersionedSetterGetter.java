@@ -19,6 +19,8 @@ import RalphVersions.EndpointInitializationHistory;
 import RalphVersions.ObjectHistory;
 import RalphVersions.ObjectContentsDeserializers;
 import RalphVersions.VersionUtil;
+import RalphVersions.ReconstructionContext;
+import RalphVersions.IReconstructionContext;
 
 /**
    Record all changes to endpoint, and then try to replay them.  Note:
@@ -85,11 +87,16 @@ public class VersionedSetterGetter
                     return false;
             }
 
+            IReconstructionContext reconstruction_context =
+                new ReconstructionContext(
+                    in_memory_version_manager,ralph_globals);
+            
             // now, tries to replay changes to endpoint.  
             ISetterGetter replayed_endpt =
                 (ISetterGetter) VersionUtil.rebuild_endpoint(
-                    in_memory_version_manager,endpt._uuid,ralph_globals);
-
+                    in_memory_version_manager,endpt._uuid,ralph_globals,
+                    reconstruction_context);
+            
             // NOTE: non-atomics are not under version control, and
             // operations to them are therefore not logged.
             // if (!endpt.get_text().equals(replayed_endpt.get_text()))

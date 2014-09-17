@@ -10,8 +10,6 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-
 public class VersionUtil
 {
     /**
@@ -22,7 +20,8 @@ public class VersionUtil
     public static Endpoint rebuild_endpoint(
         ILocalVersionManager local_version_manager,
         String endpoint_uuid,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals,
+        IReconstructionContext reconstruction_context)
     {
         EndpointInitializationHistory endpt_history =
             local_version_manager.get_endpoint_initialization_history(
@@ -30,7 +29,7 @@ public class VersionUtil
         EndpointConstructorObj endpt_constructor_obj =
             local_version_manager.get_endpoint_constructor_obj(
                 endpt_history.endpoint_constructor_class_name);
-
+        
         // repopulate all initial ralph objects that get placed in
         // endpoint.
         List<RalphObject> endpt_initialization_vars =
@@ -39,22 +38,10 @@ public class VersionUtil
         for (NameUUIDTuple name_uuid_tuple : endpt_history.variable_list)
         {
             String obj_uuid = name_uuid_tuple.uuid;
-            ObjectHistory obj_history =
-                local_version_manager.get_full_object_history(obj_uuid);
-
-            ObjectContents initial_contents =
-                obj_history.initial_construction_contents;
-            
+            // putting null in for second parameter in order to play
+            // all the way to end.
             RalphObject ralph_object =
-                ObjectContentsDeserializers.deserialize(
-                    initial_contents,ralph_globals);
-            // plays deltas forward when reconstructing object.  note
-            // that using null for reconstruction context, because
-            // should be able to reconstruct only from history.  Also
-            // note that using null as third argument, indicating that
-            // we should replay all changes on top of object.
-            ralph_object.replay(null,obj_history,null);
-            
+                reconstruction_context.get_constructed_object(obj_uuid,null);
             endpt_initialization_vars.add(ralph_object);
         }
 

@@ -5,6 +5,8 @@ import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
+import RalphVersions.ReconstructionContext;
+import RalphVersions.IReconstructionContext;
 
 public class VersionedMap
 {
@@ -33,12 +35,19 @@ public class VersionedMap
             // map should ultimately contain indices 11-19, with
             // values equal to keys.
 
+
+            IReconstructionContext reconstruction_context =
+                new ReconstructionContext(
+                    VersioningInfo.instance.local_version_manager,
+                    ralph_globals);
+
+            
             // FIXME: must now replay
             // now, tries to replay changes to endpoint.  
             TVarMapEndpoint replayed_endpt =
                 (TVarMapEndpoint) VersionUtil.rebuild_endpoint(
                     VersioningInfo.instance.local_version_manager,
-                    endpt._uuid,ralph_globals);
+                    endpt._uuid,ralph_globals,reconstruction_context);
             
             return true;
         }
