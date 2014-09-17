@@ -6,6 +6,7 @@ import ralph.Util;
 import ralph.Variables;
 import ralph.ContainerFactorySingleton;
 import ralph.IAtomicMapVariableFactory;
+import ralph.IAtomicListVariableFactory;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -91,6 +92,44 @@ public class ObjectContentsDeserializers
                 Variables.AtomicMapVariable to_return_wrapper =
                     factory.construct(ralph_globals);
                 return (RalphObject) to_return_wrapper.val.val;
+            }
+            else if (obj_contents.hasInternalListType())
+            {
+                ObjectContents.InternalList internal_list =
+                    obj_contents.getInternalListType();
+
+                // Creating an internal list in a very hackish way:
+                // creating an atomic list and then reaching into it to
+                // get internal list.
+                IAtomicListVariableFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
+                        internal_list.getValTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize internallist.");
+                }
+
+                Variables.AtomicListVariable to_return_wrapper =
+                    factory.construct(ralph_globals);
+                return (RalphObject) to_return_wrapper.val.val;
+            }
+            else if (obj_contents.hasListType())
+            {                
+                ObjectContents.List list = obj_contents.getListType();
+                String initial_reference = list.getRefType().getReference();
+                IAtomicListVariableFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
+                        list.getValTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize list.");
+                }
+                Variables.AtomicListVariable to_return =
+                    factory.construct(ralph_globals);
+                to_return.set_initial_reference(initial_reference);
+                return to_return;
             }
             
             // must have reference type
