@@ -12,6 +12,7 @@ import ralph.IInternalReferenceHolder;
 import ralph.Util;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
 import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerOpType;
 import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerDelta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -106,7 +107,8 @@ public class ObjectHistory
 
     public static void replay_internal_map(
         RalphInternalMapInterface to_replay_on,
-        ObjectHistory obj_history, Long to_play_until)
+        ObjectHistory obj_history, Long to_play_until,
+        IReconstructionContext reconstruction_context)
     {
         for (SingleObjectChange change : obj_history.history)
         {
@@ -116,7 +118,8 @@ public class ObjectHistory
                 return;
             }
             SingleObjectChange.internal_map_incorporate_single_object_change(
-                change,to_replay_on);
+                change,to_replay_on,reconstruction_context,
+                change.root_lamport_time);
         }
     }
 
@@ -217,34 +220,62 @@ public class ObjectHistory
             to_incorporate_into.direct_set_val(internal_bool);
         }
 
+        
         public static void internal_map_incorporate_single_object_change(
-            SingleObjectChange change,
-            RalphInternalMapInterface to_replay_on)
+            SingleObjectChange change, RalphInternalMapInterface to_replay_on,
+            IReconstructionContext reconstruction_context,
+            Long lamport_timestamp_before_or_during)
         {
             for (ContainerDelta delta : change.delta.getContainerDeltaList())
             {
-                if (ContainerOpType.DELETE == delta.getOpType())
+                if (ContainerOpType.CLEAR == delta.getOpType())
                 {
+                    to_replay_on.direct_clear();
                 }
-                else if (ContainerOpType.ADD == delta.getOpType())
-                {
-                }
-                else if (ContainerOpType.WRITE == delta.getOpType())
-                {
-                }
-                else if (ContainerOpType.WRITE == delta.getOpType())
-                {
-                }
-                //// DEBUG
                 else
                 {
-                    Util.logger_assert("Unknown op type on map.");
+                    ValueType key_wrapper = delta.getKey();
+                    Object key = null;
+                    if (key_wrapper.hasNum())
+                        key = key_wrapper.getNum();
+                    else if (key_wrapper.hasText())
+                        key = key_wrapper.getText();
+                    else if (key_wrapper.hasTf())
+                        key = key_wrapper.getTf();
+                    //// DEBUG
+                    else
+                        Util.logger_assert("Unknown key wrapper");
+                    //// END DEBUG
+                    
+                    if (ContainerOpType.DELETE == delta.getOpType())
+                    {
+                        to_replay_on.direct_remove_val_on_key(key);
+                    }
+                    else
+                    {
+                        String internal_obj_uuid =
+                            delta.getWhatAddedOrWritten().getReference();
+                        RalphObject new_value =
+                            reconstruction_context.get_constructed_object(
+                                internal_obj_uuid,
+                                lamport_timestamp_before_or_during);
+
+                        if ((ContainerOpType.ADD == delta.getOpType()) ||
+                            (ContainerOpType.WRITE == delta.getOpType()))
+                        {
+                            to_replay_on.direct_set_val_on_key(
+                                key,new_value);
+                        }
+                        //// DEBUG
+                        else
+                        {
+                            Util.logger_assert("Unknown op type on map.");
+                        }
+                        //// END DEBUG
+                    }
                 }
                 //// END DEBUG
             }
-
-            Util.logger_warn(
-                "FIXME: still need to incorporate changes on internal maps.");
         }
     }
 

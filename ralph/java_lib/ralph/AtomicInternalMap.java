@@ -128,7 +128,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         ObjectHistory obj_history,Long to_play_until)
     {
         ObjectHistory.replay_internal_map(
-            this,obj_history,to_play_until);
+            this,obj_history,to_play_until,reconstruction_context);
     }
 
     
