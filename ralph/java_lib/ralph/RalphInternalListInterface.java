@@ -61,7 +61,9 @@ public interface RalphInternalListInterface<V,ValueDeltaType>
     public void direct_set_val_on_key(Integer key, V to_write);
     public void direct_set_val_on_key(
         Integer key, RalphObject<V,ValueDeltaType> to_write);
-
+    public void direct_remove(Integer key_to_delete);
+    public void direct_clear();
+    
     
     public int get_len(ActiveEvent active_event) throws BackoutException;
     public Double get_len_boxed(ActiveEvent active_event) throws BackoutException;

@@ -368,4 +368,16 @@ public class AtomicInternalList<V,ValueDeltaType>
     {
         internal_list.direct_set_val_on_key(key,to_write);
     }
+
+    @Override
+    public void direct_remove(Integer key_to_delete)
+    {
+        internal_list.direct_remove(key_to_delete);
+    }
+    @Override
+    public void direct_clear()
+    {
+        internal_list.direct_clear();
+    }
+    
 }

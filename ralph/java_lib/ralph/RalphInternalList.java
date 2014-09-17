@@ -334,4 +334,19 @@ public class RalphInternalList<V,ValueDeltaType>
             data_wrapper_supplier.direct_get_val();
         wrapped_val.val.set(key,to_write);
     }
+
+    @Override
+    public void direct_remove(Integer key_to_delete)
+    {
+        ListTypeDataWrapper<V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.remove(key_to_delete.intValue());
+    }
+    @Override
+    public void direct_clear()
+    {
+        ListTypeDataWrapper<V,ValueDeltaType> wrapped_val =
+            data_wrapper_supplier.direct_get_val();
+        wrapped_val.val.clear();
+    }
 }
