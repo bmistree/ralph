@@ -19,6 +19,7 @@ public class ObjectContentsDeserializers
         // See note on top of force_initialization in
         // BaseAtomicMapVariableFactory.
         ralph.BaseAtomicMapVariableFactory.instance.force_initialization();
+        ralph.BaseAtomicListVariableFactory.instance.force_initialization();
         
         if (obj_contents.getAtomic())
         {

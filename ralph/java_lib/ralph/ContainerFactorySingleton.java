@@ -15,8 +15,14 @@ public class ContainerFactorySingleton
             new HashMap<String,
                 Map <String, IAtomicMapVariableFactory>> ();
 
+    // key is value's class name
+    private final Map<String,IAtomicListVariableFactory>
+        atomic_list_factories =
+            new HashMap<String,IAtomicListVariableFactory>();
+    
     private ContainerFactorySingleton()
     {}
+
     
     public IAtomicMapVariableFactory get_atomic_map_variable_factory(
         String key_class_name,String val_class_name)
@@ -28,6 +34,13 @@ public class ContainerFactorySingleton
         }
         return null;
     }
+
+    public IAtomicListVariableFactory get_atomic_list_variable_factory(
+        String val_class_name)
+    {
+        return atomic_list_factories.get(val_class_name);
+    }
+
     
     public void add_atomic_map_variable_factory(
         String key_class_name,String val_class_name,IAtomicMapVariableFactory factory)
@@ -38,5 +51,11 @@ public class ContainerFactorySingleton
                 key_class_name,new HashMap<String,IAtomicMapVariableFactory>());
         }
         atomic_map_factories.get(key_class_name).put(val_class_name,factory);
+    }
+
+    public void add_atomic_list_variable_factory(
+        String val_class_name,IAtomicListVariableFactory factory)
+    {
+        atomic_list_factories.put(val_class_name,factory);
     }
 }
