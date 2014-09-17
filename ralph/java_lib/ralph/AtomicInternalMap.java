@@ -89,6 +89,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         Util.logger_assert(
             "FIXME: currently, disallowing direct " +
             "serialization of atomicinternalmap.");
+        
         return null;
     }
     
