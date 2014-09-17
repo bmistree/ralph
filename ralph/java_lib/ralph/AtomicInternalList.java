@@ -9,6 +9,9 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
 import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
+
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
@@ -76,6 +79,16 @@ public class AtomicInternalList<V,ValueDeltaType>
         version_helper.save_version(
             uuid, deltas,active_event.commit_metadata);
     }
+
+    @Override
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        ObjectHistory.replay_internal_list(
+            this,obj_history,to_play_until,reconstruction_context);
+    }
+
     
     @Override
     protected

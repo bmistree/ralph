@@ -9,6 +9,9 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
 import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
+
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
@@ -256,6 +259,16 @@ public class NonAtomicInternalList<V,ValueDeltaType>
         return internal_list.contains_key_called_boxed(active_event,contains_key);
     }
 
+    @Override
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        ObjectHistory.replay_internal_list(
+            this,obj_history,to_play_until,reconstruction_context);
+    }
+
+    
     /**
        Returns authoritative internal value.  Caller must ensure no
        read-write conflicts.  Mostly should be used for

@@ -124,6 +124,23 @@ public class ObjectHistory
         }
     }
 
+    public static void replay_internal_list(
+        RalphInternalListInterface to_replay_on,
+        ObjectHistory obj_history, Long to_play_until,
+        IReconstructionContext reconstruction_context)
+    {
+        for (SingleObjectChange change : obj_history.history)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            SingleObjectChange.internal_list_incorporate_single_object_change(
+                change,to_replay_on,reconstruction_context,
+                change.root_lamport_time);
+        }
+    }
     
     public static void replay_number(
         RalphObject<Double,Double> to_replay_on,
