@@ -64,6 +64,17 @@ public class VersionedList
 
             if (! replayed_endpt.get_size().equals(endpt.get_size()))
                 return false;
+
+            int remaining_size = replayed_endpt.get_size().intValue();
+            for (int i = 0; i < remaining_size; ++i)
+            {
+                double d_i = (double) i;
+                double replayed_value =
+                    replayed_endpt.get_number(d_i).doubleValue();
+                double real_value = endpt.get_number(d_i).doubleValue();
+                if (real_value != replayed_value)
+                    return false;
+            }
             
             return true;
         }
