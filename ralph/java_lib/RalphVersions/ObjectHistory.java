@@ -7,6 +7,7 @@ import java.util.Set;
 
 import ralph.RalphObject;
 import ralph.RalphInternalMapInterface;
+import ralph.RalphInternalListInterface;
 import RalphExceptions.BackoutException;
 import ralph.IInternalReferenceHolder;
 import ralph.Util;
@@ -274,7 +275,59 @@ public class ObjectHistory
                         //// END DEBUG
                     }
                 }
-                //// END DEBUG
+            }
+        }
+
+        public static void internal_list_incorporate_single_object_change(
+            SingleObjectChange change, RalphInternalListInterface to_replay_on,
+            IReconstructionContext reconstruction_context,
+            Long lamport_timestamp_before_or_during)
+        {
+            for (ContainerDelta delta : change.delta.getContainerDeltaList())
+            {
+                if (ContainerOpType.CLEAR == delta.getOpType())
+                {
+                    to_replay_on.direct_clear();
+                }
+                else if (ContainerOpType.ADD == delta.getOpType())
+                {
+                    String internal_obj_uuid =
+                        delta.getWhatAddedOrWritten().getReference();
+                    RalphObject new_value =
+                        reconstruction_context.get_constructed_object(
+                            internal_obj_uuid,
+                            lamport_timestamp_before_or_during);
+                    to_replay_on.direct_append(new_value);
+                }
+                else
+                {
+                    ValueType key_wrapper = delta.getKey();
+                    Integer key =
+                        (new Double(key_wrapper.getNum())).intValue();
+                    
+                    if (ContainerOpType.DELETE == delta.getOpType())
+                    {
+                        to_replay_on.direct_remove(key);
+                    }
+                    else if (ContainerOpType.WRITE == delta.getOpType())
+                    {
+                        String internal_obj_uuid =
+                            delta.getWhatAddedOrWritten().getReference();
+                        RalphObject new_value =
+                            reconstruction_context.get_constructed_object(
+                                internal_obj_uuid,
+                                lamport_timestamp_before_or_during);
+
+                        to_replay_on.direct_set_val_on_key(
+                            key,new_value);
+                    }
+                    //// DEBUG
+                    else
+                    {
+                        Util.logger_assert("Unknown op type on list.");
+                    }
+                    //// END DEBUG
+                }
             }
         }
     }
