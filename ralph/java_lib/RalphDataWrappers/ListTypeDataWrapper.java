@@ -98,7 +98,6 @@ public class ListTypeDataWrapper<ValueType,DeltaValueType>
             change_log.add(write_key_tuple(key));
 
         val.get(key).set_val(active_event,to_write.get_val(active_event));
-        return;	
     }
 		
     public void set_val_on_key(
