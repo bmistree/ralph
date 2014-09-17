@@ -1,0 +1,37 @@
+Struct InternalStruct
+{
+    TVar Number internal_value;
+}
+
+
+Service ReplayStructList
+{
+    List(element: Struct InternalStruct) internal_struct_list;
+    
+    add_internal(Number internal_value)
+    {
+        atomically
+        {
+            Struct InternalStruct internal_struct;
+            internal_struct.internal_value = internal_value;
+            internal_struct_list.append(internal_struct);
+        }
+    }
+
+    get_size() returns Number
+    {
+        return internal_struct_list.size();
+    }
+
+    get_internal_value(Number index) returns Number
+    {
+        Number to_return = null;
+        atomically
+        {
+            Struct InternalStruct internal_struct =
+                internal_struct_list.get(index);
+            to_return = internal_struct.internal_value;
+        }
+        return to_return;
+    }
+}
