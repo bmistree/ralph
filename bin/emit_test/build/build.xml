@@ -604,7 +604,8 @@
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
-        jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList">
+        jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
+        jar_VersionedStructList">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -627,6 +628,11 @@
   <target
       name="ralph_VersionedList"
       depends="atomic_list">
+  </target>
+
+  <target
+      name="ralph_VersionedStructList"
+      depends="replay_struct_list">
   </target>
   
   <target
@@ -998,6 +1004,12 @@
   <target name="harness_VersionedList">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedList.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_VersionedStructList">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedStructList.java"/>
     </antcall>
   </target>
   
@@ -1489,7 +1501,20 @@
       <param name="config_properties" value="${log_config}"/>
     </antcall>
   </target>
-  
+
+  <property
+      name="versioned_struct_list_jar"
+      value="versioned_struct_list.jar"/>
+  <target
+      name="jar_VersionedStructList"
+      depends="ralph_VersionedStructList,ralph_to_byte_code,harness_VersionedStructList">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedStructList"/>
+      <param name="dest_jar" value="${versioned_struct_list_jar}"/>
+      <param name="config_properties" value="${log_config}"/>
+    </antcall>
+  </target>
+
   <property
       name="version_querier_jar"
       value="version_querier.jar"/>
