@@ -28,11 +28,22 @@ public class AtomicInternalList<V,ValueDeltaType>
     private RalphInternalList<V,ValueDeltaType> internal_list = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     
-    public AtomicInternalList(RalphGlobals ralph_globals)
+    public AtomicInternalList(
+        RalphGlobals ralph_globals,
+        boolean _log_changes,
+        ListTypeDataWrapperFactory<V,ValueDeltaType> ltdwf,
+        List<RalphObject<V,ValueDeltaType>>init_val,
+        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
         super(ralph_globals);
         internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
         version_helper = BaseTypeVersionHelpers.INTERNAL_LIST_TYPE_VERSION_HELPER;
+
+        locked_wrapper = _locked_wrapper;
+        init_multithreaded_locked_object(
+            ltdwf,version_helper,_log_changes, init_val);
+        internal_list.init_ralph_internal_list(
+            _locked_wrapper,this,this);
     }
 
     /**
@@ -68,31 +79,18 @@ public class AtomicInternalList<V,ValueDeltaType>
         duplicate_for_speculation(List<RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
         AtomicInternalList<V,ValueDeltaType> to_return = 
-            new AtomicInternalList(ralph_globals);
+            new AtomicInternalList(
+                ralph_globals,
+                log_changes,
+                (ListTypeDataWrapperFactory<V,ValueDeltaType>)data_wrapper_constructor,
+                to_speculate_on,
+                locked_wrapper);
         to_return.set_derived(this);
-        to_return.init_multithreaded_list_container(
-            log_changes,
-            (ListTypeDataWrapperFactory<V,ValueDeltaType>)data_wrapper_constructor,
-            to_speculate_on,
-            locked_wrapper);
 
         return to_return;
     }
 
     
-    public void init_multithreaded_list_container(
-        boolean _log_changes,
-        ListTypeDataWrapperFactory<V,ValueDeltaType> ltdwf,
-        List<RalphObject<V,ValueDeltaType>>init_val,
-        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
-    {
-        locked_wrapper = _locked_wrapper;
-        init_multithreaded_locked_object(
-            ltdwf,version_helper,_log_changes, init_val);
-        internal_list.init_ralph_internal_list(
-            _locked_wrapper,this,this);
-    }
-
     @Override
     public ObjectContents serialize_contents(
         ActiveEvent active_event,Object additional_serialization_contents)

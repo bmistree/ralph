@@ -302,9 +302,6 @@ public abstract class Endpoint
     protected NonAtomicInternalList<Double,Double> _produce_range(
         Double start,Double end, Double increment)
     {
-        NonAtomicInternalList<Double,Double> to_return =
-            new NonAtomicInternalList(ralph_globals);
-
         List<RalphObject<Double,Double>> init_val =
             new ArrayList<RalphObject<Double,Double>>();
         for (int i = start.intValue(); i < end.intValue();
@@ -314,8 +311,8 @@ public abstract class Endpoint
                 new Variables.NonAtomicNumberVariable(
                     false,new Double(i),ralph_globals));
         }
-        
-        to_return.init(
+        NonAtomicInternalList<Double,Double> to_return =
+            new NonAtomicInternalList(ralph_globals,
             new ListTypeDataWrapperFactory<Double,Double>(java.lang.Double.class),
             init_val,
             BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER);

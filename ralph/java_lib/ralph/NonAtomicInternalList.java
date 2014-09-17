@@ -30,24 +30,23 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     private RalphInternalList<V,ValueDeltaType> internal_list = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     
-    public NonAtomicInternalList(RalphGlobals ralph_globals)
-    {
-        super(ralph_globals);
-        version_helper = BaseTypeVersionHelpers.INTERNAL_LIST_TYPE_VERSION_HELPER;
-        internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
-    }
-    public void init(
+    public NonAtomicInternalList(
+        RalphGlobals ralph_globals,
         ListTypeDataWrapperFactory<V,ValueDeltaType> ltdwf,
         List<RalphObject<V,ValueDeltaType>>init_val,
         EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
+        super(ralph_globals);
+        version_helper = BaseTypeVersionHelpers.INTERNAL_LIST_TYPE_VERSION_HELPER;
+        internal_list = new RalphInternalList<V,ValueDeltaType>(ralph_globals);
+
         locked_wrapper = _locked_wrapper;
         internal_list.init_ralph_internal_list(
             _locked_wrapper,this,this);
         
         reference_type_val =
             (ListTypeDataWrapper<V,ValueDeltaType>)ltdwf.construct(init_val, false); 
-        val = reference_type_val;		
+        val = reference_type_val;
     }
 
     @Override
@@ -63,7 +62,6 @@ public class NonAtomicInternalList<V,ValueDeltaType>
             "serialization of nonatomicinternallist.");
         return null;
     }
-
     
     @Override
     public void swap_internal_vals(

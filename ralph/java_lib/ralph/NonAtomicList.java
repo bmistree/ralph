@@ -45,12 +45,11 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         RalphGlobals ralph_globals)
     {
         this(
-            new NonAtomicInternalList<ValueType,DeltaType>(ralph_globals),
+            new NonAtomicInternalList<ValueType,DeltaType>(
+                ralph_globals,
+                new ListTypeDataWrapperFactory<ValueType,DeltaType>(value_type_class),
+                new ArrayList<RalphObject<ValueType,DeltaType>>(),locked_wrapper),
             locked_wrapper,version_helper,value_type_class,ralph_globals);
-        
-        this.val.val.init(
-            new ListTypeDataWrapperFactory<ValueType,DeltaType>(value_type_class),
-            new ArrayList<RalphObject<ValueType,DeltaType>>(),locked_wrapper);
     }
 
     /**

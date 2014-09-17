@@ -33,9 +33,9 @@ public class ExtendedVariables
             Class<T> value_type_class,
             RalphGlobals ralph_globals)
         {
-            super(ralph_globals);
-            init_multithreaded_list_container(
-                true,new ListTypeDataWrapperFactory<T,T>(value_type_class),
+            super(
+                ralph_globals,true,
+                new ListTypeDataWrapperFactory<T,T>(value_type_class),
                 new ArrayList<RalphObject<T,T>>(),
                 _locked_wrapper);
         }

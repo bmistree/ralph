@@ -46,14 +46,13 @@ public class AtomicList<ValueType, ValueDeltaType>
     {
         this(
             _log_changes,
-            new AtomicInternalList<ValueType, ValueDeltaType>(ralph_globals),
+            new AtomicInternalList<ValueType, ValueDeltaType>(
+                ralph_globals,
+                _log_changes,
+                new ListTypeDataWrapperFactory<ValueType, ValueDeltaType>(_value_type_class),
+                new ArrayList<RalphObject<ValueType, ValueDeltaType>>(),
+                locked_wrapper),
             locked_wrapper,version_helper,_value_type_class,ralph_globals);
-        
-        this.val.val.init_multithreaded_list_container(
-            _log_changes,
-            new ListTypeDataWrapperFactory<ValueType, ValueDeltaType>(_value_type_class),
-            new ArrayList<RalphObject<ValueType, ValueDeltaType>>(),
-            locked_wrapper);
     }
 
     /**
