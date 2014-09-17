@@ -42,18 +42,17 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     
     public NonAtomicInternalMap(
         RalphGlobals ralph_globals,
-        VersionHelper<VersionContainerDeltas> internal_version_helper)
+        VersionHelper<VersionContainerDeltas> internal_version_helper,
+        MapTypeDataWrapperFactory<K,V,ValueDeltaType> mtdwf,
+        Map<K,RalphObject<V,ValueDeltaType>>init_val,
+        IndexType _index_type,
+        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper
+        )
     {
         super(ralph_globals);
         version_helper = internal_version_helper;
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
-    }
-    public void init(
-        MapTypeDataWrapperFactory<K,V,ValueDeltaType> mtdwf,
-        Map<K,RalphObject<V,ValueDeltaType>>init_val,
-        IndexType _index_type,
-        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
-    {
+
         index_type = _index_type;
         
         locked_wrapper = _locked_wrapper;

@@ -54,16 +54,14 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
     {
         this(
             new NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
-                ralph_globals,internal_version_helper),
+                ralph_globals,internal_version_helper,
+                new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
+                    _key_type_class,_value_type_class),
+                new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
+                index_type,
+                locked_wrapper),
             index_type,locked_wrapper,version_helper,_key_type_class,
             _value_type_class,ralph_globals);
-
-        this.val.val.init(
-            new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
-                _key_type_class,_value_type_class),
-            new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
-            index_type,
-            locked_wrapper);
     }
 
     /**
@@ -132,5 +130,4 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         internal_val.serialize_as_rpc_arg(active_event,any_builder);
         any_builder.setIsTvar(false);
     }
-
 }
