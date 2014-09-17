@@ -6,10 +6,14 @@ import java.util.SortedSet;
 import java.util.Set;
 
 import ralph.RalphObject;
+import ralph.RalphInternalMapInterface;
 import RalphExceptions.BackoutException;
 import ralph.IInternalReferenceHolder;
+import ralph.Util;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerOpType;
+import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerDelta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class ObjectHistory
@@ -99,6 +103,23 @@ public class ObjectHistory
         }
         return to_return;
     }
+
+    public static void replay_internal_map(
+        RalphInternalMapInterface to_replay_on,
+        ObjectHistory obj_history, Long to_play_until)
+    {
+        for (SingleObjectChange change : obj_history.history)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            SingleObjectChange.internal_map_incorporate_single_object_change(
+                change,to_replay_on);
+        }
+    }
+
     
     public static void replay_number(
         RalphObject<Double,Double> to_replay_on,
@@ -194,6 +215,36 @@ public class ObjectHistory
         {
             boolean internal_bool = change.delta.getValue().getTf();
             to_incorporate_into.direct_set_val(internal_bool);
+        }
+
+        public static void internal_map_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphInternalMapInterface to_replay_on)
+        {
+            for (ContainerDelta delta : change.delta.getContainerDeltaList())
+            {
+                if (ContainerOpType.DELETE == delta.getOpType())
+                {
+                }
+                else if (ContainerOpType.ADD == delta.getOpType())
+                {
+                }
+                else if (ContainerOpType.WRITE == delta.getOpType())
+                {
+                }
+                else if (ContainerOpType.WRITE == delta.getOpType())
+                {
+                }
+                //// DEBUG
+                else
+                {
+                    Util.logger_assert("Unknown op type on map.");
+                }
+                //// END DEBUG
+            }
+
+            Util.logger_warn(
+                "FIXME: still need to incorporate changes on internal maps.");
         }
     }
 

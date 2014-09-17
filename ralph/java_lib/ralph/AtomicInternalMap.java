@@ -13,6 +13,9 @@ import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
 
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
+
 import ralph.AtomicMap.AdditionalAtomicMapSerializationContents;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -118,6 +121,16 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         to_return.setAtomic(true);
         return to_return.build();
     }
+
+    @Override
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        ObjectHistory.replay_internal_map(
+            this,obj_history,to_play_until);
+    }
+
     
     /**
        Log completed commit, if ralph globals designates to.

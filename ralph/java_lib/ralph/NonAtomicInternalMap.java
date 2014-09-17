@@ -11,6 +11,9 @@ import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
 
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
+
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
@@ -63,6 +66,16 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
             _locked_wrapper,this,this,index_type);
     }
 
+    @Override
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        ObjectHistory.replay_internal_map(
+            this,obj_history,to_play_until);
+    }
+
+    
     @Override
     public ObjectContents serialize_contents(
         ActiveEvent active_event,Object additional_serialization_contents)
