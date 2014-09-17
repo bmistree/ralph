@@ -11,6 +11,13 @@ message ObjectContents
         required string key_type_class_name = 2;
         required string val_type_class_name = 3;
     }
+
+    message List
+    {
+        required Delta.ReferenceType ref_type = 1;
+        required string val_type_class_name = 2;
+    }
+
     
     message InternalMap
     {
@@ -34,6 +41,7 @@ message ObjectContents
     optional Delta.ReferenceType ref_type = 4;
     
     optional Map map_type = 5;
-    optional InternalMap internal_map_type = 6;
-    optional InternalList internal_list_type = 7;
+    optional List list_type = 6;
+    optional InternalMap internal_map_type = 7;
+    optional InternalList internal_list_type = 8;
 }
