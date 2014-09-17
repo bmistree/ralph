@@ -15,8 +15,8 @@ public class MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>
     Map<KeyType,RalphObject<ValueType,ValueDeltaType>>
     >
 {
-    private final Class<KeyType> key_type_class;
-    private final Class<ValueType> value_type_class;
+    public final Class<KeyType> key_type_class;
+    public final Class<ValueType> value_type_class;
 
     public MapTypeDataWrapperFactory(
         Class<KeyType> key_type_class,

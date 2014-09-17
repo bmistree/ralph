@@ -13,6 +13,8 @@ import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
 
+import ralph.AtomicMap.AdditionalAtomicMapSerializationContents;
+
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
@@ -37,6 +39,9 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     private MapTypeDataWrapper<K,V,ValueDeltaType> reference_type_val = null;
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
+
+    private final Class<K> key_type_class;
+    private final Class<V> value_type_class;
     
     public AtomicInternalMap (
         RalphGlobals ralph_globals,
@@ -52,11 +57,15 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         version_helper = internal_version_helper;
         index_type = _index_type;
         locked_wrapper = _locked_wrapper;
+        key_type_class = rtdwc.key_type_class;
+        value_type_class = rtdwc.value_type_class;
         init_multithreaded_locked_object(
             rtdwc, version_helper,_log_changes, init_val,
-            // For now, passing no additional serialization arguments
-            // into atomic object.
-            null);
+            // additional serialization contents gets passed back to
+            // serialize_contents as Object.
+            new AdditionalAtomicMapSerializationContents(
+                key_type_class.getName(), value_type_class.getName()));
+        
         internal_map.init_ralph_internal_map(
             _locked_wrapper,this,this,_index_type);
     }
@@ -82,15 +91,32 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     public ObjectContents serialize_contents(
         ActiveEvent active_event,Object additional_serialization_contents)
     {
-        // FIXME: May eventually want to fill this in (eg., if
-        // replacing serialization code.  Currently, it's unnecessary
-        // because we just use this method for serializing version
-        // histories.
-        Util.logger_assert(
-            "FIXME: currently, disallowing direct " +
-            "serialization of atomicinternalmap.");
-        
-        return null;
+        String key_type_name = null;
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+        {
+            key_type_name = key_type_class.getName();
+            value_type_name = value_type_class.getName();
+        }
+        else
+        {
+            AdditionalAtomicMapSerializationContents add_ser_contents =
+                (AdditionalAtomicMapSerializationContents)
+                additional_serialization_contents;
+            key_type_name = add_ser_contents.key_class_name;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+
+        ObjectContents.InternalMap.Builder internal_map_builder =
+            ObjectContents.InternalMap.newBuilder();
+        internal_map_builder.setKeyTypeClassName(key_type_name);
+        internal_map_builder.setValTypeClassName(value_type_name);
+
+        ObjectContents.Builder to_return = ObjectContents.newBuilder();
+        to_return.setInternalMapType(internal_map_builder);
+        to_return.setUuid(uuid());
+        to_return.setAtomic(true);
+        return to_return.build();
     }
     
     /**

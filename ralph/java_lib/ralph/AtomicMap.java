@@ -61,7 +61,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             _log_changes,
             new AtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
                 ralph_globals,internal_version_helper,
-
                 _log_changes,
                 new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
                     _key_type_class,_value_type_class),
