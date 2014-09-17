@@ -26,16 +26,17 @@ public class VersionedMap
             TVarMapEndpoint endpt = new TVarMapEndpoint(
                 ralph_globals, new SingleSideConnection());
 
-            for (int i = 0; i < 20; ++i)
+            int highest_index_to_add = 20;
+            
+            for (int i = 0; i <= highest_index_to_add; ++i)
                 endpt.put_number((double)i, (double)i);
 
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < highest_index_to_add/2; ++i)
                 endpt.remove((double)i);
             
             // map should ultimately contain indices 11-19, with
             // values equal to keys.
-
-
+            
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
                     VersioningInfo.instance.local_version_manager,
@@ -48,7 +49,31 @@ public class VersionedMap
                 (TVarMapEndpoint) VersionUtil.rebuild_endpoint(
                     VersioningInfo.instance.local_version_manager,
                     endpt._uuid,ralph_globals,reconstruction_context);
-            
+
+            if (! replayed_endpt.get_size().equals(endpt.get_size()))
+                return false;
+
+            for (int i = 0; i <= highest_index_to_add; ++i)
+            {
+                double d_i = (double)i;
+                boolean replayed_contains =
+                    replayed_endpt.contains_index(d_i).booleanValue();
+                boolean real_contains =
+                    endpt.contains_index(d_i).booleanValue();
+
+                if (real_contains != replayed_contains)
+                    return false;
+
+                if (real_contains)
+                {
+                    double replayed_num =
+                        replayed_endpt.get_number(d_i).doubleValue();
+                    double real_num =
+                        endpt.get_number(d_i).doubleValue();
+                    if (replayed_num != real_num)
+                        return false;
+                }
+            }
             return true;
         }
         catch(Exception _ex)
