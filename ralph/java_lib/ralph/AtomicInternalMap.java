@@ -38,16 +38,27 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
     
-    public AtomicInternalMap(
+    public AtomicInternalMap (
         RalphGlobals ralph_globals,
-        VersionHelper<VersionContainerDeltas> internal_version_helper)
+        VersionHelper<VersionContainerDeltas> internal_version_helper,
+        boolean _log_changes,
+        MapTypeDataWrapperFactory<K,V,ValueDeltaType> rtdwc,
+        Map<K,RalphObject<V,ValueDeltaType>>init_val,
+        NonAtomicInternalMap.IndexType _index_type,
+        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
-        //version_helper = VersionContainerDeltas.MAP_VERSION_HELPER;
         version_helper = internal_version_helper;
-    }
 
+        index_type = _index_type;
+        locked_wrapper = _locked_wrapper;
+        init_multithreaded_locked_object(
+            rtdwc, version_helper,_log_changes, init_val);
+        internal_map.init_ralph_internal_map(
+            _locked_wrapper,this,this,_index_type);
+    }
+    
     @Override
     protected
         // return type
@@ -58,14 +69,10 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         duplicate_for_speculation(Map<K,RalphObject<V,ValueDeltaType>> to_speculate_on)
     {
         AtomicInternalMap <K,V,ValueDeltaType> to_return =
-            new AtomicInternalMap(ralph_globals,version_helper);
-        to_return.set_derived(this);
-        to_return.init_multithreaded_map_container(
-            log_changes,
-            (MapTypeDataWrapperFactory<K,V,ValueDeltaType>)data_wrapper_constructor,
-            to_speculate_on,
-            index_type,locked_wrapper);
-
+            new AtomicInternalMap(
+                ralph_globals,version_helper,log_changes,
+                (MapTypeDataWrapperFactory<K,V,ValueDeltaType>)data_wrapper_constructor,
+                to_speculate_on,index_type,locked_wrapper);
         return to_return;
     }
 
@@ -103,22 +110,6 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
                 map_dirty_val.get_unmodifiable_change_log());
         version_helper.save_version(
             uuid, deltas,active_event.commit_metadata);
-    }
-
-    
-    public void init_multithreaded_map_container(
-        boolean _log_changes,
-        MapTypeDataWrapperFactory<K,V,ValueDeltaType> rtdwc,
-        Map<K,RalphObject<V,ValueDeltaType>>init_val,
-        NonAtomicInternalMap.IndexType _index_type,
-        EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
-    {
-        index_type = _index_type;
-        locked_wrapper = _locked_wrapper;
-        init_multithreaded_locked_object(
-            rtdwc, version_helper,_log_changes, init_val);
-        internal_map.init_ralph_internal_map(
-            _locked_wrapper,this,this,_index_type);
     }
 
     @Override

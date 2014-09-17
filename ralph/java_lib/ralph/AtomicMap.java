@@ -60,16 +60,16 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         this(
             _log_changes,
             new AtomicInternalMap<KeyType,ValueType,ValueDeltaType>(
-                ralph_globals,internal_version_helper),
+                ralph_globals,internal_version_helper,
+
+                _log_changes,
+                new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
+                    _key_type_class,_value_type_class),
+                new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
+                index_type,
+                locked_wrapper),
             index_type,locked_wrapper,version_helper,
             _key_type_class,_value_type_class,ralph_globals);
-        this.val.val.init_multithreaded_map_container(
-            _log_changes,
-            new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
-                _key_type_class,_value_type_class),
-            new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
-            index_type,
-            locked_wrapper);
     }
     
     /**
