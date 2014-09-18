@@ -24,8 +24,13 @@ message Delta
     {
         // value types for serialization.
         optional double num = 1;
-        optional string text = 2;
-        optional bool tf = 3;
+        optional bool null_num = 2;
+            
+        optional string text = 3;
+        optional bool null_text = 4;
+        
+        optional bool tf = 5;
+        optional bool null_tf = 6;
     }
 
     message ReferenceType

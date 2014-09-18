@@ -1262,30 +1262,60 @@ public final class DeltaProto {
        */
       double getNum();
 
-      // optional string text = 2;
+      // optional bool null_num = 2;
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional bool null_num = 2;</code>
+       */
+      boolean hasNullNum();
+      /**
+       * <code>optional bool null_num = 2;</code>
+       */
+      boolean getNullNum();
+
+      // optional string text = 3;
+      /**
+       * <code>optional string text = 3;</code>
        */
       boolean hasText();
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional string text = 3;</code>
        */
       java.lang.String getText();
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional string text = 3;</code>
        */
       com.google.protobuf.ByteString
           getTextBytes();
 
-      // optional bool tf = 3;
+      // optional bool null_text = 4;
       /**
-       * <code>optional bool tf = 3;</code>
+       * <code>optional bool null_text = 4;</code>
+       */
+      boolean hasNullText();
+      /**
+       * <code>optional bool null_text = 4;</code>
+       */
+      boolean getNullText();
+
+      // optional bool tf = 5;
+      /**
+       * <code>optional bool tf = 5;</code>
        */
       boolean hasTf();
       /**
-       * <code>optional bool tf = 3;</code>
+       * <code>optional bool tf = 5;</code>
        */
       boolean getTf();
+
+      // optional bool null_tf = 6;
+      /**
+       * <code>optional bool null_tf = 6;</code>
+       */
+      boolean hasNullTf();
+      /**
+       * <code>optional bool null_tf = 6;</code>
+       */
+      boolean getNullTf();
     }
     /**
      * Protobuf type {@code Delta.ValueType}
@@ -1343,14 +1373,29 @@ public final class DeltaProto {
                 num_ = input.readDouble();
                 break;
               }
-              case 18: {
+              case 16: {
                 bitField0_ |= 0x00000002;
+                nullNum_ = input.readBool();
+                break;
+              }
+              case 26: {
+                bitField0_ |= 0x00000004;
                 text_ = input.readBytes();
                 break;
               }
-              case 24: {
-                bitField0_ |= 0x00000004;
+              case 32: {
+                bitField0_ |= 0x00000008;
+                nullText_ = input.readBool();
+                break;
+              }
+              case 40: {
+                bitField0_ |= 0x00000010;
                 tf_ = input.readBool();
+                break;
+              }
+              case 48: {
+                bitField0_ |= 0x00000020;
+                nullTf_ = input.readBool();
                 break;
               }
             }
@@ -1417,17 +1462,33 @@ public final class DeltaProto {
         return num_;
       }
 
-      // optional string text = 2;
-      public static final int TEXT_FIELD_NUMBER = 2;
-      private java.lang.Object text_;
+      // optional bool null_num = 2;
+      public static final int NULL_NUM_FIELD_NUMBER = 2;
+      private boolean nullNum_;
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional bool null_num = 2;</code>
        */
-      public boolean hasText() {
+      public boolean hasNullNum() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional bool null_num = 2;</code>
+       */
+      public boolean getNullNum() {
+        return nullNum_;
+      }
+
+      // optional string text = 3;
+      public static final int TEXT_FIELD_NUMBER = 3;
+      private java.lang.Object text_;
+      /**
+       * <code>optional string text = 3;</code>
+       */
+      public boolean hasText() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string text = 3;</code>
        */
       public java.lang.String getText() {
         java.lang.Object ref = text_;
@@ -1444,7 +1505,7 @@ public final class DeltaProto {
         }
       }
       /**
-       * <code>optional string text = 2;</code>
+       * <code>optional string text = 3;</code>
        */
       public com.google.protobuf.ByteString
           getTextBytes() {
@@ -1460,26 +1521,61 @@ public final class DeltaProto {
         }
       }
 
-      // optional bool tf = 3;
-      public static final int TF_FIELD_NUMBER = 3;
-      private boolean tf_;
+      // optional bool null_text = 4;
+      public static final int NULL_TEXT_FIELD_NUMBER = 4;
+      private boolean nullText_;
       /**
-       * <code>optional bool tf = 3;</code>
+       * <code>optional bool null_text = 4;</code>
        */
-      public boolean hasTf() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      public boolean hasNullText() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional bool tf = 3;</code>
+       * <code>optional bool null_text = 4;</code>
+       */
+      public boolean getNullText() {
+        return nullText_;
+      }
+
+      // optional bool tf = 5;
+      public static final int TF_FIELD_NUMBER = 5;
+      private boolean tf_;
+      /**
+       * <code>optional bool tf = 5;</code>
+       */
+      public boolean hasTf() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool tf = 5;</code>
        */
       public boolean getTf() {
         return tf_;
       }
 
+      // optional bool null_tf = 6;
+      public static final int NULL_TF_FIELD_NUMBER = 6;
+      private boolean nullTf_;
+      /**
+       * <code>optional bool null_tf = 6;</code>
+       */
+      public boolean hasNullTf() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional bool null_tf = 6;</code>
+       */
+      public boolean getNullTf() {
+        return nullTf_;
+      }
+
       private void initFields() {
         num_ = 0D;
+        nullNum_ = false;
         text_ = "";
+        nullText_ = false;
         tf_ = false;
+        nullTf_ = false;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1497,10 +1593,19 @@ public final class DeltaProto {
           output.writeDouble(1, num_);
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeBytes(2, getTextBytes());
+          output.writeBool(2, nullNum_);
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          output.writeBool(3, tf_);
+          output.writeBytes(3, getTextBytes());
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          output.writeBool(4, nullText_);
+        }
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          output.writeBool(5, tf_);
+        }
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          output.writeBool(6, nullTf_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -1517,11 +1622,23 @@ public final class DeltaProto {
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(2, getTextBytes());
+            .computeBoolSize(2, nullNum_);
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBoolSize(3, tf_);
+            .computeBytesSize(3, getTextBytes());
+        }
+        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(4, nullText_);
+        }
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(5, tf_);
+        }
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(6, nullTf_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -1641,10 +1758,16 @@ public final class DeltaProto {
           super.clear();
           num_ = 0D;
           bitField0_ = (bitField0_ & ~0x00000001);
-          text_ = "";
+          nullNum_ = false;
           bitField0_ = (bitField0_ & ~0x00000002);
-          tf_ = false;
+          text_ = "";
           bitField0_ = (bitField0_ & ~0x00000004);
+          nullText_ = false;
+          bitField0_ = (bitField0_ & ~0x00000008);
+          tf_ = false;
+          bitField0_ = (bitField0_ & ~0x00000010);
+          nullTf_ = false;
+          bitField0_ = (bitField0_ & ~0x00000020);
           return this;
         }
 
@@ -1680,11 +1803,23 @@ public final class DeltaProto {
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
             to_bitField0_ |= 0x00000002;
           }
-          result.text_ = text_;
+          result.nullNum_ = nullNum_;
           if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
             to_bitField0_ |= 0x00000004;
           }
+          result.text_ = text_;
+          if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+            to_bitField0_ |= 0x00000008;
+          }
+          result.nullText_ = nullText_;
+          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+            to_bitField0_ |= 0x00000010;
+          }
           result.tf_ = tf_;
+          if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+            to_bitField0_ |= 0x00000020;
+          }
+          result.nullTf_ = nullTf_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -1704,13 +1839,22 @@ public final class DeltaProto {
           if (other.hasNum()) {
             setNum(other.getNum());
           }
+          if (other.hasNullNum()) {
+            setNullNum(other.getNullNum());
+          }
           if (other.hasText()) {
-            bitField0_ |= 0x00000002;
+            bitField0_ |= 0x00000004;
             text_ = other.text_;
             onChanged();
           }
+          if (other.hasNullText()) {
+            setNullText(other.getNullText());
+          }
           if (other.hasTf()) {
             setTf(other.getTf());
+          }
+          if (other.hasNullTf()) {
+            setNullTf(other.getNullTf());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -1788,16 +1932,49 @@ public final class DeltaProto {
           return this;
         }
 
-        // optional string text = 2;
-        private java.lang.Object text_ = "";
+        // optional bool null_num = 2;
+        private boolean nullNum_ ;
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional bool null_num = 2;</code>
          */
-        public boolean hasText() {
+        public boolean hasNullNum() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional bool null_num = 2;</code>
+         */
+        public boolean getNullNum() {
+          return nullNum_;
+        }
+        /**
+         * <code>optional bool null_num = 2;</code>
+         */
+        public Builder setNullNum(boolean value) {
+          bitField0_ |= 0x00000002;
+          nullNum_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional bool null_num = 2;</code>
+         */
+        public Builder clearNullNum() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          nullNum_ = false;
+          onChanged();
+          return this;
+        }
+
+        // optional string text = 3;
+        private java.lang.Object text_ = "";
+        /**
+         * <code>optional string text = 3;</code>
+         */
+        public boolean hasText() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
+        }
+        /**
+         * <code>optional string text = 3;</code>
          */
         public java.lang.String getText() {
           java.lang.Object ref = text_;
@@ -1811,7 +1988,7 @@ public final class DeltaProto {
           }
         }
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional string text = 3;</code>
          */
         public com.google.protobuf.ByteString
             getTextBytes() {
@@ -1827,70 +2004,136 @@ public final class DeltaProto {
           }
         }
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional string text = 3;</code>
          */
         public Builder setText(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
           text_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional string text = 3;</code>
          */
         public Builder clearText() {
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000004);
           text_ = getDefaultInstance().getText();
           onChanged();
           return this;
         }
         /**
-         * <code>optional string text = 2;</code>
+         * <code>optional string text = 3;</code>
          */
         public Builder setTextBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
           text_ = value;
           onChanged();
           return this;
         }
 
-        // optional bool tf = 3;
-        private boolean tf_ ;
+        // optional bool null_text = 4;
+        private boolean nullText_ ;
         /**
-         * <code>optional bool tf = 3;</code>
+         * <code>optional bool null_text = 4;</code>
          */
-        public boolean hasTf() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+        public boolean hasNullText() {
+          return ((bitField0_ & 0x00000008) == 0x00000008);
         }
         /**
-         * <code>optional bool tf = 3;</code>
+         * <code>optional bool null_text = 4;</code>
+         */
+        public boolean getNullText() {
+          return nullText_;
+        }
+        /**
+         * <code>optional bool null_text = 4;</code>
+         */
+        public Builder setNullText(boolean value) {
+          bitField0_ |= 0x00000008;
+          nullText_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional bool null_text = 4;</code>
+         */
+        public Builder clearNullText() {
+          bitField0_ = (bitField0_ & ~0x00000008);
+          nullText_ = false;
+          onChanged();
+          return this;
+        }
+
+        // optional bool tf = 5;
+        private boolean tf_ ;
+        /**
+         * <code>optional bool tf = 5;</code>
+         */
+        public boolean hasTf() {
+          return ((bitField0_ & 0x00000010) == 0x00000010);
+        }
+        /**
+         * <code>optional bool tf = 5;</code>
          */
         public boolean getTf() {
           return tf_;
         }
         /**
-         * <code>optional bool tf = 3;</code>
+         * <code>optional bool tf = 5;</code>
          */
         public Builder setTf(boolean value) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000010;
           tf_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional bool tf = 3;</code>
+         * <code>optional bool tf = 5;</code>
          */
         public Builder clearTf() {
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000010);
           tf_ = false;
+          onChanged();
+          return this;
+        }
+
+        // optional bool null_tf = 6;
+        private boolean nullTf_ ;
+        /**
+         * <code>optional bool null_tf = 6;</code>
+         */
+        public boolean hasNullTf() {
+          return ((bitField0_ & 0x00000020) == 0x00000020);
+        }
+        /**
+         * <code>optional bool null_tf = 6;</code>
+         */
+        public boolean getNullTf() {
+          return nullTf_;
+        }
+        /**
+         * <code>optional bool null_tf = 6;</code>
+         */
+        public Builder setNullTf(boolean value) {
+          bitField0_ |= 0x00000020;
+          nullTf_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional bool null_tf = 6;</code>
+         */
+        public Builder clearNullTf() {
+          bitField0_ = (bitField0_ & ~0x00000020);
+          nullTf_ = false;
           onChanged();
           return this;
         }
@@ -3459,19 +3702,20 @@ public final class DeltaProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013delta.proto\"\247\003\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
+      "\n\013delta.proto\"\335\003\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
       ".Delta.ValueType\022\'\n\treference\030\002 \001(\0132\024.De" +
       "lta.ReferenceType\022.\n\017container_delta\030\003 \003" +
       "(\0132\025.Delta.ContainerDelta\032\215\001\n\016ContainerD" +
       "elta\022\'\n\007op_type\030\001 \002(\0162\026.Delta.ContainerO" +
       "pType\022\035\n\003key\030\002 \002(\0132\020.Delta.ValueType\0223\n\025" +
       "what_added_or_written\030\003 \001(\0132\024.Delta.Refe" +
-      "renceType\0322\n\tValueType\022\013\n\003num\030\001 \001(\001\022\014\n\004t" +
-      "ext\030\002 \001(\t\022\n\n\002tf\030\003 \001(\010\032\"\n\rReferenceType\022\021" +
-      "\n\treference\030\001 \001(\t\"<\n\017ContainerOpType\022\n\n\006",
-      "DELETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE\020\002\022\t\n\005CLEAR\020\003B" +
-      ",\n\036ralph_local_version_protobuffsB\nDelta" +
-      "Proto"
+      "renceType\032h\n\tValueType\022\013\n\003num\030\001 \001(\001\022\020\n\010n" +
+      "ull_num\030\002 \001(\010\022\014\n\004text\030\003 \001(\t\022\021\n\tnull_text" +
+      "\030\004 \001(\010\022\n\n\002tf\030\005 \001(\010\022\017\n\007null_tf\030\006 \001(\010\032\"\n\rR",
+      "eferenceType\022\021\n\treference\030\001 \001(\t\"<\n\017Conta" +
+      "inerOpType\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE" +
+      "\020\002\022\t\n\005CLEAR\020\003B,\n\036ralph_local_version_pro" +
+      "tobuffsB\nDeltaProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3495,7 +3739,7 @@ public final class DeltaProto {
           internal_static_Delta_ValueType_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ValueType_descriptor,
-              new java.lang.String[] { "Num", "Text", "Tf", });
+              new java.lang.String[] { "Num", "NullNum", "Text", "NullText", "Tf", "NullTf", });
           internal_static_Delta_ReferenceType_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(2);
           internal_static_Delta_ReferenceType_fieldAccessorTable = new
