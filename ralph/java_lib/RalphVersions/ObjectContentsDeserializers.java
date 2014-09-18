@@ -213,9 +213,58 @@ public class ObjectContentsDeserializers
                 //// END DEBUG
 
             }
+            else if (obj_contents.hasRefType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "reference types");
+            }
+            else if (obj_contents.hasMapType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "map types");
+            }
+            else if (obj_contents.hasListType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "list types");
+            }
+            else if (obj_contents.hasInternalMapType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "internal map types");
+            }
+            else if (obj_contents.hasInternalListType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "internal list types");
+            }
+            else if (obj_contents.hasNullType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "internal null types");
+            }
+            else if (obj_contents.hasInternalStructType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "internal struct types");
+            }
+            else if (obj_contents.hasStructType())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "struct types");
+            }
+                        
             // must have reference type
             Util.logger_assert(
-                "FIXME: must allow deserializing reference types");
+                "FIXME: unknown non-atomic object to deserialize");
         }
 
         Util.logger_assert("Unknown object contents deserialization.");
