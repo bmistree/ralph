@@ -163,6 +163,20 @@ public final class ObjectContentsProto {
      * <code>optional .ObjectContents.InternalStruct internal_struct_type = 10;</code>
      */
     ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructOrBuilder getInternalStructTypeOrBuilder();
+
+    // optional .ObjectContents.Struct struct_type = 11;
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    boolean hasStructType();
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct getStructType();
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder getStructTypeOrBuilder();
   }
   /**
    * Protobuf type {@code ObjectContents}
@@ -319,6 +333,19 @@ public final class ObjectContentsProto {
                 internalStructType_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000200;
+              break;
+            }
+            case 90: {
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000400) == 0x00000400)) {
+                subBuilder = structType_.toBuilder();
+              }
+              structType_ = input.readMessage(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(structType_);
+                structType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000400;
               break;
             }
           }
@@ -1671,6 +1698,685 @@ public final class ObjectContentsProto {
       }
 
       // @@protoc_insertion_point(class_scope:ObjectContents.InternalStruct)
+    }
+
+    public interface StructOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required .Delta.ReferenceType ref_type = 1;
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      boolean hasRefType();
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType();
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder();
+
+      // required string struct_type = 2;
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      boolean hasStructType();
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      java.lang.String getStructType();
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getStructTypeBytes();
+    }
+    /**
+     * Protobuf type {@code ObjectContents.Struct}
+     */
+    public static final class Struct extends
+        com.google.protobuf.GeneratedMessage
+        implements StructOrBuilder {
+      // Use Struct.newBuilder() to construct.
+      private Struct(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private Struct(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final Struct defaultInstance;
+      public static Struct getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public Struct getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Struct(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                  subBuilder = refType_.toBuilder();
+                }
+                refType_ = input.readMessage(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(refType_);
+                  refType_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000001;
+                break;
+              }
+              case 18: {
+                bitField0_ |= 0x00000002;
+                structType_ = input.readBytes();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Struct_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Struct_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.class, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<Struct> PARSER =
+          new com.google.protobuf.AbstractParser<Struct>() {
+        public Struct parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Struct(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Struct> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required .Delta.ReferenceType ref_type = 1;
+      public static final int REF_TYPE_FIELD_NUMBER = 1;
+      private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType refType_;
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      public boolean hasRefType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType() {
+        return refType_;
+      }
+      /**
+       * <code>required .Delta.ReferenceType ref_type = 1;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder() {
+        return refType_;
+      }
+
+      // required string struct_type = 2;
+      public static final int STRUCT_TYPE_FIELD_NUMBER = 2;
+      private java.lang.Object structType_;
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      public boolean hasStructType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      public java.lang.String getStructType() {
+        java.lang.Object ref = structType_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            structType_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string struct_type = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStructTypeBytes() {
+        java.lang.Object ref = structType_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          structType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+        structType_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasRefType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasStructType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeMessage(1, refType_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getStructTypeBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, refType_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getStructTypeBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code ObjectContents.Struct}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Struct_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Struct_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.class, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder.class);
+        }
+
+        // Construct using ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getRefTypeFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          if (refTypeBuilder_ == null) {
+            refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+          } else {
+            refTypeBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          structType_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Struct_descriptor;
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct getDefaultInstanceForType() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct build() {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct buildPartial() {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct result = new ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          if (refTypeBuilder_ == null) {
+            result.refType_ = refType_;
+          } else {
+            result.refType_ = refTypeBuilder_.build();
+          }
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.structType_ = structType_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct) {
+            return mergeFrom((ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct other) {
+          if (other == ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance()) return this;
+          if (other.hasRefType()) {
+            mergeRefType(other.getRefType());
+          }
+          if (other.hasStructType()) {
+            bitField0_ |= 0x00000002;
+            structType_ = other.structType_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasRefType()) {
+            
+            return false;
+          }
+          if (!hasStructType()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required .Delta.ReferenceType ref_type = 1;
+        private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> refTypeBuilder_;
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public boolean hasRefType() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getRefType() {
+          if (refTypeBuilder_ == null) {
+            return refType_;
+          } else {
+            return refTypeBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public Builder setRefType(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+          if (refTypeBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            refType_ = value;
+            onChanged();
+          } else {
+            refTypeBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public Builder setRefType(
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder builderForValue) {
+          if (refTypeBuilder_ == null) {
+            refType_ = builderForValue.build();
+            onChanged();
+          } else {
+            refTypeBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public Builder mergeRefType(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+          if (refTypeBuilder_ == null) {
+            if (((bitField0_ & 0x00000001) == 0x00000001) &&
+                refType_ != ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance()) {
+              refType_ =
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.newBuilder(refType_).mergeFrom(value).buildPartial();
+            } else {
+              refType_ = value;
+            }
+            onChanged();
+          } else {
+            refTypeBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public Builder clearRefType() {
+          if (refTypeBuilder_ == null) {
+            refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
+            onChanged();
+          } else {
+            refTypeBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          return this;
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder getRefTypeBuilder() {
+          bitField0_ |= 0x00000001;
+          onChanged();
+          return getRefTypeFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder() {
+          if (refTypeBuilder_ != null) {
+            return refTypeBuilder_.getMessageOrBuilder();
+          } else {
+            return refType_;
+          }
+        }
+        /**
+         * <code>required .Delta.ReferenceType ref_type = 1;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> 
+            getRefTypeFieldBuilder() {
+          if (refTypeBuilder_ == null) {
+            refTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder>(
+                    refType_,
+                    getParentForChildren(),
+                    isClean());
+            refType_ = null;
+          }
+          return refTypeBuilder_;
+        }
+
+        // required string struct_type = 2;
+        private java.lang.Object structType_ = "";
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public boolean hasStructType() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public java.lang.String getStructType() {
+          java.lang.Object ref = structType_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            structType_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getStructTypeBytes() {
+          java.lang.Object ref = structType_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            structType_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public Builder setStructType(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          structType_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public Builder clearStructType() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          structType_ = getDefaultInstance().getStructType();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string struct_type = 2;</code>
+         */
+        public Builder setStructTypeBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          structType_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:ObjectContents.Struct)
+      }
+
+      static {
+        defaultInstance = new Struct(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:ObjectContents.Struct)
     }
 
     public interface MapOrBuilder
@@ -4639,6 +5345,28 @@ public final class ObjectContentsProto {
       return internalStructType_;
     }
 
+    // optional .ObjectContents.Struct struct_type = 11;
+    public static final int STRUCT_TYPE_FIELD_NUMBER = 11;
+    private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct structType_;
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    public boolean hasStructType() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct getStructType() {
+      return structType_;
+    }
+    /**
+     * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+     */
+    public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder getStructTypeOrBuilder() {
+      return structType_;
+    }
+
     private void initFields() {
       uuid_ = "";
       atomic_ = false;
@@ -4650,6 +5378,7 @@ public final class ObjectContentsProto {
       internalListType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalList.getDefaultInstance();
       nullType_ = false;
       internalStructType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct.getDefaultInstance();
+      structType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4694,6 +5423,12 @@ public final class ObjectContentsProto {
           return false;
         }
       }
+      if (hasStructType()) {
+        if (!getStructType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -4730,6 +5465,9 @@ public final class ObjectContentsProto {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeMessage(10, internalStructType_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeMessage(11, structType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -4779,6 +5517,10 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(10, internalStructType_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, structType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4895,6 +5637,7 @@ public final class ObjectContentsProto {
           getInternalMapTypeFieldBuilder();
           getInternalListTypeFieldBuilder();
           getInternalStructTypeFieldBuilder();
+          getStructTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -4951,6 +5694,12 @@ public final class ObjectContentsProto {
           internalStructTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000200);
+        if (structTypeBuilder_ == null) {
+          structType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
+        } else {
+          structTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -5047,6 +5796,14 @@ public final class ObjectContentsProto {
         } else {
           result.internalStructType_ = internalStructTypeBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        if (structTypeBuilder_ == null) {
+          result.structType_ = structType_;
+        } else {
+          result.structType_ = structTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -5095,6 +5852,9 @@ public final class ObjectContentsProto {
         if (other.hasInternalStructType()) {
           mergeInternalStructType(other.getInternalStructType());
         }
+        if (other.hasStructType()) {
+          mergeStructType(other.getStructType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -5134,6 +5894,12 @@ public final class ObjectContentsProto {
         }
         if (hasInternalStructType()) {
           if (!getInternalStructType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasStructType()) {
+          if (!getStructType().isInitialized()) {
             
             return false;
           }
@@ -6171,6 +6937,123 @@ public final class ObjectContentsProto {
         return internalStructTypeBuilder_;
       }
 
+      // optional .ObjectContents.Struct struct_type = 11;
+      private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct structType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder> structTypeBuilder_;
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public boolean hasStructType() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct getStructType() {
+        if (structTypeBuilder_ == null) {
+          return structType_;
+        } else {
+          return structTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public Builder setStructType(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct value) {
+        if (structTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          structType_ = value;
+          onChanged();
+        } else {
+          structTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public Builder setStructType(
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder builderForValue) {
+        if (structTypeBuilder_ == null) {
+          structType_ = builderForValue.build();
+          onChanged();
+        } else {
+          structTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public Builder mergeStructType(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct value) {
+        if (structTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+              structType_ != ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance()) {
+            structType_ =
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.newBuilder(structType_).mergeFrom(value).buildPartial();
+          } else {
+            structType_ = value;
+          }
+          onChanged();
+        } else {
+          structTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public Builder clearStructType() {
+        if (structTypeBuilder_ == null) {
+          structType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
+          onChanged();
+        } else {
+          structTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder getStructTypeBuilder() {
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return getStructTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder getStructTypeOrBuilder() {
+        if (structTypeBuilder_ != null) {
+          return structTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return structType_;
+        }
+      }
+      /**
+       * <code>optional .ObjectContents.Struct struct_type = 11;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder> 
+          getStructTypeFieldBuilder() {
+        if (structTypeBuilder_ == null) {
+          structTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructOrBuilder>(
+                  structType_,
+                  getParentForChildren(),
+                  isClean());
+          structType_ = null;
+        }
+        return structTypeBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObjectContents)
     }
 
@@ -6197,6 +7080,11 @@ public final class ObjectContentsProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ObjectContents_InternalStruct_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_ObjectContents_Struct_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ObjectContents_Struct_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_ObjectContents_Map_descriptor;
   private static
@@ -6226,7 +7114,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"\317\006\n" +
+      "\n\025object_contents.proto\032\013delta.proto\"\303\007\n" +
       "\016ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030" +
       "\002 \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueTyp" +
       "e\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceTyp" +
@@ -6236,20 +7124,23 @@ public final class ObjectContentsProto {
       "tents.InternalMap\0228\n\022internal_list_type\030" +
       "\010 \001(\0132\034.ObjectContents.InternalList\022\021\n\tn" +
       "ull_type\030\t \001(\010\022<\n\024internal_struct_type\030\n",
-      " \001(\0132\036.ObjectContents.InternalStruct\032M\n\023" +
-      "InternalStructField\0226\n\030field_contents_re" +
-      "ference\030\001 \002(\0132\024.Delta.ReferenceType\032E\n\016I" +
-      "nternalStruct\0223\n\006fields\030\001 \003(\0132#.ObjectCo" +
-      "ntents.InternalStructField\032g\n\003Map\022&\n\010ref" +
-      "_type\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key" +
-      "_type_class_name\030\002 \002(\t\022\033\n\023val_type_class" +
-      "_name\030\003 \002(\t\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024." +
-      "Delta.ReferenceType\022\033\n\023val_type_class_na" +
-      "me\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_type_clas",
-      "s_name\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(" +
-      "\t\032+\n\014InternalList\022\033\n\023val_type_class_name" +
-      "\030\001 \002(\tB5\n\036ralph_local_version_protobuffs" +
-      "B\023ObjectContentsProto"
+      " \001(\0132\036.ObjectContents.InternalStruct\022+\n\013" +
+      "struct_type\030\013 \001(\0132\026.ObjectContents.Struc" +
+      "t\032M\n\023InternalStructField\0226\n\030field_conten" +
+      "ts_reference\030\001 \002(\0132\024.Delta.ReferenceType" +
+      "\032E\n\016InternalStruct\0223\n\006fields\030\001 \003(\0132#.Obj" +
+      "ectContents.InternalStructField\032E\n\006Struc" +
+      "t\022&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceTyp" +
+      "e\022\023\n\013struct_type\030\002 \002(\t\032g\n\003Map\022&\n\010ref_typ" +
+      "e\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_typ" +
+      "e_class_name\030\002 \002(\t\022\033\n\023val_type_class_nam",
+      "e\030\003 \002(\t\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.Delt" +
+      "a.ReferenceType\022\033\n\023val_type_class_name\030\002" +
+      " \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class_na" +
+      "me\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t\032+\n" +
+      "\014InternalList\022\033\n\023val_type_class_name\030\001 \002" +
+      "(\tB5\n\036ralph_local_version_protobuffsB\023Ob" +
+      "jectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6261,7 +7152,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_descriptor,
-              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", });
+              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", });
           internal_static_ObjectContents_InternalStructField_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(0);
           internal_static_ObjectContents_InternalStructField_fieldAccessorTable = new
@@ -6274,26 +7165,32 @@ public final class ObjectContentsProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalStruct_descriptor,
               new java.lang.String[] { "Fields", });
-          internal_static_ObjectContents_Map_descriptor =
+          internal_static_ObjectContents_Struct_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(2);
+          internal_static_ObjectContents_Struct_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_ObjectContents_Struct_descriptor,
+              new java.lang.String[] { "RefType", "StructType", });
+          internal_static_ObjectContents_Map_descriptor =
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(3);
           internal_static_ObjectContents_Map_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Map_descriptor,
               new java.lang.String[] { "RefType", "KeyTypeClassName", "ValTypeClassName", });
           internal_static_ObjectContents_List_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(3);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(4);
           internal_static_ObjectContents_List_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_List_descriptor,
               new java.lang.String[] { "RefType", "ValTypeClassName", });
           internal_static_ObjectContents_InternalMap_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(4);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(5);
           internal_static_ObjectContents_InternalMap_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalMap_descriptor,
               new java.lang.String[] { "KeyTypeClassName", "ValTypeClassName", });
           internal_static_ObjectContents_InternalList_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(5);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(6);
           internal_static_ObjectContents_InternalList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalList_descriptor,

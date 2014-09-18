@@ -15,6 +15,12 @@ message ObjectContents
         // should be ordered alphabetically by field name
         repeated InternalStructField fields = 1;
     }
+
+    message Struct
+    {
+        required Delta.ReferenceType ref_type = 1;
+        required string struct_type = 2;
+    }
     
     message Map
     {
@@ -58,4 +64,5 @@ message ObjectContents
     // true if null, false if not
     optional bool null_type = 9;
     optional InternalStruct internal_struct_type = 10;
+    optional Struct struct_type = 11;
 }
