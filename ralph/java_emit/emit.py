@@ -2716,7 +2716,7 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
         'public %s (RalphGlobals ralph_globals)\n' %
         internal_struct_name)
     internal_struct_body_text += '''{
-    // interhits from InternalStructBaseClass
+    // inherits from InternalStructBaseClass
     super(ralph_globals);
 '''
     internal_constructor_text = ''
@@ -2729,6 +2729,9 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
             '%s = %s;\n' %
             (field_name,
              construct_new_expression(field_type,initializer_node,emit_ctx)))
+    # registers struct with version manager, if on.
+    internal_constructor_text += '\nlog_obj_constructor_during_init(null);\n'
+        
     internal_struct_body_text += indent_string(internal_constructor_text)
     internal_struct_body_text += '}\n'
 
