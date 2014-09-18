@@ -5,6 +5,18 @@ import "delta.proto";
 
 message ObjectContents
 {
+    message StructFieldPair
+    {
+        required ObjectContents field_contents = 1;
+    }
+
+    message Struct
+    {
+        // should be ordered in same order that fields were declared
+        // in structs.
+        repeated StructFieldPair field_pairs = 1;
+    }
+    
     message Map
     {
         required Delta.ReferenceType ref_type = 1;
@@ -44,4 +56,7 @@ message ObjectContents
     optional List list_type = 6;
     optional InternalMap internal_map_type = 7;
     optional InternalList internal_list_type = 8;
+    // true if null, false if not
+    optional bool null_type = 9;
+    optional Struct struct_type = 10;
 }
