@@ -6,7 +6,7 @@ Struct InternalStruct
 
 Service ReplayStructList
 {
-    List(element: Struct InternalStruct) internal_struct_list;
+    TVar List(element: Struct InternalStruct) internal_struct_list;
     
     add_internal(Number internal_value)
     {
