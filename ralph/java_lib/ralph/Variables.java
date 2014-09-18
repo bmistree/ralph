@@ -62,12 +62,17 @@ public class Variables
 
     final static InternalServiceReference default_service_reference = null;
 
+    /**
+       @param held_reference --- Can be null if pointing at null.
+     */
     public static ObjectContents serialize_reference (
         IReference held_reference,boolean atomic,String holder_uuid)
     {
         Delta.ReferenceType.Builder reference_type_builder =
             Delta.ReferenceType.newBuilder();
-        reference_type_builder.setReference(held_reference.uuid());
+        if (held_reference != null)
+            reference_type_builder.setReference(held_reference.uuid());
+        
         ObjectContents.Builder contents_builder =
             ObjectContents.newBuilder();
         contents_builder.setRefType(reference_type_builder);
@@ -76,13 +81,17 @@ public class Variables
         return contents_builder.build();
     }
 
+    /**
+       @param internal_uuid --- Can be null if pointing at null.
+     */
     public static ObjectContents serialize_struct_reference(
         String holder_uuid,String internal_uuid, String struct_class_name,
         boolean atomic)
     {
         Delta.ReferenceType.Builder ref_type_builder =
             Delta.ReferenceType.newBuilder();
-        ref_type_builder.setReference(internal_uuid);
+        if (internal_uuid != null)
+            ref_type_builder.setReference(internal_uuid);
 
         ObjectContents.Struct.Builder struct_builder =
             ObjectContents.Struct.newBuilder();

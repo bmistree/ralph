@@ -2630,8 +2630,12 @@ public ObjectContents serialize_contents(
     throws BackoutException
 {
     IReference internal = get_val(active_event);
+    String internal_reference = null;
+    if (internal != null)
+        internal_reference = internal.uuid();
+
     return ralph.Variables.serialize_struct_reference(
-        uuid(),internal.uuid(), %(struct_name)s.class.getName(),
+        uuid(),internal_reference, %(struct_name)s.class.getName(),
         true);
 }
 

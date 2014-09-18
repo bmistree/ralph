@@ -126,18 +126,26 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
 
+        String internal_reference = null;
+        if (internal_map != null)
+            internal_reference = internal_map.uuid();
+        
         return AtomicMap.serialize_map_reference(
-            uuid(),internal_map.uuid(),key_type_name,value_type_name,
+            uuid(),internal_reference,key_type_name,value_type_name,
             true);
     }
-    
+
+    /**
+       @param internal_uuid --- Can be null if pointing at null.
+     */
     public static ObjectContents serialize_map_reference(
         String holder_uuid,String internal_uuid, String key_type_class_name,
         String value_type_class_name, boolean atomic)
     {
         Delta.ReferenceType.Builder ref_type_builder =
             Delta.ReferenceType.newBuilder();
-        ref_type_builder.setReference(internal_uuid);
+        if (internal_uuid != null)
+            ref_type_builder.setReference(internal_uuid);
 
         ObjectContents.Map.Builder map_builder =
             ObjectContents.Map.newBuilder();

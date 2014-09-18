@@ -115,8 +115,12 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
         NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_map = 
             get_val(active_event);
 
+        String internal_reference = null;
+        if (internal_map != null)
+            internal_reference = internal_map.uuid();
+        
         return AtomicMap.serialize_map_reference(
-            uuid(),internal_map.uuid(),key_type_name, value_type_name,
+            uuid(),internal_reference,key_type_name, value_type_name,
             false);
     }
 

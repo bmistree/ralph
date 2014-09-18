@@ -128,17 +128,25 @@ public class AtomicList<ValueType, ValueDeltaType>
         AtomicInternalList<ValueType,ValueDeltaType> internal_list = 
             get_val(active_event);
 
+        String internal_reference = null;
+        if (internal_list != null)
+            internal_reference = internal_list.uuid();
+        
         return AtomicList.serialize_list_reference(
-            uuid(),internal_list.uuid(),value_type_name,true);
+            uuid(),internal_reference,value_type_name,true);
     }
-
+    
+    /**
+       @param internal_uuid --- Can be null if pointing at null.
+     */
     public static ObjectContents serialize_list_reference(
         String holder_uuid,String internal_uuid,
         String value_type_class_name, boolean atomic)
     {
         Delta.ReferenceType.Builder ref_type_builder =
             Delta.ReferenceType.newBuilder();
-        ref_type_builder.setReference(internal_uuid);
+        if (internal_uuid != null)
+            ref_type_builder.setReference(internal_uuid);
 
         ObjectContents.List.Builder list_builder =
             ObjectContents.List.newBuilder();

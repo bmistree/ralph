@@ -110,8 +110,12 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         NonAtomicInternalList<ValueType,DeltaType> internal_list = 
             get_val(active_event);
 
+        String internal_reference = null;
+        if (internal_list != null)
+            internal_reference = internal_list.uuid();
+        
         return AtomicList.serialize_list_reference(
-            uuid(),internal_list.uuid(),value_type_name,false);
+            uuid(),internal_reference,value_type_name,false);
     }
     
     public boolean return_internal_val_from_container()
