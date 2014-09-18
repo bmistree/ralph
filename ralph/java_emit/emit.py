@@ -40,6 +40,7 @@ import ralph.Variables.AtomicEnumVariable;
 
 import ralph_protobuffs.VariablesProto;
 import ralph.BaseAtomicMapVariableFactory.AtomicMapVariableFactory;
+import ralph.BaseAtomicListVariableFactory.AtomicListVariableFactory;
 
 import RalphDeserializer.Deserializer;
 import RalphDeserializer.DataDeserializer;
@@ -2314,6 +2315,7 @@ def emit_struct_content_deserializer(struct_type):
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
         struct_type)
 
+    # map deserializers
     param_tuples = (
         ('Double',
          'NonAtomicInternalMap.IndexType.DOUBLE',
@@ -2345,6 +2347,15 @@ private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_nam
         'struct_locked_wrapper_name': struct_locked_wrapper_name,
         'internal_struct_name': internal_struct_name,
         'version_helper': version_helper}
+
+    # list deserializers
+    text += '''
+private final static AtomicListVariableFactory<%(internal_struct_name)s,IReference>
+    ____atom_list_serializer_%(internal_struct_name)s =
+        new AtomicListVariableFactory<%(internal_struct_name)s,IReference> (
+            %(internal_struct_name)s.class,%(struct_locked_wrapper_name)s);
+''' % { 'struct_locked_wrapper_name': struct_locked_wrapper_name,
+        'internal_struct_name': internal_struct_name}
 
     return text
     
