@@ -7,6 +7,8 @@ import ralph.Variables;
 import ralph.ContainerFactorySingleton;
 import ralph.IAtomicMapVariableFactory;
 import ralph.IAtomicListVariableFactory;
+import ralph.IAtomicStructWrapperBaseClassFactory;
+import ralph.StructWrapperBaseClass;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -131,6 +133,50 @@ public class ObjectContentsDeserializers
                 to_return.set_initial_reference(initial_reference);
                 return to_return;
             }
+            else if (obj_contents.hasStructType())
+            {
+                ObjectContents.Struct struct = obj_contents.getStructType();
+                String initial_reference = struct.getRefType().getReference();
+                IAtomicStructWrapperBaseClassFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_struct_wrapper_base_class_factory(
+                        struct.getStructTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize struct.");
+                }
+                StructWrapperBaseClass to_return = factory.construct(ralph_globals);
+                to_return.set_initial_reference(initial_reference);
+                return to_return;
+            }
+            else if (obj_contents.hasInternalStructType())
+            {
+                ObjectContents.InternalStruct internal_struct =
+                    obj_contents.getInternalStructType();
+
+                // Creating an internal struct in a very hackish way:
+                // creating an atomic struct and then reaching into it
+                // to get internal struct.
+                IAtomicStructWrapperBaseClassFactory factory =
+                    ContainerFactorySingleton.instance.get_atomic_struct_wrapper_base_class_factory(
+                        internal_struct.getStructTypeClassName());
+                if (factory == null)
+                {
+                    Util.logger_assert(
+                        "No factory to contents deserialize internalstruct.");
+                }
+                
+                StructWrapperBaseClass to_return_wrapper =
+                    factory.construct(ralph_globals);
+
+                //return to_return_wrapper.val.val;
+
+                Util.logger_assert(
+                    "FIXME: ObjectContentsDeserializers should return " +
+                    "RalphObject instead of InternalStructBaseClass");
+                return null;
+            }
+
             
             // must have reference type
             Util.logger_assert(
