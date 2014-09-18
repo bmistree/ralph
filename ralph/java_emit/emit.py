@@ -2274,6 +2274,7 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
         struct_wrapper_deserializer + '\n' +
         contents_deserializer )
 
+
 def emit_struct_wrapper_deserializer(struct_type):
     struct_name = struct_type.struct_name
     to_return = '''
@@ -2616,7 +2617,9 @@ public ObjectContents serialize_contents(
     throws BackoutException
 {
     IReference internal = get_val(active_event);
-    return ralph.Variables.serialize_reference(internal,true,uuid());
+    return ralph.Variables.serialize_struct_reference(
+        uuid(),internal.uuid(), %(struct_name)s.class.getName(),
+        true);
 }
 
 

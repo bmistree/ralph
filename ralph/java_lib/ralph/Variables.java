@@ -76,6 +76,27 @@ public class Variables
         return contents_builder.build();
     }
 
+    public static ObjectContents serialize_struct_reference(
+        String holder_uuid,String internal_uuid, String struct_class_name,
+        boolean atomic)
+    {
+        Delta.ReferenceType.Builder ref_type_builder =
+            Delta.ReferenceType.newBuilder();
+        ref_type_builder.setReference(internal_uuid);
+
+        ObjectContents.Struct.Builder struct_builder =
+            ObjectContents.Struct.newBuilder();
+        struct_builder.setRefType(ref_type_builder);
+        struct_builder.setStructType(struct_class_name);
+
+        ObjectContents.Builder contents_builder =
+            ObjectContents.newBuilder();
+        contents_builder.setUuid(holder_uuid);
+        contents_builder.setAtomic(atomic);
+        contents_builder.setStructType(struct_builder);
+        return contents_builder.build();
+    }
+    
     
     /** Atomics */
     
