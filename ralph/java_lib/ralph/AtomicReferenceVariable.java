@@ -66,7 +66,8 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         version_helper.save_version(
             uuid,dirty_val.val,active_event.commit_metadata);
     }
-    
+
+    @Override
     public void replay (
         IReconstructionContext reconstruction_context,
         ObjectHistory obj_history,Long to_play_until)

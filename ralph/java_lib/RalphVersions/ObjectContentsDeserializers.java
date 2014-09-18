@@ -1,5 +1,8 @@
 package RalphVersions;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.Util;
@@ -9,6 +12,7 @@ import ralph.IAtomicMapVariableFactory;
 import ralph.IAtomicListVariableFactory;
 import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
+import ralph.InternalStructBaseClass;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -151,7 +155,7 @@ public class ObjectContentsDeserializers
             }
             else if (obj_contents.hasInternalStructType())
             {
-                ObjectContents.InternalStruct internal_struct =
+                ObjectContents.InternalStruct internal_struct_contents =
                     obj_contents.getInternalStructType();
 
                 // Creating an internal struct in a very hackish way:
@@ -159,7 +163,7 @@ public class ObjectContentsDeserializers
                 // to get internal struct.
                 IAtomicStructWrapperBaseClassFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_struct_wrapper_base_class_factory(
-                        internal_struct.getStructTypeClassName());
+                        internal_struct_contents.getStructTypeClassName());
                 if (factory == null)
                 {
                     Util.logger_assert(
@@ -168,10 +172,23 @@ public class ObjectContentsDeserializers
 
                 StructWrapperBaseClass to_return_wrapper =
                     factory.construct(ralph_globals);
-                return (RalphObject)to_return_wrapper.val.val;
+
+                InternalStructBaseClass internal_struct =
+                    (InternalStructBaseClass) to_return_wrapper.val.val;
+
+                List<String> internal_references_to_replay_on =
+                    new ArrayList<String> ();
+                for (ObjectContents.InternalStructField struct_field :
+                         internal_struct_contents.getFieldsList())
+                {
+                    internal_references_to_replay_on.add(
+                        struct_field.getFieldContentsReference().getReference());
+                }
+                internal_struct.set_internal_references_to_replay_on(
+                    internal_references_to_replay_on);
+                return internal_struct;
             }
 
-            
             // must have reference type
             Util.logger_assert(
                 "FIXME: must allow deserializing unknown atomic type.");

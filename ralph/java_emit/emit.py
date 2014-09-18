@@ -56,6 +56,8 @@ import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
 
 import RalphVersions.ILocalVersionManager;
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
 
 import RalphConnObj.ConnectionObj;
 import RalphConnObj.SingleSideConnection;
@@ -2740,7 +2742,8 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
         emit_internal_struct_serialize_as_rpc(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_deserialize_constructor(struct_type))
-
+    internal_struct_body_text += (
+        emit_internal_struct_replay(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_serialize_contents(struct_type))
     
@@ -2748,6 +2751,19 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'
     return internal_struct_definition_text
+
+
+def emit_internal_struct_replay(struct_type):
+    return '''
+@Override
+public void replay (
+    IReconstructionContext reconstruction_context,
+    ObjectHistory obj_history,Long to_play_until)
+{
+    Util.logger_assert("Still must define replay for internal structs.");
+}
+'''
+
 
 def emit_internal_struct_serialize_contents(struct_type):
     '''
