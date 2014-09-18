@@ -165,22 +165,22 @@ public class ObjectContentsDeserializers
                     Util.logger_assert(
                         "No factory to contents deserialize internalstruct.");
                 }
-                
+
+                // Warning: when deserializing an internal struct,
+                // actually returning the wrapper that it holds.
+                // Caller will need to reach in to grab out internal
+                // struct.  Doing this because this method must return
+                // a RalphObject and internal structs do not inherit
+                // from RalphObject.
                 StructWrapperBaseClass to_return_wrapper =
                     factory.construct(ralph_globals);
-
-                //return to_return_wrapper.val.val;
-
-                Util.logger_assert(
-                    "FIXME: ObjectContentsDeserializers should return " +
-                    "RalphObject instead of InternalStructBaseClass");
-                return null;
+                return to_return_wrapper;
             }
 
             
             // must have reference type
             Util.logger_assert(
-                "FIXME: must allow deserializing reference types");
+                "FIXME: must allow deserializing unknown atomic type.");
         }
         else
         {
@@ -213,7 +213,6 @@ public class ObjectContentsDeserializers
                 //// END DEBUG
 
             }
-            
             // must have reference type
             Util.logger_assert(
                 "FIXME: must allow deserializing reference types");
