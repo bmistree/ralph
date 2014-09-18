@@ -1282,6 +1282,10 @@ def emit_internal_map_type(type_object):
     value_internal_type_text = emit_internal_type(
         value_type_node.type)
 
+    delta_value_internal_type_text = value_internal_type_text
+    if isinstance(value_type_node.type,StructType):
+        delta_value_internal_type_text = 'IReference'
+    
     if type_object.is_tvar:
         internal_map_var_type = 'AtomicInternalMap'
     else:
@@ -1291,7 +1295,7 @@ def emit_internal_map_type(type_object):
         internal_map_var_type +
         ('<%s,%s,%s>' %
          (key_internal_type_text,value_internal_type_text,
-          value_internal_type_text)))
+          delta_value_internal_type_text)))
 
 def emit_internal_list_type(type_object):
     element_type_node = type_object.element_type_node
@@ -1302,10 +1306,14 @@ def emit_internal_list_type(type_object):
         internal_map_var_type = 'AtomicInternalList'
     else:
         internal_map_var_type = 'NonAtomicInternalList'
+
+    delta_element_type_text = element_type_text
+    if isinstance(element_type_node.type,StructType):
+        delta_element_type_text = 'IReference'
         
     return (
         internal_map_var_type +
-        ('<%s,%s>' % (element_type_text,element_type_text)))
+        ('<%s,%s>' % (element_type_text,delta_element_type_text)))
 
 
 def emit_map_type(type_object):
@@ -1324,11 +1332,15 @@ def emit_map_type(type_object):
         if type_object.is_tvar:
             map_var_type = 'AtomicMapVariable'
 
+        delta_value_internal_type_text = value_internal_type_text
+        if isinstance(value_type_node.type,StructType):
+            delta_value_internal_type_text = 'IReference'
+            
         # FIXME: May not be dewaldo-ifying maps correctly
         to_return = (
             '%s<%s,%s,%s>' %
             (map_var_type,key_internal_type_text,
-             value_internal_type_text,value_internal_type_text))
+             value_internal_type_text,delta_value_internal_type_text))
 
         return to_return
     else:
@@ -1344,6 +1356,11 @@ def emit_list_type(type_object):
         element_internal_type_text = emit_internal_type(
             element_type_node.type)
 
+        delta_element_internal_type_text = element_internal_type_text
+        if isinstance(element_type_node.type,StructType):
+            delta_element_internal_type_text = 'IReference'
+
+        
         list_var_type = 'NonAtomicListVariable'
         if type_object.is_tvar:
             list_var_type = 'AtomicListVariable'
@@ -1351,7 +1368,7 @@ def emit_list_type(type_object):
         to_return = (
             '%s<%s,%s>' %
             (list_var_type,element_internal_type_text,
-             element_internal_type_text))
+             delta_element_internal_type_text))
 
         return to_return
     else:
@@ -2538,6 +2555,13 @@ public %(struct_name)s (boolean log_operations, RalphGlobals ralph_globals)
         ralph_globals,
         // no additional serialization contents necessary to log this object
         null);
+}
+
+@Override
+public boolean return_internal_val_from_container() 
+{
+    // return internal val when getting from container
+    return true;
 }
 
 @Override
