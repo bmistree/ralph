@@ -12,14 +12,15 @@ message ObjectContents
 
     message InternalStruct
     {
+        required string struct_type_class_name = 1;
         // should be ordered alphabetically by field name
-        repeated InternalStructField fields = 1;
+        repeated InternalStructField fields = 2;
     }
 
     message Struct
     {
         required Delta.ReferenceType ref_type = 1;
-        required string struct_type = 2;
+        required string struct_type_class_name = 2;
     }
     
     message Map

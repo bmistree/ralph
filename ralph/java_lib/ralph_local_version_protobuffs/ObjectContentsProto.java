@@ -905,9 +905,24 @@ public final class ObjectContentsProto {
     public interface InternalStructOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
-      // repeated .ObjectContents.InternalStructField fields = 1;
+      // required string struct_type_class_name = 1;
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      boolean hasStructTypeClassName();
+      /**
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      java.lang.String getStructTypeClassName();
+      /**
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getStructTypeClassNameBytes();
+
+      // repeated .ObjectContents.InternalStructField fields = 2;
+      /**
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -916,7 +931,7 @@ public final class ObjectContentsProto {
       java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField> 
           getFieldsList();
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -924,7 +939,7 @@ public final class ObjectContentsProto {
        */
       ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField getFields(int index);
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -932,7 +947,7 @@ public final class ObjectContentsProto {
        */
       int getFieldsCount();
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -941,7 +956,7 @@ public final class ObjectContentsProto {
       java.util.List<? extends ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructFieldOrBuilder> 
           getFieldsOrBuilderList();
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1002,9 +1017,14 @@ public final class ObjectContentsProto {
                 break;
               }
               case 10: {
-                if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                bitField0_ |= 0x00000001;
+                structTypeClassName_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                   fields_ = new java.util.ArrayList<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField>();
-                  mutable_bitField0_ |= 0x00000001;
+                  mutable_bitField0_ |= 0x00000002;
                 }
                 fields_.add(input.readMessage(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField.PARSER, extensionRegistry));
                 break;
@@ -1017,7 +1037,7 @@ public final class ObjectContentsProto {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
             fields_ = java.util.Collections.unmodifiableList(fields_);
           }
           this.unknownFields = unknownFields.build();
@@ -1051,11 +1071,55 @@ public final class ObjectContentsProto {
         return PARSER;
       }
 
-      // repeated .ObjectContents.InternalStructField fields = 1;
-      public static final int FIELDS_FIELD_NUMBER = 1;
+      private int bitField0_;
+      // required string struct_type_class_name = 1;
+      public static final int STRUCT_TYPE_CLASS_NAME_FIELD_NUMBER = 1;
+      private java.lang.Object structTypeClassName_;
+      /**
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      public boolean hasStructTypeClassName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      public java.lang.String getStructTypeClassName() {
+        java.lang.Object ref = structTypeClassName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            structTypeClassName_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string struct_type_class_name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getStructTypeClassNameBytes() {
+        java.lang.Object ref = structTypeClassName_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          structTypeClassName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // repeated .ObjectContents.InternalStructField fields = 2;
+      public static final int FIELDS_FIELD_NUMBER = 2;
       private java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField> fields_;
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1065,7 +1129,7 @@ public final class ObjectContentsProto {
         return fields_;
       }
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1076,7 +1140,7 @@ public final class ObjectContentsProto {
         return fields_;
       }
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1086,7 +1150,7 @@ public final class ObjectContentsProto {
         return fields_.size();
       }
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1096,7 +1160,7 @@ public final class ObjectContentsProto {
         return fields_.get(index);
       }
       /**
-       * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+       * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
        *
        * <pre>
        * should be ordered alphabetically by field name
@@ -1108,6 +1172,7 @@ public final class ObjectContentsProto {
       }
 
       private void initFields() {
+        structTypeClassName_ = "";
         fields_ = java.util.Collections.emptyList();
       }
       private byte memoizedIsInitialized = -1;
@@ -1115,6 +1180,10 @@ public final class ObjectContentsProto {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
 
+        if (!hasStructTypeClassName()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
         for (int i = 0; i < getFieldsCount(); i++) {
           if (!getFields(i).isInitialized()) {
             memoizedIsInitialized = 0;
@@ -1128,8 +1197,11 @@ public final class ObjectContentsProto {
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getStructTypeClassNameBytes());
+        }
         for (int i = 0; i < fields_.size(); i++) {
-          output.writeMessage(1, fields_.get(i));
+          output.writeMessage(2, fields_.get(i));
         }
         getUnknownFields().writeTo(output);
       }
@@ -1140,9 +1212,13 @@ public final class ObjectContentsProto {
         if (size != -1) return size;
 
         size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getStructTypeClassNameBytes());
+        }
         for (int i = 0; i < fields_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, fields_.get(i));
+            .computeMessageSize(2, fields_.get(i));
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -1261,9 +1337,11 @@ public final class ObjectContentsProto {
 
         public Builder clear() {
           super.clear();
+          structTypeClassName_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
           if (fieldsBuilder_ == null) {
             fields_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             fieldsBuilder_.clear();
           }
@@ -1294,15 +1372,21 @@ public final class ObjectContentsProto {
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct buildPartial() {
           ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct result = new ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct(this);
           int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.structTypeClassName_ = structTypeClassName_;
           if (fieldsBuilder_ == null) {
-            if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            if (((bitField0_ & 0x00000002) == 0x00000002)) {
               fields_ = java.util.Collections.unmodifiableList(fields_);
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             }
             result.fields_ = fields_;
           } else {
             result.fields_ = fieldsBuilder_.build();
           }
+          result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
         }
@@ -1318,11 +1402,16 @@ public final class ObjectContentsProto {
 
         public Builder mergeFrom(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct other) {
           if (other == ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct.getDefaultInstance()) return this;
+          if (other.hasStructTypeClassName()) {
+            bitField0_ |= 0x00000001;
+            structTypeClassName_ = other.structTypeClassName_;
+            onChanged();
+          }
           if (fieldsBuilder_ == null) {
             if (!other.fields_.isEmpty()) {
               if (fields_.isEmpty()) {
                 fields_ = other.fields_;
-                bitField0_ = (bitField0_ & ~0x00000001);
+                bitField0_ = (bitField0_ & ~0x00000002);
               } else {
                 ensureFieldsIsMutable();
                 fields_.addAll(other.fields_);
@@ -1335,7 +1424,7 @@ public final class ObjectContentsProto {
                 fieldsBuilder_.dispose();
                 fieldsBuilder_ = null;
                 fields_ = other.fields_;
-                bitField0_ = (bitField0_ & ~0x00000001);
+                bitField0_ = (bitField0_ & ~0x00000002);
                 fieldsBuilder_ = 
                   com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                      getFieldsFieldBuilder() : null;
@@ -1349,6 +1438,10 @@ public final class ObjectContentsProto {
         }
 
         public final boolean isInitialized() {
+          if (!hasStructTypeClassName()) {
+            
+            return false;
+          }
           for (int i = 0; i < getFieldsCount(); i++) {
             if (!getFields(i).isInitialized()) {
               
@@ -1377,13 +1470,87 @@ public final class ObjectContentsProto {
         }
         private int bitField0_;
 
-        // repeated .ObjectContents.InternalStructField fields = 1;
+        // required string struct_type_class_name = 1;
+        private java.lang.Object structTypeClassName_ = "";
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public boolean hasStructTypeClassName() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public java.lang.String getStructTypeClassName() {
+          java.lang.Object ref = structTypeClassName_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            structTypeClassName_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getStructTypeClassNameBytes() {
+          java.lang.Object ref = structTypeClassName_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            structTypeClassName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public Builder setStructTypeClassName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          structTypeClassName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public Builder clearStructTypeClassName() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          structTypeClassName_ = getDefaultInstance().getStructTypeClassName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string struct_type_class_name = 1;</code>
+         */
+        public Builder setStructTypeClassNameBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          structTypeClassName_ = value;
+          onChanged();
+          return this;
+        }
+
+        // repeated .ObjectContents.InternalStructField fields = 2;
         private java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField> fields_ =
           java.util.Collections.emptyList();
         private void ensureFieldsIsMutable() {
-          if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
             fields_ = new java.util.ArrayList<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField>(fields_);
-            bitField0_ |= 0x00000001;
+            bitField0_ |= 0x00000002;
            }
         }
 
@@ -1391,7 +1558,7 @@ public final class ObjectContentsProto {
             ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructFieldOrBuilder> fieldsBuilder_;
 
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1405,7 +1572,7 @@ public final class ObjectContentsProto {
           }
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1419,7 +1586,7 @@ public final class ObjectContentsProto {
           }
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1433,7 +1600,7 @@ public final class ObjectContentsProto {
           }
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1454,7 +1621,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1472,7 +1639,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1492,7 +1659,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1513,7 +1680,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1531,7 +1698,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1549,7 +1716,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1567,7 +1734,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1576,7 +1743,7 @@ public final class ObjectContentsProto {
         public Builder clearFields() {
           if (fieldsBuilder_ == null) {
             fields_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             onChanged();
           } else {
             fieldsBuilder_.clear();
@@ -1584,7 +1751,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1601,7 +1768,7 @@ public final class ObjectContentsProto {
           return this;
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1612,7 +1779,7 @@ public final class ObjectContentsProto {
           return getFieldsFieldBuilder().getBuilder(index);
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1626,7 +1793,7 @@ public final class ObjectContentsProto {
           }
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1641,7 +1808,7 @@ public final class ObjectContentsProto {
           }
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1652,7 +1819,7 @@ public final class ObjectContentsProto {
               ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField.getDefaultInstance());
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1664,7 +1831,7 @@ public final class ObjectContentsProto {
               index, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField.getDefaultInstance());
         }
         /**
-         * <code>repeated .ObjectContents.InternalStructField fields = 1;</code>
+         * <code>repeated .ObjectContents.InternalStructField fields = 2;</code>
          *
          * <pre>
          * should be ordered alphabetically by field name
@@ -1681,7 +1848,7 @@ public final class ObjectContentsProto {
             fieldsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
                 ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructField.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStructFieldOrBuilder>(
                     fields_,
-                    ((bitField0_ & 0x00000001) == 0x00000001),
+                    ((bitField0_ & 0x00000002) == 0x00000002),
                     getParentForChildren(),
                     isClean());
             fields_ = null;
@@ -1717,20 +1884,20 @@ public final class ObjectContentsProto {
        */
       ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getRefTypeOrBuilder();
 
-      // required string struct_type = 2;
+      // required string struct_type_class_name = 2;
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
-      boolean hasStructType();
+      boolean hasStructTypeClassName();
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
-      java.lang.String getStructType();
+      java.lang.String getStructTypeClassName();
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
       com.google.protobuf.ByteString
-          getStructTypeBytes();
+          getStructTypeClassNameBytes();
     }
     /**
      * Protobuf type {@code ObjectContents.Struct}
@@ -1798,7 +1965,7 @@ public final class ObjectContentsProto {
               }
               case 18: {
                 bitField0_ |= 0x00000002;
-                structType_ = input.readBytes();
+                structTypeClassName_ = input.readBytes();
                 break;
               }
             }
@@ -1863,20 +2030,20 @@ public final class ObjectContentsProto {
         return refType_;
       }
 
-      // required string struct_type = 2;
-      public static final int STRUCT_TYPE_FIELD_NUMBER = 2;
-      private java.lang.Object structType_;
+      // required string struct_type_class_name = 2;
+      public static final int STRUCT_TYPE_CLASS_NAME_FIELD_NUMBER = 2;
+      private java.lang.Object structTypeClassName_;
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
-      public boolean hasStructType() {
+      public boolean hasStructTypeClassName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
-      public java.lang.String getStructType() {
-        java.lang.Object ref = structType_;
+      public java.lang.String getStructTypeClassName() {
+        java.lang.Object ref = structTypeClassName_;
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
@@ -1884,22 +2051,22 @@ public final class ObjectContentsProto {
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            structType_ = s;
+            structTypeClassName_ = s;
           }
           return s;
         }
       }
       /**
-       * <code>required string struct_type = 2;</code>
+       * <code>required string struct_type_class_name = 2;</code>
        */
       public com.google.protobuf.ByteString
-          getStructTypeBytes() {
-        java.lang.Object ref = structType_;
+          getStructTypeClassNameBytes() {
+        java.lang.Object ref = structTypeClassName_;
         if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          structType_ = b;
+          structTypeClassName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -1908,7 +2075,7 @@ public final class ObjectContentsProto {
 
       private void initFields() {
         refType_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
-        structType_ = "";
+        structTypeClassName_ = "";
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1919,7 +2086,7 @@ public final class ObjectContentsProto {
           memoizedIsInitialized = 0;
           return false;
         }
-        if (!hasStructType()) {
+        if (!hasStructTypeClassName()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1934,7 +2101,7 @@ public final class ObjectContentsProto {
           output.writeMessage(1, refType_);
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeBytes(2, getStructTypeBytes());
+          output.writeBytes(2, getStructTypeClassNameBytes());
         }
         getUnknownFields().writeTo(output);
       }
@@ -1951,7 +2118,7 @@ public final class ObjectContentsProto {
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(2, getStructTypeBytes());
+            .computeBytesSize(2, getStructTypeClassNameBytes());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -2076,7 +2243,7 @@ public final class ObjectContentsProto {
             refTypeBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000001);
-          structType_ = "";
+          structTypeClassName_ = "";
           bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
@@ -2117,7 +2284,7 @@ public final class ObjectContentsProto {
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
             to_bitField0_ |= 0x00000002;
           }
-          result.structType_ = structType_;
+          result.structTypeClassName_ = structTypeClassName_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -2137,9 +2304,9 @@ public final class ObjectContentsProto {
           if (other.hasRefType()) {
             mergeRefType(other.getRefType());
           }
-          if (other.hasStructType()) {
+          if (other.hasStructTypeClassName()) {
             bitField0_ |= 0x00000002;
-            structType_ = other.structType_;
+            structTypeClassName_ = other.structTypeClassName_;
             onChanged();
           }
           this.mergeUnknownFields(other.getUnknownFields());
@@ -2151,7 +2318,7 @@ public final class ObjectContentsProto {
             
             return false;
           }
-          if (!hasStructType()) {
+          if (!hasStructTypeClassName()) {
             
             return false;
           }
@@ -2294,76 +2461,76 @@ public final class ObjectContentsProto {
           return refTypeBuilder_;
         }
 
-        // required string struct_type = 2;
-        private java.lang.Object structType_ = "";
+        // required string struct_type_class_name = 2;
+        private java.lang.Object structTypeClassName_ = "";
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
-        public boolean hasStructType() {
+        public boolean hasStructTypeClassName() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
-        public java.lang.String getStructType() {
-          java.lang.Object ref = structType_;
+        public java.lang.String getStructTypeClassName() {
+          java.lang.Object ref = structTypeClassName_;
           if (!(ref instanceof java.lang.String)) {
             java.lang.String s = ((com.google.protobuf.ByteString) ref)
                 .toStringUtf8();
-            structType_ = s;
+            structTypeClassName_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
           }
         }
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
         public com.google.protobuf.ByteString
-            getStructTypeBytes() {
-          java.lang.Object ref = structType_;
+            getStructTypeClassNameBytes() {
+          java.lang.Object ref = structTypeClassName_;
           if (ref instanceof String) {
             com.google.protobuf.ByteString b = 
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
-            structType_ = b;
+            structTypeClassName_ = b;
             return b;
           } else {
             return (com.google.protobuf.ByteString) ref;
           }
         }
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
-        public Builder setStructType(
+        public Builder setStructTypeClassName(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-          structType_ = value;
+          structTypeClassName_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
-        public Builder clearStructType() {
+        public Builder clearStructTypeClassName() {
           bitField0_ = (bitField0_ & ~0x00000002);
-          structType_ = getDefaultInstance().getStructType();
+          structTypeClassName_ = getDefaultInstance().getStructTypeClassName();
           onChanged();
           return this;
         }
         /**
-         * <code>required string struct_type = 2;</code>
+         * <code>required string struct_type_class_name = 2;</code>
          */
-        public Builder setStructTypeBytes(
+        public Builder setStructTypeClassNameBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000002;
-          structType_ = value;
+          structTypeClassName_ = value;
           onChanged();
           return this;
         }
@@ -7114,7 +7281,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"\303\007\n" +
+      "\n\025object_contents.proto\032\013delta.proto\"\356\007\n" +
       "\016ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030" +
       "\002 \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueTyp" +
       "e\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceTyp" +
@@ -7128,19 +7295,20 @@ public final class ObjectContentsProto {
       "struct_type\030\013 \001(\0132\026.ObjectContents.Struc" +
       "t\032M\n\023InternalStructField\0226\n\030field_conten" +
       "ts_reference\030\001 \002(\0132\024.Delta.ReferenceType" +
-      "\032E\n\016InternalStruct\0223\n\006fields\030\001 \003(\0132#.Obj" +
-      "ectContents.InternalStructField\032E\n\006Struc" +
-      "t\022&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceTyp" +
-      "e\022\023\n\013struct_type\030\002 \002(\t\032g\n\003Map\022&\n\010ref_typ" +
-      "e\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_typ" +
-      "e_class_name\030\002 \002(\t\022\033\n\023val_type_class_nam",
-      "e\030\003 \002(\t\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.Delt" +
-      "a.ReferenceType\022\033\n\023val_type_class_name\030\002" +
-      " \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class_na" +
-      "me\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t\032+\n" +
-      "\014InternalList\022\033\n\023val_type_class_name\030\001 \002" +
-      "(\tB5\n\036ralph_local_version_protobuffsB\023Ob" +
-      "jectContentsProto"
+      "\032e\n\016InternalStruct\022\036\n\026struct_type_class_" +
+      "name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.ObjectConte" +
+      "nts.InternalStructField\032P\n\006Struct\022&\n\010ref" +
+      "_type\030\001 \002(\0132\024.Delta.ReferenceType\022\036\n\026str" +
+      "uct_type_class_name\030\002 \002(\t\032g\n\003Map\022&\n\010ref_" +
+      "type\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_",
+      "type_class_name\030\002 \002(\t\022\033\n\023val_type_class_" +
+      "name\030\003 \002(\t\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.D" +
+      "elta.ReferenceType\022\033\n\023val_type_class_nam" +
+      "e\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class" +
+      "_name\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t" +
+      "\032+\n\014InternalList\022\033\n\023val_type_class_name\030" +
+      "\001 \002(\tB5\n\036ralph_local_version_protobuffsB" +
+      "\023ObjectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7164,13 +7332,13 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_InternalStruct_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalStruct_descriptor,
-              new java.lang.String[] { "Fields", });
+              new java.lang.String[] { "StructTypeClassName", "Fields", });
           internal_static_ObjectContents_Struct_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(2);
           internal_static_ObjectContents_Struct_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Struct_descriptor,
-              new java.lang.String[] { "RefType", "StructType", });
+              new java.lang.String[] { "RefType", "StructTypeClassName", });
           internal_static_ObjectContents_Map_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(3);
           internal_static_ObjectContents_Map_fieldAccessorTable = new

@@ -87,7 +87,7 @@ public class Variables
         ObjectContents.Struct.Builder struct_builder =
             ObjectContents.Struct.newBuilder();
         struct_builder.setRefType(ref_type_builder);
-        struct_builder.setStructType(struct_class_name);
+        struct_builder.setStructTypeClassName(struct_class_name);
 
         ObjectContents.Builder contents_builder =
             ObjectContents.newBuilder();
