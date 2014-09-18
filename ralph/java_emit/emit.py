@@ -2261,6 +2261,7 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
         emit_struct_list_deserializer(struct_type))
     struct_map_deserializers = (
         emit_struct_map_deserializer(struct_type))
+    struct_wrapper_deserializer = emit_struct_wrapper_deserializer(struct_type)
     
     return (
         dw_constructor_text + '\n' +
@@ -2270,7 +2271,38 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
         struct_deserializer + '\n' +
         struct_list_deserializers + '\n' +
         struct_map_deserializers + '\n' +
+        struct_wrapper_deserializer + '\n' +
         contents_deserializer )
+
+def emit_struct_wrapper_deserializer(struct_type):
+    struct_name = struct_type.struct_name
+    to_return = '''
+private static class %(struct_wrapper_class_factory_class_name)s
+    implements IAtomicStructWrapperBaseClassFactory
+{
+    private %(struct_wrapper_class_factory_class_name)s ()
+    {
+        ContainerFactorySingleton.instance.add_atomic_struct_wrapper_base_class_factory(
+             %(struct_name)s.class.getName(),this);
+    }
+
+    public StructWrapperBaseClass construct(RalphGlobals ralph_globals)
+    {
+        return new %(struct_name)s (
+            // do not log operations
+            false,
+            ralph_globals);
+    }
+}
+
+private final static %(struct_wrapper_class_factory_class_name)s
+    __%(struct_wrapper_class_factory_class_name)s__ =
+        new %(struct_wrapper_class_factory_class_name)s();
+
+''' % { 'struct_wrapper_class_factory_class_name': struct_name + '__wrapper_class_factory',
+        'struct_name': struct_name }
+
+    return to_return
 
 
 def emit_struct_content_deserializer(struct_type):
