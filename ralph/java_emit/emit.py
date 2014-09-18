@@ -2754,15 +2754,42 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
 
 
 def emit_internal_struct_replay(struct_type):
+    internal_replay_text = ''
+    # note that it's important to add these in alphabetically sorted
+    # order.  deserializer, expects them in alphabetically sorted
+    # order
+    sorted_field_keys = sorted(struct_type.name_to_field_type_dict.keys())
+    for field_index in range (0, len(sorted_field_keys)):
+        field_name = sorted_field_keys[field_index]
+        internal_replay_text += '''
+{
+    ObjectHistory field_obj_history =
+        reconstruction_context.get_local_version_manager().get_full_object_history(
+            internal_references_to_replay_on.get(%(field_index)i));
+
+    %(field_name)s.replay(reconstruction_context, field_obj_history,to_play_until);
+}
+''' % { 'field_name': field_name,
+        'field_index': field_index}
+
+        
+    internal_replay_text = indent_string(internal_replay_text)
     return '''
 @Override
 public void replay (
     IReconstructionContext reconstruction_context,
     ObjectHistory obj_history,Long to_play_until)
 {
-    Util.logger_assert("Still must define replay for internal structs.");
+    if (internal_references_to_replay_on == null)
+    {
+        Util.logger_assert(
+            "Internal struct must have internal_references_to_replay_on set");
+    }
+
+
+%(internal_replay_text)s
 }
-'''
+''' % { 'internal_replay_text': internal_replay_text}
 
 
 def emit_internal_struct_serialize_contents(struct_type):

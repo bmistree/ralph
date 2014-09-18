@@ -19,6 +19,12 @@ public class ReconstructionContext implements IReconstructionContext
     }
 
     @Override
+    public ILocalVersionManager get_local_version_manager()
+    {
+        return local_version_manager;
+    }
+    
+    @Override
     public RalphObject get_constructed_object(
         String obj_uuid, Long lamport_timestamp_before_or_during)
     {

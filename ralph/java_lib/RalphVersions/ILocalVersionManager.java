@@ -16,7 +16,7 @@ public interface ILocalVersionManager
        objects will point at this version of commit_metadata.
      */
     public void save_commit_metadata(CommitMetadata commit_metadata);
-
+    
     /**
        @returns null if does not exist.
      */
