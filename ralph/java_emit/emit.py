@@ -2527,11 +2527,12 @@ public static class %s extends AtomicValueVariable<%s>
         struct_name)
     
     external_struct_definition_constructor = '''
-public %s (boolean log_operations, RalphGlobals ralph_globals)
+public %(struct_name)s (boolean log_operations, RalphGlobals ralph_globals)
 {
     super(
         log_operations,
-        new %s(ralph_globals),%s,
+        new %(internal_struct_name)s(ralph_globals),
+        %(data_wrapper_constructor_name)s,
         /** FIXME: emitting a null logger for structs.*/
         null,
         ralph_globals);
@@ -2564,7 +2565,7 @@ public void serialize_as_rpc_arg(
     ActiveEvent active_event,Variables.Any.Builder any_builder)
     throws BackoutException
 {
-    %s to_serialize = get_val(active_event);
+    %(internal_struct_name)s to_serialize = get_val(active_event);
     if (to_serialize == null)
         any_builder.setVarName("");
     else
@@ -2573,10 +2574,9 @@ public void serialize_as_rpc_arg(
     any_builder.setIsTvar(true);
 }
 
-''' % (struct_name, internal_struct_name,
-       data_wrapper_constructor_name,internal_struct_name)
-    # FIXME: should define rpc serialization for structs.
-
+''' % ({'struct_name': struct_name,
+        'internal_struct_name': internal_struct_name,
+        'data_wrapper_constructor_name': data_wrapper_constructor_name})
     
     external_struct_definition_constructor += '''
 @Override
