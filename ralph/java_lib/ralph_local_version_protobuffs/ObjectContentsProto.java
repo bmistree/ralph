@@ -363,19 +363,19 @@ public final class ObjectContentsProto {
     public interface StructFieldPairOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
-      // required .ObjectContents field_contents = 1;
+      // required .Delta.ReferenceType field_contents_reference = 1;
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      boolean hasFieldContents();
+      boolean hasFieldContentsReference();
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents getFieldContents();
+      ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getFieldContentsReference();
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getFieldContentsOrBuilder();
+      ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getFieldContentsReferenceOrBuilder();
     }
     /**
      * Protobuf type {@code ObjectContents.StructFieldPair}
@@ -429,14 +429,14 @@ public final class ObjectContentsProto {
                 break;
               }
               case 10: {
-                ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder subBuilder = null;
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder subBuilder = null;
                 if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                  subBuilder = fieldContents_.toBuilder();
+                  subBuilder = fieldContentsReference_.toBuilder();
                 }
-                fieldContents_ = input.readMessage(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.PARSER, extensionRegistry);
+                fieldContentsReference_ = input.readMessage(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.PARSER, extensionRegistry);
                 if (subBuilder != null) {
-                  subBuilder.mergeFrom(fieldContents_);
-                  fieldContents_ = subBuilder.buildPartial();
+                  subBuilder.mergeFrom(fieldContentsReference_);
+                  fieldContentsReference_ = subBuilder.buildPartial();
                 }
                 bitField0_ |= 0x00000001;
                 break;
@@ -481,41 +481,37 @@ public final class ObjectContentsProto {
       }
 
       private int bitField0_;
-      // required .ObjectContents field_contents = 1;
-      public static final int FIELD_CONTENTS_FIELD_NUMBER = 1;
-      private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents fieldContents_;
+      // required .Delta.ReferenceType field_contents_reference = 1;
+      public static final int FIELD_CONTENTS_REFERENCE_FIELD_NUMBER = 1;
+      private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType fieldContentsReference_;
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      public boolean hasFieldContents() {
+      public boolean hasFieldContentsReference() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents getFieldContents() {
-        return fieldContents_;
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getFieldContentsReference() {
+        return fieldContentsReference_;
       }
       /**
-       * <code>required .ObjectContents field_contents = 1;</code>
+       * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
        */
-      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getFieldContentsOrBuilder() {
-        return fieldContents_;
+      public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getFieldContentsReferenceOrBuilder() {
+        return fieldContentsReference_;
       }
 
       private void initFields() {
-        fieldContents_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance();
+        fieldContentsReference_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
 
-        if (!hasFieldContents()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        if (!getFieldContents().isInitialized()) {
+        if (!hasFieldContentsReference()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -527,7 +523,7 @@ public final class ObjectContentsProto {
                           throws java.io.IOException {
         getSerializedSize();
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          output.writeMessage(1, fieldContents_);
+          output.writeMessage(1, fieldContentsReference_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -540,7 +536,7 @@ public final class ObjectContentsProto {
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(1, fieldContents_);
+            .computeMessageSize(1, fieldContentsReference_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -650,7 +646,7 @@ public final class ObjectContentsProto {
         }
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-            getFieldContentsFieldBuilder();
+            getFieldContentsReferenceFieldBuilder();
           }
         }
         private static Builder create() {
@@ -659,10 +655,10 @@ public final class ObjectContentsProto {
 
         public Builder clear() {
           super.clear();
-          if (fieldContentsBuilder_ == null) {
-            fieldContents_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance();
+          if (fieldContentsReferenceBuilder_ == null) {
+            fieldContentsReference_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
           } else {
-            fieldContentsBuilder_.clear();
+            fieldContentsReferenceBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000001);
           return this;
@@ -696,10 +692,10 @@ public final class ObjectContentsProto {
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
             to_bitField0_ |= 0x00000001;
           }
-          if (fieldContentsBuilder_ == null) {
-            result.fieldContents_ = fieldContents_;
+          if (fieldContentsReferenceBuilder_ == null) {
+            result.fieldContentsReference_ = fieldContentsReference_;
           } else {
-            result.fieldContents_ = fieldContentsBuilder_.build();
+            result.fieldContentsReference_ = fieldContentsReferenceBuilder_.build();
           }
           result.bitField0_ = to_bitField0_;
           onBuilt();
@@ -717,19 +713,15 @@ public final class ObjectContentsProto {
 
         public Builder mergeFrom(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair other) {
           if (other == ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair.getDefaultInstance()) return this;
-          if (other.hasFieldContents()) {
-            mergeFieldContents(other.getFieldContents());
+          if (other.hasFieldContentsReference()) {
+            mergeFieldContentsReference(other.getFieldContentsReference());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
 
         public final boolean isInitialized() {
-          if (!hasFieldContents()) {
-            
-            return false;
-          }
-          if (!getFieldContents().isInitialized()) {
+          if (!hasFieldContentsReference()) {
             
             return false;
           }
@@ -755,121 +747,121 @@ public final class ObjectContentsProto {
         }
         private int bitField0_;
 
-        // required .ObjectContents field_contents = 1;
-        private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents fieldContents_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance();
+        // required .Delta.ReferenceType field_contents_reference = 1;
+        private ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType fieldContentsReference_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> fieldContentsBuilder_;
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> fieldContentsReferenceBuilder_;
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public boolean hasFieldContents() {
+        public boolean hasFieldContentsReference() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents getFieldContents() {
-          if (fieldContentsBuilder_ == null) {
-            return fieldContents_;
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType getFieldContentsReference() {
+          if (fieldContentsReferenceBuilder_ == null) {
+            return fieldContentsReference_;
           } else {
-            return fieldContentsBuilder_.getMessage();
+            return fieldContentsReferenceBuilder_.getMessage();
           }
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public Builder setFieldContents(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents value) {
-          if (fieldContentsBuilder_ == null) {
+        public Builder setFieldContentsReference(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+          if (fieldContentsReferenceBuilder_ == null) {
             if (value == null) {
               throw new NullPointerException();
             }
-            fieldContents_ = value;
+            fieldContentsReference_ = value;
             onChanged();
           } else {
-            fieldContentsBuilder_.setMessage(value);
+            fieldContentsReferenceBuilder_.setMessage(value);
           }
           bitField0_ |= 0x00000001;
           return this;
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public Builder setFieldContents(
-            ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder builderForValue) {
-          if (fieldContentsBuilder_ == null) {
-            fieldContents_ = builderForValue.build();
+        public Builder setFieldContentsReference(
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder builderForValue) {
+          if (fieldContentsReferenceBuilder_ == null) {
+            fieldContentsReference_ = builderForValue.build();
             onChanged();
           } else {
-            fieldContentsBuilder_.setMessage(builderForValue.build());
+            fieldContentsReferenceBuilder_.setMessage(builderForValue.build());
           }
           bitField0_ |= 0x00000001;
           return this;
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public Builder mergeFieldContents(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents value) {
-          if (fieldContentsBuilder_ == null) {
+        public Builder mergeFieldContentsReference(ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType value) {
+          if (fieldContentsReferenceBuilder_ == null) {
             if (((bitField0_ & 0x00000001) == 0x00000001) &&
-                fieldContents_ != ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance()) {
-              fieldContents_ =
-                ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.newBuilder(fieldContents_).mergeFrom(value).buildPartial();
+                fieldContentsReference_ != ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance()) {
+              fieldContentsReference_ =
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.newBuilder(fieldContentsReference_).mergeFrom(value).buildPartial();
             } else {
-              fieldContents_ = value;
+              fieldContentsReference_ = value;
             }
             onChanged();
           } else {
-            fieldContentsBuilder_.mergeFrom(value);
+            fieldContentsReferenceBuilder_.mergeFrom(value);
           }
           bitField0_ |= 0x00000001;
           return this;
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public Builder clearFieldContents() {
-          if (fieldContentsBuilder_ == null) {
-            fieldContents_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance();
+        public Builder clearFieldContentsReference() {
+          if (fieldContentsReferenceBuilder_ == null) {
+            fieldContentsReference_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
             onChanged();
           } else {
-            fieldContentsBuilder_.clear();
+            fieldContentsReferenceBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000001);
           return this;
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder getFieldContentsBuilder() {
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder getFieldContentsReferenceBuilder() {
           bitField0_ |= 0x00000001;
           onChanged();
-          return getFieldContentsFieldBuilder().getBuilder();
+          return getFieldContentsReferenceFieldBuilder().getBuilder();
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
-        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getFieldContentsOrBuilder() {
-          if (fieldContentsBuilder_ != null) {
-            return fieldContentsBuilder_.getMessageOrBuilder();
+        public ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder getFieldContentsReferenceOrBuilder() {
+          if (fieldContentsReferenceBuilder_ != null) {
+            return fieldContentsReferenceBuilder_.getMessageOrBuilder();
           } else {
-            return fieldContents_;
+            return fieldContentsReference_;
           }
         }
         /**
-         * <code>required .ObjectContents field_contents = 1;</code>
+         * <code>required .Delta.ReferenceType field_contents_reference = 1;</code>
          */
         private com.google.protobuf.SingleFieldBuilder<
-            ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> 
-            getFieldContentsFieldBuilder() {
-          if (fieldContentsBuilder_ == null) {
-            fieldContentsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-                ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder>(
-                    fieldContents_,
+            ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder> 
+            getFieldContentsReferenceFieldBuilder() {
+          if (fieldContentsReferenceBuilder_ == null) {
+            fieldContentsReferenceBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceTypeOrBuilder>(
+                    fieldContentsReference_,
                     getParentForChildren(),
                     isClean());
-            fieldContents_ = null;
+            fieldContentsReference_ = null;
           }
-          return fieldContentsBuilder_;
+          return fieldContentsReferenceBuilder_;
         }
 
         // @@protoc_insertion_point(builder_scope:ObjectContents.StructFieldPair)
@@ -891,8 +883,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair> 
@@ -901,8 +892,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair getFieldPairs(int index);
@@ -910,8 +900,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       int getFieldPairsCount();
@@ -919,8 +908,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       java.util.List<? extends ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder> 
@@ -929,8 +917,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder getFieldPairsOrBuilder(
@@ -1044,8 +1031,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       public java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair> getFieldPairsList() {
@@ -1055,8 +1041,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       public java.util.List<? extends ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder> 
@@ -1067,8 +1052,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       public int getFieldPairsCount() {
@@ -1078,8 +1062,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair getFieldPairs(int index) {
@@ -1089,8 +1072,7 @@ public final class ObjectContentsProto {
        * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
        *
        * <pre>
-       * should be ordered in same order that fields were declared
-       * in structs.
+       * should be ordered alphabetically by field name
        * </pre>
        */
       public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder getFieldPairsOrBuilder(
@@ -1385,8 +1367,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair> getFieldPairsList() {
@@ -1400,8 +1381,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public int getFieldPairsCount() {
@@ -1415,8 +1395,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair getFieldPairs(int index) {
@@ -1430,8 +1409,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder setFieldPairs(
@@ -1452,8 +1430,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder setFieldPairs(
@@ -1471,8 +1448,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder addFieldPairs(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair value) {
@@ -1492,8 +1468,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder addFieldPairs(
@@ -1514,8 +1489,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder addFieldPairs(
@@ -1533,8 +1507,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder addFieldPairs(
@@ -1552,8 +1525,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder addAllFieldPairs(
@@ -1571,8 +1543,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder clearFieldPairs() {
@@ -1589,8 +1560,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public Builder removeFieldPairs(int index) {
@@ -1607,8 +1577,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair.Builder getFieldPairsBuilder(
@@ -1619,8 +1588,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder getFieldPairsOrBuilder(
@@ -1634,8 +1602,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public java.util.List<? extends ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPairOrBuilder> 
@@ -1650,8 +1617,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair.Builder addFieldPairsBuilder() {
@@ -1662,8 +1628,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair.Builder addFieldPairsBuilder(
@@ -1675,8 +1640,7 @@ public final class ObjectContentsProto {
          * <code>repeated .ObjectContents.StructFieldPair field_pairs = 1;</code>
          *
          * <pre>
-         * should be ordered in same order that fields were declared
-         * in structs.
+         * should be ordered alphabetically by field name
          * </pre>
          */
         public java.util.List<ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.StructFieldPair.Builder> 
@@ -6262,7 +6226,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"\244\006\n" +
+      "\n\025object_contents.proto\032\013delta.proto\"\263\006\n" +
       "\016ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030" +
       "\002 \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueTyp" +
       "e\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceTyp" +
@@ -6272,19 +6236,19 @@ public final class ObjectContentsProto {
       "tents.InternalMap\0228\n\022internal_list_type\030" +
       "\010 \001(\0132\034.ObjectContents.InternalList\022\021\n\tn" +
       "ull_type\030\t \001(\010\022+\n\013struct_type\030\n \001(\0132\026.Ob",
-      "jectContents.Struct\032:\n\017StructFieldPair\022\'" +
-      "\n\016field_contents\030\001 \002(\0132\017.ObjectContents\032" +
-      ">\n\006Struct\0224\n\013field_pairs\030\001 \003(\0132\037.ObjectC" +
-      "ontents.StructFieldPair\032g\n\003Map\022&\n\010ref_ty" +
-      "pe\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_ty" +
-      "pe_class_name\030\002 \002(\t\022\033\n\023val_type_class_na" +
-      "me\030\003 \002(\t\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.Del" +
-      "ta.ReferenceType\022\033\n\023val_type_class_name\030" +
-      "\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class_n" +
-      "ame\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t\032+",
-      "\n\014InternalList\022\033\n\023val_type_class_name\030\001 " +
-      "\002(\tB5\n\036ralph_local_version_protobuffsB\023O" +
-      "bjectContentsProto"
+      "jectContents.Struct\032I\n\017StructFieldPair\0226" +
+      "\n\030field_contents_reference\030\001 \002(\0132\024.Delta" +
+      ".ReferenceType\032>\n\006Struct\0224\n\013field_pairs\030" +
+      "\001 \003(\0132\037.ObjectContents.StructFieldPair\032g" +
+      "\n\003Map\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Referenc" +
+      "eType\022\033\n\023key_type_class_name\030\002 \002(\t\022\033\n\023va" +
+      "l_type_class_name\030\003 \002(\t\032K\n\004List\022&\n\010ref_t" +
+      "ype\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023val_t" +
+      "ype_class_name\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023k" +
+      "ey_type_class_name\030\001 \002(\t\022\033\n\023val_type_cla",
+      "ss_name\030\002 \002(\t\032+\n\014InternalList\022\033\n\023val_typ" +
+      "e_class_name\030\001 \002(\tB5\n\036ralph_local_versio" +
+      "n_protobuffsB\023ObjectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6302,7 +6266,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_StructFieldPair_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_StructFieldPair_descriptor,
-              new java.lang.String[] { "FieldContents", });
+              new java.lang.String[] { "FieldContentsReference", });
           internal_static_ObjectContents_Struct_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(1);
           internal_static_ObjectContents_Struct_fieldAccessorTable = new

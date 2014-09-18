@@ -7,13 +7,12 @@ message ObjectContents
 {
     message StructFieldPair
     {
-        required ObjectContents field_contents = 1;
+        required Delta.ReferenceType field_contents_reference = 1;
     }
 
     message Struct
     {
-        // should be ordered in same order that fields were declared
-        // in structs.
+        // should be ordered alphabetically by field name
         repeated StructFieldPair field_pairs = 1;
     }
     
