@@ -141,7 +141,11 @@ public class Variables
             Double contents = ralph_object.get_val(active_event);
             Delta.ValueType.Builder value_type_builder =
                 Delta.ValueType.newBuilder();
-            value_type_builder.setNum(contents.doubleValue());
+
+            if (contents == null)
+                value_type_builder.setNullNum(true);
+            else
+                value_type_builder.setNum(contents.doubleValue());
             
             ObjectContents.Builder contents_builder =
                 ObjectContents.newBuilder();
@@ -238,7 +242,10 @@ public class Variables
             String contents = ralph_object.get_val(active_event);
             Delta.ValueType.Builder value_type_builder =
                 Delta.ValueType.newBuilder();
-            value_type_builder.setText(contents);
+            if (contents == null)
+                value_type_builder.setNullText(true);
+            else
+                value_type_builder.setText(contents);
             
             ObjectContents.Builder contents_builder =
                 ObjectContents.newBuilder();
@@ -329,7 +336,11 @@ public class Variables
             Boolean contents = ralph_object.get_val(active_event);
             Delta.ValueType.Builder value_type_builder =
                 Delta.ValueType.newBuilder();
-            value_type_builder.setTf(contents.booleanValue());
+            
+            if (contents == null)
+                value_type_builder.setNullTf(true);
+            else
+                value_type_builder.setTf(contents.booleanValue());
             
             ObjectContents.Builder contents_builder =
                 ObjectContents.newBuilder();

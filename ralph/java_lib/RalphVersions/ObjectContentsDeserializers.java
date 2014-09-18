@@ -36,23 +36,26 @@ public class ObjectContentsDeserializers
             {
                 ValueType val_type = obj_contents.getValType();
 
-                if (val_type.hasNum())
+                if (val_type.hasNum() || val_type.hasNullNum())
                 {
+                    Double to_set_to =
+                        val_type.hasNum() ? val_type.getNum() : null;
                     return new Variables.AtomicNumberVariable(
-                        false,new Double(val_type.getNum()),
-                        ralph_globals);
+                        false,to_set_to,ralph_globals);
                 }
-                else if (val_type.hasText())
+                else if (val_type.hasText() || val_type.hasNullText())
                 {
+                    String to_set_to =
+                        val_type.hasText() ? val_type.getText() : null;
                     return new Variables.AtomicTextVariable(
-                        false,val_type.getText(),
-                        ralph_globals);
+                        false,to_set_to,ralph_globals);
                 }
-                else if (val_type.hasTf())
+                else if (val_type.hasTf() || val_type.hasNullTf())
                 {
+                    Boolean to_set_to =
+                        val_type.hasTf() ? val_type.getTf() : null;
                     return new Variables.AtomicTrueFalseVariable(
-                        false,val_type.getTf(),
-                        ralph_globals);
+                        false,to_set_to,ralph_globals);
                 }
                 //// DEBUG
                 Util.logger_assert(
@@ -200,23 +203,26 @@ public class ObjectContentsDeserializers
             {
                 ValueType val_type = obj_contents.getValType();
 
-                if (val_type.hasNum())
+                if (val_type.hasNum() || val_type.hasNullNum())
                 {
+                    Double to_set_to =
+                        val_type.hasNum() ? val_type.getNum() : null;
                     return new Variables.NonAtomicNumberVariable(
-                        false,new Double(val_type.getNum()),
-                        ralph_globals);
+                        false,to_set_to, ralph_globals);
                 }
-                else if (val_type.hasText())
+                else if (val_type.hasText() || val_type.hasNullText())
                 {
+                    String to_set_to =
+                        val_type.hasText() ? val_type.getText() : null;
                     return new Variables.NonAtomicTextVariable(
-                        false,val_type.getText(),
-                        ralph_globals);
+                        false,to_set_to,ralph_globals);
                 }
-                else if (val_type.hasTf())
+                else if (val_type.hasTf() || val_type.hasNullTf())
                 {
+                    Boolean to_set_to =
+                        val_type.hasTf() ? val_type.getTf() : null;
                     return new Variables.NonAtomicTrueFalseVariable(
-                        false,val_type.getTf(),
-                        ralph_globals);
+                        false,to_set_to,ralph_globals);
                 }
                 //// DEBUG
                 Util.logger_assert(
