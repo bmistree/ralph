@@ -2752,7 +2752,7 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
 def emit_internal_struct_serialize_contents(struct_type):
     '''
     '''
-
+    struct_name = struct_type.struct_name
     internal_struct_builder_var_name = 'internal_struct_builder'
     field_serialization_text = ''
     
@@ -2777,7 +2777,6 @@ ObjectContents.InternalStructField.Builder %(internal_struct_field_var_name)s =
         'internal_struct_field_var_name': field_name + '___internal_struct_field_var_name__',
         'internal_struct_builder_var_name': internal_struct_builder_var_name}
         
-    
     return '''
 @Override
 public ObjectContents serialize_contents(
@@ -2785,15 +2784,19 @@ public ObjectContents serialize_contents(
 {
     ObjectContents.InternalStruct.Builder %(internal_struct_builder_var_name)s =
         ObjectContents.InternalStruct.newBuilder();
+    %(internal_struct_builder_var_name)s.setStructTypeClassName(%(struct_name)s.class.getName());
 
 %(field_serialization_text)s
 
     ObjectContents.Builder to_return = ObjectContents.newBuilder();
+    to_return.setAtomic(true);
+    to_return.setUuid(uuid());
+    to_return.setInternalStructType(%(internal_struct_builder_var_name)s);
     return to_return.build();
 }
 ''' % {'field_serialization_text': indent_string(field_serialization_text),
-       'internal_struct_builder_var_name': internal_struct_builder_var_name}
-
+       'internal_struct_builder_var_name': internal_struct_builder_var_name,
+       'struct_name': struct_name}
 
 
 def emit_internal_struct_deserialize_constructor(struct_type):
