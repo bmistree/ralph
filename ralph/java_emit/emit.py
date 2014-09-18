@@ -2415,7 +2415,7 @@ public static class %s implements DataDeserializer
         VariablesProto.Variables.Any any,
         RalphGlobals ralph_globals)
     {
-        %s internal_holder = %s.deserialize_rpc(ralph_globals,any);
+        %s internal_holder = %s.deserialize_rpc_static(ralph_globals,any);
         %s to_return = new %s(false,internal_holder,ralph_globals);
         return to_return;
     }
@@ -2847,16 +2847,18 @@ def emit_internal_struct_deserialize_constructor(struct_type):
 
         # happens regardless of if-else
         counter += 1
-        
+    
+    internal_field_deserialization_text = indent_string(
+        internal_field_deserialization_text)    
     constructor_text = '''
-public static %s deserialize_rpc(
+public static %(internal_struct_name)s deserialize_rpc_static(
     RalphGlobals ralph_globals, Variables.Any any_with_struct)
 {
     Variables.Struct _internal_struct = any_with_struct.getStruct();
-    return new %s(ralph_globals,_internal_struct);
+    return new %(internal_struct_name)s(ralph_globals,_internal_struct);
 }
 
-private %s (
+private %(internal_struct_name)s (
     RalphGlobals ralph_globals, Variables.Struct _internal_struct)
 {
     super(ralph_globals);
@@ -2867,10 +2869,11 @@ private %s (
         Deserializer.get_instance();
 
     // deserializing individual fields of struct
-%s
+%(internal_field_deserialization_text)s
 }
-''' % (internal_struct_name,internal_struct_name,internal_struct_name,
-       indent_string(internal_field_deserialization_text))
+''' % { 'internal_struct_name': internal_struct_name,
+        'internal_field_deserialization_text':  internal_field_deserialization_text}
+
     return constructor_text
 
 

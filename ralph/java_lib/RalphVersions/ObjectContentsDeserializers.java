@@ -166,15 +166,9 @@ public class ObjectContentsDeserializers
                         "No factory to contents deserialize internalstruct.");
                 }
 
-                // Warning: when deserializing an internal struct,
-                // actually returning the wrapper that it holds.
-                // Caller will need to reach in to grab out internal
-                // struct.  Doing this because this method must return
-                // a RalphObject and internal structs do not inherit
-                // from RalphObject.
                 StructWrapperBaseClass to_return_wrapper =
                     factory.construct(ralph_globals);
-                return to_return_wrapper;
+                return (RalphObject)to_return_wrapper.val.val;
             }
 
             
