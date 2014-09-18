@@ -63,7 +63,7 @@ public class Variables
     final static InternalServiceReference default_service_reference = null;
 
     public static ObjectContents serialize_reference (
-        RalphObject held_reference,boolean atomic,String holder_uuid)
+        IReference held_reference,boolean atomic,String holder_uuid)
     {
         Delta.ReferenceType.Builder reference_type_builder =
             Delta.ReferenceType.newBuilder();

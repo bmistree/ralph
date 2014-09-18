@@ -5,15 +5,15 @@ import "delta.proto";
 
 message ObjectContents
 {
-    message StructFieldPair
+    message InternalStructField
     {
         required Delta.ReferenceType field_contents_reference = 1;
     }
 
-    message Struct
+    message InternalStruct
     {
         // should be ordered alphabetically by field name
-        repeated StructFieldPair field_pairs = 1;
+        repeated InternalStructField fields = 1;
     }
     
     message Map
@@ -57,5 +57,5 @@ message ObjectContents
     optional InternalList internal_list_type = 8;
     // true if null, false if not
     optional bool null_type = 9;
-    optional Struct struct_type = 10;
+    optional InternalStruct internal_struct_type = 10;
 }

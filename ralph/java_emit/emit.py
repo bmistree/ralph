@@ -75,6 +75,7 @@ import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
 
 public class %s
 {
@@ -2284,9 +2285,9 @@ def emit_struct_content_deserializer(struct_type):
         version_helper = params[2]
         
         text += '''
-private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,%(internal_struct_name)s>
+private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference>
     %(key_type)s_atom_map_serializer_%(internal_struct_name)s =
-        new AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,%(internal_struct_name)s> (
+        new AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference> (
             %(key_type)s.class, %(internal_struct_name)s.class,%(index_type)s,
             %(struct_locked_wrapper_name)s,%(version_helper)s);
 ''' % { 'key_type': key_type,
@@ -2475,7 +2476,7 @@ def emit_struct_map_wrapper(struct_type):
     
     # ensure locked wrappers
     locked_wrappers_text = '''
-public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%s>
+public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,IReference>
 {
     @Override
     public String get_serialization_label()
@@ -2484,15 +2485,14 @@ public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,%
     }
 
     @Override
-    public RalphObject<%s,%s> ensure_atomic_object(
+    public RalphObject<%s,IReference> ensure_atomic_object(
         %s object_to_ensure, RalphGlobals ralph_globals)
     {
         return new %s(false,object_to_ensure,ralph_globals);
     }
 }
-''' % (struct_name,internal_struct_name,internal_struct_name,struct_name,
-       internal_struct_name,internal_struct_name,internal_struct_name,
-       struct_name)
+''' % (struct_name,internal_struct_name,struct_name,
+       internal_struct_name,internal_struct_name,struct_name)
 
     struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
         struct_type)
@@ -2520,7 +2520,7 @@ def emit_struct_wrapper(struct_type):
     ##### External wrapped struct
     # FIXME: structs are always atomic.
     external_struct_definition_text = '''
-public static class %s extends AtomicValueVariable<%s>
+public static class %s extends AtomicReferenceVariable<%s>
 {''' % (struct_name, internal_struct_name)
 
     data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
@@ -2535,19 +2535,9 @@ public %(struct_name)s (boolean log_operations, RalphGlobals ralph_globals)
         %(data_wrapper_constructor_name)s,
         /** FIXME: emitting a null logger for structs.*/
         null,
-        ralph_globals);
-}
-
-@Override
-public ObjectContents serialize_contents(
-    ActiveEvent active_event, Object additional_serialization_info)
-{
-    /**
-      FIXME: add method for serializing contents of structs.
-    */ 
-    Util.logger_assert(
-        "FIXME: add method for serializing contents of structs.");
-    return null;
+        ralph_globals,
+        // no additional serialization contents necessary to log this object
+        null);
 }
 
 @Override
@@ -2559,6 +2549,20 @@ public void deserialize_rpc(
         "to deserialize, instead of calling deserialize_as_rpc_arg " +
         "directly.");
 }
+
+/**
+   @param {ActiveEvent} active_event --- Can be null, in which
+   case will return internal value without taking any locks.
+ */
+@Override
+public ObjectContents serialize_contents(
+    ActiveEvent active_event, Object additional_contents)
+    throws BackoutException
+{
+    IReference internal = get_val(active_event);
+    return ralph.Variables.serialize_reference(internal,true,uuid());
+}
+
 
 @Override
 public void serialize_as_rpc_arg(
@@ -2580,7 +2584,7 @@ public void serialize_as_rpc_arg(
     
     external_struct_definition_constructor += '''
 @Override
-protected SpeculativeAtomicObject<%s,%s>
+protected SpeculativeAtomicObject<%s,IReference>
       duplicate_for_speculation(%s to_speculate_on)
 {
     ///FIXME: must finish speculation for user-defined structs
@@ -2588,7 +2592,7 @@ protected SpeculativeAtomicObject<%s,%s>
         "Have not finished duplicate_for_speculation for structs.");
     return null;
 }
-''' % (internal_struct_name,internal_struct_name,internal_struct_name)
+''' % (internal_struct_name,internal_struct_name)
 
 
     # when pass a struct into a method, should clone the struct's
@@ -2602,7 +2606,7 @@ public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
         internal_val,%s,
         /** FIXME: emitting a null logger for structs.*/
         null,
-        ralph_globals);
+        ralph_globals, null);
 }
 ''' % (struct_name,internal_struct_name,data_wrapper_constructor_name)
 
@@ -2624,9 +2628,9 @@ def emit_internal_struct(struct_type):
     
     ### Internal wrapped struct    
     internal_struct_definition_text = '''
-public static class %s
+public static class %(internal_struct_name)s extends InternalStructBaseClass
 {
-''' % internal_struct_name
+''' % {'internal_struct_name': internal_struct_name}
 
     # emit struct's fields
     emit_ctx = None
@@ -2641,8 +2645,10 @@ public static class %s
     internal_struct_body_text += (
         'public %s (RalphGlobals ralph_globals)\n' %
         internal_struct_name)
-    internal_struct_body_text += '{\n'
-
+    internal_struct_body_text += '''{
+    // interhits from InternalStructBaseClass
+    super(ralph_globals);
+'''
     internal_constructor_text = ''
     initializer_dict = struct_type.name_to_initializer_dict
     for field_name in struct_type.name_to_field_type_dict:
@@ -2655,15 +2661,66 @@ public static class %s
              construct_new_expression(field_type,initializer_node,emit_ctx)))
     internal_struct_body_text += indent_string(internal_constructor_text)
     internal_struct_body_text += '}\n'
+
+    # emit other methods of internal struct 
     internal_struct_body_text += (
         emit_internal_struct_serialize_as_rpc(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_deserialize_constructor(struct_type))
+
+    internal_struct_body_text += (
+        emit_internal_struct_serialize_contents(struct_type))
     
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'
     return internal_struct_definition_text
+
+def emit_internal_struct_serialize_contents(struct_type):
+    '''
+    '''
+
+    internal_struct_builder_var_name = 'internal_struct_builder'
+    field_serialization_text = ''
+    
+    # note that it's important to add these in alphabetically sorted
+    # order.  deserializer, expects them in alphabetically sorted order
+    for field_name in sorted(struct_type.name_to_field_type_dict.keys()):
+        field_serialization_text += '''
+Delta.ReferenceType.Builder %(reference_type_var_name)s =
+    Delta.ReferenceType.newBuilder();
+
+%(reference_type_var_name)s.setReference( %(field_name)s.uuid());
+
+ObjectContents.InternalStructField.Builder %(internal_struct_field_var_name)s =
+    ObjectContents.InternalStructField.newBuilder();
+
+%(internal_struct_field_var_name)s.setFieldContentsReference(%(reference_type_var_name)s);
+
+%(internal_struct_builder_var_name)s.addFields(%(internal_struct_field_var_name)s);
+
+''' % { 'reference_type_var_name': field_name + '___ref_type_var_name__',
+        'field_name': field_name,
+        'internal_struct_field_var_name': field_name + '___internal_struct_field_var_name__',
+        'internal_struct_builder_var_name': internal_struct_builder_var_name}
+        
+    
+    return '''
+@Override
+public ObjectContents serialize_contents(
+    ActiveEvent active_event,Object add_contents)
+{
+    ObjectContents.InternalStruct.Builder %(internal_struct_builder_var_name)s =
+        ObjectContents.InternalStruct.newBuilder();
+
+%(field_serialization_text)s
+
+    ObjectContents.Builder to_return = ObjectContents.newBuilder();
+    return to_return.build();
+}
+''' % {'field_serialization_text': indent_string(field_serialization_text),
+       'internal_struct_builder_var_name': internal_struct_builder_var_name}
+
 
 
 def emit_internal_struct_deserialize_constructor(struct_type):
@@ -2726,6 +2783,8 @@ public static %s deserialize_rpc(
 private %s (
     RalphGlobals ralph_globals, Variables.Struct _internal_struct)
 {
+    super(ralph_globals);
+
     List<Variables.Any> _struct_field_list =
         _internal_struct.getFieldValuesList();
     Deserializer deserializer_instance =
