@@ -273,6 +273,13 @@
     </antcall>
   </target>
 
+  <target name="replay_non_atomic_struct_map" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="replay_non_atomic_struct_map.rph"/>
+      <param name="class_name" value="ReplayNonAtomicStructMapJava"/>
+    </antcall>
+  </target>
+  
   <target name="for_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="for_list.rph"/>
@@ -605,7 +612,7 @@
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
-        jar_VersionedStructList">
+        jar_VersionedStructList,jar_VersionedNonAtomicStructMap">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -633,6 +640,11 @@
   <target
       name="ralph_VersionedStructList"
       depends="replay_struct_list">
+  </target>
+
+  <target
+      name="ralph_VersionedNonAtomicStructMap"
+      depends="replay_non_atomic_struct_map">
   </target>
   
   <target
@@ -1010,6 +1022,12 @@
   <target name="harness_VersionedStructList">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedStructList.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_VersionedNonAtomicStructMap">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedNonAtomicStructMap.java"/>
     </antcall>
   </target>
   
@@ -1515,6 +1533,19 @@
     </antcall>
   </target>
 
+  <property
+      name="versioned_non_atomic_struct_map_jar"
+      value="versioned_non_atomic_struct_map.jar"/>
+  <target
+      name="jar_VersionedNonAtomicStructMap"
+      depends="ralph_VersionedNonAtomicStructMap,ralph_to_byte_code,harness_VersionedNonAtomicStructMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedNonAtomicStructMap"/>
+      <param name="dest_jar" value="${versioned_non_atomic_struct_map_jar}"/>
+      <param name="config_properties" value="${log_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="version_querier_jar"
       value="version_querier.jar"/>

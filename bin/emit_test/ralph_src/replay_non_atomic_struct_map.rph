@@ -1,0 +1,47 @@
+Struct InternalStruct
+{
+    Number internal_value = null;
+}
+
+
+// dotting all this code with nulls to ensure that deserialize them correctly.
+Service ReplayNonAtomicStructMap
+{
+    Map(from: Number, to: Struct InternalStruct) internal_struct_map = null;
+
+    check_init_internal_map()
+    {
+        if (internal_struct_map == null)
+        {
+            Map(from: Number, to: Struct InternalStruct) to_set_to;
+            internal_struct_map = to_set_to;
+        }
+    }
+    
+    add_internal(Number internal_value)
+    {
+        check_init_internal_map();
+        Struct InternalStruct internal_struct = null;
+        Struct InternalStruct other_internal_struct;
+        internal_struct = other_internal_struct;
+        internal_struct.internal_value = internal_value;
+        internal_struct_map.set(internal_value,internal_struct);
+    }
+
+    get_size() returns Number
+    {
+        check_init_internal_map();
+        return internal_struct_map.size();
+    }
+
+    get_internal_value(Number index) returns Number
+    {
+        check_init_internal_map();
+        
+        Number to_return = null;
+        Struct InternalStruct internal_struct = null;
+        internal_struct = internal_struct_map.get(index);
+        to_return = internal_struct.internal_value;
+        return to_return;
+    }
+}
