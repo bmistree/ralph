@@ -1,0 +1,45 @@
+option java_package = "ralph_local_version_protobuffs";
+option java_outer_classname = "VersionSaverMessagesProto";
+
+import "object_contents.proto";
+import "delta.proto";
+
+message VersionSaverMessages
+{
+    message CommitMetadata
+    {
+        required int64 root_commit_lamport_time = 1;
+        required string root_application_uuid = 2;
+        required string event_name = 3;
+        required string event_uuid = 4;
+    }
+
+    message VersionData
+    {
+        required string object_uuid = 1;
+        required Delta delta = 2;
+        required string commit_metadata_event_uuid = 3;
+    }
+
+    message EndpointGlobalMapping
+    {
+        required string variable_name = 1;
+        required string object_uuid = 2;
+        required string endpoint_uuid = 3;
+        required string endpoint_constructor_class_name = 4;
+        required int64 local_lamport_time = 5;
+    }
+
+    message ObjectConstructor
+    {
+        required string object_uuid = 1;
+        required ObjectContents obj_contents = 2;
+    }
+
+    optional CommitMetadata commit_metadata = 1;
+    optional VersionData version_data = 2;
+    optional EndpointGlobalMapping endpoint_global_mapping = 3;
+    optional ObjectConstructor object_constructor = 4;
+}
+
+
