@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.ReplayNonAtomicStructMapJava.ReplayNonAtomicStructMap;
+import ralph_emitted.ReplayStructMapJava.ReplayStructMap;
 import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
@@ -9,14 +9,14 @@ import RalphVersions.ReconstructionContext;
 import RalphVersions.IReconstructionContext;
 
 
-public class VersionedNonAtomicStructMap
+public class VersionedStructMap
 {
     public static void main(String[] args)
     {
         if (run_test())
-            System.out.println("\nSUCCESS in VersionedNonAtomicStructMap\n");
+            System.out.println("\nSUCCESS in VersionedStructMap\n");
         else
-            System.out.println("\nFAILURE in VersionedNonAtomicStructMap\n");
+            System.out.println("\nFAILURE in VersionedStructMap\n");
     }
 
     public static boolean run_test()
@@ -24,7 +24,7 @@ public class VersionedNonAtomicStructMap
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            ReplayNonAtomicStructMap endpt = new ReplayNonAtomicStructMap(
+            ReplayStructMap endpt = new ReplayStructMap(
                 ralph_globals, new SingleSideConnection());
             
             int num_to_initially_add = 20;
@@ -41,8 +41,8 @@ public class VersionedNonAtomicStructMap
                     ralph_globals);
 
             // now, tries to replay changes to endpoint.  
-            ReplayNonAtomicStructMap replayed_endpt =
-                (ReplayNonAtomicStructMap) VersionUtil.rebuild_endpoint(
+            ReplayStructMap replayed_endpt =
+                (ReplayStructMap) VersionUtil.rebuild_endpoint(
                     VersioningInfo.instance.local_version_manager,
                     endpt._uuid,ralph_globals,reconstruction_context);
 
@@ -53,11 +53,18 @@ public class VersionedNonAtomicStructMap
             for (int i = 0; i < remaining_size; ++i)
             {
                 double d_i = (double) i;
-                double replayed_value =
-                    replayed_endpt.get_internal_value(d_i).doubleValue();
-                double real_value =
-                    endpt.get_internal_value(d_i).doubleValue();
-                if (real_value != replayed_value)
+                Double replayed_value =
+                    replayed_endpt.get_internal_value(d_i);
+                Double real_value =
+                    endpt.get_internal_value(d_i);
+
+                // Having this condition followed by the next means
+                // that we do not really have to test for null to
+                // ensure correctness.
+                if (replayed_value == real_value)
+                    continue;
+                
+                if (! real_value.equals(replayed_value))
                     return false;
             }
             return true;

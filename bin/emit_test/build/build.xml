@@ -273,10 +273,10 @@
     </antcall>
   </target>
 
-  <target name="replay_non_atomic_struct_map" depends="init" description="translate ralph files">
+  <target name="replay_struct_map" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
-      <param name="rph_filename" value="replay_non_atomic_struct_map.rph"/>
-      <param name="class_name" value="ReplayNonAtomicStructMapJava"/>
+      <param name="rph_filename" value="replay_struct_map.rph"/>
+      <param name="class_name" value="ReplayStructMapJava"/>
     </antcall>
   </target>
   
@@ -612,7 +612,7 @@
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
-        jar_VersionedStructList,jar_VersionedNonAtomicStructMap">
+        jar_VersionedStructList,jar_VersionedStructMap">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -643,8 +643,8 @@
   </target>
 
   <target
-      name="ralph_VersionedNonAtomicStructMap"
-      depends="replay_non_atomic_struct_map">
+      name="ralph_VersionedStructMap"
+      depends="replay_struct_map">
   </target>
   
   <target
@@ -1025,9 +1025,9 @@
     </antcall>
   </target>
 
-  <target name="harness_VersionedNonAtomicStructMap">
+  <target name="harness_VersionedStructMap">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="VersionedNonAtomicStructMap.java"/>
+      <param name="arg_harness_file_list" value="VersionedStructMap.java"/>
     </antcall>
   </target>
   
@@ -1534,14 +1534,14 @@
   </target>
 
   <property
-      name="versioned_non_atomic_struct_map_jar"
-      value="versioned_non_atomic_struct_map.jar"/>
+      name="versioned_struct_map_jar"
+      value="versioned_struct_map.jar"/>
   <target
-      name="jar_VersionedNonAtomicStructMap"
-      depends="ralph_VersionedNonAtomicStructMap,ralph_to_byte_code,harness_VersionedNonAtomicStructMap">
+      name="jar_VersionedStructMap"
+      depends="ralph_VersionedStructMap,ralph_to_byte_code,harness_VersionedStructMap">
     <antcall target="make_jar">
-      <param name="main_class" value="VersionedNonAtomicStructMap"/>
-      <param name="dest_jar" value="${versioned_non_atomic_struct_map_jar}"/>
+      <param name="main_class" value="VersionedStructMap"/>
+      <param name="dest_jar" value="${versioned_struct_map_jar}"/>
       <param name="config_properties" value="${log_config}"/>
     </antcall>
   </target>

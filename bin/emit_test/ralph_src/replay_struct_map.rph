@@ -1,19 +1,19 @@
 Struct InternalStruct
 {
-    Number internal_value = null;
+    TVar Number internal_value = null;
 }
 
 
 // dotting all this code with nulls to ensure that deserialize them correctly.
-Service ReplayNonAtomicStructMap
+Service ReplayStructMap
 {
-    Map(from: Number, to: Struct InternalStruct) internal_struct_map = null;
+    TVar Map(from: Number, to: Struct InternalStruct) internal_struct_map = null;
 
     check_init_internal_map()
     {
         if (internal_struct_map == null)
         {
-            Map(from: Number, to: Struct InternalStruct) to_set_to;
+            TVar Map(from: Number, to: Struct InternalStruct) to_set_to;
             internal_struct_map = to_set_to;
         }
     }
