@@ -8,7 +8,13 @@ import ralph.RalphGlobals;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.RalphObject;
+import ralph.CommitMetadata;
 import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
+import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+
+
+import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 public class VersionUtil
 {
@@ -48,5 +54,61 @@ public class VersionUtil
         return endpt_constructor_obj.construct(
             ralph_globals,new SingleSideConnection(),
             endpt_initialization_vars);
+    }
+
+    public static VersionSaverMessages.CommitMetadata.Builder
+        commit_metadata_message_builder(CommitMetadata commit_metadata)
+    {
+        VersionSaverMessages.CommitMetadata.Builder cm_builder =
+            VersionSaverMessages.CommitMetadata.newBuilder();
+
+        cm_builder.setRootCommitLamportTime(
+            commit_metadata.root_commit_lamport_time);
+        cm_builder.setRootApplicationUuid(
+            commit_metadata.root_application_uuid);
+        cm_builder.setEventName(commit_metadata.event_name);
+        cm_builder.setEventUuid(commit_metadata.event_uuid);
+        return cm_builder;
+    }
+
+    public static VersionSaverMessages.VersionData.Builder
+        version_data_message_builder(
+            String object_uuid, Delta delta,CommitMetadata commit_metadata)
+    {
+        VersionSaverMessages.VersionData.Builder version_data_builder =
+            VersionSaverMessages.VersionData.newBuilder();
+        version_data_builder.setObjectUuid(object_uuid);
+        version_data_builder.setDelta(delta);
+        version_data_builder.setCommitMetadataEventUuid(
+            commit_metadata.event_uuid);
+        return version_data_builder;
+    }
+
+    public static VersionSaverMessages.EndpointGlobalMapping.Builder
+        endpoint_global_mapping_message_builder(
+            String variable_name, String object_uuid,String endpoint_uuid,
+            String endpoint_constructor_class_name,long local_lamport_time)
+    {
+        VersionSaverMessages.EndpointGlobalMapping.Builder endpoint_global_mapping_builder =
+            VersionSaverMessages.EndpointGlobalMapping.newBuilder();
+
+        endpoint_global_mapping_builder.setVariableName(variable_name);
+        endpoint_global_mapping_builder.setObjectUuid(object_uuid);
+        endpoint_global_mapping_builder.setEndpointUuid(endpoint_uuid);
+        endpoint_global_mapping_builder.setEndpointConstructorClassName(
+            endpoint_constructor_class_name);
+        endpoint_global_mapping_builder.setLocalLamportTime(local_lamport_time);
+        return endpoint_global_mapping_builder;
+    }
+
+    public static VersionSaverMessages.ObjectConstructor.Builder
+        object_constructor_message_builder(
+            String object_uuid, ObjectContents obj_contents)
+    {
+        VersionSaverMessages.ObjectConstructor.Builder object_constructor_builder =
+            VersionSaverMessages.ObjectConstructor.newBuilder();
+        object_constructor_builder.setObjectUuid(object_uuid);
+        object_constructor_builder.setObjContents(obj_contents);
+        return object_constructor_builder;
     }
 }
