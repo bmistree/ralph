@@ -113,11 +113,10 @@ public class Variables
         extends AtomicValueVariable<Double>
     {
         public AtomicNumberVariable(
-            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
+            boolean _log_changes,Double init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,
-                new Double(((Number) init_val).doubleValue()),
+                _log_changes,init_val,
                 number_value_type_data_wrapper_factory,
                 DOUBLE_VERSION_HELPER,ralph_globals);
         }
@@ -207,10 +206,10 @@ public class Variables
         extends AtomicValueVariable<String>
     {
         public AtomicTextVariable(
-            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
+            boolean _log_changes,String init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(String)init_val,
+                _log_changes,init_val,
                 text_value_type_data_wrapper_factory,STRING_VERSION_HELPER,
                 ralph_globals);
         }
@@ -300,10 +299,10 @@ public class Variables
         extends AtomicValueVariable<Boolean>
     {
         public AtomicTrueFalseVariable(
-            boolean _log_changes,Object init_val,RalphGlobals ralph_globals)
+            boolean _log_changes,Boolean init_val,RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,(Boolean)init_val,
+                _log_changes,init_val,
                 true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
         }
