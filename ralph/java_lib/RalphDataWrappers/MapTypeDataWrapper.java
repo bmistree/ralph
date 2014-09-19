@@ -50,7 +50,7 @@ public class MapTypeDataWrapper<KeyType,ValueType,DeltaValueType>
         // either perform logging if global logging switch is on, or
         // if explicitly told to.
         log_changes =
-            (VersioningInfo.instance.local_version_manager != null) ||
+            (VersioningInfo.instance.local_version_saver != null) ||
             _log_changes;
         
         if (log_changes)

@@ -6,7 +6,7 @@ import ralph.EndpointConstructorObj;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
-public interface ILocalVersionManager
+public interface ILocalVersionSaver
 {
     /**
        @param commit_metadata --- Multiple objects will simultaneously
@@ -17,35 +17,6 @@ public interface ILocalVersionManager
      */
     public void save_commit_metadata(CommitMetadata commit_metadata);
     
-    /**
-       @returns null if does not exist.
-     */
-    public EndpointInitializationHistory
-        get_endpoint_initialization_history(String endpoint_uuid);
-
-    /**
-       @returns null if does not exist.
-     */
-    public ObjectHistory get_full_object_history(String obj_uuid);
-
-    /**
-       @returns null if does not exist.
-     */
-    public EndpointConstructorObj get_endpoint_constructor_obj(
-        String endpoint_constructor_obj_classname);
-
-    
-    /**
-       @param lower_range --- null if should query from earliest
-       record.
-
-       @param upper_range --- null if should query to latest record.
-       
-       @returns null if does not exist.  Returns objecthistory object
-       with no records if no records exist within range.
-     */
-    public ObjectHistory get_ranged_object_history(
-        String obj_uuid,Long lower_range, Long upper_range);
     
     /**
        @param object_uuid --- The unique name of a versioned object.

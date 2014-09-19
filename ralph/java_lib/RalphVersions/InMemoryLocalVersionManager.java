@@ -12,7 +12,8 @@ import ralph.EndpointConstructorObj;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
-public class InMemoryLocalVersionManager implements ILocalVersionManager
+public class InMemoryLocalVersionManager
+    implements ILocalVersionSaver, ILocalVersionReplayer
 {
     // key is the event_uuid held by CommitMetadata
     private final Map<String,CommitMetadata> commit_metadata_map =

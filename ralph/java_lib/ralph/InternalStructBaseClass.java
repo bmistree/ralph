@@ -4,7 +4,7 @@ import java.util.List;
 
 import RalphExceptions.BackoutException;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-import RalphVersions.ILocalVersionManager;
+import RalphVersions.ILocalVersionSaver;
 
 
 public abstract class InternalStructBaseClass
@@ -41,9 +41,9 @@ public abstract class InternalStructBaseClass
     protected void log_obj_constructor_during_init(
         Object additional_serialization_contents)
     {
-        ILocalVersionManager local_version_manager =
-            VersioningInfo.instance.local_version_manager;
-        if (local_version_manager != null)
+        ILocalVersionSaver local_version_saver =
+            VersioningInfo.instance.local_version_saver;
+        if (local_version_saver != null)
         {
             // using null as active_event argument for
             // serialize_contents, gets internal value right away.
@@ -61,7 +61,7 @@ public abstract class InternalStructBaseClass
                     "serializing internal struct.");
             }
 
-            local_version_manager.save_object_constructor(
+            local_version_saver.save_object_constructor(
                 uuid(), obj_contents);
         }
     }

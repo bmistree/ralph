@@ -20,5 +20,5 @@ public interface IReconstructionContext
     public RalphObject get_constructed_object(
         String obj_uuid, Long lamport_timestamp_before_or_during);
 
-    public ILocalVersionManager get_local_version_manager();
+    public ILocalVersionReplayer get_local_version_replayer();
 }

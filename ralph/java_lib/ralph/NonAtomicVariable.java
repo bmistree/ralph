@@ -5,7 +5,7 @@ import java.io.Serializable;
 import RalphExceptions.BackoutException;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
-import RalphVersions.ILocalVersionManager;
+import RalphVersions.ILocalVersionSaver;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -22,9 +22,9 @@ public abstract class NonAtomicVariable<T,DeltaType>
         super (ralph_globals);
         init(vtdwc,init_val, version_helper);
 
-        ILocalVersionManager local_version_manager =
-            VersioningInfo.instance.local_version_manager;
-        if (local_version_manager != null)
+        ILocalVersionSaver local_version_saver =
+            VersioningInfo.instance.local_version_saver;
+        if (local_version_saver != null)
         {
             ObjectContents obj_contents = null;
             try
@@ -41,7 +41,7 @@ public abstract class NonAtomicVariable<T,DeltaType>
             }
             // using null as active_event argument for
             // serialize_contents, gets internal value right away.
-            local_version_manager.save_object_constructor(
+            local_version_saver.save_object_constructor(
                 uuid(), obj_contents);
         }
     }

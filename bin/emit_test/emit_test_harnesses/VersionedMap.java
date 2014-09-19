@@ -39,13 +39,13 @@ public class VersionedMap
             
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
-                    VersioningInfo.instance.local_version_manager,
+                    VersioningInfo.instance.local_version_replayer,
                     ralph_globals);
 
             // now, tries to replay changes to endpoint.  
             TVarMapEndpoint replayed_endpt =
                 (TVarMapEndpoint) VersionUtil.rebuild_endpoint(
-                    VersioningInfo.instance.local_version_manager,
+                    VersioningInfo.instance.local_version_replayer,
                     endpt._uuid,ralph_globals,reconstruction_context);
 
             if (! replayed_endpt.get_size().equals(endpt.get_size()))

@@ -7,21 +7,21 @@ import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class ReconstructionContext implements IReconstructionContext
 {
-    private final ILocalVersionManager local_version_manager;
+    private final ILocalVersionReplayer local_version_replayer;
     private final RalphGlobals ralph_globals;
     
     public ReconstructionContext (
-        ILocalVersionManager _local_version_manager,
+        ILocalVersionReplayer _local_version_replayer,
         RalphGlobals _ralph_globals)
     {
-        local_version_manager = _local_version_manager;
+        local_version_replayer = _local_version_replayer;
         ralph_globals = _ralph_globals;
     }
 
     @Override
-    public ILocalVersionManager get_local_version_manager()
+    public ILocalVersionReplayer get_local_version_replayer()
     {
-        return local_version_manager;
+        return local_version_replayer;
     }
     
     @Override
@@ -29,7 +29,7 @@ public class ReconstructionContext implements IReconstructionContext
         String obj_uuid, Long lamport_timestamp_before_or_during)
     {
         ObjectHistory obj_history =
-            local_version_manager.get_full_object_history(obj_uuid);
+            local_version_replayer.get_full_object_history(obj_uuid);
 
         ObjectContents initial_contents =
             obj_history.initial_construction_contents;

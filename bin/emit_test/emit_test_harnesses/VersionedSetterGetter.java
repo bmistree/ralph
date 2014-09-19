@@ -14,7 +14,6 @@ import ralph.VersioningInfo;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
-import RalphVersions.ILocalVersionManager;
 import RalphVersions.EndpointInitializationHistory;
 import RalphVersions.ObjectHistory;
 import RalphVersions.ObjectContentsDeserializers;
@@ -42,8 +41,6 @@ public class VersionedSetterGetter
         try
         {
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
-            ILocalVersionManager in_memory_version_manager =
-                VersioningInfo.instance.local_version_manager;
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
             SetterGetter endpt = new SetterGetter(
@@ -89,12 +86,14 @@ public class VersionedSetterGetter
 
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
-                    in_memory_version_manager,ralph_globals);
+                    VersioningInfo.instance.local_version_replayer,
+                    ralph_globals);
             
             // now, tries to replay changes to endpoint.  
             ISetterGetter replayed_endpt =
                 (ISetterGetter) VersionUtil.rebuild_endpoint(
-                    in_memory_version_manager,endpt._uuid,ralph_globals,
+                    VersioningInfo.instance.local_version_replayer,
+                    endpt._uuid,ralph_globals,
                     reconstruction_context);
             
             // NOTE: non-atomics are not under version control, and
