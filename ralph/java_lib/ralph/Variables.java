@@ -20,6 +20,8 @@ import static ralph.BaseTypeVersionHelpers.DOUBLE_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.STRING_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.BOOLEAN_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.REFERENCE_VERSION_HELPER;
+
+
 import static ralph.BaseTypeVersionHelpers.INTERFACE_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
@@ -444,7 +446,7 @@ public class Variables
         }
     }
     
-    public static class AtomicInterfaceVariable<T>
+    public static class AtomicInterfaceVariable<T extends IReference>
         extends AtomicValueVariable<T>
     {
         public AtomicInterfaceVariable(
@@ -883,7 +885,7 @@ public class Variables
         }
     }
     
-    public static class NonAtomicInterfaceVariable<T>
+    public static class NonAtomicInterfaceVariable<T extends IReference>
         extends NonAtomicValueVariable<T>
     {
         public NonAtomicInterfaceVariable(

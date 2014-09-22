@@ -43,7 +43,7 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
  active events on this endpoint.
  *
  */
-public abstract class Endpoint 
+public abstract class Endpoint implements IReference
 {
     public final String _host_uuid;
 	
@@ -172,6 +172,11 @@ public abstract class Endpoint
           self._heartbeat.start()
           _send_clock_update();
         */
+    }
+
+    public String uuid()
+    {
+        return _uuid;
     }
 
     /**
