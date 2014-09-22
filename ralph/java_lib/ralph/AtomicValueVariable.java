@@ -11,9 +11,22 @@ public abstract class AtomicValueVariable<T>
         VersionHelper<T> version_helper,
         RalphGlobals ralph_globals)
     {
-        super(_log_changes,init_val,vtdwc,version_helper,ralph_globals,null);
+        this(_log_changes,init_val,vtdwc,version_helper,ralph_globals,null);
     }
 
+    public AtomicValueVariable(
+        boolean _log_changes, T init_val,
+        ValueTypeDataWrapperFactory<T> vtdwc,
+        VersionHelper<T> version_helper,
+        RalphGlobals ralph_globals,
+        Object additional_serialization_contents)
+    {
+        super(
+            _log_changes,init_val,vtdwc,version_helper,ralph_globals,
+            additional_serialization_contents);
+    }
+
+    
     /**
        Log completed commit, if ralph globals designates to.
      */

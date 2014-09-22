@@ -406,7 +406,7 @@ public class Variables
             super(
                 _log_changes,init_val,
                 new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
-                ralph_globals);
+                ralph_globals,_enum_constructor_obj);
             enum_constructor_obj = _enum_constructor_obj;
         }
         public AtomicEnumVariable(
@@ -417,7 +417,7 @@ public class Variables
             this(
                 _log_changes,null,_enum_constructor_obj,ralph_globals);
         }
-
+        
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents)
@@ -427,8 +427,13 @@ public class Variables
             int ordinal = -1;
             if (internal_val != null)
                 ordinal = internal_val.ordinal();
+            
+            EnumConstructorObj<T> constructor_obj = enum_constructor_obj;
+            if (constructor_obj == null)
+                constructor_obj = (EnumConstructorObj<T>)additional_contents;
+            
             return AtomicEnumVariable.<T>serialize_enum_contents(
-                ordinal,enum_constructor_obj,uuid(),true);
+                ordinal,constructor_obj,uuid(),true);
         }
 
         /**
@@ -931,6 +936,7 @@ public class Variables
             int ordinal = -1;
             if (internal_val != null)
                 ordinal = internal_val.ordinal();
+
             return AtomicEnumVariable.<T>serialize_enum_contents(
                 ordinal,enum_constructor_obj,uuid(),false);
         }
