@@ -70,7 +70,8 @@ public class VersioningInfo
                     String filename = (String) obj_filename;
                     // How many messages to allow to buffer before
                     // disk writes become blocking.
-                    int buffer_capacity = (Integer) obj_buffer_capacity;
+                    int buffer_capacity =
+                        Integer.parseInt((String)obj_buffer_capacity);
 
                     local_version_saver = new DiskLocalVersionSaver(
                         buffer_capacity, filename);
