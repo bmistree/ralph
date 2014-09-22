@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import ralph.Util;
 import ralph.EndpointConstructorObj;
+import ralph.EnumConstructorObj;
 import ralph.CommitMetadata;
 import ralph.VersioningInfo;
 
@@ -156,6 +157,22 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
             VersioningInfo.instance.local_version_saver;
         return local_version_saver.get_endpoint_constructor_obj(
             endpoint_constructor_obj_classname);
+    }
+
+    @Override
+    public EnumConstructorObj get_enum_constructor_obj(
+        String enum_constructor_obj_classname)
+    {
+        // note: not using internal local_version_manager here because
+        // local_version_manager never got updated with endpoint
+        // constructor objects.  However, the global version of
+        // local_version_saver did when objects were initially
+        // constructed.  Use this to answer
+        // get_endpoint_constructor_obj queries.
+        ILocalVersionSaver local_version_saver =
+            VersioningInfo.instance.local_version_saver;
+        return local_version_saver.get_enum_constructor_obj(
+            enum_constructor_obj_classname);
     }
     
     /**

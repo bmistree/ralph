@@ -2,6 +2,7 @@ package RalphVersions;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
+import ralph.EnumConstructorObj;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public interface ILocalVersionReplayer
@@ -23,6 +24,12 @@ public interface ILocalVersionReplayer
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname);
 
+    /**
+       @returns null if does not exist.
+     */
+    public EnumConstructorObj get_enum_constructor_obj(
+        String enum_constructor_obj_classname);
+    
     
     /**
        @param lower_range --- null if should query from earliest

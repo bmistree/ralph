@@ -46,6 +46,17 @@ public class InMemoryLocalVersionManager
         return endpoint_constructor_map.get(
             endpoint_constructor_obj_classname);
     }
+
+    /**
+       @returns null if does not exist.
+    */
+    @Override
+    synchronized public EnumConstructorObj get_enum_constructor_obj(
+        String enum_constructor_obj_classname)
+    {
+        return enum_constructor_map.get(enum_constructor_obj_classname);
+    }
+
     
     /**
        @returns null if does not exist.

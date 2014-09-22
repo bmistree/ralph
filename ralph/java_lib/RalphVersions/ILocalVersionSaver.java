@@ -70,6 +70,8 @@ public interface ILocalVersionSaver
     
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname);
+    public EnumConstructorObj get_enum_constructor_obj(
+        String enum_constructor_obj_classname);    
     
     /**
        No longer will receive udpates from this versioned object.
