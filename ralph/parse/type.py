@@ -74,6 +74,27 @@ class EnumType(Type):
             return self.enum_name
         return self.alias_name
 
+    def prepend_to_name(self,to_prepend):
+        '''Frequently use struct_name during emitting. If struct is
+        aliased though, then do not always want to prepend in front of
+        struct name.  This is because alias as form a.b.c.d; actually
+        want to prepend in front of d.
+        '''
+        # FIXME: duplicate code with StructType.
+        
+        front = ''
+        enum_name = self.enum_name
+        if self.alias_name is not None:
+            # means that we're dealing with an aliased struct.  Format of
+            # alias commands (currently) can be a.b.c.actual_struct_name.
+            # need to insert _Internal after last . if it exists
+            last_index_of = enum_name.rfind('.')
+            if last_index_of != -1:
+                front = enum_name[0:last_index_of+1]
+                enum_name = enum_name[last_index_of+1:]
+
+        return front + to_prepend + enum_name
+    
     def clone(self,is_tvar):
         '''Each user-defined enum has one canonical type.  When
         assigning a node this type, use the clone method on that

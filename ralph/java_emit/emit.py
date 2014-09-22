@@ -1246,6 +1246,8 @@ def class_from_element_type(element_type):
     elif isinstance(element_type,StructType):
         internal_struct_name = emit_internal_struct_type(element_type)        
         return internal_struct_name + '.class'
+    elif isinstance(element_type,EnumType):
+        return emit_internal_enum_type(element_type) + '.class'
     else:
         # FIXME: Currently disallowing containers holding elements to
         # anything beyond number, string, boolean, or struct types.
@@ -1277,6 +1279,9 @@ def list_map_wrappers(element_type):
 
     elif isinstance(element_type,StructType):
         element_type_wrapper = emit_struct_locked_map_wrapper_name(
+            element_type)
+    elif isinstance(element_type,EnumType):
+        element_type_wrapper = emit_enum_locked_map_wrapper_name(
             element_type)
     else:
         # FIXME: Need to emit wrappers for non-struct/non-basic
@@ -1453,6 +1458,9 @@ def emit_internal_type(type_object):
                     return emit_internal_type(typer)
                 # FIXME: Ugly, hackish way to return service references
                 if isinstance(typer,ServiceReferenceType):
+                    return emit_internal_type(typer)
+                # FIXME: Ugly, hackish way to return enums
+                if isinstance(typer,EnumType):
                     return emit_internal_type(typer)
                 
                 # FIXME: Need to support returning ServiceFactories,
@@ -2241,12 +2249,44 @@ def emit_enum_definition(enum_name,enum_type,struct_ctx):
         to_return += field_name
         if i < len(enum_type.field_list) -1:
             to_return += ','
+        else:
+            to_return += ';'
+
+    ### FIXME: kind of stupid that have to special case no logic for
+    ### empty enums.
+
+    if len(enum_type.field_list) != 0:
+        # add a wrapper so that enum can be placed in list/map
+        to_return += indent_string('''
+private static class %(enum_class_name)s_wrapper_class
+    implements EnsureAtomicWrapper<%(enum_class_name)s,%(enum_class_name)s>
+{
+    @Override
+    public String get_serialization_label()
+    {
+        Util.logger_assert("Must wrap enums correctly.");
+        return null;
+    }
+    @Override
+    public RalphObject<%(enum_class_name)s,%(enum_class_name)s> ensure_atomic_object(
+        %(enum_class_name)s object_to_ensure, RalphGlobals ralph_globals)
+    {
+        return new AtomicEnumVariable(
+            false,object_to_ensure,%(enum_class_name)s.class,ralph_globals);
+    }
+}
+
+public static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_name)s =
+    new %(enum_class_name)s_wrapper_class();
+
+    ''' % { 'enum_class_name': enum_type.get_emit_name(),
+            'enum_locked_map_wrapper_name': emit_enum_locked_map_wrapper_name(enum_type)})
+
     to_return += '}'
     return to_return
 
 def emit_internal_enum_type(enum_type):
     return enum_type.get_emit_name()
-
 
 
 ######### HANDLING STRUCTS ########
@@ -2578,6 +2618,9 @@ public final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper()
 
     return locked_wrappers_text
 
+def emit_enum_locked_map_wrapper_name(enum_type):
+    return enum_type.prepend_to_name(
+        'ENUM_LOCKED_MAP_WRAPPER__')
 
 def emit_struct_locked_map_wrapper_name(struct_type):
     return struct_type.prepend_to_name(
