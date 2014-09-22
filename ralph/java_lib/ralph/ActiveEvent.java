@@ -85,6 +85,13 @@ public abstract class ActiveEvent
         commit_metadata =
             new CommitMetadata(
                 local_timestamp,root_application_uuid,root_event_name,uuid);
+
+        // log commit_metadata in case need to replay
+        if (VersioningInfo.instance.local_version_saver != null)
+        {
+            VersioningInfo.instance.local_version_saver.save_commit_metadata(
+                commit_metadata);
+        }
     }
     
     /**
