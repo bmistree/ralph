@@ -10,6 +10,7 @@ import java.io.IOException;
 import ralph.Util;
 import ralph.EndpointConstructorObj;
 import ralph.CommitMetadata;
+import ralph.VersioningInfo;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
@@ -25,6 +26,7 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     {
         filename = _filename;
     }
+
 
     /**
        Essentially, load all file data into local_version_manager, and
@@ -139,8 +141,15 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname)
     {
-        init_local_version_manager_if_unitialized();
-        return local_version_manager.get_endpoint_constructor_obj(
+        // note: not using internal local_version_manager here because
+        // local_version_manager never got updated with endpoint
+        // constructor objects.  However, the global version of
+        // local_version_saver did when objects were initially
+        // constructed.  Use this to answer
+        // get_endpoint_constructor_obj queries.
+        ILocalVersionSaver local_version_saver =
+            VersioningInfo.instance.local_version_saver;
+        return local_version_saver.get_endpoint_constructor_obj(
             endpoint_constructor_obj_classname);
     }
     

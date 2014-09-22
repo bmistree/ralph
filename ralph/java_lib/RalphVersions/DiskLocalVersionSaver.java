@@ -1,5 +1,8 @@
 package RalphVersions;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 
@@ -10,11 +13,28 @@ import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class DiskLocalVersionSaver implements ILocalVersionSaver
 {
+    // key is the classname of the endpoint constructor object.
+    private final Map<String,EndpointConstructorObj> endpoint_constructor_map =
+        new HashMap<String,EndpointConstructorObj>();
+    
     private final DiskQueue<VersionSaverMessages> disk_queue;
+
+    
     public DiskLocalVersionSaver(int message_buffer_capacity, String log_filename)
     {
         disk_queue = new DiskQueue<VersionSaverMessages>(
             message_buffer_capacity,log_filename);
+    }
+
+    /**
+       @returns null if does not exist.
+    */
+    @Override
+    synchronized public EndpointConstructorObj get_endpoint_constructor_obj(
+        String endpoint_constructor_obj_classname)
+    {
+        return endpoint_constructor_map.get(
+            endpoint_constructor_obj_classname);
     }
     
     @Override
