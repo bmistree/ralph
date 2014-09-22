@@ -396,21 +396,22 @@ public class Variables
     public static class AtomicEnumVariable<T>
         extends AtomicValueVariable<T>
     {
+        protected final Class<T> enum_class;
         public AtomicEnumVariable(
-            boolean _log_changes,T init_val, RalphGlobals ralph_globals)
+            boolean _log_changes,T init_val,
+            Class<T> _enum_class, RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,init_val,
                 new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
+            enum_class = _enum_class;
         }
         public AtomicEnumVariable(
-            boolean _log_changes,RalphGlobals ralph_globals)
+            boolean _log_changes,Class<T> _enum_class, RalphGlobals ralph_globals)
         {
-            super(
-                _log_changes,null,
-                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
-                ralph_globals);
+            this(
+                _log_changes,null,_enum_class,ralph_globals);
         }
 
         @Override
@@ -422,14 +423,14 @@ public class Variables
             Util.logger_assert("FIXME: fill in serialization for enums");
             return null;
         }
-
+        
         @Override
         protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)
         {
             SpeculativeAtomicObject<T,T> to_return =
                 new AtomicEnumVariable(
-                    log_changes,to_speculate_on,ralph_globals);
+                    log_changes,to_speculate_on,enum_class,ralph_globals);
             to_return.set_derived(this);
             return to_return;
         }
@@ -867,22 +868,24 @@ public class Variables
     public static class NonAtomicEnumVariable<T>
         extends NonAtomicValueVariable<T>
     {
+        protected final Class<T> enum_class;
+        
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
-            RalphGlobals ralph_globals)
+            Class<T> _enum_class, RalphGlobals ralph_globals)
         {
             super(
                 init_val,
                 new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
+            enum_class = _enum_class;
         }
 
         public NonAtomicEnumVariable(
-            boolean _dummy_log_changes, RalphGlobals ralph_globals)
+            boolean _dummy_log_changes, Class<T> _enum_class,
+            RalphGlobals ralph_globals)
         {
-            super(
-                null,new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
-                ralph_globals);
+            this(false,null,_enum_class, ralph_globals);
         }
 
         @Override

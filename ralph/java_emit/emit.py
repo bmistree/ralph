@@ -857,6 +857,11 @@ new %(java_type_statement)s (
             new_ralph_variable = (
                 'new %s (false,%s,ralph_globals)' %
                 (java_type_statement,argument_name))
+        elif isinstance(argument_type,EnumType):
+            internal_enum_class_name = argument_type.get_emit_name()
+            new_ralph_variable = (
+                'new %s (false,%s,%s.class,ralph_globals)' %
+                (java_type_statement,argument_name,internal_enum_class_name))
         else:
             new_ralph_variable = (
                 'new %s (false,%s,ralph_globals)' %
@@ -1161,13 +1166,19 @@ new %(java_type_text)s  (
 
     elif isinstance(type_object,EnumType):
         java_type_text = emit_ralph_wrapped_type(type_object)
+        internal_enum_class_name = type_object.get_emit_name()
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
-            to_return = (
-                'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
+            to_return = ('''
+new  %(java_type_text)s(false,%(initializer_text)s,%(internal_enum_class_name)s.class,ralph_globals)'''
+                         % {'java_type_text': java_type_text,
+                            'initializer_text': initializer_text,
+                            'internal_enum_class_name': internal_enum_class_name})
         else:
-            to_return = (
-                'new  %s(false,ralph_globals)' % java_type_text)
+            to_return = ('''
+new %(java_type_text)s(false,%(internal_enum_class_name)s.class,ralph_globals)'''
+                         % {'java_type_text': java_type_text,
+                            'internal_enum_class_name': internal_enum_class_name})
         return to_return
     
     #### DEBUG
