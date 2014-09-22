@@ -2243,8 +2243,11 @@ def emit_enum_definition(enum_name,enum_type,struct_ctx):
     if struct_ctx.filename != where_declared_enum.filename:
         return ''
 
-    to_return = 'public enum %s {' % enum_type.get_emit_name()
+    to_return = ('''
+public enum %(enum_name)s {''' % {'enum_name': enum_type.get_emit_name()})
 
+
+    from_ordinal_body_text = ''
     for i in range(0,len(enum_type.field_list)):
         field_name = enum_type.field_list[i]
         to_return += field_name
@@ -2253,9 +2256,26 @@ def emit_enum_definition(enum_name,enum_type,struct_ctx):
         else:
             to_return += ';'
 
+        # emitting body text for from_ordinal
+        from_ordinal_body_text += '''
+if (ordinal == %(field_index)i)
+    return %(field_name)s;
+''' % { 'field_index': i,
+        'field_name': field_name}
+
+    to_return += indent_string('''
+public static %(enum_name)s from_ordinal(int ordinal)
+{
+%(from_ordinal_body_text)s
+    Util.logger_assert("Unknown ordinal to build enum from");
+    return null;
+}
+''' % { 'from_ordinal_body_text': indent_string(from_ordinal_body_text),
+        'enum_name': enum_type.get_emit_name()})
+
+            
     ### FIXME: kind of stupid that have to special case no logic for
     ### empty enums.
-
     if len(enum_type.field_list) != 0:
         # add a wrapper so that enum can be placed in list/map
         to_return += indent_string('''

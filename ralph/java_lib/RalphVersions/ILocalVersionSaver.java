@@ -63,7 +63,7 @@ public interface ILocalVersionSaver
      */
     public void save_endpoint_constructor_obj(
         EndpointConstructorObj endpoint_constructor_obj);
-
+    
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname);
     
