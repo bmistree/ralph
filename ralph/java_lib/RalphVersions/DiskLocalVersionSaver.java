@@ -92,6 +92,9 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
     public void save_endpoint_constructor_obj(
         EndpointConstructorObj endpoint_constructor_obj)
     {
+        endpoint_constructor_map.put(
+            endpoint_constructor_obj.getClass().getName(),
+            endpoint_constructor_obj);
     }
     @Override
     public void close_versioned_object(String object_uuid)
