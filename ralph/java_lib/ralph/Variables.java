@@ -393,7 +393,7 @@ public class Variables
         }
     }
 
-    public static class AtomicEnumVariable<T>
+    public static class AtomicEnumVariable<T extends Enum>
         extends AtomicValueVariable<T>
     {
         protected final Class<T> enum_class;
@@ -419,9 +419,33 @@ public class Variables
             ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
-            // FIXME: add code for serializing enum variables.
-            Util.logger_assert("FIXME: fill in serialization for enums");
-            return null;
+            T internal_val = get_val(active_event);
+            int ordinal = -1;
+            if (internal_val != null)
+                ordinal = internal_val.ordinal();
+            return AtomicEnumVariable.serialize_enum_contents(
+                ordinal,enum_class.getName(),uuid(),true);
+        }
+
+        /**
+           internal_ordinal is -1, if null.
+         */
+        public static ObjectContents serialize_enum_contents(
+            int internal_ordinal, String internal_enum_class_name,
+            String holder_uuid,boolean atomic)
+        {
+            ObjectContents.Enum.Builder enum_builder =
+                ObjectContents.Enum.newBuilder();
+            enum_builder.setEnumTypeClassName(internal_enum_class_name);
+            enum_builder.setEnumOrdinal(internal_ordinal);
+
+
+            ObjectContents.Builder object_contents_builder =
+                ObjectContents.newBuilder();
+            object_contents_builder.setUuid(holder_uuid);
+            object_contents_builder.setAtomic(atomic);
+            object_contents_builder.setEnumType(enum_builder);
+            return object_contents_builder.build();
         }
         
         @Override
@@ -865,7 +889,7 @@ public class Variables
         }
     }
 
-    public static class NonAtomicEnumVariable<T>
+    public static class NonAtomicEnumVariable<T extends Enum>
         extends NonAtomicValueVariable<T>
     {
         protected final Class<T> enum_class;
@@ -893,9 +917,12 @@ public class Variables
             ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
-            // FIXME: add code for serializing enum variables.
-            Util.logger_assert("FIXME: fill in serialization for enums");
-            return null;
+            T internal_val = get_val(active_event);
+            int ordinal = -1;
+            if (internal_val != null)
+                ordinal = internal_val.ordinal();
+            return AtomicEnumVariable.serialize_enum_contents(
+                ordinal,enum_class.getName(),uuid(),false);
         }
 
         @Override
