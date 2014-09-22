@@ -101,6 +101,11 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
                     version_data.getCommitMetadataEventUuid();
                 CommitMetadata cm = local_version_manager.get_commit_metadata(
                     commit_metadata_event_uuid);
+                
+                //// DEBUG
+                if (cm == null)
+                    Util.logger_assert("Unknown commit metadata to rebuild");
+                //// END DEBUG
 
                 String object_uuid = version_data.getObjectUuid();
                 Delta delta = version_data.getDelta();
