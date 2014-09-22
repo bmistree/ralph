@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
+import ralph.EnumConstructorObj;
 
 import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -16,10 +17,13 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
     // key is the classname of the endpoint constructor object.
     private final Map<String,EndpointConstructorObj> endpoint_constructor_map =
         new HashMap<String,EndpointConstructorObj>();
+
+    // key is the classname of the enum constructor object.
+    private final Map<String,EnumConstructorObj> enum_constructor_map =
+        new HashMap<String,EnumConstructorObj>();
     
     private final DiskQueue<VersionSaverMessages> disk_queue;
 
-    
     public DiskLocalVersionSaver(int message_buffer_capacity, String log_filename)
     {
         disk_queue = new DiskQueue<VersionSaverMessages>(
@@ -96,6 +100,16 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
             endpoint_constructor_obj.getClass().getName(),
             endpoint_constructor_obj);
     }
+    
+    @Override
+    public void save_enum_constructor_obj(
+        EnumConstructorObj enum_constructor_obj)
+    {
+        enum_constructor_map.put(
+            enum_constructor_obj.getClass().getName(),
+            enum_constructor_obj);
+    }
+    
     @Override
     public void close_versioned_object(String object_uuid)
     {

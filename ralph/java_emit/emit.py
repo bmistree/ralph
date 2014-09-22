@@ -859,9 +859,11 @@ new %(java_type_statement)s (
                 (java_type_statement,argument_name))
         elif isinstance(argument_type,EnumType):
             internal_enum_class_name = argument_type.get_emit_name()
+            enum_constructor_obj_name = emit_fully_qualified_enum_constructor_obj_name(
+                argument_type)
             new_ralph_variable = (
-                'new %s (false,%s,%s.class,ralph_globals)' %
-                (java_type_statement,argument_name,internal_enum_class_name))
+                'new %s (false,%s,%s,ralph_globals)' %
+                (java_type_statement,enum_constructor_obj_name,internal_enum_class_name))
         else:
             new_ralph_variable = (
                 'new %s (false,%s,ralph_globals)' %
@@ -1166,19 +1168,20 @@ new %(java_type_text)s  (
 
     elif isinstance(type_object,EnumType):
         java_type_text = emit_ralph_wrapped_type(type_object)
-        internal_enum_class_name = type_object.get_emit_name()
+        enum_constructor_obj_name = emit_fully_qualified_enum_constructor_obj_name(
+            type_object)
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = ('''
-new  %(java_type_text)s(false,%(initializer_text)s,%(internal_enum_class_name)s.class,ralph_globals)'''
+new  %(java_type_text)s(false,%(initializer_text)s,%(enum_constructor_obj_name)s,ralph_globals)'''
                          % {'java_type_text': java_type_text,
                             'initializer_text': initializer_text,
-                            'internal_enum_class_name': internal_enum_class_name})
+                            'enum_constructor_obj_name': enum_constructor_obj_name})
         else:
             to_return = ('''
-new %(java_type_text)s(false,%(internal_enum_class_name)s.class,ralph_globals)'''
+new %(java_type_text)s(false,%(enum_constructor_obj_name)s,ralph_globals)'''
                          % {'java_type_text': java_type_text,
-                            'internal_enum_class_name': internal_enum_class_name})
+                            'enum_constructor_obj_name': enum_constructor_obj_name})
         return to_return
     
     #### DEBUG
@@ -2246,7 +2249,6 @@ def emit_enum_definition(enum_name,enum_type,struct_ctx):
     to_return = ('''
 public enum %(enum_name)s {''' % {'enum_name': enum_type.get_emit_name()})
 
-
     from_ordinal_body_text = ''
     for i in range(0,len(enum_type.field_list)):
         field_name = enum_type.field_list[i]
@@ -2273,6 +2275,8 @@ public static %(enum_name)s from_ordinal(int ordinal)
 ''' % { 'from_ordinal_body_text': indent_string(from_ordinal_body_text),
         'enum_name': enum_type.get_emit_name()})
 
+    to_return += indent_string(
+        emit_enum_constructor_obj_and_instance(enum_type))
             
     ### FIXME: kind of stupid that have to special case no logic for
     ### empty enums.
@@ -2293,21 +2297,68 @@ private static class %(enum_class_name)s_wrapper_class
         %(enum_class_name)s object_to_ensure, RalphGlobals ralph_globals)
     {
         return new AtomicEnumVariable(
-            false,object_to_ensure,%(enum_class_name)s.class,ralph_globals);
+            false,object_to_ensure,%(enum_constructor_obj_name)s,ralph_globals);
     }
 }
 
-public static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_name)s =
+public final static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_name)s =
     new %(enum_class_name)s_wrapper_class();
 
     ''' % { 'enum_class_name': enum_type.get_emit_name(),
-            'enum_locked_map_wrapper_name': emit_enum_locked_map_wrapper_name(enum_type)})
-
+            'enum_locked_map_wrapper_name': emit_enum_locked_map_wrapper_name(enum_type),
+            'enum_constructor_obj_name': emit_fully_qualified_enum_constructor_obj_name(enum_type)})
+        
     to_return += '}'
     return to_return
 
 def emit_internal_enum_type(enum_type):
     return enum_type.get_emit_name()
+
+def emit_enum_constructor_class_name(enum_type):
+    return enum_type.prepend_to_name('some__constructor_class_name')
+
+def emit_fully_qualified_enum_constructor_class_name(enum_type):
+    return (
+        enum_type.get_emit_name() + '.' +
+        emit_enum_constructor_class_name(enum_type))
+
+def emit_fully_qualified_enum_constructor_obj_name(enum_type):
+    return (
+        enum_type.get_emit_name() + '.' +
+        emit_enum_constructor_obj_name(enum_type))
+
+def emit_enum_constructor_obj_name(enum_type):
+    return 'enum_constructor_obj'
+
+def emit_enum_constructor_obj_and_instance(enum_type):
+    '''
+    Like endpoints, each enum requires a separate constructor object
+    to generate it for replay.  Just need a single constructor for
+    each enum.
+    '''
+    enum_constructor_class_name = emit_enum_constructor_class_name(enum_type)
+    enum_constructor_obj_name = emit_enum_constructor_obj_name(enum_type)
+    to_return = '''
+public static class %(enum_constructor_class_name)s
+    extends EnumConstructorObj < %(enum_name)s> 
+{
+    @Override
+    public %(enum_name)s construct(int ordinal)
+    {
+        // -1 ordinal means that held null value
+        if (ordinal == -1)
+            return null;
+        return %(enum_name)s.from_ordinal(ordinal);
+    }
+}
+// creating this object automatically registers it with version saver.
+public static final %(enum_constructor_class_name)s %(enum_constructor_obj_name)s =
+    new %(enum_constructor_class_name)s();
+''' % {'enum_constructor_class_name' : enum_constructor_class_name,
+       'enum_name': enum_type.get_emit_name(),
+       'enum_constructor_obj_name': enum_constructor_obj_name}
+    
+    return to_return
 
 
 ######### HANDLING STRUCTS ########

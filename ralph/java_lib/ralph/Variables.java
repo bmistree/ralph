@@ -396,22 +396,26 @@ public class Variables
     public static class AtomicEnumVariable<T extends Enum>
         extends AtomicValueVariable<T>
     {
-        protected final Class<T> enum_class;
+        protected final EnumConstructorObj<T> enum_constructor_obj;
+        
         public AtomicEnumVariable(
             boolean _log_changes,T init_val,
-            Class<T> _enum_class, RalphGlobals ralph_globals)
+            EnumConstructorObj<T> _enum_constructor_obj,
+            RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,init_val,
                 new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
-            enum_class = _enum_class;
+            enum_constructor_obj = _enum_constructor_obj;
         }
         public AtomicEnumVariable(
-            boolean _log_changes,Class<T> _enum_class, RalphGlobals ralph_globals)
+            boolean _log_changes,
+            EnumConstructorObj<T> _enum_constructor_obj,
+            RalphGlobals ralph_globals)
         {
             this(
-                _log_changes,null,_enum_class,ralph_globals);
+                _log_changes,null,_enum_constructor_obj,ralph_globals);
         }
 
         @Override
@@ -423,20 +427,23 @@ public class Variables
             int ordinal = -1;
             if (internal_val != null)
                 ordinal = internal_val.ordinal();
-            return AtomicEnumVariable.serialize_enum_contents(
-                ordinal,enum_class.getName(),uuid(),true);
+            return AtomicEnumVariable.<T>serialize_enum_contents(
+                ordinal,enum_constructor_obj,uuid(),true);
         }
 
         /**
            internal_ordinal is -1, if null.
          */
-        public static ObjectContents serialize_enum_contents(
-            int internal_ordinal, String internal_enum_class_name,
-            String holder_uuid,boolean atomic)
+        public static <EnumType extends Enum>
+            ObjectContents serialize_enum_contents(
+                int internal_ordinal,
+                EnumConstructorObj<EnumType> enum_constructor_obj,
+                String holder_uuid,boolean atomic)
         {
             ObjectContents.Enum.Builder enum_builder =
                 ObjectContents.Enum.newBuilder();
-            enum_builder.setEnumTypeClassName(internal_enum_class_name);
+            enum_builder.setEnumConstructorObjClassName(
+                enum_constructor_obj.getClass().getName());
             enum_builder.setEnumOrdinal(internal_ordinal);
 
 
@@ -454,7 +461,8 @@ public class Variables
         {
             SpeculativeAtomicObject<T,T> to_return =
                 new AtomicEnumVariable(
-                    log_changes,to_speculate_on,enum_class,ralph_globals);
+                    log_changes,to_speculate_on,enum_constructor_obj,
+                    ralph_globals);
             to_return.set_derived(this);
             return to_return;
         }
@@ -892,24 +900,26 @@ public class Variables
     public static class NonAtomicEnumVariable<T extends Enum>
         extends NonAtomicValueVariable<T>
     {
-        protected final Class<T> enum_class;
+        protected final EnumConstructorObj<T> enum_constructor_obj;
         
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
-            Class<T> _enum_class, RalphGlobals ralph_globals)
+            EnumConstructorObj<T> _enum_constructor_obj,
+            RalphGlobals ralph_globals)
         {
             super(
                 init_val,
                 new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
                 ralph_globals);
-            enum_class = _enum_class;
+            enum_constructor_obj = _enum_constructor_obj;
         }
 
         public NonAtomicEnumVariable(
-            boolean _dummy_log_changes, Class<T> _enum_class,
+            boolean _dummy_log_changes,
+            EnumConstructorObj<T> _enum_constructor_obj,
             RalphGlobals ralph_globals)
         {
-            this(false,null,_enum_class, ralph_globals);
+            this(false,null,_enum_constructor_obj, ralph_globals);
         }
 
         @Override
@@ -921,8 +931,8 @@ public class Variables
             int ordinal = -1;
             if (internal_val != null)
                 ordinal = internal_val.ordinal();
-            return AtomicEnumVariable.serialize_enum_contents(
-                ordinal,enum_class.getName(),uuid(),false);
+            return AtomicEnumVariable.<T>serialize_enum_contents(
+                ordinal,enum_constructor_obj,uuid(),false);
         }
 
         @Override

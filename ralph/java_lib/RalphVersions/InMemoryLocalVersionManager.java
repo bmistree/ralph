@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
+import ralph.EnumConstructorObj;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -26,6 +27,10 @@ public class InMemoryLocalVersionManager
     // key is the classname of the endpoint constructor object.
     private final Map<String,EndpointConstructorObj> endpoint_constructor_map =
         new HashMap<String,EndpointConstructorObj>();
+
+    // key is the classname of the enum constructor object.
+    private final Map<String,EnumConstructorObj> enum_constructor_map =
+        new HashMap<String,EnumConstructorObj>();
 
     // key is the endpoint uuid
     private final Map<String,EndpointInitializationHistory> endpoint_initialization_map =
@@ -151,6 +156,15 @@ public class InMemoryLocalVersionManager
             endpoint_constructor_obj);
     }
 
+    @Override
+    synchronized public void save_enum_constructor_obj(
+        EnumConstructorObj enum_constructor_obj)
+    {
+        enum_constructor_map.put(
+            enum_constructor_obj.getClass().getName(),
+            enum_constructor_obj);
+    }
+    
     @Override
     public void close_versioned_object(String object_uuid)
     {

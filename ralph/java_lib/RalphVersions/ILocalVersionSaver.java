@@ -2,6 +2,7 @@ package RalphVersions;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
+import ralph.EnumConstructorObj;
 
 import ralph_local_version_protobuffs.DeltaProto.Delta;
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
@@ -63,6 +64,9 @@ public interface ILocalVersionSaver
      */
     public void save_endpoint_constructor_obj(
         EndpointConstructorObj endpoint_constructor_obj);
+
+    public void save_enum_constructor_obj(
+        EnumConstructorObj enum_constructor_obj);
     
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname);

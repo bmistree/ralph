@@ -2603,20 +2603,20 @@ public final class ObjectContentsProto {
     public interface EnumOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
-      // required string enum_type_class_name = 1;
+      // required string enum_constructor_obj_class_name = 1;
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
-      boolean hasEnumTypeClassName();
+      boolean hasEnumConstructorObjClassName();
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
-      java.lang.String getEnumTypeClassName();
+      java.lang.String getEnumConstructorObjClassName();
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
       com.google.protobuf.ByteString
-          getEnumTypeClassNameBytes();
+          getEnumConstructorObjClassNameBytes();
 
       // required int32 enum_ordinal = 2;
       /**
@@ -2689,7 +2689,7 @@ public final class ObjectContentsProto {
               }
               case 10: {
                 bitField0_ |= 0x00000001;
-                enumTypeClassName_ = input.readBytes();
+                enumConstructorObjClassName_ = input.readBytes();
                 break;
               }
               case 16: {
@@ -2737,20 +2737,20 @@ public final class ObjectContentsProto {
       }
 
       private int bitField0_;
-      // required string enum_type_class_name = 1;
-      public static final int ENUM_TYPE_CLASS_NAME_FIELD_NUMBER = 1;
-      private java.lang.Object enumTypeClassName_;
+      // required string enum_constructor_obj_class_name = 1;
+      public static final int ENUM_CONSTRUCTOR_OBJ_CLASS_NAME_FIELD_NUMBER = 1;
+      private java.lang.Object enumConstructorObjClassName_;
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
-      public boolean hasEnumTypeClassName() {
+      public boolean hasEnumConstructorObjClassName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
-      public java.lang.String getEnumTypeClassName() {
-        java.lang.Object ref = enumTypeClassName_;
+      public java.lang.String getEnumConstructorObjClassName() {
+        java.lang.Object ref = enumConstructorObjClassName_;
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
@@ -2758,22 +2758,22 @@ public final class ObjectContentsProto {
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            enumTypeClassName_ = s;
+            enumConstructorObjClassName_ = s;
           }
           return s;
         }
       }
       /**
-       * <code>required string enum_type_class_name = 1;</code>
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getEnumTypeClassNameBytes() {
-        java.lang.Object ref = enumTypeClassName_;
+          getEnumConstructorObjClassNameBytes() {
+        java.lang.Object ref = enumConstructorObjClassName_;
         if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          enumTypeClassName_ = b;
+          enumConstructorObjClassName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -2805,7 +2805,7 @@ public final class ObjectContentsProto {
       }
 
       private void initFields() {
-        enumTypeClassName_ = "";
+        enumConstructorObjClassName_ = "";
         enumOrdinal_ = 0;
       }
       private byte memoizedIsInitialized = -1;
@@ -2813,7 +2813,7 @@ public final class ObjectContentsProto {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized != -1) return isInitialized == 1;
 
-        if (!hasEnumTypeClassName()) {
+        if (!hasEnumConstructorObjClassName()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -2829,7 +2829,7 @@ public final class ObjectContentsProto {
                           throws java.io.IOException {
         getSerializedSize();
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          output.writeBytes(1, getEnumTypeClassNameBytes());
+          output.writeBytes(1, getEnumConstructorObjClassNameBytes());
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           output.writeInt32(2, enumOrdinal_);
@@ -2845,7 +2845,7 @@ public final class ObjectContentsProto {
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(1, getEnumTypeClassNameBytes());
+            .computeBytesSize(1, getEnumConstructorObjClassNameBytes());
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
@@ -2967,7 +2967,7 @@ public final class ObjectContentsProto {
 
         public Builder clear() {
           super.clear();
-          enumTypeClassName_ = "";
+          enumConstructorObjClassName_ = "";
           bitField0_ = (bitField0_ & ~0x00000001);
           enumOrdinal_ = 0;
           bitField0_ = (bitField0_ & ~0x00000002);
@@ -3002,7 +3002,7 @@ public final class ObjectContentsProto {
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
             to_bitField0_ |= 0x00000001;
           }
-          result.enumTypeClassName_ = enumTypeClassName_;
+          result.enumConstructorObjClassName_ = enumConstructorObjClassName_;
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
             to_bitField0_ |= 0x00000002;
           }
@@ -3023,9 +3023,9 @@ public final class ObjectContentsProto {
 
         public Builder mergeFrom(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum other) {
           if (other == ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance()) return this;
-          if (other.hasEnumTypeClassName()) {
+          if (other.hasEnumConstructorObjClassName()) {
             bitField0_ |= 0x00000001;
-            enumTypeClassName_ = other.enumTypeClassName_;
+            enumConstructorObjClassName_ = other.enumConstructorObjClassName_;
             onChanged();
           }
           if (other.hasEnumOrdinal()) {
@@ -3036,7 +3036,7 @@ public final class ObjectContentsProto {
         }
 
         public final boolean isInitialized() {
-          if (!hasEnumTypeClassName()) {
+          if (!hasEnumConstructorObjClassName()) {
             
             return false;
           }
@@ -3066,76 +3066,76 @@ public final class ObjectContentsProto {
         }
         private int bitField0_;
 
-        // required string enum_type_class_name = 1;
-        private java.lang.Object enumTypeClassName_ = "";
+        // required string enum_constructor_obj_class_name = 1;
+        private java.lang.Object enumConstructorObjClassName_ = "";
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
-        public boolean hasEnumTypeClassName() {
+        public boolean hasEnumConstructorObjClassName() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
-        public java.lang.String getEnumTypeClassName() {
-          java.lang.Object ref = enumTypeClassName_;
+        public java.lang.String getEnumConstructorObjClassName() {
+          java.lang.Object ref = enumConstructorObjClassName_;
           if (!(ref instanceof java.lang.String)) {
             java.lang.String s = ((com.google.protobuf.ByteString) ref)
                 .toStringUtf8();
-            enumTypeClassName_ = s;
+            enumConstructorObjClassName_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
           }
         }
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
         public com.google.protobuf.ByteString
-            getEnumTypeClassNameBytes() {
-          java.lang.Object ref = enumTypeClassName_;
+            getEnumConstructorObjClassNameBytes() {
+          java.lang.Object ref = enumConstructorObjClassName_;
           if (ref instanceof String) {
             com.google.protobuf.ByteString b = 
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
-            enumTypeClassName_ = b;
+            enumConstructorObjClassName_ = b;
             return b;
           } else {
             return (com.google.protobuf.ByteString) ref;
           }
         }
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
-        public Builder setEnumTypeClassName(
+        public Builder setEnumConstructorObjClassName(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-          enumTypeClassName_ = value;
+          enumConstructorObjClassName_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
-        public Builder clearEnumTypeClassName() {
+        public Builder clearEnumConstructorObjClassName() {
           bitField0_ = (bitField0_ & ~0x00000001);
-          enumTypeClassName_ = getDefaultInstance().getEnumTypeClassName();
+          enumConstructorObjClassName_ = getDefaultInstance().getEnumConstructorObjClassName();
           onChanged();
           return this;
         }
         /**
-         * <code>required string enum_type_class_name = 1;</code>
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
          */
-        public Builder setEnumTypeClassNameBytes(
+        public Builder setEnumConstructorObjClassNameBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-          enumTypeClassName_ = value;
+          enumConstructorObjClassName_ = value;
           onChanged();
           return this;
         }
@@ -8874,7 +8874,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"\266\t\n" +
+      "\n\025object_contents.proto\032\013delta.proto\"\301\t\n" +
       "\016ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030" +
       "\002 \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueTyp" +
       "e\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceTyp" +
@@ -8894,19 +8894,19 @@ public final class ObjectContentsProto {
       "_class_name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.Obje" +
       "ctContents.InternalStructField\032P\n\006Struct" +
       "\022&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType",
-      "\022\036\n\026struct_type_class_name\030\002 \002(\t\032:\n\004Enum" +
-      "\022\034\n\024enum_type_class_name\030\001 \002(\t\022\024\n\014enum_o" +
-      "rdinal\030\002 \002(\005\032g\n\003Map\022&\n\010ref_type\030\001 \002(\0132\024." +
-      "Delta.ReferenceType\022\033\n\023key_type_class_na" +
-      "me\030\002 \002(\t\022\033\n\023val_type_class_name\030\003 \002(\t\0323\n" +
-      "\tInterface\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Ref" +
-      "erenceType\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.D" +
-      "elta.ReferenceType\022\033\n\023val_type_class_nam" +
-      "e\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class" +
-      "_name\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t",
-      "\032+\n\014InternalList\022\033\n\023val_type_class_name\030" +
-      "\001 \002(\tB5\n\036ralph_local_version_protobuffsB" +
-      "\023ObjectContentsProto"
+      "\022\036\n\026struct_type_class_name\030\002 \002(\t\032E\n\004Enum" +
+      "\022\'\n\037enum_constructor_obj_class_name\030\001 \002(" +
+      "\t\022\024\n\014enum_ordinal\030\002 \002(\005\032g\n\003Map\022&\n\010ref_ty" +
+      "pe\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_ty" +
+      "pe_class_name\030\002 \002(\t\022\033\n\023val_type_class_na" +
+      "me\030\003 \002(\t\0323\n\tInterface\022&\n\010ref_type\030\001 \002(\0132" +
+      "\024.Delta.ReferenceType\032K\n\004List\022&\n\010ref_typ" +
+      "e\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023val_typ" +
+      "e_class_name\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key" +
+      "_type_class_name\030\001 \002(\t\022\033\n\023val_type_class",
+      "_name\030\002 \002(\t\032+\n\014InternalList\022\033\n\023val_type_" +
+      "class_name\030\001 \002(\tB5\n\036ralph_local_version_" +
+      "protobuffsB\023ObjectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8942,7 +8942,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_Enum_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Enum_descriptor,
-              new java.lang.String[] { "EnumTypeClassName", "EnumOrdinal", });
+              new java.lang.String[] { "EnumConstructorObjClassName", "EnumOrdinal", });
           internal_static_ObjectContents_Map_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(4);
           internal_static_ObjectContents_Map_fieldAccessorTable = new

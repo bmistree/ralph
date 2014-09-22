@@ -25,7 +25,7 @@ message ObjectContents
 
     message Enum
     {
-        required string enum_type_class_name = 1;
+        required string enum_constructor_obj_class_name = 1;
         // -1 if holds null
         required int32 enum_ordinal = 2;
     }
