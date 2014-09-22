@@ -807,6 +807,13 @@ public class AtomicActiveEvent extends ActiveEvent
         state = State.STATE_SECOND_PHASE_COMMITTED;
         _unlock();
 
+        // log commit_metadata in case need to replay
+        if (VersioningInfo.instance.local_version_saver != null)
+        {
+            VersioningInfo.instance.local_version_saver.save_commit_metadata(
+                this.commit_metadata);
+        }
+        
         // complete commit on each individual object that we touched
         // note that by the time we get here, we know that we will not
         // be modifying touched_objs dict (event has completed), and
