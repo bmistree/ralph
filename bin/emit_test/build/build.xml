@@ -14,7 +14,8 @@
   <property name="config_dir" location="${emit_test_dir}/config"/>
 
   <property name="no_log_config" location="${emit_test_dir}/no_log_config/config.properties"/>
-  <property name="log_config" location="${emit_test_dir}/log_config/config.properties"/>
+  <property name="in_memory_log_config" location="${emit_test_dir}/in_memory_log_config/config.properties"/>
+  <property name="disk_log_config" location="${emit_test_dir}/disk_log_config/config.properties"/>
   
   <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
   
@@ -612,7 +613,8 @@
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
-        jar_VersionedStructList,jar_VersionedStructMap">
+        jar_VersionedStructList,jar_VersionedStructMap,
+        jar_DiskVersionedStructList,jar_DiskVersionedStructMap">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -1490,7 +1492,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedSetterGetter"/>
       <param name="dest_jar" value="${versioned_setter_getter_jar}"/>
-      <param name="config_properties" value="${log_config}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
 
@@ -1503,7 +1505,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedMap"/>
       <param name="dest_jar" value="${versioned_map_jar}"/>
-      <param name="config_properties" value="${log_config}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
 
@@ -1516,7 +1518,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedList"/>
       <param name="dest_jar" value="${versioned_list_jar}"/>
-      <param name="config_properties" value="${log_config}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
 
@@ -1529,7 +1531,7 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedStructList"/>
       <param name="dest_jar" value="${versioned_struct_list_jar}"/>
-      <param name="config_properties" value="${log_config}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
 
@@ -1542,7 +1544,33 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedStructMap"/>
       <param name="dest_jar" value="${versioned_struct_map_jar}"/>
-      <param name="config_properties" value="${log_config}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="disk_versioned_struct_map_jar"
+      value="disk_versioned_struct_map.jar"/>
+  <target
+      name="jar_DiskVersionedStructMap"
+      depends="ralph_VersionedStructMap,ralph_to_byte_code,harness_VersionedStructMap">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedStructMap"/>
+      <param name="dest_jar" value="${disk_versioned_struct_map_jar}"/>
+      <param name="config_properties" value="${disk_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="disk_versioned_struct_list_jar"
+      value="disk_versioned_struct_list.jar"/>
+  <target
+      name="jar_DiskVersionedStructList"
+      depends="ralph_VersionedStructList,ralph_to_byte_code,harness_VersionedStructList">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedStructList"/>
+      <param name="dest_jar" value="${disk_versioned_struct_list_jar}"/>
+      <param name="config_properties" value="${disk_log_config}"/>
     </antcall>
   </target>
   
