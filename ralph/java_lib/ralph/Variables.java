@@ -471,9 +471,31 @@ public class Variables
             ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
-            // FIXME: add code for serializing interface variables.
-            Util.logger_assert("FIXME: fill in serialization for interfaces");
-            return null;
+            return AtomicInterfaceVariable.serialize_interface_contents(
+                get_val(active_event),uuid(),true);
+        }
+
+        public static ObjectContents serialize_interface_contents(
+            IReference internal_endpoint,String holder_uuid,boolean atomic)
+        {
+            Delta.ReferenceType.Builder ref_type_builder =
+                Delta.ReferenceType.newBuilder();
+            
+            if (internal_endpoint == null)
+                ref_type_builder.setReference("null");
+            else
+                ref_type_builder.setReference(internal_endpoint.uuid());
+
+            ObjectContents.Interface.Builder interface_builder =
+                ObjectContents.Interface.newBuilder();
+            interface_builder.setRefType(ref_type_builder);
+            
+            ObjectContents.Builder contents_builder =
+                ObjectContents.newBuilder();
+            contents_builder.setInterface(interface_builder);
+            contents_builder.setUuid(holder_uuid);
+            contents_builder.setAtomic(atomic);
+            return contents_builder.build();
         }
         
         @Override
@@ -903,11 +925,9 @@ public class Variables
             ActiveEvent active_event, Object additional_contents)
             throws BackoutException
         {
-            // FIXME: add code for serializing interface variables.
-            Util.logger_assert("FIXME: fill in interface variable");
-            return null;
+            return AtomicInterfaceVariable.serialize_interface_contents(
+                get_val(active_event),uuid(),false);
         }
-
         
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, RalphGlobals ralph_globals)
