@@ -13,10 +13,6 @@
   <property name="build.dir" location="${emit_test_dir}/classes"/>
   <property name="config_dir" location="${emit_test_dir}/config"/>
 
-  <property name="no_log_config" location="${emit_test_dir}/no_log_config/config.properties"/>
-  <property name="in_memory_log_config" location="${emit_test_dir}/in_memory_log_config/config.properties"/>
-  <property name="disk_log_config" location="${emit_test_dir}/disk_log_config/config.properties"/>
-  
   <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
   
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
@@ -25,6 +21,17 @@
   <property
       name="lib_build_path"
       location="${emit_test_dir}/../../../ralph/java_lib/build"/>
+
+  <property
+      name="no_log_config"
+      location="${lib_build_path}/no_log_config/config.properties"/>
+  <property
+      name="in_memory_log_config"
+      location="${lib_build_path}/in_memory_log_config/config.properties"/>
+  <property
+      name="disk_log_config"
+      location="${lib_build_path}/disk_log_config/config.properties"/>
+  
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
