@@ -12,6 +12,7 @@
   
   <!-- global properties for this build file -->
   <property name="build.dir" location="${real_dir}/classes"/>
+  <property name="jar_dir" location="${real_dir}/jar_dir"/>
   <property name="proto.dir" location="${real_dir}/../ralph_protobuffs/"/>
   <property name="version_proto_dir" location="${real_dir}/../ralph_version_protobuffs/"/>
   <property name="local_version_proto_dir" location="${real_dir}/../ralph_local_version_protobuffs/"/>
@@ -26,13 +27,35 @@
   <property name="ralph_deserializer_dir" location="${real_dir}/../RalphDeserializer/"/>
   <property name="ralph_service_connection_listener_dir" location="${real_dir}/../RalphServiceConnectionListener/"/>
   <property name="ralph_versions_dir" location="${real_dir}/../RalphVersions/"/>
-  
-  <property name="protobuf_path" location="${real_dir}/../protobuf-java-2.5.0.jar"/>
 
+  <property name="protobuf_jar_dir" location="${real_dir}/../"/>  
+  <property name="protobuf_path" location="${protobuf_jar_dir}/protobuf-java-2.5.0.jar"/>
+
+  <property
+      name="no_log_config"
+      location="${real_dir}/no_log_config/config.properties"/>
+  <property
+      name="in_memory_log_config"
+      location="${real_dir}/in_memory_log_config/config.properties"/>
+  <property
+      name="disk_log_config"
+      location="${real_dir}/disk_log_config/config.properties"/>
+
+  <property
+      name="no_log_jar_name"
+      value="ralph_no_log.jar"/>
+  <property
+      name="in_memory_log_jar_name"
+      value="ralph_in_memory_log.jar"/>
+  <property
+      name="disk_log_jar_name"
+      value="ralph_disk_log.jar"/>
+  
   <!-- set up some directories used by this project -->
   <target name="init" description="setup project directories">
     <echo message="Setting up build directory for java_libs"/>
     <mkdir dir="${build.dir}"/>
+    <mkdir dir="${jar_dir}"/>
   </target>
 
   <!-- compile protobuffs into classes -->
@@ -92,10 +115,55 @@
         includeantruntime="false"/>
   </target>
 
+  <target
+      name="all_jars"
+      depends="compile_all"
+      description="Make all jars, which can link to to enable ralph">
+    
+    <antcall target="make_jar">
+      <param name="dest_jar" value="${no_log_jar_name}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+
+    <antcall target="make_jar">
+      <param name="dest_jar" value="${in_memory_log_jar_name}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+
+    <antcall target="make_jar">
+      <param name="dest_jar" value="${disk_log_jar_name}"/>
+      <param name="config_properties" value="${disk_log_config}"/>
+    </antcall>
+    
+  </target>
+
   
+  <!-- Make a jar; requires arguments:
+       
+           * ${dest_jar} : name of jar file to save to, not including
+             dir to save to.
+
+           * ${config_properties} : fully-qualified name of file to
+             use as .properties file.
+  -->
+  <target
+      name="make_jar"
+      depends="compile_all"
+      description="Make a jar">
+    <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Class-Path" value="${build.dir}:${protobuf_path}"/>
+      </manifest>
+      <fileset dir="${build.dir}"/>
+      <fileset file="${config_properties}"/>
+      <zipgroupfileset dir="${protobuf_jar_dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
   <!-- Delete the build directory -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
+    <delete dir="${jar_dir}"/>
   </target>
 
 </project>
