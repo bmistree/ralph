@@ -79,6 +79,14 @@ public class InMemoryLocalVersionManager
         commit_metadata_map.put(commit_metadata.event_uuid,commit_metadata);
     }
 
+    /**
+       @returns null, if does not exist
+     */
+    synchronized public CommitMetadata get_commit_metadata(String event_uuid)
+    {
+        return commit_metadata_map.get(event_uuid);
+    }
+    
     @Override
     synchronized public void save_version_data(
         String object_uuid, Delta delta, CommitMetadata commit_metadata)
