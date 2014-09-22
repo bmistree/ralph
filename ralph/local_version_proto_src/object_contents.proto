@@ -30,6 +30,12 @@ message ObjectContents
         required string val_type_class_name = 3;
     }
 
+    message Interface
+    {
+        // should point to endpoint object
+        required Delta.ReferenceType ref_type = 1;
+    }
+    
     message List
     {
         required Delta.ReferenceType ref_type = 1;
@@ -66,4 +72,5 @@ message ObjectContents
     optional bool null_type = 9;
     optional InternalStruct internal_struct_type = 10;
     optional Struct struct_type = 11;
+    optional Interface interface = 12;
 }
