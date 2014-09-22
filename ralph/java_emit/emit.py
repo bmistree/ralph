@@ -1281,8 +1281,9 @@ def list_map_wrappers(element_type):
         element_type_wrapper = emit_struct_locked_map_wrapper_name(
             element_type)
     elif isinstance(element_type,EnumType):
-        element_type_wrapper = emit_enum_locked_map_wrapper_name(
-            element_type)
+        element_type_wrapper = (
+            element_type.get_emit_name() + '.' +
+            emit_enum_locked_map_wrapper_name(element_type))
     else:
         # FIXME: Need to emit wrappers for non-struct/non-basic
         # types.  (Eg., map types, list types.)
@@ -2619,8 +2620,7 @@ public final static %s_ensure_atomic_wrapper %s = new %s_ensure_atomic_wrapper()
     return locked_wrappers_text
 
 def emit_enum_locked_map_wrapper_name(enum_type):
-    return enum_type.prepend_to_name(
-        'ENUM_LOCKED_MAP_WRAPPER__')
+    return enum_type.prepend_to_name('ENUM_LOCKED_MAP_WRAPPER__')
 
 def emit_struct_locked_map_wrapper_name(struct_type):
     return struct_type.prepend_to_name(

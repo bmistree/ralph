@@ -628,7 +628,8 @@
         jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
         jar_VersionedStructList,jar_VersionedStructMap,
-        jar_DiskVersionedStructList,jar_DiskVersionedStructMap">
+        jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
+        jar_VersionedEnum">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -643,6 +644,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_VersionedEnum"
+      depends="replay_enum">
+  </target>
+  
   <target
       name="ralph_VersionedMap"
       depends="atomic_map">
@@ -1073,6 +1079,12 @@
     </antcall>
   </target>
 
+  <target name="harness_VersionedEnum">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedEnum.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedSetterGetter.java"/>
@@ -1510,6 +1522,19 @@
     </antcall>
   </target>
 
+  <property
+      name="versioned_enum_jar"
+      value="versioned_enum.jar"/>
+  <target
+      name="jar_VersionedEnum"
+      depends="ralph_VersionedEnum,ralph_to_byte_code,harness_VersionedEnum">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedEnum"/>
+      <param name="dest_jar" value="${versioned_enum_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="versioned_map_jar"
       value="versioned_map.jar"/>

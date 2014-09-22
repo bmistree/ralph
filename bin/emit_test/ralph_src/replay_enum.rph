@@ -7,7 +7,7 @@ Enum Day
 
 Service EnumHolder
 {
-    TVar Enum Day day = Day.Monday;
+    TVar Enum Day day = Day.MONDAY;
     TVar List(element: TVar Enum Day) day_history;
 
     update()
