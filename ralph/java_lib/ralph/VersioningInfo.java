@@ -7,6 +7,8 @@ import java.io.IOException;
 import RalphVersions.ILocalVersionSaver;
 import RalphVersions.ILocalVersionReplayer;
 import RalphVersions.InMemoryLocalVersionManager;
+import RalphVersions.DiskLocalVersionSaver;
+import RalphVersions.DiskLocalVersionReplayer;
 
 
 /**
@@ -42,13 +44,52 @@ public class VersioningInfo
             }
 
             String which_versioner = (String)properties.get("versioner");
-            if ((which_versioner != null) &&
-                which_versioner.equals("in-memory"))
+            if (which_versioner != null)
             {
-                InMemoryLocalVersionManager local_version_manager =
-                    new InMemoryLocalVersionManager();
-                local_version_saver = local_version_manager;
-                local_version_replayer = local_version_manager;
+                if (which_versioner.equals("in-memory"))
+                {
+                    InMemoryLocalVersionManager local_version_manager =
+                        new InMemoryLocalVersionManager();
+                    local_version_saver = local_version_manager;
+                    local_version_replayer = local_version_manager;
+                }
+                else if (which_versioner.equals("disk"))
+                {
+                    Object obj_filename =
+                        properties.get("disk-version-filename");
+                    Object obj_buffer_capacity =
+                        properties.get("disk-version-buffer-capacity");
+                    if ((obj_filename == null) || (obj_buffer_capacity == null))
+                    {
+                        Util.logger_assert(
+                            "Require 'disk-version-filename' in config and " +
+                            "'disk-version-buffer-capacity' in config.");
+                    }
+                    // filename to use to save deltas to and read
+                    // deltas from on replay.
+                    String filename = (String) obj_filename;
+                    // How many messages to allow to buffer before
+                    // disk writes become blocking.
+                    int buffer_capacity = (Integer) obj_buffer_capacity;
+
+                    local_version_saver = new DiskLocalVersionSaver(
+                        buffer_capacity, filename);
+                    local_version_replayer = new DiskLocalVersionReplayer(
+                        filename);
+                }
+                //// DEBUG
+                else
+                {
+                    Util.logger_assert(
+                        "Unknown versioning type provided");
+                    
+                    // setting these here so that will compile without
+                    // warning about how local variables may not have
+                    // been initialized.
+                    local_version_saver = null;
+                    local_version_replayer = null;
+                }
+                //// END DEBUG
             }
             else
             {
