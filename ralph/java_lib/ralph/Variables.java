@@ -422,7 +422,7 @@ public class Variables
             Util.logger_assert("FIXME: fill in serialization for enums");
             return null;
         }
-        
+
         @Override
         protected SpeculativeAtomicObject<T,T>
             duplicate_for_speculation(T to_speculate_on)

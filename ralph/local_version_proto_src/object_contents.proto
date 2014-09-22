@@ -22,6 +22,13 @@ message ObjectContents
         required Delta.ReferenceType ref_type = 1;
         required string struct_type_class_name = 2;
     }
+
+    message Enum
+    {
+        required string enum_type_class_name = 1;
+        // -1 if holds null
+        required int32 enum_ordinal = 2;
+    }
     
     message Map
     {
@@ -73,4 +80,5 @@ message ObjectContents
     optional InternalStruct internal_struct_type = 10;
     optional Struct struct_type = 11;
     optional Interface interface = 12;
+    optional Enum enum_type = 13;
 }

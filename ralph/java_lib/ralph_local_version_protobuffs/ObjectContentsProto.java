@@ -191,6 +191,20 @@ public final class ObjectContentsProto {
      * <code>optional .ObjectContents.Interface interface = 12;</code>
      */
     ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InterfaceOrBuilder getInterfaceOrBuilder();
+
+    // optional .ObjectContents.Enum enum_type = 13;
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    boolean hasEnumType();
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum getEnumType();
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder getEnumTypeOrBuilder();
   }
   /**
    * Protobuf type {@code ObjectContents}
@@ -373,6 +387,19 @@ public final class ObjectContentsProto {
                 interface_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000800;
+              break;
+            }
+            case 106: {
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder subBuilder = null;
+              if (((bitField0_ & 0x00001000) == 0x00001000)) {
+                subBuilder = enumType_.toBuilder();
+              }
+              enumType_ = input.readMessage(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(enumType_);
+                enumType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00001000;
               break;
             }
           }
@@ -2571,6 +2598,606 @@ public final class ObjectContentsProto {
       }
 
       // @@protoc_insertion_point(class_scope:ObjectContents.Struct)
+    }
+
+    public interface EnumOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required string enum_type_class_name = 1;
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      boolean hasEnumTypeClassName();
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      java.lang.String getEnumTypeClassName();
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getEnumTypeClassNameBytes();
+
+      // required int32 enum_ordinal = 2;
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      boolean hasEnumOrdinal();
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      int getEnumOrdinal();
+    }
+    /**
+     * Protobuf type {@code ObjectContents.Enum}
+     */
+    public static final class Enum extends
+        com.google.protobuf.GeneratedMessage
+        implements EnumOrBuilder {
+      // Use Enum.newBuilder() to construct.
+      private Enum(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private Enum(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final Enum defaultInstance;
+      public static Enum getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public Enum getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Enum(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                enumTypeClassName_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                enumOrdinal_ = input.readInt32();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Enum_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Enum_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.class, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<Enum> PARSER =
+          new com.google.protobuf.AbstractParser<Enum>() {
+        public Enum parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Enum(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Enum> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required string enum_type_class_name = 1;
+      public static final int ENUM_TYPE_CLASS_NAME_FIELD_NUMBER = 1;
+      private java.lang.Object enumTypeClassName_;
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      public boolean hasEnumTypeClassName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      public java.lang.String getEnumTypeClassName() {
+        java.lang.Object ref = enumTypeClassName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            enumTypeClassName_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string enum_type_class_name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEnumTypeClassNameBytes() {
+        java.lang.Object ref = enumTypeClassName_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          enumTypeClassName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // required int32 enum_ordinal = 2;
+      public static final int ENUM_ORDINAL_FIELD_NUMBER = 2;
+      private int enumOrdinal_;
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      public boolean hasEnumOrdinal() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      public int getEnumOrdinal() {
+        return enumOrdinal_;
+      }
+
+      private void initFields() {
+        enumTypeClassName_ = "";
+        enumOrdinal_ = 0;
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasEnumTypeClassName()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasEnumOrdinal()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getEnumTypeClassNameBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeInt32(2, enumOrdinal_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getEnumTypeClassNameBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt32Size(2, enumOrdinal_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code ObjectContents.Enum}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Enum_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Enum_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.class, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder.class);
+        }
+
+        // Construct using ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          enumTypeClassName_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          enumOrdinal_ = 0;
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.internal_static_ObjectContents_Enum_descriptor;
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum getDefaultInstanceForType() {
+          return ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum build() {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum buildPartial() {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum result = new ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.enumTypeClassName_ = enumTypeClassName_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.enumOrdinal_ = enumOrdinal_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum) {
+            return mergeFrom((ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum other) {
+          if (other == ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance()) return this;
+          if (other.hasEnumTypeClassName()) {
+            bitField0_ |= 0x00000001;
+            enumTypeClassName_ = other.enumTypeClassName_;
+            onChanged();
+          }
+          if (other.hasEnumOrdinal()) {
+            setEnumOrdinal(other.getEnumOrdinal());
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasEnumTypeClassName()) {
+            
+            return false;
+          }
+          if (!hasEnumOrdinal()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required string enum_type_class_name = 1;
+        private java.lang.Object enumTypeClassName_ = "";
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public boolean hasEnumTypeClassName() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public java.lang.String getEnumTypeClassName() {
+          java.lang.Object ref = enumTypeClassName_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            enumTypeClassName_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getEnumTypeClassNameBytes() {
+          java.lang.Object ref = enumTypeClassName_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            enumTypeClassName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public Builder setEnumTypeClassName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          enumTypeClassName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public Builder clearEnumTypeClassName() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          enumTypeClassName_ = getDefaultInstance().getEnumTypeClassName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string enum_type_class_name = 1;</code>
+         */
+        public Builder setEnumTypeClassNameBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          enumTypeClassName_ = value;
+          onChanged();
+          return this;
+        }
+
+        // required int32 enum_ordinal = 2;
+        private int enumOrdinal_ ;
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public boolean hasEnumOrdinal() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public int getEnumOrdinal() {
+          return enumOrdinal_;
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public Builder setEnumOrdinal(int value) {
+          bitField0_ |= 0x00000002;
+          enumOrdinal_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public Builder clearEnumOrdinal() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          enumOrdinal_ = 0;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:ObjectContents.Enum)
+      }
+
+      static {
+        defaultInstance = new Enum(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:ObjectContents.Enum)
     }
 
     public interface MapOrBuilder
@@ -6158,6 +6785,28 @@ public final class ObjectContentsProto {
       return interface_;
     }
 
+    // optional .ObjectContents.Enum enum_type = 13;
+    public static final int ENUM_TYPE_FIELD_NUMBER = 13;
+    private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum enumType_;
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    public boolean hasEnumType() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum getEnumType() {
+      return enumType_;
+    }
+    /**
+     * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+     */
+    public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder getEnumTypeOrBuilder() {
+      return enumType_;
+    }
+
     private void initFields() {
       uuid_ = "";
       atomic_ = false;
@@ -6171,6 +6820,7 @@ public final class ObjectContentsProto {
       internalStructType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.InternalStruct.getDefaultInstance();
       structType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
       interface_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Interface.getDefaultInstance();
+      enumType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6227,6 +6877,12 @@ public final class ObjectContentsProto {
           return false;
         }
       }
+      if (hasEnumType()) {
+        if (!getEnumType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -6269,6 +6925,9 @@ public final class ObjectContentsProto {
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeMessage(12, interface_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeMessage(13, enumType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -6326,6 +6985,10 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(12, interface_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(13, enumType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6444,6 +7107,7 @@ public final class ObjectContentsProto {
           getInternalStructTypeFieldBuilder();
           getStructTypeFieldBuilder();
           getInterfaceFieldBuilder();
+          getEnumTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -6512,6 +7176,12 @@ public final class ObjectContentsProto {
           interfaceBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000800);
+        if (enumTypeBuilder_ == null) {
+          enumType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
+        } else {
+          enumTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -6624,6 +7294,14 @@ public final class ObjectContentsProto {
         } else {
           result.interface_ = interfaceBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        if (enumTypeBuilder_ == null) {
+          result.enumType_ = enumType_;
+        } else {
+          result.enumType_ = enumTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -6678,6 +7356,9 @@ public final class ObjectContentsProto {
         if (other.hasInterface()) {
           mergeInterface(other.getInterface());
         }
+        if (other.hasEnumType()) {
+          mergeEnumType(other.getEnumType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -6729,6 +7410,12 @@ public final class ObjectContentsProto {
         }
         if (hasInterface()) {
           if (!getInterface().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasEnumType()) {
+          if (!getEnumType().isInitialized()) {
             
             return false;
           }
@@ -8000,6 +8687,123 @@ public final class ObjectContentsProto {
         return interfaceBuilder_;
       }
 
+      // optional .ObjectContents.Enum enum_type = 13;
+      private ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum enumType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder> enumTypeBuilder_;
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public boolean hasEnumType() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum getEnumType() {
+        if (enumTypeBuilder_ == null) {
+          return enumType_;
+        } else {
+          return enumTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public Builder setEnumType(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum value) {
+        if (enumTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          enumType_ = value;
+          onChanged();
+        } else {
+          enumTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public Builder setEnumType(
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder builderForValue) {
+        if (enumTypeBuilder_ == null) {
+          enumType_ = builderForValue.build();
+          onChanged();
+        } else {
+          enumTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public Builder mergeEnumType(ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum value) {
+        if (enumTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00001000) == 0x00001000) &&
+              enumType_ != ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance()) {
+            enumType_ =
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.newBuilder(enumType_).mergeFrom(value).buildPartial();
+          } else {
+            enumType_ = value;
+          }
+          onChanged();
+        } else {
+          enumTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public Builder clearEnumType() {
+        if (enumTypeBuilder_ == null) {
+          enumType_ = ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
+          onChanged();
+        } else {
+          enumTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00001000);
+        return this;
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder getEnumTypeBuilder() {
+        bitField0_ |= 0x00001000;
+        onChanged();
+        return getEnumTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      public ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder getEnumTypeOrBuilder() {
+        if (enumTypeBuilder_ != null) {
+          return enumTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return enumType_;
+        }
+      }
+      /**
+       * <code>optional .ObjectContents.Enum enum_type = 13;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder> 
+          getEnumTypeFieldBuilder() {
+        if (enumTypeBuilder_ == null) {
+          enumTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.Enum.Builder, ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder>(
+                  enumType_,
+                  getParentForChildren(),
+                  isClean());
+          enumType_ = null;
+        }
+        return enumTypeBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObjectContents)
     }
 
@@ -8031,6 +8835,11 @@ public final class ObjectContentsProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ObjectContents_Struct_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_ObjectContents_Enum_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ObjectContents_Enum_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_ObjectContents_Map_descriptor;
   private static
@@ -8065,7 +8874,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025object_contents.proto\032\013delta.proto\"\321\010\n" +
+      "\n\025object_contents.proto\032\013delta.proto\"\266\t\n" +
       "\016ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030" +
       "\002 \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueTyp" +
       "e\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceTyp" +
@@ -8078,23 +8887,26 @@ public final class ObjectContentsProto {
       " \001(\0132\036.ObjectContents.InternalStruct\022+\n\013" +
       "struct_type\030\013 \001(\0132\026.ObjectContents.Struc" +
       "t\022,\n\tinterface\030\014 \001(\0132\031.ObjectContents.In" +
-      "terface\032M\n\023InternalStructField\0226\n\030field_" +
-      "contents_reference\030\001 \002(\0132\024.Delta.Referen" +
-      "ceType\032e\n\016InternalStruct\022\036\n\026struct_type_" +
-      "class_name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.Objec" +
-      "tContents.InternalStructField\032P\n\006Struct\022" +
-      "&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\022" +
-      "\036\n\026struct_type_class_name\030\002 \002(\t\032g\n\003Map\022&",
-      "\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\022\033" +
-      "\n\023key_type_class_name\030\002 \002(\t\022\033\n\023val_type_" +
-      "class_name\030\003 \002(\t\0323\n\tInterface\022&\n\010ref_typ" +
-      "e\030\001 \002(\0132\024.Delta.ReferenceType\032K\n\004List\022&\n" +
-      "\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n" +
-      "\023val_type_class_name\030\002 \002(\t\032G\n\013InternalMa" +
-      "p\022\033\n\023key_type_class_name\030\001 \002(\t\022\033\n\023val_ty" +
-      "pe_class_name\030\002 \002(\t\032+\n\014InternalList\022\033\n\023v" +
-      "al_type_class_name\030\001 \002(\tB5\n\036ralph_local_" +
-      "version_protobuffsB\023ObjectContentsProto"
+      "terface\022\'\n\tenum_type\030\r \001(\0132\024.ObjectConte" +
+      "nts.Enum\032M\n\023InternalStructField\0226\n\030field" +
+      "_contents_reference\030\001 \002(\0132\024.Delta.Refere" +
+      "nceType\032e\n\016InternalStruct\022\036\n\026struct_type" +
+      "_class_name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.Obje" +
+      "ctContents.InternalStructField\032P\n\006Struct" +
+      "\022&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType",
+      "\022\036\n\026struct_type_class_name\030\002 \002(\t\032:\n\004Enum" +
+      "\022\034\n\024enum_type_class_name\030\001 \002(\t\022\024\n\014enum_o" +
+      "rdinal\030\002 \002(\005\032g\n\003Map\022&\n\010ref_type\030\001 \002(\0132\024." +
+      "Delta.ReferenceType\022\033\n\023key_type_class_na" +
+      "me\030\002 \002(\t\022\033\n\023val_type_class_name\030\003 \002(\t\0323\n" +
+      "\tInterface\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Ref" +
+      "erenceType\032K\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.D" +
+      "elta.ReferenceType\022\033\n\023val_type_class_nam" +
+      "e\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_type_class" +
+      "_name\030\001 \002(\t\022\033\n\023val_type_class_name\030\002 \002(\t",
+      "\032+\n\014InternalList\022\033\n\023val_type_class_name\030" +
+      "\001 \002(\tB5\n\036ralph_local_version_protobuffsB" +
+      "\023ObjectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8106,7 +8918,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_descriptor,
-              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", });
+              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", "EnumType", });
           internal_static_ObjectContents_InternalStructField_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(0);
           internal_static_ObjectContents_InternalStructField_fieldAccessorTable = new
@@ -8125,32 +8937,38 @@ public final class ObjectContentsProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Struct_descriptor,
               new java.lang.String[] { "RefType", "StructTypeClassName", });
-          internal_static_ObjectContents_Map_descriptor =
+          internal_static_ObjectContents_Enum_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(3);
+          internal_static_ObjectContents_Enum_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_ObjectContents_Enum_descriptor,
+              new java.lang.String[] { "EnumTypeClassName", "EnumOrdinal", });
+          internal_static_ObjectContents_Map_descriptor =
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(4);
           internal_static_ObjectContents_Map_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Map_descriptor,
               new java.lang.String[] { "RefType", "KeyTypeClassName", "ValTypeClassName", });
           internal_static_ObjectContents_Interface_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(4);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(5);
           internal_static_ObjectContents_Interface_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_Interface_descriptor,
               new java.lang.String[] { "RefType", });
           internal_static_ObjectContents_List_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(5);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(6);
           internal_static_ObjectContents_List_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_List_descriptor,
               new java.lang.String[] { "RefType", "ValTypeClassName", });
           internal_static_ObjectContents_InternalMap_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(6);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(7);
           internal_static_ObjectContents_InternalMap_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalMap_descriptor,
               new java.lang.String[] { "KeyTypeClassName", "ValTypeClassName", });
           internal_static_ObjectContents_InternalList_descriptor =
-            internal_static_ObjectContents_descriptor.getNestedTypes().get(7);
+            internal_static_ObjectContents_descriptor.getNestedTypes().get(8);
           internal_static_ObjectContents_InternalList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_InternalList_descriptor,
