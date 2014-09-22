@@ -1,0 +1,51 @@
+
+
+Enum Day
+{
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY,SUNDAY
+}
+
+Service EnumHolder
+{
+    TVar Enum Day day = Day.Monday;
+    TVar List(element: TVar Enum Day) day_history;
+
+    update()
+    {
+        // record old day, and update to new day.
+        atomically
+        {
+            day_history.append(day);
+            
+            if (day == Day.MONDAY)
+                day = Day.TUESDAY;
+            elif (day == Day.TUESDAY)
+                day = Day.WEDNESDAY;
+            elif (day == Day.WEDNESDAY)
+                day = Day.THURSDAY;
+            elif (day == Day.THURSDAY)
+                day = Day.FRIDAY;
+            elif (day == Day.FRIDAY)
+                day = Day.SATURDAY;
+            elif (day == Day.SATURDAY)
+                day = Day.SUNDAY;
+            elif (day == Day.SUNDAY)
+                day = Day.MONDAY;
+        }
+    }
+
+    get_day() returns Enum Day
+    {
+        return day;
+    }
+
+    get_history_size () returns Number
+    {
+        return day_history.size();
+    }
+
+    get_day_on_history_index(Number history_index) returns Enum Day
+    {
+        return day_history.get(history_index);
+    }
+}

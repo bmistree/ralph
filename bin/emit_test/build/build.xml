@@ -76,6 +76,13 @@
     </antcall>
   </target>
 
+  <target name="replay_enum" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="replay_enum.rph"/>
+      <param name="class_name" value="ReplayEnumJava"/>
+    </antcall>
+  </target>
+  
   <target name="atomic_number_incrementer" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_number_incrementer.rph"/>
