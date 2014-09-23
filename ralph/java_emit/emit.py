@@ -2343,12 +2343,16 @@ public static class %(enum_constructor_class_name)s
     extends EnumConstructorObj < %(enum_name)s> 
 {
     @Override
-    public %(enum_name)s construct(int ordinal)
+    public AtomicEnumVariable<%(enum_name)s> construct(
+        int ordinal,RalphGlobals ralph_globals)
     {
+        %(enum_name)s internal_val = null;
         // -1 ordinal means that held null value
-        if (ordinal == -1)
-            return null;
-        return %(enum_name)s.from_ordinal(ordinal);
+        if (ordinal != -1)
+            internal_val = %(enum_name)s.from_ordinal(ordinal);
+
+        return new AtomicEnumVariable<%(enum_name)s>(
+            false,internal_val,this,ralph_globals);
     }
 }
 // creating this object automatically registers it with version saver.
