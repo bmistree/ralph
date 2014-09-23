@@ -24,7 +24,6 @@ public class ObjectToDelta
     public final static ReferenceToDelta REFERENCE_SERIALIZER =
         new ReferenceToDelta();
 
-
     private static class ReferenceToDelta
         implements ILocalDeltaSerializer<IReference>
     {

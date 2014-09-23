@@ -38,7 +38,7 @@ public class BaseTypeVersionHelpers
         INTERNAL_LIST_TYPE_VERSION_HELPER =
         new InternalContainerTypeVersionHelper<Integer>(
             INTEGER_KEYED_LIST_DELTA_SERIALIZER);
-    
+
     public final static VersionHelper ENUM_VERSION_HELPER = null;
     public final static VersionHelper INTERFACE_VERSION_HELPER = null;
     public final static VersionHelper SERVICE_FACTORY_VERSION_HELPER = null;
