@@ -13,6 +13,7 @@ import ralph.IAtomicListVariableFactory;
 import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
 import ralph.InternalStructBaseClass;
+import ralph.EnumConstructorObj;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -21,7 +22,8 @@ import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
 public class ObjectContentsDeserializers
 {
     public static RalphObject deserialize(
-        ObjectContents obj_contents, RalphGlobals ralph_globals)
+        ObjectContents obj_contents, RalphGlobals ralph_globals,
+        ILocalVersionReplayer local_version_replayer)
     {
         // See note on top of force_initialization in
         // BaseAtomicMapVariableFactory.
@@ -61,7 +63,18 @@ public class ObjectContentsDeserializers
                 Util.logger_assert(
                     "Unknown how to deserialize atomic val type.");
                 //// END DEBUG
+            }
+            else if (obj_contents.hasEnumType())
+            {
+                ObjectContents.Enum enum_msg = obj_contents.getEnumType();
+                String enum_constructor_obj_class_name =
+                    enum_msg.getEnumConstructorObjClassName();
+                int ordinal = enum_msg.getEnumOrdinal();
 
+                EnumConstructorObj enum_constructor =
+                    local_version_replayer.get_enum_constructor_obj(
+                        enum_constructor_obj_class_name);
+                return enum_constructor.construct(ordinal,ralph_globals);
             }
             else if (obj_contents.hasMapType())
             {                

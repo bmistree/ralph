@@ -36,7 +36,8 @@ public class ReconstructionContext implements IReconstructionContext
             
         RalphObject ralph_object =
             ObjectContentsDeserializers.deserialize(
-                initial_contents,ralph_globals);
+                initial_contents,ralph_globals,
+                local_version_replayer);
 
         // plays deltas forward when reconstructing object.  
         ralph_object.replay(
