@@ -88,6 +88,20 @@ public final class DeltaProto {
      */
     ralph_local_version_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder getContainerDeltaOrBuilder(
         int index);
+
+    // optional .Delta.EnumDelta enum_delta = 4;
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    boolean hasEnumDelta();
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta getEnumDelta();
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder getEnumDeltaOrBuilder();
   }
   /**
    * Protobuf type {@code Delta}
@@ -172,6 +186,19 @@ public final class DeltaProto {
                 mutable_bitField0_ |= 0x00000004;
               }
               containerDelta_.add(input.readMessage(ralph_local_version_protobuffs.DeltaProto.Delta.ContainerDelta.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = enumDelta_.toBuilder();
+              }
+              enumDelta_ = input.readMessage(ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(enumDelta_);
+                enumDelta_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
           }
@@ -2149,6 +2176,606 @@ public final class DeltaProto {
       // @@protoc_insertion_point(class_scope:Delta.ValueType)
     }
 
+    public interface EnumDeltaOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required string enum_constructor_obj_class_name = 1;
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      boolean hasEnumConstructorObjClassName();
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      java.lang.String getEnumConstructorObjClassName();
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getEnumConstructorObjClassNameBytes();
+
+      // required int32 enum_ordinal = 2;
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      boolean hasEnumOrdinal();
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      int getEnumOrdinal();
+    }
+    /**
+     * Protobuf type {@code Delta.EnumDelta}
+     */
+    public static final class EnumDelta extends
+        com.google.protobuf.GeneratedMessage
+        implements EnumDeltaOrBuilder {
+      // Use EnumDelta.newBuilder() to construct.
+      private EnumDelta(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private EnumDelta(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final EnumDelta defaultInstance;
+      public static EnumDelta getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public EnumDelta getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private EnumDelta(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                enumConstructorObjClassName_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                enumOrdinal_ = input.readInt32();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_local_version_protobuffs.DeltaProto.internal_static_Delta_EnumDelta_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_local_version_protobuffs.DeltaProto.internal_static_Delta_EnumDelta_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.class, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<EnumDelta> PARSER =
+          new com.google.protobuf.AbstractParser<EnumDelta>() {
+        public EnumDelta parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new EnumDelta(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<EnumDelta> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required string enum_constructor_obj_class_name = 1;
+      public static final int ENUM_CONSTRUCTOR_OBJ_CLASS_NAME_FIELD_NUMBER = 1;
+      private java.lang.Object enumConstructorObjClassName_;
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      public boolean hasEnumConstructorObjClassName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      public java.lang.String getEnumConstructorObjClassName() {
+        java.lang.Object ref = enumConstructorObjClassName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            enumConstructorObjClassName_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string enum_constructor_obj_class_name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEnumConstructorObjClassNameBytes() {
+        java.lang.Object ref = enumConstructorObjClassName_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          enumConstructorObjClassName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // required int32 enum_ordinal = 2;
+      public static final int ENUM_ORDINAL_FIELD_NUMBER = 2;
+      private int enumOrdinal_;
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      public boolean hasEnumOrdinal() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required int32 enum_ordinal = 2;</code>
+       *
+       * <pre>
+       * -1 if holds null
+       * </pre>
+       */
+      public int getEnumOrdinal() {
+        return enumOrdinal_;
+      }
+
+      private void initFields() {
+        enumConstructorObjClassName_ = "";
+        enumOrdinal_ = 0;
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasEnumConstructorObjClassName()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasEnumOrdinal()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getEnumConstructorObjClassNameBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeInt32(2, enumOrdinal_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getEnumConstructorObjClassNameBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt32Size(2, enumOrdinal_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code Delta.EnumDelta}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_local_version_protobuffs.DeltaProto.internal_static_Delta_EnumDelta_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_local_version_protobuffs.DeltaProto.internal_static_Delta_EnumDelta_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.class, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder.class);
+        }
+
+        // Construct using ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          enumConstructorObjClassName_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          enumOrdinal_ = 0;
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_local_version_protobuffs.DeltaProto.internal_static_Delta_EnumDelta_descriptor;
+        }
+
+        public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta getDefaultInstanceForType() {
+          return ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
+        }
+
+        public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta build() {
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta buildPartial() {
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta result = new ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.enumConstructorObjClassName_ = enumConstructorObjClassName_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.enumOrdinal_ = enumOrdinal_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta) {
+            return mergeFrom((ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta other) {
+          if (other == ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance()) return this;
+          if (other.hasEnumConstructorObjClassName()) {
+            bitField0_ |= 0x00000001;
+            enumConstructorObjClassName_ = other.enumConstructorObjClassName_;
+            onChanged();
+          }
+          if (other.hasEnumOrdinal()) {
+            setEnumOrdinal(other.getEnumOrdinal());
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasEnumConstructorObjClassName()) {
+            
+            return false;
+          }
+          if (!hasEnumOrdinal()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required string enum_constructor_obj_class_name = 1;
+        private java.lang.Object enumConstructorObjClassName_ = "";
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public boolean hasEnumConstructorObjClassName() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public java.lang.String getEnumConstructorObjClassName() {
+          java.lang.Object ref = enumConstructorObjClassName_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            enumConstructorObjClassName_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getEnumConstructorObjClassNameBytes() {
+          java.lang.Object ref = enumConstructorObjClassName_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            enumConstructorObjClassName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public Builder setEnumConstructorObjClassName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          enumConstructorObjClassName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public Builder clearEnumConstructorObjClassName() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          enumConstructorObjClassName_ = getDefaultInstance().getEnumConstructorObjClassName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string enum_constructor_obj_class_name = 1;</code>
+         */
+        public Builder setEnumConstructorObjClassNameBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          enumConstructorObjClassName_ = value;
+          onChanged();
+          return this;
+        }
+
+        // required int32 enum_ordinal = 2;
+        private int enumOrdinal_ ;
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public boolean hasEnumOrdinal() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public int getEnumOrdinal() {
+          return enumOrdinal_;
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public Builder setEnumOrdinal(int value) {
+          bitField0_ |= 0x00000002;
+          enumOrdinal_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required int32 enum_ordinal = 2;</code>
+         *
+         * <pre>
+         * -1 if holds null
+         * </pre>
+         */
+        public Builder clearEnumOrdinal() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          enumOrdinal_ = 0;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:Delta.EnumDelta)
+      }
+
+      static {
+        defaultInstance = new EnumDelta(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:Delta.EnumDelta)
+    }
+
     public interface ReferenceTypeOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
@@ -2774,10 +3401,33 @@ public final class DeltaProto {
       return containerDelta_.get(index);
     }
 
+    // optional .Delta.EnumDelta enum_delta = 4;
+    public static final int ENUM_DELTA_FIELD_NUMBER = 4;
+    private ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta enumDelta_;
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    public boolean hasEnumDelta() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta getEnumDelta() {
+      return enumDelta_;
+    }
+    /**
+     * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+     */
+    public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder getEnumDeltaOrBuilder() {
+      return enumDelta_;
+    }
+
     private void initFields() {
       value_ = ralph_local_version_protobuffs.DeltaProto.Delta.ValueType.getDefaultInstance();
       reference_ = ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
       containerDelta_ = java.util.Collections.emptyList();
+      enumDelta_ = ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2786,6 +3436,12 @@ public final class DeltaProto {
 
       for (int i = 0; i < getContainerDeltaCount(); i++) {
         if (!getContainerDelta(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasEnumDelta()) {
+        if (!getEnumDelta().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -2805,6 +3461,9 @@ public final class DeltaProto {
       }
       for (int i = 0; i < containerDelta_.size(); i++) {
         output.writeMessage(3, containerDelta_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(4, enumDelta_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2826,6 +3485,10 @@ public final class DeltaProto {
       for (int i = 0; i < containerDelta_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, containerDelta_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, enumDelta_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2938,6 +3601,7 @@ public final class DeltaProto {
           getValueFieldBuilder();
           getReferenceFieldBuilder();
           getContainerDeltaFieldBuilder();
+          getEnumDeltaFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2964,6 +3628,12 @@ public final class DeltaProto {
         } else {
           containerDeltaBuilder_.clear();
         }
+        if (enumDeltaBuilder_ == null) {
+          enumDelta_ = ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
+        } else {
+          enumDeltaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -3017,6 +3687,14 @@ public final class DeltaProto {
         } else {
           result.containerDelta_ = containerDeltaBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (enumDeltaBuilder_ == null) {
+          result.enumDelta_ = enumDelta_;
+        } else {
+          result.enumDelta_ = enumDeltaBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3065,6 +3743,9 @@ public final class DeltaProto {
             }
           }
         }
+        if (other.hasEnumDelta()) {
+          mergeEnumDelta(other.getEnumDelta());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3072,6 +3753,12 @@ public final class DeltaProto {
       public final boolean isInitialized() {
         for (int i = 0; i < getContainerDeltaCount(); i++) {
           if (!getContainerDelta(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasEnumDelta()) {
+          if (!getEnumDelta().isInitialized()) {
             
             return false;
           }
@@ -3662,6 +4349,123 @@ public final class DeltaProto {
         return containerDeltaBuilder_;
       }
 
+      // optional .Delta.EnumDelta enum_delta = 4;
+      private ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta enumDelta_ = ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder> enumDeltaBuilder_;
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public boolean hasEnumDelta() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta getEnumDelta() {
+        if (enumDeltaBuilder_ == null) {
+          return enumDelta_;
+        } else {
+          return enumDeltaBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public Builder setEnumDelta(ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta value) {
+        if (enumDeltaBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          enumDelta_ = value;
+          onChanged();
+        } else {
+          enumDeltaBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public Builder setEnumDelta(
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder builderForValue) {
+        if (enumDeltaBuilder_ == null) {
+          enumDelta_ = builderForValue.build();
+          onChanged();
+        } else {
+          enumDeltaBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public Builder mergeEnumDelta(ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta value) {
+        if (enumDeltaBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              enumDelta_ != ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance()) {
+            enumDelta_ =
+              ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.newBuilder(enumDelta_).mergeFrom(value).buildPartial();
+          } else {
+            enumDelta_ = value;
+          }
+          onChanged();
+        } else {
+          enumDeltaBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public Builder clearEnumDelta() {
+        if (enumDeltaBuilder_ == null) {
+          enumDelta_ = ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
+          onChanged();
+        } else {
+          enumDeltaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder getEnumDeltaBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getEnumDeltaFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      public ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder getEnumDeltaOrBuilder() {
+        if (enumDeltaBuilder_ != null) {
+          return enumDeltaBuilder_.getMessageOrBuilder();
+        } else {
+          return enumDelta_;
+        }
+      }
+      /**
+       * <code>optional .Delta.EnumDelta enum_delta = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder> 
+          getEnumDeltaFieldBuilder() {
+        if (enumDeltaBuilder_ == null) {
+          enumDeltaBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDelta.Builder, ralph_local_version_protobuffs.DeltaProto.Delta.EnumDeltaOrBuilder>(
+                  enumDelta_,
+                  getParentForChildren(),
+                  isClean());
+          enumDelta_ = null;
+        }
+        return enumDeltaBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:Delta)
     }
 
@@ -3689,6 +4493,11 @@ public final class DeltaProto {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Delta_ValueType_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_Delta_EnumDelta_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_Delta_EnumDelta_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_Delta_ReferenceType_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3702,20 +4511,23 @@ public final class DeltaProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013delta.proto\"\335\003\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
+      "\n\013delta.proto\"\317\004\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
       ".Delta.ValueType\022\'\n\treference\030\002 \001(\0132\024.De" +
       "lta.ReferenceType\022.\n\017container_delta\030\003 \003" +
-      "(\0132\025.Delta.ContainerDelta\032\215\001\n\016ContainerD" +
-      "elta\022\'\n\007op_type\030\001 \002(\0162\026.Delta.ContainerO" +
-      "pType\022\035\n\003key\030\002 \002(\0132\020.Delta.ValueType\0223\n\025" +
-      "what_added_or_written\030\003 \001(\0132\024.Delta.Refe" +
-      "renceType\032h\n\tValueType\022\013\n\003num\030\001 \001(\001\022\020\n\010n" +
-      "ull_num\030\002 \001(\010\022\014\n\004text\030\003 \001(\t\022\021\n\tnull_text" +
-      "\030\004 \001(\010\022\n\n\002tf\030\005 \001(\010\022\017\n\007null_tf\030\006 \001(\010\032\"\n\rR",
-      "eferenceType\022\021\n\treference\030\001 \001(\t\"<\n\017Conta" +
-      "inerOpType\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE" +
-      "\020\002\022\t\n\005CLEAR\020\003B,\n\036ralph_local_version_pro" +
-      "tobuffsB\nDeltaProto"
+      "(\0132\025.Delta.ContainerDelta\022$\n\nenum_delta\030" +
+      "\004 \001(\0132\020.Delta.EnumDelta\032\215\001\n\016ContainerDel" +
+      "ta\022\'\n\007op_type\030\001 \002(\0162\026.Delta.ContainerOpT" +
+      "ype\022\035\n\003key\030\002 \002(\0132\020.Delta.ValueType\0223\n\025wh" +
+      "at_added_or_written\030\003 \001(\0132\024.Delta.Refere" +
+      "nceType\032h\n\tValueType\022\013\n\003num\030\001 \001(\001\022\020\n\010nul" +
+      "l_num\030\002 \001(\010\022\014\n\004text\030\003 \001(\t\022\021\n\tnull_text\030\004",
+      " \001(\010\022\n\n\002tf\030\005 \001(\010\022\017\n\007null_tf\030\006 \001(\010\032J\n\tEnu" +
+      "mDelta\022\'\n\037enum_constructor_obj_class_nam" +
+      "e\030\001 \002(\t\022\024\n\014enum_ordinal\030\002 \002(\005\032\"\n\rReferen" +
+      "ceType\022\021\n\treference\030\001 \001(\t\"<\n\017ContainerOp" +
+      "Type\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE\020\002\022\t\n\005" +
+      "CLEAR\020\003B,\n\036ralph_local_version_protobuff" +
+      "sB\nDeltaProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3727,7 +4539,7 @@ public final class DeltaProto {
           internal_static_Delta_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_descriptor,
-              new java.lang.String[] { "Value", "Reference", "ContainerDelta", });
+              new java.lang.String[] { "Value", "Reference", "ContainerDelta", "EnumDelta", });
           internal_static_Delta_ContainerDelta_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(0);
           internal_static_Delta_ContainerDelta_fieldAccessorTable = new
@@ -3740,8 +4552,14 @@ public final class DeltaProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ValueType_descriptor,
               new java.lang.String[] { "Num", "NullNum", "Text", "NullText", "Tf", "NullTf", });
-          internal_static_Delta_ReferenceType_descriptor =
+          internal_static_Delta_EnumDelta_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(2);
+          internal_static_Delta_EnumDelta_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_Delta_EnumDelta_descriptor,
+              new java.lang.String[] { "EnumConstructorObjClassName", "EnumOrdinal", });
+          internal_static_Delta_ReferenceType_descriptor =
+            internal_static_Delta_descriptor.getNestedTypes().get(3);
           internal_static_Delta_ReferenceType_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ReferenceType_descriptor,

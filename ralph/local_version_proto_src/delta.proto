@@ -31,7 +31,16 @@ message Delta
         
         optional bool tf = 5;
         optional bool null_tf = 6;
+
     }
+
+    message EnumDelta
+    {
+        required string enum_constructor_obj_class_name = 1;
+        // -1 if holds null
+        required int32 enum_ordinal = 2;
+    }
+    
 
     message ReferenceType
     {
@@ -42,7 +51,10 @@ message Delta
 
     optional ValueType value = 1;
     optional ReferenceType reference = 2;
+    
     // repeated because may transactionally perform multiple
     // operations on same container.
     repeated ContainerDelta container_delta = 3;
+    
+    optional EnumDelta enum_delta = 4;
 }
