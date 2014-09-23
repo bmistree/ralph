@@ -1,6 +1,5 @@
 #include 'enum.rph'
 alias Enum Day as 'EnumJava.Day';
-alias Enum Empty as 'EnumJava.Empty';
 alias Interface IEnumTest as 'EnumJava.IEnumTest';
 
 Endpoint Test implements Interface IEnumTest
