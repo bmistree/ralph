@@ -865,8 +865,8 @@ new %(java_type_statement)s (
             enum_version_helper_obj_name = emit_fully_qualified_enum_version_helper_singleton_name(
                 argument_type)
             new_ralph_variable = (
-                'new %s (false,%s,%s,ralph_globals)' %
-                (java_type_statement,enum_constructor_obj_name,
+                'new %s (false,%s,%s,%s,ralph_globals)' %
+                (java_type_statement,initializer,enum_constructor_obj_name,
                  enum_version_helper_obj_name))
         else:
             new_ralph_variable = (
