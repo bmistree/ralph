@@ -2346,13 +2346,19 @@ public static class %(enum_constructor_class_name)s
     public AtomicEnumVariable<%(enum_name)s> construct(
         int ordinal,RalphGlobals ralph_globals)
     {
+        %(enum_name)s internal_val = construct_enum(ordinal);
+        return new AtomicEnumVariable<%(enum_name)s>(
+            false,internal_val,this,ralph_globals);
+    }
+
+    @Override
+    public %(enum_name)s construct_enum(int ordinal)
+    {
         %(enum_name)s internal_val = null;
         // -1 ordinal means that held null value
         if (ordinal != -1)
             internal_val = %(enum_name)s.from_ordinal(ordinal);
-
-        return new AtomicEnumVariable<%(enum_name)s>(
-            false,internal_val,this,ralph_globals);
+        return internal_val;
     }
 }
 // creating this object automatically registers it with version saver.

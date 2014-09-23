@@ -16,4 +16,10 @@ public abstract class EnumConstructorObj<EnumType extends Enum>
 
     public abstract Variables.AtomicEnumVariable<EnumType> construct(
         int ordinal,RalphGlobals ralph_globals);
+
+    /**
+       Just produces an enum instance, given the ordinal.
+     */
+    public abstract EnumType construct_enum(int ordinal);
+
 }
