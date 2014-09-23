@@ -130,7 +130,7 @@ def emit_interface(interface_node,struct_types_ctx):
     
     # contains emitted code that actually gets returned
     interface_signature = '''
-public static interface %s {
+public static interface %s extends IReference {
 ''' % interface_node.name
 
     interface_body = ''
