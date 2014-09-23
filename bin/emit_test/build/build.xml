@@ -636,7 +636,7 @@
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
-        jar_VersionedEnum">
+        jar_VersionedEnum,jar_VersionedIFace">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -1096,6 +1096,13 @@
       <param name="arg_harness_file_list" value="VersionedEnum.java"/>
     </antcall>
   </target>
+
+  <target name="harness_VersionedIFace"
+          depends="harness_VersionedSetterGetter">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="VersionedIFace.java"/>
+    </antcall>
+  </target>
   
   <target name="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
@@ -1543,6 +1550,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedEnum"/>
       <param name="dest_jar" value="${versioned_enum_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="versioned_iface_jar"
+      value="versioned_iface.jar"/>
+  <target
+      name="jar_VersionedIFace"
+      depends="ralph_VersionedIFace,ralph_to_byte_code,harness_VersionedIFace">
+    <antcall target="make_jar">
+      <param name="main_class" value="VersionedIFace"/>
+      <param name="dest_jar" value="${versioned_iface_jar}"/>
       <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
