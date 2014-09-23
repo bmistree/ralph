@@ -2292,7 +2292,7 @@ public static %(enum_name)s from_ordinal(int ordinal)
         emit_enum_constructor_obj_and_instance(enum_type))
     to_return += indent_string(
         emit_enum_serializer_and_version_helper_singleton(enum_type))
-
+    
     enum_version_helper_name = emit_enum_version_helper_singleton_name(enum_type)
     ### FIXME: kind of stupid that have to special case no logic for
     ### empty enums.
@@ -2325,6 +2325,11 @@ public final static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_
             'enum_locked_map_wrapper_name': emit_enum_locked_map_wrapper_name(enum_type),
             'enum_constructor_obj_name': emit_fully_qualified_enum_constructor_obj_name(enum_type),
             'enum_version_helper_name': enum_version_helper_name})
+
+    # butting this under atomic wrapper because it depends on static
+    # atomic wrapper var.
+    to_return += indent_string(
+        emit_enum_map_list_variable_factories(enum_type))
         
     to_return += '}'
     return to_return
@@ -2368,6 +2373,55 @@ public final static VersionHelper<%(enum_name)s> %(singleton_obj_name)s =
         'singleton_obj_name': singleton_obj_name,
         'enum_constructor_obj_name': enum_constructor_obj_name}
     return to_return
+
+def emit_enum_map_list_variable_factories(enum_type):
+    enum_name = enum_type.get_emit_name()
+    enum_locked_wrapper_name = emit_enum_locked_map_wrapper_name(enum_type)
+    # FIXME: duplicated code with structs
+    
+    # map deserializers
+    param_tuples = (
+        ('Double',
+         'NonAtomicInternalMap.IndexType.DOUBLE',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
+        ('String',
+         'NonAtomicInternalMap.IndexType.STRING',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
+        ('Boolean',
+         'NonAtomicInternalMap.IndexType.BOOLEAN',
+         ('ralph.BaseTypeVersionHelpers.' +
+             'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
+     
+    text = ''
+    for params in param_tuples:
+        key_type = params[0]
+        index_type = params[1]
+        version_helper = params[2]
+        
+        text += '''
+private final static AtomicMapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s>
+    %(key_type)s_atom_map_serializer_%(enum_name)s =
+        new AtomicMapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s> (
+            %(key_type)s.class, %(enum_name)s.class,%(index_type)s,
+            %(enum_locked_wrapper_name)s,%(version_helper)s);
+''' % { 'key_type': key_type,
+        'index_type': index_type,
+        'enum_locked_wrapper_name': enum_locked_wrapper_name,
+        'enum_name': enum_name,
+        'version_helper': version_helper}
+
+    # list deserializers
+    text += '''
+private final static AtomicListVariableFactory<%(enum_name)s,%(enum_name)s>
+    ____atom_list_serializer_%(enum_name)s =
+        new AtomicListVariableFactory<%(enum_name)s,%(enum_name)s> (
+            %(enum_name)s.class,%(enum_locked_wrapper_name)s);
+''' % { 'enum_locked_wrapper_name': enum_locked_wrapper_name,
+        'enum_name': enum_name}
+    return text
+
 
 
 def emit_enum_constructor_obj_and_instance(enum_type):
