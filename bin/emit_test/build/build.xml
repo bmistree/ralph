@@ -112,6 +112,14 @@
     </antcall>
   </target>
 
+  <target name="versioned_iface" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="versioned_iface.rph"/>
+      <param name="class_name" value="VersionedIFaceJava"/>
+    </antcall>
+  </target>
+
+  
   <target name="read_only_speculate" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="read_only_speculate.rph"/>
@@ -273,7 +281,6 @@
     </antcall>
   </target>
   
-
   <target name="atomic_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_list.rph"/>
@@ -644,6 +651,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_VersionedIFace"
+      depends="iface_basic_ralph,basic_ralph,versioned_iface">
+  </target>
+  
   <target
       name="ralph_VersionedEnum"
       depends="replay_enum">

@@ -1,0 +1,49 @@
+#include 'iface_basic_ralph.rph'
+#include 'basic_ralph.rph'
+
+alias Interface ISetterGetter as 'IFaceBasicRalphJava.ISetterGetter';
+alias Service SetterGetter as 'BasicRalphJava.SetterGetter';
+
+Service VersionedInterface implements Interface ISetterGetter
+{
+    TVar Interface ISetterGetter atomic_isetter_getter = null;
+
+    initialize()
+    {
+        Service SetterGetter tmp;
+        atomically
+        {
+            atomic_isetter_getter = tmp;
+        }
+    }
+
+    get_number() returns Number
+    {
+        return atomic_isetter_getter.get_number();
+    }
+
+    set_number(Number new_number)
+    {
+        atomic_isetter_getter.set_number(new_number);
+    }
+    
+    get_text() returns Text
+    {
+        return atomic_isetter_getter.get_text();
+    }
+
+    set_text(Text new_text)
+    {
+        atomic_isetter_getter.set_text(new_text);
+    }
+
+    get_tf() returns TrueFalse
+    {
+        return atomic_isetter_getter.get_tf();
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        atomic_isetter_getter.set_tf(new_tf);
+    }
+}
