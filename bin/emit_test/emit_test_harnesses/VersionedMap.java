@@ -36,6 +36,8 @@ public class VersionedMap
             
             // map should ultimately contain indices 11-19, with
             // values equal to keys.
+
+            VersioningInfo.instance.local_version_saver.flush();
             
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(

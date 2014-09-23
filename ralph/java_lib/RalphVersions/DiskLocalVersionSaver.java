@@ -50,6 +50,13 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
         return enum_constructor_map.get(enum_constructor_obj_classname);
     }
 
+
+    @Override
+    public void flush()
+    {
+        disk_queue.flush();
+    }
+
     
     @Override
     public void save_commit_metadata(CommitMetadata commit_metadata)

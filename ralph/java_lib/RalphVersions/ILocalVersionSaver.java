@@ -17,7 +17,8 @@ public interface ILocalVersionSaver
        objects will point at this version of commit_metadata.
      */
     public void save_commit_metadata(CommitMetadata commit_metadata);
-    
+
+    public void flush();
     
     /**
        @param object_uuid --- The unique name of a versioned object.

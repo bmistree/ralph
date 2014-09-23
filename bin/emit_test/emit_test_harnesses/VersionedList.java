@@ -50,6 +50,8 @@ public class VersionedList
             for (int i = 0; i < num_to_initially_add; i += 2)
                 endpt.remove(0.);
 
+            VersioningInfo.instance.local_version_saver.flush();
+            
             // Now replay
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(

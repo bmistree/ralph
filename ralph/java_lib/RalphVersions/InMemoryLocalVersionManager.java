@@ -57,6 +57,11 @@ public class InMemoryLocalVersionManager
         return enum_constructor_map.get(enum_constructor_obj_classname);
     }
 
+    @Override
+    public void flush()
+    {
+        // nothing to flush
+    }
     
     /**
        @returns null if does not exist.

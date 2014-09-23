@@ -96,6 +96,8 @@ public class VersionedSetterGetter
                 return false;
         }
 
+        VersioningInfo.instance.local_version_saver.flush();
+        
         IReconstructionContext reconstruction_context =
             new ReconstructionContext(
                 VersioningInfo.instance.local_version_replayer,

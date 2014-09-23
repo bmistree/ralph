@@ -33,6 +33,7 @@ public class VersionedStructList
             for (int i = 0; i < num_to_initially_add; ++i)
                 endpt.add_internal((double)i);
 
+            VersioningInfo.instance.local_version_saver.flush();
             
             // Now replay
             IReconstructionContext reconstruction_context =

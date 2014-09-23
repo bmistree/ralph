@@ -1,9 +1,10 @@
 package RalphVersions;
 
 import java.io.File;
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.BufferedWriter;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import com.google.protobuf.MessageLite;
@@ -18,11 +19,14 @@ public class DiskQueue<Type extends MessageLite>
 {
     protected final ArrayBlockingQueue<Type> queue;
 
+    protected final static int BUFFERED_WRITER_BUFFER_SIZE_BYTES = 4*1024;
+    
     // FIXME: should be finals, but do not want to deal with
     // exceptions when creating causing variables to not be
     // initialized.
     protected File file;
-    protected FileOutputStream file_output_stream;
+    //protected FileOutputStream file_output_stream;
+    protected BufferedOutputStream buffered_file_output_stream;
 
     public DiskQueue(int queue_capacity, String filename)
     {
@@ -31,7 +35,10 @@ public class DiskQueue<Type extends MessageLite>
         try
         {
             file = new File(filename);
-            file_output_stream = new FileOutputStream(file);
+            buffered_file_output_stream =
+                new BufferedOutputStream(
+                    new FileOutputStream(file),
+                    BUFFERED_WRITER_BUFFER_SIZE_BYTES);
         }
         catch (IOException ex)
         {
@@ -44,6 +51,19 @@ public class DiskQueue<Type extends MessageLite>
         t.start();
     }
 
+    public void flush()
+    {
+        try
+        {
+            buffered_file_output_stream.flush();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert("Not handling flush exception for DiskQueue.");
+        }
+    }
+    
     @Override
     public void run()
     {
@@ -82,7 +102,7 @@ public class DiskQueue<Type extends MessageLite>
     {
         try
         {
-            item_to_write.writeDelimitedTo(file_output_stream);
+            item_to_write.writeDelimitedTo(buffered_file_output_stream);
         }
         catch(IOException ex)
         {
