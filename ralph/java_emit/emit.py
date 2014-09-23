@@ -59,6 +59,7 @@ import RalphVersions.ILocalVersionSaver;
 import RalphVersions.ILocalVersionReplayer;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
+import RalphVersions.EnumSerializer;
 
 import RalphConnObj.ConnectionObj;
 import RalphConnObj.SingleSideConnection;
@@ -861,9 +862,12 @@ new %(java_type_statement)s (
             internal_enum_class_name = argument_type.get_emit_name()
             enum_constructor_obj_name = emit_fully_qualified_enum_constructor_obj_name(
                 argument_type)
+            enum_version_helper_obj_name = emit_fully_qualified_enum_version_helper_singleton_name(
+                argument_type)
             new_ralph_variable = (
                 'new %s (false,%s,%s,ralph_globals)' %
-                (java_type_statement,enum_constructor_obj_name,internal_enum_class_name))
+                (java_type_statement,enum_constructor_obj_name,
+                 enum_version_helper_obj_name))
         else:
             new_ralph_variable = (
                 'new %s (false,%s,ralph_globals)' %
@@ -1170,18 +1174,27 @@ new %(java_type_text)s  (
         java_type_text = emit_ralph_wrapped_type(type_object)
         enum_constructor_obj_name = emit_fully_qualified_enum_constructor_obj_name(
             type_object)
+        enum_version_helper_obj_name = emit_fully_qualified_enum_version_helper_singleton_name(
+            type_object)
+        
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = ('''
-new  %(java_type_text)s(false,%(initializer_text)s,%(enum_constructor_obj_name)s,ralph_globals)'''
+new  %(java_type_text)s(
+    false,%(initializer_text)s, %(enum_constructor_obj_name)s,
+    %(enum_version_helper_obj_name)s, ralph_globals)'''
                          % {'java_type_text': java_type_text,
                             'initializer_text': initializer_text,
-                            'enum_constructor_obj_name': enum_constructor_obj_name})
+                            'enum_constructor_obj_name': enum_constructor_obj_name,
+                            'enum_version_helper_obj_name': enum_version_helper_obj_name})
         else:
             to_return = ('''
-new %(java_type_text)s(false,%(enum_constructor_obj_name)s,ralph_globals)'''
+new %(java_type_text)s(
+    false,%(enum_constructor_obj_name)s, %(enum_version_helper_obj_name)s,
+    ralph_globals)'''
                          % {'java_type_text': java_type_text,
-                            'enum_constructor_obj_name': enum_constructor_obj_name})
+                            'enum_constructor_obj_name': enum_constructor_obj_name,
+                            'enum_version_helper_obj_name': enum_version_helper_obj_name})
         return to_return
     
     #### DEBUG
@@ -2277,7 +2290,10 @@ public static %(enum_name)s from_ordinal(int ordinal)
 
     to_return += indent_string(
         emit_enum_constructor_obj_and_instance(enum_type))
-            
+    to_return += indent_string(
+        emit_enum_serializer_and_version_helper_singleton(enum_type))
+
+    enum_version_helper_name = emit_enum_version_helper_singleton_name(enum_type)
     ### FIXME: kind of stupid that have to special case no logic for
     ### empty enums.
     if len(enum_type.field_list) != 0:
@@ -2297,7 +2313,8 @@ private static class %(enum_class_name)s_wrapper_class
         %(enum_class_name)s object_to_ensure, RalphGlobals ralph_globals)
     {
         return new AtomicEnumVariable(
-            false,object_to_ensure,%(enum_constructor_obj_name)s,ralph_globals);
+            false,object_to_ensure,%(enum_constructor_obj_name)s,
+            %(enum_version_helper_name)s,ralph_globals);
     }
 }
 
@@ -2306,7 +2323,8 @@ public final static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_
 
     ''' % { 'enum_class_name': enum_type.get_emit_name(),
             'enum_locked_map_wrapper_name': emit_enum_locked_map_wrapper_name(enum_type),
-            'enum_constructor_obj_name': emit_fully_qualified_enum_constructor_obj_name(enum_type)})
+            'enum_constructor_obj_name': emit_fully_qualified_enum_constructor_obj_name(enum_type),
+            'enum_version_helper_name': enum_version_helper_name})
         
     to_return += '}'
     return to_return
@@ -2330,6 +2348,28 @@ def emit_fully_qualified_enum_constructor_obj_name(enum_type):
 def emit_enum_constructor_obj_name(enum_type):
     return 'enum_constructor_obj'
 
+def emit_enum_version_helper_singleton_name(enum_type):
+    return 'enum_version_helper_singleton'
+
+def emit_fully_qualified_enum_version_helper_singleton_name(enum_type):
+    return (
+        enum_type.get_emit_name() + '.' +
+        emit_enum_version_helper_singleton_name(enum_type))
+
+def emit_enum_serializer_and_version_helper_singleton(enum_type):
+    singleton_obj_name = emit_enum_version_helper_singleton_name(enum_type)
+    enum_constructor_obj_name = (
+        emit_fully_qualified_enum_constructor_obj_name(enum_type))
+    to_return = '''
+public final static VersionHelper<%(enum_name)s> %(singleton_obj_name)s =
+    new VersionHelper<%(enum_name)s>(
+        new EnumSerializer<%(enum_name)s>(%(enum_constructor_obj_name)s));
+''' % { 'enum_name': enum_type.get_emit_name(),
+        'singleton_obj_name': singleton_obj_name,
+        'enum_constructor_obj_name': enum_constructor_obj_name}
+    return to_return
+
+
 def emit_enum_constructor_obj_and_instance(enum_type):
     '''
     Like endpoints, each enum requires a separate constructor object
@@ -2338,6 +2378,8 @@ def emit_enum_constructor_obj_and_instance(enum_type):
     '''
     enum_constructor_class_name = emit_enum_constructor_class_name(enum_type)
     enum_constructor_obj_name = emit_enum_constructor_obj_name(enum_type)
+    enum_version_helper_name = emit_enum_version_helper_singleton_name(enum_type)
+
     to_return = '''
 public static class %(enum_constructor_class_name)s
     extends EnumConstructorObj < %(enum_name)s> 
@@ -2348,7 +2390,7 @@ public static class %(enum_constructor_class_name)s
     {
         %(enum_name)s internal_val = construct_enum(ordinal);
         return new AtomicEnumVariable<%(enum_name)s>(
-            false,internal_val,this,ralph_globals);
+            false,internal_val,this,%(enum_version_helper)s,ralph_globals);
     }
 
     @Override
@@ -2366,7 +2408,8 @@ public static final %(enum_constructor_class_name)s %(enum_constructor_obj_name)
     new %(enum_constructor_class_name)s();
 ''' % {'enum_constructor_class_name' : enum_constructor_class_name,
        'enum_name': enum_type.get_emit_name(),
-       'enum_constructor_obj_name': enum_constructor_obj_name}
+       'enum_constructor_obj_name': enum_constructor_obj_name,
+       'enum_version_helper': enum_version_helper_name}
     
     return to_return
 

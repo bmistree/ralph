@@ -401,21 +401,24 @@ public class Variables
         public AtomicEnumVariable(
             boolean _log_changes,T init_val,
             EnumConstructorObj<T> _enum_constructor_obj,
+            VersionHelper<T> version_helper,
             RalphGlobals ralph_globals)
         {
             super(
                 _log_changes,init_val,
-                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),version_helper,
                 ralph_globals,_enum_constructor_obj);
             enum_constructor_obj = _enum_constructor_obj;
         }
         public AtomicEnumVariable(
             boolean _log_changes,
             EnumConstructorObj<T> _enum_constructor_obj,
+            VersionHelper<T> version_helper,
             RalphGlobals ralph_globals)
         {
             this(
-                _log_changes,null,_enum_constructor_obj,ralph_globals);
+                _log_changes,null,_enum_constructor_obj,version_helper,
+                ralph_globals);
         }
         
         @Override
@@ -467,10 +470,11 @@ public class Variables
             SpeculativeAtomicObject<T,T> to_return =
                 new AtomicEnumVariable(
                     log_changes,to_speculate_on,enum_constructor_obj,
-                    ralph_globals);
+                    version_helper,ralph_globals);
             to_return.set_derived(this);
             return to_return;
         }
+        
         @Override
         public void serialize_as_rpc_arg(
             ActiveEvent active_event,
@@ -910,11 +914,12 @@ public class Variables
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes, T init_val,
             EnumConstructorObj<T> _enum_constructor_obj,
+            VersionHelper<T> version_helper,
             RalphGlobals ralph_globals)
         {
             super(
                 init_val,
-                new ValueTypeDataWrapperFactory<T>(),ENUM_VERSION_HELPER,
+                new ValueTypeDataWrapperFactory<T>(),version_helper,
                 ralph_globals);
             enum_constructor_obj = _enum_constructor_obj;
         }
@@ -922,9 +927,12 @@ public class Variables
         public NonAtomicEnumVariable(
             boolean _dummy_log_changes,
             EnumConstructorObj<T> _enum_constructor_obj,
+            VersionHelper<T> version_helper,
             RalphGlobals ralph_globals)
         {
-            this(false,null,_enum_constructor_obj, ralph_globals);
+            this(
+                false,null,_enum_constructor_obj, version_helper,
+                ralph_globals);
         }
 
         @Override
