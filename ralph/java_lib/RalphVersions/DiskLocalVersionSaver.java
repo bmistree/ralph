@@ -22,11 +22,12 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
     private final Map<String,EnumConstructorObj> enum_constructor_map =
         new HashMap<String,EnumConstructorObj>();
     
-    private final DiskQueue<VersionSaverMessages> disk_queue;
+    //private final DiskQueue<VersionSaverMessages.Builder> disk_queue;
+    private final DiskQueue disk_queue;
 
     public DiskLocalVersionSaver(int message_buffer_capacity, String log_filename)
     {
-        disk_queue = new DiskQueue<VersionSaverMessages>(
+        disk_queue = new DiskQueue(
             message_buffer_capacity,log_filename);
     }
 
@@ -65,7 +66,7 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
             VersionUtil.commit_metadata_message_builder(commit_metadata);
         VersionSaverMessages.Builder vsm = VersionSaverMessages.newBuilder();
         vsm.setCommitMetadata(cm_builder);
-        disk_queue.blocking_enqueue_item(vsm.build());
+        disk_queue.blocking_enqueue_item(vsm);
     }
     
     @Override
@@ -78,7 +79,7 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
         
         VersionSaverMessages.Builder vsm = VersionSaverMessages.newBuilder();
         vsm.setVersionData(vd_builder);
-        disk_queue.blocking_enqueue_item(vsm.build());
+        disk_queue.blocking_enqueue_item(vsm);
     }
     
     @Override
@@ -93,7 +94,7 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
         
         VersionSaverMessages.Builder vsm = VersionSaverMessages.newBuilder();
         vsm.setEndpointGlobalMapping(builder);
-        disk_queue.blocking_enqueue_item(vsm.build());
+        disk_queue.blocking_enqueue_item(vsm);
     }
     
     @Override
@@ -106,7 +107,7 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
         
         VersionSaverMessages.Builder vsm = VersionSaverMessages.newBuilder();
         vsm.setObjectConstructor(builder);
-        disk_queue.blocking_enqueue_item(vsm.build());
+        disk_queue.blocking_enqueue_item(vsm);
     }
     
     @Override

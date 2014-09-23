@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 import com.google.protobuf.MessageLite;
 
 import ralph.Util;
@@ -14,12 +15,12 @@ import ralph.Util;
 /**
    Maintains a queue of items that should get written to disk.
  */
-public class DiskQueue<Type extends MessageLite>
-    implements Runnable
+//public class DiskQueue<Type extends MessageLite>
+public class DiskQueue implements Runnable
 {
-    protected final ArrayBlockingQueue<Type> queue;
+    protected final ArrayBlockingQueue<VersionSaverMessages.Builder> queue;
 
-    protected final static int BUFFERED_WRITER_BUFFER_SIZE_BYTES = 4*1024;
+    protected final static int BUFFERED_WRITER_BUFFER_SIZE_BYTES = 128*1024;
     
     // FIXME: should be finals, but do not want to deal with
     // exceptions when creating causing variables to not be
@@ -30,7 +31,7 @@ public class DiskQueue<Type extends MessageLite>
 
     public DiskQueue(int queue_capacity, String filename)
     {
-        queue = new ArrayBlockingQueue<Type>(queue_capacity);
+        queue = new ArrayBlockingQueue<VersionSaverMessages.Builder>(queue_capacity);
 
         try
         {
@@ -71,7 +72,7 @@ public class DiskQueue<Type extends MessageLite>
         {
             try
             {
-                Type item = queue.take();
+                VersionSaverMessages.Builder item = queue.take();
                 write_item(item);
             }
             catch (InterruptedException ex)
@@ -83,7 +84,7 @@ public class DiskQueue<Type extends MessageLite>
         }
     }
     
-    public void blocking_enqueue_item(Type item_to_enqueue)
+    public void blocking_enqueue_item(VersionSaverMessages.Builder item_to_enqueue)
     {
         // blocks until available space in queue to put item.
         try
@@ -98,11 +99,11 @@ public class DiskQueue<Type extends MessageLite>
         }
     }
     
-    protected void write_item(Type item_to_write)
+    protected void write_item(VersionSaverMessages.Builder item_to_write)
     {
         try
         {
-            item_to_write.writeDelimitedTo(buffered_file_output_stream);
+            item_to_write.build().writeDelimitedTo(buffered_file_output_stream);
         }
         catch(IOException ex)
         {
