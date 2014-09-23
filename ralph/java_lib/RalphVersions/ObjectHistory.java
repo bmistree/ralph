@@ -8,6 +8,7 @@ import java.util.Set;
 import ralph.RalphObject;
 import ralph.RalphInternalMapInterface;
 import ralph.RalphInternalListInterface;
+import ralph.EnumConstructorObj;
 import RalphExceptions.BackoutException;
 import ralph.IInternalReferenceHolder;
 import ralph.Util;
@@ -160,6 +161,26 @@ public class ObjectHistory
         }
     }
 
+    public static <EnumType extends Enum> void replay_enum(
+        RalphObject<EnumType,EnumType> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until,
+        ILocalVersionReplayer replayer)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            SingleObjectChange.<EnumType>enum_incorporate_single_object_change(
+                change,to_replay_on,replayer);
+        }
+    }
+
+    
     public static void replay_text(
         RalphObject<String,String> to_replay_on,
         ObjectHistory obj_history,Long to_play_until)
@@ -222,6 +243,26 @@ public class ObjectHistory
             to_incorporate_into.direct_set_val(internal_number);
         }
 
+        public static <EnumType extends Enum> void enum_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<EnumType,EnumType> to_incorporate_into,
+            ILocalVersionReplayer replayer)
+        {
+            Delta.EnumDelta enum_delta = change.delta.getEnumDelta();
+            String enum_constructor_obj_class_name =
+                enum_delta.getEnumConstructorObjClassName();
+            int enum_ordinal = enum_delta.getEnumOrdinal();
+            
+            EnumConstructorObj<EnumType> enum_constructor =
+                (EnumConstructorObj<EnumType>) replayer.get_enum_constructor_obj(
+                    enum_constructor_obj_class_name);
+
+            EnumType internal_enum =
+                enum_constructor.construct_enum(enum_ordinal);
+            to_incorporate_into.direct_set_val(internal_enum);
+        }
+
+        
         public static void text_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<String,String> to_incorporate_into)

@@ -420,6 +420,17 @@ public class Variables
                 _log_changes,null,_enum_constructor_obj,version_helper,
                 ralph_globals);
         }
+
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            ObjectHistory.<T>replay_enum(
+                this,obj_history,to_play_until,
+                reconstruction_context.get_local_version_replayer());
+        }
+
         
         @Override
         public ObjectContents serialize_contents(
