@@ -10,6 +10,7 @@
   />
 
   <!-- global properties for this build file -->
+  <property name="jar_dir" location="${lib_test_dir}/jar_dir"/>
   <property name="build.dir" location="${lib_test_dir}/classes"/>
   <property name="src.dir" location="${lib_test_dir}/../test_src"/>
   <property
@@ -18,12 +19,29 @@
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
-      name="proto_class_path" location="${lib_build_path}/../protobuf-java-2.5.0.jar"/>
+      name="proto_jar_dir" location="${lib_build_path}/../"/>
+  <property
+      name="proto_class_path" location="${proto_jar_dir}/protobuf-java-2.5.0.jar"/>
+  
+  <property
+      name="java_lib_test_package" value="java_lib_test"/>
+
+  <property
+      name="no_log_config"
+      location="${lib_build_path}/no_log_config/config.properties"/>
+  <property
+      name="in_memory_log_config"
+      location="${lib_build_path}/in_memory_log_config/config.properties"/>
+  <property
+      name="disk_log_config"
+      location="${lib_build_path}/disk_log_config/config.properties"/>
+
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
     <echo message="Setting up build directory for tests"/>
     <mkdir dir="${build.dir}"/>
+    <mkdir dir="${jar_dir}"/>
   </target>
 
   <!-- compile java libraries -->
@@ -49,124 +67,143 @@
 
   <!-- Run all tests specified -->
   <target
-      name="run_all"
+      name="jarify_all"
       depends=
-         "run_WriteReadTVar,run_PartnersNoConflict,
-         run_PartnersModifyRemoteState,run_NonAtomic,run_MapTVar,run_ListTVar,
-         run_ExtendedListTVar">
+         "jar_WriteReadTVar,jar_PartnersNoConflict,
+          jar_PartnersModifyRemoteState,jar_NonAtomic,jar_MapTVar,jar_ListTVar,
+          jar_ExtendedListTVar">
   </target>
   
   <!-- List individual tests -->
+  <property
+      name="write_read_tvar_jar"
+      value="write_read_tvar.jar"/>
   <target
-      name="run_WriteReadTVar"
+      name="jar_WriteReadTVar"
       depends="compile_all"
-      description="Run tvar tests.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.WriteReadTVar"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+      description="Run tvar tests">
+    <antcall target="make_jar">
+      <param name="main_class" value="WriteReadTVar"/>
+      <param name="dest_jar" value="${write_read_tvar_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
+  
 
+  <property
+      name="partners_no_conflict_jar"
+      value="partners_no_conflict.jar"/>
   <target
-      name="run_PartnersNoConflict"
+      name="jar_PartnersNoConflict"
       depends="compile_all"
       description=
-        "Checks that rpcs issued between partners without conflict send and return args.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.PartnersNoConflict"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+          "Checks that rpcs issued between partners without conflict send and return args.">
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnersNoConflict"/>
+      <param name="dest_jar" value="${partners_no_conflict_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
 
-
+  <property
+      name="partners_modify_remote_state_jar"
+      value="map_tvar.jar"/>
   <target
-      name="run_PartnersModifyRemoteState"
+      name="jar_PartnersModifyRemoteState"
       depends="compile_all"
       description="Increments value on remote endpoint.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.PartnersModifyRemoteState"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+    <antcall target="make_jar">
+      <param name="main_class" value="PartnersModifyRemoteState"/>
+      <param name="dest_jar" value="${partners_modify_remote_state_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
 
-    <target
-      name="run_MapTVar"
+  <property
+      name="map_tvar_jar"
+      value="map_tvar.jar"/>
+  <target
+      name="jar_MapTVar"
       depends="compile_all"
       description="Tests can use a map as a tvar.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.MapTVarConflict"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+    <antcall target="make_jar">
+      <param name="main_class" value="MapTVarConflict"/>
+      <param name="dest_jar" value="${map_tvar_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
-
-    <target
-      name="run_ListTVar"
+  
+  <property
+      name="list_tvar_jar"
+      value="list_tvar.jar"/>
+  <target
+      name="jar_ListTVar"
       depends="compile_all"
       description="Tests can use a list as a tvar.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.ListTVarConflict"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+    <antcall target="make_jar">
+      <param name="main_class" value="ListTVarConflict"/>
+      <param name="dest_jar" value="${list_tvar_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
-
-    <target
-      name="run_ExtendedListTVar"
+  
+  <property
+      name="extended_list_tvar_jar"
+      value="extended_list_tvar.jar"/>
+  <target
+      name="jar_ExtendedListTVar"
       depends="compile_all"
       description="Tests can extend a tvar list.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.ExtendedListTVar"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+    <antcall target="make_jar">
+      <param name="main_class" value="ExtendedListTVar"/>
+      <param name="dest_jar" value="${extended_list_tvar_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
 
-    <target
-      name="run_NonAtomic"
+  <property
+      name="non_atomic_jar"
+      value="non_atomic.jar"/>
+  <target
+      name="jar_NonAtomic"
       depends="compile_all"
       description="Tries to non atomic event.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.NonAtomic"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
+    <antcall target="make_jar">
+      <param name="main_class" value="NonAtomic"/>
+      <param name="dest_jar" value="${non_atomic_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
   </target>
 
-  
+
+  <!-- Make a jar -->
+  <target
+      name="make_jar"
+      depends="compile_libs"
+      description="Make a jar">
+    <jar destfile="${jar_dir}/${dest_jar}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${java_lib_test_package}.${main_class}"/>
+        <attribute name="Class-Path" value="${build.dir}:${proto_class_path}"/>
+      </manifest>
+      <fileset dir="${build.dir}"/>
+      <fileset file="${config_properties}"/>
+      <zipgroupfileset dir="${proto_jar_dir}" includes="**/*.jar" />
+    </jar>
+  </target>
+
   
   <!-- Delete the build directory -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
+    <delete dir="${jar_dir}"/>
   </target>
-
-
   
   <target
       name="clean_all"
       depends="clean"
       description="get rid of build dir and all built libs">
-    
     <ant antfile="${lib_build_path}/build.xml" target="clean" />
-    
   </target>
-
   
 </project>
