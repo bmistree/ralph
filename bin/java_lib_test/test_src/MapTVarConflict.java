@@ -1,12 +1,12 @@
 package java_lib_test;
 
-import ralph.VariableStack;
 import ralph.Variables.AtomicMapVariable;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
+import java_lib_test.TestClassUtil.DefaultEndpoint;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -29,21 +29,16 @@ public class MapTVarConflict
 
     public static boolean run_test()
     {
-        Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-
-        AtomicMapVariable<Double,Double,Double> map_tvar =
-            (AtomicMapVariable<Double,Double,Double>)
-            endpt.global_var_stack.get_var_if_exists(
-                TestClassUtil.DefaultEndpoint.MAP_TVAR_NAME);
+        DefaultEndpoint endpt = TestClassUtil.create_default_single_endpoint();
 
         // Populate a few values in map.
-        if (! MapTVarConflict.test_add_values(endpt,map_tvar))
+        if (! MapTVarConflict.test_add_values(endpt,endpt.map_tvar))
             return false;
         // Tests concurrent read of tvar.
-        if (! MapTVarConflict.test_concurrent_read(endpt,map_tvar))
+        if (! MapTVarConflict.test_concurrent_read(endpt,endpt.map_tvar))
             return false;
         // Tests preempted read of tvar.
-        if (! MapTVarConflict.test_preempted_read(endpt,map_tvar))
+        if (! MapTVarConflict.test_preempted_read(endpt,endpt.map_tvar))
             return false;        
 
         return true;

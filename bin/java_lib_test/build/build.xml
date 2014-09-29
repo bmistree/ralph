@@ -45,32 +45,15 @@
         debuglevel="lines,vars,source"
         includeantruntime="false" />
   </target>
-
-  <target
-      name="compile_version_number"
-      depends="init,compile_libs"
-      description="compile library and test files">
-    <echo message="Hello got in here"/>
-    <javac
-        srcdir="${src.dir}"
-        includes="VersionNumber.java"
-        destdir="${build.dir}"
-        classpath="${lib_class_path}:${proto_class_path}"
-        debug="true"
-        debuglevel="lines,vars,source"
-        includeantruntime="false" />
-  </target>
-      
   
 
   <!-- Run all tests specified -->
   <target
       name="run_all"
       depends=
-        "run_WriteReadVarStack,run_WriteReadTVar,run_PartnersNoConflict,
-         run_PartnersModifyRemoteState,run_BasicDefer,run_BasicParallel,
-         run_NonAtomic,run_MapTVar,run_ListTVar,run_ExtendedListTVar,
-         run_UpdateSerializer,run_VersionQuerier">
+         "run_WriteReadTVar,run_PartnersNoConflict,
+         run_PartnersModifyRemoteState,run_NonAtomic,run_MapTVar,run_ListTVar,
+         run_ExtendedListTVar,run_UpdateSerializer,run_VersionQuerier">
   </target>
   
   <!-- List individual tests -->
@@ -81,20 +64,6 @@
     <java
         dir="${build.dir}"
         classname="java_lib_test.UpdateSerializer"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}:
-                   ${build.dir}/ralph_version_protobuffs/*.class:">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
-  <target
-      name="run_VersionNumber"
-      depends="compile_version_number"
-      description="Run version number reconstruction.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.VersionNumber"
         fork="yes"
         classpath="${build.dir}:${proto_class_path}:
                    ${build.dir}/ralph_version_protobuffs/*.class:">
@@ -113,19 +82,6 @@
         fork="yes"
         classpath="${build.dir}:${proto_class_path}:
                    ${build.dir}/ralph_version_protobuffs/*.class:">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
-  <target
-      name="run_WriteReadVarStack"
-      depends="compile_all"
-      description="Run stack tests.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.WriteReadVarStack"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
         <arg line="${args}"/>
     </java>
   </target>
@@ -172,20 +128,6 @@
   </target>
 
     <target
-      name="run_BasicDefer"
-      depends="compile_all"
-      description="Tries to run a defer statement.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.BasicDefer"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
-
-    <target
       name="run_MapTVar"
       depends="compile_all"
       description="Tests can use a map as a tvar.">
@@ -223,21 +165,6 @@
         <arg line="${args}"/>
     </java>
   </target>
-
-  
-    <target
-      name="run_BasicParallel"
-      depends="compile_all"
-      description="Tries to run a parallel statement.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.BasicParallel"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
 
     <target
       name="run_NonAtomic"

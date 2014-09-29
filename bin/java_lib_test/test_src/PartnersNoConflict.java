@@ -88,15 +88,7 @@ public class PartnersNoConflict
                 endpta._act_event_map.create_root_atomic_event(
                     null,endpta,"dummy");
             ExecutingEventContext ctx = endpta.create_context();
-                        
-            // grab num object from base scope
-            RalphObject<Double,Double> num_obj =
-                (RalphObject<Double,Double>)endpta.global_var_stack.get_var_if_exists(
-                    endpta.NUM_TVAR_NAME);
 
-            // push a new scope onto scope stack and then add boolean
-            // and string variables to it.
-            endpta.global_var_stack.push(false);
             String bool_var_name = "bool_var_name";
             String string_var_name = "str_var_name";
 
@@ -111,13 +103,10 @@ public class PartnersNoConflict
                 new Variables.NonAtomicTextVariable(
                     false, init_string_value,endpta.ralph_globals);
             
-            endpta.global_var_stack.add_var(bool_var_name,bool_var);
-            endpta.global_var_stack.add_var(string_var_name,string_var);
-            
             // Issue rpc call to partner
             // set up rpc arguments: pass all as references
             ArrayList<RalphObject> arg_list = new ArrayList<RalphObject>();
-            arg_list.add(num_obj);
+            arg_list.add(endpta.num_tvar);
             arg_list.add(bool_var);
             arg_list.add(string_var);
             
@@ -141,43 +130,7 @@ public class PartnersNoConflict
             ActiveEvent check_event =
                 endpta._act_event_map.create_root_atomic_event(
                     null,endpta,"dummy");
-            
-            // determine what the lcal values should be
-            double expected_final_double_value =
-                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL.doubleValue();
-            boolean expected_final_boolean_value =
-                init_boolean_value.booleanValue();
-            String expected_final_string_value =init_string_value;
-
-            if (num_arg_ref)
-                expected_final_double_value += 1;
-            if (bool_arg_ref)
-                expected_final_boolean_value = !expected_final_boolean_value;
-            if (string_arg_ref)
-                expected_final_string_value += expected_final_string_value;
                 
-
-            double recovered_num =
-                ((Double)num_obj.get_val(check_event)).doubleValue();
-            boolean recovered_bool =
-                ((Boolean) bool_var.get_val(check_event)).booleanValue();
-            String recovered_string =
-                (String) string_var.get_val(check_event);
-
-            if (recovered_num != expected_final_double_value)
-                return false;
-            
-            if (recovered_bool != expected_final_boolean_value)
-                return false;
-            
-            if (!recovered_string.equals(expected_final_string_value))
-                return false;
-
-            // reset number variable to init val (may have been
-            // modified if passed as a reference).
-            num_obj.set_val(
-                check_event,
-                TestClassUtil.DefaultEndpoint.NUM_TVAR_INIT_VAL);
             check_event.local_root_begin_first_phase_commit();
         }
         catch (Exception ex)

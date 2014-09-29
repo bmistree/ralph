@@ -1,6 +1,5 @@
 package java_lib_test;
 
-import ralph.VariableStack;
 import java.util.HashMap;
 import ralph.Variables.AtomicListVariable;
 import ralph.RalphObject;
@@ -8,6 +7,7 @@ import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
+import java_lib_test.TestClassUtil.DefaultEndpoint;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -24,7 +24,7 @@ public class ListTVarConflict
     
     public static void main(String [] args)
     {
-        if (ListTVarConflict.run_test())
+        if (run_test())
             TestClassUtil.print_success(test_name);
         else
             TestClassUtil.print_failure(test_name);
@@ -32,21 +32,16 @@ public class ListTVarConflict
 
     public static boolean run_test()
     {
-        Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-
-        AtomicListVariable<Double,Double> list_tvar =
-            (AtomicListVariable<Double,Double>)
-            endpt.global_var_stack.get_var_if_exists(
-                TestClassUtil.DefaultEndpoint.LIST_TVAR_NAME);
+        DefaultEndpoint endpt = TestClassUtil.create_default_single_endpoint();
 
         // Populate a few values in map.
-        if (! ListTVarConflict.test_add_values(endpt,list_tvar))
+        if (! ListTVarConflict.test_add_values(endpt,endpt.list_tvar))
             return false;
         // Tests concurrent read of tvar.
-        if (! ListTVarConflict.test_concurrent_read(endpt,list_tvar))
+        if (! ListTVarConflict.test_concurrent_read(endpt,endpt.list_tvar))
             return false;
         // Tests preempted read of tvar.
-        if (! ListTVarConflict.test_preempted_read(endpt,list_tvar))
+        if (! ListTVarConflict.test_preempted_read(endpt,endpt.list_tvar))
             return false;        
 
         return true;

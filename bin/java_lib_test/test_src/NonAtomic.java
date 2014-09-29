@@ -1,12 +1,12 @@
 package java_lib_test;
 
-import ralph.VariableStack;
 import ralph.Variables.AtomicNumberVariable;
 import ralph.RalphObject;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RootEventParent;
 import RalphCallResults.RootCallResult.ResultType;
+import java_lib_test.TestClassUtil.DefaultEndpoint;
 
 /**
    Creates an active event that reads and writes to tvar.  checks that
@@ -27,11 +27,8 @@ public class NonAtomic
 
     public static boolean run_test()
     {
-        Endpoint endpt = TestClassUtil.create_default_single_endpoint();
-        AtomicNumberVariable num_tvar =
-            (AtomicNumberVariable) endpt.global_var_stack.get_var_if_exists(
-                TestClassUtil.DefaultEndpoint.NUM_TVAR_NAME);
-
+        DefaultEndpoint endpt = TestClassUtil.create_default_single_endpoint();
+        AtomicNumberVariable num_tvar = endpt.num_tvar;
         // Tests concurrent read of tvar.
         if (! NonAtomic.test_non_atomic_read(endpt,num_tvar))
             return false;

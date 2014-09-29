@@ -1,6 +1,5 @@
 package java_lib_test;
 
-import ralph.VariableStack;
 import ralph.Variables.AtomicListVariable;
 import ralph.ExtendedVariables.ExtendedInternalAtomicList;
 import ralph.RalphObject;
@@ -13,6 +12,7 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import ralph.RalphGlobals;
 import ralph.ICancellableFuture;
 import java.util.concurrent.Future;
+import java_lib_test.TestClassUtil.DefaultEndpoint;
 import static ralph.FutureAlwaysValue.ALWAYS_TRUE_FUTURE;
 import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
 
@@ -46,7 +46,9 @@ public class ExtendedListTVar
         public TestExtendedInternalAtomicNumberList(
             RalphGlobals ralph_globals)
         {
-            super(BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
+            super(
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                Double.class,ralph_globals);
         }
         @Override
         protected ICancellableFuture apply_changes_to_hardware(
@@ -74,17 +76,18 @@ public class ExtendedListTVar
             new AtomicListVariable<Double,Double>(
                 false,
                 extended_internal_list,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,ralph_globals);
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                Double.class,ralph_globals);
         return to_return;
     }
     
     public static boolean run_test()
     {
-        Endpoint endpt = TestClassUtil.create_default_single_endpoint();
+        DefaultEndpoint endpt = TestClassUtil.create_default_single_endpoint();
 
         AtomicListVariable<Double,Double> extended_list_tvar =
             create_extended_list(endpt.ralph_globals);
-        endpt.global_var_stack.add_var(EXTENDED_LIST_NAME,extended_list_tvar);
+        endpt.list_tvar = extended_list_tvar;
         
         // Populate a few values in map.
         if (! ListTVarConflict.test_add_values(endpt,extended_list_tvar))

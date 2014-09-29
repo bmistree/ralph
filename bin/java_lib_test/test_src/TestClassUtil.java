@@ -2,7 +2,6 @@ package java_lib_test;
 
 import ralph.RalphObject;
 import ralph.Variables;
-import ralph.VariableStore;
 import ralph.Variables.AtomicNumberVariable;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
@@ -51,24 +50,40 @@ public class TestClassUtil
        with number tvar named NUM_TVAR_NAME and init val
        NUM_TVAR_INIT_VAL.
      */
-    public static Endpoint create_default_single_endpoint()
+    public static DefaultEndpoint create_default_single_endpoint()
     {
         return build_default_endpoint(new SingleSideConnection());
     }
 
     public static class DefaultEndpoint extends Endpoint
     {
-        public static final String NUM_TVAR_NAME = "num_tvar";
         public static final Double NUM_TVAR_INIT_VAL = new Double (5);
-        public static final String MAP_TVAR_NAME = "map_tvar";
-        public static final String LIST_TVAR_NAME = "list_tvar";
-        
+
+        public final AtomicNumberVariable num_tvar;
+        public final AtomicMapVariable<Double,Double,Double> map_tvar;
+        public AtomicListVariable<Double,Double> list_tvar;
         
         public DefaultEndpoint(
             RalphGlobals ralph_globals,
-            ConnectionObj conn_obj,VariableStore vstore)
+            ConnectionObj conn_obj)
         {
-            super(ralph_globals,conn_obj,vstore);
+            super(ralph_globals,conn_obj,
+                  // passing in null constructor object because
+                  // existing tests do not require
+                  null);
+            
+            num_tvar = new AtomicNumberVariable(
+                false, DefaultEndpoint.NUM_TVAR_INIT_VAL,
+                ralph_globals);
+            map_tvar = new AtomicMapVariable<Double,Double,Double>(
+                false, NonAtomicInternalMap.IndexType.DOUBLE,
+                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                ralph.BaseTypeVersionHelpers.DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
+                Double.class, Double.class, ralph_globals);
+            
+            list_tvar = new AtomicListVariable<Double,Double>(
+                false, BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                Double.class, ralph_globals);
         }
 
         @Override
@@ -125,15 +140,10 @@ public class TestClassUtil
             RalphObject<Double,Double>to_return)
             throws BackoutException
         {
-            RalphObject<Double,Double> num_obj =
-                (RalphObject<Double,Double>)ctx.var_stack.get_var_if_exists(
-                    NUM_TVAR_NAME);            
-            
             double current_val =
-                ((Double)num_obj.get_val(active_event)).doubleValue();
+                ((Double)num_tvar.get_val(active_event)).doubleValue();
             Double new_val = new Double( current_val + 1);
-            num_obj.set_val(active_event,new_val);
-
+            num_tvar.set_val(active_event,new_val);
             to_return.set_val(active_event,new_val);
         }
 
@@ -160,8 +170,6 @@ public class TestClassUtil
     private static DefaultEndpoint build_default_endpoint(
         ConnectionObj conn_obj)
     {
-        VariableStore vstore = new VariableStore(false);
-
         RalphGlobals.Parameters ralph_globals_parameters =
             new RalphGlobals.Parameters();
         ralph_globals_parameters.tcp_port_to_listen_for_connections_on =
@@ -171,35 +179,8 @@ public class TestClassUtil
         RalphGlobals ralph_globals =
             new RalphGlobals(ralph_globals_parameters);
         
-        // adding a number tvar
-        vstore.add_var(
-            DefaultEndpoint.NUM_TVAR_NAME,
-            new AtomicNumberVariable(
-                false,
-                DefaultEndpoint.NUM_TVAR_INIT_VAL,
-                ralph_globals));
-
-        vstore.add_var(
-            DefaultEndpoint.MAP_TVAR_NAME,
-            new AtomicMapVariable<Double,Double,Double>(
-                false,
-                NonAtomicInternalMap.IndexType.DOUBLE,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
-                ralph_globals));
-
-        vstore.add_var(
-            DefaultEndpoint.LIST_TVAR_NAME,
-            new AtomicListVariable<Double,Double>(
-                false,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
-                ralph_globals));
-
-        
         DefaultEndpoint to_return = new DefaultEndpoint(
-            ralph_globals,
-            conn_obj,
-            vstore);
-
+            ralph_globals,conn_obj);
         return to_return;
     }
 
