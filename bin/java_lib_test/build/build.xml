@@ -71,7 +71,7 @@
       depends=
          "jar_WriteReadTVar,jar_PartnersNoConflict,
           jar_PartnersModifyRemoteState,jar_NonAtomic,jar_MapTVar,jar_ListTVar,
-          jar_ExtendedListTVar">
+          jar_ExtendedListTVar,jar_ReplayNumber">
   </target>
   
   <!-- List individual tests -->
@@ -175,7 +175,23 @@
     </antcall>
   </target>
 
+  <property
+      name="replay_number_jar"
+      value="replay_number.jar"/>
+  <target
+      name="jar_ReplayNumber"
+      depends="compile_all"
+      description=
+          "Tries to change an atomic number a bunch of times and then replaying those changes.">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReplayNumber"/>
+      <param name="dest_jar" value="${replay_number_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
 
+
+  
   <!-- Make a jar -->
   <target
       name="make_jar"
