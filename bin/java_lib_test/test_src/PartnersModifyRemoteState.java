@@ -27,7 +27,7 @@ public class PartnersModifyRemoteState
     
     public static void main (String [] args)
     {
-        if (PartnersModifyRemoteState.run_test())
+        if (run_test())
             TestClassUtil.print_success(test_name);
         else
             TestClassUtil.print_failure(test_name);
@@ -70,14 +70,7 @@ public class PartnersModifyRemoteState
                 ctx.hide_partner_call(
                     endpta, root_event,"test_increment_local_num",true,
                     arg_list,null);
-
-
-                // check that value recovered from reference variable
-                // passed in contains correct result.
-                double recovered_value = num_var.get_val(root_event).doubleValue();
-                if (recovered_value != expected_value)
-                    return false;
-
+                
                 // check that can commit changes.
                 root_event.local_root_begin_first_phase_commit();
                 RootEventParent root_event_parent =
@@ -86,6 +79,26 @@ public class PartnersModifyRemoteState
                     root_event_parent.event_complete_queue.take();
                 
                 if (commit_resp != ResultType.COMPLETE)
+                    return false;
+
+                
+                // check that value on other side contains correct
+                // result.
+                ActiveEvent check_event =
+                    endptb._act_event_map.create_root_atomic_event(
+                        null,endptb,"dummy");
+                double other_side_value =
+                    endptb.num_tvar.get_val(check_event).doubleValue();
+                check_event.local_root_begin_first_phase_commit();
+                RootEventParent check_event_parent =
+                    (RootEventParent)check_event.event_parent;
+                ResultType commit_resp_check =
+                    check_event_parent.event_complete_queue.take();
+                
+                if (commit_resp_check != ResultType.COMPLETE)
+                    return false;
+                
+                if (other_side_value != expected_value)
                     return false;
             }
         }

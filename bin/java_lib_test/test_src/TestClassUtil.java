@@ -144,7 +144,6 @@ public class TestClassUtil
                 ((Double)num_tvar.get_val(active_event)).doubleValue();
             Double new_val = new Double( current_val + 1);
             num_tvar.set_val(active_event,new_val);
-            to_return.set_val(active_event,new_val);
         }
 
         
