@@ -53,39 +53,10 @@
       depends=
          "run_WriteReadTVar,run_PartnersNoConflict,
          run_PartnersModifyRemoteState,run_NonAtomic,run_MapTVar,run_ListTVar,
-         run_ExtendedListTVar,run_UpdateSerializer,run_VersionQuerier">
+         run_ExtendedListTVar">
   </target>
   
   <!-- List individual tests -->
-  <target
-      name="run_UpdateSerializer"
-      depends="compile_all"
-      description="Run update serialization test.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.UpdateSerializer"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}:
-                   ${build.dir}/ralph_version_protobuffs/*.class:">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
-  
-  <target
-      name="run_VersionQuerier"
-      depends="compile_all"
-      description="Run version querier test.">
-    <java
-        dir="${build.dir}"
-        classname="java_lib_test.VersionQuerier"
-        fork="yes"
-        classpath="${build.dir}:${proto_class_path}:
-                   ${build.dir}/ralph_version_protobuffs/*.class:">
-        <arg line="${args}"/>
-    </java>
-  </target>
-
   <target
       name="run_WriteReadTVar"
       depends="compile_all"
