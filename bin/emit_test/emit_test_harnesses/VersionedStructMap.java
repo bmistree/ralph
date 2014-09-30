@@ -43,7 +43,6 @@ public class VersionedStructMap
             // now, tries to replay changes to endpoint.  
             ReplayStructMap replayed_endpt =
                 (ReplayStructMap) VersionUtil.rebuild_endpoint(
-                    VersioningInfo.instance.local_version_replayer,
                     endpt._uuid,ralph_globals,reconstruction_context);
 
             if (! replayed_endpt.get_size().equals(endpt.get_size()))

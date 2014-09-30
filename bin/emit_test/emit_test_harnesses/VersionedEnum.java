@@ -40,7 +40,6 @@ public class VersionedEnum
             // now, tries to replay changes to endpoint.  
             EnumHolder replayed_endpt =
                 (EnumHolder) VersionUtil.rebuild_endpoint(
-                    VersioningInfo.instance.local_version_replayer,
                     endpt._uuid,ralph_globals,reconstruction_context);
 
             if (! replayed_endpt.get_day().equals(endpt.get_day()))

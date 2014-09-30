@@ -14,16 +14,18 @@ import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
 import ralph.InternalStructBaseClass;
 import ralph.EnumConstructorObj;
+import ralph.IReference;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType;
 import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
 
 public class ObjectContentsDeserializers
 {
     public static RalphObject deserialize(
         ObjectContents obj_contents, RalphGlobals ralph_globals,
-        ILocalVersionReplayer local_version_replayer)
+        IReconstructionContext reconstruction_context)
     {
         // See note on top of force_initialization in
         // BaseAtomicMapVariableFactory.
@@ -71,14 +73,33 @@ public class ObjectContentsDeserializers
                     enum_msg.getEnumConstructorObjClassName();
                 int ordinal = enum_msg.getEnumOrdinal();
 
+                ILocalVersionReplayer local_version_replayer =
+                    reconstruction_context.get_local_version_replayer();
                 EnumConstructorObj enum_constructor =
                     local_version_replayer.get_enum_constructor_obj(
                         enum_constructor_obj_class_name);
                 return enum_constructor.construct(ordinal,ralph_globals);
             }
+            else if (obj_contents.hasInterface())
+            {
+                ObjectContents.Interface interface_msg =
+                    obj_contents.getInterface();
+                ReferenceType ref_type = interface_msg.getRefType();
+                
+                IReference internal_val = null;
+                if (ref_type.hasReference())
+                {
+                    String endpoint_uuid = ref_type.getReference();
+                    internal_val = VersionUtil.rebuild_endpoint(
+                        endpoint_uuid,ralph_globals,reconstruction_context);
+                }
+                return new Variables.AtomicInterfaceVariable(
+                    false,internal_val,ralph_globals);
+            }
             else if (obj_contents.hasMapType())
             {                
                 ObjectContents.Map map = obj_contents.getMapType();
+                // FIXME: check for null
                 String initial_reference = map.getRefType().getReference();
                 IAtomicMapVariableFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
@@ -122,7 +143,7 @@ public class ObjectContentsDeserializers
 
                 // Creating an internal list in a very hackish way:
                 // creating an atomic list and then reaching into it to
-                // get internal list.
+                // get internal list.                
                 IAtomicListVariableFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
                         internal_list.getValTypeClassName());
@@ -139,6 +160,7 @@ public class ObjectContentsDeserializers
             else if (obj_contents.hasListType())
             {                
                 ObjectContents.List list = obj_contents.getListType();
+                // FIXME: check for null
                 String initial_reference = list.getRefType().getReference();
                 IAtomicListVariableFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
@@ -156,6 +178,7 @@ public class ObjectContentsDeserializers
             else if (obj_contents.hasStructType())
             {
                 ObjectContents.Struct struct = obj_contents.getStructType();
+                // FIXME: check for null
                 String initial_reference = struct.getRefType().getReference();
                 IAtomicStructWrapperBaseClassFactory factory =
                     ContainerFactorySingleton.instance.get_atomic_struct_wrapper_base_class_factory(
@@ -248,6 +271,12 @@ public class ObjectContentsDeserializers
                 Util.logger_assert(
                     "FIXME: must allow deserializing non-atomic " +
                     "reference types");
+            }
+            else if (obj_contents.hasInterface())
+            {
+                Util.logger_assert(
+                    "FIXME: must allow deserializing non-atomic " +
+                    "interface.");
             }
             else if (obj_contents.hasMapType())
             {

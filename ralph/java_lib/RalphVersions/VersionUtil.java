@@ -24,11 +24,13 @@ public class VersionUtil
        EndpointConstructorObjs.
      */
     public static Endpoint rebuild_endpoint(
-        ILocalVersionReplayer local_version_replayer,
         String endpoint_uuid,
         RalphGlobals ralph_globals,
         IReconstructionContext reconstruction_context)
     {
+        ILocalVersionReplayer local_version_replayer =
+            reconstruction_context.get_local_version_replayer();
+        
         EndpointInitializationHistory endpt_history =
             local_version_replayer.get_endpoint_initialization_history(
                 endpoint_uuid);

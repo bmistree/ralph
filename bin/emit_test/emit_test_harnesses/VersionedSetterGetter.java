@@ -106,7 +106,6 @@ public class VersionedSetterGetter
         // now, tries to replay changes to endpoint.  
         ISetterGetter replayed_endpt =
             (ISetterGetter) VersionUtil.rebuild_endpoint(
-                VersioningInfo.instance.local_version_replayer,
                 endpt_uuid,ralph_globals,reconstruction_context);
 
         // NOTE: non-atomics are not under version control, and
