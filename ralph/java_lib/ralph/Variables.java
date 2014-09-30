@@ -534,9 +534,7 @@ public class Variables
             Delta.ReferenceType.Builder ref_type_builder =
                 Delta.ReferenceType.newBuilder();
             
-            if (internal_endpoint == null)
-                ref_type_builder.setReference("null");
-            else
+            if (internal_endpoint != null)
                 ref_type_builder.setReference(internal_endpoint.uuid());
 
             ObjectContents.Interface.Builder interface_builder =
