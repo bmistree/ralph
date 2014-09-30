@@ -23,6 +23,7 @@ public class VersionedIFace
 
             VersionedInterface endpt = new VersionedInterface(
                 ralph_globals,new SingleSideConnection());
+            endpt.initialize();
 
             return VersionedSetterGetter.run_test_from_endpt(
                 endpt,ralph_globals,endpt._uuid);

@@ -8,6 +8,10 @@ Service VersionedInterface implements Interface ISetterGetter
 {
     TVar Interface ISetterGetter atomic_isetter_getter = null;
 
+    /**
+       Must be called once and only once to instantiate a new
+       atomic_setter_getter.
+     */
     initialize()
     {
         Service SetterGetter tmp;
