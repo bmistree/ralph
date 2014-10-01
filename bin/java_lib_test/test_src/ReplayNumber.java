@@ -13,6 +13,7 @@ import ralph.RalphObject;
 import ralph.RootEventParent;
 import ralph.VersioningInfo;
 import RalphVersions.ILocalVersionReplayer;
+import RalphVersions.ReconstructionContext;
 import ralph.Variables.AtomicNumberVariable;
 import RalphVersions.InMemoryLocalVersionManager;
 import RalphVersions.ObjectHistory;
@@ -76,13 +77,17 @@ public class ReplayNumber
             if (obj_history.history.size() != updates_set.size())
                 return false;
 
+            ReconstructionContext reconstruction_context =
+                new ReconstructionContext (replayer,ralph_globals);
+            
             // now replay object and see if it matches
             ObjectContents construction_contents =
                 obj_history.get_construction_contents();
             
             AtomicNumberVariable replayed_atom_num =
                 (AtomicNumberVariable) ObjectContentsDeserializers.deserialize(
-                    construction_contents,ralph_globals,replayer);
+                    construction_contents,ralph_globals,
+                    reconstruction_context);
             
             Double initial_replayed_internal_val =
                 replayed_atom_num.get_val(null);
