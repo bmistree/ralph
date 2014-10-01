@@ -86,15 +86,16 @@ public class ObjectContentsDeserializers
                     obj_contents.getInterface();
                 ReferenceType ref_type = interface_msg.getRefType();
                 
-                IReference internal_val = null;
+                String initial_endpt_uuid_reference = null;
                 if (ref_type.hasReference())
-                {
-                    String endpoint_uuid = ref_type.getReference();
-                    internal_val = VersionUtil.rebuild_endpoint(
-                        endpoint_uuid,ralph_globals,reconstruction_context);
-                }
-                return new Variables.AtomicInterfaceVariable(
-                    false,internal_val,ralph_globals);
+                    initial_endpt_uuid_reference = ref_type.getReference();
+
+                Variables.AtomicInterfaceVariable to_return =
+                    new Variables.AtomicInterfaceVariable(false,ralph_globals);
+
+                to_return.set_initial_reference(
+                    initial_endpt_uuid_reference);
+                return to_return;
             }
             else if (obj_contents.hasMapType())
             {                

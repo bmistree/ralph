@@ -29,6 +29,7 @@ import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
+import RalphVersions.VersionUtil;
 
 import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
 import ralph_local_version_protobuffs.DeltaProto.Delta;
@@ -500,8 +501,18 @@ public class Variables
     }
     
     public static class AtomicInterfaceVariable<T extends IReference>
-        extends AtomicValueVariable<T>
+        extends AtomicValueVariable<T> 
+        implements IInternalReferenceHolder
     {
+        /**
+           When we are replaying reference variables, we first must
+           construct them.  Then we replay what they were pointing to.
+           This field should hold the name of the reference that this
+           object was pointing to when it was constructed.  
+         */
+        private String initial_endpt_uuid_reference = null;
+        private boolean initial_endpt_uuid_reference_set = false;
+        
         public AtomicInterfaceVariable(
             boolean _log_changes,T init_val, RalphGlobals ralph_globals)
         {
@@ -518,7 +529,58 @@ public class Variables
                 new ValueTypeDataWrapperFactory<T>(),INTERFACE_VERSION_HELPER,
                 ralph_globals);
         }
+
+        /*** IInitialReferenceHolder methods */
+
+        @Override
+        public String get_initial_reference()
+        {
+            return initial_endpt_uuid_reference;
+        }
+
+        @Override
+        public void set_initial_reference(String new_initial_reference)
+        {
+            initial_endpt_uuid_reference = new_initial_reference;
+            initial_endpt_uuid_reference_set = true;
+        }
+
         
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            String endpt_uuid_reference_to_use =
+                ObjectHistory.find_reference(obj_history,to_play_until);
+            
+            if (endpt_uuid_reference_to_use == null)
+            {
+                // means that we never changed from using the initial
+                // reference that was provided.
+                //// DEBUG
+                if (! initial_endpt_uuid_reference_set)
+                {
+                    Util.logger_assert(
+                        "Error: no idea where to replay reference from.");
+                }
+                //// END DEBUG
+                endpt_uuid_reference_to_use = initial_endpt_uuid_reference;
+            }
+
+            T internal_val = null;
+            if (endpt_uuid_reference_to_use != null)
+            {
+                // can == null, if internal endpt was initialized to
+                // null.
+                internal_val = (T)VersionUtil.rebuild_endpoint(
+                    endpt_uuid_reference_to_use,ralph_globals,
+                    reconstruction_context,to_play_until);
+            }
+            direct_set_val(internal_val);
+        }
+
+        /** AtomicValueVariable overrides */
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents)

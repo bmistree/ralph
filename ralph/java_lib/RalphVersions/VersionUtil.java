@@ -22,11 +22,15 @@ public class VersionUtil
        @param endpt_constructor_class_name_to_obj --- Keys are
        endpoint constructor object class names, values are
        EndpointConstructorObjs.
+
+       @param to_rebuild_until --- If null, means should replay until
+       run out of version history.
      */
     public static Endpoint rebuild_endpoint(
         String endpoint_uuid,
         RalphGlobals ralph_globals,
-        IReconstructionContext reconstruction_context)
+        IReconstructionContext reconstruction_context,
+        Long to_rebuild_until)
     {
         ILocalVersionReplayer local_version_replayer =
             reconstruction_context.get_local_version_replayer();
@@ -49,13 +53,24 @@ public class VersionUtil
             // putting null in for second parameter in order to play
             // all the way to end.
             RalphObject ralph_object =
-                reconstruction_context.get_constructed_object(obj_uuid,null);
+                reconstruction_context.get_constructed_object(
+                    obj_uuid,to_rebuild_until);
             endpt_initialization_vars.add(ralph_object);
         }
-
+        
         return endpt_constructor_obj.construct(
             ralph_globals,new SingleSideConnection(),
             endpt_initialization_vars);
+    }
+
+    
+    public static Endpoint rebuild_endpoint(
+        String endpoint_uuid,
+        RalphGlobals ralph_globals,
+        IReconstructionContext reconstruction_context)
+    {
+        return rebuild_endpoint(
+            endpoint_uuid,ralph_globals,reconstruction_context,null);
     }
 
     public static VersionSaverMessages.CommitMetadata.Builder
