@@ -21,9 +21,7 @@ import static ralph.BaseTypeVersionHelpers.STRING_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.BOOLEAN_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.REFERENCE_VERSION_HELPER;
 
-
 import static ralph.BaseTypeVersionHelpers.INTERFACE_VERSION_HELPER;
-import static ralph.BaseTypeVersionHelpers.ENUM_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_FACTORY_VERSION_HELPER;
 import static ralph.BaseTypeVersionHelpers.SERVICE_REFERENCE_VERSION_HELPER;
 
