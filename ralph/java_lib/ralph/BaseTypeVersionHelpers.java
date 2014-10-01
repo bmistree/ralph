@@ -20,7 +20,9 @@ public class BaseTypeVersionHelpers
         new VersionHelper<Boolean> (BOOLEAN_SERIALIZER);
     public final static VersionHelper<IReference> REFERENCE_VERSION_HELPER =
         new VersionHelper<IReference> (REFERENCE_SERIALIZER);
-
+    public final static VersionHelper INTERFACE_VERSION_HELPER =
+        REFERENCE_VERSION_HELPER;
+    
     public final static InternalContainerTypeVersionHelper<Double>
         DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER =
         new InternalContainerTypeVersionHelper<Double>(
@@ -40,7 +42,6 @@ public class BaseTypeVersionHelpers
             INTEGER_KEYED_LIST_DELTA_SERIALIZER);
 
     public final static VersionHelper ENUM_VERSION_HELPER = null;
-    public final static VersionHelper INTERFACE_VERSION_HELPER = null;
     public final static VersionHelper SERVICE_FACTORY_VERSION_HELPER = null;
     public final static VersionHelper SERVICE_REFERENCE_VERSION_HELPER = null;
 }
