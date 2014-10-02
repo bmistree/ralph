@@ -1,6 +1,5 @@
 package RalphExtended;
 
-import RalphVersions.IVersionListener;
 import RalphServiceActions.ServiceAction;
 
 import ralph.SpeculativeFuture;
@@ -22,25 +21,17 @@ public class WrapApplyToHardware<T> extends ServiceAction
     public final SpeculativeFuture to_notify_when_complete =
         new SpeculativeFuture(null,false);
     private final IHardwareChangeApplier<T> hardware_change_applier;
-
-    /**
-       May be null.  Ie., if do not want to track version history of
-       object.
-     */
-    private final IVersionListener<T> version_listener;
     private final CommitMetadata commit_metadata;
     
     public WrapApplyToHardware(
         T _to_apply, boolean _undo_changes,
         ExtendedObjectStateController _state_controller,
-        IHardwareChangeApplier<T> _applier,
-        IVersionListener<T> _version_listener,CommitMetadata _commit_metadata)
+        IHardwareChangeApplier<T> _applier,CommitMetadata _commit_metadata)
     {
         to_apply = _to_apply;
         undo_changes = _undo_changes;
         state_controller = _state_controller;
         hardware_change_applier = _applier;
-        version_listener = _version_listener;
         commit_metadata = _commit_metadata;
     }
     
@@ -62,16 +53,6 @@ public class WrapApplyToHardware<T> extends ServiceAction
             state_controller.move_state_staged_changes();
         state_controller.release_lock();
 
-        // notify version listener.
-        if (version_listener != null)
-        {
-            if (undo_changes)
-                version_listener.backout_delta(commit_metadata);
-            else
-                version_listener.complete_delta(commit_metadata);
-        }
-
-        
         if (application_successful)
             to_notify_when_complete.succeeded();
         else

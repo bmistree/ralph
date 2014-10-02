@@ -1,8 +1,6 @@
 package RalphExtended;
 
 import java.util.concurrent.Future;
-
-import RalphVersions.IVersionListener;
 import RalphServiceActions.LinkFutureBooleans;
 
 import ralph.SpeculativeAtomicObject;
@@ -65,12 +63,6 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
 
     private final ISpeculateListener speculate_listener;
 
-    /**
-       Will be null, if not asked to keep track of version history for
-       this object.
-     */
-    private final IVersionListener<HardwareChangeApplierType> version_listener;
-    
     // The object that is sending this
     // hardware_first_phase_commit_hook, backout, ..., messages.
     private SpeculativeAtomicObject controlling_object;
@@ -89,14 +81,12 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         IHardwareChangeApplier<HardwareChangeApplierType> _hardware_applier,
         IHardwareStateSupplier<HardwareChangeApplierType> _hardware_state_supplier,
         ISpeculateListener _speculate_listener,
-        IVersionListener<HardwareChangeApplierType> _version_listener,
         boolean _should_speculate,
         RalphGlobals _ralph_globals)
     {
         hardware_applier = _hardware_applier;
         hardware_state_supplier = _hardware_state_supplier;
         speculate_listener = _speculate_listener;
-        version_listener = _version_listener;
         should_speculate = _should_speculate;
         ralph_globals = _ralph_globals;
     }
@@ -165,17 +155,10 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 HardwareChangeApplierType state_to_push =
                     hardware_state_supplier.get_state_to_push(active_event);
 
-                // notify version listener that we are staging a change.
-                if (version_listener != null)
-                {
-                    version_listener.stage_delta(
-                        state_to_push,active_event.commit_metadata);
-                }
-                
                 state_controller.move_state_pushing_changes(state_to_push);
                 WrapApplyToHardware<HardwareChangeApplierType> to_apply_to_hardware =
                     new WrapApplyToHardware<HardwareChangeApplierType>(
-                        state_to_push,false,state_controller,hardware_applier,version_listener,
+                        state_to_push,false,state_controller,hardware_applier,
                         active_event.commit_metadata);
 
                 ralph_globals.thread_pool.add_service_action(
@@ -299,7 +282,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 new WrapApplyToHardware<HardwareChangeApplierType>(
                     state_controller.get_dirty_on_hardware(),
                     true,state_controller,hardware_applier,
-                    version_listener, active_event.commit_metadata);
+                    active_event.commit_metadata);
 
 
             ralph_globals.thread_pool.add_service_action(to_undo_wrapper);

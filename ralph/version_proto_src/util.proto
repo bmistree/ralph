@@ -1,7 +1,0 @@
-option java_package = "ralph_version_protobuffs";
-option java_outer_classname = "UtilProto";
-
-message UUID
-{
-    required string data = 1;
-}

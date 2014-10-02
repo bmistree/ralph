@@ -632,7 +632,7 @@
         jar_MultipleInterfaces,jar_SerializeStructWithMap,
         jar_SerializeStructWithStruct,jar_SerializeStructWithList,
         jar_SerializeNullStruct,jar_ReadOnlySpeculate,jar_Enum,
-        jar_AliasEnum,jar_StructEnum, jar_VersionQuerier, jar_ManyListOps,
+        jar_AliasEnum,jar_StructEnum, jar_ManyListOps,
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
@@ -1062,12 +1062,6 @@
   <target name="harness_VersionedStructMap">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedStructMap.java"/>
-    </antcall>
-  </target>
-  
-  <target name="harness_VersionQuerier">
-    <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="VersionQuerier.java"/>
     </antcall>
   </target>
   
@@ -1642,21 +1636,6 @@
       <param name="main_class" value="VersionedStructList"/>
       <param name="dest_jar" value="${disk_versioned_struct_list_jar}"/>
       <param name="config_properties" value="${disk_log_config}"/>
-    </antcall>
-  </target>
-  
-  <property
-      name="version_querier_jar"
-      value="version_querier.jar"/>
-  <target
-      name="jar_VersionQuerier"
-      depends="ralph_AtomicNumberIncrementer,
-               ralph_to_byte_code,
-               harness_VersionQuerier">
-    <antcall target="make_jar">
-      <param name="main_class" value="VersionQuerier"/>
-      <param name="dest_jar" value="${version_querier_jar}"/>
-      <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
   

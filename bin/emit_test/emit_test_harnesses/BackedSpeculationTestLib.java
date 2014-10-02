@@ -125,7 +125,6 @@ public class BackedSpeculationTestLib
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
                     hardware_applier,hardware_state_supplier,speculate_listener,
-                    null, // not keeping track of versioning.
                     should_speculate,ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
         }

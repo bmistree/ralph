@@ -172,7 +172,6 @@ public class SimplifiedTimedSpeculationTest
             extended_hardware_overrides =
                 new ExtendedHardwareOverrides<Double>(
                     this,this,spec_listener,
-                    null, // not keeping track of versioning.
                     _should_speculate, ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
             
