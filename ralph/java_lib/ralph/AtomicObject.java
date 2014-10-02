@@ -19,7 +19,7 @@ import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 
-import RalphVersions.ILocalVersionSaver;
+import RalphVersions.IVersionSaver;
 import RalphServiceActions.AtomicObjectTryNextAction;
 import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -167,9 +167,9 @@ public abstract class AtomicObject<T,DeltaType>
     protected void log_obj_constructor_during_init(
         Object additional_serialization_contents)
     {
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
-        if (local_version_saver != null)
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
+        if (version_saver != null)
         {
             ObjectContents obj_contents = null;
             try
@@ -186,7 +186,7 @@ public abstract class AtomicObject<T,DeltaType>
             }
             // using null as active_event argument for
             // serialize_contents, gets internal value right away.
-            local_version_saver.save_object_constructor(
+            version_saver.save_object_constructor(
                 uuid(), obj_contents);
         }
     }

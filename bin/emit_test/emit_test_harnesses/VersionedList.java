@@ -50,12 +50,12 @@ public class VersionedList
             for (int i = 0; i < num_to_initially_add; i += 2)
                 endpt.remove(0.);
 
-            VersioningInfo.instance.local_version_saver.flush();
+            VersioningInfo.instance.version_saver.flush();
             
             // Now replay
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
-                    VersioningInfo.instance.local_version_replayer,
+                    VersioningInfo.instance.version_replayer,
                     ralph_globals);
 
             // now, tries to replay changes to endpoint.  

@@ -33,12 +33,12 @@ public class VersionedStructList
             for (int i = 0; i < num_to_initially_add; ++i)
                 endpt.add_internal((double)i);
 
-            VersioningInfo.instance.local_version_saver.flush();
+            VersioningInfo.instance.version_saver.flush();
             
             // Now replay
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
-                    VersioningInfo.instance.local_version_replayer,
+                    VersioningInfo.instance.version_replayer,
                     ralph_globals);
 
             // now, tries to replay changes to endpoint.  

@@ -67,7 +67,7 @@ public class AtomicInternalList<V,ValueDeltaType>
         RalphGlobals ralph_globals = active_event.get_ralph_globals();
         
         // do not do anything
-        if (VersioningInfo.instance.local_version_saver == null)
+        if (VersioningInfo.instance.version_saver == null)
             return;
 
         ListTypeDataWrapper<V,ValueDeltaType> list_dirty_val =

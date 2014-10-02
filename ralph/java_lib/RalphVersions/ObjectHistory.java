@@ -164,7 +164,7 @@ public class ObjectHistory
     public static <EnumType extends Enum> void replay_enum(
         RalphObject<EnumType,EnumType> to_replay_on,
         ObjectHistory obj_history,Long to_play_until,
-        ILocalVersionReplayer replayer)
+        IVersionReplayer replayer)
     {
         Set <SingleObjectChange> single_object_change_set =
             obj_history.history;
@@ -246,7 +246,7 @@ public class ObjectHistory
         public static <EnumType extends Enum> void enum_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<EnumType,EnumType> to_incorporate_into,
-            ILocalVersionReplayer replayer)
+            IVersionReplayer replayer)
         {
             Delta.EnumDelta enum_delta = change.delta.getEnumDelta();
             String enum_constructor_obj_class_name =

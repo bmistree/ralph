@@ -1,7 +1,7 @@
 package ralph;
 
-import RalphVersions.ILocalDeltaSerializer;
-import RalphVersions.ILocalVersionSaver;
+import RalphVersions.IDeltaSerializer;
+import RalphVersions.IVersionSaver;
 
 /**
    Each basic type should have a static VersionHelper that it shares.
@@ -9,9 +9,9 @@ import RalphVersions.ILocalVersionSaver;
  */
 public class VersionHelper<DataType> implements Versionable<DataType>
 {
-    protected final ILocalDeltaSerializer<DataType> serializer;
+    protected final IDeltaSerializer<DataType> serializer;
     public VersionHelper(
-        ILocalDeltaSerializer<DataType> _serializer)
+        IDeltaSerializer<DataType> _serializer)
     {
         serializer = _serializer;
     }
@@ -21,13 +21,13 @@ public class VersionHelper<DataType> implements Versionable<DataType>
     {
         // perform this call dynamically so that can dynamically turn
         // versioning off and on.
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
         // not performing any local versioning
-        if (local_version_saver == null)
+        if (version_saver == null)
             return;
 
-        local_version_saver.save_version_data(
+        version_saver.save_version_data(
             uuid,serializer.serialize(to_version),commit_metadata);
     }
     
@@ -35,13 +35,13 @@ public class VersionHelper<DataType> implements Versionable<DataType>
     {
         // perform this call dynamically so that can dynamically turn
         // versioning off and on.
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
         
         // not performing any local versioning
-        if (local_version_saver == null)
+        if (version_saver == null)
             return;
 
-        local_version_saver.close_versioned_object(uuid);
+        version_saver.close_versioned_object(uuid);
     }
 }

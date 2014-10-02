@@ -427,7 +427,7 @@ public class Variables
         {
             ObjectHistory.<T>replay_enum(
                 this,obj_history,to_play_until,
-                reconstruction_context.get_local_version_replayer());
+                reconstruction_context.get_version_replayer());
         }
 
         

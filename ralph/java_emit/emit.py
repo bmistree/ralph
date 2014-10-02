@@ -55,8 +55,8 @@ import ralph.NonAtomicInternalMap.IndexType;
 import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
 
-import RalphVersions.ILocalVersionSaver;
-import RalphVersions.ILocalVersionReplayer;
+import RalphVersions.IVersionSaver;
+import RalphVersions.IVersionReplayer;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 import RalphVersions.EnumSerializer;
@@ -226,7 +226,7 @@ def emit_constructor(emit_ctx,endpt_node):
         var_name = endpt_variable_decl_node.var_name
         internal_var_name = emit_ctx.lookup_internal_var_name(var_name)
         version_mapping_text += ('''
-local_version_saver.save_endpoint_global_mapping(
+version_saver.save_endpoint_global_mapping(
     "%(variable_name)s",%(variable_name)s.uuid(), _uuid,
     factory.getClass().getName(), local_lamport_time);''' %
         { 'variable_name': internal_var_name })
@@ -259,13 +259,13 @@ public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj)
 {
     super(ralph_globals,conn_obj,factory);
 
-    if (VersioningInfo.instance.local_version_saver != null)
+    if (VersioningInfo.instance.version_saver != null)
     {
         long local_lamport_time =
             ralph_globals.clock.get_and_increment_int_timestamp();
         // map names of endpoint variables to their local values.
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
         %(version_mapping_text)s
     }
 }
@@ -276,11 +276,11 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     // when sending over reference factories.
     public %(endpoint_name)s_ConstructorObj()
     {
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
-        if (local_version_saver != null)
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
+        if (version_saver != null)
         {
-            local_version_saver.save_endpoint_constructor_obj(this);
+            version_saver.save_endpoint_constructor_obj(this);
         }
     }
 
@@ -3001,7 +3001,7 @@ def emit_internal_struct_replay(struct_type):
         internal_replay_text += '''
 {
     ObjectHistory field_obj_history =
-        reconstruction_context.get_local_version_replayer().get_full_object_history(
+        reconstruction_context.get_version_replayer().get_full_object_history(
             internal_references_to_replay_on.get(%(field_index)i));
 
     %(field_name)s.replay(reconstruction_context, field_obj_history,to_play_until);

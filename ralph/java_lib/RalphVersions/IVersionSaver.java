@@ -7,7 +7,7 @@ import ralph.EnumConstructorObj;
 import ralph_version_protobuffs.DeltaProto.Delta;
 import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
-public interface ILocalVersionSaver
+public interface IVersionSaver
 {
     /**
        @param commit_metadata --- Multiple objects will simultaneously

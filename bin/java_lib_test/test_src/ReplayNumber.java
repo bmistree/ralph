@@ -12,10 +12,10 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.RootEventParent;
 import ralph.VersioningInfo;
-import RalphVersions.ILocalVersionReplayer;
+import RalphVersions.IVersionReplayer;
 import RalphVersions.ReconstructionContext;
 import ralph.Variables.AtomicNumberVariable;
-import RalphVersions.InMemoryLocalVersionManager;
+import RalphVersions.InMemoryVersionManager;
 import RalphVersions.ObjectHistory;
 import RalphConnObj.SingleSideConnection;
 import RalphCallResults.RootCallResult.ResultType;
@@ -66,8 +66,8 @@ public class ReplayNumber
 
             // first check that the number of changes to the object is
             // the same as the size of the object's history.
-            ILocalVersionReplayer replayer =
-                VersioningInfo.instance.local_version_replayer;
+            IVersionReplayer replayer =
+                VersioningInfo.instance.version_replayer;
             ObjectHistory obj_history =
                 replayer.get_full_object_history(atom_num.uuid());
             

@@ -154,9 +154,9 @@ public class NonAtomicActiveEvent extends ActiveEvent
             root_host_uuid,root_event_name,root_application_uuid);
 
         // log commit_metadata in case need to replay
-        if (VersioningInfo.instance.local_version_saver != null)
+        if (VersioningInfo.instance.version_saver != null)
         {
-            VersioningInfo.instance.local_version_saver.save_commit_metadata(
+            VersioningInfo.instance.version_saver.save_commit_metadata(
                 commit_metadata);
         }
         

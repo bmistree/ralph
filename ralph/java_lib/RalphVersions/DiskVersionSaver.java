@@ -12,7 +12,7 @@ import ralph_version_protobuffs.DeltaProto.Delta;
 import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 
-public class DiskLocalVersionSaver implements ILocalVersionSaver
+public class DiskVersionSaver implements IVersionSaver
 {
     // key is the classname of the endpoint constructor object.
     private final Map<String,EndpointConstructorObj> endpoint_constructor_map =
@@ -25,7 +25,7 @@ public class DiskLocalVersionSaver implements ILocalVersionSaver
     //private final DiskQueue<VersionSaverMessages.Builder> disk_queue;
     private final DiskQueue disk_queue;
 
-    public DiskLocalVersionSaver(int message_buffer_capacity, String log_filename)
+    public DiskVersionSaver(int message_buffer_capacity, String log_filename)
     {
         disk_queue = new DiskQueue(
             message_buffer_capacity,log_filename);

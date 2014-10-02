@@ -4,11 +4,11 @@ import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
 
-import RalphVersions.ILocalVersionSaver;
-import RalphVersions.ILocalVersionReplayer;
-import RalphVersions.InMemoryLocalVersionManager;
-import RalphVersions.DiskLocalVersionSaver;
-import RalphVersions.DiskLocalVersionReplayer;
+import RalphVersions.IVersionSaver;
+import RalphVersions.IVersionReplayer;
+import RalphVersions.InMemoryVersionManager;
+import RalphVersions.DiskVersionSaver;
+import RalphVersions.DiskVersionReplayer;
 
 
 /**
@@ -18,8 +18,8 @@ public class VersioningInfo
 {
     public static final VersioningInfo instance = new VersioningInfo();
 
-    public final ILocalVersionSaver local_version_saver;
-    public final ILocalVersionReplayer local_version_replayer;
+    public final IVersionSaver version_saver;
+    public final IVersionReplayer version_replayer;
     private VersioningInfo() 
     {
         Properties properties = new Properties();
@@ -28,8 +28,8 @@ public class VersioningInfo
             getClass().getClassLoader().getResourceAsStream("config.properties");
         if (input_stream == null)
         {
-            local_version_saver = null;
-            local_version_replayer = null;
+            version_saver = null;
+            version_replayer = null;
         }
         else
         {
@@ -48,10 +48,10 @@ public class VersioningInfo
             {
                 if (which_versioner.equals("in-memory"))
                 {
-                    InMemoryLocalVersionManager local_version_manager =
-                        new InMemoryLocalVersionManager();
-                    local_version_saver = local_version_manager;
-                    local_version_replayer = local_version_manager;
+                    InMemoryVersionManager version_manager =
+                        new InMemoryVersionManager();
+                    version_saver = version_manager;
+                    version_replayer = version_manager;
                 }
                 else if (which_versioner.equals("disk"))
                 {
@@ -73,9 +73,9 @@ public class VersioningInfo
                     int buffer_capacity =
                         Integer.parseInt((String)obj_buffer_capacity);
 
-                    local_version_saver = new DiskLocalVersionSaver(
+                    version_saver = new DiskVersionSaver(
                         buffer_capacity, filename);
-                    local_version_replayer = new DiskLocalVersionReplayer(
+                    version_replayer = new DiskVersionReplayer(
                         filename);
                 }
                 //// DEBUG
@@ -87,15 +87,15 @@ public class VersioningInfo
                     // setting these here so that will compile without
                     // warning about how local variables may not have
                     // been initialized.
-                    local_version_saver = null;
-                    local_version_replayer = null;
+                    version_saver = null;
+                    version_replayer = null;
                 }
                 //// END DEBUG
             }
             else
             {
-                local_version_saver = null;
-                local_version_replayer = null;
+                version_saver = null;
+                version_replayer = null;
             }
         }
     }

@@ -73,10 +73,10 @@ public class ObjectContentsDeserializers
                     enum_msg.getEnumConstructorObjClassName();
                 int ordinal = enum_msg.getEnumOrdinal();
 
-                ILocalVersionReplayer local_version_replayer =
-                    reconstruction_context.get_local_version_replayer();
+                IVersionReplayer version_replayer =
+                    reconstruction_context.get_version_replayer();
                 EnumConstructorObj enum_constructor =
-                    local_version_replayer.get_enum_constructor_obj(
+                    version_replayer.get_enum_constructor_obj(
                         enum_constructor_obj_class_name);
                 return enum_constructor.construct(ordinal,ralph_globals);
             }

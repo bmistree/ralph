@@ -5,7 +5,7 @@ import ralph.EndpointConstructorObj;
 import ralph.EnumConstructorObj;
 import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
-public interface ILocalVersionReplayer
+public interface IVersionReplayer
 {
     /**
        @returns null if does not exist.

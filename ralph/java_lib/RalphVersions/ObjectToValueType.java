@@ -16,7 +16,7 @@ public class ObjectToValueType
     
 
     protected static class DoubleToValueType
-        implements ILocalValueTypeSerializer<Double>
+        implements IValueTypeSerializer<Double>
     {
         @Override
         public ValueType serialize_value_type(Double to_serialize)
@@ -31,7 +31,7 @@ public class ObjectToValueType
     // FIXME: serializes down to double because have no real integer
     // type in the language.
     protected static class IntegerToValueType
-        implements ILocalValueTypeSerializer<Integer>
+        implements IValueTypeSerializer<Integer>
     {
         @Override
         public ValueType serialize_value_type(Integer to_serialize)
@@ -43,7 +43,7 @@ public class ObjectToValueType
 
     
     protected static class StringToValueType
-        implements ILocalValueTypeSerializer<String>
+        implements IValueTypeSerializer<String>
     {
         @Override
         public ValueType serialize_value_type(String to_serialize)
@@ -56,7 +56,7 @@ public class ObjectToValueType
     }
 
     protected static class BooleanToValueType
-        implements ILocalValueTypeSerializer<Boolean>
+        implements IValueTypeSerializer<Boolean>
     {
         @Override
         public ValueType serialize_value_type(Boolean to_serialize)

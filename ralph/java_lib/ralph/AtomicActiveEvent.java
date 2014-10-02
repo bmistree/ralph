@@ -808,9 +808,9 @@ public class AtomicActiveEvent extends ActiveEvent
         _unlock();
 
         // log commit_metadata in case need to replay
-        if (VersioningInfo.instance.local_version_saver != null)
+        if (VersioningInfo.instance.version_saver != null)
         {
-            VersioningInfo.instance.local_version_saver.save_commit_metadata(
+            VersioningInfo.instance.version_saver.save_commit_metadata(
                 this.commit_metadata);
         }
         

@@ -5,7 +5,7 @@ import ralph_version_protobuffs.DeltaProto.Delta;
 
 
 public class EnumSerializer<EnumType extends Enum>
-    implements ILocalDeltaSerializer<EnumType>
+    implements IDeltaSerializer<EnumType>
 {
     private final EnumConstructorObj<EnumType> enum_constructor_obj;
     

@@ -17,28 +17,28 @@ import ralph_version_protobuffs.DeltaProto.Delta;
 import ralph_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 
-public class DiskLocalVersionReplayer implements ILocalVersionReplayer
+public class DiskVersionReplayer implements IVersionReplayer
 {
     protected final String filename;
     protected boolean has_been_initialized = false;
-    protected InMemoryLocalVersionManager local_version_manager = null;
+    protected InMemoryVersionManager version_manager = null;
     
-    public DiskLocalVersionReplayer (String _filename)
+    public DiskVersionReplayer (String _filename)
     {
         filename = _filename;
     }
 
 
     /**
-       Essentially, load all file data into local_version_manager, and
+       Essentially, load all file data into version_manager, and
        use that to respond to queries.
      */
-    protected void init_local_version_manager_if_unitialized()
+    protected void init_version_manager_if_unitialized()
     {
-        if (local_version_manager != null)
+        if (version_manager != null)
             return;
         
-        local_version_manager = new InMemoryLocalVersionManager();
+        version_manager = new InMemoryVersionManager();
         try
         {
             File file = new File(filename);
@@ -62,14 +62,14 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
                         cm_msg.getRootCommitLamportTime(),
                         cm_msg.getRootApplicationUuid(),
                         cm_msg.getEventName(),cm_msg.getEventUuid());
-                    local_version_manager.save_commit_metadata(cm);
+                    version_manager.save_commit_metadata(cm);
                 }
                 else if (vsm.hasEndpointGlobalMapping())
                 {
                     VersionSaverMessages.EndpointGlobalMapping
                         endpt_global_mapping_msg =
                         vsm.getEndpointGlobalMapping();
-                    local_version_manager.save_endpoint_global_mapping(
+                    version_manager.save_endpoint_global_mapping(
                         endpt_global_mapping_msg.getVariableName(),
                         endpt_global_mapping_msg.getObjectUuid(),
                         endpt_global_mapping_msg.getEndpointUuid(),
@@ -80,7 +80,7 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
                 {
                     VersionSaverMessages.ObjectConstructor obj_constructor_msg =
                         vsm.getObjectConstructor();
-                    local_version_manager.save_object_constructor(
+                    version_manager.save_object_constructor(
                         obj_constructor_msg.getObjectUuid(),
                         obj_constructor_msg.getObjContents());
                 }
@@ -100,7 +100,7 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
             {
                 String commit_metadata_event_uuid =
                     version_data.getCommitMetadataEventUuid();
-                CommitMetadata cm = local_version_manager.get_commit_metadata(
+                CommitMetadata cm = version_manager.get_commit_metadata(
                     commit_metadata_event_uuid);
                 
                 //// DEBUG
@@ -110,7 +110,7 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
 
                 String object_uuid = version_data.getObjectUuid();
                 Delta delta = version_data.getDelta();
-                local_version_manager.save_version_data(
+                version_manager.save_version_data(
                     object_uuid, delta, cm);
             }
         }
@@ -125,8 +125,8 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     public EndpointInitializationHistory
         get_endpoint_initialization_history(String endpoint_uuid)
     {
-        init_local_version_manager_if_unitialized();
-        return local_version_manager.get_endpoint_initialization_history(
+        init_version_manager_if_unitialized();
+        return version_manager.get_endpoint_initialization_history(
             endpoint_uuid);
     }
 
@@ -136,8 +136,8 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     @Override
     public ObjectHistory get_full_object_history(String obj_uuid)
     {
-        init_local_version_manager_if_unitialized();
-        return local_version_manager.get_full_object_history(obj_uuid);
+        init_version_manager_if_unitialized();
+        return version_manager.get_full_object_history(obj_uuid);
     }
 
     /**
@@ -147,15 +147,15 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     public EndpointConstructorObj get_endpoint_constructor_obj(
         String endpoint_constructor_obj_classname)
     {
-        // note: not using internal local_version_manager here because
-        // local_version_manager never got updated with endpoint
+        // note: not using internal version_manager here because
+        // version_manager never got updated with endpoint
         // constructor objects.  However, the global version of
-        // local_version_saver did when objects were initially
+        // version_saver did when objects were initially
         // constructed.  Use this to answer
         // get_endpoint_constructor_obj queries.
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
-        return local_version_saver.get_endpoint_constructor_obj(
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
+        return version_saver.get_endpoint_constructor_obj(
             endpoint_constructor_obj_classname);
     }
 
@@ -163,15 +163,15 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     public EnumConstructorObj get_enum_constructor_obj(
         String enum_constructor_obj_classname)
     {
-        // note: not using internal local_version_manager here because
-        // local_version_manager never got updated with endpoint
+        // note: not using internal version_manager here because
+        // version_manager never got updated with endpoint
         // constructor objects.  However, the global version of
-        // local_version_saver did when objects were initially
+        // version_saver did when objects were initially
         // constructed.  Use this to answer
         // get_endpoint_constructor_obj queries.
-        ILocalVersionSaver local_version_saver =
-            VersioningInfo.instance.local_version_saver;
-        return local_version_saver.get_enum_constructor_obj(
+        IVersionSaver version_saver =
+            VersioningInfo.instance.version_saver;
+        return version_saver.get_enum_constructor_obj(
             enum_constructor_obj_classname);
     }
     
@@ -188,8 +188,8 @@ public class DiskLocalVersionReplayer implements ILocalVersionReplayer
     public ObjectHistory get_ranged_object_history(
         String obj_uuid,Long lower_range, Long upper_range)
     {
-        init_local_version_manager_if_unitialized();
-        return local_version_manager.get_ranged_object_history(
+        init_version_manager_if_unitialized();
+        return version_manager.get_ranged_object_history(
             obj_uuid,lower_range,upper_range);
     }
 }

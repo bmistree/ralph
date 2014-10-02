@@ -32,10 +32,10 @@ public class VersionedEnum
             // Now replay
             IReconstructionContext reconstruction_context =
                 new ReconstructionContext(
-                    VersioningInfo.instance.local_version_replayer,
+                    VersioningInfo.instance.version_replayer,
                     ralph_globals);
             
-            VersioningInfo.instance.local_version_saver.flush();
+            VersioningInfo.instance.version_saver.flush();
             
             // now, tries to replay changes to endpoint.  
             EnumHolder replayed_endpt =

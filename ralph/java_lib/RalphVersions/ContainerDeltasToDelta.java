@@ -10,7 +10,7 @@ import ralph_version_protobuffs.DeltaProto.Delta;
 
 
 public class ContainerDeltasToDelta <KeyType>
-    implements ILocalDeltaSerializer<VersionContainerDeltas>
+    implements IDeltaSerializer<VersionContainerDeltas>
 {
     public static final ContainerDeltasToDelta<Double> DOUBLE_KEYED_MAP_DELTA_SERIALIZER =
         new ContainerDeltasToDelta(ObjectToValueType.DOUBLE_SERIALIZER);
@@ -21,10 +21,10 @@ public class ContainerDeltasToDelta <KeyType>
     public static final ContainerDeltasToDelta<Integer> INTEGER_KEYED_LIST_DELTA_SERIALIZER =
         new ContainerDeltasToDelta(ObjectToValueType.INTEGER_SERIALIZER);
     
-    private final ILocalValueTypeSerializer<KeyType> key_type_serializer;
+    private final IValueTypeSerializer<KeyType> key_type_serializer;
 
     public ContainerDeltasToDelta(
-        ILocalValueTypeSerializer<KeyType> key_type_serializer)
+        IValueTypeSerializer<KeyType> key_type_serializer)
     {
         this.key_type_serializer = key_type_serializer;
     }

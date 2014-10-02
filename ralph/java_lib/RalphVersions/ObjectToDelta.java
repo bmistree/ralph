@@ -25,7 +25,7 @@ public class ObjectToDelta
         new ReferenceToDelta();
 
     private static class ReferenceToDelta
-        implements ILocalDeltaSerializer<IReference>
+        implements IDeltaSerializer<IReference>
     {
         @Override
         public Delta serialize(IReference to_serialize)
@@ -43,7 +43,7 @@ public class ObjectToDelta
     }
         
     private static class DoubleToDelta
-        implements ILocalDeltaSerializer<Double>
+        implements IDeltaSerializer<Double>
     {
         @Override
         public Delta serialize(Double to_serialize)
@@ -57,7 +57,7 @@ public class ObjectToDelta
     }
                                                    
     private static class StringToDelta
-        implements ILocalDeltaSerializer<String>
+        implements IDeltaSerializer<String>
     {
         @Override
         public Delta serialize(String to_serialize)
@@ -71,7 +71,7 @@ public class ObjectToDelta
     }
 
     private static class BooleanToDelta
-        implements ILocalDeltaSerializer<Boolean>
+        implements IDeltaSerializer<Boolean>
     {
         @Override
         public Delta serialize(Boolean to_serialize)

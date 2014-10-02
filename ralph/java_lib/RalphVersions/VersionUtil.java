@@ -32,14 +32,14 @@ public class VersionUtil
         IReconstructionContext reconstruction_context,
         Long to_rebuild_until)
     {
-        ILocalVersionReplayer local_version_replayer =
-            reconstruction_context.get_local_version_replayer();
+        IVersionReplayer version_replayer =
+            reconstruction_context.get_version_replayer();
         
         EndpointInitializationHistory endpt_history =
-            local_version_replayer.get_endpoint_initialization_history(
+            version_replayer.get_endpoint_initialization_history(
                 endpoint_uuid);
         EndpointConstructorObj endpt_constructor_obj =
-            local_version_replayer.get_endpoint_constructor_obj(
+            version_replayer.get_endpoint_constructor_obj(
                 endpt_history.endpoint_constructor_class_name);
         
         // repopulate all initial ralph objects that get placed in
