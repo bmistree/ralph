@@ -166,19 +166,34 @@ public final class PartnerRequestSequenceBlockProto {
      */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getReplyToUuidOrBuilder();
 
-    // required .Variables arguments = 6;
+    // optional .PartnerRequestSequenceBlock.Arguments arguments = 6;
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
     boolean hasArguments();
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
-    ralph_protobuffs.VariablesProto.Variables getArguments();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getArguments();
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
-    ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getArgumentsOrBuilder();
 
     // required bool transaction = 7;
     /**
@@ -202,9 +217,9 @@ public final class PartnerRequestSequenceBlockProto {
      */
     boolean getTransaction();
 
-    // optional .Variables return_objs = 8;
+    // optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -214,7 +229,7 @@ public final class PartnerRequestSequenceBlockProto {
      */
     boolean hasReturnObjs();
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -222,9 +237,9 @@ public final class PartnerRequestSequenceBlockProto {
      *values.
      * </pre>
      */
-    ralph_protobuffs.VariablesProto.Variables getReturnObjs();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getReturnObjs();
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -232,7 +247,7 @@ public final class PartnerRequestSequenceBlockProto {
      *values.
      * </pre>
      */
-    ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder();
+    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getReturnObjsOrBuilder();
   }
   /**
    * Protobuf type {@code PartnerRequestSequenceBlock}
@@ -343,11 +358,11 @@ public final class PartnerRequestSequenceBlockProto {
               break;
             }
             case 50: {
-              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = null;
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder subBuilder = null;
               if (((bitField0_ & 0x00000020) == 0x00000020)) {
                 subBuilder = arguments_.toBuilder();
               }
-              arguments_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.PARSER, extensionRegistry);
+              arguments_ = input.readMessage(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(arguments_);
                 arguments_ = subBuilder.buildPartial();
@@ -361,11 +376,11 @@ public final class PartnerRequestSequenceBlockProto {
               break;
             }
             case 66: {
-              ralph_protobuffs.VariablesProto.Variables.Builder subBuilder = null;
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder subBuilder = null;
               if (((bitField0_ & 0x00000080) == 0x00000080)) {
                 subBuilder = returnObjs_.toBuilder();
               }
-              returnObjs_ = input.readMessage(ralph_protobuffs.VariablesProto.Variables.PARSER, extensionRegistry);
+              returnObjs_ = input.readMessage(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(returnObjs_);
                 returnObjs_ = subBuilder.buildPartial();
@@ -410,6 +425,1374 @@ public final class PartnerRequestSequenceBlockProto {
     @java.lang.Override
     public com.google.protobuf.Parser<PartnerRequestSequenceBlock> getParserForType() {
       return PARSER;
+    }
+
+    public interface ArgumentsOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // repeated .ObjectContents context_contents = 1;
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents> 
+          getContextContentsList();
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      ralph_protobuffs.ObjectContentsProto.ObjectContents getContextContents(int index);
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      int getContextContentsCount();
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      java.util.List<? extends ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> 
+          getContextContentsOrBuilderList();
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getContextContentsOrBuilder(
+          int index);
+
+      // repeated .UUID argument_uuids = 2;
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      java.util.List<ralph_protobuffs.UtilProto.UUID> 
+          getArgumentUuidsList();
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      ralph_protobuffs.UtilProto.UUID getArgumentUuids(int index);
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      int getArgumentUuidsCount();
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getArgumentUuidsOrBuilderList();
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      ralph_protobuffs.UtilProto.UUIDOrBuilder getArgumentUuidsOrBuilder(
+          int index);
+    }
+    /**
+     * Protobuf type {@code PartnerRequestSequenceBlock.Arguments}
+     */
+    public static final class Arguments extends
+        com.google.protobuf.GeneratedMessage
+        implements ArgumentsOrBuilder {
+      // Use Arguments.newBuilder() to construct.
+      private Arguments(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private Arguments(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final Arguments defaultInstance;
+      public static Arguments getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public Arguments getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Arguments(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                  contextContents_ = new java.util.ArrayList<ralph_protobuffs.ObjectContentsProto.ObjectContents>();
+                  mutable_bitField0_ |= 0x00000001;
+                }
+                contextContents_.add(input.readMessage(ralph_protobuffs.ObjectContentsProto.ObjectContents.PARSER, extensionRegistry));
+                break;
+              }
+              case 18: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                  argumentUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                argumentUuids_.add(input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+            contextContents_ = java.util.Collections.unmodifiableList(contextContents_);
+          }
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            argumentUuids_ = java.util.Collections.unmodifiableList(argumentUuids_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_Arguments_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<Arguments> PARSER =
+          new com.google.protobuf.AbstractParser<Arguments>() {
+        public Arguments parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Arguments(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Arguments> getParserForType() {
+        return PARSER;
+      }
+
+      // repeated .ObjectContents context_contents = 1;
+      public static final int CONTEXT_CONTENTS_FIELD_NUMBER = 1;
+      private java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents> contextContents_;
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      public java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents> getContextContentsList() {
+        return contextContents_;
+      }
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      public java.util.List<? extends ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> 
+          getContextContentsOrBuilderList() {
+        return contextContents_;
+      }
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      public int getContextContentsCount() {
+        return contextContents_.size();
+      }
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      public ralph_protobuffs.ObjectContentsProto.ObjectContents getContextContents(int index) {
+        return contextContents_.get(index);
+      }
+      /**
+       * <code>repeated .ObjectContents context_contents = 1;</code>
+       *
+       * <pre>
+       **
+       *All object components necessary to rebuild object.
+       * </pre>
+       */
+      public ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getContextContentsOrBuilder(
+          int index) {
+        return contextContents_.get(index);
+      }
+
+      // repeated .UUID argument_uuids = 2;
+      public static final int ARGUMENT_UUIDS_FIELD_NUMBER = 2;
+      private java.util.List<ralph_protobuffs.UtilProto.UUID> argumentUuids_;
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      public java.util.List<ralph_protobuffs.UtilProto.UUID> getArgumentUuidsList() {
+        return argumentUuids_;
+      }
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getArgumentUuidsOrBuilderList() {
+        return argumentUuids_;
+      }
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      public int getArgumentUuidsCount() {
+        return argumentUuids_.size();
+      }
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID getArgumentUuids(int index) {
+        return argumentUuids_.get(index);
+      }
+      /**
+       * <code>repeated .UUID argument_uuids = 2;</code>
+       *
+       * <pre>
+       **
+       *Ordered: first argument to rpc is first of argument_uuids,
+       *etc.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getArgumentUuidsOrBuilder(
+          int index) {
+        return argumentUuids_.get(index);
+      }
+
+      private void initFields() {
+        contextContents_ = java.util.Collections.emptyList();
+        argumentUuids_ = java.util.Collections.emptyList();
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        for (int i = 0; i < getContextContentsCount(); i++) {
+          if (!getContextContents(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        for (int i = 0; i < getArgumentUuidsCount(); i++) {
+          if (!getArgumentUuids(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        for (int i = 0; i < contextContents_.size(); i++) {
+          output.writeMessage(1, contextContents_.get(i));
+        }
+        for (int i = 0; i < argumentUuids_.size(); i++) {
+          output.writeMessage(2, argumentUuids_.get(i));
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        for (int i = 0; i < contextContents_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, contextContents_.get(i));
+        }
+        for (int i = 0; i < argumentUuids_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(2, argumentUuids_.get(i));
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code PartnerRequestSequenceBlock.Arguments}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_Arguments_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder.class);
+        }
+
+        // Construct using ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getContextContentsFieldBuilder();
+            getArgumentUuidsFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          if (contextContentsBuilder_ == null) {
+            contextContents_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            contextContentsBuilder_.clear();
+          }
+          if (argumentUuidsBuilder_ == null) {
+            argumentUuids_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            argumentUuidsBuilder_.clear();
+          }
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_Arguments_descriptor;
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getDefaultInstanceForType() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments build() {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments buildPartial() {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments result = new ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments(this);
+          int from_bitField0_ = bitField0_;
+          if (contextContentsBuilder_ == null) {
+            if (((bitField0_ & 0x00000001) == 0x00000001)) {
+              contextContents_ = java.util.Collections.unmodifiableList(contextContents_);
+              bitField0_ = (bitField0_ & ~0x00000001);
+            }
+            result.contextContents_ = contextContents_;
+          } else {
+            result.contextContents_ = contextContentsBuilder_.build();
+          }
+          if (argumentUuidsBuilder_ == null) {
+            if (((bitField0_ & 0x00000002) == 0x00000002)) {
+              argumentUuids_ = java.util.Collections.unmodifiableList(argumentUuids_);
+              bitField0_ = (bitField0_ & ~0x00000002);
+            }
+            result.argumentUuids_ = argumentUuids_;
+          } else {
+            result.argumentUuids_ = argumentUuidsBuilder_.build();
+          }
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments) {
+            return mergeFrom((ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments other) {
+          if (other == ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance()) return this;
+          if (contextContentsBuilder_ == null) {
+            if (!other.contextContents_.isEmpty()) {
+              if (contextContents_.isEmpty()) {
+                contextContents_ = other.contextContents_;
+                bitField0_ = (bitField0_ & ~0x00000001);
+              } else {
+                ensureContextContentsIsMutable();
+                contextContents_.addAll(other.contextContents_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.contextContents_.isEmpty()) {
+              if (contextContentsBuilder_.isEmpty()) {
+                contextContentsBuilder_.dispose();
+                contextContentsBuilder_ = null;
+                contextContents_ = other.contextContents_;
+                bitField0_ = (bitField0_ & ~0x00000001);
+                contextContentsBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getContextContentsFieldBuilder() : null;
+              } else {
+                contextContentsBuilder_.addAllMessages(other.contextContents_);
+              }
+            }
+          }
+          if (argumentUuidsBuilder_ == null) {
+            if (!other.argumentUuids_.isEmpty()) {
+              if (argumentUuids_.isEmpty()) {
+                argumentUuids_ = other.argumentUuids_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+              } else {
+                ensureArgumentUuidsIsMutable();
+                argumentUuids_.addAll(other.argumentUuids_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.argumentUuids_.isEmpty()) {
+              if (argumentUuidsBuilder_.isEmpty()) {
+                argumentUuidsBuilder_.dispose();
+                argumentUuidsBuilder_ = null;
+                argumentUuids_ = other.argumentUuids_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+                argumentUuidsBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getArgumentUuidsFieldBuilder() : null;
+              } else {
+                argumentUuidsBuilder_.addAllMessages(other.argumentUuids_);
+              }
+            }
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          for (int i = 0; i < getContextContentsCount(); i++) {
+            if (!getContextContents(i).isInitialized()) {
+              
+              return false;
+            }
+          }
+          for (int i = 0; i < getArgumentUuidsCount(); i++) {
+            if (!getArgumentUuids(i).isInitialized()) {
+              
+              return false;
+            }
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // repeated .ObjectContents context_contents = 1;
+        private java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents> contextContents_ =
+          java.util.Collections.emptyList();
+        private void ensureContextContentsIsMutable() {
+          if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+            contextContents_ = new java.util.ArrayList<ralph_protobuffs.ObjectContentsProto.ObjectContents>(contextContents_);
+            bitField0_ |= 0x00000001;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.ObjectContentsProto.ObjectContents, ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> contextContentsBuilder_;
+
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents> getContextContentsList() {
+          if (contextContentsBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(contextContents_);
+          } else {
+            return contextContentsBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public int getContextContentsCount() {
+          if (contextContentsBuilder_ == null) {
+            return contextContents_.size();
+          } else {
+            return contextContentsBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public ralph_protobuffs.ObjectContentsProto.ObjectContents getContextContents(int index) {
+          if (contextContentsBuilder_ == null) {
+            return contextContents_.get(index);
+          } else {
+            return contextContentsBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder setContextContents(
+            int index, ralph_protobuffs.ObjectContentsProto.ObjectContents value) {
+          if (contextContentsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContextContentsIsMutable();
+            contextContents_.set(index, value);
+            onChanged();
+          } else {
+            contextContentsBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder setContextContents(
+            int index, ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder builderForValue) {
+          if (contextContentsBuilder_ == null) {
+            ensureContextContentsIsMutable();
+            contextContents_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            contextContentsBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder addContextContents(ralph_protobuffs.ObjectContentsProto.ObjectContents value) {
+          if (contextContentsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContextContentsIsMutable();
+            contextContents_.add(value);
+            onChanged();
+          } else {
+            contextContentsBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder addContextContents(
+            int index, ralph_protobuffs.ObjectContentsProto.ObjectContents value) {
+          if (contextContentsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContextContentsIsMutable();
+            contextContents_.add(index, value);
+            onChanged();
+          } else {
+            contextContentsBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder addContextContents(
+            ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder builderForValue) {
+          if (contextContentsBuilder_ == null) {
+            ensureContextContentsIsMutable();
+            contextContents_.add(builderForValue.build());
+            onChanged();
+          } else {
+            contextContentsBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder addContextContents(
+            int index, ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder builderForValue) {
+          if (contextContentsBuilder_ == null) {
+            ensureContextContentsIsMutable();
+            contextContents_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            contextContentsBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder addAllContextContents(
+            java.lang.Iterable<? extends ralph_protobuffs.ObjectContentsProto.ObjectContents> values) {
+          if (contextContentsBuilder_ == null) {
+            ensureContextContentsIsMutable();
+            super.addAll(values, contextContents_);
+            onChanged();
+          } else {
+            contextContentsBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder clearContextContents() {
+          if (contextContentsBuilder_ == null) {
+            contextContents_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000001);
+            onChanged();
+          } else {
+            contextContentsBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public Builder removeContextContents(int index) {
+          if (contextContentsBuilder_ == null) {
+            ensureContextContentsIsMutable();
+            contextContents_.remove(index);
+            onChanged();
+          } else {
+            contextContentsBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder getContextContentsBuilder(
+            int index) {
+          return getContextContentsFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getContextContentsOrBuilder(
+            int index) {
+          if (contextContentsBuilder_ == null) {
+            return contextContents_.get(index);  } else {
+            return contextContentsBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public java.util.List<? extends ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> 
+             getContextContentsOrBuilderList() {
+          if (contextContentsBuilder_ != null) {
+            return contextContentsBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(contextContents_);
+          }
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder addContextContentsBuilder() {
+          return getContextContentsFieldBuilder().addBuilder(
+              ralph_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder addContextContentsBuilder(
+            int index) {
+          return getContextContentsFieldBuilder().addBuilder(
+              index, ralph_protobuffs.ObjectContentsProto.ObjectContents.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .ObjectContents context_contents = 1;</code>
+         *
+         * <pre>
+         **
+         *All object components necessary to rebuild object.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder> 
+             getContextContentsBuilderList() {
+          return getContextContentsFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.ObjectContentsProto.ObjectContents, ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder> 
+            getContextContentsFieldBuilder() {
+          if (contextContentsBuilder_ == null) {
+            contextContentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                ralph_protobuffs.ObjectContentsProto.ObjectContents, ralph_protobuffs.ObjectContentsProto.ObjectContents.Builder, ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder>(
+                    contextContents_,
+                    ((bitField0_ & 0x00000001) == 0x00000001),
+                    getParentForChildren(),
+                    isClean());
+            contextContents_ = null;
+          }
+          return contextContentsBuilder_;
+        }
+
+        // repeated .UUID argument_uuids = 2;
+        private java.util.List<ralph_protobuffs.UtilProto.UUID> argumentUuids_ =
+          java.util.Collections.emptyList();
+        private void ensureArgumentUuidsIsMutable() {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+            argumentUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(argumentUuids_);
+            bitField0_ |= 0x00000002;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> argumentUuidsBuilder_;
+
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.UtilProto.UUID> getArgumentUuidsList() {
+          if (argumentUuidsBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(argumentUuids_);
+          } else {
+            return argumentUuidsBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public int getArgumentUuidsCount() {
+          if (argumentUuidsBuilder_ == null) {
+            return argumentUuids_.size();
+          } else {
+            return argumentUuidsBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public ralph_protobuffs.UtilProto.UUID getArgumentUuids(int index) {
+          if (argumentUuidsBuilder_ == null) {
+            return argumentUuids_.get(index);
+          } else {
+            return argumentUuidsBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder setArgumentUuids(
+            int index, ralph_protobuffs.UtilProto.UUID value) {
+          if (argumentUuidsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.set(index, value);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder setArgumentUuids(
+            int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (argumentUuidsBuilder_ == null) {
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder addArgumentUuids(ralph_protobuffs.UtilProto.UUID value) {
+          if (argumentUuidsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.add(value);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder addArgumentUuids(
+            int index, ralph_protobuffs.UtilProto.UUID value) {
+          if (argumentUuidsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.add(index, value);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder addArgumentUuids(
+            ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (argumentUuidsBuilder_ == null) {
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.add(builderForValue.build());
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder addArgumentUuids(
+            int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (argumentUuidsBuilder_ == null) {
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder addAllArgumentUuids(
+            java.lang.Iterable<? extends ralph_protobuffs.UtilProto.UUID> values) {
+          if (argumentUuidsBuilder_ == null) {
+            ensureArgumentUuidsIsMutable();
+            super.addAll(values, argumentUuids_);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder clearArgumentUuids() {
+          if (argumentUuidsBuilder_ == null) {
+            argumentUuids_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public Builder removeArgumentUuids(int index) {
+          if (argumentUuidsBuilder_ == null) {
+            ensureArgumentUuidsIsMutable();
+            argumentUuids_.remove(index);
+            onChanged();
+          } else {
+            argumentUuidsBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public ralph_protobuffs.UtilProto.UUID.Builder getArgumentUuidsBuilder(
+            int index) {
+          return getArgumentUuidsFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public ralph_protobuffs.UtilProto.UUIDOrBuilder getArgumentUuidsOrBuilder(
+            int index) {
+          if (argumentUuidsBuilder_ == null) {
+            return argumentUuids_.get(index);  } else {
+            return argumentUuidsBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+             getArgumentUuidsOrBuilderList() {
+          if (argumentUuidsBuilder_ != null) {
+            return argumentUuidsBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(argumentUuids_);
+          }
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public ralph_protobuffs.UtilProto.UUID.Builder addArgumentUuidsBuilder() {
+          return getArgumentUuidsFieldBuilder().addBuilder(
+              ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public ralph_protobuffs.UtilProto.UUID.Builder addArgumentUuidsBuilder(
+            int index) {
+          return getArgumentUuidsFieldBuilder().addBuilder(
+              index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .UUID argument_uuids = 2;</code>
+         *
+         * <pre>
+         **
+         *Ordered: first argument to rpc is first of argument_uuids,
+         *etc.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.UtilProto.UUID.Builder> 
+             getArgumentUuidsBuilderList() {
+          return getArgumentUuidsFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+            getArgumentUuidsFieldBuilder() {
+          if (argumentUuidsBuilder_ == null) {
+            argumentUuidsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                    argumentUuids_,
+                    ((bitField0_ & 0x00000002) == 0x00000002),
+                    getParentForChildren(),
+                    isClean());
+            argumentUuids_ = null;
+          }
+          return argumentUuidsBuilder_;
+        }
+
+        // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock.Arguments)
+      }
+
+      static {
+        defaultInstance = new Arguments(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:PartnerRequestSequenceBlock.Arguments)
     }
 
     private int bitField0_;
@@ -628,25 +2011,40 @@ public final class PartnerRequestSequenceBlockProto {
       return replyToUuid_;
     }
 
-    // required .Variables arguments = 6;
+    // optional .PartnerRequestSequenceBlock.Arguments arguments = 6;
     public static final int ARGUMENTS_FIELD_NUMBER = 6;
-    private ralph_protobuffs.VariablesProto.Variables arguments_;
+    private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments arguments_;
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
     public boolean hasArguments() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
-    public ralph_protobuffs.VariablesProto.Variables getArguments() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getArguments() {
       return arguments_;
     }
     /**
-     * <code>required .Variables arguments = 6;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+     *
+     * <pre>
+     **
+     *Optional because may not have any arguments to rpc.
+     * </pre>
      */
-    public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getArgumentsOrBuilder() {
       return arguments_;
     }
 
@@ -678,11 +2076,11 @@ public final class PartnerRequestSequenceBlockProto {
       return transaction_;
     }
 
-    // optional .Variables return_objs = 8;
+    // optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;
     public static final int RETURN_OBJS_FIELD_NUMBER = 8;
-    private ralph_protobuffs.VariablesProto.Variables returnObjs_;
+    private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments returnObjs_;
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -694,7 +2092,7 @@ public final class PartnerRequestSequenceBlockProto {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -702,11 +2100,11 @@ public final class PartnerRequestSequenceBlockProto {
      *values.
      * </pre>
      */
-    public ralph_protobuffs.VariablesProto.Variables getReturnObjs() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getReturnObjs() {
       return returnObjs_;
     }
     /**
-     * <code>optional .Variables return_objs = 8;</code>
+     * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
      *
      * <pre>
      **
@@ -714,7 +2112,7 @@ public final class PartnerRequestSequenceBlockProto {
      *values.
      * </pre>
      */
-    public ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder() {
+    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getReturnObjsOrBuilder() {
       return returnObjs_;
     }
 
@@ -724,9 +2122,9 @@ public final class PartnerRequestSequenceBlockProto {
       nameOfBlockRequesting_ = "";
       replyWithUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       replyToUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
-      arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+      arguments_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
       transaction_ = false;
-      returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+      returnObjs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -742,10 +2140,6 @@ public final class PartnerRequestSequenceBlockProto {
         return false;
       }
       if (!hasReplyWithUuid()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasArguments()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -771,9 +2165,11 @@ public final class PartnerRequestSequenceBlockProto {
           return false;
         }
       }
-      if (!getArguments().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasArguments()) {
+        if (!getArguments().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (hasReturnObjs()) {
         if (!getReturnObjs().isInitialized()) {
@@ -1002,7 +2398,7 @@ public final class PartnerRequestSequenceBlockProto {
         }
         bitField0_ = (bitField0_ & ~0x00000010);
         if (argumentsBuilder_ == null) {
-          arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+          arguments_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
         } else {
           argumentsBuilder_.clear();
         }
@@ -1010,7 +2406,7 @@ public final class PartnerRequestSequenceBlockProto {
         transaction_ = false;
         bitField0_ = (bitField0_ & ~0x00000040);
         if (returnObjsBuilder_ == null) {
-          returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+          returnObjs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
         } else {
           returnObjsBuilder_.clear();
         }
@@ -1158,10 +2554,6 @@ public final class PartnerRequestSequenceBlockProto {
           
           return false;
         }
-        if (!hasArguments()) {
-          
-          return false;
-        }
         if (!hasTransaction()) {
           
           return false;
@@ -1184,9 +2576,11 @@ public final class PartnerRequestSequenceBlockProto {
             return false;
           }
         }
-        if (!getArguments().isInitialized()) {
-          
-          return false;
+        if (hasArguments()) {
+          if (!getArguments().isInitialized()) {
+            
+            return false;
+          }
         }
         if (hasReturnObjs()) {
           if (!getReturnObjs().isInitialized()) {
@@ -1980,20 +3374,30 @@ public final class PartnerRequestSequenceBlockProto {
         return replyToUuidBuilder_;
       }
 
-      // required .Variables arguments = 6;
-      private ralph_protobuffs.VariablesProto.Variables arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+      // optional .PartnerRequestSequenceBlock.Arguments arguments = 6;
+      private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments arguments_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> argumentsBuilder_;
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder> argumentsBuilder_;
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
       public boolean hasArguments() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
-      public ralph_protobuffs.VariablesProto.Variables getArguments() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getArguments() {
         if (argumentsBuilder_ == null) {
           return arguments_;
         } else {
@@ -2001,9 +3405,14 @@ public final class PartnerRequestSequenceBlockProto {
         }
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
-      public Builder setArguments(ralph_protobuffs.VariablesProto.Variables value) {
+      public Builder setArguments(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments value) {
         if (argumentsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2017,10 +3426,15 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
       public Builder setArguments(
-          ralph_protobuffs.VariablesProto.Variables.Builder builderForValue) {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder builderForValue) {
         if (argumentsBuilder_ == null) {
           arguments_ = builderForValue.build();
           onChanged();
@@ -2031,14 +3445,19 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
-      public Builder mergeArguments(ralph_protobuffs.VariablesProto.Variables value) {
+      public Builder mergeArguments(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments value) {
         if (argumentsBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020) &&
-              arguments_ != ralph_protobuffs.VariablesProto.Variables.getDefaultInstance()) {
+              arguments_ != ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance()) {
             arguments_ =
-              ralph_protobuffs.VariablesProto.Variables.newBuilder(arguments_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.newBuilder(arguments_).mergeFrom(value).buildPartial();
           } else {
             arguments_ = value;
           }
@@ -2050,11 +3469,16 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
       public Builder clearArguments() {
         if (argumentsBuilder_ == null) {
-          arguments_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+          arguments_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
           onChanged();
         } else {
           argumentsBuilder_.clear();
@@ -2063,17 +3487,27 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
-      public ralph_protobuffs.VariablesProto.Variables.Builder getArgumentsBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder getArgumentsBuilder() {
         bitField0_ |= 0x00000020;
         onChanged();
         return getArgumentsFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
-      public ralph_protobuffs.VariablesProto.VariablesOrBuilder getArgumentsOrBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getArgumentsOrBuilder() {
         if (argumentsBuilder_ != null) {
           return argumentsBuilder_.getMessageOrBuilder();
         } else {
@@ -2081,14 +3515,19 @@ public final class PartnerRequestSequenceBlockProto {
         }
       }
       /**
-       * <code>required .Variables arguments = 6;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments arguments = 6;</code>
+       *
+       * <pre>
+       **
+       *Optional because may not have any arguments to rpc.
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> 
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder> 
           getArgumentsFieldBuilder() {
         if (argumentsBuilder_ == null) {
           argumentsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder>(
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder>(
                   arguments_,
                   getParentForChildren(),
                   isClean());
@@ -2154,12 +3593,12 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
 
-      // optional .Variables return_objs = 8;
-      private ralph_protobuffs.VariablesProto.Variables returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+      // optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;
+      private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments returnObjs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> returnObjsBuilder_;
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder> returnObjsBuilder_;
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2171,7 +3610,7 @@ public final class PartnerRequestSequenceBlockProto {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2179,7 +3618,7 @@ public final class PartnerRequestSequenceBlockProto {
        *values.
        * </pre>
        */
-      public ralph_protobuffs.VariablesProto.Variables getReturnObjs() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments getReturnObjs() {
         if (returnObjsBuilder_ == null) {
           return returnObjs_;
         } else {
@@ -2187,7 +3626,7 @@ public final class PartnerRequestSequenceBlockProto {
         }
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2195,7 +3634,7 @@ public final class PartnerRequestSequenceBlockProto {
        *values.
        * </pre>
        */
-      public Builder setReturnObjs(ralph_protobuffs.VariablesProto.Variables value) {
+      public Builder setReturnObjs(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments value) {
         if (returnObjsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -2209,7 +3648,7 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2218,7 +3657,7 @@ public final class PartnerRequestSequenceBlockProto {
        * </pre>
        */
       public Builder setReturnObjs(
-          ralph_protobuffs.VariablesProto.Variables.Builder builderForValue) {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder builderForValue) {
         if (returnObjsBuilder_ == null) {
           returnObjs_ = builderForValue.build();
           onChanged();
@@ -2229,7 +3668,7 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2237,12 +3676,12 @@ public final class PartnerRequestSequenceBlockProto {
        *values.
        * </pre>
        */
-      public Builder mergeReturnObjs(ralph_protobuffs.VariablesProto.Variables value) {
+      public Builder mergeReturnObjs(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments value) {
         if (returnObjsBuilder_ == null) {
           if (((bitField0_ & 0x00000080) == 0x00000080) &&
-              returnObjs_ != ralph_protobuffs.VariablesProto.Variables.getDefaultInstance()) {
+              returnObjs_ != ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance()) {
             returnObjs_ =
-              ralph_protobuffs.VariablesProto.Variables.newBuilder(returnObjs_).mergeFrom(value).buildPartial();
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.newBuilder(returnObjs_).mergeFrom(value).buildPartial();
           } else {
             returnObjs_ = value;
           }
@@ -2254,7 +3693,7 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2264,7 +3703,7 @@ public final class PartnerRequestSequenceBlockProto {
        */
       public Builder clearReturnObjs() {
         if (returnObjsBuilder_ == null) {
-          returnObjs_ = ralph_protobuffs.VariablesProto.Variables.getDefaultInstance();
+          returnObjs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
           onChanged();
         } else {
           returnObjsBuilder_.clear();
@@ -2273,7 +3712,7 @@ public final class PartnerRequestSequenceBlockProto {
         return this;
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2281,13 +3720,13 @@ public final class PartnerRequestSequenceBlockProto {
        *values.
        * </pre>
        */
-      public ralph_protobuffs.VariablesProto.Variables.Builder getReturnObjsBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder getReturnObjsBuilder() {
         bitField0_ |= 0x00000080;
         onChanged();
         return getReturnObjsFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2295,7 +3734,7 @@ public final class PartnerRequestSequenceBlockProto {
        *values.
        * </pre>
        */
-      public ralph_protobuffs.VariablesProto.VariablesOrBuilder getReturnObjsOrBuilder() {
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getReturnObjsOrBuilder() {
         if (returnObjsBuilder_ != null) {
           return returnObjsBuilder_.getMessageOrBuilder();
         } else {
@@ -2303,7 +3742,7 @@ public final class PartnerRequestSequenceBlockProto {
         }
       }
       /**
-       * <code>optional .Variables return_objs = 8;</code>
+       * <code>optional .PartnerRequestSequenceBlock.Arguments return_objs = 8;</code>
        *
        * <pre>
        **
@@ -2312,11 +3751,11 @@ public final class PartnerRequestSequenceBlockProto {
        * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder> 
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder> 
           getReturnObjsFieldBuilder() {
         if (returnObjsBuilder_ == null) {
           returnObjsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ralph_protobuffs.VariablesProto.Variables, ralph_protobuffs.VariablesProto.Variables.Builder, ralph_protobuffs.VariablesProto.VariablesOrBuilder>(
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder>(
                   returnObjs_,
                   getParentForChildren(),
                   isClean());
@@ -2341,6 +3780,11 @@ public final class PartnerRequestSequenceBlockProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerRequestSequenceBlock_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_PartnerRequestSequenceBlock_Arguments_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2351,15 +3795,19 @@ public final class PartnerRequestSequenceBlockProto {
   static {
     java.lang.String[] descriptorData = {
       "\n!partnerRequestSequenceBlock.proto\032\nuti" +
-      "l.proto\032\017variables.proto\"\212\002\n\033PartnerRequ" +
-      "estSequenceBlock\022\031\n\nevent_uuid\030\001 \002(\0132\005.U" +
-      "UID\022\033\n\010priority\030\002 \002(\0132\t.Priority\022 \n\030name" +
-      "_of_block_requesting\030\003 \001(\t\022\036\n\017reply_with" +
-      "_uuid\030\004 \002(\0132\005.UUID\022\034\n\rreply_to_uuid\030\005 \001(" +
-      "\0132\005.UUID\022\035\n\targuments\030\006 \002(\0132\n.Variables\022" +
-      "\023\n\013transaction\030\007 \002(\010\022\037\n\013return_objs\030\010 \001(" +
-      "\0132\n.VariablesB4\n\020ralph_protobuffsB Partn" +
-      "erRequestSequenceBlockProto"
+      "l.proto\032\024objectContents.proto\"\231\003\n\033Partne" +
+      "rRequestSequenceBlock\022\031\n\nevent_uuid\030\001 \002(" +
+      "\0132\005.UUID\022\033\n\010priority\030\002 \002(\0132\t.Priority\022 \n" +
+      "\030name_of_block_requesting\030\003 \001(\t\022\036\n\017reply" +
+      "_with_uuid\030\004 \002(\0132\005.UUID\022\034\n\rreply_to_uuid" +
+      "\030\005 \001(\0132\005.UUID\0229\n\targuments\030\006 \001(\0132&.Partn" +
+      "erRequestSequenceBlock.Arguments\022\023\n\013tran" +
+      "saction\030\007 \002(\010\022;\n\013return_objs\030\010 \001(\0132&.Par" +
+      "tnerRequestSequenceBlock.Arguments\032U\n\tAr",
+      "guments\022)\n\020context_contents\030\001 \003(\0132\017.Obje" +
+      "ctContents\022\035\n\016argument_uuids\030\002 \003(\0132\005.UUI" +
+      "DB4\n\020ralph_protobuffsB PartnerRequestSeq" +
+      "uenceBlockProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2372,6 +3820,12 @@ public final class PartnerRequestSequenceBlockProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_descriptor,
               new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", "ReturnObjs", });
+          internal_static_PartnerRequestSequenceBlock_Arguments_descriptor =
+            internal_static_PartnerRequestSequenceBlock_descriptor.getNestedTypes().get(0);
+          internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_PartnerRequestSequenceBlock_Arguments_descriptor,
+              new java.lang.String[] { "ContextContents", "ArgumentUuids", });
           return null;
         }
       };
@@ -2379,7 +3833,7 @@ public final class PartnerRequestSequenceBlockProto {
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           ralph_protobuffs.UtilProto.getDescriptor(),
-          ralph_protobuffs.VariablesProto.getDescriptor(),
+          ralph_protobuffs.ObjectContentsProto.getDescriptor(),
         }, assigner);
   }
 

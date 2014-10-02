@@ -1,7 +1,7 @@
 option java_package = "ralph_protobuffs";
 option java_outer_classname = "VersionSaverMessagesProto";
 
-import "object_contents.proto";
+import "objectContents.proto";
 import "delta.proto";
 
 message VersionSaverMessages

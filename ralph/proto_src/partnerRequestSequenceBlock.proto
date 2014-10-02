@@ -1,5 +1,5 @@
 import "util.proto";
-import "variables.proto";
+import "objectContents.proto";
 
 option java_package = "ralph_protobuffs";
 option java_outer_classname = "PartnerRequestSequenceBlockProto";
@@ -7,6 +7,20 @@ option java_outer_classname = "PartnerRequestSequenceBlockProto";
 
 message PartnerRequestSequenceBlock
 {
+    message Arguments
+    {
+        /**
+           All object components necessary to rebuild object.
+         */
+        repeated ObjectContents context_contents = 1;
+        /**
+           Ordered: first argument to rpc is first of argument_uuids,
+           etc.
+         */
+        repeated UUID argument_uuids = 2;
+    }
+    
+    
     required UUID event_uuid = 1;
     required Priority priority = 2;
     
@@ -37,9 +51,12 @@ message PartnerRequestSequenceBlock
       said as part of this sequence in.
     */      
     optional UUID reply_to_uuid = 5;
-    
-    required Variables arguments = 6;
-    
+
+    /**
+       Optional because may not have any arguments to rpc.
+     */
+    optional Arguments arguments = 6;
+
     /**
        True if the call should have transactional semantics.  False
        otherwise.
@@ -50,5 +67,5 @@ message PartnerRequestSequenceBlock
        If this is the result of an rpc call, can contain return
        values.
      */
-    optional Variables return_objs = 8;
+    optional Arguments return_objs = 8;
 }
