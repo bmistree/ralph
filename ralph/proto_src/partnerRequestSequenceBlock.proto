@@ -1,5 +1,6 @@
 import "util.proto";
 import "objectContents.proto";
+import "delta.proto";
 
 option java_package = "ralph_protobuffs";
 option java_outer_classname = "PartnerRequestSequenceBlockProto";
@@ -14,11 +15,23 @@ message PartnerRequestSequenceBlock
          */
         repeated ObjectContents context_contents = 1;
         /**
+           Allow to hold internal fields of container.
+         */
+        repeated ArgumentContainerDeltas container_deltas = 2;
+        
+        /**
            Ordered: first argument to rpc is first of argument_uuids,
            etc.
          */
-        repeated UUID argument_uuids = 2;
+        repeated UUID argument_uuids = 3;
     }
+
+    message ArgumentContainerDeltas
+    {
+        required string object_uuid = 1;
+        repeated Delta.ContainerDelta container_delta = 2;
+    }
+
     
     
     required UUID event_uuid = 1;

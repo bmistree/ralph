@@ -480,9 +480,59 @@ public final class PartnerRequestSequenceBlockProto {
       ralph_protobuffs.ObjectContentsProto.ObjectContentsOrBuilder getContextContentsOrBuilder(
           int index);
 
-      // repeated .UUID argument_uuids = 2;
+      // repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> 
+          getContainerDeltasList();
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas getContainerDeltas(int index);
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      int getContainerDeltasCount();
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder> 
+          getContainerDeltasOrBuilderList();
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder getContainerDeltasOrBuilder(
+          int index);
+
+      // repeated .UUID argument_uuids = 3;
+      /**
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -493,7 +543,7 @@ public final class PartnerRequestSequenceBlockProto {
       java.util.List<ralph_protobuffs.UtilProto.UUID> 
           getArgumentUuidsList();
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -503,7 +553,7 @@ public final class PartnerRequestSequenceBlockProto {
        */
       ralph_protobuffs.UtilProto.UUID getArgumentUuids(int index);
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -513,7 +563,7 @@ public final class PartnerRequestSequenceBlockProto {
        */
       int getArgumentUuidsCount();
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -524,7 +574,7 @@ public final class PartnerRequestSequenceBlockProto {
       java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
           getArgumentUuidsOrBuilderList();
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -596,8 +646,16 @@ public final class PartnerRequestSequenceBlockProto {
               }
               case 18: {
                 if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                  argumentUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                  containerDeltas_ = new java.util.ArrayList<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas>();
                   mutable_bitField0_ |= 0x00000002;
+                }
+                containerDeltas_.add(input.readMessage(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.PARSER, extensionRegistry));
+                break;
+              }
+              case 26: {
+                if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                  argumentUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                  mutable_bitField0_ |= 0x00000004;
                 }
                 argumentUuids_.add(input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry));
                 break;
@@ -614,6 +672,9 @@ public final class PartnerRequestSequenceBlockProto {
             contextContents_ = java.util.Collections.unmodifiableList(contextContents_);
           }
           if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            containerDeltas_ = java.util.Collections.unmodifiableList(containerDeltas_);
+          }
+          if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
             argumentUuids_ = java.util.Collections.unmodifiableList(argumentUuids_);
           }
           this.unknownFields = unknownFields.build();
@@ -708,11 +769,72 @@ public final class PartnerRequestSequenceBlockProto {
         return contextContents_.get(index);
       }
 
-      // repeated .UUID argument_uuids = 2;
-      public static final int ARGUMENT_UUIDS_FIELD_NUMBER = 2;
+      // repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;
+      public static final int CONTAINER_DELTAS_FIELD_NUMBER = 2;
+      private java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> containerDeltas_;
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> getContainerDeltasList() {
+        return containerDeltas_;
+      }
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      public java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder> 
+          getContainerDeltasOrBuilderList() {
+        return containerDeltas_;
+      }
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      public int getContainerDeltasCount() {
+        return containerDeltas_.size();
+      }
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas getContainerDeltas(int index) {
+        return containerDeltas_.get(index);
+      }
+      /**
+       * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+       *
+       * <pre>
+       **
+       *Allow to hold internal fields of container.
+       * </pre>
+       */
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder getContainerDeltasOrBuilder(
+          int index) {
+        return containerDeltas_.get(index);
+      }
+
+      // repeated .UUID argument_uuids = 3;
+      public static final int ARGUMENT_UUIDS_FIELD_NUMBER = 3;
       private java.util.List<ralph_protobuffs.UtilProto.UUID> argumentUuids_;
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -724,7 +846,7 @@ public final class PartnerRequestSequenceBlockProto {
         return argumentUuids_;
       }
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -737,7 +859,7 @@ public final class PartnerRequestSequenceBlockProto {
         return argumentUuids_;
       }
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -749,7 +871,7 @@ public final class PartnerRequestSequenceBlockProto {
         return argumentUuids_.size();
       }
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -761,7 +883,7 @@ public final class PartnerRequestSequenceBlockProto {
         return argumentUuids_.get(index);
       }
       /**
-       * <code>repeated .UUID argument_uuids = 2;</code>
+       * <code>repeated .UUID argument_uuids = 3;</code>
        *
        * <pre>
        **
@@ -776,6 +898,7 @@ public final class PartnerRequestSequenceBlockProto {
 
       private void initFields() {
         contextContents_ = java.util.Collections.emptyList();
+        containerDeltas_ = java.util.Collections.emptyList();
         argumentUuids_ = java.util.Collections.emptyList();
       }
       private byte memoizedIsInitialized = -1;
@@ -785,6 +908,12 @@ public final class PartnerRequestSequenceBlockProto {
 
         for (int i = 0; i < getContextContentsCount(); i++) {
           if (!getContextContents(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        for (int i = 0; i < getContainerDeltasCount(); i++) {
+          if (!getContainerDeltas(i).isInitialized()) {
             memoizedIsInitialized = 0;
             return false;
           }
@@ -805,8 +934,11 @@ public final class PartnerRequestSequenceBlockProto {
         for (int i = 0; i < contextContents_.size(); i++) {
           output.writeMessage(1, contextContents_.get(i));
         }
+        for (int i = 0; i < containerDeltas_.size(); i++) {
+          output.writeMessage(2, containerDeltas_.get(i));
+        }
         for (int i = 0; i < argumentUuids_.size(); i++) {
-          output.writeMessage(2, argumentUuids_.get(i));
+          output.writeMessage(3, argumentUuids_.get(i));
         }
         getUnknownFields().writeTo(output);
       }
@@ -821,9 +953,13 @@ public final class PartnerRequestSequenceBlockProto {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(1, contextContents_.get(i));
         }
+        for (int i = 0; i < containerDeltas_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(2, containerDeltas_.get(i));
+        }
         for (int i = 0; i < argumentUuids_.size(); i++) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, argumentUuids_.get(i));
+            .computeMessageSize(3, argumentUuids_.get(i));
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -934,6 +1070,7 @@ public final class PartnerRequestSequenceBlockProto {
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
             getContextContentsFieldBuilder();
+            getContainerDeltasFieldBuilder();
             getArgumentUuidsFieldBuilder();
           }
         }
@@ -949,9 +1086,15 @@ public final class PartnerRequestSequenceBlockProto {
           } else {
             contextContentsBuilder_.clear();
           }
+          if (containerDeltasBuilder_ == null) {
+            containerDeltas_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            containerDeltasBuilder_.clear();
+          }
           if (argumentUuidsBuilder_ == null) {
             argumentUuids_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             argumentUuidsBuilder_.clear();
           }
@@ -991,10 +1134,19 @@ public final class PartnerRequestSequenceBlockProto {
           } else {
             result.contextContents_ = contextContentsBuilder_.build();
           }
-          if (argumentUuidsBuilder_ == null) {
+          if (containerDeltasBuilder_ == null) {
             if (((bitField0_ & 0x00000002) == 0x00000002)) {
-              argumentUuids_ = java.util.Collections.unmodifiableList(argumentUuids_);
+              containerDeltas_ = java.util.Collections.unmodifiableList(containerDeltas_);
               bitField0_ = (bitField0_ & ~0x00000002);
+            }
+            result.containerDeltas_ = containerDeltas_;
+          } else {
+            result.containerDeltas_ = containerDeltasBuilder_.build();
+          }
+          if (argumentUuidsBuilder_ == null) {
+            if (((bitField0_ & 0x00000004) == 0x00000004)) {
+              argumentUuids_ = java.util.Collections.unmodifiableList(argumentUuids_);
+              bitField0_ = (bitField0_ & ~0x00000004);
             }
             result.argumentUuids_ = argumentUuids_;
           } else {
@@ -1041,11 +1193,37 @@ public final class PartnerRequestSequenceBlockProto {
               }
             }
           }
+          if (containerDeltasBuilder_ == null) {
+            if (!other.containerDeltas_.isEmpty()) {
+              if (containerDeltas_.isEmpty()) {
+                containerDeltas_ = other.containerDeltas_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+              } else {
+                ensureContainerDeltasIsMutable();
+                containerDeltas_.addAll(other.containerDeltas_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.containerDeltas_.isEmpty()) {
+              if (containerDeltasBuilder_.isEmpty()) {
+                containerDeltasBuilder_.dispose();
+                containerDeltasBuilder_ = null;
+                containerDeltas_ = other.containerDeltas_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+                containerDeltasBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getContainerDeltasFieldBuilder() : null;
+              } else {
+                containerDeltasBuilder_.addAllMessages(other.containerDeltas_);
+              }
+            }
+          }
           if (argumentUuidsBuilder_ == null) {
             if (!other.argumentUuids_.isEmpty()) {
               if (argumentUuids_.isEmpty()) {
                 argumentUuids_ = other.argumentUuids_;
-                bitField0_ = (bitField0_ & ~0x00000002);
+                bitField0_ = (bitField0_ & ~0x00000004);
               } else {
                 ensureArgumentUuidsIsMutable();
                 argumentUuids_.addAll(other.argumentUuids_);
@@ -1058,7 +1236,7 @@ public final class PartnerRequestSequenceBlockProto {
                 argumentUuidsBuilder_.dispose();
                 argumentUuidsBuilder_ = null;
                 argumentUuids_ = other.argumentUuids_;
-                bitField0_ = (bitField0_ & ~0x00000002);
+                bitField0_ = (bitField0_ & ~0x00000004);
                 argumentUuidsBuilder_ = 
                   com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                      getArgumentUuidsFieldBuilder() : null;
@@ -1074,6 +1252,12 @@ public final class PartnerRequestSequenceBlockProto {
         public final boolean isInitialized() {
           for (int i = 0; i < getContextContentsCount(); i++) {
             if (!getContextContents(i).isInitialized()) {
+              
+              return false;
+            }
+          }
+          for (int i = 0; i < getContainerDeltasCount(); i++) {
+            if (!getContainerDeltas(i).isInitialized()) {
               
               return false;
             }
@@ -1436,13 +1620,343 @@ public final class PartnerRequestSequenceBlockProto {
           return contextContentsBuilder_;
         }
 
-        // repeated .UUID argument_uuids = 2;
+        // repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;
+        private java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> containerDeltas_ =
+          java.util.Collections.emptyList();
+        private void ensureContainerDeltasIsMutable() {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+            containerDeltas_ = new java.util.ArrayList<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas>(containerDeltas_);
+            bitField0_ |= 0x00000002;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder> containerDeltasBuilder_;
+
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> getContainerDeltasList() {
+          if (containerDeltasBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(containerDeltas_);
+          } else {
+            return containerDeltasBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public int getContainerDeltasCount() {
+          if (containerDeltasBuilder_ == null) {
+            return containerDeltas_.size();
+          } else {
+            return containerDeltasBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas getContainerDeltas(int index) {
+          if (containerDeltasBuilder_ == null) {
+            return containerDeltas_.get(index);
+          } else {
+            return containerDeltasBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder setContainerDeltas(
+            int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas value) {
+          if (containerDeltasBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.set(index, value);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder setContainerDeltas(
+            int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder builderForValue) {
+          if (containerDeltasBuilder_ == null) {
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltasBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder addContainerDeltas(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas value) {
+          if (containerDeltasBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.add(value);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder addContainerDeltas(
+            int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas value) {
+          if (containerDeltasBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.add(index, value);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder addContainerDeltas(
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder builderForValue) {
+          if (containerDeltasBuilder_ == null) {
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.add(builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltasBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder addContainerDeltas(
+            int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder builderForValue) {
+          if (containerDeltasBuilder_ == null) {
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltasBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder addAllContainerDeltas(
+            java.lang.Iterable<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas> values) {
+          if (containerDeltasBuilder_ == null) {
+            ensureContainerDeltasIsMutable();
+            super.addAll(values, containerDeltas_);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder clearContainerDeltas() {
+          if (containerDeltasBuilder_ == null) {
+            containerDeltas_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public Builder removeContainerDeltas(int index) {
+          if (containerDeltasBuilder_ == null) {
+            ensureContainerDeltasIsMutable();
+            containerDeltas_.remove(index);
+            onChanged();
+          } else {
+            containerDeltasBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder getContainerDeltasBuilder(
+            int index) {
+          return getContainerDeltasFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder getContainerDeltasOrBuilder(
+            int index) {
+          if (containerDeltasBuilder_ == null) {
+            return containerDeltas_.get(index);  } else {
+            return containerDeltasBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder> 
+             getContainerDeltasOrBuilderList() {
+          if (containerDeltasBuilder_ != null) {
+            return containerDeltasBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(containerDeltas_);
+          }
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder addContainerDeltasBuilder() {
+          return getContainerDeltasFieldBuilder().addBuilder(
+              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder addContainerDeltasBuilder(
+            int index) {
+          return getContainerDeltasFieldBuilder().addBuilder(
+              index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .PartnerRequestSequenceBlock.ArgumentContainerDeltas container_deltas = 2;</code>
+         *
+         * <pre>
+         **
+         *Allow to hold internal fields of container.
+         * </pre>
+         */
+        public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder> 
+             getContainerDeltasBuilderList() {
+          return getContainerDeltasFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder> 
+            getContainerDeltasFieldBuilder() {
+          if (containerDeltasBuilder_ == null) {
+            containerDeltasBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder>(
+                    containerDeltas_,
+                    ((bitField0_ & 0x00000002) == 0x00000002),
+                    getParentForChildren(),
+                    isClean());
+            containerDeltas_ = null;
+          }
+          return containerDeltasBuilder_;
+        }
+
+        // repeated .UUID argument_uuids = 3;
         private java.util.List<ralph_protobuffs.UtilProto.UUID> argumentUuids_ =
           java.util.Collections.emptyList();
         private void ensureArgumentUuidsIsMutable() {
-          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          if (!((bitField0_ & 0x00000004) == 0x00000004)) {
             argumentUuids_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(argumentUuids_);
-            bitField0_ |= 0x00000002;
+            bitField0_ |= 0x00000004;
            }
         }
 
@@ -1450,7 +1964,7 @@ public final class PartnerRequestSequenceBlockProto {
             ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> argumentUuidsBuilder_;
 
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1466,7 +1980,7 @@ public final class PartnerRequestSequenceBlockProto {
           }
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1482,7 +1996,7 @@ public final class PartnerRequestSequenceBlockProto {
           }
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1498,7 +2012,7 @@ public final class PartnerRequestSequenceBlockProto {
           }
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1521,7 +2035,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1541,7 +2055,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1563,7 +2077,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1586,7 +2100,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1606,7 +2120,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1626,7 +2140,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1646,7 +2160,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1657,7 +2171,7 @@ public final class PartnerRequestSequenceBlockProto {
         public Builder clearArgumentUuids() {
           if (argumentUuidsBuilder_ == null) {
             argumentUuids_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000004);
             onChanged();
           } else {
             argumentUuidsBuilder_.clear();
@@ -1665,7 +2179,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1684,7 +2198,7 @@ public final class PartnerRequestSequenceBlockProto {
           return this;
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1697,7 +2211,7 @@ public final class PartnerRequestSequenceBlockProto {
           return getArgumentUuidsFieldBuilder().getBuilder(index);
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1713,7 +2227,7 @@ public final class PartnerRequestSequenceBlockProto {
           }
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1730,7 +2244,7 @@ public final class PartnerRequestSequenceBlockProto {
           }
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1743,7 +2257,7 @@ public final class PartnerRequestSequenceBlockProto {
               ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1757,7 +2271,7 @@ public final class PartnerRequestSequenceBlockProto {
               index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
         }
         /**
-         * <code>repeated .UUID argument_uuids = 2;</code>
+         * <code>repeated .UUID argument_uuids = 3;</code>
          *
          * <pre>
          **
@@ -1776,7 +2290,7 @@ public final class PartnerRequestSequenceBlockProto {
             argumentUuidsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
                 ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
                     argumentUuids_,
-                    ((bitField0_ & 0x00000002) == 0x00000002),
+                    ((bitField0_ & 0x00000004) == 0x00000004),
                     getParentForChildren(),
                     isClean());
             argumentUuids_ = null;
@@ -1793,6 +2307,859 @@ public final class PartnerRequestSequenceBlockProto {
       }
 
       // @@protoc_insertion_point(class_scope:PartnerRequestSequenceBlock.Arguments)
+    }
+
+    public interface ArgumentContainerDeltasOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required string object_uuid = 1;
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      boolean hasObjectUuid();
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      java.lang.String getObjectUuid();
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      com.google.protobuf.ByteString
+          getObjectUuidBytes();
+
+      // repeated .Delta.ContainerDelta container_delta = 2;
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta> 
+          getContainerDeltaList();
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      ralph_protobuffs.DeltaProto.Delta.ContainerDelta getContainerDelta(int index);
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      int getContainerDeltaCount();
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      java.util.List<? extends ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder> 
+          getContainerDeltaOrBuilderList();
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder getContainerDeltaOrBuilder(
+          int index);
+    }
+    /**
+     * Protobuf type {@code PartnerRequestSequenceBlock.ArgumentContainerDeltas}
+     */
+    public static final class ArgumentContainerDeltas extends
+        com.google.protobuf.GeneratedMessage
+        implements ArgumentContainerDeltasOrBuilder {
+      // Use ArgumentContainerDeltas.newBuilder() to construct.
+      private ArgumentContainerDeltas(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private ArgumentContainerDeltas(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final ArgumentContainerDeltas defaultInstance;
+      public static ArgumentContainerDeltas getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public ArgumentContainerDeltas getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ArgumentContainerDeltas(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                objectUuid_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                  containerDelta_ = new java.util.ArrayList<ralph_protobuffs.DeltaProto.Delta.ContainerDelta>();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                containerDelta_.add(input.readMessage(ralph_protobuffs.DeltaProto.Delta.ContainerDelta.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            containerDelta_ = java.util.Collections.unmodifiableList(containerDelta_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<ArgumentContainerDeltas> PARSER =
+          new com.google.protobuf.AbstractParser<ArgumentContainerDeltas>() {
+        public ArgumentContainerDeltas parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ArgumentContainerDeltas(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ArgumentContainerDeltas> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required string object_uuid = 1;
+      public static final int OBJECT_UUID_FIELD_NUMBER = 1;
+      private java.lang.Object objectUuid_;
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      public boolean hasObjectUuid() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      public java.lang.String getObjectUuid() {
+        java.lang.Object ref = objectUuid_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            objectUuid_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string object_uuid = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getObjectUuidBytes() {
+        java.lang.Object ref = objectUuid_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          objectUuid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // repeated .Delta.ContainerDelta container_delta = 2;
+      public static final int CONTAINER_DELTA_FIELD_NUMBER = 2;
+      private java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta> containerDelta_;
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      public java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta> getContainerDeltaList() {
+        return containerDelta_;
+      }
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      public java.util.List<? extends ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder> 
+          getContainerDeltaOrBuilderList() {
+        return containerDelta_;
+      }
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      public int getContainerDeltaCount() {
+        return containerDelta_.size();
+      }
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ContainerDelta getContainerDelta(int index) {
+        return containerDelta_.get(index);
+      }
+      /**
+       * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder getContainerDeltaOrBuilder(
+          int index) {
+        return containerDelta_.get(index);
+      }
+
+      private void initFields() {
+        objectUuid_ = "";
+        containerDelta_ = java.util.Collections.emptyList();
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasObjectUuid()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        for (int i = 0; i < getContainerDeltaCount(); i++) {
+          if (!getContainerDelta(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getObjectUuidBytes());
+        }
+        for (int i = 0; i < containerDelta_.size(); i++) {
+          output.writeMessage(2, containerDelta_.get(i));
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getObjectUuidBytes());
+        }
+        for (int i = 0; i < containerDelta_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(2, containerDelta_.get(i));
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code PartnerRequestSequenceBlock.ArgumentContainerDeltas}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltasOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.class, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.Builder.class);
+        }
+
+        // Construct using ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getContainerDeltaFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          objectUuid_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          if (containerDeltaBuilder_ == null) {
+            containerDelta_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            containerDeltaBuilder_.clear();
+          }
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor;
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas getDefaultInstanceForType() {
+          return ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.getDefaultInstance();
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas build() {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas buildPartial() {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas result = new ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.objectUuid_ = objectUuid_;
+          if (containerDeltaBuilder_ == null) {
+            if (((bitField0_ & 0x00000002) == 0x00000002)) {
+              containerDelta_ = java.util.Collections.unmodifiableList(containerDelta_);
+              bitField0_ = (bitField0_ & ~0x00000002);
+            }
+            result.containerDelta_ = containerDelta_;
+          } else {
+            result.containerDelta_ = containerDeltaBuilder_.build();
+          }
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas) {
+            return mergeFrom((ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas other) {
+          if (other == ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas.getDefaultInstance()) return this;
+          if (other.hasObjectUuid()) {
+            bitField0_ |= 0x00000001;
+            objectUuid_ = other.objectUuid_;
+            onChanged();
+          }
+          if (containerDeltaBuilder_ == null) {
+            if (!other.containerDelta_.isEmpty()) {
+              if (containerDelta_.isEmpty()) {
+                containerDelta_ = other.containerDelta_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+              } else {
+                ensureContainerDeltaIsMutable();
+                containerDelta_.addAll(other.containerDelta_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.containerDelta_.isEmpty()) {
+              if (containerDeltaBuilder_.isEmpty()) {
+                containerDeltaBuilder_.dispose();
+                containerDeltaBuilder_ = null;
+                containerDelta_ = other.containerDelta_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+                containerDeltaBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getContainerDeltaFieldBuilder() : null;
+              } else {
+                containerDeltaBuilder_.addAllMessages(other.containerDelta_);
+              }
+            }
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasObjectUuid()) {
+            
+            return false;
+          }
+          for (int i = 0; i < getContainerDeltaCount(); i++) {
+            if (!getContainerDelta(i).isInitialized()) {
+              
+              return false;
+            }
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required string object_uuid = 1;
+        private java.lang.Object objectUuid_ = "";
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public boolean hasObjectUuid() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public java.lang.String getObjectUuid() {
+          java.lang.Object ref = objectUuid_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            objectUuid_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getObjectUuidBytes() {
+          java.lang.Object ref = objectUuid_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            objectUuid_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public Builder setObjectUuid(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          objectUuid_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public Builder clearObjectUuid() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          objectUuid_ = getDefaultInstance().getObjectUuid();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string object_uuid = 1;</code>
+         */
+        public Builder setObjectUuidBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          objectUuid_ = value;
+          onChanged();
+          return this;
+        }
+
+        // repeated .Delta.ContainerDelta container_delta = 2;
+        private java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta> containerDelta_ =
+          java.util.Collections.emptyList();
+        private void ensureContainerDeltaIsMutable() {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+            containerDelta_ = new java.util.ArrayList<ralph_protobuffs.DeltaProto.Delta.ContainerDelta>(containerDelta_);
+            bitField0_ |= 0x00000002;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.DeltaProto.Delta.ContainerDelta, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder> containerDeltaBuilder_;
+
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta> getContainerDeltaList() {
+          if (containerDeltaBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(containerDelta_);
+          } else {
+            return containerDeltaBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public int getContainerDeltaCount() {
+          if (containerDeltaBuilder_ == null) {
+            return containerDelta_.size();
+          } else {
+            return containerDeltaBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public ralph_protobuffs.DeltaProto.Delta.ContainerDelta getContainerDelta(int index) {
+          if (containerDeltaBuilder_ == null) {
+            return containerDelta_.get(index);
+          } else {
+            return containerDeltaBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder setContainerDelta(
+            int index, ralph_protobuffs.DeltaProto.Delta.ContainerDelta value) {
+          if (containerDeltaBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltaIsMutable();
+            containerDelta_.set(index, value);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder setContainerDelta(
+            int index, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder builderForValue) {
+          if (containerDeltaBuilder_ == null) {
+            ensureContainerDeltaIsMutable();
+            containerDelta_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltaBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder addContainerDelta(ralph_protobuffs.DeltaProto.Delta.ContainerDelta value) {
+          if (containerDeltaBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltaIsMutable();
+            containerDelta_.add(value);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder addContainerDelta(
+            int index, ralph_protobuffs.DeltaProto.Delta.ContainerDelta value) {
+          if (containerDeltaBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureContainerDeltaIsMutable();
+            containerDelta_.add(index, value);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder addContainerDelta(
+            ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder builderForValue) {
+          if (containerDeltaBuilder_ == null) {
+            ensureContainerDeltaIsMutable();
+            containerDelta_.add(builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltaBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder addContainerDelta(
+            int index, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder builderForValue) {
+          if (containerDeltaBuilder_ == null) {
+            ensureContainerDeltaIsMutable();
+            containerDelta_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            containerDeltaBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder addAllContainerDelta(
+            java.lang.Iterable<? extends ralph_protobuffs.DeltaProto.Delta.ContainerDelta> values) {
+          if (containerDeltaBuilder_ == null) {
+            ensureContainerDeltaIsMutable();
+            super.addAll(values, containerDelta_);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder clearContainerDelta() {
+          if (containerDeltaBuilder_ == null) {
+            containerDelta_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public Builder removeContainerDelta(int index) {
+          if (containerDeltaBuilder_ == null) {
+            ensureContainerDeltaIsMutable();
+            containerDelta_.remove(index);
+            onChanged();
+          } else {
+            containerDeltaBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder getContainerDeltaBuilder(
+            int index) {
+          return getContainerDeltaFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder getContainerDeltaOrBuilder(
+            int index) {
+          if (containerDeltaBuilder_ == null) {
+            return containerDelta_.get(index);  } else {
+            return containerDeltaBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public java.util.List<? extends ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder> 
+             getContainerDeltaOrBuilderList() {
+          if (containerDeltaBuilder_ != null) {
+            return containerDeltaBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(containerDelta_);
+          }
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder addContainerDeltaBuilder() {
+          return getContainerDeltaFieldBuilder().addBuilder(
+              ralph_protobuffs.DeltaProto.Delta.ContainerDelta.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder addContainerDeltaBuilder(
+            int index) {
+          return getContainerDeltaFieldBuilder().addBuilder(
+              index, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Delta.ContainerDelta container_delta = 2;</code>
+         */
+        public java.util.List<ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder> 
+             getContainerDeltaBuilderList() {
+          return getContainerDeltaFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            ralph_protobuffs.DeltaProto.Delta.ContainerDelta, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder> 
+            getContainerDeltaFieldBuilder() {
+          if (containerDeltaBuilder_ == null) {
+            containerDeltaBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                ralph_protobuffs.DeltaProto.Delta.ContainerDelta, ralph_protobuffs.DeltaProto.Delta.ContainerDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ContainerDeltaOrBuilder>(
+                    containerDelta_,
+                    ((bitField0_ & 0x00000002) == 0x00000002),
+                    getParentForChildren(),
+                    isClean());
+            containerDelta_ = null;
+          }
+          return containerDeltaBuilder_;
+        }
+
+        // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock.ArgumentContainerDeltas)
+      }
+
+      static {
+        defaultInstance = new ArgumentContainerDeltas(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:PartnerRequestSequenceBlock.ArgumentContainerDeltas)
     }
 
     private int bitField0_;
@@ -3785,6 +5152,11 @@ public final class PartnerRequestSequenceBlockProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -3795,19 +5167,24 @@ public final class PartnerRequestSequenceBlockProto {
   static {
     java.lang.String[] descriptorData = {
       "\n!partnerRequestSequenceBlock.proto\032\nuti" +
-      "l.proto\032\024objectContents.proto\"\231\003\n\033Partne" +
-      "rRequestSequenceBlock\022\031\n\nevent_uuid\030\001 \002(" +
-      "\0132\005.UUID\022\033\n\010priority\030\002 \002(\0132\t.Priority\022 \n" +
-      "\030name_of_block_requesting\030\003 \001(\t\022\036\n\017reply" +
-      "_with_uuid\030\004 \002(\0132\005.UUID\022\034\n\rreply_to_uuid" +
-      "\030\005 \001(\0132\005.UUID\0229\n\targuments\030\006 \001(\0132&.Partn" +
-      "erRequestSequenceBlock.Arguments\022\023\n\013tran" +
-      "saction\030\007 \002(\010\022;\n\013return_objs\030\010 \001(\0132&.Par" +
-      "tnerRequestSequenceBlock.Arguments\032U\n\tAr",
-      "guments\022)\n\020context_contents\030\001 \003(\0132\017.Obje" +
-      "ctContents\022\035\n\016argument_uuids\030\002 \003(\0132\005.UUI" +
-      "DB4\n\020ralph_protobuffsB PartnerRequestSeq" +
-      "uenceBlockProto"
+      "l.proto\032\024objectContents.proto\032\013delta.pro" +
+      "to\"\312\004\n\033PartnerRequestSequenceBlock\022\031\n\nev" +
+      "ent_uuid\030\001 \002(\0132\005.UUID\022\033\n\010priority\030\002 \002(\0132" +
+      "\t.Priority\022 \n\030name_of_block_requesting\030\003" +
+      " \001(\t\022\036\n\017reply_with_uuid\030\004 \002(\0132\005.UUID\022\034\n\r" +
+      "reply_to_uuid\030\005 \001(\0132\005.UUID\0229\n\targuments\030" +
+      "\006 \001(\0132&.PartnerRequestSequenceBlock.Argu" +
+      "ments\022\023\n\013transaction\030\007 \002(\010\022;\n\013return_obj" +
+      "s\030\010 \001(\0132&.PartnerRequestSequenceBlock.Ar",
+      "guments\032\245\001\n\tArguments\022)\n\020context_content" +
+      "s\030\001 \003(\0132\017.ObjectContents\022N\n\020container_de" +
+      "ltas\030\002 \003(\01324.PartnerRequestSequenceBlock" +
+      ".ArgumentContainerDeltas\022\035\n\016argument_uui" +
+      "ds\030\003 \003(\0132\005.UUID\032^\n\027ArgumentContainerDelt" +
+      "as\022\023\n\013object_uuid\030\001 \002(\t\022.\n\017container_del" +
+      "ta\030\002 \003(\0132\025.Delta.ContainerDeltaB4\n\020ralph" +
+      "_protobuffsB PartnerRequestSequenceBlock" +
+      "Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3825,7 +5202,13 @@ public final class PartnerRequestSequenceBlockProto {
           internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_Arguments_descriptor,
-              new java.lang.String[] { "ContextContents", "ArgumentUuids", });
+              new java.lang.String[] { "ContextContents", "ContainerDeltas", "ArgumentUuids", });
+          internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor =
+            internal_static_PartnerRequestSequenceBlock_descriptor.getNestedTypes().get(1);
+          internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_PartnerRequestSequenceBlock_ArgumentContainerDeltas_descriptor,
+              new java.lang.String[] { "ObjectUuid", "ContainerDelta", });
           return null;
         }
       };
@@ -3834,6 +5217,7 @@ public final class PartnerRequestSequenceBlockProto {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           ralph_protobuffs.UtilProto.getDescriptor(),
           ralph_protobuffs.ObjectContentsProto.getDescriptor(),
+          ralph_protobuffs.DeltaProto.getDescriptor(),
         }, assigner);
   }
 
