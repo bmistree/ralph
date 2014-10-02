@@ -6,7 +6,7 @@ import RalphDataWrappers.ContainerOpTuple;
 
 import ralph.Util;
 import ralph.VersionContainerDeltas;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.DeltaProto.Delta;
 
 
 public class ContainerDeltasToDelta <KeyType>

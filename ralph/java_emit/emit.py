@@ -79,8 +79,8 @@ import RalphCallResults.RootCallResult;
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.DeltaProto.Delta;
 
 public class %s
 {

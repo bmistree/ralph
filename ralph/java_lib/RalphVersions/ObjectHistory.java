@@ -13,11 +13,11 @@ import RalphExceptions.BackoutException;
 import ralph.IInternalReferenceHolder;
 import ralph.Util;
 
-import ralph_local_version_protobuffs.DeltaProto.Delta;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerOpType;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ContainerDelta;
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.DeltaProto.Delta.ValueType;
+import ralph_version_protobuffs.DeltaProto.Delta.ContainerOpType;
+import ralph_version_protobuffs.DeltaProto.Delta.ContainerDelta;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class ObjectHistory
 {

@@ -9,8 +9,8 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.DeltaProto.Delta;
 
     
 /**

@@ -16,10 +16,10 @@ import ralph.InternalStructBaseClass;
 import ralph.EnumConstructorObj;
 import ralph.IReference;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ReferenceType;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.DeltaProto.Delta.ReferenceType;
+import ralph_version_protobuffs.DeltaProto.Delta.ValueType;
 
 public class ObjectContentsDeserializers
 {

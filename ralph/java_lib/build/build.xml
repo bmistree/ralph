@@ -14,7 +14,7 @@
   <property name="build.dir" location="${real_dir}/classes"/>
   <property name="jar_dir" location="${real_dir}/jar_dir"/>
   <property name="proto.dir" location="${real_dir}/../ralph_protobuffs/"/>
-  <property name="local_version_proto_dir" location="${real_dir}/../ralph_local_version_protobuffs/"/>
+  <property name="version_proto_dir" location="${real_dir}/../ralph_version_protobuffs/"/>
   <property name="exceptions.dir" location="${real_dir}/../RalphExceptions/"/>
   <property name="ralph.dir" location="${real_dir}/../ralph/"/>  
   <property name="connections.dir" location="${real_dir}/../RalphConnObj/"/>
@@ -69,9 +69,9 @@
         />
   </target>
 
-  <target name="compile_local_version_proto" depends="init" description="compile version msg protos">
+  <target name="compile_version_proto" depends="init" description="compile version msg protos">
     <javac
-        srcdir="${local_version_proto_dir}"
+        srcdir="${version_proto_dir}"
         destdir="${build.dir}"
         classpath="${protobuf_path}"
         includeantruntime="false"
@@ -88,7 +88,7 @@
 
   <target
       name="compile_all"
-      depends="init,compile_proto,compile_local_version_proto,compile_exceptions"
+      depends="init,compile_proto,compile_version_proto,compile_exceptions"
       description="compile all libs for project">
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:

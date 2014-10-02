@@ -12,7 +12,7 @@ import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <V> --- The Java type of data that the values should point

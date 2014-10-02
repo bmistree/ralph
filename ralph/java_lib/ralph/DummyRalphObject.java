@@ -2,7 +2,7 @@ package ralph;
 
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
 

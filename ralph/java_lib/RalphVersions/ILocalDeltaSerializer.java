@@ -1,6 +1,6 @@
 package RalphVersions;
 
-import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.DeltaProto.Delta;
 
 public interface ILocalDeltaSerializer<DataTypeToSerialize>
 {

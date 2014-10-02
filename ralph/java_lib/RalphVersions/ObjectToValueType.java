@@ -1,7 +1,7 @@
 package RalphVersions;
 
-import ralph_local_version_protobuffs.DeltaProto.Delta;
-import ralph_local_version_protobuffs.DeltaProto.Delta.ValueType;
+import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.DeltaProto.Delta.ValueType;
 
 public class ObjectToValueType
 {

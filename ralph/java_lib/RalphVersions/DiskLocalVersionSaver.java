@@ -7,9 +7,9 @@ import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 import ralph.EnumConstructorObj;
 
-import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
+import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 
 public class DiskLocalVersionSaver implements ILocalVersionSaver

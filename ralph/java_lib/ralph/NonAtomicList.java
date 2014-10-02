@@ -11,7 +11,7 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import ralph.AtomicList.AdditionalAtomicListSerializationContents;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <V> ---- The type of each internal value in the internal

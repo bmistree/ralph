@@ -13,8 +13,8 @@ import ralph.EnumConstructorObj;
 import ralph.CommitMetadata;
 import ralph.VersioningInfo;
 
-import ralph_local_version_protobuffs.DeltaProto.Delta;
-import ralph_local_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
+import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 
 public class DiskLocalVersionReplayer implements ILocalVersionReplayer

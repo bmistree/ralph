@@ -12,8 +12,8 @@ import RalphDataWrappers.MapTypeDataWrapper;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_local_version_protobuffs.DeltaProto.Delta;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.DeltaProto.Delta;
 
 
 /**

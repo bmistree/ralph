@@ -3,7 +3,7 @@ package ralph;
 import java.util.List;
 
 import RalphExceptions.BackoutException;
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ILocalVersionSaver;
 
 

@@ -25,7 +25,7 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectContentsDeserializers;
 import RalphVersions.ObjectHistory.SingleObjectChange;
 

@@ -18,7 +18,7 @@ import RalphVersions.ObjectHistory;
 
 import ralph.AtomicMap.AdditionalAtomicMapSerializationContents;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or

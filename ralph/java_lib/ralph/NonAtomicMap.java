@@ -11,7 +11,7 @@ import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
  * @param <K>  ---- The keys used for indexing

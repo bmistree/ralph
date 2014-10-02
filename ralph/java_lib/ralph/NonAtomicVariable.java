@@ -7,7 +7,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphDataWrappers.ValueTypeDataWrapper;
 import RalphVersions.ILocalVersionSaver;
 
-import ralph_local_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
 
 public abstract class NonAtomicVariable<T,DeltaType>
     extends NonAtomicObject<T,DeltaType>
