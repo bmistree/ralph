@@ -3,7 +3,7 @@ package RalphVersions;
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 
-import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
 public class ReconstructionContext implements IReconstructionContext
 {

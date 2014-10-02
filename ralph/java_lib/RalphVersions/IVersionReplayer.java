@@ -3,7 +3,7 @@ package RalphVersions;
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 import ralph.EnumConstructorObj;
-import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
 public interface IVersionReplayer
 {

@@ -10,11 +10,11 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.CommitMetadata;
 import RalphVersions.EndpointInitializationHistory.NameUUIDTuple;
-import ralph_version_protobuffs.DeltaProto.Delta;
-import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.DeltaProto.Delta;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
 
-import ralph_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
+import ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 public class VersionUtil
 {

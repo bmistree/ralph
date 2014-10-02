@@ -1,6 +1,6 @@
 package RalphVersions;
 
-import ralph_version_protobuffs.DeltaProto.Delta.ValueType;
+import ralph_protobuffs.DeltaProto.Delta.ValueType;
 
 public interface IValueTypeSerializer<ToSerializeType>
 {

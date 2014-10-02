@@ -1,7 +1,7 @@
 package RalphVersions;
 
 import ralph.EnumConstructorObj;
-import ralph_version_protobuffs.DeltaProto.Delta;
+import ralph_protobuffs.DeltaProto.Delta;
 
 
 public class EnumSerializer<EnumType extends Enum>

@@ -21,7 +21,7 @@ import RalphDataWrappers.ListTypeDataWrapper;
 
 import RalphVersions.IVersionSaver;
 import RalphServiceActions.AtomicObjectTryNextAction;
-import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
 
 /**

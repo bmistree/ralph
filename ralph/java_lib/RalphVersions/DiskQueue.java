@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import ralph_version_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
+import ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 import com.google.protobuf.MessageLite;
 
 import ralph.Util;

@@ -1,4 +1,4 @@
-option java_package = "ralph_version_protobuffs";
+option java_package = "ralph_protobuffs";
 option java_outer_classname = "DeltaProto";
 
 message Delta

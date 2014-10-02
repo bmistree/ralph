@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import RalphExceptions.BackoutException;
 import ralph_protobuffs.VariablesProto;
-import ralph_version_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
 
