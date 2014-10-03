@@ -2,7 +2,6 @@ package ralph;
 
 import java.util.List;
 import java.util.ArrayList;
-import ralph_protobuffs.VariablesProto.Variables;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
@@ -81,18 +80,10 @@ public abstract class NonAtomicList<ValueType,DeltaType>
 
     }
 
-    public void serialize_as_rpc_arg(
-        ActiveEvent active_event,
-        Variables.Any.Builder any_builder) throws BackoutException
-    {
-        NonAtomicInternalList<ValueType,DeltaType> internal_val =
-            get_val(active_event);
-        internal_val.serialize_as_rpc_arg(active_event,any_builder);
-    }
-
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event, Object additional_serialization_contents)
+        ActiveEvent active_event, Object additional_serialization_contents,
+        SerializationContext serialization_context)
         throws BackoutException
     {
         String value_type_name = null;
@@ -112,7 +103,11 @@ public abstract class NonAtomicList<ValueType,DeltaType>
 
         String internal_reference = null;
         if (internal_list != null)
+        {
             internal_reference = internal_list.uuid();
+            if (serialization_context != null)
+                serialization_context.add_to_serialize(internal_list);
+        }
         
         return AtomicList.serialize_list_reference(
             uuid(),internal_reference,value_type_name,false);

@@ -1,25 +1,27 @@
 package ralph;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
-
-import RalphServiceActions.ServiceAction;
+import java.util.concurrent.locks.ReentrantLock;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.VariablesProto;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
+
 import RalphCallResults.MessageCallResultObject;
-import java.util.concurrent.locks.ReentrantLock;
+
+import RalphServiceActions.ServiceAction;
 
 import RalphExceptions.BackoutException;
 import RalphExceptions.StoppedException;
-
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
+
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
 
@@ -357,52 +359,40 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 reply_with_uuid, threadsafe_unblock_queue);
         }
 
+        // FIXME: check if can refactor and merge the following code
+        // with AtomicActiveEvent.
+
         // construct variables for arg messages
-        VariablesProto.Variables.Builder serialized_arguments =
-            VariablesProto.Variables.newBuilder();
-        for (RalphObject arg : args)
+        SerializationContext serialization_context =
+            new SerializationContext(args,true);
+        Arguments.Builder serialized_arguments = null;
+
+        try
         {
-            try
-            {
-                // arg may be null: for instance if sending a
-                // sequence complete call to an endpoint where the
-                // passed in argument was not passed in by
-                // reference.
-                VariablesProto.Variables.Any.Builder any_builder =
-                    VariablesProto.Variables.Any.newBuilder();
-
-                if (arg == null)
-                {
-                    any_builder.setVarName("");
-                    any_builder.setIsTvar(false);
-                }
-                else
-                    arg.serialize_as_rpc_arg(this,any_builder);
-
-                serialized_arguments.addVars(any_builder);
-            }
-            catch (BackoutException excep)
-            {
-                return false;
-            }
+            serialized_arguments =
+                serialization_context.serialize_all(this);
+        }
+        catch (BackoutException excep)
+        {
+            return false;
         }
 
-        VariablesProto.Variables.Builder serialized_results = null;
+        Arguments.Builder serialized_results = null;
         if (result != null)
         {
-            serialized_results = VariablesProto.Variables.newBuilder();
-            VariablesProto.Variables.Any.Builder any_builder =
-                VariablesProto.Variables.Any.newBuilder();
+            serialization_context = new SerializationContext(null,true);
+            serialization_context.add_to_serialize(result);
             try
             {
-                result.serialize_as_rpc_arg(this,any_builder);
+                serialized_results =
+                    serialization_context.serialize_all(this);
             }
             catch (BackoutException excep)
             {
                 return false;
             }
-            serialized_results.addVars(any_builder);
         }
+
         
         // changed to have rpc semantics: this means that if it's not
         // the first message, then it is a reply to another message.
@@ -549,10 +539,16 @@ public class NonAtomicActiveEvent extends ActiveEvent
         //#### END DEBUG
 
         // grab all arguments from message
-        List <RalphObject> args =
-            ExecutingEventContext.deserialize_rpc_args_list(
-                msg.getArguments(),endpt_recvd_msg_on.ralph_globals);
         
+        // FIXME: Check if necessary for args to be non-null;
+        List <RalphObject> args = new ArrayList<RalphObject>();
+        if (msg.hasArguments())
+        {
+            args =
+                RPCDeserializationHelper.deserialize_arguments_list(
+                    event_parent.ralph_globals,msg.getArguments());
+        }
+
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.
@@ -640,21 +636,17 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 "unknown _ActiveEvent message in NonAtomic.");
         }
         //#### END DEBUG
-        
-        String reply_with_uuid = msg.getReplyWithUuid().getData();
-        VariablesProto.Variables returned_variables = msg.getArguments();
 
-        VariablesProto.Variables returned_objs = null;
+        String reply_with_uuid = msg.getReplyWithUuid().getData();
+        Arguments returned_objs = null;
         if (msg.hasReturnObjs())
             returned_objs = msg.getReturnObjs();
-
         
         //# unblock waiting listening queue.
         message_listening_queues_map.get(reply_to_uuid).add(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid,name_of_block_to_exec_next,
                 // contain returned results.
-                returned_variables,
                 returned_objs));
 
         //# no need holding onto queue waiting on a message response.

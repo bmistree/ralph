@@ -1,7 +1,6 @@
 package ralph;
 
 import java.util.List;
-import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -31,14 +30,6 @@ public interface RalphInternalListInterface<V,ValueDeltaType>
     
     public void append(
         ActiveEvent active_event, V what_to_insert) throws BackoutException;
-    /**
-       Runs through all the entries in the map/list/struct and puts
-       them into any_builder.
-     */
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException;
     
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException;

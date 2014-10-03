@@ -10,16 +10,16 @@ import java.io.ObjectInputStream;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import RalphDeserializer.Deserializer;
-import RalphDeserializer.DeserializationEvent;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
-import ralph_protobuffs.VariablesProto;
 
 import RalphCallResults.MessageCallResultObject;
+
+
 
 
 public class ExecutingEventContext
@@ -70,20 +70,6 @@ public class ExecutingEventContext
      */
     public ExecutingEventContext ()
     {}
-
-    public static void serialize_as_rpc_arg(
-        ActiveEvent active_event, RalphObject to_serialize,
-        VariablesProto.Variables.Any.Builder any_builder) throws BackoutException
-    {
-        if (to_serialize == null)
-        {
-            any_builder.setVarName("");
-            any_builder.setIsTvar(false);
-            return;
-        }
-
-        to_serialize.serialize_as_rpc_arg(active_event,any_builder);
-    }
     
     /**
        Use this constructor when creating an event context as a result
@@ -322,110 +308,11 @@ public class ExecutingEventContext
         // then return it here.
         if (queue_elem.returned_objs != null)
         {
-            VariablesProto.Variables returned_objs_proto =
+            Arguments returned_objs_proto =
                 queue_elem.returned_objs;
-            
-            // FIXME: probably do not need to use a list for returned
-            // objects.  Could just use a single return value.
-            List<RalphObject> returned_objs =
-                ExecutingEventContext.deserialize_variables_list(
-                    returned_objs_proto,endpoint.ralph_globals);
-            
-            if (returned_objs.size() != 1)
-            {
-                Util.logger_assert(
-                    "If RPC returns variable, should only return one.  " +
-                    returned_objs.size());
-            }
 
-            RalphObject to_return = returned_objs.get(0);
-            if (to_return == null)
-            {
-                // when other side returns a value, the caller expects
-                // the returned value to be wrapped (ie, accessible
-                // only after a call to get_val).  In this case then
-                // we can just wrap the null in a simple
-                // NonAtomicNumberVariable... lightweight and will
-                // still return null when its get_val is called.
-                to_return = new Variables.NonAtomicNumberVariable(
-                    false,null,endpoint.ralph_globals);
-            }
-            return to_return;
+            Util.logger_assert("Need to deserialize returned objects");
         }
         return null;
-    }
-
-    /**
-       Takes variables and returns their deserialized forms as a map.
-       Index of map is variable name; value of map is object.
-     */
-    public static HashMap<String,RalphObject> deserialize_variables_map(
-        VariablesProto.Variables variables, RalphGlobals ralph_globals)
-    {
-        HashMap<String,RalphObject> to_return =
-            new HashMap<String,RalphObject>();
-        
-        // run through variables and turn into map
-        for (VariablesProto.Variables.Any variable : variables.getVarsList() )
-        {
-            String var_name = variable.getVarName();
-            RalphObject lo = deserialize_any(variable,ralph_globals);
-            to_return.put(var_name,lo);
-        }
-
-        return to_return;
-    }
-
-    public static List<RalphObject> deserialize_rpc_args_list(
-        VariablesProto.Variables variables,RalphGlobals ralph_globals)
-    {
-        List<RalphObject> to_return = new ArrayList<RalphObject>();
-
-        // run through variables and turn into map
-        for (VariablesProto.Variables.Any variable : variables.getVarsList())
-        {
-            RalphObject lo = deserialize_any(variable,ralph_globals);
-            to_return.add(lo);
-        }
-
-        return to_return;
-    }
-    
-    /**
-       Takes variables and returns their deserialized forms as a map.
-       Index of map is variable name; value of map is object.
-
-       Returns positional values.  If references_only is true, then
-       put null values in for the non-references.
-     */
-    public static List<RalphObject> deserialize_variables_list(
-        VariablesProto.Variables variables, RalphGlobals ralph_globals)
-    {
-        List<RalphObject> to_return = new ArrayList<RalphObject>();
-
-        // run through variables and turn into map
-        for (VariablesProto.Variables.Any variable : variables.getVarsList())
-        {
-            RalphObject lo = deserialize_any(variable,ralph_globals);
-            to_return.add(lo);
-        }
-        return to_return;
-    }
-
-    
-    /**
-       @returns {RalphObject or null} --- Returns null if the
-       argument passed in was empty.  This could happen for instance
-       if deserializing any corresponding to result for a
-       non-passed-by-reference argument.
-     */
-    public static RalphObject deserialize_any(
-        VariablesProto.Variables.Any variable,RalphGlobals ralph_globals)
-    {
-        Deserializer deserializer = Deserializer.get_instance();
-        DeserializationEvent evt =
-            deserializer.dummy_deserialization_active_event();
-        evt.set_ralph_globals(ralph_globals);
-        return deserializer.deserialize(variable,ralph_globals);
     }
 }

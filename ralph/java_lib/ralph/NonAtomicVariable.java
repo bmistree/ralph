@@ -30,7 +30,7 @@ public abstract class NonAtomicVariable<T,DeltaType>
             try
             {
                 obj_contents = serialize_contents(
-                    null,additional_serialization_contents);
+                    null,additional_serialization_contents,null);
             }
             catch (BackoutException backout_exception)
             {

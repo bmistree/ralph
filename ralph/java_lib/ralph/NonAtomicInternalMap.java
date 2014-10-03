@@ -1,11 +1,10 @@
 package ralph;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
-import ralph_protobuffs.VariablesProto;
+
 import RalphExceptions.BackoutException;
-import java.util.Map.Entry;
+
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
@@ -14,7 +13,10 @@ import RalphDataWrappers.MapTypeDataWrapperSupplier;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 
+import ralph.AtomicMap.AdditionalAtomicMapSerializationContents;
+
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -39,6 +41,10 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     private MapTypeDataWrapper<K,V,ValueDeltaType> reference_type_val = null;
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
+
+    private final Class<K> key_type_class;
+    private final Class<V> value_type_class;
+    
     // Keeps track of the map's index type.  Useful when serializing
     // and deserializing data.
     public IndexType index_type;
@@ -59,6 +65,9 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
         index_type = _index_type;
         
         locked_wrapper = _locked_wrapper;
+        key_type_class = mtdwf.key_type_class;
+        value_type_class = mtdwf.value_type_class;
+        
         reference_type_val =
             (MapTypeDataWrapper<K, V,ValueDeltaType>)mtdwf.construct(init_val, false);
         val = reference_type_val;
@@ -75,19 +84,35 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
             this,obj_history,to_play_until,reconstruction_context);
     }
 
-    
+
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event,Object additional_serialization_contents)
+        ActiveEvent active_event,Object additional_serialization_contents,
+        SerializationContext serialization_context) throws BackoutException
     {
-        // FIXME: May eventually want to fill this in (eg., if
-        // replacing serialization code.  Currently, it's unnecessary
-        // because we just use this method for serializing version
-        // histories.
-        Util.logger_assert(
-            "FIXME: currently, disallowing direct " +
-            "serialization of nonatomicinternalmap.");
-        return null;
+        // FIXME: should rename
+        // AdditionalAtomicMapSerializationContents to be specific to
+        // maps, not atomic maps.
+        
+        String key_type_name = null;
+        String value_type_name = null;
+        if (additional_serialization_contents == null)
+        {
+            key_type_name = key_type_class.getName();
+            value_type_name = value_type_class.getName();
+        }
+        else
+        {
+            AdditionalAtomicMapSerializationContents add_ser_contents =
+                (AdditionalAtomicMapSerializationContents)
+                additional_serialization_contents;
+            key_type_name = add_ser_contents.key_class_name;
+            value_type_name = add_ser_contents.val_class_name;
+        }
+
+        return RalphInternalMap.<K,V,ValueDeltaType>serialize_contents(
+            active_event,key_type_name,value_type_name,serialization_context,
+            false,uuid(),this);
     }
     
     @Override
@@ -141,20 +166,6 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     public V get_val_on_key(ActiveEvent active_event, K key) throws BackoutException
     {
         return internal_map.get_val_on_key(active_event,key);
-    }
-
-    /**
-       Runs through all the entries in the map/list/struct and puts
-       them into any_builder.
-     */
-    @Override
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        internal_map.serialize_as_rpc_arg(active_event,any_builder);
-        any_builder.setIsTvar(false);
     }
 
     @Override

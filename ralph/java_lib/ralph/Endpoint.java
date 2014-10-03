@@ -20,7 +20,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
-import ralph_protobuffs.VariablesProto;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -854,10 +854,9 @@ public abstract class Endpoint implements IReference
     public void _send_partner_message_sequence_block_request(
         String block_name,String event_uuid,String priority,
         String reply_with_uuid, String reply_to_uuid,
-        ActiveEvent active_event,
-        VariablesProto.Variables.Builder rpc_variables,
-        VariablesProto.Variables.Builder serialized_results,
-        boolean first_msg,boolean transactional)
+        ActiveEvent active_event, Arguments.Builder rpc_variables,
+        Arguments.Builder serialized_results, boolean first_msg,
+        boolean transactional)
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
@@ -897,7 +896,7 @@ public abstract class Endpoint implements IReference
             reply_to_uuid_msg.setData(reply_to_uuid);
             request_sequence_block_msg.setReplyToUuid(reply_to_uuid_msg);
     	}
-        
+
         request_sequence_block_msg.setArguments(rpc_variables);
         if (serialized_results != null)
             request_sequence_block_msg.setReturnObjs(serialized_results);

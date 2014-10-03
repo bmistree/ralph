@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
 
-import ralph_protobuffs.VariablesProto;
 import ralph_protobuffs.UtilProto.UUID;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -136,7 +135,8 @@ public class Variables
          */
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicNumberVariable.serialize_num_contents(
@@ -183,24 +183,6 @@ public class Variables
                 number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
         }
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder) throws BackoutException
-        {
-            Double internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setNum(internal_val.doubleValue());
-            any_builder.setIsTvar(true);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
-        }
     }
 
     public static class AtomicTextVariable
@@ -237,7 +219,8 @@ public class Variables
          */
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicTextVariable.serialize_text_contents(
@@ -262,26 +245,6 @@ public class Variables
             contents_builder.setUuid(ralph_object.uuid());
             contents_builder.setAtomic(atomic);
             return contents_builder.build();
-        }
-
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            String internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setText(internal_val);
-            any_builder.setIsTvar(true);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
         }
         
         @Override
@@ -330,7 +293,8 @@ public class Variables
          */
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return
@@ -359,27 +323,6 @@ public class Variables
             return contents_builder.build();
         }
 
-
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            Boolean internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setTrueFalse(internal_val.booleanValue());
-            any_builder.setIsTvar(true);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
-        }
-        
         @Override
         protected SpeculativeAtomicObject<Boolean,Boolean>
             duplicate_for_speculation(Boolean to_speculate_on)
@@ -433,7 +376,8 @@ public class Variables
         
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             T internal_val = get_val(active_event);
@@ -484,21 +428,9 @@ public class Variables
             to_return.set_derived(this);
             return to_return;
         }
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            // FIXME: Should allow serializing enum types across
-            // network.
-            Util.logger_assert(
-                "FIXME: Should allow serializing enums across network.");
-        }
     }
     
-    public static class AtomicInterfaceVariable<T extends IReference>
+    public static class AtomicInterfaceVariable<T extends Endpoint>
         extends AtomicValueVariable<T> 
         implements IInternalReferenceHolder
     {
@@ -581,21 +513,33 @@ public class Variables
         /** AtomicValueVariable overrides */
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicInterfaceVariable.serialize_interface_contents(
-                get_val(active_event),uuid(),true);
+                get_val(active_event),uuid(),true,serialization_context);
         }
 
         public static ObjectContents serialize_interface_contents(
-            IReference internal_endpoint,String holder_uuid,boolean atomic)
+            Endpoint internal_endpoint,String holder_uuid,boolean atomic,
+            SerializationContext serialization_context)
         {
             Delta.ReferenceType.Builder ref_type_builder =
                 Delta.ReferenceType.newBuilder();
             
             if (internal_endpoint != null)
+            {
                 ref_type_builder.setReference(internal_endpoint.uuid());
+
+                if ((serialization_context != null) &&
+                    serialization_context.deep_copy)
+                {
+                    Util.logger_assert(
+                        "Cannot serialize a reference to an endpoint " +
+                        "to send as part of rpc.");
+                }
+            }
 
             ObjectContents.Interface.Builder interface_builder =
                 ObjectContents.Interface.newBuilder();
@@ -618,15 +562,6 @@ public class Variables
                     log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
             return to_return;
-        }
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            Util.logger_assert(
-                "Cannot pass reference to interface across network.");
         }
     }
     
@@ -652,7 +587,8 @@ public class Variables
 
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             // FIXME: add code for serializing service factories variables.
@@ -675,44 +611,6 @@ public class Variables
                         log_changes,to_speculate_on,ralph_globals);
             to_return.set_derived(this);
             return to_return;
-        }
-
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            InternalServiceFactory internal_val = get_val(active_event);
-            serialize_service_factory(internal_val,any_builder);
-            any_builder.setIsTvar(true);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
-        }
-
-        /**
-           Can be used by both atomic and non-atomic service factories.
-         */
-        public static void serialize_service_factory (
-            InternalServiceFactory internal_val,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            any_builder.setVarName("");
-            try {
-                any_builder.setServiceFactory(
-                    com.google.protobuf.ByteString.copyFrom(
-                        internal_val.convert_constructor_to_byte_array()));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                Util.logger_assert(
-                    "\nUnhandled IOException when serializing " +
-                    "service factory.\n");
-            }
         }
     }
     
@@ -747,51 +645,11 @@ public class Variables
             return to_return;
         }
 
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            InternalServiceReference internal_val = get_val(active_event);
-            serialize_service_reference(internal_val,any_builder);
-            any_builder.setIsTvar(true);
-        }
-
         
-        /**
-           Can be used by both atomic and non-atomic service factories.
-         */
-        public static void serialize_service_reference (
-            InternalServiceReference internal_val,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            any_builder.setVarName("");
-
-            UUID.Builder service_uuid = UUID.newBuilder();
-            service_uuid.setData(internal_val.service_uuid);
-            
-            VariablesProto.Variables.ServiceReference.Builder service_reference =
-                VariablesProto.Variables.ServiceReference.newBuilder();
-            
-            service_reference.setIpAddr(internal_val.ip_addr);
-            service_reference.setTcpPort(internal_val.tcp_port);
-            service_reference.setServiceUuid(service_uuid);
-
-            any_builder.setServiceReference(service_reference);
-        }
-        
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
-        }
-
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             // FIXME: add code for serializing service reference variables.
@@ -815,7 +673,8 @@ public class Variables
         }
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicNumberVariable.serialize_num_contents(
@@ -837,24 +696,6 @@ public class Variables
                 default_number,
                 number_value_type_data_wrapper_factory,DOUBLE_VERSION_HELPER,
                 ralph_globals);
-        }
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            Double internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setNum(internal_val.doubleValue());
-            any_builder.setIsTvar(false);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -890,30 +731,12 @@ public class Variables
         
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicTextVariable.serialize_text_contents(
                 active_event,this,false);
-        }
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            String internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setText(internal_val);
-            any_builder.setIsTvar(false);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -932,7 +755,8 @@ public class Variables
 
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicTrueFalseVariable.serialize_true_false_contents(
@@ -954,24 +778,6 @@ public class Variables
                 default_tf,
                 true_false_value_type_data_wrapper_factory,BOOLEAN_VERSION_HELPER,
                 ralph_globals);
-        }
-
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            Boolean internal_val = get_val(active_event);
-            any_builder.setVarName("");
-            any_builder.setTrueFalse(internal_val.booleanValue());
-            any_builder.setIsTvar(false);
-        }
-
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -1006,7 +812,8 @@ public class Variables
 
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             T internal_val = get_val(active_event);
@@ -1017,20 +824,9 @@ public class Variables
             return AtomicEnumVariable.<T>serialize_enum_contents(
                 ordinal,enum_constructor_obj,uuid(),false);
         }
-
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            // FIXME: Should allow serializing enums across network.
-            any_builder.setIsTvar(false);
-            Util.logger_assert(
-                "FIXME: Should allow serializing enum variables across network");
-        }
     }
     
-    public static class NonAtomicInterfaceVariable<T extends IReference>
+    public static class NonAtomicInterfaceVariable<T extends Endpoint>
         extends NonAtomicValueVariable<T>
     {
         public NonAtomicInterfaceVariable(
@@ -1045,11 +841,12 @@ public class Variables
 
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             return AtomicInterfaceVariable.serialize_interface_contents(
-                get_val(active_event),uuid(),false);
+                get_val(active_event),uuid(),false,serialization_context);
         }
         
         public NonAtomicInterfaceVariable(
@@ -1058,15 +855,6 @@ public class Variables
             super(
                 null,new ValueTypeDataWrapperFactory<T>(),
                 INTERFACE_VERSION_HELPER, ralph_globals);
-        }
-
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-        {
-            any_builder.setIsTvar(false);
-            Util.logger_assert(
-                "Cannot pass interface reference over network.");
         }
     }
     
@@ -1093,32 +881,14 @@ public class Variables
 
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             // FIXME: add code for serializing service factories variables.
             Util.logger_assert(
                 "FIXME: fill in serialization for service factories");
             return null;
-        }
-        
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            InternalServiceFactory internal_val = get_val(active_event);
-            AtomicServiceFactoryVariable.serialize_service_factory(
-                internal_val,any_builder);
-            any_builder.setIsTvar(false);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
         }
     }
 
@@ -1135,6 +905,7 @@ public class Variables
                 service_reference_value_type_data_wrapper_factory,
                 SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
+        
         public NonAtomicServiceReferenceVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
         {
@@ -1143,29 +914,11 @@ public class Variables
                 service_reference_value_type_data_wrapper_factory,
                 SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
-
-        @Override
-        public void serialize_as_rpc_arg(
-            ActiveEvent active_event,
-            VariablesProto.Variables.Any.Builder any_builder)
-            throws BackoutException
-        {
-            InternalServiceReference internal_val = get_val(active_event);
-            AtomicServiceReferenceVariable.serialize_service_reference(
-                internal_val,any_builder);
-            any_builder.setIsTvar(false);
-        }
-        @Override
-        public void deserialize_rpc(
-            RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-        {
-            Util.logger_assert(
-                "Should deserialize directly in DataConstructorRegistry.");
-        }
         
         @Override
         public ObjectContents serialize_contents(
-            ActiveEvent active_event, Object additional_contents)
+            ActiveEvent active_event, Object additional_contents,
+            SerializationContext serialization_context)
             throws BackoutException
         {
             // FIXME: add code for serializing service reference variables.
@@ -1173,7 +926,6 @@ public class Variables
                 "FIXME: fill in serialization for service references");
             return null;
         }
-        
     }
 
     

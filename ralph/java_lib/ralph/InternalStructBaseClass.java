@@ -51,7 +51,7 @@ public abstract class InternalStructBaseClass
             try
             {
                 obj_contents = serialize_contents(
-                    null,additional_serialization_contents);
+                    null,additional_serialization_contents,null);
             }
             catch(BackoutException ex)
             {

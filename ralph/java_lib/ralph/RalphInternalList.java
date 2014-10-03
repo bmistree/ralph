@@ -1,12 +1,18 @@
 package ralph;
 
 import java.util.List;
-import ralph_protobuffs.VariablesProto;
+
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperSupplier;
+
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.DeltaProto.Delta;
+import ralph_protobuffs.DeltaProto.Delta.ContainerDelta;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas;
+
 
 /**
  * @param <V> --- The Java type of data that are elements in the list
@@ -120,44 +126,6 @@ public class RalphInternalList<V,ValueDeltaType>
             active_event, index_to_insert_in, wrapped_to_insert);
     }
 
-    /**
-       Runs through all the entries in the map/list/struct and puts
-       them into any_builder.  Note: parent that calls will set
-       is_tvar field.
-     */
-    @Override
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        // mostly useless
-        any_builder.setVarName("");
-
-        // get list's internal data
-        ListTypeDataWrapper<V,ValueDeltaType> wrapped_val = get_val_read(active_event);
-        List<RalphObject<V,ValueDeltaType>> ralph_list = wrapped_val.val;
-
-        // create a list message that contains all changes
-        VariablesProto.Variables.List.Builder list_builder =
-            VariablesProto.Variables.List.newBuilder();
-
-        for (RalphObject<V,ValueDeltaType> to_append : ralph_list)
-        {
-            VariablesProto.Variables.Any.Builder single_element_builder =
-                VariablesProto.Variables.Any.newBuilder();
-            to_append.serialize_as_rpc_arg(
-                active_event,single_element_builder);
-            list_builder.addListValues(single_element_builder);
-        }
-        list_builder.setElementTypeIdentifier(
-            locked_wrapper.get_serialization_label());
-        any_builder.setList(list_builder);
-        
-        // non-atomics should not hold locks
-        check_immediate_commit(active_event);
-    }
-    
     @Override
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException
@@ -349,4 +317,79 @@ public class RalphInternalList<V,ValueDeltaType>
             data_wrapper_supplier.direct_get_val();
         wrapped_val.val.clear();
     }
+
+
+    public static <ValueType,ValueDeltaType> ObjectContents serialize_contents(
+        ActiveEvent active_event,String value_type_name,
+        SerializationContext serialization_context, boolean is_atomic,
+        String internal_container_uuid,
+        ListTypeDataWrapperSupplier<ValueType,ValueDeltaType> data_wrapper_supplier)
+        throws BackoutException
+    {
+
+        if ((serialization_context != null) &&
+            (serialization_context.deep_copy))
+        {
+            ArgumentContainerDeltas.Builder arg_container_deltas_builder = 
+                ArgumentContainerDeltas.newBuilder();
+            arg_container_deltas_builder.setObjectUuid(internal_container_uuid);
+
+            // FIXME: check if internal list is null
+            
+            ListTypeDataWrapper<ValueType,ValueDeltaType> wrapped_list =
+                data_wrapper_supplier.get_val_read(active_event);
+
+            // run through all values in list and serialize them.
+            for (int i = 0; i < wrapped_list.val.size(); ++i)
+            {                
+                // deeply-serializing this object by just creating a
+                // message that adds all data in the map.  This means
+                // that all op_types should be adds.
+                ContainerDelta.Builder container_delta_builder =
+                    ContainerDelta.newBuilder();
+                container_delta_builder.setOpType(Delta.ContainerOpType.ADD);
+                
+                // serialize key type into map
+                Delta.ValueType.Builder value_type_builder =
+                    Delta.ValueType.newBuilder();
+                value_type_builder.setNum((double)i);
+                container_delta_builder.setKey(value_type_builder);
+                
+
+                // Serialize value types into lists
+                RalphObject<ValueType,ValueDeltaType> value =
+                    wrapped_list.val.get(i);
+
+                // tell the serialization_context to serialize the
+                // internal ralph object contained withing this map.
+                serialization_context.add_to_serialize(value);
+                
+                String value_reference = value.uuid();
+                Delta.ReferenceType.Builder value_reference_builder =
+                    Delta.ReferenceType.newBuilder();
+                value_reference_builder.setReference(value_reference);
+
+                container_delta_builder.setWhatAddedOrWritten(
+                    value_reference_builder);
+
+                // finally, add the container_delta just built to
+                // ArgumentContainerDeltas.
+                arg_container_deltas_builder.addContainerDelta(
+                    container_delta_builder);
+            }
+            serialization_context.add_argument_container_delta(
+                arg_container_deltas_builder);
+        }
+
+        ObjectContents.InternalList.Builder internal_list_builder =
+            ObjectContents.InternalList.newBuilder();
+        internal_list_builder.setValTypeClassName(value_type_name);
+
+        ObjectContents.Builder to_return = ObjectContents.newBuilder();
+        to_return.setInternalListType(internal_list_builder);
+        to_return.setUuid(internal_container_uuid);
+        to_return.setAtomic(is_atomic);
+        return to_return.build();
+    }
+
 }

@@ -9,23 +9,24 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import RalphServiceActions.ServiceAction;
 
-import ralph_protobuffs.PartnerErrorProto.PartnerError;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.VariablesProto;
 import RalphCallResults.MessageCallResultObject;
-import java.util.concurrent.locks.ReentrantLock;
 
 import RalphExceptions.BackoutException;
 import RalphExceptions.StoppedException;
-
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
+
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
+
+import ralph_protobuffs.PartnerErrorProto.PartnerError;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 /**
    Interface between AtomicActiveEvent and SpeculativeAtomicObject:
@@ -1207,56 +1208,43 @@ public class AtomicActiveEvent extends ActiveEvent
                     reply_with_uuid, threadsafe_unblock_queue);
             }
 
+            
+            // FIXME: check if can refactor and merge the following
+            // code with NonAtomicActiveEvent code.
+
             // construct variables for arg messages
-            VariablesProto.Variables.Builder serialized_arguments =
-                VariablesProto.Variables.newBuilder();
-            for (RalphObject arg : args)
+            SerializationContext serialization_context =
+                new SerializationContext(args,true);
+            Arguments.Builder serialized_arguments = null;
+
+            try
             {
-                try
-                {
-                    // arg may be null: for instance if sending a
-                    // sequence complete call to an endpoint where the
-                    // passed in argument was not passed in by
-                    // reference.
-                    VariablesProto.Variables.Any.Builder any_builder =
-                        VariablesProto.Variables.Any.newBuilder();
-
-                    if (arg == null)
-                    {
-                        any_builder.setVarName("");
-                        any_builder.setIsTvar(false);
-                    }
-                    else
-                        arg.serialize_as_rpc_arg(this,any_builder);
-                    
-                    serialized_arguments.addVars(any_builder);
-                }
-                catch (BackoutException excep)
-                {
-                    _unlock();
-                    return false;
-                }
+                serialized_arguments =
+                    serialization_context.serialize_all(this);
             }
-
-            VariablesProto.Variables.Builder serialized_results = null;
+            catch (BackoutException excep)
+            {
+                _unlock();
+                return false;
+            }
+            
+            Arguments.Builder serialized_results = null;
             if (result != null)
             {
-                serialized_results = VariablesProto.Variables.newBuilder();
-                VariablesProto.Variables.Any.Builder any_builder =
-                    VariablesProto.Variables.Any.newBuilder();
+                serialization_context = new SerializationContext(null,true);
+                serialization_context.add_to_serialize(result);
                 try
                 {
-                    result.serialize_as_rpc_arg(this,any_builder);
+                    serialized_results =
+                        serialization_context.serialize_all(this);
                 }
                 catch (BackoutException excep)
                 {
                     _unlock();
                     return false;
                 }
-                serialized_results.addVars(any_builder);
             }
-
-
+            
             // changed to have rpc semantics: this means that if it's not
             // the first message, then it is a reply to another message.
             // if it is a first message, then should not be replying to
@@ -1271,7 +1259,6 @@ public class AtomicActiveEvent extends ActiveEvent
                 func_name,uuid,get_priority(),reply_with_uuid,
                 replying_to,this,serialized_arguments,serialized_results,
                 first_msg,true);
-
         }
         
         _unlock();
@@ -1409,11 +1396,16 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         //#### END DEBUG
 
-
         // grab all arguments from message
-        List <RalphObject> args =
-            ExecutingEventContext.deserialize_rpc_args_list(
-                msg.getArguments(),endpt_recvd_on.ralph_globals);
+        
+        // FIXME: Check if necessary for args to be non-null;
+        List <RalphObject> args = new ArrayList<RalphObject>();
+        if (msg.hasArguments())
+        {
+            args =
+                RPCDeserializationHelper.deserialize_arguments_list(
+                    event_parent.ralph_globals,msg.getArguments());
+        }
 
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
@@ -1523,9 +1515,8 @@ public class AtomicActiveEvent extends ActiveEvent
         //#### END DEBUG
         
         String reply_with_uuid = msg.getReplyWithUuid().getData();
-        VariablesProto.Variables returned_variables = msg.getArguments();
-
-        VariablesProto.Variables returned_objs = null;
+        
+        Arguments returned_objs = null;
         if (msg.hasReturnObjs())
             returned_objs = msg.getReturnObjs();
         
@@ -1533,8 +1524,6 @@ public class AtomicActiveEvent extends ActiveEvent
         message_listening_queues_map.get(reply_to_uuid).add(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid,name_of_block_to_exec_next,
-                // args passed in as references
-                returned_variables,
                 // result of rpc
                 returned_objs));
 

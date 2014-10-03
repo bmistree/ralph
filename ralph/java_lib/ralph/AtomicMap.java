@@ -2,7 +2,6 @@ package ralph;
 
 import java.util.HashMap;
 import java.util.Map;
-import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
@@ -104,7 +103,8 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
 
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event, Object additional_serialization_contents)
+        ActiveEvent active_event, Object additional_serialization_contents,
+        SerializationContext serialization_context)
         throws BackoutException
     {
         String key_type_name = null;
@@ -128,7 +128,14 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
 
         String internal_reference = null;
         if (internal_map != null)
+        {
             internal_reference = internal_map.uuid();
+            if ( (serialization_context != null) &&
+                 serialization_context.deep_copy)
+            {
+                serialization_context.add_to_serialize(internal_map);
+            }
+        }
         
         return AtomicMap.serialize_map_reference(
             uuid(),internal_reference,key_type_name,value_type_name,
@@ -189,18 +196,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
         return to_return;
     }
     
-    
-    public void serialize_as_rpc_arg(
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_val =
-            get_val(active_event);
-        internal_val.serialize_as_rpc_arg(active_event,any_builder);
-        any_builder.setIsTvar(true);
-    }
-
     public static class AdditionalAtomicMapSerializationContents
     {
         public final String key_class_name;

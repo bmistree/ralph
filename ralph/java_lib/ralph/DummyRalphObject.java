@@ -1,7 +1,6 @@
 package ralph;
 
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto;
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
@@ -16,7 +15,8 @@ public abstract class DummyRalphObject <Type, DeltaType>
 {
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event,Object add_contents)
+        ActiveEvent active_event,Object add_contents,
+        SerializationContext serialization_context)
         throws BackoutException
     {
         Util.logger_assert("Cannot call serialize_contents on dummy.");
@@ -28,14 +28,6 @@ public abstract class DummyRalphObject <Type, DeltaType>
         throws BackoutException
     {
         Util.logger_assert("Cannot call swap_internal_vals on dummy.");
-    }
-    @Override
-    public void serialize_as_rpc_arg(
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        Util.logger_assert("Cannot call serialize_as_rpc_arg on dummy.");
     }
     @Override
     public void direct_set_val(Type new_val)

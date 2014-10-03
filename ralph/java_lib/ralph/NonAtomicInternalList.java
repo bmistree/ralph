@@ -1,7 +1,6 @@
 package ralph;
 
 import java.util.List;
-import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
@@ -27,7 +26,8 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     // The type that gets passed to internal version helper.
     VersionContainerDeltas
     >
-    implements ImmediateCommitSupplier, ListTypeDataWrapperSupplier,
+    implements ImmediateCommitSupplier,
+        ListTypeDataWrapperSupplier<V,ValueDeltaType>,
         RalphInternalListInterface<V,ValueDeltaType>
 {    
     private ListTypeDataWrapper<V,ValueDeltaType> reference_type_val = null;
@@ -58,7 +58,8 @@ public class NonAtomicInternalList<V,ValueDeltaType>
 
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event,Object additional_serialization_contents)
+        ActiveEvent active_event,Object additional_serialization_contents,
+        SerializationContext serialization_context) throws BackoutException
     {
         String value_type_name = null;
         if (additional_serialization_contents == null)
@@ -71,15 +72,9 @@ public class NonAtomicInternalList<V,ValueDeltaType>
             value_type_name = add_ser_contents.val_class_name;
         }
 
-        ObjectContents.InternalList.Builder internal_list_builder =
-            ObjectContents.InternalList.newBuilder();
-        internal_list_builder.setValTypeClassName(value_type_name);
-
-        ObjectContents.Builder to_return = ObjectContents.newBuilder();
-        to_return.setInternalListType(internal_list_builder);
-        to_return.setUuid(uuid());
-        to_return.setAtomic(false);
-        return to_return.build();
+        return RalphInternalList.<V,ValueDeltaType>serialize_contents(
+            active_event,value_type_name,serialization_context,false,
+            uuid(),this);
     }
     
     @Override
@@ -158,16 +153,6 @@ public class NonAtomicInternalList<V,ValueDeltaType>
         internal_list.append(active_event,what_to_insert);
     }
     
-    @Override
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        internal_list.serialize_as_rpc_arg(active_event,any_builder);
-        any_builder.setIsTvar(false);
-    }
-
     @Override
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException

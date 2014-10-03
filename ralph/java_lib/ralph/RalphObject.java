@@ -3,7 +3,6 @@ package ralph;
 import java.util.concurrent.locks.ReentrantLock;
 
 import RalphExceptions.BackoutException;
-import ralph_protobuffs.VariablesProto;
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
@@ -27,10 +26,14 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        @param active_event --- Can be null
 
        @param add_contents --- Metadata that an object may pass in for
-       serialization.
+       serialization.  Can be null.
+
+       @param serialization_context --- So that references can add
+       more internal objects to be serialized.
      */
     public abstract ObjectContents serialize_contents(
-        ActiveEvent active_event,Object add_contents)
+        ActiveEvent active_event,Object add_contents,
+        SerializationContext serialization_context)
         throws BackoutException;
     
     /**
@@ -38,7 +41,7 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        a version.
      */
     protected VersionHelper<DeltaType> version_helper = null;
-
+    
     /**
        After regenerating an object from its constructor, need to be
        able to replay its changes on top of it.
@@ -65,25 +68,6 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     public abstract void swap_internal_vals(
         ActiveEvent active_event,RalphObject to_swap_with)
         throws BackoutException;
-    
-    /**
-       Take internal data and add it as an arg to the
-       Varialbes.Any.Builder.
-     */
-    public abstract void serialize_as_rpc_arg(
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException;
-    /**
-       Object has already been constructed.  Deserialize contents of
-       any into it.
-     */
-    public void deserialize_rpc(
-        RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-    {
-        // FIXME: should just declare this abstract.
-        Util.logger_assert("FIXME: objects override deserialize_rpc.");
-    }
 
     /**
        Assumes no other writers.  Set directly on internal value.

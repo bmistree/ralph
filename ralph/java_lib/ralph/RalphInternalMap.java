@@ -1,16 +1,20 @@
 package ralph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import ralph_protobuffs.VariablesProto;
-import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import RalphExceptions.BackoutException;
+
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
 import RalphDataWrappers.MapTypeDataWrapperSupplier;
 import RalphAtomicWrappers.BaseAtomicWrappers;
+
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentContainerDeltas;
+import ralph_protobuffs.DeltaProto.Delta.ContainerDelta;
+import ralph_protobuffs.DeltaProto.Delta;
 
 /**
  * @param <K> --- Keys for the container (Can be Numbers, Booleans, or
@@ -77,94 +81,7 @@ public class RalphInternalMap<K,V,ValueDeltaType>
         check_immediate_commit(active_event);
         return (V)to_return;
     }
-
-    /**
-       Runs through all the entries in the map/list/struct and puts
-       them into any_builder.
-     */
-    @Override
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        MapTypeDataWrapper<K,V,ValueDeltaType> wrapped_val = get_val_write(active_event);
-
-        VariablesProto.Variables.Map.Builder map_builder =
-            VariablesProto.Variables.Map.newBuilder();
-
-        // set identifier types
-        if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
-        {
-            map_builder.setKeyTypeIdentifier(
-                BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL);
-        }
-        else if (index_type == NonAtomicInternalMap.IndexType.STRING)
-        {
-            map_builder.setKeyTypeIdentifier(
-                BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL);
-        }
-        else if (index_type == NonAtomicInternalMap.IndexType.BOOLEAN)
-        {
-            map_builder.setKeyTypeIdentifier(
-                BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL);
-        }
-        //// DEBUG
-        else
-            Util.logger_assert("Unkonw map index type in serialize");
-        //// END DEBUG
-
-        
-        map_builder.setValueTypeIdentifier(
-            locked_wrapper.get_serialization_label());
-
-        // serialize internal values        
-        for (Entry<K,RalphObject<V,ValueDeltaType>> map_entry : wrapped_val.val.entrySet() )
-        {
-            // create any for index
-            VariablesProto.Variables.Any.Builder index_builder = VariablesProto.Variables.Any.newBuilder();
-            index_builder.setVarName("");
-            if (index_type == NonAtomicInternalMap.IndexType.DOUBLE)
-            {
-                Double index_entry = (Double) map_entry.getKey();
-                index_builder.setNum(index_entry.doubleValue());
-                index_builder.setIsTvar(false);                
-            }
-            else if (index_type == NonAtomicInternalMap.IndexType.STRING)
-            {
-                String index_entry = (String) map_entry.getKey();
-                index_builder.setText(index_entry);
-                index_builder.setIsTvar(false);
-            }
-            else if (index_type == NonAtomicInternalMap.IndexType.BOOLEAN)
-            {
-                Boolean index_entry = (Boolean) map_entry.getKey();
-                index_builder.setTrueFalse(index_entry.booleanValue());
-                index_builder.setIsTvar(false);
-            }
-            else
-            {
-                Util.logger_assert(
-                    "Unrecognized index type when serializing matrix");
-            }
-
-            // create any for value
-            VariablesProto.Variables.Any.Builder value_builder =
-                VariablesProto.Variables.Any.newBuilder();
-            RalphObject<V,ValueDeltaType> map_value = map_entry.getValue();
-            
-            map_value.serialize_as_rpc_arg(active_event,value_builder);
-            
-            // apply both to map builder
-            map_builder.addMapIndices(index_builder);
-            map_builder.addMapValues(value_builder);
-        }
-        any_builder.setVarName("");
-        any_builder.setMap(map_builder);
-
-        check_immediate_commit(active_event);
-    }
-
+    
     /**
        Caller must ensure that there will be no conflicts when
        writing.  Used for deserialization, not real operations.
@@ -307,5 +224,119 @@ public class RalphInternalMap<K,V,ValueDeltaType>
         MapTypeDataWrapper<K,V,ValueDeltaType> wrapped_val = get_val_write(active_event);
         wrapped_val.val.clear();
         check_immediate_commit(active_event);
-    }    
+    }
+
+
+    public static <KeyType,ValueType,ValueDeltaType> ObjectContents serialize_contents(
+        ActiveEvent active_event,String key_type_name, String value_type_name,
+        SerializationContext serialization_context, boolean is_atomic,
+        String internal_container_uuid,
+        MapTypeDataWrapperSupplier<KeyType,ValueType,ValueDeltaType> data_wrapper_supplier)
+        throws BackoutException
+    {
+        if ((serialization_context != null) &&
+            (serialization_context.deep_copy))
+        {
+            ArgumentContainerDeltas.Builder arg_container_deltas_builder = 
+                ArgumentContainerDeltas.newBuilder();
+            arg_container_deltas_builder.setObjectUuid(internal_container_uuid);
+
+            // FIXME: check if internal map is null
+
+            // FIXME: check if key is null
+            
+            MapTypeDataWrapper<KeyType,ValueType,ValueDeltaType> wrapped_map =
+                data_wrapper_supplier.get_val_read(active_event);
+
+            // run through all values in map and serialize them.
+            for (Entry<KeyType,RalphObject<ValueType,ValueDeltaType>> entry :
+                     wrapped_map.val.entrySet())
+            {
+                KeyType key = entry.getKey();
+                
+                // deeply-serializing this object by just creating a
+                // message that adds all data in the map.  This means
+                // that all op_types should be adds.
+                ContainerDelta.Builder container_delta_builder =
+                    ContainerDelta.newBuilder();
+                container_delta_builder.setOpType(Delta.ContainerOpType.ADD);
+
+                // serialize key type into map
+                Delta.ValueType.Builder value_type_builder =
+                    Delta.ValueType.newBuilder();
+                if (key_type_name == Double.class.getName())
+                {
+                    if (key == null)
+                        value_type_builder.setNullNum(true);
+                    else
+                    {
+                        value_type_builder.setNum(
+                            ((Double)key).doubleValue());
+                    }
+                }
+                else if (key_type_name == String.class.getName())
+                {
+                    if (key == null)
+                        value_type_builder.setNullText(true);
+                    else
+                        value_type_builder.setText((String)key);
+                }
+                else if (key_type_name == Boolean.class.getName())
+                {
+                    if (key == null)
+                        value_type_builder.setNullTf(true);
+                    else
+                    {
+                        value_type_builder.setTf(
+                            ((Boolean)key).booleanValue());
+                    }
+                }
+                //// DEBUG
+                else
+                {
+                    Util.logger_assert(
+                        "Unknown key type for map when serializing");
+                }
+                //// END DEBUG
+                
+                container_delta_builder.setKey(value_type_builder);
+
+                // Serialize value types into maps.
+                RalphObject<ValueType,ValueDeltaType> value =
+                    entry.getValue();
+                // tell the serialization_context to serialize the
+                // internal ralph object contained withing this map.
+                serialization_context.add_to_serialize(value);
+                
+                String value_reference = value.uuid();
+                Delta.ReferenceType.Builder value_reference_builder =
+                    Delta.ReferenceType.newBuilder();
+                value_reference_builder.setReference(value_reference);
+
+                container_delta_builder.setWhatAddedOrWritten(
+                    value_reference_builder);
+
+                // finally, add the container_delta just built to
+                // ArgumentContainerDeltas.
+                arg_container_deltas_builder.addContainerDelta(
+                    container_delta_builder);
+            }
+
+            serialization_context.add_argument_container_delta(
+                arg_container_deltas_builder);
+        }
+
+
+        // Build actual object contents for internal map
+        ObjectContents.InternalMap.Builder internal_map_builder =
+            ObjectContents.InternalMap.newBuilder();
+        internal_map_builder.setKeyTypeClassName(key_type_name);
+        internal_map_builder.setValTypeClassName(value_type_name);
+
+        ObjectContents.Builder to_return = ObjectContents.newBuilder();
+        to_return.setInternalMapType(internal_map_builder);
+        to_return.setUuid(internal_container_uuid);
+        to_return.setAtomic(is_atomic);
+        return to_return.build();
+    }
 }

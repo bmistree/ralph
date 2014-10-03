@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import ralph_protobuffs.VariablesProto;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
 import ralph.NonAtomicInternalMap.IndexType;
@@ -33,7 +32,8 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
     Map<K,RalphObject<V,ValueDeltaType>>,
     VersionContainerDeltas
     >
-    implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
+    implements ImmediateCommitSupplier,
+        MapTypeDataWrapperSupplier<K,V,ValueDeltaType>,
         RalphInternalMapInterface<K,V,ValueDeltaType>
 {
     // Keeps track of the map's index type.  Useful when serializing
@@ -92,7 +92,8 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
 
     @Override
     public ObjectContents serialize_contents(
-        ActiveEvent active_event,Object additional_serialization_contents)
+        ActiveEvent active_event,Object additional_serialization_contents,
+        SerializationContext serialization_context) throws BackoutException
     {
         String key_type_name = null;
         String value_type_name = null;
@@ -110,16 +111,9 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
             value_type_name = add_ser_contents.val_class_name;
         }
 
-        ObjectContents.InternalMap.Builder internal_map_builder =
-            ObjectContents.InternalMap.newBuilder();
-        internal_map_builder.setKeyTypeClassName(key_type_name);
-        internal_map_builder.setValTypeClassName(value_type_name);
-
-        ObjectContents.Builder to_return = ObjectContents.newBuilder();
-        to_return.setInternalMapType(internal_map_builder);
-        to_return.setUuid(uuid());
-        to_return.setAtomic(true);
-        return to_return.build();
+        return RalphInternalMap.<K,V,ValueDeltaType>serialize_contents(
+            active_event,key_type_name,value_type_name,serialization_context,
+            true,uuid(),this);
     }
 
     @Override
@@ -218,20 +212,6 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         throws BackoutException
     {
         return internal_map.get_val_on_key(active_event,key);
-    }
-
-    /**
-       Runs through all the entries in the map/list/struct and puts
-       them into any_builder.
-     */
-    @Override
-    public void serialize_as_rpc_arg (
-        ActiveEvent active_event,
-        VariablesProto.Variables.Any.Builder any_builder)
-        throws BackoutException
-    {
-        internal_map.serialize_as_rpc_arg(active_event,any_builder);
-        any_builder.setIsTvar(true);
     }
 
     @Override
