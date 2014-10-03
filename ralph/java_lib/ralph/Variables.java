@@ -430,7 +430,7 @@ public class Variables
         }
     }
     
-    public static class AtomicInterfaceVariable<T extends Endpoint>
+    public static class AtomicInterfaceVariable<T extends IReference>
         extends AtomicValueVariable<T> 
         implements IInternalReferenceHolder
     {
@@ -522,7 +522,7 @@ public class Variables
         }
 
         public static ObjectContents serialize_interface_contents(
-            Endpoint internal_endpoint,String holder_uuid,boolean atomic,
+            IReference internal_endpoint,String holder_uuid,boolean atomic,
             SerializationContext serialization_context)
         {
             Delta.ReferenceType.Builder ref_type_builder =
@@ -826,7 +826,7 @@ public class Variables
         }
     }
     
-    public static class NonAtomicInterfaceVariable<T extends Endpoint>
+    public static class NonAtomicInterfaceVariable<T extends IReference>
         extends NonAtomicValueVariable<T>
     {
         public NonAtomicInterfaceVariable(
