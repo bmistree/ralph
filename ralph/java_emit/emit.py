@@ -38,16 +38,8 @@ import ralph.Variables.AtomicServiceReferenceVariable;
 import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
 
-import ralph_protobuffs.VariablesProto;
 import ralph.BaseAtomicMapVariableFactory.AtomicMapVariableFactory;
 import ralph.BaseAtomicListVariableFactory.AtomicListVariableFactory;
-
-import RalphDeserializer.Deserializer;
-import RalphDeserializer.DataDeserializer;
-import static RalphDeserializer.BasicListDataDeserializers.AtomListDeserializer;
-import static RalphDeserializer.BasicListDataDeserializers.NonAtomListDeserializer;
-import static RalphDeserializer.BasicMapDataDeserializers.AtomMapDeserializer;
-import static RalphDeserializer.BasicMapDataDeserializers.NonAtomMapDeserializer;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -69,7 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ralph.Util;
 import java.util.concurrent.ArrayBlockingQueue;
-import ralph_protobuffs.VariablesProto.Variables;
+
 import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
@@ -2489,12 +2481,7 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
     external_struct_definition_text = emit_struct_wrapper(struct_type)
     internal_struct_definition_text = emit_internal_struct(struct_type)
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
-    struct_deserializer = emit_struct_deserializer(struct_type)
     contents_deserializer = emit_struct_content_deserializer(struct_type)
-    struct_list_deserializers = (
-        emit_struct_list_deserializer(struct_type))
-    struct_map_deserializers = (
-        emit_struct_map_deserializer(struct_type))
     struct_wrapper_deserializer = emit_struct_wrapper_deserializer(struct_type)
     
     return (
@@ -2502,9 +2489,6 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
         external_struct_definition_text + '\n' +
         internal_struct_definition_text + '\n' +
         struct_map_wrapper + '\n' +
-        struct_deserializer + '\n' +
-        struct_list_deserializers + '\n' +
-        struct_map_deserializers + '\n' +
         struct_wrapper_deserializer + '\n' +
         contents_deserializer )
 
@@ -2616,154 +2600,6 @@ final static %s
 def struct_data_wrapper_constructor_name(struct_name):
     return '%s_type_data_wrapper_constructor' % struct_name
 
-def emit_struct_deserializer(struct_type):
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    internal_deserializer_name = (
-        '__%s_SingletonStructDeserializer' % internal_struct_name)
-
-    to_return = '''
-public static class %s implements DataDeserializer
-{
-    private static %s instance = new %s();
-
-    // Singleton: want to ensure will only ever register this struct
-    // once.
-    protected %s()
-    {
-        Deserializer deserializer =
-            Deserializer.get_instance();
-        // put struct name into deserializer
-        deserializer.register("%s",this);
-    }
-    
-    public static %s get_instance()
-    {
-        return instance;
-    }
-
-    // used for data deserialization
-    @Override
-    public RalphObject deserialize(
-        VariablesProto.Variables.Any any,
-        RalphGlobals ralph_globals)
-    {
-        %s internal_holder = %s.deserialize_rpc_static(ralph_globals,any);
-        %s to_return = new %s(false,internal_holder,ralph_globals);
-        return to_return;
-    }
-}
-// forces construction of internal data constructor
-private static final %s %s__instance = %s.get_instance();
-''' % (internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name,internal_deserializer_name,
-       # the name that's entered into deserializer registry:
-       struct_name,
-       # get_instance
-       internal_deserializer_name,
-       # inside of construct method
-       internal_struct_name,internal_struct_name, 
-       struct_name,struct_name,
-       # generates static instance.
-       internal_deserializer_name,internal_deserializer_name,
-       internal_deserializer_name)
-
-    return to_return
-
-
-def emit_struct_list_deserializer(struct_type):
-    '''
-    @param {type object} struct_type
-    '''
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
-        struct_type)
-    to_return = ''
-    
-    for constructor_text in ('AtomListDeserializer','NonAtomListDeserializer'):
-        # needs to be unique across struct names and atom/non-atom
-        var_name = (
-            '_______%s_SingletonStructDeserializer__%s' %
-            (internal_struct_name,constructor_text))
-        
-        type_text = (
-            '%s<%s>' %
-            (constructor_text,internal_struct_name))
-        
-        to_return += '''
-private final static {type_text} {var_name} =
-    new {type_text} ("{label}", {wrapper},{value_type_class});
-'''.format(type_text=type_text,var_name = var_name,label=struct_name,
-           wrapper=struct_locked_wrapper_name,
-           value_type_class= internal_struct_name+ '.class')
-    return to_return
-
-def emit_struct_map_deserializer(struct_type):
-    '''
-    @param {type object} struct_type
-    '''
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(struct_type)
-    struct_locked_wrapper_name = emit_struct_locked_map_wrapper_name(
-        struct_type)
-    to_return = ''
-
-    key_tuples = (
-        ('Double',
-         'BaseAtomicWrappers.NON_ATOMIC_NUMBER_LABEL',
-         'NonAtomicInternalMap.IndexType.DOUBLE',
-         'ralph.BaseTypeVersionHelpers.' +
-            'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'),
-        
-        ('String',
-         'BaseAtomicWrappers.NON_ATOMIC_TEXT_LABEL',
-         'NonAtomicInternalMap.IndexType.STRING',
-         'ralph.BaseTypeVersionHelpers.' +
-           'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'),
-        
-        ('Boolean',
-         'BaseAtomicWrappers.NON_ATOMIC_TRUE_FALSE_LABEL',
-         'NonAtomicInternalMap.IndexType.BOOLEAN',
-         'ralph.BaseTypeVersionHelpers.' +
-           'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER'))
-    
-    for constructor_text in ('AtomMapDeserializer','NonAtomMapDeserializer'):
-        for key_tuple in key_tuples:
-            java_key_type_text = key_tuple[0]
-            key_label_text = key_tuple[1]
-            index_type_text = key_tuple[2]
-            version_helper_text = key_tuple[3]
-            
-            # needs to be unique across struct names and
-            # atom/non-atom, and key types
-            var_name = (
-                '_______%s_SingletonStructDeserializer__%s_%s' %
-                (internal_struct_name,constructor_text,java_key_type_text))
-
-            type_text = (
-                '%s<%s,%s>' %
-                (constructor_text,java_key_type_text,internal_struct_name))
-
-            to_return += '''
-    private final static {type_text} {var_name} =
-        new {type_text} ({key_label}, "{value_label}", {wrapper},
-                         {index_type}, {version_helper_text}, {index_type_class},
-                         {value_type_class});
-    '''.format(type_text=type_text,
-               var_name = var_name,
-               key_label=key_label_text,
-               value_label=struct_name,
-               index_type=index_type_text,
-               wrapper=struct_locked_wrapper_name,
-               version_helper_text=version_helper_text,
-               index_type_class = java_key_type_text + '.class',
-               value_type_class = internal_struct_name + '.class')
-
-    return to_return
-
-
-
 def emit_struct_map_wrapper(struct_type):
     struct_name = struct_type.struct_name
     internal_struct_name = emit_internal_struct_type(struct_type)
@@ -2843,48 +2679,32 @@ public boolean return_internal_val_from_container()
     return true;
 }
 
-@Override
-public void deserialize_rpc(
-    RalphGlobals ralph_globals, VariablesProto.Variables.Any any)
-{
-    Util.logger_assert(
-        "Should be using this struct's SingletonStructDeserializer " +
-        "to deserialize, instead of calling deserialize_as_rpc_arg " +
-        "directly.");
-}
-
 /**
    @param {ActiveEvent} active_event --- Can be null, in which
    case will return internal value without taking any locks.
  */
 @Override
 public ObjectContents serialize_contents(
-    ActiveEvent active_event, Object additional_contents)
+    ActiveEvent active_event, Object additional_contents,
+    SerializationContext serialization_context)
     throws BackoutException
 {
-    IReference internal = get_val(active_event);
+    %(internal_struct_name)s internal_struct = get_val(active_event);
     String internal_reference = null;
-    if (internal != null)
-        internal_reference = internal.uuid();
+
+    if (internal_struct != null)
+    {
+        internal_reference = internal_struct.uuid();
+        if ( (serialization_context != null) &&
+             serialization_context.deep_copy)
+        {
+            serialization_context.add_to_serialize(internal_struct);
+        }
+    }
 
     return ralph.Variables.serialize_struct_reference(
         uuid(),internal_reference, %(struct_name)s.class.getName(),
         true);
-}
-
-
-@Override
-public void serialize_as_rpc_arg(
-    ActiveEvent active_event,Variables.Any.Builder any_builder)
-    throws BackoutException
-{
-    %(internal_struct_name)s to_serialize = get_val(active_event);
-    if (to_serialize == null)
-        any_builder.setVarName("");
-    else
-       to_serialize.serialize_as_rpc_arg(active_event,any_builder);
-
-    any_builder.setIsTvar(true);
 }
 
 ''' % ({'struct_name': struct_name,
@@ -2976,10 +2796,6 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
 
     # emit other methods of internal struct 
     internal_struct_body_text += (
-        emit_internal_struct_serialize_as_rpc(struct_type))
-    internal_struct_body_text += (
-        emit_internal_struct_deserialize_constructor(struct_type))
-    internal_struct_body_text += (
         emit_internal_struct_replay(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_serialize_contents(struct_type))
@@ -3052,15 +2868,23 @@ ObjectContents.InternalStructField.Builder %(internal_struct_field_var_name)s =
 
 %(internal_struct_builder_var_name)s.addFields(%(internal_struct_field_var_name)s);
 
+if ( (serialization_context != null) &&
+     serialization_context.deep_copy)
+{
+    serialization_context.add_to_serialize(%(field_name)s);
+}
+
 ''' % { 'reference_type_var_name': field_name + '___ref_type_var_name__',
         'field_name': field_name,
         'internal_struct_field_var_name': field_name + '___internal_struct_field_var_name__',
         'internal_struct_builder_var_name': internal_struct_builder_var_name}
-        
+
+    # FIXME: only allowing atomic internal structs during
+    # serialization.  (Note set_atomic is hard coded true.)
     return '''
 @Override
 public ObjectContents serialize_contents(
-    ActiveEvent active_event,Object add_contents)
+    ActiveEvent active_event,Object add_contents,SerializationContext serialization_context)
 {
     ObjectContents.InternalStruct.Builder %(internal_struct_builder_var_name)s =
         ObjectContents.InternalStruct.newBuilder();
@@ -3077,124 +2901,3 @@ public ObjectContents serialize_contents(
 ''' % {'field_serialization_text': indent_string(field_serialization_text),
        'internal_struct_builder_var_name': internal_struct_builder_var_name,
        'struct_name': struct_name}
-
-
-def emit_internal_struct_deserialize_constructor(struct_type):
-    '''
-    Each struct has a constructor that can be initialized by a proto
-    message.
-    '''
-    # when emitting structs, do not yet have emit context
-    emit_ctx = None
-    struct_name = struct_type.struct_name
-    internal_struct_name = emit_internal_struct_type(
-        struct_type)
-    dict_dot_fields = struct_type.dict_dot_fields()
-    internal_field_deserialization_text = ''
-    counter = 0;
-
-    for field_name in sorted(dict_dot_fields.keys()):
-        field_type = dict_dot_fields[field_name]
-        internal_field_type = emit_ralph_wrapped_type(field_type)
-        if isinstance(field_type,MapType) or isinstance(field_type,ListType):
-            internal_type = emit_internal_type(field_type)
-            internal_field_deserialization_text += '''
-{
-    %s = %s;
-    // FIXME: will only work for non-tvars
-    try{
-        %s.set_val(
-            null,
-            (%s)deserializer_instance.deserialize(
-                _struct_field_list.get(%i),ralph_globals));
-    } catch (Exception ex) {
-        Util.logger_assert("Should not get an exception when deserializing");
-    }
- 
-}
-''' % (field_name,
-       construct_new_expression(field_type,None,emit_ctx),
-       field_name,internal_type,counter)
-        else:
-            # not a map/list
-            internal_field_deserialization_text += '''
-{
-    // FIXME: if allow serializing null, should do so here.
-    %s = (%s)deserializer_instance.deserialize(
-    _struct_field_list.get(%i),ralph_globals);
-}
-''' % (field_name,emit_ralph_wrapped_type(field_type),counter)
-
-        # happens regardless of if-else
-        counter += 1
-    
-    internal_field_deserialization_text = indent_string(
-        internal_field_deserialization_text)    
-    constructor_text = '''
-public static %(internal_struct_name)s deserialize_rpc_static(
-    RalphGlobals ralph_globals, Variables.Any any_with_struct)
-{
-    Variables.Struct _internal_struct = any_with_struct.getStruct();
-    return new %(internal_struct_name)s(ralph_globals,_internal_struct);
-}
-
-private %(internal_struct_name)s (
-    RalphGlobals ralph_globals, Variables.Struct _internal_struct)
-{
-    super(ralph_globals);
-
-    List<Variables.Any> _struct_field_list =
-        _internal_struct.getFieldValuesList();
-    Deserializer deserializer_instance =
-        Deserializer.get_instance();
-
-    // deserializing individual fields of struct
-%(internal_field_deserialization_text)s
-}
-''' % { 'internal_struct_name': internal_struct_name,
-        'internal_field_deserialization_text':  internal_field_deserialization_text}
-
-    return constructor_text
-
-
-def emit_internal_struct_serialize_as_rpc(struct_type):
-    # first build create a builder for each internal field
-    struct_name = struct_type.struct_name
-    internal_field_serialization_text = ''
-    dict_dot_fields = struct_type.dict_dot_fields()
-
-    for field_name in sorted(dict_dot_fields.keys()):
-        internal_field_serialization_text += '''
-{
-    // using separate blocks for each so that we can reuse internal
-    // variable names (eg., _field_builder).
-    Variables.Any.Builder _field_builder = Variables.Any.newBuilder();
-    %s.serialize_as_rpc_arg(_active_event,_field_builder);
-
-    _struct_builder.addFieldNames("%s");
-    _struct_builder.addFieldValues(_field_builder);
-}
-''' % (field_name,field_name)
-        
-    serialize_as_rpc_text = '''
-public void serialize_as_rpc_arg(
-    ActiveEvent _active_event,Variables.Any.Builder _any_builder)
-    throws BackoutException
-{
-    // apply internal fields to struct builder
-    Variables.Struct.Builder _struct_builder =
-       Variables.Struct.newBuilder();
-    // particular for each struct
-    _struct_builder.setStructIdentifier("%s");
-
-    // particular to each struct.
-%s
-
-    // apply struct message to any builder
-    _any_builder.setStruct(_struct_builder);
-    _any_builder.setVarName("");
-}
-''' % (struct_name,indent_string(internal_field_serialization_text))
-
-    return serialize_as_rpc_text
-

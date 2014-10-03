@@ -62,7 +62,9 @@ public class SerializationContext
     }
 
     /**
-       When serializing 
+       When doing a deep serialization of a map or a list, the
+       internal map/list adds its full contents using an
+       ArgumentContainerDeltas.Builder.
      */
     public void add_argument_container_delta(
         ArgumentContainerDeltas.Builder arg_container_delta)
