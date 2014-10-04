@@ -29,7 +29,14 @@ public class RPCDeserializationHelper
             String obj_uuid = arg_uuid.getData();
             ObjectContents obj_contents =
                 version_replayer.get_object_contents(obj_uuid);
-                
+            //// DEBUG
+            if (obj_contents == null)
+            {
+                Util.logger_assert(
+                    "Require obj_contents when deserializng rpc arg");
+            }
+            //// END DEBUG
+            
             RalphObject ro = ObjectContentsDeserializers.deserialize(
                 obj_contents,ralph_globals,reconstruction_context);
             to_return.add(ro);
