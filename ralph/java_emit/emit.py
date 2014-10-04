@@ -349,15 +349,16 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
         if (isinstance(method_declaration_arg_node.type, MapType) or
             isinstance(method_declaration_arg_node.type, ListType)):
-            # for map types, just push the map variable directly as
-            # argument to method.  (Do not need to call get_val
-            # directly because when pass arguments to a method, the
-            # method expects a map type.
-            map_type = emit_internal_type(method_declaration_arg_node.type)
-            single_arg_string = (
-                '%s %s = (%s == null) ? null : (%s) %s;\n' %
-                (map_type, arg_name, arg_vec_to_read_from, map_type,
-                 arg_vec_to_read_from))
+            internal_container_type = emit_internal_type(method_declaration_arg_node.type)
+            wrapped_container_type = emit_ralph_wrapped_type(method_declaration_arg_node.type)
+
+            single_arg_string = '''
+%(internal_container_type)s %(arg_name)s =
+    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(active_event);\n
+''' % { 'internal_container_type': internal_container_type,
+        'arg_name': arg_name,
+        'arg_vec_to_read_from': arg_vec_to_read_from,
+        'wrapped_container_type': wrapped_container_type}
 
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
