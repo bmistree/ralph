@@ -48,6 +48,10 @@ public class ExecutingEventContext
        passed into the RPC as arguments.  We do this because we may
        have to return one or more of these objects as references when
        return result of rpc.
+
+       FIXME: get rid of args_to_reply_with reference.  Can only
+       return variables through rpc return.
+       
      */
     private List<RalphObject> args_to_reply_with = null;
     
@@ -180,20 +184,17 @@ public class ExecutingEventContext
         }
         // END DEBUG
         
-        // when a sequence completes, we have to return all the rpc
-        // arguments that were passed in by reference: filter out
-        // args not passed by reference
-        for (int i = 0; i < args_to_reply_with.size(); ++i)
-        {
-            RalphObject arg = args_to_reply_with.get(i);
-            args_to_reply_with.set(i,null);
-        }
-        
         hide_partner_call(
             endpoint,active_event,
             null,  // no function name
             false, // not first msg sent
-            args_to_reply_with, result);
+            
+            // FIXME: eventually want to disallow sending any
+            // arguments back.  Ie., disallow calling rpc with
+            // reference.  However, this call requires an array of
+            // ralph objects.  Providing them.
+            new ArrayList<RalphObject>(),
+            result);
     }
 
 

@@ -361,7 +361,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
         // FIXME: check if can refactor and merge the following code
         // with AtomicActiveEvent.
-
+        
         // construct variables for arg messages
         SerializationContext serialization_context =
             new SerializationContext(args,true);
