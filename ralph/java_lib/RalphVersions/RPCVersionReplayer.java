@@ -27,6 +27,7 @@ public class RPCVersionReplayer implements IVersionReplayer
             String obj_uuid = obj_contents.getUuid();
             ObjectHistory obj_history = new ObjectHistory(obj_uuid);
             obj_history.set_construction_contents(obj_contents);
+            object_history_map.put(obj_uuid,obj_history);
         }
 
         for (ArgumentContainerDeltas arg_container_delta :
