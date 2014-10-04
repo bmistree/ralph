@@ -39,6 +39,16 @@ public class RPCDeserializationHelper
             
             RalphObject ro = ObjectContentsDeserializers.deserialize(
                 obj_contents,ralph_globals,reconstruction_context);
+
+            //// DEBUG
+            if (ro == null)
+            {
+                Util.logger_assert(
+                    "Received a ralphobject that we could not deserialize " +
+                    "for rpc.");
+            }
+            //// END DEBUG
+            
             to_return.add(ro);
         }
         
