@@ -1,5 +1,7 @@
 package ralph;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -99,18 +101,20 @@ public class SerializationContext
         // additional entries to still_to_serialize.
         while(! still_to_serialize.isEmpty())
         {
-            for (Iterator<Entry<String,RalphObject>> it =
-                     still_to_serialize.entrySet().iterator();
-                 it.hasNext();)
+            // to prevent concurrent modifications to map, iterate
+            // over a copy of map entries.
+            Set <Entry<String,RalphObject>> copied_entry_set =
+                new HashSet(still_to_serialize.entrySet());
+            for (Entry<String,RalphObject> entry : copied_entry_set)
             {
-                Entry<String,RalphObject> entry = it.next();
+                String obj_uuid = entry.getKey();
                 RalphObject ro = entry.getValue();
-
                 ObjectContents obj_contents = ro.serialize_contents(
                     active_event,null,this);
                 to_return.addContextContents(obj_contents);
 
-                it.remove();
+                serialized.put(obj_uuid,ro);
+                still_to_serialize.remove(obj_uuid);
             }
         }
 
