@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
+import java.util.Arrays;
 
 import RalphExceptions.BackoutException;
 
@@ -45,10 +45,9 @@ public class SerializationContext
      */
     public final boolean deep_copy;
     
-    public SerializationContext(boolean _deep_copy)
+    public SerializationContext(RalphObject ro, boolean _deep_copy)
     {
-        this(null,_deep_copy);
-
+        this(Arrays.asList(ro),_deep_copy);
     }
     
     public SerializationContext(

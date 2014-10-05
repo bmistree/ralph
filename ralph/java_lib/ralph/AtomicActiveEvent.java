@@ -1231,8 +1231,7 @@ public class AtomicActiveEvent extends ActiveEvent
             Arguments.Builder serialized_results = null;
             if (result != null)
             {
-                serialization_context = new SerializationContext(null,true);
-                serialization_context.add_to_serialize(result);
+                serialization_context = new SerializationContext(result,true);
                 try
                 {
                     serialized_results =
@@ -1527,6 +1526,8 @@ public class AtomicActiveEvent extends ActiveEvent
                 // result of rpc
                 returned_objs));
 
+
+        
         //# no need holding onto queue waiting on a message response.
         message_listening_queues_map.remove(reply_to_uuid);
     }	
