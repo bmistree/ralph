@@ -355,7 +355,6 @@ public class RalphInternalList<V,ValueDeltaType>
                 value_type_builder.setNum((double)i);
                 container_delta_builder.setKey(value_type_builder);
                 
-
                 // Serialize value types into lists
                 RalphObject<ValueType,ValueDeltaType> value =
                     wrapped_list.val.get(i);

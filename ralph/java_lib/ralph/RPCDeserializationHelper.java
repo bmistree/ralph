@@ -36,9 +36,9 @@ public class RPCDeserializationHelper
                     "Require obj_contents when deserializng rpc arg");
             }
             //// END DEBUG
-            
-            RalphObject ro = ObjectContentsDeserializers.deserialize(
-                obj_contents,ralph_globals,reconstruction_context);
+
+            RalphObject ro = reconstruction_context.get_constructed_object(
+                obj_uuid, null);
 
             //// DEBUG
             if (ro == null)
