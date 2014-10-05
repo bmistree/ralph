@@ -39,7 +39,7 @@ import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
 
 import ralph.BaseAtomicMapVariableFactory.AtomicMapVariableFactory;
-import ralph.BaseAtomicListVariableFactory.AtomicListVariableFactory;
+import ralph.BaseListVariableFactory.ListVariableFactory;
 
 // index types for maps
 import ralph.NonAtomicInternalMap.IndexType;
@@ -2407,9 +2407,9 @@ private final static AtomicMapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_
 
     # list deserializers
     text += '''
-private final static AtomicListVariableFactory<%(enum_name)s,%(enum_name)s>
+private final static ListVariableFactory<%(enum_name)s,%(enum_name)s>
     ____atom_list_serializer_%(enum_name)s =
-        new AtomicListVariableFactory<%(enum_name)s,%(enum_name)s> (
+        new ListVariableFactory<%(enum_name)s,%(enum_name)s> (
             %(enum_name)s.class,%(enum_locked_wrapper_name)s);
 ''' % { 'enum_locked_wrapper_name': enum_locked_wrapper_name,
         'enum_name': enum_name}
@@ -2568,9 +2568,9 @@ private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_nam
 
     # list deserializers
     text += '''
-private final static AtomicListVariableFactory<%(internal_struct_name)s,IReference>
+private final static ListVariableFactory<%(internal_struct_name)s,IReference>
     ____atom_list_serializer_%(internal_struct_name)s =
-        new AtomicListVariableFactory<%(internal_struct_name)s,IReference> (
+        new ListVariableFactory<%(internal_struct_name)s,IReference> (
             %(internal_struct_name)s.class,%(struct_locked_wrapper_name)s);
 ''' % { 'struct_locked_wrapper_name': struct_locked_wrapper_name,
         'internal_struct_name': internal_struct_name}

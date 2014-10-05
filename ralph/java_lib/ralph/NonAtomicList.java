@@ -35,7 +35,18 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     // passed.
     NonAtomicInternalList<ValueType,DeltaType>,
     IReference>
+    implements IInternalReferenceHolder
 {
+    /**
+       When we are replaying reference variables, we first must
+       construct them.  Then we replay what they were pointing to.
+       This field should hold the name of the reference that this
+       object was pointing to when it was constructed.  
+     */
+    private String initial_reference = null;
+    private boolean initial_reference_set = false;
+
+    
     public final static String deserialization_label = "NonAtomic List";
     public final Class<ValueType> value_type_class;
     
@@ -116,5 +127,27 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     public boolean return_internal_val_from_container()
     {
         return false;
+    }
+
+
+    /*** IInitialReferenceHolder methods */
+    
+    @Override
+    public String get_initial_reference()
+    {
+        return initial_reference;
+    }
+
+    @Override
+    public void set_initial_reference(String new_initial_reference)
+    {
+        initial_reference = new_initial_reference;
+        initial_reference_set = true;
+    }
+
+    @Override
+    public boolean get_initial_reference_set()
+    {
+        return initial_reference_set;
     }
 }

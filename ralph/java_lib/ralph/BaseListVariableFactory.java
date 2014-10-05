@@ -1,6 +1,7 @@
 package ralph;
 
 import ralph.Variables.AtomicListVariable;
+import ralph.Variables.NonAtomicListVariable;
 
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import static RalphAtomicWrappers.BaseAtomicWrappers.NON_ATOMIC_NUMBER_WRAPPER;
@@ -11,37 +12,38 @@ import static RalphAtomicWrappers.BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER;
 import static RalphAtomicWrappers.BaseAtomicWrappers.ATOMIC_TEXT_WRAPPER;
 import static RalphAtomicWrappers.BaseAtomicWrappers.ATOMIC_TRUE_FALSE_WRAPPER;
 
-public class BaseAtomicListVariableFactory
+public class BaseListVariableFactory
 {
     // Java uses a lazy class loader and lazy initialization.  What
     // this means is that side effect of registering all these
     // factories with containerfactory may not happen, unless code
     // that needs them to be registered first touches a field in this
     // class.
-    public final static BaseAtomicListVariableFactory instance =
-        new BaseAtomicListVariableFactory();
+    public final static BaseListVariableFactory instance =
+        new BaseListVariableFactory();
     public void force_initialization(){}
 
-    private BaseAtomicListVariableFactory()
+    private BaseListVariableFactory()
     {}
 
-    public final static AtomicListVariableFactory<Double,Double>
-        double_factory = new AtomicListVariableFactory(
+    public final static ListVariableFactory<Double,Double>
+        double_factory = new ListVariableFactory(
             Double.class,ATOMIC_NUMBER_WRAPPER);
-    public final static AtomicListVariableFactory<Double,Double>
-        string_factory = new AtomicListVariableFactory(
+    public final static ListVariableFactory<Double,Double>
+        string_factory = new ListVariableFactory(
             String.class,ATOMIC_TEXT_WRAPPER);
-    public final static AtomicListVariableFactory<Boolean,Boolean>
-        boolean_factory = new AtomicListVariableFactory(
+    public final static ListVariableFactory<Boolean,Boolean>
+        boolean_factory = new ListVariableFactory(
             Boolean.class,ATOMIC_TRUE_FALSE_WRAPPER);    
+
     
-    public static class AtomicListVariableFactory<ValueType,ValueDeltaType>
-        implements IAtomicListVariableFactory
+    public static class ListVariableFactory<ValueType,ValueDeltaType>
+        implements IListVariableFactory
     {
         private final Class <ValueType> value_type_class;
         private final EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper;
         
-        public AtomicListVariableFactory(
+        public ListVariableFactory(
             Class <ValueType> _value_type_class,
             EnsureAtomicWrapper<ValueType,ValueDeltaType> _locked_wrapper)
         {
@@ -52,9 +54,16 @@ public class BaseAtomicListVariableFactory
         }
         
         @Override
-        public AtomicListVariable construct(RalphGlobals ralph_globals)
+        public AtomicListVariable construct_atomic(RalphGlobals ralph_globals)
         {
             return new Variables.AtomicListVariable<ValueType,ValueDeltaType>(
+                false,locked_wrapper,value_type_class,ralph_globals);
+        }
+
+        @Override
+        public NonAtomicListVariable construct_non_atomic(RalphGlobals ralph_globals)
+        {
+            return new Variables.NonAtomicListVariable<ValueType,ValueDeltaType>(
                 false,locked_wrapper,value_type_class,ralph_globals);
         }
     }

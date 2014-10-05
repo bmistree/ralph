@@ -16,9 +16,9 @@ public class ContainerFactorySingleton
                 Map <String, IAtomicMapVariableFactory>> ();
 
     // key is value's class name
-    private final Map<String,IAtomicListVariableFactory>
+    private final Map<String,IListVariableFactory>
         atomic_list_factories =
-            new HashMap<String,IAtomicListVariableFactory>();
+            new HashMap<String,IListVariableFactory>();
 
     // key is class name of struct
     private final Map<String, IAtomicStructWrapperBaseClassFactory>
@@ -41,7 +41,7 @@ public class ContainerFactorySingleton
         return null;
     }
 
-    public IAtomicListVariableFactory get_atomic_list_variable_factory(
+    public IListVariableFactory get_list_variable_factory(
         String val_class_name)
     {
         return atomic_list_factories.get(val_class_name);
@@ -66,7 +66,7 @@ public class ContainerFactorySingleton
     }
 
     public void add_atomic_list_variable_factory(
-        String val_class_name,IAtomicListVariableFactory factory)
+        String val_class_name,IListVariableFactory factory)
     {
         atomic_list_factories.put(val_class_name,factory);
     }

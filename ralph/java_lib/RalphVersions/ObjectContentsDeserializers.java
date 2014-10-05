@@ -9,7 +9,7 @@ import ralph.Util;
 import ralph.Variables;
 import ralph.ContainerFactorySingleton;
 import ralph.IAtomicMapVariableFactory;
-import ralph.IAtomicListVariableFactory;
+import ralph.IListVariableFactory;
 import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
 import ralph.InternalStructBaseClass;
@@ -30,7 +30,7 @@ public class ObjectContentsDeserializers
         // See note on top of force_initialization in
         // BaseAtomicMapVariableFactory.
         ralph.BaseAtomicMapVariableFactory.instance.force_initialization();
-        ralph.BaseAtomicListVariableFactory.instance.force_initialization();
+        ralph.BaseListVariableFactory.instance.force_initialization();
 
 
         boolean is_atomic = obj_contents.getAtomic();
@@ -181,20 +181,14 @@ public class ObjectContentsDeserializers
         }
         else if (obj_contents.hasInternalListType())
         {
-            if (! is_atomic)
-            {
-                Util.logger_assert(
-                    "Must allow deserializing non-atomic internal lists");
-            }
-            
             ObjectContents.InternalList internal_list =
                 obj_contents.getInternalListType();
 
             // Creating an internal list in a very hackish way:
             // creating an atomic list and then reaching into it to
             // get internal list.                
-            IAtomicListVariableFactory factory =
-                ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
+            IListVariableFactory factory =
+                ContainerFactorySingleton.instance.get_list_variable_factory(
                     internal_list.getValTypeClassName());
             if (factory == null)
             {
@@ -202,31 +196,38 @@ public class ObjectContentsDeserializers
                     "No factory to contents deserialize internallist.");
             }
 
-            Variables.AtomicListVariable to_return_wrapper =
-                factory.construct(ralph_globals);
+            if (is_atomic)
+            {
+                Variables.AtomicListVariable to_return_wrapper =
+                    factory.construct_atomic(ralph_globals);
+                return (RalphObject) to_return_wrapper.val.val;
+            }
+            Variables.NonAtomicListVariable to_return_wrapper =
+                factory.construct_non_atomic(ralph_globals);
             return (RalphObject) to_return_wrapper.val.val;
         }
         else if (obj_contents.hasListType())
         {
-            if (! is_atomic)
-            {
-                Util.logger_assert(
-                    "Must allow deserializing non-atomic lists");
-            }
-            
             ObjectContents.List list = obj_contents.getListType();
             // FIXME: check for null
             String initial_reference = list.getRefType().getReference();
-            IAtomicListVariableFactory factory =
-                ContainerFactorySingleton.instance.get_atomic_list_variable_factory(
+            IListVariableFactory factory =
+                ContainerFactorySingleton.instance.get_list_variable_factory(
                     list.getValTypeClassName());
             if (factory == null)
             {
                 Util.logger_assert(
                     "No factory to contents deserialize list.");
             }
-            Variables.AtomicListVariable to_return =
-                factory.construct(ralph_globals);
+            if (is_atomic)
+            {
+                Variables.AtomicListVariable to_return =
+                    factory.construct_atomic(ralph_globals);
+                to_return.set_initial_reference(initial_reference);
+                return to_return;
+            }
+            Variables.NonAtomicListVariable to_return =
+                factory.construct_non_atomic(ralph_globals);
             to_return.set_initial_reference(initial_reference);
             return to_return;
         }
