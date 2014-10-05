@@ -18,10 +18,13 @@ public abstract class NonAtomicObject<T,DeltaType>
     public final String uuid;
     private DataWrapperFactory<T> data_wrapper_constructor;
     public DataWrapper<T> val = null;
+    public final RalphGlobals ralph_globals;
     
-    public NonAtomicObject(RalphGlobals ralph_globals)
+    
+    public NonAtomicObject(RalphGlobals _ralph_globals)
     {
-        uuid = ralph_globals.generate_uuid();
+        ralph_globals = _ralph_globals;
+        uuid = _ralph_globals.generate_uuid();
     }
 	
     public void init(

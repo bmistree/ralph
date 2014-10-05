@@ -461,7 +461,6 @@ public class Variables
         }
 
         /*** IInitialReferenceHolder methods */
-
         @Override
         public String get_initial_reference()
         {
@@ -474,12 +473,19 @@ public class Variables
             initial_endpt_uuid_reference = new_initial_reference;
             initial_endpt_uuid_reference_set = true;
         }
-
-        
         @Override
-        public void replay (
+        public boolean get_initial_reference_set()
+        {
+            return initial_endpt_uuid_reference_set;
+        }
+        
+        public static
+            <InterfaceVariableType extends RalphObject<IReference, IReference> & IInternalReferenceHolder>
+            void interface_replay(
             IReconstructionContext reconstruction_context,
-            ObjectHistory obj_history,Long to_play_until)
+            ObjectHistory obj_history, Long to_play_until,
+            InterfaceVariableType interface_variable,
+            RalphGlobals ralph_globals)
         {
             String endpt_uuid_reference_to_use =
                 ObjectHistory.find_reference(obj_history,to_play_until);
@@ -489,25 +495,36 @@ public class Variables
                 // means that we never changed from using the initial
                 // reference that was provided.
                 //// DEBUG
-                if (! initial_endpt_uuid_reference_set)
+                if (! interface_variable.get_initial_reference_set())
                 {
                     Util.logger_assert(
                         "Error: no idea where to replay reference from.");
                 }
                 //// END DEBUG
-                endpt_uuid_reference_to_use = initial_endpt_uuid_reference;
+                endpt_uuid_reference_to_use =
+                    interface_variable.get_initial_reference();
             }
 
-            T internal_val = null;
+            IReference internal_val = null;
             if (endpt_uuid_reference_to_use != null)
             {
                 // can == null, if internal endpt was initialized to
                 // null.
-                internal_val = (T)VersionUtil.rebuild_endpoint(
+                internal_val = VersionUtil.rebuild_endpoint(
                     endpt_uuid_reference_to_use,ralph_globals,
                     reconstruction_context,to_play_until);
             }
-            direct_set_val(internal_val);
+            interface_variable.direct_set_val(internal_val);
+        }
+        
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            AtomicInterfaceVariable.<AtomicInterfaceVariable>interface_replay(
+                reconstruction_context,obj_history,to_play_until,this,
+                ralph_globals);
         }
 
         /** AtomicValueVariable overrides */
@@ -828,7 +845,17 @@ public class Variables
     
     public static class NonAtomicInterfaceVariable<T extends IReference>
         extends NonAtomicValueVariable<T>
+        implements IInternalReferenceHolder
     {
+        /**
+           When we are replaying reference variables, we first must
+           construct them.  Then we replay what they were pointing to.
+           This field should hold the name of the reference that this
+           object was pointing to when it was constructed.  
+         */
+        private String initial_endpt_uuid_reference = null;
+        private boolean initial_endpt_uuid_reference_set = false;
+
         public NonAtomicInterfaceVariable(
             boolean _dummy_log_changes, T init_val,
             RalphGlobals ralph_globals)
@@ -855,6 +882,37 @@ public class Variables
             super(
                 null,new ValueTypeDataWrapperFactory<T>(),
                 INTERFACE_VERSION_HELPER, ralph_globals);
+        }
+
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            AtomicInterfaceVariable.<NonAtomicInterfaceVariable>interface_replay(
+                reconstruction_context,obj_history,to_play_until,this,
+                ralph_globals);
+        }
+
+        /**
+           IInternalReferenceHolders
+         */
+        @Override
+        public String get_initial_reference()
+        {
+            return initial_endpt_uuid_reference;
+        }
+
+        @Override
+        public void set_initial_reference(String new_initial_reference)
+        {
+            initial_endpt_uuid_reference = new_initial_reference;
+            initial_endpt_uuid_reference_set = true;
+        }
+        @Override
+        public boolean get_initial_reference_set()
+        {
+            return initial_endpt_uuid_reference_set;
         }
     }
     

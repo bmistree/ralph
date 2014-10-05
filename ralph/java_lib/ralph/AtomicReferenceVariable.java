@@ -15,6 +15,7 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
        object was pointing to when it was constructed.  
      */
     private String initial_reference = null;
+    private boolean initial_reference_set = false;
     
     public AtomicReferenceVariable(
         boolean _log_changes, ValueType init_val,
@@ -39,8 +40,16 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     public void set_initial_reference(String new_initial_reference)
     {
         initial_reference = new_initial_reference;
+        initial_reference_set = true;
     }
 
+    @Override
+    public boolean get_initial_reference_set()
+    {
+        return initial_reference_set;
+    }
+
+    
     /***** AtomicVariable methods */
     
     @Override
