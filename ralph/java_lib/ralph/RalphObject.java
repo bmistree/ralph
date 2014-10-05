@@ -46,20 +46,9 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        After regenerating an object from its constructor, need to be
        able to replay its changes on top of it.
      */
-    // public abstract void replay (
-    //     IReconstructionContext reconstruction_context,
-    //     ObjectHistory obj_history,Long to_play_until);
-    public void replay (
+    public abstract void replay (
         IReconstructionContext reconstruction_context,
-        ObjectHistory obj_history,Long to_play_until)
-    {
-        // Note: should be abstract, but implementing this method as
-        // assert --- allows compiling and testing even though replay
-        // isn't implemented for a number of objects.
-        Util.logger_assert(
-            "Replay not overridden in atomicvariable.");
-    }
-
+        ObjectHistory obj_history,Long to_play_until);
     
     /**
        Mostly used when deserializing one locked object (to_swap_with)

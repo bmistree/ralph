@@ -629,6 +629,14 @@ public class Variables
             to_return.set_derived(this);
             return to_return;
         }
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of ServiceFactory-s");
+        }
     }
     
     public static class AtomicServiceReferenceVariable
@@ -661,7 +669,14 @@ public class Variables
             to_return.set_derived(this);
             return to_return;
         }
-
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of ServiceReference-s");
+        }
         
         @Override
         public ObjectContents serialize_contents(
@@ -826,7 +841,16 @@ public class Variables
                 false,null,_enum_constructor_obj, version_helper,
                 ralph_globals);
         }
-
+        
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of NonAtomicEnum-s");
+        }
+        
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,
@@ -938,6 +962,15 @@ public class Variables
         }
 
         @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of NonAtomicServiceFactory-s");
+        }
+        
+        @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,
             SerializationContext serialization_context)
@@ -971,6 +1004,16 @@ public class Variables
                 default_service_reference,
                 service_reference_value_type_data_wrapper_factory,
                 SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
+        }
+        
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of " +
+                "NonAtomicServiceReference-s");
         }
         
         @Override
@@ -1018,6 +1061,16 @@ public class Variables
             super(
                 internal_val,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
+        }
+        
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of " +
+                "NonAtomicMap-s");
         }
     }
 
@@ -1108,6 +1161,15 @@ public class Variables
             super(
                 internal_val,locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class,ralph_globals);
+        }
+        @Override
+        public void replay (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until)
+        {
+            Util.logger_assert(
+                "FIXME: still must allow replay of " +
+                "NonAtomicList-s");
         }
     }
 }
