@@ -56,7 +56,7 @@ public abstract class NonAtomicReferenceVariable<ValueType extends IReference>
     /***** NonAtomicVariable methods */
     
     @Override
-    public final boolean return_internal_val_from_container() 
+    public boolean return_internal_val_from_container() 
     {
         return false;
     }

@@ -53,7 +53,7 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     /***** AtomicVariable methods */
     
     @Override
-    public final boolean return_internal_val_from_container() 
+    public boolean return_internal_val_from_container() 
     {
         return false;
     }
