@@ -71,7 +71,7 @@ public abstract class NonAtomicReferenceVariable<ValueType extends IReference>
 
         if (reference_to_use == null)
         {
-            if (initial_reference == null)
+            if(! get_initial_reference_set())
             {
                 Util.logger_assert(
                     "Require a reference to replay from");

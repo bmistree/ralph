@@ -2,6 +2,7 @@ package RalphVersions;
 
 import ralph.RalphGlobals;
 import ralph.RalphObject;
+import ralph.Util;
 
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -31,6 +32,14 @@ public class ReconstructionContext implements IReconstructionContext
         ObjectHistory obj_history =
             version_replayer.get_full_object_history(obj_uuid);
 
+        //// DEBUG
+        if (obj_history == null)
+        {
+            Util.logger_assert(
+                "Could not find object history for target obj_uuid");
+        }
+        //// END DEBUG
+        
         ObjectContents initial_contents =
             obj_history.initial_construction_contents;
             
