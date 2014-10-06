@@ -2505,7 +2505,7 @@ private static class %(struct_wrapper_class_factory_class_name)s
         ContainerFactorySingleton.instance.add_atomic_struct_wrapper_base_class_factory(
              %(struct_name)s.class.getName(),this);
     }
-
+    @Override
     public StructWrapperBaseClass construct(RalphGlobals ralph_globals)
     {
         return new %(struct_name)s (
@@ -2513,6 +2513,17 @@ private static class %(struct_wrapper_class_factory_class_name)s
             false,
             ralph_globals);
     }
+    @Override
+    public StructWrapperBaseClass construct_null_internal(RalphGlobals ralph_globals)
+    {
+        return new %(struct_name)s (
+            // do not log operations
+            false,
+            // populate internal value with null
+            null,
+            ralph_globals);
+    }
+
 }
 
 private final static %(struct_wrapper_class_factory_class_name)s

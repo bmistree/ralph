@@ -241,8 +241,13 @@ public class ObjectContentsDeserializers
                     "FIXME: disallowing deserializing non-atomic lists");
             }
             ObjectContents.Struct struct = obj_contents.getStructType();
-            // FIXME: check for null
-            String initial_reference = struct.getRefType().getReference();
+
+            Delta.ReferenceType ref_type = struct.getRefType();
+            String initial_reference = null;
+            if (ref_type.hasReference())
+                initial_reference = struct.getRefType().getReference();
+
+            
             IAtomicStructWrapperBaseClassFactory factory =
                 ContainerFactorySingleton.instance.get_atomic_struct_wrapper_base_class_factory(
                     struct.getStructTypeClassName());
@@ -251,7 +256,17 @@ public class ObjectContentsDeserializers
                 Util.logger_assert(
                     "No factory to contents deserialize struct.");
             }
-            StructWrapperBaseClass to_return = factory.construct(ralph_globals);
+            StructWrapperBaseClass to_return = null;
+            if (initial_reference == null)
+            {
+                // means that was initialized with null.
+                to_return = factory.construct_null_internal(ralph_globals);
+            }
+            else
+            {
+                to_return = factory.construct(ralph_globals);
+            }
+            
             to_return.set_initial_reference(initial_reference);
             return to_return;
         }

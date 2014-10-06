@@ -12,7 +12,9 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
        When we are replaying reference variables, we first must
        construct them.  Then we replay what they were pointing to.
        This field should hold the name of the reference that this
-       object was pointing to when it was constructed.  
+       object was pointing to when it was constructed.  Note that
+       initial_reference can be set to null (ie., if wrapping internal
+       class that is null).
      */
     private String initial_reference = null;
     private boolean initial_reference_set = false;
@@ -83,7 +85,7 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     {
         String reference_to_use =
             ObjectHistory.find_reference(obj_history,to_play_until);
-
+        
         if (reference_to_use == null)
         {
             if(! get_initial_reference_set())
@@ -92,7 +94,17 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
                     "Require a reference to replay from");
             }
             reference_to_use = initial_reference;
+
+            // If reference_to_use is set to null, means that internal
+            // value should be null and we shouldn't replay any
+            // farther.
+            if (reference_to_use == null)
+            {
+                direct_set_val(null);
+                return;
+            }
         }
+        
         ValueType rebuilt_internal_val =
             (ValueType) reconstruction_context.get_constructed_object(
                 reference_to_use, to_play_until);
