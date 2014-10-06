@@ -38,7 +38,7 @@ import ralph.Variables.AtomicServiceReferenceVariable;
 import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
 
-import ralph.BaseAtomicMapVariableFactory.AtomicMapVariableFactory;
+import ralph.BaseMapVariableFactory.MapVariableFactory;
 import ralph.BaseListVariableFactory.ListVariableFactory;
 
 // index types for maps
@@ -2394,9 +2394,9 @@ def emit_enum_map_list_variable_factories(enum_type):
         version_helper = params[2]
         
         text += '''
-private final static AtomicMapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s>
+private final static MapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s>
     %(key_type)s_atom_map_serializer_%(enum_name)s =
-        new AtomicMapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s> (
+        new MapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s> (
             %(key_type)s.class, %(enum_name)s.class,%(index_type)s,
             %(enum_locked_wrapper_name)s,%(version_helper)s);
 ''' % { 'key_type': key_type,
@@ -2555,9 +2555,9 @@ def emit_struct_content_deserializer(struct_type):
         version_helper = params[2]
         
         text += '''
-private final static AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference>
+private final static MapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference>
     %(key_type)s_atom_map_serializer_%(internal_struct_name)s =
-        new AtomicMapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference> (
+        new MapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference> (
             %(key_type)s.class, %(internal_struct_name)s.class,%(index_type)s,
             %(struct_locked_wrapper_name)s,%(version_helper)s);
 ''' % { 'key_type': key_type,

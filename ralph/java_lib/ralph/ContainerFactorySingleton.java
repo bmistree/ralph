@@ -11,9 +11,9 @@ public class ContainerFactorySingleton
     // first string is the key's class name, second key is the value's
     // class name.
     private final Map<String,
-        Map <String, IAtomicMapVariableFactory>> atomic_map_factories =
+        Map <String, IMapVariableFactory>> atomic_map_factories =
             new HashMap<String,
-                Map <String, IAtomicMapVariableFactory>> ();
+                Map <String, IMapVariableFactory>> ();
 
     // key is value's class name
     private final Map<String,IListVariableFactory>
@@ -30,7 +30,7 @@ public class ContainerFactorySingleton
     {}
 
     
-    public IAtomicMapVariableFactory get_atomic_map_variable_factory(
+    public IMapVariableFactory get_atomic_map_variable_factory(
         String key_class_name,String val_class_name)
     {
         if (atomic_map_factories.containsKey(key_class_name) &&
@@ -55,12 +55,12 @@ public class ContainerFactorySingleton
     }
     
     public void add_atomic_map_variable_factory(
-        String key_class_name,String val_class_name,IAtomicMapVariableFactory factory)
+        String key_class_name,String val_class_name,IMapVariableFactory factory)
     {
         if (! atomic_map_factories.containsKey(key_class_name))
         {
             atomic_map_factories.put(
-                key_class_name,new HashMap<String,IAtomicMapVariableFactory>());
+                key_class_name,new HashMap<String,IMapVariableFactory>());
         }
         atomic_map_factories.get(key_class_name).put(val_class_name,factory);
     }

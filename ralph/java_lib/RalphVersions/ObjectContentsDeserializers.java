@@ -8,7 +8,7 @@ import ralph.RalphObject;
 import ralph.Util;
 import ralph.Variables;
 import ralph.ContainerFactorySingleton;
-import ralph.IAtomicMapVariableFactory;
+import ralph.IMapVariableFactory;
 import ralph.IListVariableFactory;
 import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
@@ -28,8 +28,8 @@ public class ObjectContentsDeserializers
         IReconstructionContext reconstruction_context)
     {
         // See note on top of force_initialization in
-        // BaseAtomicMapVariableFactory.
-        ralph.BaseAtomicMapVariableFactory.instance.force_initialization();
+        // BaseMapVariableFactory.
+        ralph.BaseMapVariableFactory.instance.force_initialization();
         ralph.BaseListVariableFactory.instance.force_initialization();
 
 
@@ -130,16 +130,10 @@ public class ObjectContentsDeserializers
         }
         else if (obj_contents.hasMapType())
         {
-            if (! is_atomic)
-            {
-                Util.logger_assert(
-                    "Must permit deserializing non-atomic maps");
-            }
-            
             ObjectContents.Map map = obj_contents.getMapType();
             // FIXME: check for null
             String initial_reference = map.getRefType().getReference();
-            IAtomicMapVariableFactory factory =
+            IMapVariableFactory factory =
                 ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
                     map.getKeyTypeClassName(),map.getValTypeClassName());
             if (factory == null)
@@ -147,25 +141,27 @@ public class ObjectContentsDeserializers
                 Util.logger_assert(
                     "No factory to contents deserialize map.");
             }
-            Variables.AtomicMapVariable to_return =
-                factory.construct(ralph_globals);
+            if (is_atomic)
+            {                
+                Variables.AtomicMapVariable to_return =
+                    factory.construct_atomic(ralph_globals);
+                to_return.set_initial_reference(initial_reference);
+                return to_return;
+            }
+            Variables.NonAtomicMapVariable to_return =
+                    factory.construct_non_atomic(ralph_globals);
             to_return.set_initial_reference(initial_reference);
             return to_return;
         }
         else if (obj_contents.hasInternalMapType())
         {
-            if (! is_atomic)
-            {
-                Util.logger_assert(
-                    "Must allow deserializing non-atomic internal maps");
-            }
             ObjectContents.InternalMap internal_map =
                 obj_contents.getInternalMapType();
 
             // Creating an internal map in a very hackish way:
             // creating an atomic map and then reaching into it to
             // get internal map.
-            IAtomicMapVariableFactory factory =
+            IMapVariableFactory factory =
                 ContainerFactorySingleton.instance.get_atomic_map_variable_factory(
                     internal_map.getKeyTypeClassName(),
                     internal_map.getValTypeClassName());
@@ -175,8 +171,14 @@ public class ObjectContentsDeserializers
                     "No factory to contents deserialize internalmap.");
             }
 
-            Variables.AtomicMapVariable to_return_wrapper =
-                factory.construct(ralph_globals);
+            if (is_atomic)
+            {
+                Variables.AtomicMapVariable to_return_wrapper =
+                    factory.construct_atomic(ralph_globals);
+                return (RalphObject) to_return_wrapper.val.val;
+            }
+            Variables.NonAtomicMapVariable to_return_wrapper =
+                factory.construct_non_atomic(ralph_globals);
             return (RalphObject) to_return_wrapper.val.val;
         }
         else if (obj_contents.hasInternalListType())
