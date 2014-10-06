@@ -4,8 +4,12 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 
-public abstract class AtomicReferenceVariable<ValueType extends IReference>
-    extends AtomicVariable<ValueType, IReference>
+// FIXME: This class is highly-redundant with AtomicReferenceVariable.
+// Think about parameterizing based on NonAtomicVariable to get rid of
+// extra code.
+
+public abstract class NonAtomicReferenceVariable<ValueType extends IReference>
+    extends NonAtomicVariable<ValueType, IReference>
     implements IInternalReferenceHolder
 {
     /**
@@ -17,14 +21,13 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     private String initial_reference = null;
     private boolean initial_reference_set = false;
     
-    public AtomicReferenceVariable(
-        boolean _log_changes, ValueType init_val,
-        ValueTypeDataWrapperFactory<ValueType> vtdwc,
+    public NonAtomicReferenceVariable(
+        ValueType init_val, ValueTypeDataWrapperFactory<ValueType> vtdwc,
         VersionHelper<IReference> version_helper,
         RalphGlobals ralph_globals,Object additional_serialization_contents)
     {
         super(
-            _log_changes,init_val,vtdwc,version_helper,ralph_globals,
+            init_val,vtdwc,version_helper,ralph_globals,
             additional_serialization_contents);
     }
 
@@ -50,7 +53,7 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
     }
 
     
-    /***** AtomicVariable methods */
+    /***** NonAtomicVariable methods */
     
     @Override
     public final boolean return_internal_val_from_container() 
@@ -58,24 +61,6 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         return false;
     }
     
-    /**
-       Log completed commit, if ralph globals designates to.
-     */
-    @Override
-    public void complete_write_commit_log(
-        ActiveEvent active_event)
-    {
-        RalphGlobals ralph_globals = active_event.ralph_globals;
-        // do not do anything
-        if ((VersioningInfo.instance.version_saver == null) ||
-            (version_helper == null))
-        {
-            return;
-        }
-        version_helper.save_version(
-            uuid,dirty_val.val,active_event.commit_metadata);
-    }
-
     @Override
     public void replay (
         IReconstructionContext reconstruction_context,

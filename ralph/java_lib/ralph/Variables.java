@@ -1062,16 +1062,6 @@ public class Variables
                 internal_val,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
-        
-        @Override
-        public void replay (
-            IReconstructionContext reconstruction_context,
-            ObjectHistory obj_history,Long to_play_until)
-        {
-            Util.logger_assert(
-                "FIXME: still must allow replay of " +
-                "NonAtomicMap-s");
-        }
     }
 
     // atomic
@@ -1161,15 +1151,6 @@ public class Variables
             super(
                 internal_val,locked_wrapper,REFERENCE_VERSION_HELPER,
                 value_type_class,ralph_globals);
-        }
-        @Override
-        public void replay (
-            IReconstructionContext reconstruction_context,
-            ObjectHistory obj_history,Long to_play_until)
-        {
-            Util.logger_assert(
-                "FIXME: still must allow replay of " +
-                "NonAtomicList-s");
         }
     }
 }

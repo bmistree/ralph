@@ -28,15 +28,15 @@ import ralph_protobuffs.ObjectContentsProto.ObjectContents;
  *     LockedMapVariable< Number, String>>
  */
 public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
-    extends NonAtomicVariable<
+    extends NonAtomicReferenceVariable<
     // this wraps a locked container object.  Ie, calling get_val on
     // this will return NonAtomicInternalMap.  when call set val, must
-    // pass in a NonAtomicInternalMap Note: this is the type that is
-    // sent into the version helper for logging.
-    NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>,
-    IReference
+    // pass in a NonAtomicInternalMap Note: version helper gets passed
+    // in delta of this type.
+    NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>
     >
 {
+    // FIXME: remove deserialization labels
     public final static String deserialization_label = "NonAtomic Map";
 
     private final Class<KeyType> key_type_class;

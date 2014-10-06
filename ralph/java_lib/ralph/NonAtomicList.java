@@ -27,15 +27,12 @@ import ralph_protobuffs.ObjectContentsProto.ObjectContents;
  * 
  */
 public abstract class NonAtomicList<ValueType,DeltaType>
-    extends NonAtomicVariable<
-    // this wraps a locked container object.  Ie,
-    // calling get_val on this will return NonAtomicInternalList.
-    // when call set val, must pass in a NonAtomicInternalList
-    // Note: the type that the version helper for this nonatomic list gets
-    // passed.
-    NonAtomicInternalList<ValueType,DeltaType>,
-    IReference>
-    implements IInternalReferenceHolder
+    extends NonAtomicReferenceVariable<
+    // this wraps a locked container object.  Ie, calling get_val on
+    // this will return AtomicListContainer.  when call set val, must
+    // pass in a AtomicListContainer.  Note:version helper gets passed
+    // in delta of this type.
+    NonAtomicInternalList<ValueType, DeltaType>>
 {
     /**
        When we are replaying reference variables, we first must
@@ -88,7 +85,6 @@ public abstract class NonAtomicList<ValueType,DeltaType>
                 _value_type_class.getName()));
         
         value_type_class = _value_type_class;
-
     }
 
     @Override
@@ -122,32 +118,5 @@ public abstract class NonAtomicList<ValueType,DeltaType>
         
         return AtomicList.serialize_list_reference(
             uuid(),internal_reference,value_type_name,false);
-    }
-    
-    public boolean return_internal_val_from_container()
-    {
-        return false;
-    }
-
-
-    /*** IInitialReferenceHolder methods */
-    
-    @Override
-    public String get_initial_reference()
-    {
-        return initial_reference;
-    }
-
-    @Override
-    public void set_initial_reference(String new_initial_reference)
-    {
-        initial_reference = new_initial_reference;
-        initial_reference_set = true;
-    }
-
-    @Override
-    public boolean get_initial_reference_set()
-    {
-        return initial_reference_set;
     }
 }
