@@ -34,16 +34,6 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     // in delta of this type.
     NonAtomicInternalList<ValueType, DeltaType>>
 {
-    /**
-       When we are replaying reference variables, we first must
-       construct them.  Then we replay what they were pointing to.
-       This field should hold the name of the reference that this
-       object was pointing to when it was constructed.  
-     */
-    private String initial_reference = null;
-    private boolean initial_reference_set = false;
-
-    
     public final static String deserialization_label = "NonAtomic List";
     public final Class<ValueType> value_type_class;
     
