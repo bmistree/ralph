@@ -34,6 +34,9 @@ public class InternalServiceFactory
     public static InternalServiceFactory deserialize (
         ByteString serialized_byte_string,RalphGlobals ralph_globals)
     {
+        if (serialized_byte_string.isEmpty())
+            return null;
+        
         try
         {
             ObjectInputStream object_input_stream =

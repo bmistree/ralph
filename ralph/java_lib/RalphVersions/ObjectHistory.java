@@ -5,13 +5,18 @@ import java.util.TreeSet;
 import java.util.SortedSet;
 import java.util.Set;
 
+import com.google.protobuf.ByteString;
+
 import ralph.RalphObject;
 import ralph.RalphInternalMapInterface;
 import ralph.RalphInternalListInterface;
 import ralph.EnumConstructorObj;
-import RalphExceptions.BackoutException;
 import ralph.IInternalReferenceHolder;
 import ralph.Util;
+import ralph.InternalServiceFactory;
+import ralph.RalphGlobals;
+
+import RalphExceptions.BackoutException;
 
 import ralph_protobuffs.DeltaProto.Delta;
 import ralph_protobuffs.DeltaProto.Delta.ValueType;
@@ -161,6 +166,31 @@ public class ObjectHistory
         }
     }
 
+    public static void replay_service_factory(
+        RalphObject<InternalServiceFactory,InternalServiceFactory> to_replay_on,
+        ObjectHistory obj_history, Long to_play_until,RalphGlobals ralph_globals)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+
+        SingleObjectChange latest_change = null;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            latest_change = change;
+        }
+        if (latest_change != null)
+        {
+            SingleObjectChange.service_factory_incorporate_single_object_change(
+                latest_change,to_replay_on,ralph_globals);
+        }
+    }
+
+    
     public static <EnumType extends Enum> void replay_enum(
         RalphObject<EnumType,EnumType> to_replay_on,
         ObjectHistory obj_history,Long to_play_until,
@@ -260,6 +290,19 @@ public class ObjectHistory
             EnumType internal_enum =
                 enum_constructor.construct_enum(enum_ordinal);
             to_incorporate_into.direct_set_val(internal_enum);
+        }
+
+        public static void service_factory_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<InternalServiceFactory,InternalServiceFactory>to_replay_on,
+            RalphGlobals ralph_globals)
+        {
+            ByteString serialized_delta =
+                change.delta.getServiceFactoryDelta().getSerializedFactory();
+
+            InternalServiceFactory internal_service_factory =
+                InternalServiceFactory.deserialize (serialized_delta,ralph_globals);
+            to_replay_on.direct_set_val(internal_service_factory);
         }
 
         

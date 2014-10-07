@@ -683,8 +683,8 @@ public class Variables
             IReconstructionContext reconstruction_context,
             ObjectHistory obj_history,Long to_play_until)
         {
-            Util.logger_assert(
-                "FIXME: still must allow replay of ServiceFactory-s");
+            ObjectHistory.replay_service_factory(
+                this,obj_history,to_play_until,ralph_globals);
         }
     }
     
@@ -1015,8 +1015,8 @@ public class Variables
             IReconstructionContext reconstruction_context,
             ObjectHistory obj_history,Long to_play_until)
         {
-            Util.logger_assert(
-                "FIXME: still must allow replay of NonAtomicServiceFactory-s");
+            ObjectHistory.replay_service_factory(
+                this,obj_history,to_play_until,ralph_globals);
         }
 
         @Override
