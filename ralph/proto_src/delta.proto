@@ -41,7 +41,11 @@ message Delta
         required int32 enum_ordinal = 2;
     }
     
-
+    message ServiceFactoryDelta
+    {
+        required bytes serialized_factory = 1;
+    }
+    
     message ReferenceType
     {
         // nothing inside means that we should set reference to null.
@@ -57,4 +61,5 @@ message Delta
     repeated ContainerDelta container_delta = 3;
     
     optional EnumDelta enum_delta = 4;
+    optional ServiceFactoryDelta service_factory_delta = 5;
 }

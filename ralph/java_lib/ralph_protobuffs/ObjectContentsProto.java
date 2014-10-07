@@ -205,6 +205,20 @@ public final class ObjectContentsProto {
      * <code>optional .ObjectContents.Enum enum_type = 13;</code>
      */
     ralph_protobuffs.ObjectContentsProto.ObjectContents.EnumOrBuilder getEnumTypeOrBuilder();
+
+    // optional .Delta.ServiceFactoryDelta service_factory_type = 14;
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    boolean hasServiceFactoryType();
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactoryType();
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryTypeOrBuilder();
   }
   /**
    * Protobuf type {@code ObjectContents}
@@ -400,6 +414,19 @@ public final class ObjectContentsProto {
                 enumType_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00001000;
+              break;
+            }
+            case 114: {
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder subBuilder = null;
+              if (((bitField0_ & 0x00002000) == 0x00002000)) {
+                subBuilder = serviceFactoryType_.toBuilder();
+              }
+              serviceFactoryType_ = input.readMessage(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(serviceFactoryType_);
+                serviceFactoryType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00002000;
               break;
             }
           }
@@ -6807,6 +6834,28 @@ public final class ObjectContentsProto {
       return enumType_;
     }
 
+    // optional .Delta.ServiceFactoryDelta service_factory_type = 14;
+    public static final int SERVICE_FACTORY_TYPE_FIELD_NUMBER = 14;
+    private ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta serviceFactoryType_;
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    public boolean hasServiceFactoryType() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactoryType() {
+      return serviceFactoryType_;
+    }
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryTypeOrBuilder() {
+      return serviceFactoryType_;
+    }
+
     private void initFields() {
       uuid_ = "";
       atomic_ = false;
@@ -6821,6 +6870,7 @@ public final class ObjectContentsProto {
       structType_ = ralph_protobuffs.ObjectContentsProto.ObjectContents.Struct.getDefaultInstance();
       interface_ = ralph_protobuffs.ObjectContentsProto.ObjectContents.Interface.getDefaultInstance();
       enumType_ = ralph_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
+      serviceFactoryType_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6883,6 +6933,12 @@ public final class ObjectContentsProto {
           return false;
         }
       }
+      if (hasServiceFactoryType()) {
+        if (!getServiceFactoryType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -6928,6 +6984,9 @@ public final class ObjectContentsProto {
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         output.writeMessage(13, enumType_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeMessage(14, serviceFactoryType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -6989,6 +7048,10 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(13, enumType_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, serviceFactoryType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7108,6 +7171,7 @@ public final class ObjectContentsProto {
           getStructTypeFieldBuilder();
           getInterfaceFieldBuilder();
           getEnumTypeFieldBuilder();
+          getServiceFactoryTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -7182,6 +7246,12 @@ public final class ObjectContentsProto {
           enumTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
+        if (serviceFactoryTypeBuilder_ == null) {
+          serviceFactoryType_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+        } else {
+          serviceFactoryTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -7302,6 +7372,14 @@ public final class ObjectContentsProto {
         } else {
           result.enumType_ = enumTypeBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        if (serviceFactoryTypeBuilder_ == null) {
+          result.serviceFactoryType_ = serviceFactoryType_;
+        } else {
+          result.serviceFactoryType_ = serviceFactoryTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7358,6 +7436,9 @@ public final class ObjectContentsProto {
         }
         if (other.hasEnumType()) {
           mergeEnumType(other.getEnumType());
+        }
+        if (other.hasServiceFactoryType()) {
+          mergeServiceFactoryType(other.getServiceFactoryType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -7416,6 +7497,12 @@ public final class ObjectContentsProto {
         }
         if (hasEnumType()) {
           if (!getEnumType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasServiceFactoryType()) {
+          if (!getServiceFactoryType().isInitialized()) {
             
             return false;
           }
@@ -8804,6 +8891,123 @@ public final class ObjectContentsProto {
         return enumTypeBuilder_;
       }
 
+      // optional .Delta.ServiceFactoryDelta service_factory_type = 14;
+      private ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta serviceFactoryType_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder> serviceFactoryTypeBuilder_;
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public boolean hasServiceFactoryType() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactoryType() {
+        if (serviceFactoryTypeBuilder_ == null) {
+          return serviceFactoryType_;
+        } else {
+          return serviceFactoryTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public Builder setServiceFactoryType(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta value) {
+        if (serviceFactoryTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          serviceFactoryType_ = value;
+          onChanged();
+        } else {
+          serviceFactoryTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public Builder setServiceFactoryType(
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder builderForValue) {
+        if (serviceFactoryTypeBuilder_ == null) {
+          serviceFactoryType_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceFactoryTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public Builder mergeServiceFactoryType(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta value) {
+        if (serviceFactoryTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00002000) == 0x00002000) &&
+              serviceFactoryType_ != ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance()) {
+            serviceFactoryType_ =
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.newBuilder(serviceFactoryType_).mergeFrom(value).buildPartial();
+          } else {
+            serviceFactoryType_ = value;
+          }
+          onChanged();
+        } else {
+          serviceFactoryTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00002000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public Builder clearServiceFactoryType() {
+        if (serviceFactoryTypeBuilder_ == null) {
+          serviceFactoryType_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+          onChanged();
+        } else {
+          serviceFactoryTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00002000);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder getServiceFactoryTypeBuilder() {
+        bitField0_ |= 0x00002000;
+        onChanged();
+        return getServiceFactoryTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryTypeOrBuilder() {
+        if (serviceFactoryTypeBuilder_ != null) {
+          return serviceFactoryTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return serviceFactoryType_;
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder> 
+          getServiceFactoryTypeFieldBuilder() {
+        if (serviceFactoryTypeBuilder_ == null) {
+          serviceFactoryTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder>(
+                  serviceFactoryType_,
+                  getParentForChildren(),
+                  isClean());
+          serviceFactoryType_ = null;
+        }
+        return serviceFactoryTypeBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObjectContents)
     }
 
@@ -8874,7 +9078,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\024objectContents.proto\032\013delta.proto\"\301\t\n\016" +
+      "\n\024objectContents.proto\032\013delta.proto\"\373\t\n\016" +
       "ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030\002" +
       " \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueType" +
       "\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceType" +
@@ -8888,25 +9092,26 @@ public final class ObjectContentsProto {
       "truct_type\030\013 \001(\0132\026.ObjectContents.Struct" +
       "\022,\n\tinterface\030\014 \001(\0132\031.ObjectContents.Int" +
       "erface\022\'\n\tenum_type\030\r \001(\0132\024.ObjectConten" +
-      "ts.Enum\032M\n\023InternalStructField\0226\n\030field_" +
-      "contents_reference\030\001 \002(\0132\024.Delta.Referen" +
-      "ceType\032e\n\016InternalStruct\022\036\n\026struct_type_" +
-      "class_name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.Objec" +
-      "tContents.InternalStructField\032P\n\006Struct\022" +
-      "&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\022",
-      "\036\n\026struct_type_class_name\030\002 \002(\t\032E\n\004Enum\022" +
-      "\'\n\037enum_constructor_obj_class_name\030\001 \002(\t" +
-      "\022\024\n\014enum_ordinal\030\002 \002(\005\032g\n\003Map\022&\n\010ref_typ" +
-      "e\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_typ" +
-      "e_class_name\030\002 \002(\t\022\033\n\023val_type_class_nam" +
-      "e\030\003 \002(\t\0323\n\tInterface\022&\n\010ref_type\030\001 \002(\0132\024" +
-      ".Delta.ReferenceType\032K\n\004List\022&\n\010ref_type" +
-      "\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023val_type" +
-      "_class_name\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_" +
-      "type_class_name\030\001 \002(\t\022\033\n\023val_type_class_",
-      "name\030\002 \002(\t\032+\n\014InternalList\022\033\n\023val_type_c" +
-      "lass_name\030\001 \002(\tB\'\n\020ralph_protobuffsB\023Obj" +
-      "ectContentsProto"
+      "ts.Enum\0228\n\024service_factory_type\030\016 \001(\0132\032." +
+      "Delta.ServiceFactoryDelta\032M\n\023InternalStr" +
+      "uctField\0226\n\030field_contents_reference\030\001 \002" +
+      "(\0132\024.Delta.ReferenceType\032e\n\016InternalStru" +
+      "ct\022\036\n\026struct_type_class_name\030\001 \002(\t\0223\n\006fi" +
+      "elds\030\002 \003(\0132#.ObjectContents.InternalStru",
+      "ctField\032P\n\006Struct\022&\n\010ref_type\030\001 \002(\0132\024.De" +
+      "lta.ReferenceType\022\036\n\026struct_type_class_n" +
+      "ame\030\002 \002(\t\032E\n\004Enum\022\'\n\037enum_constructor_ob" +
+      "j_class_name\030\001 \002(\t\022\024\n\014enum_ordinal\030\002 \002(\005" +
+      "\032g\n\003Map\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Refere" +
+      "nceType\022\033\n\023key_type_class_name\030\002 \002(\t\022\033\n\023" +
+      "val_type_class_name\030\003 \002(\t\0323\n\tInterface\022&" +
+      "\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\032K" +
+      "\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Referen" +
+      "ceType\022\033\n\023val_type_class_name\030\002 \002(\t\032G\n\013I",
+      "nternalMap\022\033\n\023key_type_class_name\030\001 \002(\t\022" +
+      "\033\n\023val_type_class_name\030\002 \002(\t\032+\n\014Internal" +
+      "List\022\033\n\023val_type_class_name\030\001 \002(\tB\'\n\020ral" +
+      "ph_protobuffsB\023ObjectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8918,7 +9123,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_descriptor,
-              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", "EnumType", });
+              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", "EnumType", "ServiceFactoryType", });
           internal_static_ObjectContents_InternalStructField_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(0);
           internal_static_ObjectContents_InternalStructField_fieldAccessorTable = new
