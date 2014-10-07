@@ -2826,18 +2826,20 @@ def emit_internal_struct_replay(struct_type):
     sorted_field_keys = sorted(struct_type.name_to_field_type_dict.keys())
     for field_index in range (0, len(sorted_field_keys)):
         field_name = sorted_field_keys[field_index]
+        field_type = struct_type.name_to_field_type_dict[field_name]
+        field_type_text = emit_ralph_wrapped_type(field_type)
         internal_replay_text += '''
 {
-    ObjectHistory field_obj_history =
-        reconstruction_context.get_version_replayer().get_full_object_history(
-            internal_references_to_replay_on.get(%(field_index)i));
-
-    %(field_name)s.replay(reconstruction_context, field_obj_history,to_play_until);
+    %(field_name)s =
+        (%(field_type)s) reconstruction_context.get_constructed_object(
+            internal_references_to_replay_on.get(%(field_index)i),
+            to_play_until);
 }
 ''' % { 'field_name': field_name,
-        'field_index': field_index}
+        'field_index': field_index,
+        'field_type': field_type_text}
 
-        
+
     internal_replay_text = indent_string(internal_replay_text)
     return '''
 @Override
