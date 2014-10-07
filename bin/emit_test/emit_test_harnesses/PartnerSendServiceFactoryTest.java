@@ -20,7 +20,7 @@ public class PartnerSendServiceFactoryTest
     
     public static void main(String[] args)
     {
-        if (PartnerSendServiceFactoryTest.run_test())
+        if (run_test())
             System.out.println("\nSUCCESS in PartnerSendServiceFactoryTest\n");
         else
             System.out.println("\nFAILURE in PartnerSendServiceFactoryTest\n");

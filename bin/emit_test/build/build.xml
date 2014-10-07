@@ -849,7 +849,7 @@
   <target
       name="ralph_PartnerServiceFactory"
       depends="basic_ralph,single_side_service_factory,
-               partner_service_factory">
+               partner_service_factory,iface_basic_ralph">
   </target>
 
   <target
