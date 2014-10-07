@@ -3,6 +3,8 @@ package RalphVersions;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.protobuf.ByteString;
+
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.Util;
@@ -13,6 +15,7 @@ import ralph.IListVariableFactory;
 import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
 import ralph.InternalStructBaseClass;
+import ralph.InternalServiceFactory;
 import ralph.EnumConstructorObj;
 import ralph.IReference;
 
@@ -312,6 +315,31 @@ public class ObjectContentsDeserializers
                 internal_references_to_replay_on);
             return internal_struct;
         }
+        else if (obj_contents.hasServiceFactoryType())
+        {
+            InternalServiceFactory internal_service_factory = null;
+            ByteString byte_string =
+                obj_contents.getServiceFactoryType().getSerializedFactory();
+            if (! byte_string.isEmpty())
+            {
+                internal_service_factory =
+                    InternalServiceFactory.deserialize (
+                        byte_string, ralph_globals);
+            }
+            
+            if (obj_contents.getAtomic())
+            {
+                Variables.AtomicServiceFactoryVariable to_return =
+                    new Variables.AtomicServiceFactoryVariable(
+                        false,internal_service_factory,ralph_globals);
+                return to_return;
+            }
+            Variables.NonAtomicServiceFactoryVariable to_return =
+                new Variables.NonAtomicServiceFactoryVariable(
+                        false,internal_service_factory,ralph_globals);
+            return to_return;
+        }
+        
 
         Util.logger_assert("Unknown object contents deserialization.");
         return null;        

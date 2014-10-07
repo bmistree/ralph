@@ -2,6 +2,7 @@ package ralph;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import java.io.IOException;
 
 import com.google.protobuf.ByteString;
@@ -18,7 +19,6 @@ public class InternalServiceFactory
 {
     private EndpointConstructorObj endpt_constructor = null;
     private RalphGlobals ralph_globals = null;
-
     
     public InternalServiceFactory(
         EndpointConstructorObj endpt_constructor,RalphGlobals ralph_globals)
@@ -27,6 +27,55 @@ public class InternalServiceFactory
         this.ralph_globals = ralph_globals;
     }
 
+
+    /**
+       Deserializing constructor.
+     */
+    public static InternalServiceFactory deserialize (
+        ByteString serialized_byte_string,RalphGlobals ralph_globals)
+    {
+        try
+        {
+            ObjectInputStream object_input_stream =
+                new ObjectInputStream(serialized_byte_string.newInput());
+
+            Class<EndpointConstructorObj> constructor_class =
+                (Class<EndpointConstructorObj>) object_input_stream.readObject();
+            object_input_stream.close();
+
+            EndpointConstructorObj constructor_obj =
+                constructor_class.newInstance();
+
+            InternalServiceFactory to_return =
+                new InternalServiceFactory(constructor_obj,ralph_globals);
+            return to_return;
+        }
+        catch (IOException _ex)
+        {
+            _ex.printStackTrace();
+        }
+        catch (ClassNotFoundException _ex)
+        {
+            _ex.printStackTrace();
+        }
+        catch (InstantiationException _ex)
+        {
+            _ex.printStackTrace();
+        }
+        catch (IllegalAccessException _ex)
+        {
+            _ex.printStackTrace();
+        }
+
+        // Should never get a case where 
+        Util.logger_assert(
+            "Not handling the case of unusual exceptions when deserializing " +
+            "internal service factories.");
+        return null;
+    }
+    
+    
+    
     ByteString convert_constructor_to_byte_string() throws IOException
     {
         ByteArrayOutputStream byte_array_output_stream =
