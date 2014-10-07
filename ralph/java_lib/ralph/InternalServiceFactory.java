@@ -3,6 +3,9 @@ package ralph;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
+
+import com.google.protobuf.ByteString;
+
 import ralph_protobuffs.CreateConnectionProto.CreateConnection;
 import ralph_protobuffs.UtilProto.UUID;
 
@@ -24,7 +27,7 @@ public class InternalServiceFactory
         this.ralph_globals = ralph_globals;
     }
 
-    byte [] convert_constructor_to_byte_array() throws IOException
+    ByteString convert_constructor_to_byte_string() throws IOException
     {
         ByteArrayOutputStream byte_array_output_stream =
             new ByteArrayOutputStream();
@@ -34,10 +37,15 @@ public class InternalServiceFactory
         out.close();
 
         out.writeObject(endpt_constructor.getClass());
-        byte[] to_return = byte_array_output_stream.toByteArray();
+        byte[] byte_array = byte_array_output_stream.toByteArray();
         byte_array_output_stream.close();
-        return to_return;
+        
+        // FIXME: this may be an inefficient way to construct
+        // bytestring (two copies, instead of one).
+        ByteString byte_string = ByteString.copyFrom(byte_array);
+        return byte_string;
     }
+
     
     public Endpoint construct(ActiveEvent active_event)
     {

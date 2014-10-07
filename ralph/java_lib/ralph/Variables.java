@@ -1,5 +1,7 @@
 package ralph;
 
+import com.google.protobuf.ByteString;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
@@ -608,10 +610,57 @@ public class Variables
             SerializationContext serialization_context)
             throws BackoutException
         {
-            // FIXME: add code for serializing service factories variables.
-            Util.logger_assert(
-                "FIXME: fill in serialization for service factories");
-            return null;
+            return AtomicServiceFactoryVariable.service_factory_serialize_contents(
+                active_event, serialization_context,this,true);
+        }
+
+        public static ObjectContents service_factory_serialize_contents(
+            ActiveEvent active_event,SerializationContext serialization_context,
+            RalphObject<InternalServiceFactory,InternalServiceFactory> service_factory_holder,
+            boolean is_atomic) throws BackoutException
+        {
+            InternalServiceFactory internal_val =
+                service_factory_holder.get_val(active_event);
+
+            ByteString internal_byte_string = null;
+            if (internal_val != null)
+            {
+                try
+                {
+                    internal_byte_string =
+                        internal_val.convert_constructor_to_byte_string();
+                }
+                catch(IOException ex)
+                {
+                    // The only time this happens is if we get an
+                    // IOException when copying internal service
+                    // factory.
+                    ex.printStackTrace();
+                    Util.logger_assert(
+                        "Not handling IOException thrown from copying " +
+                        "object contents when serializing internal " +
+                        "service factory.");
+                }
+            }
+            else
+            {
+                // null byte string is an empty byte array.
+                internal_byte_string.copyFrom(new byte[0]);
+            }
+
+            Delta.ServiceFactoryDelta.Builder service_factory_delta_builder =
+                Delta.ServiceFactoryDelta.newBuilder();
+            service_factory_delta_builder.setSerializedFactory(
+                internal_byte_string);
+
+            ObjectContents.Builder obj_contents_builder =
+                ObjectContents.newBuilder();
+
+            obj_contents_builder.setServiceFactoryType(
+                service_factory_delta_builder);
+            obj_contents_builder.setAtomic(is_atomic);
+            obj_contents_builder.setUuid(service_factory_holder.uuid());
+            return obj_contents_builder.build();
         }
         
         @Override
@@ -969,17 +1018,15 @@ public class Variables
             Util.logger_assert(
                 "FIXME: still must allow replay of NonAtomicServiceFactory-s");
         }
-        
+
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,
             SerializationContext serialization_context)
             throws BackoutException
         {
-            // FIXME: add code for serializing service factories variables.
-            Util.logger_assert(
-                "FIXME: fill in serialization for service factories");
-            return null;
+            return AtomicServiceFactoryVariable.service_factory_serialize_contents(
+                active_event, serialization_context,this,false);
         }
     }
 
