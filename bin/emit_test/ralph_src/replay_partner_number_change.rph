@@ -1,0 +1,24 @@
+
+Endpoint NumberSender
+{
+    send_update_number(Number num_to_send)
+    {
+        @partner.partner_receive_set_number(num_to_send);
+    }
+}
+
+
+Endpoint NumberReceiver
+{
+    TVar Number num = 15;
+
+    get_number() returns Number
+    {
+        return num;
+    }
+
+    partner_receive_set_number(Number to_update_to)
+    {
+        num = to_update_to;
+    }
+}

@@ -119,6 +119,12 @@
     </antcall>
   </target>
 
+  <target name="replay_partner_number_change" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="replay_partner_number_change.rph"/>
+      <param name="class_name" value="ReplayPartnerNumberChangeJava"/>
+    </antcall>
+  </target>
   
   <target name="read_only_speculate" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
