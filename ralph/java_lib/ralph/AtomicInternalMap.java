@@ -148,15 +148,6 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
             uuid, deltas,active_event.commit_metadata);
     }
 
-    @Override
-    public void swap_internal_vals(
-        ActiveEvent active_event,RalphObject to_swap_with)
-        throws BackoutException
-    {
-        Util.logger_assert(
-            "Must fill in write_if_different in AtomicInternalMap.");
-    }
-    
     /** ImmediateCommitSupplier interface*/
     @Override
     public void check_immediate_commit(ActiveEvent active_event)

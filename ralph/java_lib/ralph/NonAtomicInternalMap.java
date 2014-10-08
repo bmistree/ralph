@@ -115,15 +115,6 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
             false,uuid(),this);
     }
     
-    @Override
-    public void swap_internal_vals(
-        ActiveEvent active_event,RalphObject to_swap_with)
-        throws BackoutException
-    {
-        Util.logger_assert(
-            "Still must define swap method for NonAtomicInternalMap.");
-    }
-    
     /** ImmediateCommitSupplier interface*/
     @Override
     public void check_immediate_commit(ActiveEvent active_event)

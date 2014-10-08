@@ -22,13 +22,7 @@ public abstract class DummyRalphObject <Type, DeltaType>
         Util.logger_assert("Cannot call serialize_contents on dummy.");
         return null;
     }
-    @Override
-    public void swap_internal_vals(
-        ActiveEvent active_event,RalphObject to_swap_with)
-        throws BackoutException
-    {
-        Util.logger_assert("Cannot call swap_internal_vals on dummy.");
-    }
+
     @Override
     public void direct_set_val(Type new_val)
     {

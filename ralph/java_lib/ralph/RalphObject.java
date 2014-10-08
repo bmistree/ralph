@@ -51,14 +51,6 @@ public abstract class RalphObject<T,DeltaType> implements IReference
         ObjectHistory obj_history,Long to_play_until);
     
     /**
-       Mostly used when deserializing one locked object (to_swap_with)
-       into another.  this.
-     */
-    public abstract void swap_internal_vals(
-        ActiveEvent active_event,RalphObject to_swap_with)
-        throws BackoutException;
-
-    /**
        Assumes no other writers.  Set directly on internal value.
      */
     public abstract void direct_set_val(T new_val);
