@@ -34,7 +34,6 @@ public abstract class NonAtomicList<ValueType,DeltaType>
     // in delta of this type.
     NonAtomicInternalList<ValueType, DeltaType>>
 {
-    public final static String deserialization_label = "NonAtomic List";
     public final Class<ValueType> value_type_class;
     
     public NonAtomicList(

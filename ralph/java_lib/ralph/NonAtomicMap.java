@@ -36,13 +36,9 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
     NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType>
     >
 {
-    // FIXME: remove deserialization labels
-    public final static String deserialization_label = "NonAtomic Map";
-
     private final Class<KeyType> key_type_class;
     private final Class<ValueType> value_type_class;
 
-    
     public NonAtomicMap(
         NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,

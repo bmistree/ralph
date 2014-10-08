@@ -39,8 +39,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     AtomicInternalMap<KeyType,ValueType,ValueDeltaType>
     >
 {
-    public final static String deserialization_label = "Atomic Map";
-    
     private NonAtomicInternalMap.IndexType index_type = null;
     private EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper = null;
     

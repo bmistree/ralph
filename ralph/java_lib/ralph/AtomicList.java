@@ -34,8 +34,6 @@ public class AtomicList<ValueType, ValueDeltaType>
     AtomicInternalList<ValueType, ValueDeltaType>>
 {
     private EnsureAtomicWrapper<ValueType, ValueDeltaType> locked_wrapper = null;
-
-    public final static String deserialization_label = "Atomic List";
     private final Class<ValueType> value_type_class;
     
     public AtomicList(
