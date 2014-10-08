@@ -16,10 +16,7 @@ public class TCPPartnerCall
 {
     private static final String HOST_NAME = "localhost";
     private static final int TCP_LISTENING_PORT = 38689;
-
-    private static final SideAConstructor SIDE_A_CONSTRUCTOR =
-        new SideAConstructor();
-    private static final SideBConstructor SIDE_B_CONSTRUCTOR =
+    private static final EndpointConstructorObj SIDE_B_CONSTRUCTOR =
         new SideBConstructor();
     
     private static SideA side_a = null;
@@ -53,7 +50,7 @@ public class TCPPartnerCall
             Thread.sleep(1000);
             try {
                 side_a = (SideA)Ralph.tcp_connect(
-                    SIDE_A_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
+                    SideA.factory, HOST_NAME, TCP_LISTENING_PORT,
                     new RalphGlobals(params_a));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,42 +81,17 @@ public class TCPPartnerCall
         }
     }
 
-    private static class SideAConstructor implements EndpointConstructorObj
-    {
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
-        {
-            Endpoint to_return = null;
-
-            try {
-                to_return = new SideA(globals,conn_obj);
-            } catch (Exception _ex) {
-                _ex.printStackTrace();
-                assert(false);
-            }
-            return to_return;
-        }
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
-        {
-            return construct(globals,conn_obj);
-        }
-    }
-    
+    /**
+       Must override constructor so that can save global SideB after
+       constructing it.
+     */
     private static class SideBConstructor implements EndpointConstructorObj
     {
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
         {
-            try {
-                side_b = new SideB(globals,conn_obj);
-            } catch (Exception _ex) {
-                _ex.printStackTrace();
-            }
+            side_b = (SideB) SideB.factory.construct(globals,conn_obj);
             return side_b;
         }
         @Override
