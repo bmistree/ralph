@@ -726,6 +726,42 @@ public class Variables
             Util.logger_assert(
                 "FIXME: still must allow replay of ServiceReference-s");
         }
+
+        public static ObjectContents serialize_service_reference_contents(
+            ActiveEvent active_event,
+            RalphObject<InternalServiceReference,InternalServiceReference> service_reference_holder,
+            boolean is_atomic)
+            throws BackoutException
+        {
+            // FIXME: likely expensive.  Should serialize references
+            // instead of full contents.
+            InternalServiceReference internal_service_reference =
+                service_reference_holder.get_val(active_event);
+
+            
+            Delta.ServiceReferenceDelta.Builder service_reference_builder =
+                Delta.ServiceReferenceDelta.newBuilder();
+
+            if (internal_service_reference != null)
+            {
+                service_reference_builder.setIpAddr(
+                    internal_service_reference.ip_addr);
+                service_reference_builder.setTcpPort(
+                    internal_service_reference.tcp_port);
+                service_reference_builder.setServiceUuid(
+                    internal_service_reference.service_uuid);
+            }
+
+            ObjectContents.Builder object_contents_builder =
+                ObjectContents.newBuilder();
+            object_contents_builder.setServiceReferenceType(
+                service_reference_builder);
+            object_contents_builder.setUuid(service_reference_holder.uuid());
+            object_contents_builder.setAtomic(is_atomic);
+
+            return object_contents_builder.build();
+        }
+
         
         @Override
         public ObjectContents serialize_contents(
@@ -733,10 +769,8 @@ public class Variables
             SerializationContext serialization_context)
             throws BackoutException
         {
-            // FIXME: add code for serializing service reference variables.
-            Util.logger_assert(
-                "FIXME: fill in serialization for service references");
-            return null;
+            return AtomicServiceReferenceVariable.serialize_service_reference_contents(
+                active_event,this,true);
         }
     }
     
@@ -1052,7 +1086,7 @@ public class Variables
                 service_reference_value_type_data_wrapper_factory,
                 SERVICE_REFERENCE_VERSION_HELPER,ralph_globals);
         }
-        
+
         @Override
         public void replay (
             IReconstructionContext reconstruction_context,
@@ -1062,18 +1096,16 @@ public class Variables
                 "FIXME: still must allow replay of " +
                 "NonAtomicServiceReference-s");
         }
-        
+
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,
             SerializationContext serialization_context)
             throws BackoutException
         {
-            // FIXME: add code for serializing service reference variables.
-            Util.logger_assert(
-                "FIXME: fill in serialization for service references");
-            return null;
-        }
+            return AtomicServiceReferenceVariable.serialize_service_reference_contents(
+                active_event,this,false);
+        }        
     }
 
     
