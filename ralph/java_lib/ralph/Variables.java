@@ -723,8 +723,8 @@ public class Variables
             IReconstructionContext reconstruction_context,
             ObjectHistory obj_history,Long to_play_until)
         {
-            Util.logger_assert(
-                "FIXME: still must allow replay of ServiceReference-s");
+            ObjectHistory.replay_service_reference(
+                this,obj_history,to_play_until, ralph_globals);
         }
 
         public static ObjectContents serialize_service_reference_contents(
@@ -1092,9 +1092,8 @@ public class Variables
             IReconstructionContext reconstruction_context,
             ObjectHistory obj_history,Long to_play_until)
         {
-            Util.logger_assert(
-                "FIXME: still must allow replay of " +
-                "NonAtomicServiceReference-s");
+            ObjectHistory.replay_service_reference(
+                this,obj_history,to_play_until, ralph_globals);
         }
 
         @Override

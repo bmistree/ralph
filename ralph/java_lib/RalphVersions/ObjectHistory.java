@@ -14,6 +14,7 @@ import ralph.EnumConstructorObj;
 import ralph.IInternalReferenceHolder;
 import ralph.Util;
 import ralph.InternalServiceFactory;
+import ralph.InternalServiceReference;
 import ralph.RalphGlobals;
 
 import RalphExceptions.BackoutException;
@@ -166,6 +167,30 @@ public class ObjectHistory
         }
     }
 
+    public static void replay_service_reference(
+        RalphObject<InternalServiceReference,InternalServiceReference> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until, RalphGlobals ralph_globals)
+    {
+        Set <SingleObjectChange> single_object_change_set =
+            obj_history.history;
+
+        SingleObjectChange latest_change = null;
+        for (SingleObjectChange change : single_object_change_set)
+        {
+            if ((to_play_until != null) &&
+                (change.root_lamport_time > to_play_until))
+            {
+                return;
+            }
+            latest_change = change;
+        }
+        if (latest_change != null)
+        {
+            SingleObjectChange.service_reference_incorporate_single_object_change(
+                latest_change,to_replay_on,ralph_globals);
+        }
+    }
+    
     public static void replay_service_factory(
         RalphObject<InternalServiceFactory,InternalServiceFactory> to_replay_on,
         ObjectHistory obj_history, Long to_play_until,RalphGlobals ralph_globals)
@@ -263,6 +288,17 @@ public class ObjectHistory
             this.root_lamport_time = root_lamport_time;
             this.delta = delta;
             this.commit_metadata_event_uuid = commit_metadata_event_uuid;
+        }
+
+        public static void service_reference_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<InternalServiceReference,InternalServiceReference> to_incorporate_into,
+            RalphGlobals ralph_globals)
+        {
+            InternalServiceReference internal_service_reference =
+                InternalServiceReference.deserialize_delta (
+                    change.delta.getServiceReferenceDelta());
+            to_incorporate_into.direct_set_val(internal_service_reference);
         }
         
         public static void number_incorporate_single_object_change(
