@@ -39,7 +39,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     AtomicInternalMap<KeyType,ValueType,ValueDeltaType>
     >
 {
-    private NonAtomicInternalMap.IndexType index_type = null;
     private EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper = null;
     
     private final Class<KeyType> key_type_class;
@@ -47,7 +46,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     
     public AtomicMap(
         boolean _log_changes,
-        NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
         InternalContainerTypeVersionHelper<KeyType> internal_version_helper,
@@ -62,10 +60,9 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
                 new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
                     _key_type_class,_value_type_class),
                 new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
-                index_type,
                 locked_wrapper),
-            index_type,locked_wrapper,version_helper,
-            _key_type_class,_value_type_class,ralph_globals);
+            locked_wrapper,version_helper,_key_type_class,_value_type_class,
+            ralph_globals);
     }
     
     /**
@@ -76,7 +73,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
     public AtomicMap(
         boolean _log_changes,
         AtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_val,
-        NonAtomicInternalMap.IndexType index_type,        
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
         Class<KeyType> key_type_class,Class<ValueType> value_type_class,
@@ -93,7 +89,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             new AdditionalAtomicMapSerializationContents(
                 key_type_class.getName(),value_type_class.getName()));
         
-        this.index_type = index_type;
         this.locked_wrapper = locked_wrapper;
         this.key_type_class = key_type_class;
         this.value_type_class = value_type_class;
@@ -183,7 +178,6 @@ public class AtomicMap<KeyType,ValueType,ValueDeltaType>
             new AtomicMap(
                 log_changes,
                 to_speculate_on,
-                index_type,
                 locked_wrapper,
                 version_helper,
                 key_type_class,value_type_class,

@@ -40,7 +40,6 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
     private final Class<ValueType> value_type_class;
 
     public NonAtomicMap(
-        NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
         InternalContainerTypeVersionHelper<KeyType> internal_version_helper,
@@ -53,9 +52,8 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
                 new MapTypeDataWrapperFactory<KeyType,ValueType,ValueDeltaType>(
                     _key_type_class,_value_type_class),
                 new HashMap<KeyType,RalphObject<ValueType,ValueDeltaType>>(),
-                index_type,
                 locked_wrapper),
-            index_type,locked_wrapper,version_helper,_key_type_class,
+            locked_wrapper,version_helper,_key_type_class,
             _value_type_class,ralph_globals);
     }
 
@@ -66,7 +64,6 @@ public abstract class NonAtomicMap<KeyType,ValueType,ValueDeltaType>
      */
     public NonAtomicMap(
         NonAtomicInternalMap<KeyType,ValueType,ValueDeltaType> internal_val,
-        NonAtomicInternalMap.IndexType index_type,
         EnsureAtomicWrapper<ValueType,ValueDeltaType> locked_wrapper,
         VersionHelper<IReference> version_helper,
         Class<KeyType> _key_type_class,Class<ValueType> _value_type_class,

@@ -34,10 +34,6 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     implements ImmediateCommitSupplier, MapTypeDataWrapperSupplier,
         RalphInternalMapInterface<K,V,ValueDeltaType>
 {
-    public enum IndexType{
-        DOUBLE,STRING,BOOLEAN
-    };
-
     private MapTypeDataWrapper<K,V,ValueDeltaType> reference_type_val = null;
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
@@ -45,16 +41,11 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
     private final Class<K> key_type_class;
     private final Class<V> value_type_class;
     
-    // Keeps track of the map's index type.  Useful when serializing
-    // and deserializing data.
-    public IndexType index_type;
-    
     public NonAtomicInternalMap(
         RalphGlobals ralph_globals,
         VersionHelper<VersionContainerDeltas> internal_version_helper,
         MapTypeDataWrapperFactory<K,V,ValueDeltaType> mtdwf,
         Map<K,RalphObject<V,ValueDeltaType>>init_val,
-        IndexType _index_type,
         EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper
         )
     {
@@ -62,8 +53,6 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
         version_helper = internal_version_helper;
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
 
-        index_type = _index_type;
-        
         locked_wrapper = _locked_wrapper;
         key_type_class = mtdwf.key_type_class;
         value_type_class = mtdwf.value_type_class;
@@ -71,8 +60,7 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
         reference_type_val =
             (MapTypeDataWrapper<K, V,ValueDeltaType>)mtdwf.construct(init_val, false);
         val = reference_type_val;
-        internal_map.init_ralph_internal_map(
-            _locked_wrapper,this,this,index_type);
+        internal_map.init_ralph_internal_map(_locked_wrapper,this,this);
     }
 
     @Override

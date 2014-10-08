@@ -29,10 +29,6 @@ public class RalphInternalMap<K,V,ValueDeltaType>
     private ImmediateCommitSupplier immediate_commit_supplier;
     private RalphGlobals ralph_globals = null;
     
-    // Keeps track of the map's index type.  Useful when serializing
-    // and deserializing data.
-    public NonAtomicInternalMap.IndexType index_type;
-    
     public RalphInternalMap(RalphGlobals ralph_globals)
     {
         this.ralph_globals = ralph_globals;
@@ -41,13 +37,11 @@ public class RalphInternalMap<K,V,ValueDeltaType>
     public void init_ralph_internal_map(
         EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper,
         MapTypeDataWrapperSupplier<K,V,ValueDeltaType>_data_wrapper_supplier,
-        ImmediateCommitSupplier _immediate_commit_supplier,
-        NonAtomicInternalMap.IndexType _index_type)
+        ImmediateCommitSupplier _immediate_commit_supplier)
     {
         locked_wrapper = _locked_wrapper;
         data_wrapper_supplier = _data_wrapper_supplier;
         immediate_commit_supplier = _immediate_commit_supplier;
-        index_type = _index_type;
     }
 
     private MapTypeDataWrapper<K,V,ValueDeltaType> get_val_read(

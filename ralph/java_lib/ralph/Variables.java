@@ -1115,14 +1115,13 @@ public class Variables
     {
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
-            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             InternalContainerTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
-                _index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
+                locked_wrapper,REFERENCE_VERSION_HELPER,
                 internal_version_helper,key_type_class, value_type_class,
                 ralph_globals);
         }
@@ -1130,14 +1129,13 @@ public class Variables
         public NonAtomicMapVariable(
             boolean _dummy_log_changes,
             NonAtomicInternalMap<K,V,ValueDeltaType> internal_val,
-            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             InternalContainerTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
-                internal_val,_index_type,locked_wrapper,REFERENCE_VERSION_HELPER,
+                internal_val,locked_wrapper,REFERENCE_VERSION_HELPER,
                 key_type_class, value_type_class,ralph_globals);
         }
     }
@@ -1148,29 +1146,27 @@ public class Variables
     {
         public AtomicMapVariable(
             boolean _log_changes,
-            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             InternalContainerTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,_index_type,locked_wrapper,
-                REFERENCE_VERSION_HELPER,internal_version_helper,
-                key_type_class, value_type_class,ralph_globals);
+                _log_changes,locked_wrapper,REFERENCE_VERSION_HELPER,
+                internal_version_helper,key_type_class, value_type_class,
+                ralph_globals);
         }
 
         public AtomicMapVariable(
             boolean _log_changes,
             AtomicInternalMap<K,V,ValueDeltaType> internal_val,
-            NonAtomicInternalMap.IndexType _index_type,
             EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper,
             InternalContainerTypeVersionHelper<K> internal_version_helper,
             Class<K> key_type_class, Class<V> value_type_class,
             RalphGlobals ralph_globals)
         {
             super(
-                _log_changes,internal_val,_index_type,locked_wrapper,
+                _log_changes,internal_val,locked_wrapper,
                 REFERENCE_VERSION_HELPER,key_type_class,value_type_class,
                 ralph_globals);
         }

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import RalphExceptions.BackoutException;
 import java.util.Map.Entry;
-import ralph.NonAtomicInternalMap.IndexType;
 import RalphAtomicWrappers.EnsureAtomicWrapper;
 import RalphDataWrappers.MapTypeDataWrapperFactory;
 import RalphDataWrappers.MapTypeDataWrapper;
@@ -36,9 +35,6 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         MapTypeDataWrapperSupplier<K,V,ValueDeltaType>,
         RalphInternalMapInterface<K,V,ValueDeltaType>
 {
-    // Keeps track of the map's index type.  Useful when serializing
-    // and deserializing data.
-    public NonAtomicInternalMap.IndexType index_type;
     private MapTypeDataWrapper<K,V,ValueDeltaType> reference_type_val = null;
     private RalphInternalMap<K,V,ValueDeltaType> internal_map = null;
     public EnsureAtomicWrapper<V,ValueDeltaType> locked_wrapper = null;
@@ -52,13 +48,11 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
         boolean _log_changes,
         MapTypeDataWrapperFactory<K,V,ValueDeltaType> rtdwc,
         Map<K,RalphObject<V,ValueDeltaType>>init_val,
-        NonAtomicInternalMap.IndexType _index_type,
         EnsureAtomicWrapper<V,ValueDeltaType>_locked_wrapper)
     {
         super(ralph_globals);
         internal_map = new RalphInternalMap<K,V,ValueDeltaType>(ralph_globals);
         version_helper = internal_version_helper;
-        index_type = _index_type;
         locked_wrapper = _locked_wrapper;
         key_type_class = rtdwc.key_type_class;
         value_type_class = rtdwc.value_type_class;
@@ -69,8 +63,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
             new AdditionalAtomicMapSerializationContents(
                 key_type_class.getName(), value_type_class.getName()));
         
-        internal_map.init_ralph_internal_map(
-            _locked_wrapper,this,this,_index_type);
+        internal_map.init_ralph_internal_map(_locked_wrapper,this,this);
     }
 
     @Override
@@ -86,7 +79,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
             new AtomicInternalMap(
                 ralph_globals,version_helper,log_changes,
                 (MapTypeDataWrapperFactory<K,V,ValueDeltaType>)data_wrapper_constructor,
-                to_speculate_on,index_type,locked_wrapper);
+                to_speculate_on,locked_wrapper);
         return to_return;
     }
 

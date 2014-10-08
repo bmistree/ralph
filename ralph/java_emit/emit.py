@@ -41,9 +41,6 @@ import ralph.Variables.AtomicEnumVariable;
 import ralph.BaseMapVariableFactory.MapVariableFactory;
 import ralph.BaseListVariableFactory.ListVariableFactory;
 
-// index types for maps
-import ralph.NonAtomicInternalMap.IndexType;
-
 import ralph.Variables.NonAtomicListVariable;
 import ralph.Variables.AtomicListVariable;
 
@@ -828,7 +825,6 @@ try
 new %(java_type_statement)s (
     false,
     %(argument_name)s,
-    %(argument_name)s.index_type,
     %(argument_name)s.locked_wrapper,
     %(internal_map_version_helper)s,
     %(key_type_class)s,
@@ -1027,23 +1023,6 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                     initializer_node.line_number,
                     'Not handling initializers for map types')
             
-        index_basic_type = type_object.from_type_node.type.basic_type
-        if index_basic_type == NUMBER_TYPE:
-            java_map_index_type_text = (
-                'NonAtomicInternalMap.IndexType.DOUBLE')
-        elif index_basic_type == STRING_TYPE:
-            java_map_index_type_text = (
-                'NonAtomicInternalMap.IndexType.STRING')
-        elif index_basic_type == BOOL_TYPE:
-            java_map_index_type_text = (
-                'NonAtomicInternalMap.IndexType.BOOLEAN')
-        #### DEBUG
-        else:
-            raise InternalEmitException(
-                'Unknown',0,
-                'Map only accepts value types for indices')
-        #### END DEBUG
-
         internal_map_version_helper = (
             internal_map_version_helper_from_map_type(type_object))
         
@@ -1067,14 +1046,12 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 new %(java_type_text)s  (
     false,
     %(internal_val_text)s  
-    %(java_map_index_type_text)s,
     %(value_type_wrapper)s,
     %(internal_map_version_helper)s,
     %(key_type_class)s,
     %(value_type_class)s,ralph_globals)
 ''' % { 'java_type_text': java_type_text,
         'internal_val_text': internal_val_txt,
-        'java_map_index_type_text': java_map_index_type_text,
         'value_type_wrapper': value_type_wrapper,
         'key_type_class': key_type_class,
         'value_type_class': value_type_class,
@@ -1224,7 +1201,7 @@ def internal_map_version_helper_from_map_type(map_type):
             'Unknown',0,
             'Map only accepts value types for indices')
     #### END DEBUG
-
+    
     return internal_map_version_helper
 
     
@@ -2375,32 +2352,27 @@ def emit_enum_map_list_variable_factories(enum_type):
     # map deserializers
     param_tuples = (
         ('Double',
-         'NonAtomicInternalMap.IndexType.DOUBLE',
          ('ralph.BaseTypeVersionHelpers.' +
              'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
         ('String',
-         'NonAtomicInternalMap.IndexType.STRING',
          ('ralph.BaseTypeVersionHelpers.' +
              'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
         ('Boolean',
-         'NonAtomicInternalMap.IndexType.BOOLEAN',
          ('ralph.BaseTypeVersionHelpers.' +
              'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
      
     text = ''
     for params in param_tuples:
         key_type = params[0]
-        index_type = params[1]
-        version_helper = params[2]
+        version_helper = params[1]
         
         text += '''
 private final static MapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s>
     %(key_type)s_atom_map_serializer_%(enum_name)s =
         new MapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s> (
-            %(key_type)s.class, %(enum_name)s.class,%(index_type)s,
+            %(key_type)s.class, %(enum_name)s.class,
             %(enum_locked_wrapper_name)s,%(version_helper)s);
 ''' % { 'key_type': key_type,
-        'index_type': index_type,
         'enum_locked_wrapper_name': enum_locked_wrapper_name,
         'enum_name': enum_name,
         'version_helper': version_helper}
@@ -2547,32 +2519,27 @@ def emit_struct_content_deserializer(struct_type):
     # map deserializers
     param_tuples = (
         ('Double',
-         'NonAtomicInternalMap.IndexType.DOUBLE',
          ('ralph.BaseTypeVersionHelpers.' +
              'DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
         ('String',
-         'NonAtomicInternalMap.IndexType.STRING',
          ('ralph.BaseTypeVersionHelpers.' +
              'STRING_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')),
         ('Boolean',
-         'NonAtomicInternalMap.IndexType.BOOLEAN',
          ('ralph.BaseTypeVersionHelpers.' +
              'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
      
     text = ''
     for params in param_tuples:
         key_type = params[0]
-        index_type = params[1]
-        version_helper = params[2]
+        version_helper = params[1]
         
         text += '''
 private final static MapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference>
     %(key_type)s_atom_map_serializer_%(internal_struct_name)s =
         new MapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference> (
-            %(key_type)s.class, %(internal_struct_name)s.class,%(index_type)s,
+            %(key_type)s.class, %(internal_struct_name)s.class,
             %(struct_locked_wrapper_name)s,%(version_helper)s);
 ''' % { 'key_type': key_type,
-        'index_type': index_type,
         'struct_locked_wrapper_name': struct_locked_wrapper_name,
         'internal_struct_name': internal_struct_name,
         'version_helper': version_helper}
