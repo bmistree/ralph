@@ -649,7 +649,8 @@
         jar_VersionedSetterGetter,jar_VersionedMap,jar_VersionedList,
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
-        jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange">
+        jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
+        jar_ReplayPartnerStructElement">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -1124,6 +1125,12 @@
   <target name="harness_ReplayPartnerNumberChange">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReplayPartnerNumber.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_ReplayPartnerStructElement">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="ReplayPartnerStructElement.java"/>
     </antcall>
   </target>
   
@@ -1603,6 +1610,19 @@
     </antcall>
   </target>
 
+  <property
+      name="replay_partner_struct_element_jar"
+      value="replay_partner_struct_element.jar"/>
+  <target
+      name="jar_ReplayPartnerStructElement"
+      depends="ralph_ReplayPartnerStructElement,ralph_to_byte_code,harness_ReplayPartnerStructElement">
+    <antcall target="make_jar">
+      <param name="main_class" value="ReplayPartnerStructElement"/>
+      <param name="dest_jar" value="${replay_partner_struct_element_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="versioned_map_jar"
       value="versioned_map.jar"/>

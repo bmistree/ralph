@@ -25,4 +25,14 @@ Endpoint StructReceiver
     {
         struct_list.append(to_append);
     }
+
+    struct_list_size() returns Number
+    {
+        return struct_list.size();
+    }
+    struct_list_internal_val(Number index) returns Number
+    {
+        Struct SomeStruct holder = struct_list.get(index);
+        return holder.some_num;
+    }
 }
