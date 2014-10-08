@@ -16,6 +16,7 @@ import ralph.IAtomicStructWrapperBaseClassFactory;
 import ralph.StructWrapperBaseClass;
 import ralph.InternalStructBaseClass;
 import ralph.InternalServiceFactory;
+import ralph.InternalServiceReference;
 import ralph.EnumConstructorObj;
 import ralph.IReference;
 
@@ -338,6 +339,32 @@ public class ObjectContentsDeserializers
                 new Variables.NonAtomicServiceFactoryVariable(
                         false,internal_service_factory,ralph_globals);
             return to_return;
+        }
+        else if (obj_contents.hasServiceReferenceType())
+        {
+            InternalServiceReference internal_service_reference = null;
+
+            Delta.ServiceReferenceDelta service_reference_delta =
+                obj_contents.getServiceReferenceType();
+
+            // internal service reference is null if missing fields.
+            if (service_reference_delta.hasIpAddr())
+            {
+                String ip_addr = service_reference_delta.getIpAddr();
+                int tcp_port = service_reference_delta.getTcpPort();
+                String service_uuid = service_reference_delta.getServiceUuid();
+                internal_service_reference =
+                    new InternalServiceReference(ip_addr,tcp_port,service_uuid);
+            }
+
+            if (obj_contents.getAtomic())
+            {
+                return new Variables.AtomicServiceReferenceVariable(
+                    false,internal_service_reference,ralph_globals);
+            }
+            
+            return new Variables.NonAtomicServiceReferenceVariable(
+                false,internal_service_reference,ralph_globals);
         }
         
 
