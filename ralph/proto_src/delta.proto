@@ -45,6 +45,15 @@ message Delta
     {
         required bytes serialized_factory = 1;
     }
+
+    message ServiceReferenceDelta
+    {
+        // either all these are here or none are.  if none are, then
+        // service reference holds a reference to null.
+        optional string ip_addr = 1;
+        optional int32 tcp_port = 2;
+        optional string service_uuid = 3;
+    }
     
     message ReferenceType
     {
@@ -62,4 +71,5 @@ message Delta
     
     optional EnumDelta enum_delta = 4;
     optional ServiceFactoryDelta service_factory_delta = 5;
+    optional ServiceReferenceDelta service_reference_delta = 6;
 }

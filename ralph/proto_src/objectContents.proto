@@ -82,4 +82,5 @@ message ObjectContents
     optional Interface interface = 12;
     optional Enum enum_type = 13;
     optional Delta.ServiceFactoryDelta service_factory_type = 14;
+    optional Delta.ServiceReferenceDelta service_reference_type = 15;
 }

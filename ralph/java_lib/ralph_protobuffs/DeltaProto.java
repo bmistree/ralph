@@ -116,6 +116,20 @@ public final class DeltaProto {
      * <code>optional .Delta.ServiceFactoryDelta service_factory_delta = 5;</code>
      */
     ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryDeltaOrBuilder();
+
+    // optional .Delta.ServiceReferenceDelta service_reference_delta = 6;
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    boolean hasServiceReferenceDelta();
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceDelta();
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceDeltaOrBuilder();
   }
   /**
    * Protobuf type {@code Delta}
@@ -226,6 +240,19 @@ public final class DeltaProto {
                 serviceFactoryDelta_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000008;
+              break;
+            }
+            case 50: {
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = serviceReferenceDelta_.toBuilder();
+              }
+              serviceReferenceDelta_ = input.readMessage(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(serviceReferenceDelta_);
+                serviceReferenceDelta_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
               break;
             }
           }
@@ -3210,6 +3237,774 @@ public final class DeltaProto {
       // @@protoc_insertion_point(class_scope:Delta.ServiceFactoryDelta)
     }
 
+    public interface ServiceReferenceDeltaOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // optional string ip_addr = 1;
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      boolean hasIpAddr();
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      java.lang.String getIpAddr();
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      com.google.protobuf.ByteString
+          getIpAddrBytes();
+
+      // optional int32 tcp_port = 2;
+      /**
+       * <code>optional int32 tcp_port = 2;</code>
+       */
+      boolean hasTcpPort();
+      /**
+       * <code>optional int32 tcp_port = 2;</code>
+       */
+      int getTcpPort();
+
+      // optional string service_uuid = 3;
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      boolean hasServiceUuid();
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      java.lang.String getServiceUuid();
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      com.google.protobuf.ByteString
+          getServiceUuidBytes();
+    }
+    /**
+     * Protobuf type {@code Delta.ServiceReferenceDelta}
+     */
+    public static final class ServiceReferenceDelta extends
+        com.google.protobuf.GeneratedMessage
+        implements ServiceReferenceDeltaOrBuilder {
+      // Use ServiceReferenceDelta.newBuilder() to construct.
+      private ServiceReferenceDelta(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private ServiceReferenceDelta(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final ServiceReferenceDelta defaultInstance;
+      public static ServiceReferenceDelta getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public ServiceReferenceDelta getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ServiceReferenceDelta(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                ipAddr_ = input.readBytes();
+                break;
+              }
+              case 16: {
+                bitField0_ |= 0x00000002;
+                tcpPort_ = input.readInt32();
+                break;
+              }
+              case 26: {
+                bitField0_ |= 0x00000004;
+                serviceUuid_ = input.readBytes();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.DeltaProto.internal_static_Delta_ServiceReferenceDelta_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.DeltaProto.internal_static_Delta_ServiceReferenceDelta_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.class, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<ServiceReferenceDelta> PARSER =
+          new com.google.protobuf.AbstractParser<ServiceReferenceDelta>() {
+        public ServiceReferenceDelta parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ServiceReferenceDelta(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ServiceReferenceDelta> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // optional string ip_addr = 1;
+      public static final int IP_ADDR_FIELD_NUMBER = 1;
+      private java.lang.Object ipAddr_;
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      public boolean hasIpAddr() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      public java.lang.String getIpAddr() {
+        java.lang.Object ref = ipAddr_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            ipAddr_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>optional string ip_addr = 1;</code>
+       *
+       * <pre>
+       * either all these are here or none are.  if none are, then
+       * service reference holds a reference to null.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getIpAddrBytes() {
+        java.lang.Object ref = ipAddr_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ipAddr_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // optional int32 tcp_port = 2;
+      public static final int TCP_PORT_FIELD_NUMBER = 2;
+      private int tcpPort_;
+      /**
+       * <code>optional int32 tcp_port = 2;</code>
+       */
+      public boolean hasTcpPort() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 tcp_port = 2;</code>
+       */
+      public int getTcpPort() {
+        return tcpPort_;
+      }
+
+      // optional string service_uuid = 3;
+      public static final int SERVICE_UUID_FIELD_NUMBER = 3;
+      private java.lang.Object serviceUuid_;
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      public boolean hasServiceUuid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      public java.lang.String getServiceUuid() {
+        java.lang.Object ref = serviceUuid_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            serviceUuid_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>optional string service_uuid = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getServiceUuidBytes() {
+        java.lang.Object ref = serviceUuid_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          serviceUuid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        ipAddr_ = "";
+        tcpPort_ = 0;
+        serviceUuid_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getIpAddrBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeInt32(2, tcpPort_);
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          output.writeBytes(3, getServiceUuidBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getIpAddrBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt32Size(2, tcpPort_);
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(3, getServiceUuidBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code Delta.ServiceReferenceDelta}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.DeltaProto.internal_static_Delta_ServiceReferenceDelta_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.DeltaProto.internal_static_Delta_ServiceReferenceDelta_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.class, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder.class);
+        }
+
+        // Construct using ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          ipAddr_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          tcpPort_ = 0;
+          bitField0_ = (bitField0_ & ~0x00000002);
+          serviceUuid_ = "";
+          bitField0_ = (bitField0_ & ~0x00000004);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.DeltaProto.internal_static_Delta_ServiceReferenceDelta_descriptor;
+        }
+
+        public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getDefaultInstanceForType() {
+          return ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+        }
+
+        public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta build() {
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta buildPartial() {
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta result = new ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.ipAddr_ = ipAddr_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.tcpPort_ = tcpPort_;
+          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+            to_bitField0_ |= 0x00000004;
+          }
+          result.serviceUuid_ = serviceUuid_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta) {
+            return mergeFrom((ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta other) {
+          if (other == ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance()) return this;
+          if (other.hasIpAddr()) {
+            bitField0_ |= 0x00000001;
+            ipAddr_ = other.ipAddr_;
+            onChanged();
+          }
+          if (other.hasTcpPort()) {
+            setTcpPort(other.getTcpPort());
+          }
+          if (other.hasServiceUuid()) {
+            bitField0_ |= 0x00000004;
+            serviceUuid_ = other.serviceUuid_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // optional string ip_addr = 1;
+        private java.lang.Object ipAddr_ = "";
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public boolean hasIpAddr() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public java.lang.String getIpAddr() {
+          java.lang.Object ref = ipAddr_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            ipAddr_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public com.google.protobuf.ByteString
+            getIpAddrBytes() {
+          java.lang.Object ref = ipAddr_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            ipAddr_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public Builder setIpAddr(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          ipAddr_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public Builder clearIpAddr() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          ipAddr_ = getDefaultInstance().getIpAddr();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string ip_addr = 1;</code>
+         *
+         * <pre>
+         * either all these are here or none are.  if none are, then
+         * service reference holds a reference to null.
+         * </pre>
+         */
+        public Builder setIpAddrBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          ipAddr_ = value;
+          onChanged();
+          return this;
+        }
+
+        // optional int32 tcp_port = 2;
+        private int tcpPort_ ;
+        /**
+         * <code>optional int32 tcp_port = 2;</code>
+         */
+        public boolean hasTcpPort() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional int32 tcp_port = 2;</code>
+         */
+        public int getTcpPort() {
+          return tcpPort_;
+        }
+        /**
+         * <code>optional int32 tcp_port = 2;</code>
+         */
+        public Builder setTcpPort(int value) {
+          bitField0_ |= 0x00000002;
+          tcpPort_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional int32 tcp_port = 2;</code>
+         */
+        public Builder clearTcpPort() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          tcpPort_ = 0;
+          onChanged();
+          return this;
+        }
+
+        // optional string service_uuid = 3;
+        private java.lang.Object serviceUuid_ = "";
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public boolean hasServiceUuid() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
+        }
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public java.lang.String getServiceUuid() {
+          java.lang.Object ref = serviceUuid_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            serviceUuid_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public com.google.protobuf.ByteString
+            getServiceUuidBytes() {
+          java.lang.Object ref = serviceUuid_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            serviceUuid_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public Builder setServiceUuid(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+          serviceUuid_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public Builder clearServiceUuid() {
+          bitField0_ = (bitField0_ & ~0x00000004);
+          serviceUuid_ = getDefaultInstance().getServiceUuid();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string service_uuid = 3;</code>
+         */
+        public Builder setServiceUuidBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+          serviceUuid_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:Delta.ServiceReferenceDelta)
+      }
+
+      static {
+        defaultInstance = new ServiceReferenceDelta(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:Delta.ServiceReferenceDelta)
+    }
+
     public interface ReferenceTypeOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
@@ -3879,12 +4674,35 @@ public final class DeltaProto {
       return serviceFactoryDelta_;
     }
 
+    // optional .Delta.ServiceReferenceDelta service_reference_delta = 6;
+    public static final int SERVICE_REFERENCE_DELTA_FIELD_NUMBER = 6;
+    private ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta serviceReferenceDelta_;
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    public boolean hasServiceReferenceDelta() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceDelta() {
+      return serviceReferenceDelta_;
+    }
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceDeltaOrBuilder() {
+      return serviceReferenceDelta_;
+    }
+
     private void initFields() {
       value_ = ralph_protobuffs.DeltaProto.Delta.ValueType.getDefaultInstance();
       reference_ = ralph_protobuffs.DeltaProto.Delta.ReferenceType.getDefaultInstance();
       containerDelta_ = java.util.Collections.emptyList();
       enumDelta_ = ralph_protobuffs.DeltaProto.Delta.EnumDelta.getDefaultInstance();
       serviceFactoryDelta_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+      serviceReferenceDelta_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3931,6 +4749,9 @@ public final class DeltaProto {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(5, serviceFactoryDelta_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(6, serviceReferenceDelta_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -3959,6 +4780,10 @@ public final class DeltaProto {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, serviceFactoryDelta_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, serviceReferenceDelta_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4073,6 +4898,7 @@ public final class DeltaProto {
           getContainerDeltaFieldBuilder();
           getEnumDeltaFieldBuilder();
           getServiceFactoryDeltaFieldBuilder();
+          getServiceReferenceDeltaFieldBuilder();
         }
       }
       private static Builder create() {
@@ -4111,6 +4937,12 @@ public final class DeltaProto {
           serviceFactoryDeltaBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
+        if (serviceReferenceDeltaBuilder_ == null) {
+          serviceReferenceDelta_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+        } else {
+          serviceReferenceDeltaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -4180,6 +5012,14 @@ public final class DeltaProto {
         } else {
           result.serviceFactoryDelta_ = serviceFactoryDeltaBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (serviceReferenceDeltaBuilder_ == null) {
+          result.serviceReferenceDelta_ = serviceReferenceDelta_;
+        } else {
+          result.serviceReferenceDelta_ = serviceReferenceDeltaBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4233,6 +5073,9 @@ public final class DeltaProto {
         }
         if (other.hasServiceFactoryDelta()) {
           mergeServiceFactoryDelta(other.getServiceFactoryDelta());
+        }
+        if (other.hasServiceReferenceDelta()) {
+          mergeServiceReferenceDelta(other.getServiceReferenceDelta());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -5077,6 +5920,123 @@ public final class DeltaProto {
         return serviceFactoryDeltaBuilder_;
       }
 
+      // optional .Delta.ServiceReferenceDelta service_reference_delta = 6;
+      private ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta serviceReferenceDelta_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder> serviceReferenceDeltaBuilder_;
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public boolean hasServiceReferenceDelta() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceDelta() {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          return serviceReferenceDelta_;
+        } else {
+          return serviceReferenceDeltaBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public Builder setServiceReferenceDelta(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta value) {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          serviceReferenceDelta_ = value;
+          onChanged();
+        } else {
+          serviceReferenceDeltaBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public Builder setServiceReferenceDelta(
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder builderForValue) {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          serviceReferenceDelta_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceReferenceDeltaBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public Builder mergeServiceReferenceDelta(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta value) {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              serviceReferenceDelta_ != ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance()) {
+            serviceReferenceDelta_ =
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.newBuilder(serviceReferenceDelta_).mergeFrom(value).buildPartial();
+          } else {
+            serviceReferenceDelta_ = value;
+          }
+          onChanged();
+        } else {
+          serviceReferenceDeltaBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public Builder clearServiceReferenceDelta() {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          serviceReferenceDelta_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+          onChanged();
+        } else {
+          serviceReferenceDeltaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder getServiceReferenceDeltaBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getServiceReferenceDeltaFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceDeltaOrBuilder() {
+        if (serviceReferenceDeltaBuilder_ != null) {
+          return serviceReferenceDeltaBuilder_.getMessageOrBuilder();
+        } else {
+          return serviceReferenceDelta_;
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_delta = 6;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder> 
+          getServiceReferenceDeltaFieldBuilder() {
+        if (serviceReferenceDeltaBuilder_ == null) {
+          serviceReferenceDeltaBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder>(
+                  serviceReferenceDelta_,
+                  getParentForChildren(),
+                  isClean());
+          serviceReferenceDelta_ = null;
+        }
+        return serviceReferenceDeltaBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:Delta)
     }
 
@@ -5114,6 +6074,11 @@ public final class DeltaProto {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Delta_ServiceFactoryDelta_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_Delta_ServiceReferenceDelta_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_Delta_ServiceReferenceDelta_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_Delta_ReferenceType_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5127,25 +6092,29 @@ public final class DeltaProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013delta.proto\"\275\005\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
+      "\n\013delta.proto\"\316\006\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
       ".Delta.ValueType\022\'\n\treference\030\002 \001(\0132\024.De" +
       "lta.ReferenceType\022.\n\017container_delta\030\003 \003" +
       "(\0132\025.Delta.ContainerDelta\022$\n\nenum_delta\030" +
       "\004 \001(\0132\020.Delta.EnumDelta\0229\n\025service_facto" +
       "ry_delta\030\005 \001(\0132\032.Delta.ServiceFactoryDel" +
-      "ta\032\215\001\n\016ContainerDelta\022\'\n\007op_type\030\001 \002(\0162\026" +
-      ".Delta.ContainerOpType\022\035\n\003key\030\002 \002(\0132\020.De" +
-      "lta.ValueType\0223\n\025what_added_or_written\030\003" +
-      " \001(\0132\024.Delta.ReferenceType\032h\n\tValueType\022",
-      "\013\n\003num\030\001 \001(\001\022\020\n\010null_num\030\002 \001(\010\022\014\n\004text\030\003" +
-      " \001(\t\022\021\n\tnull_text\030\004 \001(\010\022\n\n\002tf\030\005 \001(\010\022\017\n\007n" +
-      "ull_tf\030\006 \001(\010\032J\n\tEnumDelta\022\'\n\037enum_constr" +
-      "uctor_obj_class_name\030\001 \002(\t\022\024\n\014enum_ordin" +
-      "al\030\002 \002(\005\0321\n\023ServiceFactoryDelta\022\032\n\022seria" +
-      "lized_factory\030\001 \002(\014\032\"\n\rReferenceType\022\021\n\t" +
-      "reference\030\001 \001(\t\"<\n\017ContainerOpType\022\n\n\006DE" +
-      "LETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE\020\002\022\t\n\005CLEAR\020\003B\036\n" +
-      "\020ralph_protobuffsB\nDeltaProto"
+      "ta\022=\n\027service_reference_delta\030\006 \001(\0132\034.De" +
+      "lta.ServiceReferenceDelta\032\215\001\n\016ContainerD" +
+      "elta\022\'\n\007op_type\030\001 \002(\0162\026.Delta.ContainerO" +
+      "pType\022\035\n\003key\030\002 \002(\0132\020.Delta.ValueType\0223\n\025",
+      "what_added_or_written\030\003 \001(\0132\024.Delta.Refe" +
+      "renceType\032h\n\tValueType\022\013\n\003num\030\001 \001(\001\022\020\n\010n" +
+      "ull_num\030\002 \001(\010\022\014\n\004text\030\003 \001(\t\022\021\n\tnull_text" +
+      "\030\004 \001(\010\022\n\n\002tf\030\005 \001(\010\022\017\n\007null_tf\030\006 \001(\010\032J\n\tE" +
+      "numDelta\022\'\n\037enum_constructor_obj_class_n" +
+      "ame\030\001 \002(\t\022\024\n\014enum_ordinal\030\002 \002(\005\0321\n\023Servi" +
+      "ceFactoryDelta\022\032\n\022serialized_factory\030\001 \002" +
+      "(\014\032P\n\025ServiceReferenceDelta\022\017\n\007ip_addr\030\001" +
+      " \001(\t\022\020\n\010tcp_port\030\002 \001(\005\022\024\n\014service_uuid\030\003" +
+      " \001(\t\032\"\n\rReferenceType\022\021\n\treference\030\001 \001(\t",
+      "\"<\n\017ContainerOpType\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001" +
+      "\022\t\n\005WRITE\020\002\022\t\n\005CLEAR\020\003B\036\n\020ralph_protobuf" +
+      "fsB\nDeltaProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5157,7 +6126,7 @@ public final class DeltaProto {
           internal_static_Delta_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_descriptor,
-              new java.lang.String[] { "Value", "Reference", "ContainerDelta", "EnumDelta", "ServiceFactoryDelta", });
+              new java.lang.String[] { "Value", "Reference", "ContainerDelta", "EnumDelta", "ServiceFactoryDelta", "ServiceReferenceDelta", });
           internal_static_Delta_ContainerDelta_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(0);
           internal_static_Delta_ContainerDelta_fieldAccessorTable = new
@@ -5182,8 +6151,14 @@ public final class DeltaProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ServiceFactoryDelta_descriptor,
               new java.lang.String[] { "SerializedFactory", });
-          internal_static_Delta_ReferenceType_descriptor =
+          internal_static_Delta_ServiceReferenceDelta_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(4);
+          internal_static_Delta_ServiceReferenceDelta_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_Delta_ServiceReferenceDelta_descriptor,
+              new java.lang.String[] { "IpAddr", "TcpPort", "ServiceUuid", });
+          internal_static_Delta_ReferenceType_descriptor =
+            internal_static_Delta_descriptor.getNestedTypes().get(5);
           internal_static_Delta_ReferenceType_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ReferenceType_descriptor,

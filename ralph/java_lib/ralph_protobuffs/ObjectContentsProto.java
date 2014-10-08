@@ -219,6 +219,20 @@ public final class ObjectContentsProto {
      * <code>optional .Delta.ServiceFactoryDelta service_factory_type = 14;</code>
      */
     ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryTypeOrBuilder();
+
+    // optional .Delta.ServiceReferenceDelta service_reference_type = 15;
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    boolean hasServiceReferenceType();
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceType();
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceTypeOrBuilder();
   }
   /**
    * Protobuf type {@code ObjectContents}
@@ -427,6 +441,19 @@ public final class ObjectContentsProto {
                 serviceFactoryType_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00002000;
+              break;
+            }
+            case 122: {
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder subBuilder = null;
+              if (((bitField0_ & 0x00004000) == 0x00004000)) {
+                subBuilder = serviceReferenceType_.toBuilder();
+              }
+              serviceReferenceType_ = input.readMessage(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(serviceReferenceType_);
+                serviceReferenceType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00004000;
               break;
             }
           }
@@ -6856,6 +6883,28 @@ public final class ObjectContentsProto {
       return serviceFactoryType_;
     }
 
+    // optional .Delta.ServiceReferenceDelta service_reference_type = 15;
+    public static final int SERVICE_REFERENCE_TYPE_FIELD_NUMBER = 15;
+    private ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta serviceReferenceType_;
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    public boolean hasServiceReferenceType() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceType() {
+      return serviceReferenceType_;
+    }
+    /**
+     * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceTypeOrBuilder() {
+      return serviceReferenceType_;
+    }
+
     private void initFields() {
       uuid_ = "";
       atomic_ = false;
@@ -6871,6 +6920,7 @@ public final class ObjectContentsProto {
       interface_ = ralph_protobuffs.ObjectContentsProto.ObjectContents.Interface.getDefaultInstance();
       enumType_ = ralph_protobuffs.ObjectContentsProto.ObjectContents.Enum.getDefaultInstance();
       serviceFactoryType_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+      serviceReferenceType_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6988,6 +7038,9 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeMessage(14, serviceFactoryType_);
       }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeMessage(15, serviceReferenceType_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -7052,6 +7105,10 @@ public final class ObjectContentsProto {
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, serviceFactoryType_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(15, serviceReferenceType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7172,6 +7229,7 @@ public final class ObjectContentsProto {
           getInterfaceFieldBuilder();
           getEnumTypeFieldBuilder();
           getServiceFactoryTypeFieldBuilder();
+          getServiceReferenceTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -7252,6 +7310,12 @@ public final class ObjectContentsProto {
           serviceFactoryTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00002000);
+        if (serviceReferenceTypeBuilder_ == null) {
+          serviceReferenceType_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+        } else {
+          serviceReferenceTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -7380,6 +7444,14 @@ public final class ObjectContentsProto {
         } else {
           result.serviceFactoryType_ = serviceFactoryTypeBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        if (serviceReferenceTypeBuilder_ == null) {
+          result.serviceReferenceType_ = serviceReferenceType_;
+        } else {
+          result.serviceReferenceType_ = serviceReferenceTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7439,6 +7511,9 @@ public final class ObjectContentsProto {
         }
         if (other.hasServiceFactoryType()) {
           mergeServiceFactoryType(other.getServiceFactoryType());
+        }
+        if (other.hasServiceReferenceType()) {
+          mergeServiceReferenceType(other.getServiceReferenceType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -9008,6 +9083,123 @@ public final class ObjectContentsProto {
         return serviceFactoryTypeBuilder_;
       }
 
+      // optional .Delta.ServiceReferenceDelta service_reference_type = 15;
+      private ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta serviceReferenceType_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder> serviceReferenceTypeBuilder_;
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public boolean hasServiceReferenceType() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta getServiceReferenceType() {
+        if (serviceReferenceTypeBuilder_ == null) {
+          return serviceReferenceType_;
+        } else {
+          return serviceReferenceTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public Builder setServiceReferenceType(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta value) {
+        if (serviceReferenceTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          serviceReferenceType_ = value;
+          onChanged();
+        } else {
+          serviceReferenceTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public Builder setServiceReferenceType(
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder builderForValue) {
+        if (serviceReferenceTypeBuilder_ == null) {
+          serviceReferenceType_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceReferenceTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public Builder mergeServiceReferenceType(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta value) {
+        if (serviceReferenceTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00004000) == 0x00004000) &&
+              serviceReferenceType_ != ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance()) {
+            serviceReferenceType_ =
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.newBuilder(serviceReferenceType_).mergeFrom(value).buildPartial();
+          } else {
+            serviceReferenceType_ = value;
+          }
+          onChanged();
+        } else {
+          serviceReferenceTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00004000;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public Builder clearServiceReferenceType() {
+        if (serviceReferenceTypeBuilder_ == null) {
+          serviceReferenceType_ = ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance();
+          onChanged();
+        } else {
+          serviceReferenceTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00004000);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder getServiceReferenceTypeBuilder() {
+        bitField0_ |= 0x00004000;
+        onChanged();
+        return getServiceReferenceTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder getServiceReferenceTypeOrBuilder() {
+        if (serviceReferenceTypeBuilder_ != null) {
+          return serviceReferenceTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return serviceReferenceType_;
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceReferenceDelta service_reference_type = 15;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder> 
+          getServiceReferenceTypeFieldBuilder() {
+        if (serviceReferenceTypeBuilder_ == null) {
+          serviceReferenceTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDeltaOrBuilder>(
+                  serviceReferenceType_,
+                  getParentForChildren(),
+                  isClean());
+          serviceReferenceType_ = null;
+        }
+        return serviceReferenceTypeBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:ObjectContents)
     }
 
@@ -9078,7 +9270,7 @@ public final class ObjectContentsProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\024objectContents.proto\032\013delta.proto\"\373\t\n\016" +
+      "\n\024objectContents.proto\032\013delta.proto\"\271\n\n\016" +
       "ObjectContents\022\014\n\004uuid\030\001 \002(\t\022\016\n\006atomic\030\002" +
       " \002(\010\022\"\n\010val_type\030\003 \001(\0132\020.Delta.ValueType" +
       "\022&\n\010ref_type\030\004 \001(\0132\024.Delta.ReferenceType" +
@@ -9093,25 +9285,27 @@ public final class ObjectContentsProto {
       "\022,\n\tinterface\030\014 \001(\0132\031.ObjectContents.Int" +
       "erface\022\'\n\tenum_type\030\r \001(\0132\024.ObjectConten" +
       "ts.Enum\0228\n\024service_factory_type\030\016 \001(\0132\032." +
-      "Delta.ServiceFactoryDelta\032M\n\023InternalStr" +
-      "uctField\0226\n\030field_contents_reference\030\001 \002" +
-      "(\0132\024.Delta.ReferenceType\032e\n\016InternalStru" +
-      "ct\022\036\n\026struct_type_class_name\030\001 \002(\t\0223\n\006fi" +
-      "elds\030\002 \003(\0132#.ObjectContents.InternalStru",
-      "ctField\032P\n\006Struct\022&\n\010ref_type\030\001 \002(\0132\024.De" +
-      "lta.ReferenceType\022\036\n\026struct_type_class_n" +
-      "ame\030\002 \002(\t\032E\n\004Enum\022\'\n\037enum_constructor_ob" +
-      "j_class_name\030\001 \002(\t\022\024\n\014enum_ordinal\030\002 \002(\005" +
-      "\032g\n\003Map\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Refere" +
-      "nceType\022\033\n\023key_type_class_name\030\002 \002(\t\022\033\n\023" +
-      "val_type_class_name\030\003 \002(\t\0323\n\tInterface\022&" +
-      "\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\032K" +
-      "\n\004List\022&\n\010ref_type\030\001 \002(\0132\024.Delta.Referen" +
-      "ceType\022\033\n\023val_type_class_name\030\002 \002(\t\032G\n\013I",
-      "nternalMap\022\033\n\023key_type_class_name\030\001 \002(\t\022" +
-      "\033\n\023val_type_class_name\030\002 \002(\t\032+\n\014Internal" +
-      "List\022\033\n\023val_type_class_name\030\001 \002(\tB\'\n\020ral" +
-      "ph_protobuffsB\023ObjectContentsProto"
+      "Delta.ServiceFactoryDelta\022<\n\026service_ref" +
+      "erence_type\030\017 \001(\0132\034.Delta.ServiceReferen" +
+      "ceDelta\032M\n\023InternalStructField\0226\n\030field_" +
+      "contents_reference\030\001 \002(\0132\024.Delta.Referen" +
+      "ceType\032e\n\016InternalStruct\022\036\n\026struct_type_",
+      "class_name\030\001 \002(\t\0223\n\006fields\030\002 \003(\0132#.Objec" +
+      "tContents.InternalStructField\032P\n\006Struct\022" +
+      "&\n\010ref_type\030\001 \002(\0132\024.Delta.ReferenceType\022" +
+      "\036\n\026struct_type_class_name\030\002 \002(\t\032E\n\004Enum\022" +
+      "\'\n\037enum_constructor_obj_class_name\030\001 \002(\t" +
+      "\022\024\n\014enum_ordinal\030\002 \002(\005\032g\n\003Map\022&\n\010ref_typ" +
+      "e\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023key_typ" +
+      "e_class_name\030\002 \002(\t\022\033\n\023val_type_class_nam" +
+      "e\030\003 \002(\t\0323\n\tInterface\022&\n\010ref_type\030\001 \002(\0132\024" +
+      ".Delta.ReferenceType\032K\n\004List\022&\n\010ref_type",
+      "\030\001 \002(\0132\024.Delta.ReferenceType\022\033\n\023val_type" +
+      "_class_name\030\002 \002(\t\032G\n\013InternalMap\022\033\n\023key_" +
+      "type_class_name\030\001 \002(\t\022\033\n\023val_type_class_" +
+      "name\030\002 \002(\t\032+\n\014InternalList\022\033\n\023val_type_c" +
+      "lass_name\030\001 \002(\tB\'\n\020ralph_protobuffsB\023Obj" +
+      "ectContentsProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -9123,7 +9317,7 @@ public final class ObjectContentsProto {
           internal_static_ObjectContents_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ObjectContents_descriptor,
-              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", "EnumType", "ServiceFactoryType", });
+              new java.lang.String[] { "Uuid", "Atomic", "ValType", "RefType", "MapType", "ListType", "InternalMapType", "InternalListType", "NullType", "InternalStructType", "StructType", "Interface", "EnumType", "ServiceFactoryType", "ServiceReferenceType", });
           internal_static_ObjectContents_InternalStructField_descriptor =
             internal_static_ObjectContents_descriptor.getNestedTypes().get(0);
           internal_static_ObjectContents_InternalStructField_fieldAccessorTable = new
