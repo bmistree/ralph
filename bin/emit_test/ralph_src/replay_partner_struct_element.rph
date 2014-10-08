@@ -1,0 +1,28 @@
+
+Struct SomeStruct
+{
+    TVar Number some_num = 1;
+}
+
+Endpoint StructSender
+{
+    send_struct(Number internal_struct_number)
+    {
+        atomically
+        {
+            Struct SomeStruct s;
+            s.some_num = internal_struct_number;
+            @partner.receive_additional_struct(s);
+        }
+    }
+}
+
+Endpoint StructReceiver
+{
+    TVar List(element: Struct SomeStruct) struct_list;
+
+    receive_additional_struct(Struct SomeStruct to_append)
+    {
+        struct_list.append(to_append);
+    }
+}

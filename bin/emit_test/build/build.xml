@@ -104,6 +104,13 @@
     </antcall>
   </target>
 
+  <target name="replay_partner_struct_element_ralph"
+          depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="replay_partner_struct_element.rph"/>
+      <param name="class_name" value="ReplayPartnerStructElementJava"/>
+    </antcall>
+  </target>
   
   <target name="iface_basic_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
@@ -712,6 +719,11 @@
       depends="enum_ralph,alias_enum_ralph">
   </target>
 
+  <target
+      name="ralph_ReplayPartnerStructElement"
+      depends="replay_partner_struct_element_ralph">
+  </target>
+  
   <target
       name="ralph_StructEnum"
       depends="struct_enum_ralph">
