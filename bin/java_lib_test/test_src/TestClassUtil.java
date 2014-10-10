@@ -22,7 +22,6 @@ import RalphExceptions.StoppedException;
 import java.util.HashMap;
 import ralph.Variables.AtomicMapVariable;
 import ralph.Variables.AtomicListVariable;
-import ralph.NonAtomicInternalMap;
 import RalphAtomicWrappers.BaseAtomicWrappers;
 
 
@@ -76,8 +75,7 @@ public class TestClassUtil
                 false, DefaultEndpoint.NUM_TVAR_INIT_VAL,
                 ralph_globals);
             map_tvar = new AtomicMapVariable<Double,Double,Double>(
-                false, NonAtomicInternalMap.IndexType.DOUBLE,
-                BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
+                false,BaseAtomicWrappers.ATOMIC_NUMBER_WRAPPER,
                 ralph.BaseTypeVersionHelpers.DOUBLE_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER,
                 Double.class, Double.class, ralph_globals);
             
