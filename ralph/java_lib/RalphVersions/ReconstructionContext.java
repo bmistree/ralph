@@ -6,6 +6,13 @@ import ralph.Util;
 
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
+/**
+   Used to replay objects.  Difference between this and
+   RPCDeserializationReconstructionContext is that this code does not
+   log any changes to variables from deserialization so that can later
+   replay.
+ */
+
 public class ReconstructionContext implements IReconstructionContext
 {
     private final IVersionReplayer version_replayer;

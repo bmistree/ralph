@@ -545,9 +545,9 @@ public class NonAtomicActiveEvent extends ActiveEvent
         {
             args =
                 RPCDeserializationHelper.deserialize_arguments_list(
-                    event_parent.ralph_globals,msg.getArguments());
+                    event_parent.ralph_globals,msg.getArguments(),this);
         }
-
+        
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.

@@ -1403,7 +1403,7 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             args =
                 RPCDeserializationHelper.deserialize_arguments_list(
-                    event_parent.ralph_globals,msg.getArguments());
+                    event_parent.ralph_globals,msg.getArguments(),this);
         }
 
         // create new ExecutingEventContext that copies current stack

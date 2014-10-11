@@ -6,7 +6,7 @@ import java.util.List;
 import RalphVersions.RPCVersionReplayer;
 import RalphVersions.ObjectContentsDeserializers;
 import RalphVersions.IReconstructionContext;
-import RalphVersions.ReconstructionContext;
+import RalphVersions.RPCDeserializationReconstructionContext;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
@@ -16,13 +16,14 @@ import ralph_protobuffs.UtilProto.UUID;
 public class RPCDeserializationHelper
 {
     public static List<RalphObject> deserialize_arguments_list(
-        RalphGlobals ralph_globals,Arguments arguments)
+        RalphGlobals ralph_globals,Arguments arguments, ActiveEvent act_event)
     {
         List to_return = new ArrayList<RalphObject>();
         RPCVersionReplayer version_replayer =
             new RPCVersionReplayer(arguments);
         IReconstructionContext reconstruction_context =
-            new ReconstructionContext(version_replayer,ralph_globals);
+            new RPCDeserializationReconstructionContext(
+                version_replayer,ralph_globals,act_event);
 
         for (UUID arg_uuid : arguments.getArgumentUuidsList())
         {

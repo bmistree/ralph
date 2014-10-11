@@ -317,7 +317,7 @@ public class ExecutingEventContext
             // can repurpose deserialization code
             List<RalphObject> to_return_list =
                 RPCDeserializationHelper.deserialize_arguments_list(
-                    endpoint.ralph_globals,returned_objs_proto);
+                    endpoint.ralph_globals,returned_objs_proto,active_event);
             //// DEBUG
             if (to_return_list.size() != 1)
             {
