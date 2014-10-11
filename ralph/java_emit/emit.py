@@ -2775,7 +2775,7 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
 
     # emit other methods of internal struct 
     internal_struct_body_text += (
-        emit_internal_struct_replay(struct_type))
+        emit_internal_struct_replay_and_deserialize(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_serialize_contents(struct_type))
     
@@ -2785,8 +2785,9 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
     return internal_struct_definition_text
 
 
-def emit_internal_struct_replay(struct_type):
+def emit_internal_struct_replay_and_deserialize(struct_type):
     internal_replay_text = ''
+    internal_deserialize_text = ''
     # note that it's important to add these in alphabetically sorted
     # order.  deserializer, expects them in alphabetically sorted
     # order
@@ -2806,9 +2807,20 @@ def emit_internal_struct_replay(struct_type):
         'field_index': field_index,
         'field_type': field_type_text}
 
+        internal_deserialize_text += '''
+{
+    %(field_name)s.set_val(act_event,
+        ((%(field_type)s) reconstruction_context.get_constructed_object(
+            internal_references_to_replay_on.get(%(field_index)i),
+            to_play_until)).get_val(act_event));
+}
+''' % { 'field_name': field_name,
+        'field_index': field_index,
+        'field_type': field_type_text}
+
 
     internal_replay_text = indent_string(internal_replay_text)
-    return '''
+    replay_text = '''
 @Override
 public void replay (
     IReconstructionContext reconstruction_context,
@@ -2824,6 +2836,26 @@ public void replay (
 %(internal_replay_text)s
 }
 ''' % { 'internal_replay_text': internal_replay_text}
+
+    deserialize_text = '''
+@Override
+public void deserialize (
+    IReconstructionContext reconstruction_context,
+    ObjectHistory obj_history,Long to_play_until,
+    ActiveEvent act_event) throws BackoutException
+{
+    if (internal_references_to_replay_on == null)
+    {
+        Util.logger_assert(
+            "Internal struct must have internal_references_to_replay_on set");
+    }
+
+
+%(internal_deserialize_text)s
+}
+''' % { 'internal_deserialize_text': internal_deserialize_text}
+
+    return replay_text + deserialize_text
 
 
 def emit_internal_struct_serialize_contents(struct_type):
