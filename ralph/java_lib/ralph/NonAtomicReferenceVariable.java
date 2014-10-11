@@ -3,6 +3,7 @@ package ralph;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
+import RalphExceptions.BackoutException;
 
 // FIXME: This class is highly-redundant with AtomicReferenceVariable.
 // Think about parameterizing based on NonAtomicVariable to get rid of
@@ -62,35 +63,28 @@ public abstract class NonAtomicReferenceVariable<ValueType extends IReference>
     {
         return false;
     }
-    
+
     @Override
     public void replay (
         IReconstructionContext reconstruction_context,
         ObjectHistory obj_history,Long to_play_until)
     {
-        String reference_to_use =
-            ObjectHistory.find_reference(obj_history,to_play_until);
-
-        if (reference_to_use == null)
-        {
-            if(! get_initial_reference_set())
-            {
-                Util.logger_assert(
-                    "Require a reference to replay from");
-            }
-            reference_to_use = initial_reference;
-            // If reference_to_use is set to null, means that internal
-            // value should be null and we shouldn't replay any
-            // farther.
-            if (reference_to_use == null)
-            {
-                direct_set_val(null);
-                return;
-            }
-        }
         ValueType rebuilt_internal_val =
-            (ValueType) reconstruction_context.get_constructed_object(
-                reference_to_use, to_play_until);
+            AtomicReferenceVariable.<ValueType>replay_deserialize_internal_val_helper(
+                this,reconstruction_context,obj_history, to_play_until);
         direct_set_val(rebuilt_internal_val);
+    }
+    
+    @Override
+    public void deserialize (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until,
+        ActiveEvent act_event)
+        throws BackoutException
+    {
+        ValueType rebuilt_internal_val =
+            AtomicReferenceVariable.<ValueType>replay_deserialize_internal_val_helper(
+                this,reconstruction_context,obj_history, to_play_until);
+        set_val(act_event,rebuilt_internal_val);
     }
 }

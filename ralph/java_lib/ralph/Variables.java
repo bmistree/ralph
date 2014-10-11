@@ -130,6 +130,17 @@ public class Variables
         {
             ObjectHistory.replay_number(this,obj_history,to_play_until);
         }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_number(
+                this,obj_history,to_play_until,deserialization_event);
+        }
+
         
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
@@ -214,6 +225,18 @@ public class Variables
         {
             ObjectHistory.replay_text(this,obj_history,to_play_until);
         }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_text(
+                this,obj_history,to_play_until,
+                deserialization_event);
+        }
+
         
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
@@ -289,6 +312,18 @@ public class Variables
             ObjectHistory.replay_tf(this,obj_history,to_play_until);
         }
 
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_tf(
+                this,obj_history,to_play_until,
+                deserialization_event);
+        }
+
+        
         /**
            @param {ActiveEvent} active_event --- Can be null, in which
            case will return internal value without taking any locks.
@@ -375,6 +410,17 @@ public class Variables
                 reconstruction_context.get_version_replayer());
         }
 
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.<T>deserialize_enum(
+                this,obj_history,to_play_until,
+                reconstruction_context.get_version_replayer(),
+                deserialization_event);
+        }
         
         @Override
         public ObjectContents serialize_contents(
@@ -529,6 +575,17 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            Util.logger_assert(
+                "Disallowing serializing endpoints across network.");
+        }
+
+        
         /** AtomicValueVariable overrides */
         @Override
         public ObjectContents serialize_contents(
@@ -686,6 +743,16 @@ public class Variables
             ObjectHistory.replay_service_factory(
                 this,obj_history,to_play_until,ralph_globals);
         }
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_service_factory(
+                this,obj_history,to_play_until,ralph_globals,
+                deserialization_event);
+        }
     }
     
     public static class AtomicServiceReferenceVariable
@@ -725,6 +792,17 @@ public class Variables
         {
             ObjectHistory.replay_service_reference(
                 this,obj_history,to_play_until, ralph_globals);
+        }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_service_reference(
+                this,obj_history,to_play_until, ralph_globals,
+                deserialization_event);
         }
 
         public static ObjectContents serialize_service_reference_contents(
@@ -803,6 +881,17 @@ public class Variables
         {
             ObjectHistory.replay_number(this,obj_history,to_play_until);
         }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_number(
+                this,obj_history,to_play_until,deserialization_event);
+        }
+
         
         public NonAtomicNumberVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
@@ -843,6 +932,17 @@ public class Variables
         {
             ObjectHistory.replay_text(this,obj_history,to_play_until);
         }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_text(
+                this,obj_history,to_play_until,deserialization_event);
+        }
+
         
         @Override
         public ObjectContents serialize_contents(
@@ -885,6 +985,17 @@ public class Variables
         {
             ObjectHistory.replay_tf(this,obj_history,to_play_until);
         }
+
+        @Override
+        public void deserialize(
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_tf(
+                this,obj_history,to_play_until,deserialization_event);
+        }
+
         
         public NonAtomicTrueFalseVariable(
             boolean _dummy_log_changes,RalphGlobals ralph_globals)
@@ -933,6 +1044,17 @@ public class Variables
             Util.logger_assert(
                 "FIXME: still must allow replay of NonAtomicEnum-s");
         }
+
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            Util.logger_assert(
+                "FIXME: still must allow deserialize of NonAtomicEnum-s");
+        }
+
         
         @Override
         public ObjectContents serialize_contents(
@@ -1001,6 +1123,17 @@ public class Variables
                 ralph_globals);
         }
 
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            Util.logger_assert(
+                "Should not allow serializing and deserializing endpoints");
+        }
+
+        
         /**
            IInternalReferenceHolders
          */
@@ -1054,6 +1187,18 @@ public class Variables
         }
 
         @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_service_factory(
+                this,obj_history,to_play_until,ralph_globals,
+                deserialization_event);
+        }
+
+        
+        @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,
             SerializationContext serialization_context)
@@ -1096,6 +1241,18 @@ public class Variables
                 this,obj_history,to_play_until, ralph_globals);
         }
 
+        @Override
+        public void deserialize (
+            IReconstructionContext reconstruction_context,
+            ObjectHistory obj_history,Long to_play_until,
+            ActiveEvent deserialization_event) throws BackoutException
+        {
+            ObjectHistory.deserialize_service_reference(
+                this,obj_history,to_play_until, ralph_globals,
+                deserialization_event);
+        }
+
+        
         @Override
         public ObjectContents serialize_contents(
             ActiveEvent active_event, Object additional_contents,

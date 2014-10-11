@@ -16,6 +16,7 @@ import ralph.Util;
 import ralph.InternalServiceFactory;
 import ralph.InternalServiceReference;
 import ralph.RalphGlobals;
+import ralph.ActiveEvent;
 
 import RalphExceptions.BackoutException;
 
@@ -100,7 +101,19 @@ public class ObjectHistory
     public static String find_reference(
         ObjectHistory obj_history,Long to_play_until)
     {
-        String to_return = null;
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return null;
+
+        return change.delta.getReference().getReference();
+    }
+
+    protected static SingleObjectChange find_target_single_object_change(
+        ObjectHistory obj_history, Long to_play_until)
+    {
+        SingleObjectChange to_return = null;
         for (SingleObjectChange change : obj_history.history)
         {
             if ((to_play_until != null) &&
@@ -108,16 +121,40 @@ public class ObjectHistory
             {
                 return to_return;
             }
-            to_return = change.delta.getReference().getReference();
+            to_return = change;
         }
         return to_return;
     }
-
+    
     public static void replay_internal_map(
         RalphInternalMapInterface to_replay_on,
         ObjectHistory obj_history, Long to_play_until,
         IReconstructionContext reconstruction_context)
     {
+        try
+        {
+            deserialize_internal_map(
+                to_replay_on, obj_history,to_play_until,
+                reconstruction_context,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
+        }
+    }
+
+    /**
+       If act_event is null, will direct_set_val on object instead of
+       set_val.
+     */
+    public static void deserialize_internal_map(
+        RalphInternalMapInterface to_replay_on,
+        ObjectHistory obj_history, Long to_play_until,
+        IReconstructionContext reconstruction_context,
+        ActiveEvent act_event) throws BackoutException
+    {        
         for (SingleObjectChange change : obj_history.history)
         {
             if ((to_play_until != null) &&
@@ -127,7 +164,7 @@ public class ObjectHistory
             }
             SingleObjectChange.internal_map_incorporate_single_object_change(
                 change,to_replay_on,reconstruction_context,
-                change.root_lamport_time);
+                change.root_lamport_time,act_event);
         }
     }
 
@@ -135,6 +172,27 @@ public class ObjectHistory
         RalphInternalListInterface to_replay_on,
         ObjectHistory obj_history, Long to_play_until,
         IReconstructionContext reconstruction_context)
+    {
+        try
+        {
+            deserialize_internal_list(
+                to_replay_on,obj_history,to_play_until,
+                reconstruction_context,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
+        }
+    }
+
+    
+    public static void deserialize_internal_list(
+        RalphInternalListInterface to_replay_on,
+        ObjectHistory obj_history, Long to_play_until,
+        IReconstructionContext reconstruction_context,
+        ActiveEvent act_event) throws BackoutException
     {
         for (SingleObjectChange change : obj_history.history)
         {
@@ -145,7 +203,7 @@ public class ObjectHistory
             }
             SingleObjectChange.internal_list_incorporate_single_object_change(
                 change,to_replay_on,reconstruction_context,
-                change.root_lamport_time);
+                change.root_lamport_time,act_event);
         }
     }
     
@@ -153,127 +211,201 @@ public class ObjectHistory
         RalphObject<Double,Double> to_replay_on,
         ObjectHistory obj_history,Long to_play_until)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-            SingleObjectChange.number_incorporate_single_object_change(
-                change,to_replay_on);
+            deserialize_number(to_replay_on,obj_history,to_play_until,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
 
+    public static void deserialize_number(
+        RalphObject<Double,Double> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until,
+        ActiveEvent act_event) throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+
+        SingleObjectChange.number_incorporate_single_object_change(
+            change,to_replay_on,act_event);
+    }
+
+    
     public static void replay_service_reference(
         RalphObject<InternalServiceReference,InternalServiceReference> to_replay_on,
         ObjectHistory obj_history,Long to_play_until, RalphGlobals ralph_globals)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-
-        SingleObjectChange latest_change = null;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-            latest_change = change;
+            deserialize_service_reference(
+                to_replay_on, obj_history, to_play_until, ralph_globals,null);
         }
-        if (latest_change != null)
+        catch (BackoutException ex)
         {
-            SingleObjectChange.service_reference_incorporate_single_object_change(
-                latest_change,to_replay_on,ralph_globals);
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
+
+    public static void deserialize_service_reference(
+        RalphObject<InternalServiceReference,InternalServiceReference> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until, RalphGlobals ralph_globals,
+        ActiveEvent act_event) throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+
+        SingleObjectChange.service_reference_incorporate_single_object_change(
+            change,to_replay_on,ralph_globals,act_event);
+    }
+
     
     public static void replay_service_factory(
         RalphObject<InternalServiceFactory,InternalServiceFactory> to_replay_on,
         ObjectHistory obj_history, Long to_play_until,RalphGlobals ralph_globals)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-
-        SingleObjectChange latest_change = null;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-            latest_change = change;
+            deserialize_service_factory(
+                to_replay_on, obj_history, to_play_until, ralph_globals,null);
         }
-        if (latest_change != null)
+        catch (BackoutException ex)
         {
-            SingleObjectChange.service_factory_incorporate_single_object_change(
-                latest_change,to_replay_on,ralph_globals);
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
 
+    public static void deserialize_service_factory(
+        RalphObject<InternalServiceFactory,InternalServiceFactory> to_replay_on,
+        ObjectHistory obj_history, Long to_play_until,RalphGlobals ralph_globals,
+        ActiveEvent act_event) throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+
+        SingleObjectChange.service_factory_incorporate_single_object_change(
+            change,to_replay_on,ralph_globals,act_event);
+    }
+
+    
     
     public static <EnumType extends Enum> void replay_enum(
         RalphObject<EnumType,EnumType> to_replay_on,
         ObjectHistory obj_history,Long to_play_until,
         IVersionReplayer replayer)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-            SingleObjectChange.<EnumType>enum_incorporate_single_object_change(
-                change,to_replay_on,replayer);
+            ObjectHistory.<EnumType>deserialize_enum(
+                to_replay_on,obj_history,to_play_until,replayer,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
 
-    
+    public static <EnumType extends Enum> void deserialize_enum(
+        RalphObject<EnumType,EnumType> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until,
+        IVersionReplayer replayer, ActiveEvent act_event)
+        throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+
+        SingleObjectChange.<EnumType>enum_incorporate_single_object_change(
+            change,to_replay_on,replayer,act_event);
+    }
+
     public static void replay_text(
         RalphObject<String,String> to_replay_on,
         ObjectHistory obj_history,Long to_play_until)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-
-            SingleObjectChange.text_incorporate_single_object_change(
-                change,to_replay_on);
+            deserialize_text(
+                to_replay_on,obj_history,to_play_until,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
 
+    public static void deserialize_text(
+        RalphObject<String,String> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until, ActiveEvent act_event)
+        throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+
+        SingleObjectChange.text_incorporate_single_object_change(
+            change,to_replay_on,act_event);
+    }
+
+    
     public static void replay_tf(
         RalphObject<Boolean,Boolean> to_replay_on,
         ObjectHistory obj_history,Long to_play_until)
     {
-        Set <SingleObjectChange> single_object_change_set =
-            obj_history.history;
-        for (SingleObjectChange change : single_object_change_set)
+        try
         {
-            if ((to_play_until != null) &&
-                (change.root_lamport_time > to_play_until))
-            {
-                return;
-            }
-
-            SingleObjectChange.true_false_incorporate_single_object_change(
-                change,to_replay_on);
+            deserialize_tf(
+                to_replay_on,obj_history,to_play_until,null);
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Should be unable to throw backout when replaying");
         }
     }
 
+    public static void deserialize_tf(
+        RalphObject<Boolean,Boolean> to_replay_on,
+        ObjectHistory obj_history,Long to_play_until, ActiveEvent act_event)
+        throws BackoutException
+    {
+        SingleObjectChange change =
+            find_target_single_object_change(obj_history,to_play_until);
+
+        if (change == null)
+            return;
+        
+        SingleObjectChange.true_false_incorporate_single_object_change(
+            change,to_replay_on,act_event);
+    }
+
+    
     
     public static class SingleObjectChange
     {
@@ -293,26 +425,37 @@ public class ObjectHistory
         public static void service_reference_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<InternalServiceReference,InternalServiceReference> to_incorporate_into,
-            RalphGlobals ralph_globals)
+            RalphGlobals ralph_globals, ActiveEvent act_event) throws BackoutException
         {
             InternalServiceReference internal_service_reference =
                 InternalServiceReference.deserialize_delta (
                     change.delta.getServiceReferenceDelta());
-            to_incorporate_into.direct_set_val(internal_service_reference);
-        }
-        
-        public static void number_incorporate_single_object_change(
-            SingleObjectChange change,
-            RalphObject<Double,Double> to_incorporate_into)
-        {
-            double internal_number = change.delta.getValue().getNum();
-            to_incorporate_into.direct_set_val(internal_number);
+            if (act_event == null)
+                to_incorporate_into.direct_set_val(internal_service_reference);
+            else
+            {
+                to_incorporate_into.set_val(
+                    act_event,internal_service_reference);
+            }
         }
 
+        public static void number_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<Double,Double> to_incorporate_into,
+            ActiveEvent act_event) throws BackoutException
+        {
+            double internal_number = change.delta.getValue().getNum();
+            if (act_event == null)
+                to_incorporate_into.direct_set_val(internal_number);
+            else
+                to_incorporate_into.set_val(act_event,internal_number);
+        }
+        
         public static <EnumType extends Enum> void enum_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<EnumType,EnumType> to_incorporate_into,
-            IVersionReplayer replayer)
+            IVersionReplayer replayer, ActiveEvent act_event)
+            throws BackoutException
         {
             Delta.EnumDelta enum_delta = change.delta.getEnumDelta();
             String enum_constructor_obj_class_name =
@@ -325,50 +468,69 @@ public class ObjectHistory
 
             EnumType internal_enum =
                 enum_constructor.construct_enum(enum_ordinal);
-            to_incorporate_into.direct_set_val(internal_enum);
+            if (act_event == null)
+                to_incorporate_into.direct_set_val(internal_enum);
+            else
+                to_incorporate_into.set_val(act_event,internal_enum);
         }
 
+        
         public static void service_factory_incorporate_single_object_change(
             SingleObjectChange change,
             RalphObject<InternalServiceFactory,InternalServiceFactory>to_replay_on,
-            RalphGlobals ralph_globals)
+            RalphGlobals ralph_globals,ActiveEvent act_event)
+            throws BackoutException
         {
             ByteString serialized_delta =
                 change.delta.getServiceFactoryDelta().getSerializedFactory();
 
             InternalServiceFactory internal_service_factory =
                 InternalServiceFactory.deserialize (serialized_delta,ralph_globals);
-            to_replay_on.direct_set_val(internal_service_factory);
+            if (act_event == null)
+                to_replay_on.direct_set_val(internal_service_factory);
+            else
+                to_replay_on.set_val(act_event,internal_service_factory);
         }
-
         
         public static void text_incorporate_single_object_change(
             SingleObjectChange change,
-            RalphObject<String,String> to_incorporate_into)
+            RalphObject<String,String> to_incorporate_into,
+            ActiveEvent act_event) throws BackoutException
         {
             String internal_string = change.delta.getValue().getText();
-            to_incorporate_into.direct_set_val(internal_string);
-        }
-        
-        public static void true_false_incorporate_single_object_change(
-            SingleObjectChange change,
-            RalphObject<Boolean,Boolean> to_incorporate_into)
-        {
-            boolean internal_bool = change.delta.getValue().getTf();
-            to_incorporate_into.direct_set_val(internal_bool);
+            if (act_event == null)
+                to_incorporate_into.direct_set_val(internal_string);
+            else
+                to_incorporate_into.set_val(act_event,internal_string);
         }
 
-        
+        public static void true_false_incorporate_single_object_change(
+            SingleObjectChange change,
+            RalphObject<Boolean,Boolean> to_incorporate_into,
+            ActiveEvent act_event)
+            throws BackoutException
+        {
+            boolean internal_bool = change.delta.getValue().getTf();
+            if (act_event == null)
+                to_incorporate_into.direct_set_val(internal_bool);
+            else
+                to_incorporate_into.set_val(act_event,internal_bool);
+        }
+
         public static void internal_map_incorporate_single_object_change(
             SingleObjectChange change, RalphInternalMapInterface to_replay_on,
             IReconstructionContext reconstruction_context,
-            Long lamport_timestamp_before_or_during)
+            Long lamport_timestamp_before_or_during, ActiveEvent act_event)
+            throws BackoutException
         {
             for (ContainerDelta delta : change.delta.getContainerDeltaList())
             {
                 if (ContainerOpType.CLEAR == delta.getOpType())
                 {
-                    to_replay_on.direct_clear();
+                    if (act_event == null)
+                        to_replay_on.direct_clear();
+                    else
+                        to_replay_on.clear(act_event);
                 }
                 else
                 {
@@ -387,7 +549,10 @@ public class ObjectHistory
                     
                     if (ContainerOpType.DELETE == delta.getOpType())
                     {
-                        to_replay_on.direct_remove_val_on_key(key);
+                        if (act_event == null)
+                            to_replay_on.direct_remove_val_on_key(key);
+                        else
+                            to_replay_on.remove(act_event,key);
                     }
                     else
                     {
@@ -401,8 +566,16 @@ public class ObjectHistory
                         if ((ContainerOpType.ADD == delta.getOpType()) ||
                             (ContainerOpType.WRITE == delta.getOpType()))
                         {
-                            to_replay_on.direct_set_val_on_key(
-                                key,new_value);
+                            if (act_event == null)
+                            {
+                                to_replay_on.direct_set_val_on_key(
+                                    key,new_value);
+                            }
+                            else
+                            {
+                                to_replay_on.set_val_on_key(
+                                    act_event, key,new_value);
+                            }
                         }
                         //// DEBUG
                         else
@@ -418,13 +591,17 @@ public class ObjectHistory
         public static void internal_list_incorporate_single_object_change(
             SingleObjectChange change, RalphInternalListInterface to_replay_on,
             IReconstructionContext reconstruction_context,
-            Long lamport_timestamp_before_or_during)
+            Long lamport_timestamp_before_or_during,ActiveEvent act_event)
+            throws BackoutException
         {
             for (ContainerDelta delta : change.delta.getContainerDeltaList())
             {
                 if (ContainerOpType.CLEAR == delta.getOpType())
                 {
-                    to_replay_on.direct_clear();
+                    if (act_event == null)
+                        to_replay_on.direct_clear();
+                    else
+                        to_replay_on.clear(act_event);
                 }
                 else if (ContainerOpType.ADD == delta.getOpType())
                 {
@@ -434,7 +611,11 @@ public class ObjectHistory
                         reconstruction_context.get_constructed_object(
                             internal_obj_uuid,
                             lamport_timestamp_before_or_during);
-                    to_replay_on.direct_append(new_value);
+
+                    if (act_event == null)
+                        to_replay_on.direct_append(new_value);
+                    else
+                        to_replay_on.append(act_event,new_value);
                 }
                 else
                 {
@@ -444,7 +625,10 @@ public class ObjectHistory
                     
                     if (ContainerOpType.DELETE == delta.getOpType())
                     {
-                        to_replay_on.direct_remove(key);
+                        if (act_event == null)
+                            to_replay_on.direct_remove(key);
+                        else
+                            to_replay_on.remove(act_event,key);
                     }
                     else if (ContainerOpType.WRITE == delta.getOpType())
                     {
@@ -455,8 +639,16 @@ public class ObjectHistory
                                 internal_obj_uuid,
                                 lamport_timestamp_before_or_during);
 
-                        to_replay_on.direct_set_val_on_key(
-                            key,new_value);
+                        if (act_event == null)
+                        {
+                            to_replay_on.direct_set_val_on_key(
+                                key,new_value);
+                        }
+                        else
+                        {
+                            to_replay_on.set_val_on_key(
+                                act_event,key,new_value);
+                        }
                     }
                     //// DEBUG
                     else

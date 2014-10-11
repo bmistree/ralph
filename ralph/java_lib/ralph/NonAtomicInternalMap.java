@@ -72,6 +72,17 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
             this,obj_history,to_play_until,reconstruction_context);
     }
 
+    @Override
+    public void deserialize(
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until, ActiveEvent act_event)
+        throws BackoutException
+    {
+        ObjectHistory.deserialize_internal_map(
+            this,obj_history,to_play_until,reconstruction_context,act_event);
+    }
+
+    
 
     @Override
     public ObjectContents serialize_contents(

@@ -49,6 +49,16 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     public abstract void replay (
         IReconstructionContext reconstruction_context,
         ObjectHistory obj_history,Long to_play_until);
+
+    /**
+       Used to deserialize rpc variables.  Likely should be very
+       similar to replay.  Or replay will call it.
+     */
+    public abstract void deserialize (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until,
+        ActiveEvent deserialization_event) throws BackoutException;
+
     
     /**
        Assumes no other writers.  Set directly on internal value.

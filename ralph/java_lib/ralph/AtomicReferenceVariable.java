@@ -3,6 +3,7 @@ package ralph;
 import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
+import RalphExceptions.BackoutException;
 
 public abstract class AtomicReferenceVariable<ValueType extends IReference>
     extends AtomicVariable<ValueType, IReference>
@@ -78,8 +79,8 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
             uuid,dirty_val.val,active_event.commit_metadata);
     }
 
-    @Override
-    public void replay (
+    public static <InternalType> InternalType replay_deserialize_internal_val_helper(
+        IInternalReferenceHolder internal_reference_holder,
         IReconstructionContext reconstruction_context,
         ObjectHistory obj_history,Long to_play_until)
     {
@@ -88,26 +89,49 @@ public abstract class AtomicReferenceVariable<ValueType extends IReference>
         
         if (reference_to_use == null)
         {
-            if(! get_initial_reference_set())
+            if(! internal_reference_holder.get_initial_reference_set())
             {
                 Util.logger_assert(
                     "Require a reference to replay from");
             }
-            reference_to_use = initial_reference;
+            reference_to_use =
+                internal_reference_holder.get_initial_reference();
 
             // If reference_to_use is set to null, means that internal
             // value should be null and we shouldn't replay any
             // farther.
             if (reference_to_use == null)
-            {
-                direct_set_val(null);
-                return;
-            }
+                return null;
         }
         
-        ValueType rebuilt_internal_val =
-            (ValueType) reconstruction_context.get_constructed_object(
+        InternalType rebuilt_internal_val =
+            (InternalType) reconstruction_context.get_constructed_object(
                 reference_to_use, to_play_until);
+        return rebuilt_internal_val;
+        
+    }
+    
+    @Override
+    public void replay (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until)
+    {
+        ValueType rebuilt_internal_val =
+            AtomicReferenceVariable.<ValueType>replay_deserialize_internal_val_helper(
+                this,reconstruction_context,obj_history, to_play_until);
         direct_set_val(rebuilt_internal_val);
+    }
+    
+    @Override
+    public void deserialize (
+        IReconstructionContext reconstruction_context,
+        ObjectHistory obj_history,Long to_play_until,
+        ActiveEvent act_event)
+        throws BackoutException
+    {
+        ValueType rebuilt_internal_val =
+            AtomicReferenceVariable.<ValueType>replay_deserialize_internal_val_helper(
+                this,reconstruction_context,obj_history, to_play_until);
+        set_val(act_event,rebuilt_internal_val);
     }
 }
