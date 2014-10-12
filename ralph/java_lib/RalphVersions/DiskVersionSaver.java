@@ -2,6 +2,9 @@ package RalphVersions;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
@@ -22,13 +25,20 @@ public class DiskVersionSaver implements IVersionSaver
     private final Map<String,EnumConstructorObj> enum_constructor_map =
         new HashMap<String,EnumConstructorObj>();
     
-    //private final DiskQueue<VersionSaverMessages.Builder> disk_queue;
-    private final DiskQueue disk_queue;
+    private final List<DiskQueue> disk_queue_list =
+        new ArrayList<DiskQueue>();
 
-    public DiskVersionSaver(int message_buffer_capacity, String log_filename)
+    private final AtomicInteger disk_queue_counter = new AtomicInteger(0);
+    
+    public DiskVersionSaver(
+        int message_buffer_capacity, List<String> log_filenames)
     {
-        disk_queue = new DiskQueue(
-            message_buffer_capacity,log_filename);
+        for (String log_filename : log_filenames)
+        {
+            disk_queue_list.add(
+                new DiskQueue(
+                    message_buffer_capacity,log_filename));
+        }
     }
 
     /**
@@ -55,13 +65,24 @@ public class DiskVersionSaver implements IVersionSaver
     @Override
     public void flush()
     {
-        disk_queue.flush();
+        for (DiskQueue disk_queue : disk_queue_list)
+            disk_queue.flush();
     }
 
+
+    protected DiskQueue get_disk_queue()
+    {
+        int unmodded_disk_queue_index = disk_queue_counter.incrementAndGet();
+        DiskQueue disk_queue = disk_queue_list.get(
+            unmodded_disk_queue_index % disk_queue_list.size());
+        return disk_queue;
+    }
     
     @Override
     public void save_commit_metadata(CommitMetadata commit_metadata)
     {
+        DiskQueue disk_queue = get_disk_queue();
+        
         VersionSaverMessages.CommitMetadata.Builder cm_builder =
             VersionUtil.commit_metadata_message_builder(commit_metadata);
         VersionSaverMessages.Builder vsm = VersionSaverMessages.newBuilder();
@@ -73,6 +94,8 @@ public class DiskVersionSaver implements IVersionSaver
     public void save_version_data(
         String object_uuid, Delta delta, CommitMetadata commit_metadata)
     {
+        DiskQueue disk_queue = get_disk_queue();
+        
         VersionSaverMessages.VersionData.Builder vd_builder =
             VersionUtil.version_data_message_builder(
                 object_uuid,delta,commit_metadata);
@@ -87,6 +110,8 @@ public class DiskVersionSaver implements IVersionSaver
         String variable_name, String object_uuid,String endpoint_uuid,
         String endpoint_constructor_class_name,long local_lamport_time)
     {
+        DiskQueue disk_queue = get_disk_queue();
+        
         VersionSaverMessages.EndpointGlobalMapping.Builder builder =
             VersionUtil.endpoint_global_mapping_message_builder(
                 variable_name, object_uuid, endpoint_uuid,
@@ -101,6 +126,8 @@ public class DiskVersionSaver implements IVersionSaver
     public void save_object_constructor(
         String object_uuid, ObjectContents obj_contents)
     {
+        DiskQueue disk_queue = get_disk_queue();
+        
         VersionSaverMessages.ObjectConstructor.Builder builder =
             VersionUtil.object_constructor_message_builder(
                 object_uuid,obj_contents);
