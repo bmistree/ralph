@@ -30,6 +30,9 @@ public interface RalphInternalListInterface<V,ValueDeltaType>
     
     public void append(
         ActiveEvent active_event, V what_to_insert) throws BackoutException;
+    public void append(
+        ActiveEvent active_event, RalphObject<V,ValueDeltaType> what_to_insert)
+        throws BackoutException;
     
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException;

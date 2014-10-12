@@ -117,15 +117,23 @@ public class RalphInternalList<V,ValueDeltaType>
     {
         RalphObject<V,ValueDeltaType> wrapped_to_insert =
             locked_wrapper.ensure_atomic_object(what_to_insert,ralph_globals);
+        append(active_event,wrapped_to_insert);
+    }
 
+    @Override
+    public void append(
+        ActiveEvent active_event, RalphObject<V,ValueDeltaType> what_to_insert)
+        throws BackoutException
+    {
         ListTypeDataWrapper<V,ValueDeltaType> wrapped_val =
             get_val_write(active_event);
         int size = wrapped_val.val.size();
         Integer index_to_insert_in = new Integer(size);
         insert(
-            active_event, index_to_insert_in, wrapped_to_insert);
+            active_event, index_to_insert_in, what_to_insert);
     }
 
+    
     @Override
     public void set_val_on_key(
         ActiveEvent active_event, Integer key, V to_write) throws BackoutException

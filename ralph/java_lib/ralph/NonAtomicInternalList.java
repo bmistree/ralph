@@ -143,6 +143,13 @@ public class NonAtomicInternalList<V,ValueDeltaType>
     {
         internal_list.append(active_event,what_to_insert);
     }
+    @Override
+    public void append(
+        ActiveEvent active_event, RalphObject<V,ValueDeltaType> what_to_insert)
+        throws BackoutException
+    {
+        internal_list.append(active_event,what_to_insert);
+    }
     
     @Override
     public void set_val_on_key(
