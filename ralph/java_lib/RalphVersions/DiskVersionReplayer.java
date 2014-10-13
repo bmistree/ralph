@@ -34,6 +34,71 @@ public class DiskVersionReplayer implements IVersionReplayer
 
 
     /**
+       Loads a single file.
+       
+       @returns --- a list of verion datas that should only be applied
+       after all files have been loaded.
+     */
+    protected List<VersionSaverMessages.VersionData> read_in_single_file(
+        String folder_name, String filename) throws IOException
+    {
+        // have to buffer registering VersionData-s because need
+        // to pass in associated CommitMetadata object.
+        List<VersionSaverMessages.VersionData> buffered_version_datas =
+            new ArrayList<VersionSaverMessages.VersionData>();
+
+        File file = new File(folder_name,filename);
+        FileInputStream file_input_stream = new FileInputStream(file);
+        while (file_input_stream.available() != 0)
+        {
+            VersionSaverMessages vsm = VersionSaverMessages.parseDelimitedFrom(
+                file_input_stream);
+            if (vsm.hasVersionData())
+                buffered_version_datas.add(vsm.getVersionData());
+            else if (vsm.hasCommitMetadata())
+            {
+                VersionSaverMessages.CommitMetadata cm_msg =
+                    vsm.getCommitMetadata();
+                CommitMetadata cm = new CommitMetadata(
+                    cm_msg.getRootCommitLamportTime(),
+                    cm_msg.getRootApplicationUuid(),
+                    cm_msg.getEventName(),cm_msg.getEventUuid());
+                version_manager.save_commit_metadata(cm);
+            }
+            else if (vsm.hasEndpointGlobalMapping())
+            {
+                VersionSaverMessages.EndpointGlobalMapping
+                    endpt_global_mapping_msg =
+                    vsm.getEndpointGlobalMapping();
+                version_manager.save_endpoint_global_mapping(
+                    endpt_global_mapping_msg.getVariableName(),
+                    endpt_global_mapping_msg.getObjectUuid(),
+                    endpt_global_mapping_msg.getEndpointUuid(),
+                    endpt_global_mapping_msg.getEndpointConstructorClassName(),
+                    endpt_global_mapping_msg.getLocalLamportTime());
+            }
+            else if (vsm.hasObjectConstructor())
+            {
+                VersionSaverMessages.ObjectConstructor obj_constructor_msg =
+                    vsm.getObjectConstructor();
+                version_manager.save_object_constructor(
+                    obj_constructor_msg.getObjectUuid(),
+                    obj_constructor_msg.getObjContents());
+            }
+            //// DEBUG
+            else
+            {
+                Util.logger_assert(
+                    "VersionSaverMessage without expected ");
+            }
+            //// END DEBUG
+        }
+
+        return buffered_version_datas;
+    }
+    
+    
+    /**
        Essentially, load all file data into version_manager, and
        use that to respond to queries.
      */
@@ -45,61 +110,15 @@ public class DiskVersionReplayer implements IVersionReplayer
         version_manager = new InMemoryVersionManager();
         try
         {
-            // FIXME: for now, just reconstructing from single file.
-            // Hardcoded to read 0 entry.
-            File file = new File(folder_name,filename_list.get(0));
-            FileInputStream file_input_stream = new FileInputStream(file);
-
-            // have to buffer registering VersionData-s because need
-            // to pass in associated CommitMetadata object.
             List<VersionSaverMessages.VersionData> buffered_version_datas =
                 new ArrayList<VersionSaverMessages.VersionData>();
-            while (file_input_stream.available() != 0)
+
+            for (String filename : filename_list)
             {
-                VersionSaverMessages vsm = VersionSaverMessages.parseDelimitedFrom(
-                    file_input_stream);
-                if (vsm.hasVersionData())
-                    buffered_version_datas.add(vsm.getVersionData());
-                else if (vsm.hasCommitMetadata())
-                {
-                    VersionSaverMessages.CommitMetadata cm_msg =
-                        vsm.getCommitMetadata();
-                    CommitMetadata cm = new CommitMetadata(
-                        cm_msg.getRootCommitLamportTime(),
-                        cm_msg.getRootApplicationUuid(),
-                        cm_msg.getEventName(),cm_msg.getEventUuid());
-                    version_manager.save_commit_metadata(cm);
-                }
-                else if (vsm.hasEndpointGlobalMapping())
-                {
-                    VersionSaverMessages.EndpointGlobalMapping
-                        endpt_global_mapping_msg =
-                        vsm.getEndpointGlobalMapping();
-                    version_manager.save_endpoint_global_mapping(
-                        endpt_global_mapping_msg.getVariableName(),
-                        endpt_global_mapping_msg.getObjectUuid(),
-                        endpt_global_mapping_msg.getEndpointUuid(),
-                        endpt_global_mapping_msg.getEndpointConstructorClassName(),
-                        endpt_global_mapping_msg.getLocalLamportTime());
-                }
-                else if (vsm.hasObjectConstructor())
-                {
-                    VersionSaverMessages.ObjectConstructor obj_constructor_msg =
-                        vsm.getObjectConstructor();
-                    version_manager.save_object_constructor(
-                        obj_constructor_msg.getObjectUuid(),
-                        obj_constructor_msg.getObjContents());
-                }
-                //// DEBUG
-                else
-                {
-                    Util.logger_assert(
-                        "VersionSaverMessage without expected ");
-                }
-                //// END DEBUG
+                buffered_version_datas.addAll(
+                    read_in_single_file(folder_name,filename));
             }
-
-
+            
             // now replay version data messages
             for (VersionSaverMessages.VersionData version_data : 
                      buffered_version_datas)
