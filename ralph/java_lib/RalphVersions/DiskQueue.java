@@ -29,23 +29,16 @@ public class DiskQueue implements Runnable
     //protected FileOutputStream file_output_stream;
     protected BufferedOutputStream buffered_file_output_stream;
 
-    public DiskQueue(int queue_capacity, String filename)
+    public DiskQueue(
+        int queue_capacity, String folder_name, String filename)
+        throws IOException
     {
         queue = new ArrayBlockingQueue<VersionSaverMessages.Builder>(queue_capacity);
-
-        try
-        {
-            file = new File(filename);
-            buffered_file_output_stream =
-                new BufferedOutputStream(
-                    new FileOutputStream(file),
-                    BUFFERED_WRITER_BUFFER_SIZE_BYTES);
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            Util.logger_assert("File error in disk queue.");
-        }
+        file = new File(folder_name,filename);
+        buffered_file_output_stream =
+            new BufferedOutputStream(
+                new FileOutputStream(file),
+                BUFFERED_WRITER_BUFFER_SIZE_BYTES);
 
         Thread t = new Thread(this);
         t.setDaemon(true);

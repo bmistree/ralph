@@ -19,13 +19,17 @@ import ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 public class DiskVersionReplayer implements IVersionReplayer
 {
-    protected final String filename;
+    protected final String folder_name;
+    protected final List<String> filename_list;
+    
     protected boolean has_been_initialized = false;
     protected InMemoryVersionManager version_manager = null;
     
-    public DiskVersionReplayer (String _filename)
+    public DiskVersionReplayer (String _folder_name, int num_files)
     {
-        filename = _filename;
+        folder_name = _folder_name;
+        filename_list =
+            DiskVersionSaver.generate_logging_filenames(num_files);
     }
 
 
@@ -41,7 +45,9 @@ public class DiskVersionReplayer implements IVersionReplayer
         version_manager = new InMemoryVersionManager();
         try
         {
-            File file = new File(filename);
+            // FIXME: for now, just reconstructing from single file.
+            // Hardcoded to read 0 entry.
+            File file = new File(folder_name,filename_list.get(0));
             FileInputStream file_input_stream = new FileInputStream(file);
 
             // have to buffer registering VersionData-s because need

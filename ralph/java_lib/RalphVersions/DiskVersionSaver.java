@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.io.IOException;
+import java.io.File;
 
 import ralph.CommitMetadata;
 import ralph.EndpointConstructorObj;
 import ralph.EnumConstructorObj;
+import ralph.Util;
 
 import ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 import ralph_protobuffs.DeltaProto.Delta;
@@ -29,17 +32,49 @@ public class DiskVersionSaver implements IVersionSaver
         new ArrayList<DiskQueue>();
 
     private final AtomicInteger disk_queue_counter = new AtomicInteger(0);
-    
+
+    /**
+       @param message_buffer_capacity --- Number of messages can
+       buffer in queues before writing to disk.
+
+       @param folder_name --- 
+     */
     public DiskVersionSaver(
-        int message_buffer_capacity, List<String> log_filenames)
+        int message_buffer_capacity, String folder_name,int num_log_files)
     {
-        for (String log_filename : log_filenames)
+        try
         {
-            disk_queue_list.add(
-                new DiskQueue(
-                    message_buffer_capacity,log_filename));
+            File folder = new File(folder_name);
+            if (!folder.exists())
+                folder.mkdir();
+
+            List<String> filenames =
+                DiskVersionSaver.generate_logging_filenames(num_log_files);
+            for (String filename : filenames)
+            {
+                disk_queue_list.add(
+                    new DiskQueue(
+                        message_buffer_capacity,folder_name,filename));
+            }
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert("Exception in logger creating files");
         }
     }
+
+    public static List<String> generate_logging_filenames(int num_log_files)
+    {
+        List<String> to_return = new ArrayList<String>();
+        for (int i = 0; i < num_log_files; ++i)
+        {
+            String filename = Integer.toString(i) + ".bin";
+            to_return.add(filename);
+        }
+        return to_return;
+    }
+    
 
     /**
        @returns null if does not exist.

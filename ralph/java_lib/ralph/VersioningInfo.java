@@ -81,17 +81,13 @@ public class VersioningInfo
                     // How many disk queues should support
                     int num_loggers = Integer.parseInt((String)obj_num_loggers);
 
-                    List<String> saver_filenames= new ArrayList<String>();
-                    for (int i = 0; i < num_loggers; ++i)
-                        saver_filenames.add(Integer.toString(i) + ".bin");
-                    
                     version_saver = new DiskVersionSaver(
-                        buffer_capacity, saver_filenames);
+                        buffer_capacity, folder_name,num_loggers);
 
                     // FIXME: loading version replayer from just a
                     // single log file, instead of all of them.
                     version_replayer =
-                        new DiskVersionReplayer(saver_filenames.get(0));
+                        new DiskVersionReplayer(folder_name, num_loggers);
                 }
                 //// DEBUG
                 else
