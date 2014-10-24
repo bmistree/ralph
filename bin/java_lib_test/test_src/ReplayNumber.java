@@ -104,7 +104,7 @@ public class ReplayNumber
             for (SingleObjectChange change : single_object_change_set)
             {
                 SingleObjectChange.number_incorporate_single_object_change(
-                    change,replayed_atom_num);
+                    change,replayed_atom_num,null);
                 Double replayed_val = replayed_atom_num.get_val(null);
                 Double actual_val = updates_set.get(updates_set_index);
                 
