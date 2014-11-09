@@ -1,9 +1,0 @@
-
-Interface IReadTest
-{
-    read_number() returns Number;
-    read_atomic_number() returns Number;
-    read_other_atomic_number() returns Number;
-    read_map();
-    read_atomic_map();
-}
