@@ -494,7 +494,6 @@ def p_Statement(p):
               | AssignmentStatement SEMI_COLON
               | ForStatement
               | ConditionStatement
-              | ParallelStatement
               | ScopeStatement
               | AtomicallyStatement
     '''
@@ -508,17 +507,6 @@ def p_AtomicallyStatement(p):
     scope_node = p[2]
     p[0] = AtomicallyNode(global_parsing_filename,scope_node)
     
-    
-def p_ParallelStatement(p):
-    '''
-    ParallelStatement : PARALLEL LEFT_PAREN Expression COMMA Expression RIGHT_PAREN 
-    '''
-    line_number = p.lineno(1)
-    to_iter_over_node = p[3]
-    lambda_node = p[5]
-    p[0] = ParallelNode(
-        global_parsing_filename,to_iter_over_node,lambda_node,line_number)
-
 
 def p_LenExpression(p):
     '''
