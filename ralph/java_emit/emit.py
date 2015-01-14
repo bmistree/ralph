@@ -675,7 +675,7 @@ def emit_external_method_body(
         # check if should create the root active event as an active
         # event with super priority.
         method_body_text += '''
-ActiveEvent active_event = null;
+NonAtomicActiveEvent active_event = null;
 if (%(super_argument_flag)s == IsSuperFlag.SUPER)
     active_event = _act_event_map.create_super_root_non_atomic_event(
         this,"%(event_entry_point_name)s");
