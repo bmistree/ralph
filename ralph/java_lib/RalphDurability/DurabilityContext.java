@@ -8,7 +8,7 @@ import ralph_protobuffs.DurabilityProto.Durability;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.UtilProto.UUID;
-
+import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
 
 public class DurabilityContext
 {
@@ -38,8 +38,21 @@ public class DurabilityContext
         
         DurabilityPrepare.Builder prepare_msg = DurabilityPrepare.newBuilder();
         prepare_msg.setEventUuid(uuid_builder);
-        for (PartnerRequestSequenceBlock req : rpc_args)
-            prepare_msg.addRpcArgs(req);
+
+        for (int i = 0; i < rpc_args.size(); ++i)
+        {
+            PartnerRequestSequenceBlock prsb = rpc_args.get(i);
+            String endpt_uuid = endpoint_uuid_received_rpc_on.get(i);
+            UUID.Builder endpt_uuid_builder = UUID.newBuilder();
+            endpt_uuid_builder.setData(endpt_uuid);
+                        
+            PairedPartnerRequestSequenceEndpointUUID.Builder rpc_arg_tuple =
+                PairedPartnerRequestSequenceEndpointUUID.newBuilder();
+            rpc_arg_tuple.setRpcArgs(prsb);
+            rpc_arg_tuple.setEndpointUuid(endpt_uuid_builder);
+
+            prepare_msg.addRpcArgs(rpc_arg_tuple);
+        }
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setPrepare(prepare_msg);

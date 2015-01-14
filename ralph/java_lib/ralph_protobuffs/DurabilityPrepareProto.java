@@ -25,29 +25,29 @@ public final class DurabilityPrepareProto {
      */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getEventUuidOrBuilder();
 
-    // repeated .PartnerRequestSequenceBlock rpc_args = 2;
+    // repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> 
+    java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> 
         getRpcArgsList();
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs(int index);
+    ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID getRpcArgs(int index);
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
     int getRpcArgsCount();
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+    java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder> 
         getRpcArgsOrBuilderList();
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder(
+    ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder getRpcArgsOrBuilder(
         int index);
   }
   /**
@@ -116,10 +116,10 @@ public final class DurabilityPrepareProto {
             }
             case 18: {
               if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                rpcArgs_ = new java.util.ArrayList<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock>();
+                rpcArgs_ = new java.util.ArrayList<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID>();
                 mutable_bitField0_ |= 0x00000002;
               }
-              rpcArgs_.add(input.readMessage(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.PARSER, extensionRegistry));
+              rpcArgs_.add(input.readMessage(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.PARSER, extensionRegistry));
               break;
             }
           }
@@ -164,6 +164,737 @@ public final class DurabilityPrepareProto {
       return PARSER;
     }
 
+    public interface PairedPartnerRequestSequenceEndpointUUIDOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required .PartnerRequestSequenceBlock rpc_args = 1;
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      boolean hasRpcArgs();
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs();
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder();
+
+      // required .UUID endpoint_uuid = 2;
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      boolean hasEndpointUuid();
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      ralph_protobuffs.UtilProto.UUID getEndpointUuid();
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder();
+    }
+    /**
+     * Protobuf type {@code DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID}
+     */
+    public static final class PairedPartnerRequestSequenceEndpointUUID extends
+        com.google.protobuf.GeneratedMessage
+        implements PairedPartnerRequestSequenceEndpointUUIDOrBuilder {
+      // Use PairedPartnerRequestSequenceEndpointUUID.newBuilder() to construct.
+      private PairedPartnerRequestSequenceEndpointUUID(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private PairedPartnerRequestSequenceEndpointUUID(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final PairedPartnerRequestSequenceEndpointUUID defaultInstance;
+      public static PairedPartnerRequestSequenceEndpointUUID getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public PairedPartnerRequestSequenceEndpointUUID getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private PairedPartnerRequestSequenceEndpointUUID(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                  subBuilder = rpcArgs_.toBuilder();
+                }
+                rpcArgs_ = input.readMessage(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(rpcArgs_);
+                  rpcArgs_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000001;
+                break;
+              }
+              case 18: {
+                ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                  subBuilder = endpointUuid_.toBuilder();
+                }
+                endpointUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(endpointUuid_);
+                  endpointUuid_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000002;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.class, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<PairedPartnerRequestSequenceEndpointUUID> PARSER =
+          new com.google.protobuf.AbstractParser<PairedPartnerRequestSequenceEndpointUUID>() {
+        public PairedPartnerRequestSequenceEndpointUUID parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new PairedPartnerRequestSequenceEndpointUUID(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<PairedPartnerRequestSequenceEndpointUUID> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required .PartnerRequestSequenceBlock rpc_args = 1;
+      public static final int RPC_ARGS_FIELD_NUMBER = 1;
+      private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock rpcArgs_;
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      public boolean hasRpcArgs() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs() {
+        return rpcArgs_;
+      }
+      /**
+       * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+       */
+      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder() {
+        return rpcArgs_;
+      }
+
+      // required .UUID endpoint_uuid = 2;
+      public static final int ENDPOINT_UUID_FIELD_NUMBER = 2;
+      private ralph_protobuffs.UtilProto.UUID endpointUuid_;
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      public boolean hasEndpointUuid() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUID getEndpointUuid() {
+        return endpointUuid_;
+      }
+      /**
+       * <code>required .UUID endpoint_uuid = 2;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder() {
+        return endpointUuid_;
+      }
+
+      private void initFields() {
+        rpcArgs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+        endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasRpcArgs()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasEndpointUuid()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!getRpcArgs().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!getEndpointUuid().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeMessage(1, rpcArgs_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeMessage(2, endpointUuid_);
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, rpcArgs_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(2, endpointUuid_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.class, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder.class);
+        }
+
+        // Construct using ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getRpcArgsFieldBuilder();
+            getEndpointUuidFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          if (rpcArgsBuilder_ == null) {
+            rpcArgs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+          } else {
+            rpcArgsBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          if (endpointUuidBuilder_ == null) {
+            endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          } else {
+            endpointUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor;
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID getDefaultInstanceForType() {
+          return ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.getDefaultInstance();
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID build() {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID buildPartial() {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID result = new ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          if (rpcArgsBuilder_ == null) {
+            result.rpcArgs_ = rpcArgs_;
+          } else {
+            result.rpcArgs_ = rpcArgsBuilder_.build();
+          }
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          if (endpointUuidBuilder_ == null) {
+            result.endpointUuid_ = endpointUuid_;
+          } else {
+            result.endpointUuid_ = endpointUuidBuilder_.build();
+          }
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID) {
+            return mergeFrom((ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID other) {
+          if (other == ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.getDefaultInstance()) return this;
+          if (other.hasRpcArgs()) {
+            mergeRpcArgs(other.getRpcArgs());
+          }
+          if (other.hasEndpointUuid()) {
+            mergeEndpointUuid(other.getEndpointUuid());
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasRpcArgs()) {
+            
+            return false;
+          }
+          if (!hasEndpointUuid()) {
+            
+            return false;
+          }
+          if (!getRpcArgs().isInitialized()) {
+            
+            return false;
+          }
+          if (!getEndpointUuid().isInitialized()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required .PartnerRequestSequenceBlock rpc_args = 1;
+        private ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock rpcArgs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> rpcArgsBuilder_;
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public boolean hasRpcArgs() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs() {
+          if (rpcArgsBuilder_ == null) {
+            return rpcArgs_;
+          } else {
+            return rpcArgsBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public Builder setRpcArgs(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+          if (rpcArgsBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            rpcArgs_ = value;
+            onChanged();
+          } else {
+            rpcArgsBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public Builder setRpcArgs(
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
+          if (rpcArgsBuilder_ == null) {
+            rpcArgs_ = builderForValue.build();
+            onChanged();
+          } else {
+            rpcArgsBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public Builder mergeRpcArgs(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+          if (rpcArgsBuilder_ == null) {
+            if (((bitField0_ & 0x00000001) == 0x00000001) &&
+                rpcArgs_ != ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance()) {
+              rpcArgs_ =
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.newBuilder(rpcArgs_).mergeFrom(value).buildPartial();
+            } else {
+              rpcArgs_ = value;
+            }
+            onChanged();
+          } else {
+            rpcArgsBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public Builder clearRpcArgs() {
+          if (rpcArgsBuilder_ == null) {
+            rpcArgs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
+            onChanged();
+          } else {
+            rpcArgsBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          return this;
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder getRpcArgsBuilder() {
+          bitField0_ |= 0x00000001;
+          onChanged();
+          return getRpcArgsFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder() {
+          if (rpcArgsBuilder_ != null) {
+            return rpcArgsBuilder_.getMessageOrBuilder();
+          } else {
+            return rpcArgs_;
+          }
+        }
+        /**
+         * <code>required .PartnerRequestSequenceBlock rpc_args = 1;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+            getRpcArgsFieldBuilder() {
+          if (rpcArgsBuilder_ == null) {
+            rpcArgsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder>(
+                    rpcArgs_,
+                    getParentForChildren(),
+                    isClean());
+            rpcArgs_ = null;
+          }
+          return rpcArgsBuilder_;
+        }
+
+        // required .UUID endpoint_uuid = 2;
+        private ralph_protobuffs.UtilProto.UUID endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> endpointUuidBuilder_;
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public boolean hasEndpointUuid() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUID getEndpointUuid() {
+          if (endpointUuidBuilder_ == null) {
+            return endpointUuid_;
+          } else {
+            return endpointUuidBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public Builder setEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (endpointUuidBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            endpointUuid_ = value;
+            onChanged();
+          } else {
+            endpointUuidBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public Builder setEndpointUuid(
+            ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (endpointUuidBuilder_ == null) {
+            endpointUuid_ = builderForValue.build();
+            onChanged();
+          } else {
+            endpointUuidBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public Builder mergeEndpointUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (endpointUuidBuilder_ == null) {
+            if (((bitField0_ & 0x00000002) == 0x00000002) &&
+                endpointUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+              endpointUuid_ =
+                ralph_protobuffs.UtilProto.UUID.newBuilder(endpointUuid_).mergeFrom(value).buildPartial();
+            } else {
+              endpointUuid_ = value;
+            }
+            onChanged();
+          } else {
+            endpointUuidBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public Builder clearEndpointUuid() {
+          if (endpointUuidBuilder_ == null) {
+            endpointUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+            onChanged();
+          } else {
+            endpointUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUID.Builder getEndpointUuidBuilder() {
+          bitField0_ |= 0x00000002;
+          onChanged();
+          return getEndpointUuidFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointUuidOrBuilder() {
+          if (endpointUuidBuilder_ != null) {
+            return endpointUuidBuilder_.getMessageOrBuilder();
+          } else {
+            return endpointUuid_;
+          }
+        }
+        /**
+         * <code>required .UUID endpoint_uuid = 2;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+            getEndpointUuidFieldBuilder() {
+          if (endpointUuidBuilder_ == null) {
+            endpointUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                    endpointUuid_,
+                    getParentForChildren(),
+                    isClean());
+            endpointUuid_ = null;
+          }
+          return endpointUuidBuilder_;
+        }
+
+        // @@protoc_insertion_point(builder_scope:DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID)
+      }
+
+      static {
+        defaultInstance = new PairedPartnerRequestSequenceEndpointUUID(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID)
+    }
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
@@ -187,38 +918,38 @@ public final class DurabilityPrepareProto {
       return eventUuid_;
     }
 
-    // repeated .PartnerRequestSequenceBlock rpc_args = 2;
+    // repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;
     public static final int RPC_ARGS_FIELD_NUMBER = 2;
-    private java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> rpcArgs_;
+    private java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> rpcArgs_;
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> getRpcArgsList() {
+    public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> getRpcArgsList() {
       return rpcArgs_;
     }
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    public java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+    public java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder> 
         getRpcArgsOrBuilderList() {
       return rpcArgs_;
     }
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
     public int getRpcArgsCount() {
       return rpcArgs_.size();
     }
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs(int index) {
+    public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID getRpcArgs(int index) {
       return rpcArgs_.get(index);
     }
     /**
-     * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+     * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
      */
-    public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder(
+    public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder getRpcArgsOrBuilder(
         int index) {
       return rpcArgs_.get(index);
     }
@@ -654,23 +1385,23 @@ public final class DurabilityPrepareProto {
         return eventUuidBuilder_;
       }
 
-      // repeated .PartnerRequestSequenceBlock rpc_args = 2;
-      private java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> rpcArgs_ =
+      // repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;
+      private java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> rpcArgs_ =
         java.util.Collections.emptyList();
       private void ensureRpcArgsIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          rpcArgs_ = new java.util.ArrayList<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock>(rpcArgs_);
+          rpcArgs_ = new java.util.ArrayList<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID>(rpcArgs_);
           bitField0_ |= 0x00000002;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> rpcArgsBuilder_;
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder> rpcArgsBuilder_;
 
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> getRpcArgsList() {
+      public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> getRpcArgsList() {
         if (rpcArgsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(rpcArgs_);
         } else {
@@ -678,7 +1409,7 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public int getRpcArgsCount() {
         if (rpcArgsBuilder_ == null) {
@@ -688,9 +1419,9 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock getRpcArgs(int index) {
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID getRpcArgs(int index) {
         if (rpcArgsBuilder_ == null) {
           return rpcArgs_.get(index);
         } else {
@@ -698,10 +1429,10 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder setRpcArgs(
-          int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID value) {
         if (rpcArgsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -715,10 +1446,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder setRpcArgs(
-          int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder builderForValue) {
         if (rpcArgsBuilder_ == null) {
           ensureRpcArgsIsMutable();
           rpcArgs_.set(index, builderForValue.build());
@@ -729,9 +1460,9 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public Builder addRpcArgs(ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+      public Builder addRpcArgs(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID value) {
         if (rpcArgsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -745,10 +1476,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder addRpcArgs(
-          int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock value) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID value) {
         if (rpcArgsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -762,10 +1493,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder addRpcArgs(
-          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder builderForValue) {
         if (rpcArgsBuilder_ == null) {
           ensureRpcArgsIsMutable();
           rpcArgs_.add(builderForValue.build());
@@ -776,10 +1507,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder addRpcArgs(
-          int index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder builderForValue) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder builderForValue) {
         if (rpcArgsBuilder_ == null) {
           ensureRpcArgsIsMutable();
           rpcArgs_.add(index, builderForValue.build());
@@ -790,10 +1521,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder addAllRpcArgs(
-          java.lang.Iterable<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock> values) {
+          java.lang.Iterable<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID> values) {
         if (rpcArgsBuilder_ == null) {
           ensureRpcArgsIsMutable();
           super.addAll(values, rpcArgs_);
@@ -804,7 +1535,7 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder clearRpcArgs() {
         if (rpcArgsBuilder_ == null) {
@@ -817,7 +1548,7 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
       public Builder removeRpcArgs(int index) {
         if (rpcArgsBuilder_ == null) {
@@ -830,16 +1561,16 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder getRpcArgsBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder getRpcArgsBuilder(
           int index) {
         return getRpcArgsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder getRpcArgsOrBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder getRpcArgsOrBuilder(
           int index) {
         if (rpcArgsBuilder_ == null) {
           return rpcArgs_.get(index);  } else {
@@ -847,9 +1578,9 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public java.util.List<? extends ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder> 
            getRpcArgsOrBuilderList() {
         if (rpcArgsBuilder_ != null) {
           return rpcArgsBuilder_.getMessageOrBuilderList();
@@ -858,33 +1589,33 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder addRpcArgsBuilder() {
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder addRpcArgsBuilder() {
         return getRpcArgsFieldBuilder().addBuilder(
-            ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance());
+            ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.getDefaultInstance());
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder addRpcArgsBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder addRpcArgsBuilder(
           int index) {
         return getRpcArgsFieldBuilder().addBuilder(
-            index, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance());
+            index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.getDefaultInstance());
       }
       /**
-       * <code>repeated .PartnerRequestSequenceBlock rpc_args = 2;</code>
+       * <code>repeated .DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;</code>
        */
-      public java.util.List<ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder> 
+      public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder> 
            getRpcArgsBuilderList() {
         return getRpcArgsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder> 
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder> 
           getRpcArgsFieldBuilder() {
         if (rpcArgsBuilder_ == null) {
           rpcArgsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Builder, ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlockOrBuilder>(
+              ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder>(
                   rpcArgs_,
                   ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
@@ -910,6 +1641,11 @@ public final class DurabilityPrepareProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_DurabilityPrepare_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -920,11 +1656,15 @@ public final class DurabilityPrepareProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027durabilityPrepare.proto\032\nutil.proto\032!p" +
-      "artnerRequestSequenceBlock.proto\"^\n\021Dura" +
-      "bilityPrepare\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUID" +
-      "\022.\n\010rpc_args\030\002 \003(\0132\034.PartnerRequestSeque" +
-      "nceBlockB*\n\020ralph_protobuffsB\026Durability" +
-      "PrepareProto"
+      "artnerRequestSequenceBlock.proto\"\367\001\n\021Dur" +
+      "abilityPrepare\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUI" +
+      "D\022M\n\010rpc_args\030\002 \003(\0132;.DurabilityPrepare." +
+      "PairedPartnerRequestSequenceEndpointUUID" +
+      "\032x\n(PairedPartnerRequestSequenceEndpoint" +
+      "UUID\022.\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestS" +
+      "equenceBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UU" +
+      "IDB*\n\020ralph_protobuffsB\026DurabilityPrepar" +
+      "eProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -937,6 +1677,12 @@ public final class DurabilityPrepareProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_DurabilityPrepare_descriptor,
               new java.lang.String[] { "EventUuid", "RpcArgs", });
+          internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor =
+            internal_static_DurabilityPrepare_descriptor.getNestedTypes().get(0);
+          internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor,
+              new java.lang.String[] { "RpcArgs", "EndpointUuid", });
           return null;
         }
       };

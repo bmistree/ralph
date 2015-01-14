@@ -6,6 +6,12 @@ import "partnerRequestSequenceBlock.proto";
 
 message DurabilityPrepare
 {
+    message PairedPartnerRequestSequenceEndpointUUID
+    {
+        required PartnerRequestSequenceBlock rpc_args = 1;
+        required UUID endpoint_uuid = 2;
+    }
+    
     required UUID event_uuid = 1;
-    repeated PartnerRequestSequenceBlock rpc_args = 2;
+    repeated PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;
 }
