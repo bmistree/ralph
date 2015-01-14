@@ -47,19 +47,16 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     }
     
     @Override
-    public void prepare_operation(
-        String event_uuid, List<PartnerRequestSequenceBlock> rpc_args)
+    public void prepare_operation(DurabilityContext dc)
     {
-        Durability durability_msg = DurabilityUtil.prepare_proto_buf(
-            event_uuid,rpc_args);
+        Durability durability_msg = dc.prepare_proto_buf();
         write_durability_msg(durability_msg);
     }
 
     @Override
-    public void complete_operation(String event_uuid, boolean succeeded)
+    public void complete_operation(DurabilityContext dc, boolean succeeded)
     {
-        Durability durability_msg = DurabilityUtil.complete_proto_buf(
-            event_uuid,succeeded);
+        Durability durability_msg = dc.complete_proto_buf(succeeded);
         write_durability_msg(durability_msg);
     }
     

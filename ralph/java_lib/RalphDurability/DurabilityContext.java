@@ -1,6 +1,7 @@
 package RalphDurability;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.DurabilityProto.Durability;
@@ -8,10 +9,29 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.UtilProto.UUID;
 
-public class DurabilityUtil
+
+public class DurabilityContext
 {
-    public static Durability prepare_proto_buf (
-        String event_uuid, List<PartnerRequestSequenceBlock> rpc_args)
+    public final String event_uuid;
+    private final List<PartnerRequestSequenceBlock> rpc_args;
+    // need to know which endpoint handled the rpc request.
+    private final List<String> endpoint_uuid_received_rpc_on;
+    
+    public DurabilityContext(String event_uuid)
+    {
+        this.event_uuid = event_uuid;
+        this.rpc_args = new ArrayList<PartnerRequestSequenceBlock>();
+        this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
+    }
+
+    public void add_rpc_arg(
+        PartnerRequestSequenceBlock arg, String endpoint_uuid)
+    {
+        rpc_args.add(arg);
+        endpoint_uuid_received_rpc_on.add(endpoint_uuid);
+    }
+
+    public Durability prepare_proto_buf()
     {
         UUID.Builder uuid_builder = UUID.newBuilder();
         uuid_builder.setData(event_uuid);
@@ -26,8 +46,8 @@ public class DurabilityUtil
         return to_return.build();
     }
 
-    public static Durability complete_proto_buf (
-        String event_uuid, boolean succeeded)
+
+    public Durability complete_proto_buf(boolean succeeded)
     {
         UUID.Builder uuid_builder = UUID.newBuilder();
         uuid_builder.setData(event_uuid);
