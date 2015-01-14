@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
+import RalphDurability.DurabilityContext;
 import RalphExceptions.StoppedException;
 
 
@@ -72,12 +73,12 @@ public class ActiveEventMap
 
     public AtomicActiveEvent create_root_atomic_event(
         ActiveEvent event_parent, Endpoint root_endpoint,
-        String event_entry_point_name)
+        String event_entry_point_name,DurabilityContext durability_context)
         throws RalphExceptions.StoppedException
     {
         return (AtomicActiveEvent)create_root_event(
             true,event_parent,false,root_endpoint,
-            event_entry_point_name);
+            event_entry_point_name,durability_context);
     }
 
     public NonAtomicActiveEvent create_root_non_atomic_event(
@@ -85,7 +86,7 @@ public class ActiveEventMap
         throws RalphExceptions.StoppedException
     {
         return (NonAtomicActiveEvent)create_root_event(
-            false,null,false,root_endpoint,event_entry_point_name);
+            false,null,false,root_endpoint,event_entry_point_name,null);
     }
     
     /**
@@ -98,7 +99,7 @@ public class ActiveEventMap
         throws RalphExceptions.StoppedException
     {
         return (NonAtomicActiveEvent)create_root_event(
-            false,null,true,root_endpoint, event_entry_point_name);
+            false,null,true,root_endpoint, event_entry_point_name,null);
     }
 
 
@@ -117,7 +118,8 @@ public class ActiveEventMap
      */
     private ActiveEvent create_root_event(
         boolean atomic, ActiveEvent event_parent, boolean super_priority,
-        Endpoint root_endpoint, String event_entry_point_name)
+        Endpoint root_endpoint, String event_entry_point_name,
+        DurabilityContext durability_context)
         throws RalphExceptions.StoppedException
     {
         // DEBUG
@@ -131,7 +133,8 @@ public class ActiveEventMap
         {
             root_event =
                 boosted_manager.create_root_atomic_event(
-                    event_parent,root_endpoint,event_entry_point_name);
+                    event_parent,root_endpoint,event_entry_point_name,
+                    durability_context);
         }
         else
         {
@@ -223,8 +226,15 @@ public class ActiveEventMap
                 ActiveEvent new_event = null;
                 if (atomic)
                 {
+                    DurabilityContext durability_context = null;
+                    if (DurabilityInfo.instance.durability_saver != null)
+                    {
+                        durability_context =
+                            new DurabilityContext(pep.get_uuid());
+                    }
                     new_event = new AtomicActiveEvent(
-                        pep,local_endpoint._thread_pool,this,null,ralph_globals);
+                        pep,local_endpoint._thread_pool,this,null,ralph_globals,
+                        durability_context);
                 }
                 else
                     new_event = new NonAtomicActiveEvent(pep,this,ralph_globals);

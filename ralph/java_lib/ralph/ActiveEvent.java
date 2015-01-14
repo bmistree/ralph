@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import RalphCallResults.MessageCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+
+import RalphDurability.DurabilityContext;
+
 import RalphExceptions.StoppedException;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -17,6 +20,11 @@ public abstract class ActiveEvent
     public final String uuid;
     public final EventParent event_parent;
     protected final ThreadPool thread_pool;
+
+    /**
+       Can be null, eg., if durability is turned off.
+     */
+    protected final DurabilityContext durability_context;
     
     /**
        FIXME.
@@ -44,17 +52,37 @@ public abstract class ActiveEvent
     {
         this(
             _event_parent.get_uuid(),_event_parent,_thread_pool,
-            _ralph_globals);
+            _ralph_globals,create_new_durability_context(_event_parent.get_uuid()));
     }
+
+    public ActiveEvent(
+        EventParent _event_parent, ThreadPool _thread_pool,
+        RalphGlobals _ralph_globals, DurabilityContext _durability_context)
+    {
+        this(
+            _event_parent.get_uuid(),_event_parent,_thread_pool,
+            _ralph_globals,_durability_context);
+    }
+    
     public ActiveEvent(
         String _uuid, EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals)
+        RalphGlobals _ralph_globals, DurabilityContext _durability_context)
     {
         uuid = _uuid;
         event_parent = _event_parent;
         thread_pool = _thread_pool;
         ralph_globals = _ralph_globals;
+        durability_context = _durability_context;
     }
+
+    private static DurabilityContext create_new_durability_context(
+        String event_uuid)
+    {
+        if (DurabilityInfo.instance.durability_saver != null)
+            return new DurabilityContext(event_uuid);
+        return null;
+    }
+    
 
     /**
        FIXME: See note above ralph_globals.

@@ -5,6 +5,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import RalphServiceActions.ServiceAction;
 import RalphServiceActions.PromoteBoostedAction;
 
+import RalphDurability.DurabilityContext;
+
+
 public class BoostedManager
 {
     private LamportClock clock = null;
@@ -55,10 +58,11 @@ public class BoostedManager
 
     public ActiveEvent create_root_atomic_event(
         ActiveEvent atomic_parent, Endpoint root_endpoint,
-        String event_entry_point_name)
+        String event_entry_point_name,DurabilityContext durability_context)
     {
         return create_root_event(
-            true,atomic_parent,false,root_endpoint,event_entry_point_name);
+            true,atomic_parent,false,root_endpoint,event_entry_point_name,
+            durability_context);
     }
 
     /**
@@ -70,7 +74,8 @@ public class BoostedManager
         String event_entry_point_name)
     {
         return create_root_event(
-            false,null,super_priority,root_endpoint,event_entry_point_name);
+            false,null,super_priority,root_endpoint,event_entry_point_name,
+            null);
     }
 
     private void _lock()
@@ -96,7 +101,8 @@ public class BoostedManager
      */
     private ActiveEvent create_root_event(
         boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
-        Endpoint requester_endpoint, String event_entry_point_name)
+        Endpoint requester_endpoint, String event_entry_point_name,
+        DurabilityContext durability_context)
     {
         // DEBUG
         if (super_priority && atomic)
@@ -114,11 +120,19 @@ public class BoostedManager
         ActiveEvent root_event = null;
         if (atomic)
         {
+            DurabilityContext new_durability_context = null;
+            if (durability_context != null)
+            {
+                new_durability_context =
+                    durability_context.clone(rep.get_uuid());
+            }
+            
             root_event =
                 new AtomicActiveEvent(
                     rep,
                     act_event_map.local_endpoint._thread_pool,
-                    act_event_map,atomic_parent,ralph_globals);
+                    act_event_map,atomic_parent,ralph_globals,
+                    new_durability_context);
         }
         else
         {

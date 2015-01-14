@@ -22,6 +22,8 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 import RalphExceptions.StoppedException;
 
+import RalphDurability.DurabilityContext;
+
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
@@ -348,7 +350,6 @@ public class AtomicActiveEvent extends ActiveEvent
 
     */
     private boolean _network_failure = false;
-
     
     /**
        @param {ActiveEvent} _to_restore_from_atomic --- We frequently
@@ -356,13 +357,18 @@ public class AtomicActiveEvent extends ActiveEvent
        be able to access the parente event that created it after the
        atomic event has completed.  Can do so using
        to_restore_from_atomic.
+
+       @param _durability_context --- The durability context that this
+       atomic active event should use.  (Ie., if inherited from
+       NonAtomicEvent, should already be cloned.)
      */
     public AtomicActiveEvent(
         EventParent _event_parent, ThreadPool _thread_pool,
         ActiveEventMap _event_map,
-        ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals)
+        ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals,
+        DurabilityContext _durability_context)
     {
-        super(_event_parent,_thread_pool,_ralph_globals);
+        super(_event_parent,_thread_pool,_ralph_globals,_durability_context);
         event_map = _event_map;
         to_restore_from_atomic = _to_restore_from_atomic;
     }

@@ -11,6 +11,8 @@ import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
+import RalphDurability.DurabilityContext;
+
 import RalphCallResults.MessageCallResultObject;
 
 import RalphServiceActions.ServiceAction;
@@ -53,7 +55,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         super(_event_parent,null,_ralph_globals);
         event_map = _event_map;
     }
-
+    
     /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
      read or a write on a Waldo object, if this event has not
@@ -112,7 +114,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         atomic_child_lock();
         atomic_child = event_map.create_root_atomic_event(
             this,event_parent.local_endpoint,
-            event_parent.event_entry_point_name);
+            event_parent.event_entry_point_name,durability_context);
         atomic_child_unlock();
         return atomic_child;
     }
