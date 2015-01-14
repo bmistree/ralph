@@ -1,0 +1,11 @@
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "DurabilityPrepareProto";
+
+import "util.proto";
+import "partnerRequestSequenceBlock.proto";
+
+message DurabilityPrepare
+{
+    required UUID event_uuid = 1;
+    repeated PartnerRequestSequenceBlock rpc_args = 2;
+}

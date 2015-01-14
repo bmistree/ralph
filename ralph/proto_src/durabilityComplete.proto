@@ -1,0 +1,10 @@
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "DurabilityCompleteProto";
+
+import "util.proto";
+
+message DurabilityComplete
+{
+    required UUID event_uuid = 1;
+    required bool succeeded = 2;
+}

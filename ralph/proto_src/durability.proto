@@ -1,0 +1,11 @@
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "DurabilityProto";
+
+import "durabilityPrepare.proto";
+import "durabilityComplete.proto";
+
+message Durability
+{
+    optional DurabilityPrepare prepare = 1;
+    optional DurabilityComplete complete = 2;
+}
