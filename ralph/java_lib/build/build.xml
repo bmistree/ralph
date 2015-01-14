@@ -22,6 +22,7 @@
   <property name="ralph_call_results.dir" location="${real_dir}/../RalphCallResults/"/>
   <property name="ralph_service_actions.dir" location="${real_dir}/../RalphServiceActions/"/>
   <property name="ralph_extended_dir" location="${real_dir}/../RalphExtended/"/>
+  <property name="ralph_durability_dir" location="${real_dir}/../RalphDurability/"/>
   <property name="ralph_service_connection_listener_dir" location="${real_dir}/../RalphServiceConnectionListener/"/>
   <property name="ralph_versions_dir" location="${real_dir}/../RalphVersions/"/>
 
@@ -79,7 +80,7 @@
     <javac
         srcdir="${ralph.dir}:${connections.dir}:${ralph_call_results.dir}:${ralph_service_actions.dir}:
                 ${atomic_wrappers.dir}:${data_wrappers.dir}:${ralph_extended_dir}:
-                ${ralph_service_connection_listener_dir}:${ralph_versions_dir}"
+                ${ralph_service_connection_listener_dir}:${ralph_versions_dir}:${ralph_durability_dir}"
         destdir="${build.dir}"
         classpath="${build.dir}/ralph_protobuffs/*.class:
                    ${protobuf_path}"
