@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import RalphDurability.IDurabilitySaver;
+import RalphDurability.DiskDurabilitySaver;
 
 
 /**
@@ -47,11 +48,7 @@ public class DurabilityInfo
                     // filename to use to save deltas to and read
                     // deltas from on replay.
                     String log_filename = (String) obj_log_filename;
-
-                    // FIXME: actually create a disk-based durability
-                    // saver.
-                    durability_saver = null;
-                    
+                    durability_saver = new DiskDurabilitySaver(log_filename);
                 }
                 //// DEBUG
                 else
