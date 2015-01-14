@@ -1269,7 +1269,7 @@ public class AtomicActiveEvent extends ActiveEvent
         _unlock();
         return partner_call_requested;
     }
-
+    
     public String get_priority()
     {
         return event_parent.get_priority();
@@ -1447,7 +1447,7 @@ public class AtomicActiveEvent extends ActiveEvent
      * @param msg
      */
     @Override
-    public void recv_partner_sequence_call_msg(
+    protected void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException

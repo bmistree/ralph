@@ -298,7 +298,7 @@ public abstract class ActiveEvent
         Endpoint endpoint, ExecutingEventContext ctx, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,List<RalphObject>args,RalphObject result);
-    
+
 
     public abstract String get_priority();
 
@@ -361,12 +361,24 @@ public abstract class ActiveEvent
         boolean skip_partner, boolean already_backed_out,
         boolean stop_request);
     
-    public abstract void recv_partner_sequence_call_msg(
+    public void recv_partner_sequence_call_msg(
+        Endpoint endpt_recvd_on,
+        PartnerRequestSequenceBlock msg)
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
+    {
+        if (durability_context != null)
+            durability_context.add_rpc_arg(msg,endpt_recvd_on.uuid());
+        internal_recv_partner_sequence_call_msg(endpt_recvd_on,msg);
+    }
+
+    protected abstract void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException;
-
+    
+    
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
         String msg_originator_host_uuid);

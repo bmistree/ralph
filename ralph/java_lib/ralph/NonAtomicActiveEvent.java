@@ -577,7 +577,8 @@ public class NonAtomicActiveEvent extends ActiveEvent
         return to_return;
     }
 
-    public void recv_partner_sequence_call_msg(
+    @Override
+    protected void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException,
         StoppedException
