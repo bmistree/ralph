@@ -57,6 +57,19 @@ public class NonAtomicActiveEvent extends ActiveEvent
     }
     
     /**
+       If we are logging for durability, when we first enter a call,
+       we log the call, the endpoint it was made on, and the arguments
+       to it.  The first and the third of these are contained in prsb,
+       the second is contained in endpoint_uuid.
+     */
+    public void durability_entry_call(
+        PartnerRequestSequenceBlock prsb,String endpoint_uuid)
+    {
+        if (durability_context != null)
+            durability_context.add_rpc_arg(prsb,endpoint_uuid);
+    }
+    
+    /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
      read or a write on a Waldo object, if this event has not
      previously performed a read or write on that object, then we
