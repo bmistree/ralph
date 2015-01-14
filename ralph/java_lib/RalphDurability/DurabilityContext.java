@@ -24,6 +24,26 @@ public class DurabilityContext
         this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
     }
 
+    /**
+       Makes a deep copy of the state of the current durability
+       context with a different event_uuid (new_event_uuid).  Basic
+       idea is that from a non-atomic event, when we encounter an
+       atomic event, we want to copy its durability context.  We only
+       do stable logging when we complete atomic events.
+     */
+    public DurabilityContext clone(String new_event_uuid)
+    {
+        DurabilityContext to_return = new DurabilityContext(new_event_uuid);
+
+        for (int i = 0; i < rpc_args.size(); ++i)
+        {
+            PartnerRequestSequenceBlock rpc_arg = rpc_args.get(i);
+            String endpoint_uuid = endpoint_uuid_received_rpc_on.get(i);
+            to_return.add_rpc_arg(rpc_arg,endpoint_uuid);
+        }
+        return to_return;
+    }
+    
     public void add_rpc_arg(
         PartnerRequestSequenceBlock arg, String endpoint_uuid)
     {
