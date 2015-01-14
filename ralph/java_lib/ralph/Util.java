@@ -63,6 +63,7 @@ public class Util
     {
         System.out.println("Compiler error: " + to_assert);
         assert false;
+        System.exit(-1);
     }
 	
     static public void logger_warn(String to_warn)
