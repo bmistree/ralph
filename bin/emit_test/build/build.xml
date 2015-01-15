@@ -31,6 +31,10 @@
   <property
       name="disk_log_config"
       location="${lib_build_path}/disk_log_config/config.properties"/>
+
+  <property
+      name="disk_durability_config"
+      location="${lib_build_path}/disk_durability_config/config.properties"/>
   
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
@@ -650,7 +654,7 @@
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
-        jar_ReplayPartnerStructElement">
+        jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -665,6 +669,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_DurabilitySetterGetter"
+      depends="iface_basic_ralph,basic_ralph">
+  </target>
+  
   <target
       name="ralph_VersionedIFace"
       depends="iface_basic_ralph,basic_ralph,versioned_iface">
@@ -1122,6 +1131,7 @@
     </antcall>
   </target>
 
+  
   <target name="harness_ReplayPartnerNumberChange">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReplayPartnerNumber.java"/>
@@ -1137,6 +1147,12 @@
   <target name="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedSetterGetter.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_DurabilitySetterGetter">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="DurabilitySetterGetter.java"/>
     </antcall>
   </target>
   
@@ -1571,6 +1587,20 @@
     </antcall>
   </target>
 
+  <property
+      name="disk_durability_setter_getter_jar"
+      value="disk_durability_setter_getter.jar"/>
+  <target
+      name="jar_DiskDurabilitySetterGetter"
+      depends="ralph_DurabilitySetterGetter,ralph_to_byte_code,harness_DurabilitySetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilitySetterGetter"/>
+      <param name="dest_jar" value="${disk_durability_setter_getter_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
+
+  
   <property
       name="versioned_enum_jar"
       value="versioned_enum.jar"/>
