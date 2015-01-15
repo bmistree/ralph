@@ -1,0 +1,63 @@
+alias Interface ISetterGetter as 'IFaceBasicRalphJava.ISetterGetter';
+
+Service AtomicSetterGetter implements Interface ISetterGetter
+{
+    TVar Number internal_number = 15;
+    TVar Text internal_text = 'hello';
+    TVar TrueFalse internal_tf = True;
+
+    get_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = internal_number;
+        }
+        return to_return;
+    }
+
+    set_number(Number new_number)
+    {
+        atomically
+        {
+            internal_number = new_number;
+        }
+    }
+    
+    get_text() returns Text
+    {
+        Text to_return;
+        atomically
+        {
+            to_return = internal_text;
+        }
+        return to_return;
+    }
+
+    set_text(Text new_text)
+    {
+        atomically
+        {
+            internal_text = new_text;
+        }
+    }
+
+
+    get_tf() returns TrueFalse
+    {
+        TrueFalse to_return;
+        atomically
+        {
+            to_return = internal_tf;
+        }
+        return to_return;
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        atomically
+        {
+            internal_tf = new_tf;
+        }
+    }
+}

@@ -242,6 +242,13 @@
     </antcall>
   </target>
 
+  <target name="atomic_setter_getter" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="atomic_setter_getter.rph"/>
+      <param name="class_name" value="AtomicSetterGetterJava"/>
+    </antcall>
+  </target>
+  
   <target name="internal_method_call" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="internal_method_call.rph"/>
@@ -671,7 +678,7 @@
 
   <target
       name="ralph_DurabilitySetterGetter"
-      depends="iface_basic_ralph,basic_ralph">
+      depends="iface_basic_ralph,atomic_setter_getter">
   </target>
   
   <target

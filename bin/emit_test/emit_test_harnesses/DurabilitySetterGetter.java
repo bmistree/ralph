@@ -1,6 +1,6 @@
 package emit_test_harnesses;
 
-import ralph_emitted.BasicRalphJava.SetterGetter;
+import ralph_emitted.AtomicSetterGetterJava.AtomicSetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
 import RalphConnObj.SingleSideConnection;
 
@@ -28,7 +28,7 @@ public class DurabilitySetterGetter
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
-            SetterGetter endpt = new SetterGetter(
+            AtomicSetterGetter endpt = new AtomicSetterGetter(
                 ralph_globals,new SingleSideConnection());
 
             return run_test_from_endpt(endpt,ralph_globals,endpt._uuid);
