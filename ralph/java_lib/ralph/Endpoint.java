@@ -815,91 +815,13 @@ public abstract class Endpoint implements IReference
      Sends a message using connection object to the partner
      endpoint requesting it to perform some message sequence
      action.
-    
-     @param {String or None} block_name --- The name of the
-     sequence block we want to execute on the partner
-     endpoint. (Note: this is how that sequence block is named in
-     the source Waldo file, not how it is translated by the
-     compiler into a function.)  It can also be None if this is the
-     final message sequence block's execution.  
-
-     @param {uuid} event_uuid --- The uuid of the requesting event.
-
-     @param {uuid} reply_with_uuid --- When the partner endpoint
-     responds, it should place reply_with_uuid in its reply_to
-     message field.  That way, we can determine which message the
-     partner endpoint was replying to.
-
-     @param {uuid or None} reply_to_uuid --- If this is the
-     beginning of a sequence of messages, then fill the reply_to
-     field of the message with None (the message is not a reply to
-     anything that we have seen so far).  Otherwise, put the
-     reply_with message field of the last message that the partner
-     said as part of this sequence in.
-
-     @param {ActiveEvent} active_event --- The active event that
-     is requesting the message to be sent.
-
-     @param{Builder} serialized_results --- Can be null.  Serialized
-     value of all returned objects.
-     
-     @param {bool} first_msg --- If we are sending the first
-     message in a sequence block, then we must force the sequence
-     local data to be transmitted whether or not it was modified.
-     
-     @param {boolean} transactional --- True if this call should be
-     part of a transaction.  False if it's just a regular rpc.  Only
-     keeps track if this is not the first message sent.
     */
     public void _send_partner_message_sequence_block_request(
-        String block_name,String event_uuid,String priority,
-        String reply_with_uuid, String reply_to_uuid,
-        ActiveEvent active_event, Arguments.Builder rpc_variables,
-        Arguments.Builder serialized_results, boolean first_msg,
-        boolean transactional)
+        PartnerRequestSequenceBlock request_sequence_block_msg)
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
     	general_message.setTimestamp(_clock.get_int_timestamp());
-
-    	PartnerRequestSequenceBlock.Builder request_sequence_block_msg =
-            PartnerRequestSequenceBlock.newBuilder();
-    	request_sequence_block_msg.setTransaction(transactional);
-
-    	// event uuid + priority
-    	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
-    	event_uuid_msg.setData(event_uuid);
-
-    	UtilProto.Priority.Builder priority_msg =
-            UtilProto.Priority.newBuilder();
-    	priority_msg.setData(priority);
-    	
-    	request_sequence_block_msg.setEventUuid(event_uuid_msg);
-    	request_sequence_block_msg.setPriority(priority_msg);
-        
-    	//name of block requesting
-    	if (block_name != null)
-            request_sequence_block_msg.setNameOfBlockRequesting(block_name);
-    	
-    	//reply with uuid
-    	UtilProto.UUID.Builder reply_with_uuid_msg =
-            UtilProto.UUID.newBuilder();
-    	reply_with_uuid_msg.setData(reply_with_uuid);
-    	
-    	request_sequence_block_msg.setReplyWithUuid(reply_with_uuid_msg);
-    	
-    	//reply to uuid
-    	if (reply_to_uuid != null)
-    	{
-            UtilProto.UUID.Builder reply_to_uuid_msg =
-                UtilProto.UUID.newBuilder();
-            reply_to_uuid_msg.setData(reply_to_uuid);
-            request_sequence_block_msg.setReplyToUuid(reply_to_uuid_msg);
-    	}
-
-        request_sequence_block_msg.setArguments(rpc_variables);
-        if (serialized_results != null)
-            request_sequence_block_msg.setReturnObjs(serialized_results);
         
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
     	_conn_obj.write(general_message.build(),this);

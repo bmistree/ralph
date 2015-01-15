@@ -374,53 +374,23 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 reply_with_uuid, threadsafe_unblock_queue);
         }
 
-        // FIXME: check if can refactor and merge the following code
-        // with AtomicActiveEvent.
-        
-        // construct variables for arg messages
-        SerializationContext serialization_context =
-            new SerializationContext(args,true);
-        Arguments.Builder serialized_arguments = null;
+        PartnerRequestSequenceBlock request_sequence_block = null;
 
         try
         {
-            serialized_arguments =
-                serialization_context.serialize_all(this);
+            request_sequence_block =
+                PartnerRequestSequenceBlockProducer.produce_request_block(
+                    ctx,func_name,first_msg,args,result,this,false,
+                    reply_with_uuid);
         }
-        catch (BackoutException excep)
+        catch (BackoutException ex)
         {
             return false;
         }
 
-        Arguments.Builder serialized_results = null;
-        if (result != null)
-        {
-            serialization_context = new SerializationContext(result,true);
-            try
-            {
-                serialized_results =
-                    serialization_context.serialize_all(this);
-            }
-            catch (BackoutException excep)
-            {
-                return false;
-            }
-        }
-        
-        // changed to have rpc semantics: this means that if it's not
-        // the first message, then it is a reply to another message.
-        // if it is a first message, then should not be replying to
-        // anything.
-        String replying_to = null;
-        if (! first_msg)
-            replying_to = ctx.get_to_reply_with();
-
         // request endpoint to send message to partner
         endpoint._send_partner_message_sequence_block_request(
-            func_name,uuid,get_priority(),reply_with_uuid,
-            replying_to,this,serialized_arguments,serialized_results,
-            first_msg,false);
-        
+            request_sequence_block);
         return true;
     }
 
