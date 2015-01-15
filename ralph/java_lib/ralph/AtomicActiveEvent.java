@@ -641,6 +641,12 @@ public class AtomicActiveEvent extends ActiveEvent
                 return FirstPhaseCommitResponseCode.FAILED;
             }
 
+            if (durability_context != null)
+            {
+                DurabilityInfo.instance.durability_saver.prepare_operation(
+                    durability_context);
+            }
+            
             // update data after skip to prevent overwriting values on
             // root in case of cycles.
             this.commit_metadata = new CommitMetadata(
@@ -725,6 +731,7 @@ public class AtomicActiveEvent extends ActiveEvent
             _lock();
             boolean preempted =
                 (state == State.STATE_BACKING_OUT) || (state == State.STATE_BACKED_OUT);
+
             if (preempted)
                 return FirstPhaseCommitResponseCode.FAILED;
 
@@ -747,9 +754,9 @@ public class AtomicActiveEvent extends ActiveEvent
                     new RalphServiceActions.BackoutAtomicEventAction(this);
                 thread_pool.add_service_action(
                     service_action);
+
                 return FirstPhaseCommitResponseCode.FAILED;
             }
-
 
             // all changes are staged on objects, can transition
             // into first phase commit state
@@ -856,7 +863,15 @@ public class AtomicActiveEvent extends ActiveEvent
         // # notify other endpoints to also complete their commits
         event_parent.second_phase_transition_success(
             local_endpoints_whose_partners_contacted);
+
         
+        // FIXME: Check if this call really has to fsync.  I don't
+        // think it does.
+        if (durability_context != null)
+        {
+            DurabilityInfo.instance.durability_saver.complete_operation(
+                durability_context,true);
+        }
     }
 
     /**
@@ -1000,6 +1015,14 @@ public class AtomicActiveEvent extends ActiveEvent
             touched_obj.backout(this);
 
         _lock();
+
+        // FIXME: Check if this call really has to fsync.  I don't
+        // think it does.
+        if (durability_context != null)
+        {
+            DurabilityInfo.instance.durability_saver.complete_operation(
+                durability_context,false);
+        }
         
         state = State.STATE_BACKED_OUT;
         completely_backed_out_condition.signalAll();
