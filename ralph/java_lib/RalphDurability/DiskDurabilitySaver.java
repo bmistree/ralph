@@ -50,7 +50,7 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     public void prepare_operation(DurabilityContext dc)
     {
         Durability durability_msg = dc.prepare_proto_buf();
-        write_durability_msg(durability_msg);
+        write_durability_msg(durability_msg,true);
     }
 
     @Override
@@ -58,15 +58,17 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     {
         Durability durability_msg = dc.complete_proto_buf(succeeded);
         if (durability_msg != null)
-            write_durability_msg(durability_msg);
+            write_durability_msg(durability_msg,false);
     }
     
-    private void write_durability_msg(Durability durability_msg)
+    private void write_durability_msg(
+        Durability durability_msg,boolean should_fsync)
     {
         try
         {
             durability_msg.writeDelimitedTo(f_output);
-            f_channel.force(false);
+            if (should_fsync)
+                f_channel.force(false);
         }
         catch(IOException ex)
         {
