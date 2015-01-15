@@ -654,6 +654,7 @@ def emit_external_signature(emit_ctx,method_signature_node,with_super_arg):
 def super_flag_argument():
     return '__is_super_flag_arg___'
 
+
 def emit_external_method_body(
     emit_ctx,method_signature_node,with_super_arg,
     return_type, void_return_type, argument_name_text_list):
@@ -688,13 +689,52 @@ else
             }
     else:
         method_body_text += '''
-ActiveEvent active_event =
+NonAtomicActiveEvent active_event =
     _act_event_map.create_root_non_atomic_event(
         this,"%(event_entry_point_name)s");
 ''' % {
             'event_entry_point_name': method_signature_node.method_name
             }
+
+    # check whether to perform a durability call
+    # update context with loaded arguments
+    ralph_wrapped_arg_names_list = []
+    emit_ctx.push_scope()
+    for argument_node in method_signature_node.method_declaration_args:
+        arg_name = argument_node.arg_name
+        emit_ctx.add_var_name(arg_name)
+        ralph_wrapped_arg_names_list.append(
+            emit_ctx.lookup_internal_var_name(arg_name))
+
+    ralph_wrapped_arguments_text = method_args_to_ralph_wrapped_types(
+        emit_ctx, method_signature_node,argument_name_text_list)
         
+    method_body_text += '''
+
+if (DurabilityInfo.instance.durability_saver != null)
+{
+    // If durability is turned on, then package contents of call so
+    // that will be able to replay them later.
+
+%(ralph_wrapped_arguments_text)s;
+
+    List <RalphObject> args = new ArrayList<RalphObject>(
+        Arrays.asList(%(ralph_wrapped_args_list)s));
+
+    active_event.durability_entry_call(
+        PartnerRequestSequenceBlockProducer.produce_request_block(
+            null,"%(func_name)s", args, null,active_event,false,
+            "-1" /* Empty reply with for entry call*/),
+        _uuid);
+}
+
+''' % {
+        'func_name': method_signature_node.method_name,
+        'ralph_wrapped_arguments_text': ralph_wrapped_arguments_text,
+        'ralph_wrapped_args_list': ','.join(ralph_wrapped_arg_names_list)
+        }
+    emit_ctx.pop_scope()
+
     inner_method_call_text = (
         '%s (ctx ,active_event' % method_signature_node.method_name)
     for argument_name in argument_name_text_list:
@@ -757,43 +797,24 @@ def emit_external_facing_method(emit_ctx,method_signature_node):
 
     non_super_method = non_super_signature + non_super_body
     return super_method + '\n' + non_super_method
-    
 
-def emit_method_signature_plus_head(emit_ctx,method_signature_node):
+
+
+def method_args_to_ralph_wrapped_types(emit_ctx,method_signature_node,
+                                       argument_name_text_list):
     '''
-    @param {EmitContext} emit_ctx --- Loads arguments to method into
-    emit_ctx.
-
-    @param {MethodSignatureNode} method_signature_node ---
-
-    @returns {String} --- A java signature for method.  Eg.,
-
-    private Double some_method (
-        ExecutingEventContext _ctx, ActiveEvent _active_event,
-        SomeType SomeVar) 
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
-    {
-        try {
-    '''
-    to_return,argument_name_text_list = emit_internal_method_signature(
-        emit_ctx,method_signature_node)
-    to_return += '{\n'
+    Runs through method signature and produces code that wraps all
+    arguments in Ralph wrappers.
     
-    # (starting at #3, because #1 and #2 are in
-    # emit_internal_method_signature)
-    # 3: emit head section where add to scope stack and push arguments
-    # on to scope stack.  Must push arguments on to scope stack so
-    # they're available in defer statements
-
-    # note try block gets closed at end of
-    # emit_method_declaration_node, near finally block.
-    to_return += indent_string('''
-try
-{
-''')
-
-
+    @param {} emit_ctx
+    @param {MethodSignatureNode} method_signature_node
+    
+    @param {list} argument_name_text_list --- Each element of the list
+    is a string that corresponds to the names of arguments (without
+    types) as they will appear in the emitted method signature.
+    '''
+    to_return = ''
+    
     # convert each method argument to ralph variable and then add to
     # stack.  Note: skip this step for maps, which caller already
     # cloned for us.
@@ -867,6 +888,42 @@ new %(java_type_statement)s (
             '%s %s = %s;\n' %
             (java_type_statement,internal_arg_name,new_ralph_variable),2)
 
+    return to_return
+
+def emit_method_signature_plus_head(emit_ctx,method_signature_node):
+    '''
+    @param {EmitContext} emit_ctx --- Loads arguments to method into
+    emit_ctx.
+
+    @param {MethodSignatureNode} method_signature_node ---
+
+    @returns {String} --- A java signature for method.  Eg.,
+
+    private Double some_method (
+        ExecutingEventContext _ctx, ActiveEvent _active_event,
+        SomeType SomeVar) 
+        throws ApplicationException, BackoutException, NetworkException,
+        StoppedException
+    {
+        try {
+    '''
+    to_return,argument_name_text_list = emit_internal_method_signature(
+        emit_ctx,method_signature_node)
+    to_return += '{\n'
+    
+    # (starting at #3, because #1 and #2 are in
+    # emit_internal_method_signature)
+    # 3: emit head section where add to scope stack and push arguments
+    # on to scope stack.  Must push arguments on to scope stack so
+    # they're available in defer statements
+
+    # note try block gets closed at end of
+    # emit_method_declaration_node, near finally block.
+    converted_args_text = 'try{ \n'
+    converted_args_text += method_args_to_ralph_wrapped_types(
+        emit_ctx,method_signature_node,argument_name_text_list)
+    
+    to_return += indent_string(converted_args_text)
     return to_return
 
 def emit_internal_method_signature(emit_ctx,method_signature_node):
