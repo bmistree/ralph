@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.StructTestJava.SetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class StructSetterGetter
@@ -19,8 +18,8 @@ public class StructSetterGetter
     {
         try
         {
-            SetterGetter non_iface_endpt = new SetterGetter(
-                new RalphGlobals(),new SingleSideConnection());
+            SetterGetter non_iface_endpt =
+                SetterGetter.create_single_sided(new RalphGlobals());
 
             // initialize struct on endpoint
             non_iface_endpt.initialize_internal_struct(

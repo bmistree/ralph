@@ -6,7 +6,6 @@ import ralph_emitted.LessSimplifiedBackedSpeculationJava.LessSimplifiedBackedSpe
 import ralph_emitted.LessSimplifiedBackedSpeculationJava._InternalSwitch;
 import ralph.RalphGlobals;
 import ralph.Variables.AtomicNumberVariable;
-import RalphConnObj.SingleSideConnection;
 import ralph.ActiveEvent;
 import ralph.SpeculativeFuture;
 import ralph.ICancellableFuture;
@@ -57,8 +56,9 @@ public class LessSimplifiedTimedSpeculationTest
     {
         try
         {
-            LessSimplifiedBackedSpeculation endpt = new LessSimplifiedBackedSpeculation(
-                ralph_globals,new SingleSideConnection());
+            LessSimplifiedBackedSpeculation endpt =
+                LessSimplifiedBackedSpeculation.create_single_sided(
+                    ralph_globals);
 
             _InternalSwitch internal_switch1 = 
                 create_internal_switch(

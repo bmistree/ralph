@@ -65,6 +65,9 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import RalphCallResults.RootCallResult;
 
+import RalphDurability.DurabilityContext;
+
+
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
 
@@ -244,9 +247,11 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
     version_unmapping_text = indent_string(version_unmapping_text,2)
     
     constructor_text = '''
-public %(endpoint_name)s ( RalphGlobals ralph_globals,ConnectionObj conn_obj) 
+public %(endpoint_name)s (
+    RalphGlobals ralph_globals,ConnectionObj conn_obj,
+    DurabilityContext durability_context) 
 {
-    super(ralph_globals,conn_obj,factory);
+    super(ralph_globals,conn_obj,factory,durability_context);
 
     if (VersioningInfo.instance.version_saver != null)
     {
@@ -274,23 +279,32 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     }
 
     @Override
-    public Endpoint construct (RalphGlobals ralph_globals, ConnectionObj conn_obj)
+    public Endpoint construct (
+        RalphGlobals ralph_globals, ConnectionObj conn_obj,
+        DurabilityContext durability_context)
     {
-        return new %(endpoint_name)s(ralph_globals,conn_obj);
+        return new %(endpoint_name)s(ralph_globals,conn_obj,durability_context);
     }
 
     @Override
     public Endpoint construct (
         RalphGlobals ralph_globals, ConnectionObj conn_obj,
-        List<RalphObject> internal_values_list)
+        List<RalphObject> internal_values_list,
+        DurabilityContext durability_context)
     {
-        %(endpoint_name)s to_return =  new %(endpoint_name)s(ralph_globals,conn_obj);
+        %(endpoint_name)s to_return =
+            new %(endpoint_name)s(ralph_globals,conn_obj,durability_context);
         %(version_unmapping_text)s
         return to_return;
     }
 }
 
 public final static EndpointConstructorObj factory = new %(endpoint_name)s_ConstructorObj();
+
+public final static %(endpoint_name)s create_single_sided(RalphGlobals ralph_globals)
+{
+    return (%(endpoint_name)s) Ralph.no_partner_create(factory,ralph_globals);
+}
 
 ''' % ({'endpoint_name': endpt_node.name,
         'version_mapping_text': version_mapping_text,

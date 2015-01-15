@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.EndpointStructListJava.EndpointUser;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class EndpointStructListTest
@@ -20,11 +19,11 @@ public class EndpointStructListTest
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            SetterGetter setter_getter_endpt = new SetterGetter(
-                ralph_globals, new SingleSideConnection());
+            SetterGetter setter_getter_endpt =
+                SetterGetter.create_single_sided(ralph_globals);
 
-            EndpointUser endpt = new EndpointUser(
-                ralph_globals, new SingleSideConnection());
+            EndpointUser endpt =
+                EndpointUser.create_single_sided(ralph_globals);
             endpt.add_endpoint(setter_getter_endpt);
             
             // testing numbers

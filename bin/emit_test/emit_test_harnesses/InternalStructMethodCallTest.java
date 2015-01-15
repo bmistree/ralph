@@ -3,7 +3,6 @@ package emit_test_harnesses;
 import java.util.Random;
 
 import ralph_emitted.InternalReturnStructJava.StructReturner;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class InternalStructMethodCallTest
@@ -20,9 +19,8 @@ public class InternalStructMethodCallTest
     {
         try
         {
-            StructReturner service = new StructReturner(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            StructReturner service =
+                StructReturner.create_single_sided(new RalphGlobals());
 
             Random rand = new Random();
             for (int i = 0; i < 20; ++i)

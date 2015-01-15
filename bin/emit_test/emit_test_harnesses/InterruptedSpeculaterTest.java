@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.InterruptedSpeculaterJava.InterruptedSpeculater;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,9 +23,8 @@ public class InterruptedSpeculaterTest
     {
         try
         {
-            InterruptedSpeculater endpt = new InterruptedSpeculater(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            InterruptedSpeculater endpt =
+                InterruptedSpeculater.create_single_sided( new RalphGlobals());
 
             if (run_concurrently(endpt,false) < 2)
                 return false;

@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.SingleSideServiceFactoryJava.ServiceReceiver;
 import ralph_emitted.BasicRalphJava.SetterGetter;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.InternalServiceFactory;
 import ralph.EndpointConstructorObj;
@@ -26,9 +25,7 @@ public class SingleSideServiceFactoryTest
 
             RalphGlobals ralph_globals = new RalphGlobals();
             ServiceReceiver endpt =
-                (ServiceReceiver)ServiceReceiver.factory.construct(
-                    ralph_globals,
-                    new SingleSideConnection());
+                ServiceReceiver.create_single_sided(ralph_globals);
 
             EndpointConstructorObj setter_getter_factory =
                 SetterGetter.factory;

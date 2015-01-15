@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReplayStructMapJava.ReplayStructMap;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
@@ -24,8 +23,8 @@ public class VersionedStructMap
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            ReplayStructMap endpt = new ReplayStructMap(
-                ralph_globals, new SingleSideConnection());
+            ReplayStructMap endpt =
+                ReplayStructMap.create_single_sided(ralph_globals);
             
             int num_to_initially_add = 20;
             

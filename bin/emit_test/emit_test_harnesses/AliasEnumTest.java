@@ -19,8 +19,7 @@ public class AliasEnumTest
     {
         try
         {
-            Test endpt = new Test(
-                new RalphGlobals(),new SingleSideConnection());
+            Test endpt = new Test.create_single_sided(new RalphGlobals());
             return EnumTest.internal_test(endpt);
         }
         catch(Exception _ex)

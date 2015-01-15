@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.TextAddAndToTextJava.TextAdder;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class TextManipulation
@@ -18,9 +17,8 @@ public class TextManipulation
     {
         try
         {
-            TextAdder endpt = new TextAdder(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            TextAdder endpt =
+                TextAdder.create_single_sided(new RalphGlobals());
 
             String lhs = "hello";
             String rhs = "hi";

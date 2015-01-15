@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.EnumJava.IEnumTest;
 import ralph_emitted.EnumJava.Test;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class EnumTest
@@ -19,8 +18,7 @@ public class EnumTest
     {
         try
         {
-            Test endpt = new Test(
-                new RalphGlobals(),new SingleSideConnection());
+            Test endpt = Test.create_single_sided(new RalphGlobals());
             return internal_test(endpt);
         }
         catch(Exception _ex)

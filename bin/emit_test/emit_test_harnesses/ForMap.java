@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ForMapJava.MapEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class ForMap
@@ -18,8 +17,8 @@ public class ForMap
     {
         try
         {
-            MapEndpoint endpt = new MapEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            MapEndpoint endpt =
+                MapEndpoint.create_single_sided(new RalphGlobals());
 
             /** Check on non-atomic map */
             // insert number in map

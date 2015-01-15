@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReplayStructListJava.ReplayStructList;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
@@ -24,8 +23,8 @@ public class VersionedStructList
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            ReplayStructList endpt = new ReplayStructList(
-                ralph_globals, new SingleSideConnection());
+            ReplayStructList endpt =
+                ReplayStructList.create_single_sided(ralph_globals);
             
             int num_to_initially_add = 20;
             

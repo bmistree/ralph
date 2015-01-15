@@ -19,10 +19,9 @@ public class BasicSetterGetter
     {
         try
         {
-            ISetterGetter endpt = new SetterGetter(
-                new RalphGlobals(),
-                new SingleSideConnection());
-
+            ISetterGetter endpt =
+                SetterGetter.create_single_sided(new RalphGlobals());
+            
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
             for (int i = 0; i < 20; ++i)

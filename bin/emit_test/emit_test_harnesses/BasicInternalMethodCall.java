@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.InternalMethodCallJava.InternalMethodCaller;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class BasicInternalMethodCall
@@ -18,9 +17,8 @@ public class BasicInternalMethodCall
     {
         try
         {
-            InternalMethodCaller endpt = new InternalMethodCaller(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            InternalMethodCaller endpt =
+                InternalMethodCaller.create_single_sided(new RalphGlobals());
 
             // testing numbers
             double original_number = endpt.get_number().doubleValue();

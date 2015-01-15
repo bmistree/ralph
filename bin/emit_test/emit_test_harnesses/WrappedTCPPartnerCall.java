@@ -6,7 +6,6 @@ import java.util.List;
 import ralph_emitted.BasicPartnerJava.SideA;
 import ralph_emitted.BasicPartnerJava.SideB;
 import ralph_emitted.WrappedPartnerJava.SingleSidedHolder;
-import RalphConnObj.SingleSideConnection;
 import RalphConnObj.TCPConnectionObj;
 import ralph.RalphGlobals;
 import ralph.RalphObject;
@@ -52,9 +51,8 @@ public class WrappedTCPPartnerCall
         {
             RalphGlobals a_globals = new RalphGlobals(params_a);
             
-            SingleSidedHolder single_holder = new SingleSidedHolder(
-                a_globals, new SingleSideConnection());
-
+            SingleSidedHolder single_holder =
+                SingleSidedHolder.create_single_sided(a_globals);
             
             Ralph.tcp_accept(
                 SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,

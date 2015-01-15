@@ -10,7 +10,6 @@ import ralph.VersioningInfo;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 
-import RalphConnObj.SingleSideConnection;
 import RalphConnObj.TCPConnectionObj;
 
 import RalphVersions.VersionUtil;

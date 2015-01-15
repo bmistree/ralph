@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ForListJava.ListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class ForList
@@ -18,8 +17,8 @@ public class ForList
     {
         try
         {
-            ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            ListEndpoint endpt =
+                ListEndpoint.create_single_sided(new RalphGlobals());
 
             /** Check on non-atomic list */
             // append to end of list

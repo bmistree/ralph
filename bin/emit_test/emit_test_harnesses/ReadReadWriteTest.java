@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReadReadWriteSpeculationJava.ReadReadWrite;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,9 +22,8 @@ public class ReadReadWriteTest
     {
         try
         {
-            ReadReadWrite endpt = new ReadReadWrite(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            ReadReadWrite endpt =
+                ReadReadWrite.create_single_sided( new RalphGlobals());
 
             // testing numbers
             double original_internal_number = endpt.get_num().doubleValue();

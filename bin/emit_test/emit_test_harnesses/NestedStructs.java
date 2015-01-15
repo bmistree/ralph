@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.NestedStructsJava.End;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -21,8 +20,7 @@ public class NestedStructs
     {
         try
         {
-            End endpt = new End(
-                new RalphGlobals(),new SingleSideConnection());
+            End endpt = End.create_single_sided(new RalphGlobals());
 
             ArrayList<Double> nums_to_insert = new ArrayList(
                 Arrays.asList(

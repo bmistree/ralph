@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.InterruptedEndpointAtomicallyJava.InterruptedAtomicEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 import java.util.concurrent.ExecutorService;
@@ -44,14 +43,14 @@ public class InterruptedEndpointCallAtomically
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            SetterGetter internal_endpt = new SetterGetter(
-                ralph_globals, new SingleSideConnection());
+            SetterGetter internal_endpt =
+                SetterGetter.create_single_sided(ralph_globals);
 
             double original_internal_number = 15;
             internal_endpt.set_number(new Double(original_internal_number));
             
-            InterruptedAtomicEndpoint endpt = new InterruptedAtomicEndpoint(
-                ralph_globals,new SingleSideConnection());
+            InterruptedAtomicEndpoint endpt =
+                InterruptedAtomicEndpoint.create_single_sided(ralph_globals);
 
             endpt.set_endpt(internal_endpt);
 

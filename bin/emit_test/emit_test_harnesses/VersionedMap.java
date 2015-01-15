@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.AtomicMapJava.TVarMapEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
@@ -23,8 +22,8 @@ public class VersionedMap
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            TVarMapEndpoint endpt = new TVarMapEndpoint(
-                ralph_globals, new SingleSideConnection());
+            TVarMapEndpoint endpt =
+                TVarMapEndpoint.create_single_sided(ralph_globals);
 
             int highest_index_to_add = 20;
             

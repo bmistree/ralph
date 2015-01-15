@@ -16,8 +16,14 @@ import ralph.EndpointConstructorObj;
 import ralph.SignalFunction;
 import ralph.Stoppable;
 import ralph.RalphGlobals;
+import ralph.DurabilityInfo;
+
+import RalphDurability.DurabilityContext;
+
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 import ralph_protobuffs.CreateConnectionProto.CreateConnection;
+
+
 
 public class TCPConnectionObj implements ConnectionObj, Runnable
 {
@@ -251,9 +257,28 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                     continue;
                 }
                 TCPConnectionObj tcp_conn_obj = new TCPConnectionObj(client_conn);
-				
-                Endpoint created_endpoint =
-                    endpoint_constructor.construct(ralph_globals, tcp_conn_obj);
+
+                // log the newly created endpoint
+                DurabilityContext durability_context = null;
+                if (DurabilityInfo.instance.durability_saver != null)
+                {
+                    String dummy_event_uuid = ralph_globals.generate_uuid();
+                    durability_context =
+                        new DurabilityContext(dummy_event_uuid);
+                }
+                
+                Endpoint created_endpoint = endpoint_constructor.construct(
+                    ralph_globals, tcp_conn_obj, durability_context);
+
+                if (DurabilityInfo.instance.durability_saver != null)
+                {
+                    // FIXME: should actually be logging the endpoint
+                    // type as well here.
+                    DurabilityInfo.instance.durability_saver.prepare_operation(
+                        durability_context);
+                    DurabilityInfo.instance.durability_saver.complete_operation(
+                        durability_context,true);
+                }
                 
                 if (cb != null)
                     cb.fire(created_endpoint);

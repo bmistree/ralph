@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.MiddleInterruptedSpeculaterJava.MiddleInterruptedSpeculater;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,9 +36,8 @@ public class MiddleInterruptedSpeculaterTest
     {
         try
         {
-            MiddleInterruptedSpeculater endpt = new MiddleInterruptedSpeculater(
-                ralph_globals,
-                new SingleSideConnection());
+            MiddleInterruptedSpeculater endpt =
+                MiddleInterruptedSpeculater.create_single_sided(ralph_globals);
 
             run_concurrently(endpt);
 

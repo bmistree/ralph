@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.BackedSpeculationJava.BackedSpeculation;
 import ralph_emitted.BackedSpeculationJava._InternalSwitch;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -69,8 +68,8 @@ public class AlwaysWorksBackedSpeculationTest
     {
         try
         {
-            BackedSpeculation endpt = new BackedSpeculation(
-                ralph_globals,new SingleSideConnection());
+            BackedSpeculation endpt =
+                BackedSpeculation.create_single_sided(ralph_globals);
 
             _InternalSwitch switch1 =
                 create_switch(

@@ -3,6 +3,8 @@ package ralph;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import RalphDurability.DurabilityContext;
+
 import RalphConnObj.TCPConnectionObj.TCPAcceptThread;
 
 
@@ -21,11 +23,35 @@ public class Ralph {
     public static Endpoint no_partner_create(
         EndpointConstructorObj constructor, RalphGlobals all_globals)
     {
-        return constructor.construct(
-            all_globals, new RalphConnObj.SingleSideConnection());
+        // log the newly created endpoint
+        DurabilityContext durability_context = null;
+        if (DurabilityInfo.instance.durability_saver != null)
+        {
+            String dummy_event_uuid = all_globals.generate_uuid();
+            durability_context =
+                new DurabilityContext(dummy_event_uuid);
+        }
+
+        try
+        { 
+            return constructor.construct(
+                all_globals, new RalphConnObj.SingleSideConnection(),
+                durability_context);
+        }
+        finally
+        {
+            if (DurabilityInfo.instance.durability_saver != null)
+            {
+                // FIXME: should actually be logging the endpoint
+                // type as well here.
+                DurabilityInfo.instance.durability_saver.prepare_operation(
+                    durability_context);
+                DurabilityInfo.instance.durability_saver.complete_operation(
+                    durability_context,true);
+            }
+        }
     }
-        
-	
+
 	
     /**
      * Tries to connect an endpoint to another endpoint via a TCP
@@ -55,9 +81,34 @@ public class Ralph {
         RalphGlobals all_globals)
         throws IOException
     {
+        // log the newly created endpoint
+        DurabilityContext durability_context = null;
+        if (DurabilityInfo.instance.durability_saver != null)
+        {
+            String dummy_event_uuid = all_globals.generate_uuid();
+            durability_context =
+                new DurabilityContext(dummy_event_uuid);
+        }
+        
         RalphConnObj.TCPConnectionObj tcp_connection_obj = 
             new RalphConnObj.TCPConnectionObj(host,port);
-        return constructor_obj.construct(all_globals,tcp_connection_obj);
+        try
+        {
+            return constructor_obj.construct(
+                all_globals,tcp_connection_obj,durability_context);
+        }
+        finally
+        {
+            if (DurabilityInfo.instance.durability_saver != null)
+            {
+                // FIXME: should actually be logging the endpoint
+                // type as well here.
+                DurabilityInfo.instance.durability_saver.prepare_operation(
+                    durability_context);
+                DurabilityInfo.instance.durability_saver.complete_operation(
+                    durability_context,true);
+            }
+        }
     }
 
 
@@ -93,7 +144,32 @@ public class Ralph {
         EndpointConstructorObj constructor_obj, String host, int port,
         RalphGlobals all_globals)
     {
-        return tcp_accept(constructor_obj,host,port, null,all_globals);
+        // log the newly created endpoint
+        DurabilityContext durability_context = null;
+        if (DurabilityInfo.instance.durability_saver != null)
+        {
+            String dummy_event_uuid = all_globals.generate_uuid();
+            durability_context =
+                new DurabilityContext(dummy_event_uuid);
+        }
+
+
+        try
+        {
+            return tcp_accept(constructor_obj,host,port, null,all_globals);
+        }
+        finally
+        {
+            if (DurabilityInfo.instance.durability_saver != null)
+            {
+                // FIXME: should actually be logging the endpoint
+                // type as well here.
+                DurabilityInfo.instance.durability_saver.prepare_operation(
+                    durability_context);
+                DurabilityInfo.instance.durability_saver.complete_operation(
+                    durability_context,true);
+            }
+        }
     }
 
     

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.AtomicStructJava.TVarStructTest;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,9 +23,8 @@ public class AtomicStructTest
     {
         try
         {
-            TVarStructTest endpt = new TVarStructTest(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            TVarStructTest endpt =
+                TVarStructTest.create_single_sided(new RalphGlobals());
 
             for (int i = 0; i < NUM_TIMES_TO_RUN_LONG_EVENT; ++i)
             {

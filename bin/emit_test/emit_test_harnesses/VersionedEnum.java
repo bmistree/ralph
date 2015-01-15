@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReplayEnumJava.EnumHolder;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
@@ -23,8 +22,7 @@ public class VersionedEnum
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            EnumHolder endpt = new EnumHolder(
-                ralph_globals, new SingleSideConnection());
+            EnumHolder endpt = EnumHolder.create_single_sided(ralph_globals);
 
             for (int i = 0; i < 20; ++i)
                 endpt.update();

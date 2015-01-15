@@ -98,12 +98,13 @@ public class InternalServiceFactory
         return byte_string;
     }
 
-    
     public Endpoint construct(ActiveEvent active_event)
     {
         SingleSideConnection ssc = new SingleSideConnection();
-        return this.endpt_constructor.construct(ralph_globals,ssc);
+        return this.endpt_constructor.construct(
+            ralph_globals,ssc,active_event.durability_context);
     }
+    
     public Endpoint construct_from_reference(
         ActiveEvent active_event,InternalServiceReference service_reference)
     {
@@ -135,6 +136,7 @@ public class InternalServiceFactory
         
         tcp_connection_obj.write_create_connection(
             create_connection_msg.build());
-        return endpt_constructor.construct(ralph_globals,tcp_connection_obj);
+        return endpt_constructor.construct(
+            ralph_globals,tcp_connection_obj,active_event.durability_context);
     }
 }

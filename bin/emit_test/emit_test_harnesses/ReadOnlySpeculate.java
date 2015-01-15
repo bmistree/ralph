@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReadOnlySpeculateJava.ReadOnlySpeculateService;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,8 +35,8 @@ public class ReadOnlySpeculate
         try
         {
             final ReadOnlySpeculateService endpt =
-                new ReadOnlySpeculateService(
-                    new RalphGlobals(),new SingleSideConnection());
+                ReadOnlySpeculateService.create_single_sided(
+                    new RalphGlobals());
 
             Thread speculater_thread = new Thread()
             {

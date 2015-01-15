@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.SelfJava.B;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class SelfTest
@@ -18,7 +17,7 @@ public class SelfTest
     {
         try
         {
-            B endpt = new B(new RalphGlobals(),new SingleSideConnection());
+            B endpt = B.create_single_sided(new RalphGlobals());
 
             for (int i = 1; i < 20; ++i)
             {

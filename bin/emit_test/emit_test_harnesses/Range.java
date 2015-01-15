@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.RangeTestJava.RangeTest;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class Range
@@ -26,8 +25,8 @@ public class Range
     {
         try
         {
-            RangeTest rt_service = new RangeTest(
-                new RalphGlobals(),new SingleSideConnection());
+            RangeTest rt_service =
+                RangeTest.create_single_sided(new RalphGlobals());
 
             // sum from [0, 10)
             double [] example_array =

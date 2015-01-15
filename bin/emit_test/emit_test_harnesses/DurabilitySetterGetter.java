@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.AtomicSetterGetterJava.AtomicSetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
-import RalphConnObj.SingleSideConnection;
 
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
@@ -28,8 +27,8 @@ public class DurabilitySetterGetter
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
-            AtomicSetterGetter endpt = new AtomicSetterGetter(
-                ralph_globals,new SingleSideConnection());
+            AtomicSetterGetter endpt =
+                AtomicSetterGetter.create_single_sided(ralph_globals);
 
             return run_test_from_endpt(endpt,ralph_globals,endpt._uuid);
         }

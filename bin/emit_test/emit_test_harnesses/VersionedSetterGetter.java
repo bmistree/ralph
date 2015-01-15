@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import ralph.RalphObject;
@@ -43,8 +42,8 @@ public class VersionedSetterGetter
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
-            SetterGetter endpt = new SetterGetter(
-                ralph_globals,new SingleSideConnection());
+            SetterGetter endpt =
+                SetterGetter.create_single_sided(ralph_globals);
 
             return run_test_from_endpt(endpt,ralph_globals,endpt._uuid);
         }

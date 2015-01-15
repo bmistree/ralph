@@ -6,7 +6,6 @@ import ralph_emitted.SimplifiedBackedSpeculationJava.SimplifiedBackedSpeculation
 import ralph_emitted.SimplifiedBackedSpeculationJava._InternalWrappedLock;
 import ralph.RalphGlobals;
 import ralph.Variables.AtomicNumberVariable;
-import RalphConnObj.SingleSideConnection;
 import ralph.ActiveEvent;
 import ralph.SpeculativeFuture;
 import ralph.ICancellableFuture;
@@ -57,8 +56,8 @@ public class SimplifiedTimedSpeculationTest
     {
         try
         {
-            SimplifiedBackedSpeculation endpt = new SimplifiedBackedSpeculation(
-                ralph_globals,new SingleSideConnection());
+            SimplifiedBackedSpeculation endpt =
+                SimplifiedBackedSpeculation.create_single_sided(ralph_globals);
 
             _InternalWrappedLock wrapped_lock =
                 create_internal_wrapped_lock(

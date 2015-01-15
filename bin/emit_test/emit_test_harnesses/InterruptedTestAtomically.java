@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.InterruptedAtomicallyJava.InterruptedAtomic;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 import java.util.concurrent.ExecutorService;
@@ -43,8 +42,8 @@ public class InterruptedTestAtomically
         ReturnCode status = ReturnCode.SUCCESS;
         try
         {
-            InterruptedAtomic endpt = new InterruptedAtomic(
-                new RalphGlobals(),new SingleSideConnection());
+            InterruptedAtomic endpt =
+                InterruptedAtomic.create_single_sided(new RalphGlobals());
 
             // failure report takes precedence over unknown report
             // takes precedence over success report

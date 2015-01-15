@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.TestListJava.ListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class ListTester
@@ -18,8 +17,8 @@ public class ListTester
     {
         try
         {
-            ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            ListEndpoint endpt =
+                ListEndpoint.create_single_sided(new RalphGlobals());
 
             double list_size = endpt.get_size().doubleValue();
             if (list_size != 0)

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.SuperInterruptedAtomicallyJava.SuperInterruptedAtomic;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 import java.util.concurrent.ExecutorService;
@@ -34,8 +33,8 @@ public class SuperInterruptedTestAtomically
     {
         try
         {
-            SuperInterruptedAtomic endpt = new SuperInterruptedAtomic(
-                new RalphGlobals(),new SingleSideConnection());
+            SuperInterruptedAtomic endpt =
+                SuperInterruptedAtomic.create_single_sided(new RalphGlobals());
 
             for (int i=0; i < NUM_TIMES_TO_RUN; ++i)
                 single_run(endpt);

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ManyOpsAtomicListFailJava.TVarListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.ExtendedVariables.ExtendedInternalAtomicList;
 import RalphDataWrappers.ContainerOpTuple;
@@ -37,8 +36,8 @@ public class RandomFailureExtendedList
     {
         try
         {
-            TVarListEndpoint endpt = new TVarListEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            TVarListEndpoint endpt =
+                TVarListEndpoint.create_single_sided(new RalphGlobals());
 
             // set endpoint's internal list from SynchronizedNumberList
             SynchronizedNumberInternalList synchronized_internal_list =

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph.RalphGlobals;
-import RalphConnObj.SingleSideConnection;
 import ralph_emitted.VersionedIFaceJava.VersionedInterface;
 
 public class VersionedIFace
@@ -21,8 +20,8 @@ public class VersionedIFace
             RalphGlobals.Parameters parameters = new RalphGlobals.Parameters();
             RalphGlobals ralph_globals = new RalphGlobals(parameters);
 
-            VersionedInterface endpt = new VersionedInterface(
-                ralph_globals,new SingleSideConnection());
+            VersionedInterface endpt =
+                VersionedInterface.create_single_sided(ralph_globals);
             endpt.initialize();
 
             return VersionedSetterGetter.run_test_from_endpt(

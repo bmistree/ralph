@@ -60,7 +60,7 @@ public class VersionUtil
         
         return endpt_constructor_obj.construct(
             ralph_globals,new SingleSideConnection(),
-            endpt_initialization_vars);
+            endpt_initialization_vars,null);
     }
 
     

@@ -24,7 +24,7 @@ public abstract class ActiveEvent
     /**
        Can be null, eg., if durability is turned off.
      */
-    protected final DurabilityContext durability_context;
+    public final DurabilityContext durability_context;
     
     /**
        FIXME.

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.EnumStructJava.UseBool;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class StructEnumTest
@@ -18,8 +17,7 @@ public class StructEnumTest
     {
         try
         {
-            UseBool endpt = new UseBool(
-                new RalphGlobals(),new SingleSideConnection());
+            UseBool endpt = UseBool.create_single_sided(new RalphGlobals());
 
             if (! endpt.test_true_false(true))
                 return false;

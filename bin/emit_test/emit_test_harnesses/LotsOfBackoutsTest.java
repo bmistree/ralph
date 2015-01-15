@@ -20,9 +20,8 @@ public class LotsOfBackoutsTest
     {
         try
         {
-            LotsOfBackouts endpt = new LotsOfBackouts(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            LotsOfBackouts endpt =
+                LotsOfBackouts.create_single_sided(new RalphGlobals());
 
             endpt.perform_test(new Double(NUM_TIMES_TO_RUN));
 

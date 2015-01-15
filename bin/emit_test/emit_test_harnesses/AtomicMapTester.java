@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.AtomicMapJava.TVarMapEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class AtomicMapTester
@@ -18,9 +17,8 @@ public class AtomicMapTester
     {
         try
         {
-            TVarMapEndpoint endpt = new TVarMapEndpoint(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            TVarMapEndpoint endpt =
+                TVarMapEndpoint.create_single_sided(new RalphGlobals());
 
             double map_size = endpt.get_size().doubleValue();
             if (map_size != 0.)

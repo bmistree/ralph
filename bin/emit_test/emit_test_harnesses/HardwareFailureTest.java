@@ -3,7 +3,6 @@ package emit_test_harnesses;
 import ralph_emitted.HardwareFailureJava;
 import ralph_emitted.HardwareFailureJava.HardwareOwner;
 import ralph_emitted.HardwareFailureJava._InternalPieceOfHardware;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import RalphDataWrappers.ListTypeDataWrapper;
 import ralph.ExtendedVariables.ExtendedInternalAtomicList;
@@ -57,8 +56,8 @@ public class HardwareFailureTest
     {
         try
         {
-            HardwareOwner endpt = new HardwareOwner(
-                ralph_globals, new SingleSideConnection());
+            HardwareOwner endpt =
+                HardwareOwner.create_single_sided(ralph_globals);
 
             double hardware_id = 1.0;
             _InternalPieceOfHardware hardware_to_add =

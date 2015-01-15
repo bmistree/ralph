@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.TestMapJava.MapEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class MapTester
@@ -18,8 +17,8 @@ public class MapTester
     {
         try
         {
-            MapEndpoint endpt = new MapEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            MapEndpoint endpt =
+                MapEndpoint.create_single_sided( new RalphGlobals());
 
             double map_size = endpt.get_size().doubleValue();
             if (map_size != 0)

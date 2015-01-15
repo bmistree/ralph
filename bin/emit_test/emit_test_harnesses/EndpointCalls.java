@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.EndpointLibUserJava.EndpointUser;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class EndpointCalls
@@ -21,11 +20,11 @@ public class EndpointCalls
         {
             RalphGlobals ralph_globals = new RalphGlobals();
             
-            SetterGetter internal_endpt = new SetterGetter(
-                ralph_globals,new SingleSideConnection());
+            SetterGetter internal_endpt =
+                SetterGetter.create_single_sided(ralph_globals);
 
-            EndpointUser endpt = new EndpointUser(
-                ralph_globals,new SingleSideConnection());
+            EndpointUser endpt =
+                EndpointUser.create_single_sided(ralph_globals);
 
             endpt.set_endpoint(internal_endpt);
             

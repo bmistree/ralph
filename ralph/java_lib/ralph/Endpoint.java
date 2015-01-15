@@ -32,6 +32,8 @@ import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
+import RalphDurability.DurabilityContext;
+
 
 /**
  *
@@ -135,10 +137,14 @@ public abstract class Endpoint implements IReference
        @param{EndpointConstructorObj} endpoint_constructor_obj --- Can
        be used to instantiate a version of this class, using construct
        method.
+
+       @param {DurabilityContext} durability_context --- Can be null,
+       eg., if durability is off.
     */
     public Endpoint (
         RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
-        EndpointConstructorObj endpoint_constructor_obj)
+        EndpointConstructorObj endpoint_constructor_obj,
+        DurabilityContext durability_context)
     {
         _uuid = ralph_globals.generate_local_uuid();
         this.ralph_globals = ralph_globals;
@@ -172,8 +178,11 @@ public abstract class Endpoint implements IReference
           self._heartbeat.start()
           _send_clock_update();
         */
-    }
 
+        if (durability_context != null)
+            durability_context.add_endpoint_created_uuid(_uuid);
+    }
+    
     public String uuid()
     {
         return _uuid;

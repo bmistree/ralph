@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.StructLibUserJava.StructUser;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class StructLibraries
@@ -18,8 +17,7 @@ public class StructLibraries
     {
         try
         {
-            StructUser endpt = new StructUser(
-                new RalphGlobals(),new SingleSideConnection());
+            StructUser endpt = new StructUser(new RalphGlobals());
 
             // testing numbers
             String text_to_set = "hello";

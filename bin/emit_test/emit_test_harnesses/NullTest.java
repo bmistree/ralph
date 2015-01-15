@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.NullJava.NullService;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class NullTest
@@ -18,9 +17,8 @@ public class NullTest
     {
         try
         {
-            NullService service = new NullService(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            NullService service =
+                NullService.create_single_sided(new RalphGlobals());
 
             /** Test value types */
             if (service.get_number() != null)

@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.AtomicListJava.TVarListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import RalphVersions.VersionUtil;
@@ -24,8 +23,8 @@ public class VersionedList
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            TVarListEndpoint endpt = new TVarListEndpoint(
-                ralph_globals, new SingleSideConnection());
+            TVarListEndpoint endpt =
+                TVarListEndpoint.create_single_sided(ralph_globals);
 
             double list_size = endpt.get_size().doubleValue();
             if (list_size != 0)

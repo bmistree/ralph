@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.RalphAtomicallyJava.TestAtomically;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class BasicTestAtomically
@@ -18,9 +17,8 @@ public class BasicTestAtomically
     {
         try
         {
-            TestAtomically endpt = new TestAtomically(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            TestAtomically endpt =
+                TestAtomically.create_single_sided(new RalphGlobals());
 
             for (int i = 0; i < 30; ++i)
             {

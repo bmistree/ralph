@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.ReturnListJava.ListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.NonAtomicInternalList;
 
@@ -19,8 +18,8 @@ public class ReturnListTest
     {
         try
         {
-            ListEndpoint endpt = new ListEndpoint(
-                new RalphGlobals(),new SingleSideConnection());
+            ListEndpoint endpt =
+                ListEndpoint.create_single_sided(new RalphGlobals());
 
             NonAtomicInternalList<String,String> result =
                 endpt.test_return_list();

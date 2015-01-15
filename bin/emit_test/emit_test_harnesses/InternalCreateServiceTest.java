@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.InternalCreateServiceJava.InternalCreateService;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class InternalCreateServiceTest
@@ -18,9 +17,8 @@ public class InternalCreateServiceTest
     {
         try
         {
-            InternalCreateService endpt = new InternalCreateService(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            InternalCreateService endpt =
+                InternalCreateService.create_single_sided(new RalphGlobals());
 
             if (! endpt.is_null())
                 return false;

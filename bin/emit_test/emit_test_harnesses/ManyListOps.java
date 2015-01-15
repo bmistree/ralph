@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.AtomicListJava.TVarListEndpoint;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class ManyListOps
@@ -20,9 +19,8 @@ public class ManyListOps
     {
         try
         {
-            TVarListEndpoint endpt = new TVarListEndpoint(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            TVarListEndpoint endpt =
+                TVarListEndpoint.create_single_sided( new RalphGlobals());
 
             for (int i = 0; i < NUMBER_OPS_TO_RUN; ++i)
             {

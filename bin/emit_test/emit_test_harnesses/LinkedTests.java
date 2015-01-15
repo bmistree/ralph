@@ -1,6 +1,5 @@
 package emit_test_harnesses;
 
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import RalphConnObj.SameHostConnection;
 
@@ -58,8 +57,8 @@ public class LinkedTests
             RalphGlobals fg_globals = new RalphGlobals(params_fg);
 
             // a
-            LinkedInstanceEndpoint a = new LinkedInstanceEndpoint(
-                ab_globals,new SingleSideConnection());
+            LinkedInstanceEndpoint a =
+                LinkedInstanceEndpoint.create_single_sided(ab_globals);
             a.set_name("A");
 
             // connect b and c
@@ -72,8 +71,8 @@ public class LinkedTests
             c.set_name("C");
             
             // d
-            LinkedInstanceEndpoint d = new LinkedInstanceEndpoint(
-                cde_globals, new SingleSideConnection());
+            LinkedInstanceEndpoint d =
+                LinkedInstanceEndpoint.create_single_sided(cde_globals);
             d.set_name("D");
             
             // connect e and f
@@ -86,8 +85,8 @@ public class LinkedTests
             f.set_name("F");
 
             // create g
-            LinkedInstanceEndpoint g = new LinkedInstanceEndpoint(
-                fg_globals,new SingleSideConnection());
+            LinkedInstanceEndpoint g =
+                LinkedInstanceEndpoint.create_single_sided(fg_globals);
             g.set_name("G");
             
             

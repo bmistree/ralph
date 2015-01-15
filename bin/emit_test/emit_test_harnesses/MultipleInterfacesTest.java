@@ -3,7 +3,6 @@ package emit_test_harnesses;
 import ralph_emitted.MultipleInterfacesJava.SetterGetter;
 import ralph_emitted.MultipleInterfacesJava.INumberSetterGetter;
 import ralph_emitted.MultipleInterfacesJava.ITextSetterGetter;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class MultipleInterfacesTest
@@ -20,9 +19,8 @@ public class MultipleInterfacesTest
     {
         try
         {
-            SetterGetter endpt = new SetterGetter(
-                new RalphGlobals(),
-                new SingleSideConnection());
+            SetterGetter endpt =
+                SetterGetter.create_single_sided(new RalphGlobals());
 
             // testing numbers
             INumberSetterGetter num_endpt = (INumberSetterGetter)endpt;
