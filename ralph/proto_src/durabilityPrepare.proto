@@ -14,4 +14,10 @@ message DurabilityPrepare
     
     required UUID event_uuid = 1;
     repeated PairedPartnerRequestSequenceEndpointUUID rpc_args = 2;
+
+    /**
+       When we replay, whenever we generate a new endpoint, we should
+       assign them uuids in this order.
+     */
+    repeated UUID endpoints_created = 3;
 }

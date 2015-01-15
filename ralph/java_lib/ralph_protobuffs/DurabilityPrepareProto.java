@@ -49,6 +49,61 @@ public final class DurabilityPrepareProto {
      */
     ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder getRpcArgsOrBuilder(
         int index);
+
+    // repeated .UUID endpoints_created = 3;
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    java.util.List<ralph_protobuffs.UtilProto.UUID> 
+        getEndpointsCreatedList();
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index);
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    int getEndpointsCreatedCount();
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+        getEndpointsCreatedOrBuilderList();
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code DurabilityPrepare}
@@ -122,6 +177,14 @@ public final class DurabilityPrepareProto {
               rpcArgs_.add(input.readMessage(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID.PARSER, extensionRegistry));
               break;
             }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              endpointsCreated_.add(input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -132,6 +195,9 @@ public final class DurabilityPrepareProto {
       } finally {
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           rpcArgs_ = java.util.Collections.unmodifiableList(rpcArgs_);
+        }
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          endpointsCreated_ = java.util.Collections.unmodifiableList(endpointsCreated_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -954,9 +1020,76 @@ public final class DurabilityPrepareProto {
       return rpcArgs_.get(index);
     }
 
+    // repeated .UUID endpoints_created = 3;
+    public static final int ENDPOINTS_CREATED_FIELD_NUMBER = 3;
+    private java.util.List<ralph_protobuffs.UtilProto.UUID> endpointsCreated_;
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    public java.util.List<ralph_protobuffs.UtilProto.UUID> getEndpointsCreatedList() {
+      return endpointsCreated_;
+    }
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+        getEndpointsCreatedOrBuilderList() {
+      return endpointsCreated_;
+    }
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    public int getEndpointsCreatedCount() {
+      return endpointsCreated_.size();
+    }
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index) {
+      return endpointsCreated_.get(index);
+    }
+    /**
+     * <code>repeated .UUID endpoints_created = 3;</code>
+     *
+     * <pre>
+     **
+     *When we replay, whenever we generate a new endpoint, we should
+     *assign them uuids in this order.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+        int index) {
+      return endpointsCreated_.get(index);
+    }
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       rpcArgs_ = java.util.Collections.emptyList();
+      endpointsCreated_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -977,6 +1110,12 @@ public final class DurabilityPrepareProto {
           return false;
         }
       }
+      for (int i = 0; i < getEndpointsCreatedCount(); i++) {
+        if (!getEndpointsCreated(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -989,6 +1128,9 @@ public final class DurabilityPrepareProto {
       }
       for (int i = 0; i < rpcArgs_.size(); i++) {
         output.writeMessage(2, rpcArgs_.get(i));
+      }
+      for (int i = 0; i < endpointsCreated_.size(); i++) {
+        output.writeMessage(3, endpointsCreated_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1006,6 +1148,10 @@ public final class DurabilityPrepareProto {
       for (int i = 0; i < rpcArgs_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, rpcArgs_.get(i));
+      }
+      for (int i = 0; i < endpointsCreated_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, endpointsCreated_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1117,6 +1263,7 @@ public final class DurabilityPrepareProto {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getEventUuidFieldBuilder();
           getRpcArgsFieldBuilder();
+          getEndpointsCreatedFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1136,6 +1283,12 @@ public final class DurabilityPrepareProto {
           bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           rpcArgsBuilder_.clear();
+        }
+        if (endpointsCreatedBuilder_ == null) {
+          endpointsCreated_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          endpointsCreatedBuilder_.clear();
         }
         return this;
       }
@@ -1182,6 +1335,15 @@ public final class DurabilityPrepareProto {
         } else {
           result.rpcArgs_ = rpcArgsBuilder_.build();
         }
+        if (endpointsCreatedBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            endpointsCreated_ = java.util.Collections.unmodifiableList(endpointsCreated_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.endpointsCreated_ = endpointsCreated_;
+        } else {
+          result.endpointsCreated_ = endpointsCreatedBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1227,6 +1389,32 @@ public final class DurabilityPrepareProto {
             }
           }
         }
+        if (endpointsCreatedBuilder_ == null) {
+          if (!other.endpointsCreated_.isEmpty()) {
+            if (endpointsCreated_.isEmpty()) {
+              endpointsCreated_ = other.endpointsCreated_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureEndpointsCreatedIsMutable();
+              endpointsCreated_.addAll(other.endpointsCreated_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.endpointsCreated_.isEmpty()) {
+            if (endpointsCreatedBuilder_.isEmpty()) {
+              endpointsCreatedBuilder_.dispose();
+              endpointsCreatedBuilder_ = null;
+              endpointsCreated_ = other.endpointsCreated_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              endpointsCreatedBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEndpointsCreatedFieldBuilder() : null;
+            } else {
+              endpointsCreatedBuilder_.addAllMessages(other.endpointsCreated_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1242,6 +1430,12 @@ public final class DurabilityPrepareProto {
         }
         for (int i = 0; i < getRpcArgsCount(); i++) {
           if (!getRpcArgs(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getEndpointsCreatedCount(); i++) {
+          if (!getEndpointsCreated(i).isInitialized()) {
             
             return false;
           }
@@ -1625,6 +1819,354 @@ public final class DurabilityPrepareProto {
         return rpcArgsBuilder_;
       }
 
+      // repeated .UUID endpoints_created = 3;
+      private java.util.List<ralph_protobuffs.UtilProto.UUID> endpointsCreated_ =
+        java.util.Collections.emptyList();
+      private void ensureEndpointsCreatedIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(endpointsCreated_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> endpointsCreatedBuilder_;
+
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public java.util.List<ralph_protobuffs.UtilProto.UUID> getEndpointsCreatedList() {
+        if (endpointsCreatedBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(endpointsCreated_);
+        } else {
+          return endpointsCreatedBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public int getEndpointsCreatedCount() {
+        if (endpointsCreatedBuilder_ == null) {
+          return endpointsCreated_.size();
+        } else {
+          return endpointsCreatedBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index) {
+        if (endpointsCreatedBuilder_ == null) {
+          return endpointsCreated_.get(index);
+        } else {
+          return endpointsCreatedBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder setEndpointsCreated(
+          int index, ralph_protobuffs.UtilProto.UUID value) {
+        if (endpointsCreatedBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.set(index, value);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder setEndpointsCreated(
+          int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (endpointsCreatedBuilder_ == null) {
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder addEndpointsCreated(ralph_protobuffs.UtilProto.UUID value) {
+        if (endpointsCreatedBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.add(value);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder addEndpointsCreated(
+          int index, ralph_protobuffs.UtilProto.UUID value) {
+        if (endpointsCreatedBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.add(index, value);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder addEndpointsCreated(
+          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (endpointsCreatedBuilder_ == null) {
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.add(builderForValue.build());
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder addEndpointsCreated(
+          int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (endpointsCreatedBuilder_ == null) {
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder addAllEndpointsCreated(
+          java.lang.Iterable<? extends ralph_protobuffs.UtilProto.UUID> values) {
+        if (endpointsCreatedBuilder_ == null) {
+          ensureEndpointsCreatedIsMutable();
+          super.addAll(values, endpointsCreated_);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder clearEndpointsCreated() {
+        if (endpointsCreatedBuilder_ == null) {
+          endpointsCreated_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public Builder removeEndpointsCreated(int index) {
+        if (endpointsCreatedBuilder_ == null) {
+          ensureEndpointsCreatedIsMutable();
+          endpointsCreated_.remove(index);
+          onChanged();
+        } else {
+          endpointsCreatedBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder getEndpointsCreatedBuilder(
+          int index) {
+        return getEndpointsCreatedFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+          int index) {
+        if (endpointsCreatedBuilder_ == null) {
+          return endpointsCreated_.get(index);  } else {
+          return endpointsCreatedBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+           getEndpointsCreatedOrBuilderList() {
+        if (endpointsCreatedBuilder_ != null) {
+          return endpointsCreatedBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(endpointsCreated_);
+        }
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder addEndpointsCreatedBuilder() {
+        return getEndpointsCreatedFieldBuilder().addBuilder(
+            ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder addEndpointsCreatedBuilder(
+          int index) {
+        return getEndpointsCreatedFieldBuilder().addBuilder(
+            index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .UUID endpoints_created = 3;</code>
+       *
+       * <pre>
+       **
+       *When we replay, whenever we generate a new endpoint, we should
+       *assign them uuids in this order.
+       * </pre>
+       */
+      public java.util.List<ralph_protobuffs.UtilProto.UUID.Builder> 
+           getEndpointsCreatedBuilderList() {
+        return getEndpointsCreatedFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getEndpointsCreatedFieldBuilder() {
+        if (endpointsCreatedBuilder_ == null) {
+          endpointsCreatedBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                  endpointsCreated_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          endpointsCreated_ = null;
+        }
+        return endpointsCreatedBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:DurabilityPrepare)
     }
 
@@ -1656,15 +2198,15 @@ public final class DurabilityPrepareProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027durabilityPrepare.proto\032\nutil.proto\032!p" +
-      "artnerRequestSequenceBlock.proto\"\367\001\n\021Dur" +
+      "artnerRequestSequenceBlock.proto\"\231\002\n\021Dur" +
       "abilityPrepare\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUI" +
       "D\022M\n\010rpc_args\030\002 \003(\0132;.DurabilityPrepare." +
       "PairedPartnerRequestSequenceEndpointUUID" +
-      "\032x\n(PairedPartnerRequestSequenceEndpoint" +
-      "UUID\022.\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestS" +
-      "equenceBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UU" +
-      "IDB*\n\020ralph_protobuffsB\026DurabilityPrepar" +
-      "eProto"
+      "\022 \n\021endpoints_created\030\003 \003(\0132\005.UUID\032x\n(Pa" +
+      "iredPartnerRequestSequenceEndpointUUID\022." +
+      "\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestSequenc" +
+      "eBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UUIDB*\n\020" +
+      "ralph_protobuffsB\026DurabilityPrepareProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1676,7 +2218,7 @@ public final class DurabilityPrepareProto {
           internal_static_DurabilityPrepare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_DurabilityPrepare_descriptor,
-              new java.lang.String[] { "EventUuid", "RpcArgs", });
+              new java.lang.String[] { "EventUuid", "RpcArgs", "EndpointsCreated", });
           internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor =
             internal_static_DurabilityPrepare_descriptor.getNestedTypes().get(0);
           internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable = new
