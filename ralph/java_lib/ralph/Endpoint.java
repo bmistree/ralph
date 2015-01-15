@@ -869,7 +869,7 @@ public abstract class Endpoint implements IReference
     	// event uuid + priority
     	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
     	event_uuid_msg.setData(event_uuid);
-    	
+
     	UtilProto.Priority.Builder priority_msg =
             UtilProto.Priority.newBuilder();
     	priority_msg.setData(priority);

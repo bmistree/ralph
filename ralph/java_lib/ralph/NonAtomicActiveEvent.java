@@ -406,7 +406,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
                 return false;
             }
         }
-
         
         // changed to have rpc semantics: this means that if it's not
         // the first message, then it is a reply to another message.
