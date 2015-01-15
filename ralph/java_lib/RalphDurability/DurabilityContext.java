@@ -16,7 +16,9 @@ public class DurabilityContext
     private final List<PartnerRequestSequenceBlock> rpc_args;
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
+    private final List<String> endpoints_created_uuids;
 
+    
     // should set to true after we write a prepare message.  This way
     // we can skip writing complete messages for contexts that never
     // got to prepare step.
@@ -27,6 +29,7 @@ public class DurabilityContext
         this.event_uuid = event_uuid;
         this.rpc_args = new ArrayList<PartnerRequestSequenceBlock>();
         this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
+        this.endpoints_created_uuids = new ArrayList<String>();
     }
 
     /**
@@ -46,7 +49,16 @@ public class DurabilityContext
             String endpoint_uuid = endpoint_uuid_received_rpc_on.get(i);
             to_return.add_rpc_arg(rpc_arg,endpoint_uuid);
         }
+
+        for (String endpoint_uuid : endpoints_created_uuids)
+            to_return.add_endpoint_created_uuid(endpoint_uuid);
+        
         return to_return;
+    }
+
+    public synchronized void add_endpoint_created_uuid(String endpoint_uuid)
+    {
+        endpoints_created_uuids.add(endpoint_uuid);
     }
     
     public synchronized void add_rpc_arg(
@@ -78,6 +90,14 @@ public class DurabilityContext
 
             prepare_msg.addRpcArgs(rpc_arg_tuple);
         }
+        
+        for (String endpt_uuid : endpoints_created_uuids)
+        {
+            UUID.Builder endpt_uuid_builder = UUID.newBuilder();
+            endpt_uuid_builder.setData(endpt_uuid);
+            prepare_msg.addEndpointsCreated(endpt_uuid_builder);
+        }
+        
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setPrepare(prepare_msg);
