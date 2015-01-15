@@ -16,6 +16,11 @@ public class DurabilityContext
     private final List<PartnerRequestSequenceBlock> rpc_args;
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
+
+    // should set to true after we write a prepare message.  This way
+    // we can skip writing complete messages for contexts that never
+    // got to prepare step.
+    private boolean has_prepared = false;
     
     public DurabilityContext(String event_uuid)
     {
@@ -31,7 +36,7 @@ public class DurabilityContext
        atomic event, we want to copy its durability context.  We only
        do stable logging when we complete atomic events.
      */
-    public DurabilityContext clone(String new_event_uuid)
+    public synchronized DurabilityContext clone(String new_event_uuid)
     {
         DurabilityContext to_return = new DurabilityContext(new_event_uuid);
 
@@ -44,14 +49,14 @@ public class DurabilityContext
         return to_return;
     }
     
-    public void add_rpc_arg(
+    public synchronized void add_rpc_arg(
         PartnerRequestSequenceBlock arg, String endpoint_uuid)
     {
         rpc_args.add(arg);
         endpoint_uuid_received_rpc_on.add(endpoint_uuid);
     }
 
-    public Durability prepare_proto_buf()
+    public synchronized Durability prepare_proto_buf()
     {
         UUID.Builder uuid_builder = UUID.newBuilder();
         uuid_builder.setData(event_uuid);
@@ -76,12 +81,16 @@ public class DurabilityContext
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setPrepare(prepare_msg);
+        has_prepared = true;
         return to_return.build();
     }
 
 
-    public Durability complete_proto_buf(boolean succeeded)
+    public synchronized Durability complete_proto_buf(boolean succeeded)
     {
+        if (! has_prepared)
+            return null;
+        
         UUID.Builder uuid_builder = UUID.newBuilder();
         uuid_builder.setData(event_uuid);
 
