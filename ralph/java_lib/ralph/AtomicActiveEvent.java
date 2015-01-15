@@ -1214,12 +1214,21 @@ public class AtomicActiveEvent extends ActiveEvent
                     reply_with_uuid, threadsafe_unblock_queue);
             }
 
+            // changed to have rpc semantics: this means that if it's not
+            // the first message, then it is a reply to another message.
+            // if it is a first message, then should not be replying to
+            // anything.
+            String replying_to = null;
+            if (! first_msg)
+                replying_to = ctx.get_to_reply_with();
+
+            
             PartnerRequestSequenceBlock request_sequence_block = null;
             try
             {
                 request_sequence_block =
                     PartnerRequestSequenceBlockProducer.produce_request_block(
-                        ctx,func_name,first_msg,args,result,this,true,
+                        replying_to,func_name,args,result,this,true,
                         reply_with_uuid);
             }
             catch (BackoutException ex)
