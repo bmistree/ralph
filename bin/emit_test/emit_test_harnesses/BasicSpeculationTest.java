@@ -194,7 +194,7 @@ public class BasicSpeculationTest
             SpeculativeInterface endpt =
                 (SpeculativeInterface) constructor_obj.construct(
                     speculative_interface_ralph_globals,
-                    new SingleSideConnection());
+                    new SingleSideConnection(),null);
             
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();

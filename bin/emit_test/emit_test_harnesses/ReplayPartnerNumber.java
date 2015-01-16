@@ -19,6 +19,8 @@ import RalphVersions.IReconstructionContext;
 import ralph_emitted.ReplayPartnerNumberChangeJava.NumberSender;
 import ralph_emitted.ReplayPartnerNumberChangeJava.NumberReceiver;
 
+import RalphDurability.DurabilityContext;
+
 
 public class ReplayPartnerNumber
 {
@@ -133,17 +135,20 @@ public class ReplayPartnerNumber
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
-            receiver = (NumberReceiver) NumberReceiver.factory.construct(globals,conn_obj);
+            receiver =
+                (NumberReceiver)
+                NumberReceiver.factory.construct(globals,conn_obj,durability_context);
             return receiver;
         }
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }
     }
     

@@ -63,10 +63,12 @@ public class LinkedTests
 
             // connect b and c
             SameHostConnection bc_conn = new SameHostConnection();
-            LinkedConnectionEndpoint b = new LinkedConnectionEndpoint(
-                ab_globals,bc_conn);
-            LinkedConnectionEndpoint c = new LinkedConnectionEndpoint(
-                cde_globals,bc_conn);
+            LinkedConnectionEndpoint b =
+                LinkedConnectionEndpoint.external_create(
+                    ab_globals,bc_conn);
+            LinkedConnectionEndpoint c =
+                LinkedConnectionEndpoint.external_create(
+                    cde_globals,bc_conn);
             b.set_name("B");
             c.set_name("C");
             
@@ -77,10 +79,10 @@ public class LinkedTests
             
             // connect e and f
             SameHostConnection ef_conn = new SameHostConnection();
-            LinkedConnectionEndpoint e = new LinkedConnectionEndpoint(
-                cde_globals,ef_conn);
-            LinkedConnectionEndpoint f = new LinkedConnectionEndpoint(
-                fg_globals,ef_conn);
+            LinkedConnectionEndpoint e =
+                LinkedConnectionEndpoint.external_create(cde_globals,ef_conn);
+            LinkedConnectionEndpoint f =
+                LinkedConnectionEndpoint.external_create(fg_globals,ef_conn);
             e.set_name("E");
             f.set_name("F");
 

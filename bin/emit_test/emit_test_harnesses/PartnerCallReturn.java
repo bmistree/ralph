@@ -28,9 +28,9 @@ public class PartnerCallReturn
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            PassReturnArg side_a = new PassReturnArg(
+            PassReturnArg side_a = PassReturnArg.external_create(
                 new RalphGlobals(params_a),conn_obj);
-            PassReturnArg side_b = new PassReturnArg(
+            PassReturnArg side_b = PassReturnArg.external_create(
                 new RalphGlobals(params_b),conn_obj);
 
             Double[] list_first_nums = new Double [] {1.0, 2.0, 3.5,5.5};

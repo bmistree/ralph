@@ -12,7 +12,7 @@ import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
-
+import RalphDurability.DurabilityContext;
 
 public class WrappedTCPPartnerCall
 {
@@ -91,12 +91,13 @@ public class WrappedTCPPartnerCall
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
             Endpoint to_return = null;
 
             try {
-                to_return = new SideA(globals,conn_obj);
+                to_return = new SideA(globals,conn_obj,durability_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
                 assert(false);
@@ -106,9 +107,10 @@ public class WrappedTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,
+            DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }
     }
     
@@ -116,10 +118,11 @@ public class WrappedTCPPartnerCall
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
             try {
-                side_b = new SideB(globals,conn_obj);
+                side_b = new SideB(globals,conn_obj,durability_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
             }
@@ -128,9 +131,10 @@ public class WrappedTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,
+            DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }
     }
 

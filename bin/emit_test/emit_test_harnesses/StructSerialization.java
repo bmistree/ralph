@@ -37,9 +37,9 @@ public class StructSerialization
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            StructSerializer side_a = new StructSerializer(
+            StructSerializer side_a = StructSerializer.external_create(
                 new RalphGlobals(params_a),conn_obj);
-            StructSerializer side_b = new StructSerializer(
+            StructSerializer side_b = StructSerializer.external_create(
                 new RalphGlobals(params_b),conn_obj);
 
             List<SerializerTest> tests_to_run =

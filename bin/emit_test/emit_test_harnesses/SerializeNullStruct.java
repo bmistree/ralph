@@ -30,10 +30,12 @@ public class SerializeNullStruct
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            SerializeNull side_a = new SerializeNull(
-                new RalphGlobals(params_a),conn_obj);
-            SerializeNull side_b = new SerializeNull(
-                new RalphGlobals(params_b),conn_obj);
+            SerializeNull side_a =
+                SerializeNull.external_create(
+                    new RalphGlobals(params_a),conn_obj);
+            SerializeNull side_b =
+                SerializeNull.external_create(
+                    new RalphGlobals(params_b),conn_obj);
 
             if (! num_sum_test(side_a))
                 return false;

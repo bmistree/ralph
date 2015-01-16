@@ -306,6 +306,37 @@ public final static %(endpoint_name)s create_single_sided(RalphGlobals ralph_glo
     return (%(endpoint_name)s) Ralph.no_partner_create(factory,ralph_globals);
 }
 
+public final static %(endpoint_name)s external_create(
+    RalphGlobals ralph_globals,ConnectionObj conn_obj)
+{
+        // log the newly created endpoint
+        DurabilityContext durability_context = null;
+        if (DurabilityInfo.instance.durability_saver != null)
+        {
+            String dummy_event_uuid = ralph_globals.generate_uuid();
+            durability_context =
+                new DurabilityContext(dummy_event_uuid);
+        }
+
+        try
+        {
+            return (%(endpoint_name)s) factory.construct(
+                ralph_globals,conn_obj,durability_context);
+        }
+        finally
+        {
+            if (DurabilityInfo.instance.durability_saver != null)
+            {
+                // FIXME: should actually be logging the endpoint
+                // type as well here.
+                DurabilityInfo.instance.durability_saver.prepare_operation(
+                    durability_context);
+                DurabilityInfo.instance.durability_saver.complete_operation(
+                    durability_context,true);
+            }
+        }
+}
+
 ''' % ({'endpoint_name': endpt_node.name,
         'version_mapping_text': version_mapping_text,
         'version_unmapping_text': version_unmapping_text})
@@ -1177,7 +1208,7 @@ new %(java_type_text)s  (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
             default_internal_endpoint_text = (
-                'new %s (ralph_globals,new SingleSideConnection())' %
+                'new %s (ralph_globals,new SingleSideConnection(),_active_event.durability_context)' %
                 type_object.alias_name)
             
             to_return = (

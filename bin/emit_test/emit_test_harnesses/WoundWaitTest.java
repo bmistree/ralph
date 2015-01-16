@@ -67,10 +67,10 @@ public class WoundWaitTest
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            PromoterEndpoint side_a = new PromoterEndpoint(
+            PromoterEndpoint side_a = PromoterEndpoint.external_create(
                 new RalphGlobals(params_a),
                 conn_obj);
-            PromoterEndpoint side_b = new PromoterEndpoint(
+            PromoterEndpoint side_b = PromoterEndpoint.external_create(
                 new RalphGlobals(params_b),
                 conn_obj);
 

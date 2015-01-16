@@ -1,6 +1,8 @@
 package emit_test_harnesses;
 
 import java.util.List;
+import java.io.IOException;
+
 import ralph_emitted.AtomicPartnerJava.SideA;
 import ralph_emitted.AtomicPartnerJava.SideB;
 import RalphConnObj.TCPConnectionObj;
@@ -9,7 +11,7 @@ import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
-import java.io.IOException;
+import RalphDurability.DurabilityContext;
 
 public class AtomicTCPPartnerCall
 {
@@ -89,12 +91,13 @@ public class AtomicTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, 
-            RalphConnObj.ConnectionObj conn_obj)
+            RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
             Endpoint to_return = null;
 
             try {
-                to_return = new SideA(globals,conn_obj);
+                to_return = new SideA(globals,conn_obj,durability_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
                 assert(false);
@@ -104,9 +107,10 @@ public class AtomicTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,
+            DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }        
     }
     
@@ -115,10 +119,11 @@ public class AtomicTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals,
-            RalphConnObj.ConnectionObj conn_obj)
+            RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
             try {
-                side_b = new SideB(globals,conn_obj);
+                side_b = new SideB(globals,conn_obj,durability_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
             }
@@ -127,9 +132,10 @@ public class AtomicTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,
+            DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }
     }
 

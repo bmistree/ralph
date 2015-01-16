@@ -40,10 +40,12 @@ public class SerializeMapOfStructs
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            MapSerializer side_a = new MapSerializer(
-                new RalphGlobals(params_a),conn_obj);
-            MapSerializer side_b = new MapSerializer(
-                new RalphGlobals(params_b),conn_obj);
+            MapSerializer side_a =
+                MapSerializer.external_create(
+                    new RalphGlobals(params_a),conn_obj);
+            MapSerializer side_b =
+                MapSerializer.external_create(
+                    new RalphGlobals(params_b),conn_obj);
 
             // tests atomic number map serialization
             if (! map_num_sum_test(true,side_a))

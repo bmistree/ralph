@@ -45,14 +45,12 @@ public class PartnerSendServiceFactoryTest
             RalphGlobals receiver_globals =
                 new RalphGlobals(params_receiver);
             ServiceReceiver service_receiver_endpt =
-                (ServiceReceiver)ServiceReceiver.factory.construct(
-                    receiver_globals,conn_obj);
+                ServiceReceiver.external_create(receiver_globals,conn_obj);
             
             RalphGlobals sender_globals =
                 new RalphGlobals(params_sender);
             ServiceFactorySender service_sender_endpt =
-                (ServiceFactorySender) ServiceFactorySender.factory.construct(
-                    sender_globals,conn_obj);
+                ServiceFactorySender.external_create(sender_globals,conn_obj);
             
 
             // build service factory to send to other side

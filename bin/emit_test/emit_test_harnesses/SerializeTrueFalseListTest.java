@@ -31,9 +31,9 @@ public class SerializeTrueFalseListTest
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            ListSerializer side_a = new ListSerializer(
+            ListSerializer side_a = ListSerializer.external_create(
                 new RalphGlobals(params_a),conn_obj);
-            ListSerializer side_b = new ListSerializer(
+            ListSerializer side_b = ListSerializer.external_create(
                 new RalphGlobals(params_b),conn_obj);
 
             // tests atomic text list serialization

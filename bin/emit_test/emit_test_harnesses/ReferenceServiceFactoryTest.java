@@ -41,9 +41,9 @@ public class ReferenceServiceFactoryTest
             SameHostConnection conn_obj = new SameHostConnection();
             RalphGlobals sender_globals =
                 new RalphGlobals(params_sender);
-            Sender sender = new Sender(sender_globals,conn_obj);
+            Sender sender = Sender.external_create(sender_globals,conn_obj);
             Receiver receiver =
-                new Receiver(
+                Receiver.external_create(
                     new RalphGlobals(params_receiver),conn_obj);
 
             EndpointConstructorObj receiver_creater =

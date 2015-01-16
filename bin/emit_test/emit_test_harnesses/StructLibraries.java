@@ -17,7 +17,8 @@ public class StructLibraries
     {
         try
         {
-            StructUser endpt = new StructUser(new RalphGlobals());
+            StructUser endpt =
+                StructUser.create_single_sided(new RalphGlobals());
 
             // testing numbers
             String text_to_set = "hello";

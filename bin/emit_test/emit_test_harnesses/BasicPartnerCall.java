@@ -29,9 +29,9 @@ public class BasicPartnerCall
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            SideA side_a = new SideA(
+            SideA side_a = SideA.external_create(
                 new RalphGlobals(params_a),conn_obj);
-            SideB side_b = new SideB(
+            SideB side_b = SideB.external_create(
                 new RalphGlobals(params_b),conn_obj);
 
             double prev_number = side_b.get_number().doubleValue();

@@ -80,10 +80,12 @@ public class PromotionTest
         try
         {
             SameHostConnection conn_obj = new SameHostConnection();
-            PromoterEndpoint side_a = new PromoterEndpoint(
-                new RalphGlobals(params_a),conn_obj);
-            PromoterEndpoint side_b = new PromoterEndpoint(
-                new RalphGlobals(params_b),conn_obj);
+            PromoterEndpoint side_a =
+                PromoterEndpoint.external_create(
+                    new RalphGlobals(params_a),conn_obj);
+            PromoterEndpoint side_b =
+                PromoterEndpoint.external_create(
+                    new RalphGlobals(params_b),conn_obj);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();
