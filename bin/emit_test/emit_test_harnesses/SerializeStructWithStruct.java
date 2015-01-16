@@ -31,7 +31,7 @@ public class SerializeStructWithStruct
             SameHostConnection conn_obj = new SameHostConnection();
             StructSerializer side_a = StructSerializer.external_create(
                 new RalphGlobals(params_a),conn_obj);
-            StructSerializer side_b = StructSerializer.exteranl_create(
+            StructSerializer side_b = StructSerializer.external_create(
                 new RalphGlobals(params_b),conn_obj);
 
             if (! num_sum_test(side_a))
