@@ -40,13 +40,13 @@ class EmitContext(object):
 
         self.method_set = set()
         self.in_endpoint_global_vars = False
-
+        
     def add_method_name_to_method_set(self,method_name):
         self.method_set.add(method_name)
 
     def method_name_in_method_set(self,method_name):
         return method_name in self.method_set
-
+    
     def get_in_endpoint_global_vars(self):
         return self.in_endpoint_global_vars
     def set_in_endpoint_global_vars(self,inside):

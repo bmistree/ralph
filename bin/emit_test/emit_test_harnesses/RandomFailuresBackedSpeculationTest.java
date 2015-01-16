@@ -48,8 +48,8 @@ public class RandomFailuresBackedSpeculationTest
         try
         {
             RalphGlobals ralph_globals = new RalphGlobals();
-            BackedSpeculation endpt = new BackedSpeculation(
-                ralph_globals,new SingleSideConnection());
+            BackedSpeculation endpt =
+                BackedSpeculation.create_single_sided(ralph_globals);
             
             RandomFailuresOnHardware hardware_change_applier_switch1 =
                 new RandomFailuresOnHardware(

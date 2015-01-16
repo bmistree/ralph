@@ -1207,14 +1207,22 @@ new %(java_type_text)s  (
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
+
+            durability_context_text = 'null /** FIXME: Should emit other context */'
+            if not emit_ctx.get_in_endpoint_global_vars():
+                durability_context_text = '_active_event.durability_context'
+                
             default_internal_endpoint_text = (
-                'new %s (ralph_globals,new SingleSideConnection(),_active_event.durability_context)' %
-                type_object.alias_name)
+                'new %(type_alias)s (ralph_globals,new SingleSideConnection(),%(durability_context)s)' %
+                {
+                    'type_alias': type_object.alias_name,
+                    'durability_context': durability_context_text
+                    })
             
             to_return = (
                 'new  %s(false,%s,ralph_globals)' %
                 (java_type_text,default_internal_endpoint_text))
-            
+
 
         return to_return
 
