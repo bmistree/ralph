@@ -668,7 +668,8 @@
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
-        jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter">
+        jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
+        jar_DirectStructWrappedEndpoint">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -678,6 +679,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_DirectStructWrappedEndpoint"
+      depends="direct_struct_wrapped_endpoint">
+  </target>
+  
   <target
       name="ralph_VersionedSetterGetter"
       depends="iface_basic_ralph,basic_ralph">
@@ -1132,6 +1138,12 @@
     </antcall>
   </target>
 
+  <target name="harness_DirectStructWrappedEndpoint">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="DirectStructWrappedEndpoint.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_VersionedEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedEnum.java"/>
@@ -1588,6 +1600,20 @@
     </antcall>
   </target>
 
+  <property
+      name="direct_struct_wrapped_endpoint_jar"
+      value="direct_struct_wrapped_endpoint.jar"/>
+  <target
+      name="jar_DirectStructWrappedEndpoint"
+      depends="ralph_DirectStructWrappedEndpoint,ralph_to_byte_code,harness_DirectStructWrappedEndpoint">
+    <antcall target="make_jar">
+      <param name="main_class" value="DirectStructWrappedEndpoint"/>
+      <param name="dest_jar" value="${direct_struct_wrapped_endpoint_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
+  
   <property
       name="versioned_setter_getter_jar"
       value="versioned_setter_getter.jar"/>
