@@ -41,6 +41,17 @@ class EmitContext(object):
         self.method_set = set()
         self.in_endpoint_global_vars = False
         
+        # must keep track of this separately so that for endpoint
+        # global variables that are endpoints, we can emit code for
+        # them with their durability_contexts' satisfied.
+        self.in_endpoint_constructor = False
+
+    def set_in_endpoint_constructor(self,to_set_to):
+        self.in_endpoint_constructor = to_set_to
+        
+    def get_in_endpoint_constructor(self):
+        return self.in_endpoint_constructor
+        
     def add_method_name_to_method_set(self,method_name):
         self.method_set.add(method_name)
 
@@ -49,6 +60,7 @@ class EmitContext(object):
     
     def get_in_endpoint_global_vars(self):
         return self.in_endpoint_global_vars
+    
     def set_in_endpoint_global_vars(self,inside):
         """
         Args:

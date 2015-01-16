@@ -193,7 +193,9 @@ public static class %s extends Endpoint %s {
     endpt_class_body = emit_endpt_variable_declarations(
         emit_ctx,endpt_node.body_node.variable_declaration_nodes)
     endpt_class_body += '\n'
-    endpt_class_body += emit_constructor(emit_ctx,endpt_node)
+    endpt_class_body += emit_constructor(
+        emit_ctx,endpt_node,endpt_node.body_node.variable_declaration_nodes)
+    
     endpt_class_body += emit_endpt_method_declarations(
         emit_ctx,endpt_node.body_node.method_declaration_nodes)
     endpt_class_body += '\n'
@@ -203,7 +205,11 @@ public static class %s extends Endpoint %s {
     return endpt_class_signature + indent_string(endpt_class_body) + '\n}'
 
 
-def emit_constructor(emit_ctx,endpt_node):
+def emit_constructor(emit_ctx,endpt_node,variable_declaration_node_list):
+    '''
+    @param {list} variable_declaration_node_list --- Each element is
+    a DeclarationStatementNode.
+    '''
     # when initially construct an endpoint/service, if versioning is
     # on, should map the endpoint's global variables to the ralph
     # objects that they point to.  These mappings can then be used
@@ -245,13 +251,32 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
        'variable_type': java_type_statement}
     # line up with construct method
     version_unmapping_text = indent_string(version_unmapping_text,2)
+
+    # this text is used for initializing endpoint objects in the
+    # endpoint constructor.  We have to do this in the constructor so
+    # that we have access to the target durability_context.
+    endpt_globals_endpt_vars_text = ''
+
+    emit_ctx.set_in_endpoint_constructor(True)
+    for variable_declaration_node in variable_declaration_node_list:
+        if isinstance(variable_declaration_node.type,EndpointType):
+            endpt_globals_endpt_vars_text += (
+                emit_statement(emit_ctx,variable_declaration_node) )
+            endpt_globals_endpt_vars_text += '\n'
+
+    endpt_globals_endpt_vars_text = indent_string(
+        endpt_globals_endpt_vars_text)
     
+    emit_ctx.set_in_endpoint_constructor(False)
+
     constructor_text = '''
 public %(endpoint_name)s (
     RalphGlobals ralph_globals,ConnectionObj conn_obj,
     DurabilityContext durability_context) 
 {
     super(ralph_globals,conn_obj,factory,durability_context);
+
+%(endpt_globals_endpt_vars_text)s
 
     if (VersioningInfo.instance.version_saver != null)
     {
@@ -339,7 +364,8 @@ public final static %(endpoint_name)s external_create(
 
 ''' % ({'endpoint_name': endpt_node.name,
         'version_mapping_text': version_mapping_text,
-        'version_unmapping_text': version_unmapping_text})
+        'version_unmapping_text': version_unmapping_text,
+        'endpt_globals_endpt_vars_text': endpt_globals_endpt_vars_text})
     return constructor_text
 
 
@@ -1202,15 +1228,23 @@ new %(java_type_text)s  (
     
     elif isinstance(type_object,EndpointType):
         java_type_text = emit_ralph_wrapped_type(type_object)
-        if initializer_node is not None:
+
+        # FIXME: apparently can have None emit_ctx when being called
+        # through struct.  Kind of fishy.  Should fix.
+        if (emit_ctx is None) or emit_ctx.get_in_endpoint_global_vars():
+            # we must initialize endpoint globals in the constructors
+            # of endpoints so that we have a durability context
+            # available.
+            to_return = 'null'
+            
+        elif initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
-
-            durability_context_text = 'null /** FIXME: Should emit other context */'
-            if not emit_ctx.get_in_endpoint_global_vars():
-                durability_context_text = '_active_event.durability_context'
+            durability_context_text = '_active_event.durability_context'
+            if emit_ctx.get_in_endpoint_constructor():
+                durability_context_text = 'durability_context'
                 
             default_internal_endpoint_text = (
                 'new %(type_alias)s (ralph_globals,new SingleSideConnection(),%(durability_context)s)' %
@@ -1218,13 +1252,13 @@ new %(java_type_text)s  (
                     'type_alias': type_object.alias_name,
                     'durability_context': durability_context_text
                     })
-            
+
             to_return = (
                 'new  %s(false,%s,ralph_globals)' %
                 (java_type_text,default_internal_endpoint_text))
 
-
         return to_return
+    
 
     elif isinstance(type_object,ServiceFactoryType):
         java_type_text = emit_ralph_wrapped_type(type_object)
@@ -1989,7 +2023,8 @@ _ctx.hide_partner_call(
             statement_node.type,statement_node.initializer_node,emit_ctx)
 
         # add new variable to emit_ctx stack
-        emit_ctx.add_var_name(statement_node.var_name)
+        if not emit_ctx.get_in_endpoint_constructor():
+            emit_ctx.add_var_name(statement_node.var_name)
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.var_name)
 
@@ -1999,7 +2034,10 @@ _ctx.hide_partner_call(
 
         if emit_ctx.get_in_endpoint_global_vars():
             declaration_statement = 'private ' + declaration_statement
-            
+        elif emit_ctx.get_in_endpoint_constructor():
+            declaration_statement = (
+                '%s = %s; ' % (internal_var_name,new_expression))
+
         return declaration_statement + '\n'
 
     elif statement_node.label == ast_labels.RETURN:
