@@ -16,6 +16,8 @@ import RalphVersions.VersionUtil;
 import RalphVersions.ReconstructionContext;
 import RalphVersions.IReconstructionContext;
 
+import RalphDurability.DurabilityContext;
+
 import ralph_emitted.ReplayPartnerStructElementJava.StructSender;
 import ralph_emitted.ReplayPartnerStructElementJava.StructReceiver;
 
@@ -131,17 +133,21 @@ public class ReplayPartnerStructElement
     {
         @Override
         public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj)
+            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
+            DurabilityContext durability_context)
         {
-            receiver = (StructReceiver) StructReceiver.factory.construct(globals,conn_obj);
+            receiver =
+                (StructReceiver) StructReceiver.factory.construct(
+                    globals,conn_obj,durability_context);
             return receiver;
         }
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list)
+            List<RalphObject> internal_val_list,
+            DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj);
+            return construct(globals,conn_obj,durability_context);
         }
     }
 
