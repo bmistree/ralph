@@ -86,6 +86,13 @@
       <param name="class_name" value="ReplayEnumJava"/>
     </antcall>
   </target>
+
+  <target name="direct_struct_wrapped_endpoint" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="direct_struct_wrapped_endpoint.rph"/>
+      <param name="class_name" value="DirectStructWrappedEndpointJava"/>
+    </antcall>
+  </target>
   
   <target name="atomic_number_incrementer" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">

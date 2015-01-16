@@ -1,0 +1,29 @@
+alias Service InnerService as 'DirectStructWrappedEndpointJava.InnerService';
+
+
+Struct WrappedEndpoint
+{
+    Service InnerService inner_service;
+}
+
+Service OuterService
+{
+    Struct WrappedEndpoint wrapped;
+
+    increment_and_return_number() returns Number
+    {
+        return wrapped.inner_service.increment_and_return_number();
+    }
+    
+}
+
+Service InnerService
+{
+    Number inner_number = 0;
+
+    increment_and_return_number() returns Number
+    {
+        inner_number += 1;
+        return inner_number;
+    }
+}
