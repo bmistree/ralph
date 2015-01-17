@@ -1231,7 +1231,8 @@ new %(java_type_text)s  (
 
         # FIXME: apparently can have None emit_ctx when being called
         # through struct.  Kind of fishy.  Should fix.
-        if (emit_ctx is None) or emit_ctx.get_in_endpoint_global_vars():
+        if (emit_ctx.get_in_struct_constructor() or
+            emit_ctx.get_in_endpoint_global_vars()):
             # we must initialize endpoint globals in the constructors
             # of endpoints so that we have a durability context
             # available.
@@ -1258,7 +1259,7 @@ new %(java_type_text)s  (
                 (java_type_text,default_internal_endpoint_text))
 
         return to_return
-    
+
 
     elif isinstance(type_object,ServiceFactoryType):
         java_type_text = emit_ralph_wrapped_type(type_object)
@@ -2889,15 +2890,18 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
 ''' % {'internal_struct_name': internal_struct_name}
 
     # emit struct's fields
-    emit_ctx = None
+    emit_ctx = EmitContext(None)
+    emit_ctx.set_in_struct_global_vars(True)
     internal_struct_body_text = ''
     for field_name in struct_type.name_to_field_type_dict:
         field_type = struct_type.name_to_field_type_dict[field_name]
         internal_struct_body_text += (
             'public %s %s = null;\n' %
             (emit_ralph_wrapped_type(field_type),field_name))
-
+    emit_ctx.set_in_struct_global_vars(False)
+        
     # emit constructor for struct
+    emit_ctx.set_in_struct_constructor(True)
     internal_struct_body_text += (
         'public %s (RalphGlobals ralph_globals)\n' %
         internal_struct_name)
@@ -2909,12 +2913,13 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
     initializer_dict = struct_type.name_to_initializer_dict
     for field_name in struct_type.name_to_field_type_dict:
         field_type = struct_type.name_to_field_type_dict[field_name]
-
         initializer_node = initializer_dict.get(field_name,None)
         internal_constructor_text += (
             '%s = %s;\n' %
             (field_name,
              construct_new_expression(field_type,initializer_node,emit_ctx)))
+
+    emit_ctx.set_in_struct_constructor(False)        
     # registers struct with version manager, if on.
     internal_constructor_text += '\nlog_obj_constructor_during_init(null);\n'
         

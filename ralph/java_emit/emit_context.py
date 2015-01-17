@@ -46,6 +46,21 @@ class EmitContext(object):
         # them with their durability_contexts' satisfied.
         self.in_endpoint_constructor = False
 
+        self.in_struct_global_vars = False
+        self.in_struct_constructor = False
+        
+    def set_in_struct_global_vars(self,to_set_to):
+        self.in_struct_global_vars = to_set_to
+        
+    def get_in_struct_global_vars(self):
+        return self.in_struct_global_vars
+
+    def set_in_struct_constructor(self,to_set_to):
+        self.in_struct_constructor = to_set_to
+        
+    def get_in_struct_constructor(self):
+        return self.in_struct_constructor
+    
     def set_in_endpoint_constructor(self,to_set_to):
         self.in_endpoint_constructor = to_set_to
         
