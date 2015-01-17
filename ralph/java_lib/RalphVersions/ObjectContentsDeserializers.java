@@ -263,12 +263,14 @@ public class ObjectContentsDeserializers
             StructWrapperBaseClass to_return = null;
             if (initial_reference == null)
             {
-                // means that was initialized with null.
-                to_return = factory.construct_null_internal(ralph_globals);
+                to_return =
+                    factory.construct_null_internal(ralph_globals);
             }
             else
             {
-                to_return = factory.construct(ralph_globals);
+                // using null here because when replaying shouldn't
+                // durably re-log.
+                to_return = factory.construct(ralph_globals,null);
             }
             
             to_return.set_initial_reference(initial_reference);
@@ -298,8 +300,10 @@ public class ObjectContentsDeserializers
                     "No factory to contents deserialize internalstruct.");
             }
 
+            // using null here because when replaying shouldn't
+            // durably re-log.
             StructWrapperBaseClass to_return_wrapper =
-                factory.construct(ralph_globals);
+                factory.construct(ralph_globals,null);
 
             InternalStructBaseClass internal_struct =
                 (InternalStructBaseClass) to_return_wrapper.val.val;

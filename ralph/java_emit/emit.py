@@ -259,7 +259,8 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
 
     emit_ctx.set_in_endpoint_constructor(True)
     for variable_declaration_node in variable_declaration_node_list:
-        if isinstance(variable_declaration_node.type,EndpointType):
+        if (isinstance(variable_declaration_node.type,EndpointType) or
+            isinstance(variable_declaration_node.type,StructType)):
             endpt_globals_endpt_vars_text += (
                 emit_statement(emit_ctx,variable_declaration_node) )
             endpt_globals_endpt_vars_text += '\n'
@@ -422,7 +423,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
             single_arg_string = '''
 %(internal_container_type)s %(arg_name)s =
-    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(active_event);\n
+    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(_active_event);\n
 ''' % { 'internal_container_type': internal_container_type,
         'arg_name': arg_name,
         'arg_vec_to_read_from': arg_vec_to_read_from,
@@ -431,7 +432,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
             single_arg_string = (
-                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(active_event);\n''' %
+                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(_active_event);\n''' %
                 (arg_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, StructType):
@@ -441,7 +442,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(_active_event);\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,struct_type_name,
                  arg_vec_to_read_from))
         elif isinstance(method_declaration_arg_node.type,EnumType):
@@ -453,7 +454,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             wrapped_enum_type_name = (
                 'RalphObject<%s,%s>' % (enum_type_name,enum_type_name))
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(active_event);\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(_active_event);\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,
                  wrapped_enum_type_name,arg_vec_to_read_from))
             
@@ -537,14 +538,14 @@ def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
     if args_text != '':
         args_text = ',' + args_text
 
-    actual_call = method_name + '(ctx,active_event' + args_text + ')'
+    actual_call = method_name + '(ctx,_active_event' + args_text + ')'
     if method_declaration_node.returns_value():
         return_type = method_declaration_node.get_return_type()
         new_expression = (
             'result = %s;\n' %
             construct_new_expression(return_type,None,emit_ctx))
         assignment_statement = (
-            'result.set_val(active_event,%s);' %
+            'result.set_val(_active_event,%s);' %
             actual_call)
         actual_call = new_expression + assignment_statement
 
@@ -606,7 +607,7 @@ else
         
     emitted_method = '''
 protected RalphObject _handle_rpc_call(
-    String to_exec_internal_name,ActiveEvent active_event,
+    String to_exec_internal_name,ActiveEvent _active_event,
     ExecutingEventContext ctx,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException,
@@ -1153,7 +1154,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
             
         internal_map_version_helper = (
             internal_map_version_helper_from_map_type(type_object))
-        
+
         # require EnsureAtomicWrapper object to 
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
@@ -1216,14 +1217,28 @@ new %(java_type_text)s  (
     
     elif isinstance(type_object,StructType):
         struct_name = type_object.struct_name
-        if initializer_node is not None:
+
+        if (emit_ctx.get_in_struct_global_vars() or
+            emit_ctx.get_in_endpoint_global_vars()):
+            to_return = 'null'
+        elif initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (struct_name,initializer_text))
         else:
+            durability_context_text = '_active_event.durability_context'
+            if (emit_ctx.get_in_endpoint_constructor() or
+                emit_ctx.get_in_struct_constructor()):
+                durability_context_text = 'durability_context'
+            
             to_return = (
-                'new  %s(false,ralph_globals)' % struct_name)
-
+                ('new  %(struct_name)s(false,ralph_globals, ' +
+                 '%(durability_context)s)') %
+                {
+                    'struct_name': struct_name,
+                    'durability_context': durability_context_text
+                    })
+            
         return to_return
     
     elif isinstance(type_object,EndpointType):
@@ -2626,15 +2641,19 @@ private static class %(struct_wrapper_class_factory_class_name)s
              %(struct_name)s.class.getName(),this);
     }
     @Override
-    public StructWrapperBaseClass construct(RalphGlobals ralph_globals)
+    public StructWrapperBaseClass construct(
+        RalphGlobals ralph_globals, DurabilityContext durability_context)
     {
         return new %(struct_name)s (
             // do not log operations
             false,
-            ralph_globals);
+            ralph_globals,
+            // decide whether to log or not.
+            durability_context);
     }
     @Override
-    public StructWrapperBaseClass construct_null_internal(RalphGlobals ralph_globals)
+    public StructWrapperBaseClass construct_null_internal(
+        RalphGlobals ralph_globals)
     {
         return new %(struct_name)s (
             // do not log operations
@@ -2643,7 +2662,6 @@ private static class %(struct_wrapper_class_factory_class_name)s
             null,
             ralph_globals);
     }
-
 }
 
 private final static %(struct_wrapper_class_factory_class_name)s
@@ -2786,11 +2804,13 @@ public static class %s extends StructWrapperBaseClass<%s>
         struct_name)
     
     external_struct_definition_constructor = '''
-public %(struct_name)s (boolean log_operations, RalphGlobals ralph_globals)
+public %(struct_name)s (
+    boolean log_operations, RalphGlobals ralph_globals,
+    DurabilityContext durability_context)
 {
     super(
         log_operations,
-        new %(internal_struct_name)s(ralph_globals),
+        new %(internal_struct_name)s(ralph_globals,durability_context),
         %(data_wrapper_constructor_name)s,
         /** FIXME: emitting a null logger for structs.*/
         null,
@@ -2855,7 +2875,8 @@ protected SpeculativeAtomicObject<%s,IReference>
     # wrapper to have pass-by-reference semantics.
     clone_for_args_method_constructor_text = '''
 /** Constructor for cloning into args */
-public %s (boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
+public %s (
+    boolean log_operations,%s internal_val,RalphGlobals ralph_globals)
 {
     super(
         log_operations,

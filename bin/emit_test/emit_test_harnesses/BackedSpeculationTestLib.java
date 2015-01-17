@@ -60,7 +60,7 @@ public class BackedSpeculationTestLib
         IHardwareChangeApplier<Double> hardware_change_applier,
         IHardwareStateSupplier<Double> hardware_state_supplier)
     {
-        _InternalSwitch to_return = new _InternalSwitch(ralph_globals);
+        _InternalSwitch to_return = new _InternalSwitch(ralph_globals,null);
         SpeculateListener speculate_listener = new SpeculateListener();
         InternalSwitchGuard internal_switch_guard = 
             new InternalSwitchGuard(

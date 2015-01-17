@@ -114,7 +114,8 @@ public class SimplifiedTimedSpeculationTest
         RalphGlobals ralph_globals,boolean should_speculate,
         int time_to_delay_on_apply)
     {
-        _InternalWrappedLock to_return = new _InternalWrappedLock(ralph_globals);
+        _InternalWrappedLock to_return =
+            new _InternalWrappedLock(ralph_globals,null);
         to_return.lock =
             new InternalLockNumber(
                 ralph_globals,should_speculate,time_to_delay_on_apply,

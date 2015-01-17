@@ -124,7 +124,7 @@ public class LessSimplifiedTimedSpeculationTest
         RalphGlobals ralph_globals,boolean should_speculate,
         int time_to_delay_on_apply)
     {
-        _InternalSwitch to_return = new _InternalSwitch(ralph_globals);
+        _InternalSwitch to_return = new _InternalSwitch(ralph_globals,null);
         to_return.switch_guard =
             new InternalSwitchGuard(
                 ralph_globals,should_speculate,time_to_delay_on_apply,
