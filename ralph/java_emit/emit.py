@@ -1229,9 +1229,7 @@ new %(java_type_text)s  (
     elif isinstance(type_object,EndpointType):
         java_type_text = emit_ralph_wrapped_type(type_object)
 
-        # FIXME: apparently can have None emit_ctx when being called
-        # through struct.  Kind of fishy.  Should fix.
-        if (emit_ctx.get_in_struct_constructor() or
+        if (emit_ctx.get_in_struct_global_vars() or
             emit_ctx.get_in_endpoint_global_vars()):
             # we must initialize endpoint globals in the constructors
             # of endpoints so that we have a durability context
@@ -1244,7 +1242,8 @@ new %(java_type_text)s  (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
             durability_context_text = '_active_event.durability_context'
-            if emit_ctx.get_in_endpoint_constructor():
+            if (emit_ctx.get_in_endpoint_constructor() or
+                emit_ctx.get_in_struct_constructor()):
                 durability_context_text = 'durability_context'
                 
             default_internal_endpoint_text = (
@@ -2903,7 +2902,8 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
     # emit constructor for struct
     emit_ctx.set_in_struct_constructor(True)
     internal_struct_body_text += (
-        'public %s (RalphGlobals ralph_globals)\n' %
+        ('public %s (RalphGlobals ralph_globals,' +
+         'DurabilityContext durability_context)\n') %
         internal_struct_name)
     internal_struct_body_text += '''{
     // inherits from InternalStructBaseClass
