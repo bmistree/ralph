@@ -131,6 +131,9 @@ public class ReplayPartnerStructElement
      */
     private static class ReceiverConstructor implements EndpointConstructorObj
     {
+        private final static String canonical_name =
+            ReceiverConstructor.class.getName();
+        
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
@@ -148,6 +151,12 @@ public class ReplayPartnerStructElement
             DurabilityContext durability_context)
         {
             return construct(globals,conn_obj,durability_context);
+        }
+
+        @Override
+        public String get_canonical_name()
+        {
+            return canonical_name;
         }
     }
 

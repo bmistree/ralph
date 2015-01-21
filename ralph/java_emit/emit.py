@@ -292,6 +292,9 @@ public %(endpoint_name)s (
 
 public static class %(endpoint_name)s_ConstructorObj implements EndpointConstructorObj
 {
+    private final static String canonical_name =
+        %(endpoint_name)s_ConstructorObj.class.getName();
+
     // This should be public because need to be able to build object
     // when sending over reference factories.
     public %(endpoint_name)s_ConstructorObj()
@@ -302,6 +305,12 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
         {
             version_saver.save_endpoint_constructor_obj(this);
         }
+    }
+
+    @Override
+    public String get_canonical_name()
+    {
+        return canonical_name;
     }
 
     @Override

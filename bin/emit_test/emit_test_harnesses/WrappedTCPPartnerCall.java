@@ -89,6 +89,9 @@ public class WrappedTCPPartnerCall
 
     private static class SideAConstructor implements EndpointConstructorObj
     {
+        private final static String canonical_name =
+            SideAConstructor.class.getName();
+        
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
@@ -112,10 +115,19 @@ public class WrappedTCPPartnerCall
         {
             return construct(globals,conn_obj,durability_context);
         }
+
+        @Override
+        public String get_canonical_name()
+        {
+            return canonical_name;
+        }
     }
     
     private static class SideBConstructor implements EndpointConstructorObj
     {
+        private final static String canonical_name =
+            SideBConstructor.class.getName();
+        
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
@@ -136,6 +148,12 @@ public class WrappedTCPPartnerCall
         {
             return construct(globals,conn_obj,durability_context);
         }
+
+        @Override
+        public String get_canonical_name()
+        {
+            return canonical_name;
+        }        
     }
 
     
