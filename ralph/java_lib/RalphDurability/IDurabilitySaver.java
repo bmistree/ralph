@@ -1,5 +1,7 @@
 package RalphDurability;
 
+import ralph.EndpointConstructorObj;
+
 public interface IDurabilitySaver
 {
     /**
@@ -7,4 +9,11 @@ public interface IDurabilitySaver
      */
     public void prepare_operation(DurabilityContext dc);
     public void complete_operation(DurabilityContext dc, boolean succeeded);
+
+    /**
+       If do not have a serialized version of this endpoint logged to
+       durable storage, then force writing it to disk.
+     */
+    public void ensure_logged_endpt_constructor(
+        EndpointConstructorObj endpt_constructor_obj);
 }

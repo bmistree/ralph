@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ralph.Util;
+import ralph.EndpointConstructorObj;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.DurabilityProto.Durability;
@@ -75,5 +76,13 @@ public class DiskDurabilitySaver implements IDurabilitySaver
             ex.printStackTrace();
             Util.logger_assert("IOException in prepare");
         }
+    }
+
+    @Override
+    public void ensure_logged_endpt_constructor(
+        EndpointConstructorObj endpt_constructor_obj)
+    {
+        // FIXME: Stub method, must finish writing logger.
+        Util.logger_assert("FIXME: finish stub method");
     }
 }
