@@ -25,4 +25,10 @@ public interface EndpointConstructorObj
         RalphGlobals globals,RalphConnObj.ConnectionObj conn_obj,
         List<RalphObject> internal_values_list,
         DurabilityContext durability_context);
+
+    /**
+       @returns a globally unique name for this constructor object so
+       that can uniquely name this object for durability logging.
+     */
+    public String get_canonical_name();
 }
