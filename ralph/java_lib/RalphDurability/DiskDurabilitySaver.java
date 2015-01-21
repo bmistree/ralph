@@ -21,6 +21,10 @@ public class DiskDurabilitySaver implements IDurabilitySaver
 {
     private final FileChannel f_channel;
     private final FileOutputStream f_output;
+    // key is endpoint constructor object's canonical name; value
+    // doesn't matter.
+    private final LRUCache<String,Boolean> constructor_obj_index =
+        new LRUCache<String,Boolean>();
     
     public DiskDurabilitySaver (String log_filename)
     {
@@ -77,12 +81,33 @@ public class DiskDurabilitySaver implements IDurabilitySaver
             Util.logger_assert("IOException in prepare");
         }
     }
-
+    
     @Override
     public void ensure_logged_endpt_constructor(
         EndpointConstructorObj endpt_constructor_obj)
     {
-        // FIXME: Stub method, must finish writing logger.
-        Util.logger_assert("FIXME: finish stub method");
+        boolean should_log_to_disk = false;
+        // require synchronized access to lru cache
+        synchronized(this)
+        {
+            String const_name = endpt_constructor_obj.get_canonical_name();
+            Boolean value =
+                constructor_obj_index.get(const_name);
+
+            if (value == null)
+            {
+                should_log_to_disk = true;
+                constructor_obj_index.put(const_name,true);
+            }
+        }
+
+        if (should_log_to_disk)
+        {
+            Durability msg =
+                DurabilityContext.endpt_constructor_durability_constructor(
+                    endpt_constructor_obj);
+            
+            write_durability_msg(msg,true);
+        }
     }
 }

@@ -2,6 +2,13 @@ package RalphDurability;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.IOException;
+
+import com.google.protobuf.ByteString;
+
+import ralph.EndpointConstructorObj;
+import ralph.Util;
+import ralph.InternalServiceFactory;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.DurabilityProto.Durability;
@@ -9,6 +16,7 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
+import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 
 public class DurabilityContext
 {
@@ -121,6 +129,30 @@ public class DurabilityContext
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setComplete(complete_msg);
+        return to_return.build();
+    }
+
+    public static Durability endpt_constructor_durability_constructor(
+        EndpointConstructorObj endpt_constructor_obj)
+    {
+        ServiceFactoryDelta.Builder sfd_builder =
+            ServiceFactoryDelta.newBuilder();
+
+        try
+        {
+            ByteString contents =
+                InternalServiceFactory.static_convert_constructor_to_byte_string(
+                    endpt_constructor_obj);
+            sfd_builder.setSerializedFactory(contents);
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert("Exception converting endpt to bytestring");
+        }
+
+        Durability.Builder to_return = Durability.newBuilder();
+        to_return.setServiceFactory(sfd_builder);
         return to_return.build();
     }
 }

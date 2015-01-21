@@ -77,9 +77,14 @@ public class InternalServiceFactory
         return null;
     }
     
-    
-    
     ByteString convert_constructor_to_byte_string() throws IOException
+    {
+        return InternalServiceFactory.static_convert_constructor_to_byte_string(
+            endpt_constructor);
+    }
+
+    public static ByteString static_convert_constructor_to_byte_string(
+        EndpointConstructorObj endpt_constructor) throws IOException
     {
         ByteArrayOutputStream byte_array_output_stream =
             new ByteArrayOutputStream();
@@ -97,7 +102,7 @@ public class InternalServiceFactory
         ByteString byte_string = ByteString.copyFrom(byte_array);
         return byte_string;
     }
-
+    
     public Endpoint construct(ActiveEvent active_event)
     {
         SingleSideConnection ssc = new SingleSideConnection();
