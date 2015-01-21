@@ -3,9 +3,11 @@ option java_outer_classname = "DurabilityProto";
 
 import "durabilityPrepare.proto";
 import "durabilityComplete.proto";
+import "delta.proto";
 
 message Durability
 {
     optional DurabilityPrepare prepare = 1;
     optional DurabilityComplete complete = 2;
+    optional Delta.ServiceFactoryDelta service_factory = 3;
 }

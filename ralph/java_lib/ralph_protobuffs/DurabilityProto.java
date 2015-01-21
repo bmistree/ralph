@@ -38,6 +38,20 @@ public final class DurabilityProto {
      * <code>optional .DurabilityComplete complete = 2;</code>
      */
     ralph_protobuffs.DurabilityCompleteProto.DurabilityCompleteOrBuilder getCompleteOrBuilder();
+
+    // optional .Delta.ServiceFactoryDelta service_factory = 3;
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    boolean hasServiceFactory();
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactory();
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryOrBuilder();
   }
   /**
    * Protobuf type {@code Durability}
@@ -114,6 +128,19 @@ public final class DurabilityProto {
                 complete_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = serviceFactory_.toBuilder();
+              }
+              serviceFactory_ = input.readMessage(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(serviceFactory_);
+                serviceFactory_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
           }
@@ -200,9 +227,32 @@ public final class DurabilityProto {
       return complete_;
     }
 
+    // optional .Delta.ServiceFactoryDelta service_factory = 3;
+    public static final int SERVICE_FACTORY_FIELD_NUMBER = 3;
+    private ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta serviceFactory_;
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    public boolean hasServiceFactory() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactory() {
+      return serviceFactory_;
+    }
+    /**
+     * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+     */
+    public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryOrBuilder() {
+      return serviceFactory_;
+    }
+
     private void initFields() {
       prepare_ = ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.getDefaultInstance();
       complete_ = ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete.getDefaultInstance();
+      serviceFactory_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -221,6 +271,12 @@ public final class DurabilityProto {
           return false;
         }
       }
+      if (hasServiceFactory()) {
+        if (!getServiceFactory().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -233,6 +289,9 @@ public final class DurabilityProto {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, complete_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, serviceFactory_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -250,6 +309,10 @@ public final class DurabilityProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, complete_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, serviceFactory_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -361,6 +424,7 @@ public final class DurabilityProto {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getPrepareFieldBuilder();
           getCompleteFieldBuilder();
+          getServiceFactoryFieldBuilder();
         }
       }
       private static Builder create() {
@@ -381,6 +445,12 @@ public final class DurabilityProto {
           completeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
+        if (serviceFactoryBuilder_ == null) {
+          serviceFactory_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+        } else {
+          serviceFactoryBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -425,6 +495,14 @@ public final class DurabilityProto {
         } else {
           result.complete_ = completeBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (serviceFactoryBuilder_ == null) {
+          result.serviceFactory_ = serviceFactory_;
+        } else {
+          result.serviceFactory_ = serviceFactoryBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -447,6 +525,9 @@ public final class DurabilityProto {
         if (other.hasComplete()) {
           mergeComplete(other.getComplete());
         }
+        if (other.hasServiceFactory()) {
+          mergeServiceFactory(other.getServiceFactory());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -460,6 +541,12 @@ public final class DurabilityProto {
         }
         if (hasComplete()) {
           if (!getComplete().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasServiceFactory()) {
+          if (!getServiceFactory().isInitialized()) {
             
             return false;
           }
@@ -720,6 +807,123 @@ public final class DurabilityProto {
         return completeBuilder_;
       }
 
+      // optional .Delta.ServiceFactoryDelta service_factory = 3;
+      private ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta serviceFactory_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder> serviceFactoryBuilder_;
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public boolean hasServiceFactory() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta getServiceFactory() {
+        if (serviceFactoryBuilder_ == null) {
+          return serviceFactory_;
+        } else {
+          return serviceFactoryBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public Builder setServiceFactory(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta value) {
+        if (serviceFactoryBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          serviceFactory_ = value;
+          onChanged();
+        } else {
+          serviceFactoryBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public Builder setServiceFactory(
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder builderForValue) {
+        if (serviceFactoryBuilder_ == null) {
+          serviceFactory_ = builderForValue.build();
+          onChanged();
+        } else {
+          serviceFactoryBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public Builder mergeServiceFactory(ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta value) {
+        if (serviceFactoryBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              serviceFactory_ != ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance()) {
+            serviceFactory_ =
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.newBuilder(serviceFactory_).mergeFrom(value).buildPartial();
+          } else {
+            serviceFactory_ = value;
+          }
+          onChanged();
+        } else {
+          serviceFactoryBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public Builder clearServiceFactory() {
+        if (serviceFactoryBuilder_ == null) {
+          serviceFactory_ = ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.getDefaultInstance();
+          onChanged();
+        } else {
+          serviceFactoryBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder getServiceFactoryBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getServiceFactoryFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      public ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder getServiceFactoryOrBuilder() {
+        if (serviceFactoryBuilder_ != null) {
+          return serviceFactoryBuilder_.getMessageOrBuilder();
+        } else {
+          return serviceFactory_;
+        }
+      }
+      /**
+       * <code>optional .Delta.ServiceFactoryDelta service_factory = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder> 
+          getServiceFactoryFieldBuilder() {
+        if (serviceFactoryBuilder_ == null) {
+          serviceFactoryBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta.Builder, ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDeltaOrBuilder>(
+                  serviceFactory_,
+                  getParentForChildren(),
+                  isClean());
+          serviceFactory_ = null;
+        }
+        return serviceFactoryBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:Durability)
     }
 
@@ -746,10 +950,12 @@ public final class DurabilityProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\020durability.proto\032\027durabilityPrepare.pr" +
-      "oto\032\030durabilityComplete.proto\"X\n\nDurabil" +
-      "ity\022#\n\007prepare\030\001 \001(\0132\022.DurabilityPrepare" +
-      "\022%\n\010complete\030\002 \001(\0132\023.DurabilityCompleteB" +
-      "#\n\020ralph_protobuffsB\017DurabilityProto"
+      "oto\032\030durabilityComplete.proto\032\013delta.pro" +
+      "to\"\215\001\n\nDurability\022#\n\007prepare\030\001 \001(\0132\022.Dur" +
+      "abilityPrepare\022%\n\010complete\030\002 \001(\0132\023.Durab" +
+      "ilityComplete\0223\n\017service_factory\030\003 \001(\0132\032" +
+      ".Delta.ServiceFactoryDeltaB#\n\020ralph_prot" +
+      "obuffsB\017DurabilityProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -761,7 +967,7 @@ public final class DurabilityProto {
           internal_static_Durability_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Durability_descriptor,
-              new java.lang.String[] { "Prepare", "Complete", });
+              new java.lang.String[] { "Prepare", "Complete", "ServiceFactory", });
           return null;
         }
       };
@@ -770,6 +976,7 @@ public final class DurabilityProto {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           ralph_protobuffs.DurabilityPrepareProto.getDescriptor(),
           ralph_protobuffs.DurabilityCompleteProto.getDescriptor(),
+          ralph_protobuffs.DeltaProto.getDescriptor(),
         }, assigner);
   }
 
