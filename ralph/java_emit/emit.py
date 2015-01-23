@@ -66,6 +66,7 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import RalphCallResults.RootCallResult;
 
 import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilitySaver;
 
 
 import ralph.EventPriority.IsSuperFlag;
@@ -304,6 +305,13 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
         if (version_saver != null)
         {
             version_saver.save_endpoint_constructor_obj(this);
+        }
+
+        IDurabilitySaver durability_saver =
+            DurabilityInfo.instance.durability_saver;
+        if (durability_saver != null)
+        {
+            durability_saver.ensure_logged_endpt_constructor(this);
         }
     }
 
