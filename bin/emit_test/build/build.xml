@@ -669,7 +669,7 @@
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
-        jar_DirectStructWrappedEndpoint">
+        jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -693,7 +693,12 @@
       name="ralph_DurabilitySetterGetter"
       depends="iface_basic_ralph,atomic_setter_getter">
   </target>
-  
+
+  <target
+      name="ralph_DurabilityConstructorCheck"
+      depends="range_test,atomic_setter_getter,iface_basic_ralph">
+  </target>
+
   <target
       name="ralph_VersionedIFace"
       depends="iface_basic_ralph,basic_ralph,versioned_iface">
@@ -1181,6 +1186,12 @@
       <param name="arg_harness_file_list" value="DurabilitySetterGetter.java"/>
     </antcall>
   </target>
+
+  <target name="harness_DurabilityConstructorCheck">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="DurabilityConstructorCheck.java"/>
+    </antcall>
+  </target>
   
   <target name="harness_ReadOnlySpeculate">
     <antcall target="compile_harness">
@@ -1640,6 +1651,18 @@
     </antcall>
   </target>
 
+  <property
+      name="disk_durability_constructor_check_jar"
+      value="disk_durability_constructor_check.jar"/>
+  <target
+      name="jar_DiskDurabilityConstructorCheck"
+      depends="ralph_DurabilityConstructorCheck,ralph_to_byte_code,harness_DurabilityConstructorCheck">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilityConstructorCheck"/>
+      <param name="dest_jar" value="${disk_durability_constructor_check_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
   
   <property
       name="versioned_enum_jar"
