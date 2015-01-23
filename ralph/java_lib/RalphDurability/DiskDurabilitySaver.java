@@ -35,7 +35,6 @@ public class DiskDurabilitySaver implements IDurabilitySaver
             f_channel = f_output.getChannel();
     }
 
-
     private FileOutputStream initialize_f_output(String log_filename)
     {
         FileOutputStream to_return = null;

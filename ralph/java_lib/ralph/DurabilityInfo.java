@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.List;
 
 import RalphDurability.IDurabilitySaver;
+import RalphDurability.IDurabilityReplayer;
 import RalphDurability.DiskDurabilitySaver;
+import RalphDurability.DurabilityReplayer;
+import RalphDurability.DiskDurabilityReader;
 
 
 /**
@@ -17,6 +20,7 @@ public class DurabilityInfo
     public static final DurabilityInfo instance = new DurabilityInfo();
 
     public final IDurabilitySaver durability_saver;
+    public final IDurabilityReplayer durability_replayer;
     private DurabilityInfo() 
     {
         Properties properties = new Properties();
@@ -24,7 +28,10 @@ public class DurabilityInfo
         InputStream input_stream =
             getClass().getClassLoader().getResourceAsStream("config.properties");
         if (input_stream == null)
+        {
+            durability_replayer = null;
             durability_saver = null;
+        }
         else
         {
             try
@@ -37,6 +44,7 @@ public class DurabilityInfo
                 System.exit (-1);
             }
 
+            /******* LOADING DURABILITY SAVER *****/
             String which_durability = (String)properties.get("durability");
             if (which_durability != null)
             {
@@ -64,6 +72,45 @@ public class DurabilityInfo
             }
             else
                 durability_saver = null;
+
+
+            /******* LOADING DURABILITY REPLAYER *****/
+            String which_durability_replayer =
+                (String)properties.get("durability-replayer");
+            if (which_durability_replayer != null)
+            {
+                if (which_durability_replayer.equals("disk"))
+                {
+                    Object obj_log_filename = 
+                        properties.get(
+                            "disk-durability-replayer-log-filename");
+                    
+                    // filename to use to save deltas to and read
+                    // deltas from on replay.
+                    String log_filename = (String) obj_log_filename;
+
+                    DiskDurabilityReader durability_reader =
+                        new DiskDurabilityReader(log_filename);
+                    
+                    durability_replayer =
+                        new DurabilityReplayer(durability_reader);
+                }
+                //// DEBUG
+                else
+                {
+                    Util.logger_assert(
+                        "Unknown durability replayer type provided");
+                    
+                    // setting these here so that will compile without
+                    // warning about how local variables may not have
+                    // been initialized.
+                    durability_replayer = null;
+                }
+                //// END DEBUG
+            }
+            else
+                durability_replayer = null;
+            
         }
     }
 }
