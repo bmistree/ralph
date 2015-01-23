@@ -27,16 +27,12 @@ public class InternalServiceFactory
         this.ralph_globals = ralph_globals;
     }
 
-
     /**
-       Deserializing constructor.
+       Deserialize endpoint constructors directly from byte strings.
      */
-    public static InternalServiceFactory deserialize (
-        ByteString serialized_byte_string,RalphGlobals ralph_globals)
+    public static EndpointConstructorObj deserialize_endpt_constructor(
+        ByteString serialized_byte_string)
     {
-        if (serialized_byte_string.isEmpty())
-            return null;
-        
         try
         {
             ObjectInputStream object_input_stream =
@@ -48,10 +44,7 @@ public class InternalServiceFactory
 
             EndpointConstructorObj constructor_obj =
                 constructor_class.newInstance();
-
-            InternalServiceFactory to_return =
-                new InternalServiceFactory(constructor_obj,ralph_globals);
-            return to_return;
+            return constructor_obj;
         }
         catch (IOException _ex)
         {
@@ -76,6 +69,23 @@ public class InternalServiceFactory
             "internal service factories.");
         return null;
     }
+    
+    /**
+       Deserializing constructor.
+     */
+    public static InternalServiceFactory deserialize (
+        ByteString serialized_byte_string,RalphGlobals ralph_globals)
+    {
+        if (serialized_byte_string.isEmpty())
+            return null;
+        
+        EndpointConstructorObj internal = deserialize_endpt_constructor(
+            serialized_byte_string);
+        InternalServiceFactory to_return =
+                new InternalServiceFactory(internal,ralph_globals);
+        return to_return;
+    }
+
     
     ByteString convert_constructor_to_byte_string() throws IOException
     {
