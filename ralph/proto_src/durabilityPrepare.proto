@@ -19,5 +19,12 @@ message DurabilityPrepare
        When we replay, whenever we generate a new endpoint, we should
        assign them uuids in this order.
      */
-    repeated UUID endpoints_created = 3;
+
+    message EndpointUUIDConstructorNamePair
+    {
+        required UUID endpt_uuid = 1;
+        required string constructor_canonical_name = 2;
+    }
+    
+    repeated EndpointUUIDConstructorNamePair endpoints_created = 3;
 }

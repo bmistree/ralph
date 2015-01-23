@@ -25,7 +25,6 @@ public class DurabilityContext
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
     private final List<String> endpoints_created_uuids;
-
     
     // should set to true after we write a prepare message.  This way
     // we can skip writing complete messages for contexts that never

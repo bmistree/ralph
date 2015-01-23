@@ -50,59 +50,29 @@ public final class DurabilityPrepareProto {
     ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUIDOrBuilder getRpcArgsOrBuilder(
         int index);
 
-    // repeated .UUID endpoints_created = 3;
+    // repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    java.util.List<ralph_protobuffs.UtilProto.UUID> 
+    java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> 
         getEndpointsCreatedList();
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index);
+    ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair getEndpointsCreated(int index);
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
     int getEndpointsCreatedCount();
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+    java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder> 
         getEndpointsCreatedOrBuilderList();
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+    ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder getEndpointsCreatedOrBuilder(
         int index);
   }
   /**
@@ -179,10 +149,10 @@ public final class DurabilityPrepareProto {
             }
             case 26: {
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>();
+                endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair>();
                 mutable_bitField0_ |= 0x00000004;
               }
-              endpointsCreated_.add(input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry));
+              endpointsCreated_.add(input.readMessage(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.PARSER, extensionRegistry));
               break;
             }
           }
@@ -961,6 +931,693 @@ public final class DurabilityPrepareProto {
       // @@protoc_insertion_point(class_scope:DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID)
     }
 
+    public interface EndpointUUIDConstructorNamePairOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required .UUID endpt_uuid = 1;
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      boolean hasEndptUuid();
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      ralph_protobuffs.UtilProto.UUID getEndptUuid();
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      ralph_protobuffs.UtilProto.UUIDOrBuilder getEndptUuidOrBuilder();
+
+      // required string constructor_canonical_name = 2;
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      boolean hasConstructorCanonicalName();
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      java.lang.String getConstructorCanonicalName();
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getConstructorCanonicalNameBytes();
+    }
+    /**
+     * Protobuf type {@code DurabilityPrepare.EndpointUUIDConstructorNamePair}
+     */
+    public static final class EndpointUUIDConstructorNamePair extends
+        com.google.protobuf.GeneratedMessage
+        implements EndpointUUIDConstructorNamePairOrBuilder {
+      // Use EndpointUUIDConstructorNamePair.newBuilder() to construct.
+      private EndpointUUIDConstructorNamePair(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private EndpointUUIDConstructorNamePair(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final EndpointUUIDConstructorNamePair defaultInstance;
+      public static EndpointUUIDConstructorNamePair getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public EndpointUUIDConstructorNamePair getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private EndpointUUIDConstructorNamePair(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                  subBuilder = endptUuid_.toBuilder();
+                }
+                endptUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(endptUuid_);
+                  endptUuid_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000001;
+                break;
+              }
+              case 18: {
+                bitField0_ |= 0x00000002;
+                constructorCanonicalName_ = input.readBytes();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.class, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<EndpointUUIDConstructorNamePair> PARSER =
+          new com.google.protobuf.AbstractParser<EndpointUUIDConstructorNamePair>() {
+        public EndpointUUIDConstructorNamePair parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new EndpointUUIDConstructorNamePair(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<EndpointUUIDConstructorNamePair> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required .UUID endpt_uuid = 1;
+      public static final int ENDPT_UUID_FIELD_NUMBER = 1;
+      private ralph_protobuffs.UtilProto.UUID endptUuid_;
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      public boolean hasEndptUuid() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUID getEndptUuid() {
+        return endptUuid_;
+      }
+      /**
+       * <code>required .UUID endpt_uuid = 1;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndptUuidOrBuilder() {
+        return endptUuid_;
+      }
+
+      // required string constructor_canonical_name = 2;
+      public static final int CONSTRUCTOR_CANONICAL_NAME_FIELD_NUMBER = 2;
+      private java.lang.Object constructorCanonicalName_;
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      public boolean hasConstructorCanonicalName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      public java.lang.String getConstructorCanonicalName() {
+        java.lang.Object ref = constructorCanonicalName_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            constructorCanonicalName_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string constructor_canonical_name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getConstructorCanonicalNameBytes() {
+        java.lang.Object ref = constructorCanonicalName_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          constructorCanonicalName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        endptUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        constructorCanonicalName_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasEndptUuid()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasConstructorCanonicalName()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!getEndptUuid().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeMessage(1, endptUuid_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getConstructorCanonicalNameBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(1, endptUuid_);
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getConstructorCanonicalNameBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code DurabilityPrepare.EndpointUUIDConstructorNamePair}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.class, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder.class);
+        }
+
+        // Construct using ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getEndptUuidFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          if (endptUuidBuilder_ == null) {
+            endptUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          } else {
+            endptUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          constructorCanonicalName_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return ralph_protobuffs.DurabilityPrepareProto.internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor;
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair getDefaultInstanceForType() {
+          return ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.getDefaultInstance();
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair build() {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair buildPartial() {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair result = new ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          if (endptUuidBuilder_ == null) {
+            result.endptUuid_ = endptUuid_;
+          } else {
+            result.endptUuid_ = endptUuidBuilder_.build();
+          }
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.constructorCanonicalName_ = constructorCanonicalName_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair) {
+            return mergeFrom((ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair other) {
+          if (other == ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.getDefaultInstance()) return this;
+          if (other.hasEndptUuid()) {
+            mergeEndptUuid(other.getEndptUuid());
+          }
+          if (other.hasConstructorCanonicalName()) {
+            bitField0_ |= 0x00000002;
+            constructorCanonicalName_ = other.constructorCanonicalName_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasEndptUuid()) {
+            
+            return false;
+          }
+          if (!hasConstructorCanonicalName()) {
+            
+            return false;
+          }
+          if (!getEndptUuid().isInitialized()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required .UUID endpt_uuid = 1;
+        private ralph_protobuffs.UtilProto.UUID endptUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> endptUuidBuilder_;
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public boolean hasEndptUuid() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUID getEndptUuid() {
+          if (endptUuidBuilder_ == null) {
+            return endptUuid_;
+          } else {
+            return endptUuidBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public Builder setEndptUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (endptUuidBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            endptUuid_ = value;
+            onChanged();
+          } else {
+            endptUuidBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public Builder setEndptUuid(
+            ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          if (endptUuidBuilder_ == null) {
+            endptUuid_ = builderForValue.build();
+            onChanged();
+          } else {
+            endptUuidBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public Builder mergeEndptUuid(ralph_protobuffs.UtilProto.UUID value) {
+          if (endptUuidBuilder_ == null) {
+            if (((bitField0_ & 0x00000001) == 0x00000001) &&
+                endptUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+              endptUuid_ =
+                ralph_protobuffs.UtilProto.UUID.newBuilder(endptUuid_).mergeFrom(value).buildPartial();
+            } else {
+              endptUuid_ = value;
+            }
+            onChanged();
+          } else {
+            endptUuidBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000001;
+          return this;
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public Builder clearEndptUuid() {
+          if (endptUuidBuilder_ == null) {
+            endptUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+            onChanged();
+          } else {
+            endptUuidBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000001);
+          return this;
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUID.Builder getEndptUuidBuilder() {
+          bitField0_ |= 0x00000001;
+          onChanged();
+          return getEndptUuidFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndptUuidOrBuilder() {
+          if (endptUuidBuilder_ != null) {
+            return endptUuidBuilder_.getMessageOrBuilder();
+          } else {
+            return endptUuid_;
+          }
+        }
+        /**
+         * <code>required .UUID endpt_uuid = 1;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilder<
+            ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+            getEndptUuidFieldBuilder() {
+          if (endptUuidBuilder_ == null) {
+            endptUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                    endptUuid_,
+                    getParentForChildren(),
+                    isClean());
+            endptUuid_ = null;
+          }
+          return endptUuidBuilder_;
+        }
+
+        // required string constructor_canonical_name = 2;
+        private java.lang.Object constructorCanonicalName_ = "";
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public boolean hasConstructorCanonicalName() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public java.lang.String getConstructorCanonicalName() {
+          java.lang.Object ref = constructorCanonicalName_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            constructorCanonicalName_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getConstructorCanonicalNameBytes() {
+          java.lang.Object ref = constructorCanonicalName_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            constructorCanonicalName_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public Builder setConstructorCanonicalName(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          constructorCanonicalName_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public Builder clearConstructorCanonicalName() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          constructorCanonicalName_ = getDefaultInstance().getConstructorCanonicalName();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string constructor_canonical_name = 2;</code>
+         */
+        public Builder setConstructorCanonicalNameBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          constructorCanonicalName_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:DurabilityPrepare.EndpointUUIDConstructorNamePair)
+      }
+
+      static {
+        defaultInstance = new EndpointUUIDConstructorNamePair(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:DurabilityPrepare.EndpointUUIDConstructorNamePair)
+    }
+
     private int bitField0_;
     // required .UUID event_uuid = 1;
     public static final int EVENT_UUID_FIELD_NUMBER = 1;
@@ -1020,68 +1677,38 @@ public final class DurabilityPrepareProto {
       return rpcArgs_.get(index);
     }
 
-    // repeated .UUID endpoints_created = 3;
+    // repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;
     public static final int ENDPOINTS_CREATED_FIELD_NUMBER = 3;
-    private java.util.List<ralph_protobuffs.UtilProto.UUID> endpointsCreated_;
+    private java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> endpointsCreated_;
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    public java.util.List<ralph_protobuffs.UtilProto.UUID> getEndpointsCreatedList() {
+    public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> getEndpointsCreatedList() {
       return endpointsCreated_;
     }
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+    public java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder> 
         getEndpointsCreatedOrBuilderList() {
       return endpointsCreated_;
     }
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
     public int getEndpointsCreatedCount() {
       return endpointsCreated_.size();
     }
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    public ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index) {
+    public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair getEndpointsCreated(int index) {
       return endpointsCreated_.get(index);
     }
     /**
-     * <code>repeated .UUID endpoints_created = 3;</code>
-     *
-     * <pre>
-     **
-     *When we replay, whenever we generate a new endpoint, we should
-     *assign them uuids in this order.
-     * </pre>
+     * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
      */
-    public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+    public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder getEndpointsCreatedOrBuilder(
         int index) {
       return endpointsCreated_.get(index);
     }
@@ -1819,29 +2446,23 @@ public final class DurabilityPrepareProto {
         return rpcArgsBuilder_;
       }
 
-      // repeated .UUID endpoints_created = 3;
-      private java.util.List<ralph_protobuffs.UtilProto.UUID> endpointsCreated_ =
+      // repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;
+      private java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> endpointsCreated_ =
         java.util.Collections.emptyList();
       private void ensureEndpointsCreatedIsMutable() {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.UtilProto.UUID>(endpointsCreated_);
+          endpointsCreated_ = new java.util.ArrayList<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair>(endpointsCreated_);
           bitField0_ |= 0x00000004;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> endpointsCreatedBuilder_;
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder> endpointsCreatedBuilder_;
 
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public java.util.List<ralph_protobuffs.UtilProto.UUID> getEndpointsCreatedList() {
+      public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> getEndpointsCreatedList() {
         if (endpointsCreatedBuilder_ == null) {
           return java.util.Collections.unmodifiableList(endpointsCreated_);
         } else {
@@ -1849,13 +2470,7 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public int getEndpointsCreatedCount() {
         if (endpointsCreatedBuilder_ == null) {
@@ -1865,15 +2480,9 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public ralph_protobuffs.UtilProto.UUID getEndpointsCreated(int index) {
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair getEndpointsCreated(int index) {
         if (endpointsCreatedBuilder_ == null) {
           return endpointsCreated_.get(index);
         } else {
@@ -1881,16 +2490,10 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder setEndpointsCreated(
-          int index, ralph_protobuffs.UtilProto.UUID value) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair value) {
         if (endpointsCreatedBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1904,16 +2507,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder setEndpointsCreated(
-          int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder builderForValue) {
         if (endpointsCreatedBuilder_ == null) {
           ensureEndpointsCreatedIsMutable();
           endpointsCreated_.set(index, builderForValue.build());
@@ -1924,15 +2521,9 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public Builder addEndpointsCreated(ralph_protobuffs.UtilProto.UUID value) {
+      public Builder addEndpointsCreated(ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair value) {
         if (endpointsCreatedBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1946,16 +2537,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder addEndpointsCreated(
-          int index, ralph_protobuffs.UtilProto.UUID value) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair value) {
         if (endpointsCreatedBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1969,16 +2554,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder addEndpointsCreated(
-          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder builderForValue) {
         if (endpointsCreatedBuilder_ == null) {
           ensureEndpointsCreatedIsMutable();
           endpointsCreated_.add(builderForValue.build());
@@ -1989,16 +2568,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder addEndpointsCreated(
-          int index, ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+          int index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder builderForValue) {
         if (endpointsCreatedBuilder_ == null) {
           ensureEndpointsCreatedIsMutable();
           endpointsCreated_.add(index, builderForValue.build());
@@ -2009,16 +2582,10 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder addAllEndpointsCreated(
-          java.lang.Iterable<? extends ralph_protobuffs.UtilProto.UUID> values) {
+          java.lang.Iterable<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair> values) {
         if (endpointsCreatedBuilder_ == null) {
           ensureEndpointsCreatedIsMutable();
           super.addAll(values, endpointsCreated_);
@@ -2029,13 +2596,7 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder clearEndpointsCreated() {
         if (endpointsCreatedBuilder_ == null) {
@@ -2048,13 +2609,7 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
       public Builder removeEndpointsCreated(int index) {
         if (endpointsCreatedBuilder_ == null) {
@@ -2067,28 +2622,16 @@ public final class DurabilityPrepareProto {
         return this;
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public ralph_protobuffs.UtilProto.UUID.Builder getEndpointsCreatedBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder getEndpointsCreatedBuilder(
           int index) {
         return getEndpointsCreatedFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public ralph_protobuffs.UtilProto.UUIDOrBuilder getEndpointsCreatedOrBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder getEndpointsCreatedOrBuilder(
           int index) {
         if (endpointsCreatedBuilder_ == null) {
           return endpointsCreated_.get(index);  } else {
@@ -2096,15 +2639,9 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public java.util.List<? extends ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+      public java.util.List<? extends ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder> 
            getEndpointsCreatedOrBuilderList() {
         if (endpointsCreatedBuilder_ != null) {
           return endpointsCreatedBuilder_.getMessageOrBuilderList();
@@ -2113,51 +2650,33 @@ public final class DurabilityPrepareProto {
         }
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public ralph_protobuffs.UtilProto.UUID.Builder addEndpointsCreatedBuilder() {
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder addEndpointsCreatedBuilder() {
         return getEndpointsCreatedFieldBuilder().addBuilder(
-            ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+            ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.getDefaultInstance());
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public ralph_protobuffs.UtilProto.UUID.Builder addEndpointsCreatedBuilder(
+      public ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder addEndpointsCreatedBuilder(
           int index) {
         return getEndpointsCreatedFieldBuilder().addBuilder(
-            index, ralph_protobuffs.UtilProto.UUID.getDefaultInstance());
+            index, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.getDefaultInstance());
       }
       /**
-       * <code>repeated .UUID endpoints_created = 3;</code>
-       *
-       * <pre>
-       **
-       *When we replay, whenever we generate a new endpoint, we should
-       *assign them uuids in this order.
-       * </pre>
+       * <code>repeated .DurabilityPrepare.EndpointUUIDConstructorNamePair endpoints_created = 3;</code>
        */
-      public java.util.List<ralph_protobuffs.UtilProto.UUID.Builder> 
+      public java.util.List<ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder> 
            getEndpointsCreatedBuilderList() {
         return getEndpointsCreatedFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder> 
           getEndpointsCreatedFieldBuilder() {
         if (endpointsCreatedBuilder_ == null) {
           endpointsCreatedBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+              ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair.Builder, ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePairOrBuilder>(
                   endpointsCreated_,
                   ((bitField0_ & 0x00000004) == 0x00000004),
                   getParentForChildren(),
@@ -2188,6 +2707,11 @@ public final class DurabilityPrepareProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2198,15 +2722,19 @@ public final class DurabilityPrepareProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027durabilityPrepare.proto\032\nutil.proto\032!p" +
-      "artnerRequestSequenceBlock.proto\"\231\002\n\021Dur" +
+      "artnerRequestSequenceBlock.proto\"\250\003\n\021Dur" +
       "abilityPrepare\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUI" +
       "D\022M\n\010rpc_args\030\002 \003(\0132;.DurabilityPrepare." +
       "PairedPartnerRequestSequenceEndpointUUID" +
-      "\022 \n\021endpoints_created\030\003 \003(\0132\005.UUID\032x\n(Pa" +
-      "iredPartnerRequestSequenceEndpointUUID\022." +
-      "\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestSequenc" +
-      "eBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UUIDB*\n\020" +
-      "ralph_protobuffsB\026DurabilityPrepareProto"
+      "\022M\n\021endpoints_created\030\003 \003(\01322.Durability" +
+      "Prepare.EndpointUUIDConstructorNamePair\032" +
+      "x\n(PairedPartnerRequestSequenceEndpointU" +
+      "UID\022.\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestSe" +
+      "quenceBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UUI",
+      "D\032`\n\037EndpointUUIDConstructorNamePair\022\031\n\n" +
+      "endpt_uuid\030\001 \002(\0132\005.UUID\022\"\n\032constructor_c" +
+      "anonical_name\030\002 \002(\tB*\n\020ralph_protobuffsB" +
+      "\026DurabilityPrepareProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2225,6 +2753,12 @@ public final class DurabilityPrepareProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor,
               new java.lang.String[] { "RpcArgs", "EndpointUuid", });
+          internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor =
+            internal_static_DurabilityPrepare_descriptor.getNestedTypes().get(1);
+          internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_DurabilityPrepare_EndpointUUIDConstructorNamePair_descriptor,
+              new java.lang.String[] { "EndptUuid", "ConstructorCanonicalName", });
           return null;
         }
       };
