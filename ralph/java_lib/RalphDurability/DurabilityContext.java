@@ -16,6 +16,7 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
+import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 
 public class DurabilityContext
@@ -24,7 +25,7 @@ public class DurabilityContext
     private final List<PartnerRequestSequenceBlock> rpc_args;
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
-    private final List<String> endpoints_created_uuids;
+    private final List<EndptUUIDConstructorPair> endpts_created_info;
     
     // should set to true after we write a prepare message.  This way
     // we can skip writing complete messages for contexts that never
@@ -36,7 +37,7 @@ public class DurabilityContext
         this.event_uuid = event_uuid;
         this.rpc_args = new ArrayList<PartnerRequestSequenceBlock>();
         this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
-        this.endpoints_created_uuids = new ArrayList<String>();
+        this.endpts_created_info = new ArrayList<EndptUUIDConstructorPair>();
     }
 
     /**
@@ -57,16 +58,46 @@ public class DurabilityContext
             to_return.add_rpc_arg(rpc_arg,endpoint_uuid);
         }
 
-        for (String endpoint_uuid : endpoints_created_uuids)
-            to_return.add_endpoint_created_uuid(endpoint_uuid);
-        
+        for (EndptUUIDConstructorPair pair : endpts_created_info)
+        {
+            to_return.add_endpt_created_info(
+                pair.endpt_uuid,pair.constructor_name);
+        }
         return to_return;
     }
 
-    public synchronized void add_endpoint_created_uuid(String endpoint_uuid)
+    public synchronized void add_endpt_created_info(
+        String endpt_uuid,String endpt_constructor_name)
     {
-        endpoints_created_uuids.add(endpoint_uuid);
+        endpts_created_info.add(
+            new EndptUUIDConstructorPair(
+                endpt_uuid,endpt_constructor_name));
     }
+
+    private class EndptUUIDConstructorPair
+    {
+        public final String endpt_uuid;
+        public final String constructor_name;
+        public EndptUUIDConstructorPair(
+            String endpt_uuid, String constructor_name)
+        {
+            this.endpt_uuid = endpt_uuid;
+            this.constructor_name = constructor_name;
+        }
+
+        public EndpointUUIDConstructorNamePair to_proto_buf()
+        {
+            UUID.Builder uuid_builder = UUID.newBuilder();
+            uuid_builder.setData(endpt_uuid);
+            
+            EndpointUUIDConstructorNamePair.Builder to_return =
+                EndpointUUIDConstructorNamePair.newBuilder();
+            to_return.setEndptUuid(uuid_builder);
+            to_return.setConstructorCanonicalName(constructor_name);
+            return to_return.build();
+        }
+    }
+    
     
     public synchronized void add_rpc_arg(
         PartnerRequestSequenceBlock arg, String endpoint_uuid)
@@ -98,13 +129,8 @@ public class DurabilityContext
             prepare_msg.addRpcArgs(rpc_arg_tuple);
         }
         
-        for (String endpt_uuid : endpoints_created_uuids)
-        {
-            UUID.Builder endpt_uuid_builder = UUID.newBuilder();
-            endpt_uuid_builder.setData(endpt_uuid);
-            prepare_msg.addEndpointsCreated(endpt_uuid_builder);
-        }
-        
+        for (EndptUUIDConstructorPair pair : endpts_created_info)
+            prepare_msg.addEndpointsCreated(pair.to_proto_buf());
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setPrepare(prepare_msg);

@@ -180,7 +180,10 @@ public abstract class Endpoint implements IReference
         */
 
         if (durability_context != null)
-            durability_context.add_endpoint_created_uuid(_uuid);
+        {
+            durability_context.add_endpt_created_info(
+                _uuid,endpoint_constructor_obj.get_canonical_name());
+        }
     }
     
     public String uuid()
