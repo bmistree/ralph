@@ -43,7 +43,7 @@ public class PartnerRequestSequenceBlockProducer
      */
     
     public static PartnerRequestSequenceBlock produce_request_block(
-        String to_reply_to, String func_name, List<RalphObject> args,
+        String to_reply_to, String func_name, List<? extends RalphObject> args,
         RalphObject result, ActiveEvent active_event, boolean atomic,
         String reply_with_uuid) throws BackoutException
     {

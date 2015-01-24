@@ -39,7 +39,7 @@ public class SerializationContext
     protected final List<ArgumentContainerDeltas.Builder> container_deltas_list =
         new ArrayList<ArgumentContainerDeltas.Builder>();
     
-    protected final List<RalphObject> arguments_list;
+    protected final List<? extends RalphObject> arguments_list;
     /**
        Whether containers, etc. should copy internal values.
      */
@@ -51,7 +51,7 @@ public class SerializationContext
     }
     
     public SerializationContext(
-        List<RalphObject> _arguments_list,boolean _deep_copy)
+        List<? extends RalphObject> _arguments_list,boolean _deep_copy)
     {
         arguments_list = _arguments_list;
         deep_copy = _deep_copy;
