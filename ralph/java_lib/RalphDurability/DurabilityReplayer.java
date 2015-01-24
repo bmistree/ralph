@@ -19,7 +19,6 @@ public class DurabilityReplayer implements IDurabilityReplayer
     private final Map<String, EndpointConstructorObj> constructor_map =
         new HashMap<String,EndpointConstructorObj>();
     
-    
     public DurabilityReplayer(IDurabilityReader durability_reader)
     {
         this.durability_reader = durability_reader;
