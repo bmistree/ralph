@@ -4,7 +4,6 @@ import "partnerFirstPhaseResultMessage.proto";
 import "partnerBackoutCommitRequest.proto";
 import "partnerCompleteCommitRequest.proto";
 import "partnerCommitRequest.proto";
-import "partnerStop.proto";
 import "partnerError.proto";
 import "heartbeat.proto";
 import "promotionMessage.proto";
@@ -21,10 +20,9 @@ message GeneralMessage
     optional PartnerBackoutCommitRequest backout_commit_request = 4;
     optional PartnerCompleteCommitRequest complete_commit_request = 5;
     optional PartnerCommitRequest commit_request = 6;
-    optional PartnerStop stop = 7;
-    optional PartnerError error = 8;
-    optional Heartbeat heartbeat = 9;
-    optional Promotion promotion = 10;
+    optional PartnerError error = 7;
+    optional Heartbeat heartbeat = 8;
+    optional Promotion promotion = 9;
     
-    required uint64 timestamp = 11;
+    required uint64 timestamp = 10;
 }

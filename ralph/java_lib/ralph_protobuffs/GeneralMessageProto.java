@@ -95,69 +95,55 @@ public final class GeneralMessageProto {
      */
     ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequestOrBuilder getCommitRequestOrBuilder();
 
-    // optional .PartnerStop stop = 7;
+    // optional .PartnerError error = 7;
     /**
-     * <code>optional .PartnerStop stop = 7;</code>
-     */
-    boolean hasStop();
-    /**
-     * <code>optional .PartnerStop stop = 7;</code>
-     */
-    ralph_protobuffs.PartnerStopProto.PartnerStop getStop();
-    /**
-     * <code>optional .PartnerStop stop = 7;</code>
-     */
-    ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder();
-
-    // optional .PartnerError error = 8;
-    /**
-     * <code>optional .PartnerError error = 8;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
     boolean hasError();
     /**
-     * <code>optional .PartnerError error = 8;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
     ralph_protobuffs.PartnerErrorProto.PartnerError getError();
     /**
-     * <code>optional .PartnerError error = 8;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
     ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder();
 
-    // optional .Heartbeat heartbeat = 9;
+    // optional .Heartbeat heartbeat = 8;
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     boolean hasHeartbeat();
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat();
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder();
 
-    // optional .Promotion promotion = 10;
+    // optional .Promotion promotion = 9;
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     boolean hasPromotion();
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     ralph_protobuffs.PromotionProto.Promotion getPromotion();
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder();
 
-    // required uint64 timestamp = 11;
+    // required uint64 timestamp = 10;
     /**
-     * <code>required uint64 timestamp = 11;</code>
+     * <code>required uint64 timestamp = 10;</code>
      */
     boolean hasTimestamp();
     /**
-     * <code>required uint64 timestamp = 11;</code>
+     * <code>required uint64 timestamp = 10;</code>
      */
     long getTimestamp();
   }
@@ -291,21 +277,8 @@ public final class GeneralMessageProto {
               break;
             }
             case 58: {
-              ralph_protobuffs.PartnerStopProto.PartnerStop.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000040) == 0x00000040)) {
-                subBuilder = stop_.toBuilder();
-              }
-              stop_ = input.readMessage(ralph_protobuffs.PartnerStopProto.PartnerStop.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(stop_);
-                stop_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000040;
-              break;
-            }
-            case 66: {
               ralph_protobuffs.PartnerErrorProto.PartnerError.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+              if (((bitField0_ & 0x00000040) == 0x00000040)) {
                 subBuilder = error_.toBuilder();
               }
               error_ = input.readMessage(ralph_protobuffs.PartnerErrorProto.PartnerError.PARSER, extensionRegistry);
@@ -313,12 +286,12 @@ public final class GeneralMessageProto {
                 subBuilder.mergeFrom(error_);
                 error_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000040;
               break;
             }
-            case 74: {
+            case 66: {
               ralph_protobuffs.HeartbeatProto.Heartbeat.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
                 subBuilder = heartbeat_.toBuilder();
               }
               heartbeat_ = input.readMessage(ralph_protobuffs.HeartbeatProto.Heartbeat.PARSER, extensionRegistry);
@@ -326,12 +299,12 @@ public final class GeneralMessageProto {
                 subBuilder.mergeFrom(heartbeat_);
                 heartbeat_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000080;
               break;
             }
-            case 82: {
+            case 74: {
               ralph_protobuffs.PromotionProto.Promotion.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000200) == 0x00000200)) {
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
                 subBuilder = promotion_.toBuilder();
               }
               promotion_ = input.readMessage(ralph_protobuffs.PromotionProto.Promotion.PARSER, extensionRegistry);
@@ -339,11 +312,11 @@ public final class GeneralMessageProto {
                 subBuilder.mergeFrom(promotion_);
                 promotion_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000100;
               break;
             }
-            case 88: {
-              bitField0_ |= 0x00000400;
+            case 80: {
+              bitField0_ |= 0x00000200;
               timestamp_ = input.readUInt64();
               break;
             }
@@ -519,105 +492,83 @@ public final class GeneralMessageProto {
       return commitRequest_;
     }
 
-    // optional .PartnerStop stop = 7;
-    public static final int STOP_FIELD_NUMBER = 7;
-    private ralph_protobuffs.PartnerStopProto.PartnerStop stop_;
+    // optional .PartnerError error = 7;
+    public static final int ERROR_FIELD_NUMBER = 7;
+    private ralph_protobuffs.PartnerErrorProto.PartnerError error_;
     /**
-     * <code>optional .PartnerStop stop = 7;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
-    public boolean hasStop() {
+    public boolean hasError() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional .PartnerStop stop = 7;</code>
-     */
-    public ralph_protobuffs.PartnerStopProto.PartnerStop getStop() {
-      return stop_;
-    }
-    /**
-     * <code>optional .PartnerStop stop = 7;</code>
-     */
-    public ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
-      return stop_;
-    }
-
-    // optional .PartnerError error = 8;
-    public static final int ERROR_FIELD_NUMBER = 8;
-    private ralph_protobuffs.PartnerErrorProto.PartnerError error_;
-    /**
-     * <code>optional .PartnerError error = 8;</code>
-     */
-    public boolean hasError() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>optional .PartnerError error = 8;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
     public ralph_protobuffs.PartnerErrorProto.PartnerError getError() {
       return error_;
     }
     /**
-     * <code>optional .PartnerError error = 8;</code>
+     * <code>optional .PartnerError error = 7;</code>
      */
     public ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
       return error_;
     }
 
-    // optional .Heartbeat heartbeat = 9;
-    public static final int HEARTBEAT_FIELD_NUMBER = 9;
+    // optional .Heartbeat heartbeat = 8;
+    public static final int HEARTBEAT_FIELD_NUMBER = 8;
     private ralph_protobuffs.HeartbeatProto.Heartbeat heartbeat_;
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     public boolean hasHeartbeat() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     public ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
       return heartbeat_;
     }
     /**
-     * <code>optional .Heartbeat heartbeat = 9;</code>
+     * <code>optional .Heartbeat heartbeat = 8;</code>
      */
     public ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
       return heartbeat_;
     }
 
-    // optional .Promotion promotion = 10;
-    public static final int PROMOTION_FIELD_NUMBER = 10;
+    // optional .Promotion promotion = 9;
+    public static final int PROMOTION_FIELD_NUMBER = 9;
     private ralph_protobuffs.PromotionProto.Promotion promotion_;
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     public boolean hasPromotion() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     public ralph_protobuffs.PromotionProto.Promotion getPromotion() {
       return promotion_;
     }
     /**
-     * <code>optional .Promotion promotion = 10;</code>
+     * <code>optional .Promotion promotion = 9;</code>
      */
     public ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
       return promotion_;
     }
 
-    // required uint64 timestamp = 11;
-    public static final int TIMESTAMP_FIELD_NUMBER = 11;
+    // required uint64 timestamp = 10;
+    public static final int TIMESTAMP_FIELD_NUMBER = 10;
     private long timestamp_;
     /**
-     * <code>required uint64 timestamp = 11;</code>
+     * <code>required uint64 timestamp = 10;</code>
      */
     public boolean hasTimestamp() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>required uint64 timestamp = 11;</code>
+     * <code>required uint64 timestamp = 10;</code>
      */
     public long getTimestamp() {
       return timestamp_;
@@ -630,7 +581,6 @@ public final class GeneralMessageProto {
       backoutCommitRequest_ = ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest.getDefaultInstance();
       completeCommitRequest_ = ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest.getDefaultInstance();
       commitRequest_ = ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest.getDefaultInstance();
-      stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
       error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
       heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
       promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
@@ -681,12 +631,6 @@ public final class GeneralMessageProto {
           return false;
         }
       }
-      if (hasStop()) {
-        if (!getStop().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
       if (hasError()) {
         if (!getError().isInitialized()) {
           memoizedIsInitialized = 0;
@@ -731,19 +675,16 @@ public final class GeneralMessageProto {
         output.writeMessage(6, commitRequest_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeMessage(7, stop_);
+        output.writeMessage(7, error_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeMessage(8, error_);
+        output.writeMessage(8, heartbeat_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeMessage(9, heartbeat_);
+        output.writeMessage(9, promotion_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeMessage(10, promotion_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeUInt64(11, timestamp_);
+        output.writeUInt64(10, timestamp_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -780,23 +721,19 @@ public final class GeneralMessageProto {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, stop_);
+          .computeMessageSize(7, error_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, error_);
+          .computeMessageSize(8, heartbeat_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, heartbeat_);
+          .computeMessageSize(9, promotion_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, promotion_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(11, timestamp_);
+          .computeUInt64Size(10, timestamp_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -912,7 +849,6 @@ public final class GeneralMessageProto {
           getBackoutCommitRequestFieldBuilder();
           getCompleteCommitRequestFieldBuilder();
           getCommitRequestFieldBuilder();
-          getStopFieldBuilder();
           getErrorFieldBuilder();
           getHeartbeatFieldBuilder();
           getPromotionFieldBuilder();
@@ -960,32 +896,26 @@ public final class GeneralMessageProto {
           commitRequestBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
-        if (stopBuilder_ == null) {
-          stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
-        } else {
-          stopBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000040);
         if (errorBuilder_ == null) {
           error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
         } else {
           errorBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000040);
         if (heartbeatBuilder_ == null) {
           heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
         } else {
           heartbeatBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000080);
         if (promotionBuilder_ == null) {
           promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
         } else {
           promotionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000100);
         timestamp_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -1065,37 +995,29 @@ public final class GeneralMessageProto {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        if (stopBuilder_ == null) {
-          result.stop_ = stop_;
-        } else {
-          result.stop_ = stopBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
         if (errorBuilder_ == null) {
           result.error_ = error_;
         } else {
           result.error_ = errorBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
         }
         if (heartbeatBuilder_ == null) {
           result.heartbeat_ = heartbeat_;
         } else {
           result.heartbeat_ = heartbeatBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
         }
         if (promotionBuilder_ == null) {
           result.promotion_ = promotion_;
         } else {
           result.promotion_ = promotionBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
         }
         result.timestamp_ = timestamp_;
         result.bitField0_ = to_bitField0_;
@@ -1131,9 +1053,6 @@ public final class GeneralMessageProto {
         }
         if (other.hasCommitRequest()) {
           mergeCommitRequest(other.getCommitRequest());
-        }
-        if (other.hasStop()) {
-          mergeStop(other.getStop());
         }
         if (other.hasError()) {
           mergeError(other.getError());
@@ -1188,12 +1107,6 @@ public final class GeneralMessageProto {
         }
         if (hasCommitRequest()) {
           if (!getCommitRequest().isInitialized()) {
-            
-            return false;
-          }
-        }
-        if (hasStop()) {
-          if (!getStop().isInitialized()) {
             
             return false;
           }
@@ -1940,135 +1853,18 @@ public final class GeneralMessageProto {
         return commitRequestBuilder_;
       }
 
-      // optional .PartnerStop stop = 7;
-      private ralph_protobuffs.PartnerStopProto.PartnerStop stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder> stopBuilder_;
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public boolean hasStop() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public ralph_protobuffs.PartnerStopProto.PartnerStop getStop() {
-        if (stopBuilder_ == null) {
-          return stop_;
-        } else {
-          return stopBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public Builder setStop(ralph_protobuffs.PartnerStopProto.PartnerStop value) {
-        if (stopBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          stop_ = value;
-          onChanged();
-        } else {
-          stopBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public Builder setStop(
-          ralph_protobuffs.PartnerStopProto.PartnerStop.Builder builderForValue) {
-        if (stopBuilder_ == null) {
-          stop_ = builderForValue.build();
-          onChanged();
-        } else {
-          stopBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public Builder mergeStop(ralph_protobuffs.PartnerStopProto.PartnerStop value) {
-        if (stopBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040) &&
-              stop_ != ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance()) {
-            stop_ =
-              ralph_protobuffs.PartnerStopProto.PartnerStop.newBuilder(stop_).mergeFrom(value).buildPartial();
-          } else {
-            stop_ = value;
-          }
-          onChanged();
-        } else {
-          stopBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000040;
-        return this;
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public Builder clearStop() {
-        if (stopBuilder_ == null) {
-          stop_ = ralph_protobuffs.PartnerStopProto.PartnerStop.getDefaultInstance();
-          onChanged();
-        } else {
-          stopBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000040);
-        return this;
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public ralph_protobuffs.PartnerStopProto.PartnerStop.Builder getStopBuilder() {
-        bitField0_ |= 0x00000040;
-        onChanged();
-        return getStopFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      public ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder getStopOrBuilder() {
-        if (stopBuilder_ != null) {
-          return stopBuilder_.getMessageOrBuilder();
-        } else {
-          return stop_;
-        }
-      }
-      /**
-       * <code>optional .PartnerStop stop = 7;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder> 
-          getStopFieldBuilder() {
-        if (stopBuilder_ == null) {
-          stopBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ralph_protobuffs.PartnerStopProto.PartnerStop, ralph_protobuffs.PartnerStopProto.PartnerStop.Builder, ralph_protobuffs.PartnerStopProto.PartnerStopOrBuilder>(
-                  stop_,
-                  getParentForChildren(),
-                  isClean());
-          stop_ = null;
-        }
-        return stopBuilder_;
-      }
-
-      // optional .PartnerError error = 8;
+      // optional .PartnerError error = 7;
       private ralph_protobuffs.PartnerErrorProto.PartnerError error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.PartnerErrorProto.PartnerError, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder, ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> errorBuilder_;
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public boolean hasError() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public ralph_protobuffs.PartnerErrorProto.PartnerError getError() {
         if (errorBuilder_ == null) {
@@ -2078,7 +1874,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public Builder setError(ralph_protobuffs.PartnerErrorProto.PartnerError value) {
         if (errorBuilder_ == null) {
@@ -2090,11 +1886,11 @@ public final class GeneralMessageProto {
         } else {
           errorBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000040;
         return this;
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public Builder setError(
           ralph_protobuffs.PartnerErrorProto.PartnerError.Builder builderForValue) {
@@ -2104,15 +1900,15 @@ public final class GeneralMessageProto {
         } else {
           errorBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000040;
         return this;
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public Builder mergeError(ralph_protobuffs.PartnerErrorProto.PartnerError value) {
         if (errorBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
               error_ != ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance()) {
             error_ =
               ralph_protobuffs.PartnerErrorProto.PartnerError.newBuilder(error_).mergeFrom(value).buildPartial();
@@ -2123,11 +1919,11 @@ public final class GeneralMessageProto {
         } else {
           errorBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000040;
         return this;
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public Builder clearError() {
         if (errorBuilder_ == null) {
@@ -2136,19 +1932,19 @@ public final class GeneralMessageProto {
         } else {
           errorBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public ralph_protobuffs.PartnerErrorProto.PartnerError.Builder getErrorBuilder() {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000040;
         onChanged();
         return getErrorFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       public ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder getErrorOrBuilder() {
         if (errorBuilder_ != null) {
@@ -2158,7 +1954,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .PartnerError error = 8;</code>
+       * <code>optional .PartnerError error = 7;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.PartnerErrorProto.PartnerError, ralph_protobuffs.PartnerErrorProto.PartnerError.Builder, ralph_protobuffs.PartnerErrorProto.PartnerErrorOrBuilder> 
@@ -2174,18 +1970,18 @@ public final class GeneralMessageProto {
         return errorBuilder_;
       }
 
-      // optional .Heartbeat heartbeat = 9;
+      // optional .Heartbeat heartbeat = 8;
       private ralph_protobuffs.HeartbeatProto.Heartbeat heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.HeartbeatProto.Heartbeat, ralph_protobuffs.HeartbeatProto.Heartbeat.Builder, ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder> heartbeatBuilder_;
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public boolean hasHeartbeat() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public ralph_protobuffs.HeartbeatProto.Heartbeat getHeartbeat() {
         if (heartbeatBuilder_ == null) {
@@ -2195,7 +1991,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public Builder setHeartbeat(ralph_protobuffs.HeartbeatProto.Heartbeat value) {
         if (heartbeatBuilder_ == null) {
@@ -2207,11 +2003,11 @@ public final class GeneralMessageProto {
         } else {
           heartbeatBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public Builder setHeartbeat(
           ralph_protobuffs.HeartbeatProto.Heartbeat.Builder builderForValue) {
@@ -2221,15 +2017,15 @@ public final class GeneralMessageProto {
         } else {
           heartbeatBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public Builder mergeHeartbeat(ralph_protobuffs.HeartbeatProto.Heartbeat value) {
         if (heartbeatBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
               heartbeat_ != ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance()) {
             heartbeat_ =
               ralph_protobuffs.HeartbeatProto.Heartbeat.newBuilder(heartbeat_).mergeFrom(value).buildPartial();
@@ -2240,11 +2036,11 @@ public final class GeneralMessageProto {
         } else {
           heartbeatBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public Builder clearHeartbeat() {
         if (heartbeatBuilder_ == null) {
@@ -2253,19 +2049,19 @@ public final class GeneralMessageProto {
         } else {
           heartbeatBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public ralph_protobuffs.HeartbeatProto.Heartbeat.Builder getHeartbeatBuilder() {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000080;
         onChanged();
         return getHeartbeatFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       public ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder getHeartbeatOrBuilder() {
         if (heartbeatBuilder_ != null) {
@@ -2275,7 +2071,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .Heartbeat heartbeat = 9;</code>
+       * <code>optional .Heartbeat heartbeat = 8;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.HeartbeatProto.Heartbeat, ralph_protobuffs.HeartbeatProto.Heartbeat.Builder, ralph_protobuffs.HeartbeatProto.HeartbeatOrBuilder> 
@@ -2291,18 +2087,18 @@ public final class GeneralMessageProto {
         return heartbeatBuilder_;
       }
 
-      // optional .Promotion promotion = 10;
+      // optional .Promotion promotion = 9;
       private ralph_protobuffs.PromotionProto.Promotion promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.PromotionProto.Promotion, ralph_protobuffs.PromotionProto.Promotion.Builder, ralph_protobuffs.PromotionProto.PromotionOrBuilder> promotionBuilder_;
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public boolean hasPromotion() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public ralph_protobuffs.PromotionProto.Promotion getPromotion() {
         if (promotionBuilder_ == null) {
@@ -2312,7 +2108,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public Builder setPromotion(ralph_protobuffs.PromotionProto.Promotion value) {
         if (promotionBuilder_ == null) {
@@ -2324,11 +2120,11 @@ public final class GeneralMessageProto {
         } else {
           promotionBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public Builder setPromotion(
           ralph_protobuffs.PromotionProto.Promotion.Builder builderForValue) {
@@ -2338,15 +2134,15 @@ public final class GeneralMessageProto {
         } else {
           promotionBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public Builder mergePromotion(ralph_protobuffs.PromotionProto.Promotion value) {
         if (promotionBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
               promotion_ != ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance()) {
             promotion_ =
               ralph_protobuffs.PromotionProto.Promotion.newBuilder(promotion_).mergeFrom(value).buildPartial();
@@ -2357,11 +2153,11 @@ public final class GeneralMessageProto {
         } else {
           promotionBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public Builder clearPromotion() {
         if (promotionBuilder_ == null) {
@@ -2370,19 +2166,19 @@ public final class GeneralMessageProto {
         } else {
           promotionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public ralph_protobuffs.PromotionProto.Promotion.Builder getPromotionBuilder() {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000100;
         onChanged();
         return getPromotionFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       public ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder() {
         if (promotionBuilder_ != null) {
@@ -2392,7 +2188,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>optional .Promotion promotion = 10;</code>
+       * <code>optional .Promotion promotion = 9;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.PromotionProto.Promotion, ralph_protobuffs.PromotionProto.Promotion.Builder, ralph_protobuffs.PromotionProto.PromotionOrBuilder> 
@@ -2408,34 +2204,34 @@ public final class GeneralMessageProto {
         return promotionBuilder_;
       }
 
-      // required uint64 timestamp = 11;
+      // required uint64 timestamp = 10;
       private long timestamp_ ;
       /**
-       * <code>required uint64 timestamp = 11;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public boolean hasTimestamp() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required uint64 timestamp = 11;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public long getTimestamp() {
         return timestamp_;
       }
       /**
-       * <code>required uint64 timestamp = 11;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public Builder setTimestamp(long value) {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000200;
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint64 timestamp = 11;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000200);
         timestamp_ = 0L;
         onChanged();
         return this;
@@ -2471,23 +2267,22 @@ public final class GeneralMessageProto {
       "oto\032$partnerFirstPhaseResultMessage.prot" +
       "o\032!partnerBackoutCommitRequest.proto\032\"pa" +
       "rtnerCompleteCommitRequest.proto\032\032partne" +
-      "rCommitRequest.proto\032\021partnerStop.proto\032" +
-      "\022partnerError.proto\032\017heartbeat.proto\032\026pr" +
-      "omotionMessage.proto\032\nutil.proto\"\356\003\n\016Gen" +
-      "eralMessage\022)\n\014notify_ready\030\001 \001(\0132\023.Part" +
-      "nerNotifyReady\022<\n\026request_sequence_block",
-      "\030\002 \001(\0132\034.PartnerRequestSequenceBlock\022;\n\022" +
-      "first_phase_result\030\003 \001(\0132\037.PartnerFirstP" +
-      "haseResultMessage\022<\n\026backout_commit_requ" +
-      "est\030\004 \001(\0132\034.PartnerBackoutCommitRequest\022" +
-      ">\n\027complete_commit_request\030\005 \001(\0132\035.Partn" +
-      "erCompleteCommitRequest\022-\n\016commit_reques" +
-      "t\030\006 \001(\0132\025.PartnerCommitRequest\022\032\n\004stop\030\007" +
-      " \001(\0132\014.PartnerStop\022\034\n\005error\030\010 \001(\0132\r.Part" +
-      "nerError\022\035\n\theartbeat\030\t \001(\0132\n.Heartbeat\022" +
-      "\035\n\tpromotion\030\n \001(\0132\n.Promotion\022\021\n\ttimest",
-      "amp\030\013 \002(\004B\'\n\020ralph_protobuffsB\023GeneralMe" +
-      "ssageProto"
+      "rCommitRequest.proto\032\022partnerError.proto" +
+      "\032\017heartbeat.proto\032\026promotionMessage.prot" +
+      "o\032\nutil.proto\"\322\003\n\016GeneralMessage\022)\n\014noti" +
+      "fy_ready\030\001 \001(\0132\023.PartnerNotifyReady\022<\n\026r" +
+      "equest_sequence_block\030\002 \001(\0132\034.PartnerReq",
+      "uestSequenceBlock\022;\n\022first_phase_result\030" +
+      "\003 \001(\0132\037.PartnerFirstPhaseResultMessage\022<" +
+      "\n\026backout_commit_request\030\004 \001(\0132\034.Partner" +
+      "BackoutCommitRequest\022>\n\027complete_commit_" +
+      "request\030\005 \001(\0132\035.PartnerCompleteCommitReq" +
+      "uest\022-\n\016commit_request\030\006 \001(\0132\025.PartnerCo" +
+      "mmitRequest\022\034\n\005error\030\007 \001(\0132\r.PartnerErro" +
+      "r\022\035\n\theartbeat\030\010 \001(\0132\n.Heartbeat\022\035\n\tprom" +
+      "otion\030\t \001(\0132\n.Promotion\022\021\n\ttimestamp\030\n \002" +
+      "(\004B\'\n\020ralph_protobuffsB\023GeneralMessagePr",
+      "oto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2499,7 +2294,7 @@ public final class GeneralMessageProto {
           internal_static_GeneralMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_GeneralMessage_descriptor,
-              new java.lang.String[] { "NotifyReady", "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Stop", "Error", "Heartbeat", "Promotion", "Timestamp", });
+              new java.lang.String[] { "NotifyReady", "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Error", "Heartbeat", "Promotion", "Timestamp", });
           return null;
         }
       };
@@ -2512,7 +2307,6 @@ public final class GeneralMessageProto {
           ralph_protobuffs.PartnerBackoutCommitRequestProto.getDescriptor(),
           ralph_protobuffs.PartnerCompleteCommitRequestProto.getDescriptor(),
           ralph_protobuffs.PartnerCommitRequestProto.getDescriptor(),
-          ralph_protobuffs.PartnerStopProto.getDescriptor(),
           ralph_protobuffs.PartnerErrorProto.getDescriptor(),
           ralph_protobuffs.HeartbeatProto.getDescriptor(),
           ralph_protobuffs.PromotionProto.getDescriptor(),

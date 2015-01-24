@@ -1,8 +1,0 @@
-
-option java_package = "ralph_protobuffs";
-option java_outer_classname = "PartnerStopProto";
-
-message PartnerStop
-{
-    required bool dummy = 1;
-}
