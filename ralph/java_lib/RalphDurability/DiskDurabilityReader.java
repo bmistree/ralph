@@ -35,7 +35,7 @@ public class DiskDurabilityReader implements IDurabilityReader
     {
         try
         {
-            return Durability.parseFrom(f_input);
+            return Durability.parseDelimitedFrom(f_input);
         }
         catch(IOException ex)
         {
