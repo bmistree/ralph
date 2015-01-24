@@ -83,8 +83,8 @@ public abstract class Endpoint implements IReference
     private RalphConnObj.ConnectionObj _conn_obj = null;
     public ActiveEventMap _act_event_map = null;
 	
-    public ThreadPool _thread_pool = null;
-    private AllEndpoints _all_endpoints = null;
+    public final ThreadPool _thread_pool;
+    private final AllEndpoints _all_endpoints;
 
     public final String _uuid;
     
