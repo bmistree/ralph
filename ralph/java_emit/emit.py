@@ -627,8 +627,7 @@ protected RalphObject _handle_rpc_call(
     String to_exec_internal_name,ActiveEvent _active_event,
     ExecutingEventContext ctx,
     Object...args)
-    throws ApplicationException, BackoutException, NetworkException,
-    StoppedException
+    throws ApplicationException, BackoutException, NetworkException
 {
     RalphObject result = null;
 
@@ -991,8 +990,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     private Double some_method (
         ExecutingEventContext _ctx, ActiveEvent _active_event,
         SomeType SomeVar) 
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         try {
     '''
@@ -1052,7 +1050,7 @@ def emit_internal_method_signature(emit_ctx,method_signature_node):
 
     to_return += (
         ') throws ApplicationException, BackoutException, ' +
-        'NetworkException,StoppedException')
+        'NetworkException')
     return to_return, argument_name_text_list
 
 
