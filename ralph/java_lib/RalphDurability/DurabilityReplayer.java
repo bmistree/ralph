@@ -56,6 +56,8 @@ public class DurabilityReplayer implements IDurabilityReplayer
         }
         else if (msg.hasPrepare())
         {
+            DurabilityReplayContext replay_durability_context =
+                new DurabilityReplayContext(msg.getPrepare());
             Util.logger_warn(
                 "Must handle prepare message in durability replayer");
         }
