@@ -806,8 +806,8 @@ if (DurabilityInfo.instance.durability_saver != null)
 
 %(ralph_wrapped_arguments_text)s;
 
-    List <RalphObject> args = new ArrayList<RalphObject>(
-        Arrays.asList(%(ralph_wrapped_args_list)s));
+    List <? extends RalphObject> args =
+        Arrays.asList(%(ralph_wrapped_args_list)s);
 
     active_event.durability_entry_call(
         PartnerRequestSequenceBlockProducer.produce_request_block(
