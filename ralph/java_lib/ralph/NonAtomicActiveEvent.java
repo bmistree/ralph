@@ -18,11 +18,9 @@ import RalphCallResults.MessageCallResultObject;
 import RalphServiceActions.ServiceAction;
 
 import RalphExceptions.BackoutException;
-import RalphExceptions.StoppedException;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import RalphExceptions.StoppedException;
 
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
@@ -122,7 +120,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
             atomic_child_copy.promote_boosted(new_priority);
     }
     
-    public ActiveEvent clone_atomic() throws StoppedException
+    public ActiveEvent clone_atomic() 
     {
         atomic_child_lock();
         atomic_child = event_map.create_root_atomic_event(
@@ -232,12 +230,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         else
             event_parent.put_exception(error,message_listening_queues_map);
     }
-
-    public void stop(boolean skip_partner)
-    {
-        Util.logger_assert(
-            "\nError: must fill in stop method on event.\n");
-    }
     
     /**
        ASSUMES ALREADY WITHIN _LOCK
@@ -248,23 +240,15 @@ public class NonAtomicActiveEvent extends ActiveEvent
        sentinel into the threadsafe queue indicating that the event
        has been rolled back and to not proceed further.
 
-       * @param stop_request
        */
-    private void rollback_unblock_waiting_queues(boolean stop_request)
+    private void rollback_unblock_waiting_queues()
     {
         for (ArrayBlockingQueue<MessageCallResultObject> msg_queue_to_unblock :
                  message_listening_queues_map.values())
         {
             MessageCallResultObject queue_feeder = null;
-            if (stop_request)
-            {
-                queue_feeder = MessageCallResultObject.stop_already_called();
-            }
-            else
-            {
-                queue_feeder =
-                    MessageCallResultObject.backout_before_receive_message();
-            }
+            queue_feeder =
+                MessageCallResultObject.backout_before_receive_message();
             msg_queue_to_unblock.add(queue_feeder);
         }
     }
@@ -276,18 +260,17 @@ public class NonAtomicActiveEvent extends ActiveEvent
        either endpoint's partner, an endpoint that we called an
        endpoint method on, or an endpoint that called an endpoint
        method on us.
-       * @param stop_request
        */
     @Override
     public void blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request)
+        String backout_requester_host_uuid)
     {
         Util.logger_assert(
             "Should not call backout on non-atomic active event.");
     }
     @Override
     public void non_blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request)
+        String backout_requester_host_uuid)
     {
         // can get called by speculative obj, eg., if backing out a
         // derived from.
@@ -469,37 +452,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         Util.logger_assert(
             "Non-atomic should not receive forward_backout_request.");
     }
-	
-	
-
-    /**
-       @param {bool} skip_partner --- @see forward_commit_request
-
-       @param {bool} already_backed_out --- Caller has already backed
-       out the commit through commit manager, and is calling this
-       function primarily to forward the backout message.  No need to
-       do so again inside of function.
-
-       @param {bool} stop_request --- True if this backout is a
-       product of a stop request.  False otherwise.
-        
-       When this is called, we want to disable all further additions
-       to self.subscribed_to and self.partner_contacted.  (Ie, after we
-       have requested to backout, we should not execute any further
-       endpoint object calls or request partner to do any additional
-       work for this event.)
-
-       * @param skip_partner
-       * @param already_backed_out
-       * @param stop_request
-       */
-    public void forward_backout_request_and_backout_self(
-        boolean skip_partner, boolean already_backed_out, boolean stop_request)
-    {
-        Util.logger_assert(
-            "Non-atomic should not receive forward_backout_request.");
-    }
-
 
     /**
        ASSUMES ALREADY WITHIN LOCK
@@ -570,8 +522,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     @Override
     protected void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its

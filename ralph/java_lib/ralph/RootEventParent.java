@@ -164,26 +164,14 @@ public class RootEventParent extends EventParent
     @Override
     public void rollback(
         String backout_requester_host_uuid, 
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
-        boolean stop_request)
+        Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
         super.rollback(
             backout_requester_host_uuid,
-            local_endpoints_whose_partners_contacted,stop_request);
-    
+            local_endpoints_whose_partners_contacted);
 
-        //# put val to read into event_complete_queue so can know
-        //# whether or not to retry event.
-        if (stop_request)
-        {
-            event_complete_queue.add(
-                RootCallResult.ResultType.STOP);
-        }
-        else
-        {
-            event_complete_queue.add(
-                RootCallResult.ResultType.RESCHEDULE);
-        }
+        event_complete_queue.add(
+            RootCallResult.ResultType.RESCHEDULE);
     }
 
     /**

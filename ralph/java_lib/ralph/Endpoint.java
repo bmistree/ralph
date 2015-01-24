@@ -17,7 +17,6 @@ import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage;
 import ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.PartnerStopProto.PartnerStop;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
@@ -25,7 +24,6 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import RalphExceptions.StoppedException;
 
 import RalphAtomicWrappers.BaseAtomicWrappers;
 
@@ -89,22 +87,6 @@ public abstract class Endpoint implements IReference
     private AllEndpoints _all_endpoints = null;
 
     public final String _uuid;
-	
-    private ReentrantLock _stop_mutex = new ReentrantLock();
-	
-    //# has stop been called locally, on the partner, and have we
-    //# performed cleanup, respectively
-    private boolean _stop_called = false;
-    private boolean _partner_stop_called = false;
-    private boolean _stop_complete = false;
-	
-    private List<ArrayBlockingQueue<Object>> _stop_blocking_queues =
-        new ArrayList<ArrayBlockingQueue<Object>>();
-	
-    //# holds callbacks to call when stop is complete
-    private int _stop_listener_id_assigner = 0;
-    private Map<Integer,StopListener> _stop_listeners =
-        new HashMap<Integer,StopListener>();
     
     private boolean _conn_failed = false;
     private ReentrantLock _conn_mutex = new ReentrantLock();
@@ -226,16 +208,6 @@ public abstract class Endpoint implements IReference
         _conn_obj_mutex.unlock();
     }
     
-    private void _stop_lock()
-    {
-        _stop_mutex.lock();
-    }
- 
-    private void _stop_unlock()
-    {
-        _stop_mutex.unlock();
-    }
-
     /**
        Using this mechanism, a service on a remote host can connect to
        this endpoint.  Series of required operations:
@@ -463,10 +435,6 @@ public abstract class Endpoint implements IReference
                 new RalphServiceActions.ReceivePartnerMessageRequestSequenceBlockAction(
                     this,general_msg.getRequestSequenceBlock());
             _thread_pool.add_service_action(service_action);
-        }
-        else if (general_msg.hasStop())
-        {
-            Util.logger_warn("Skipping stop");
         }
         else if (general_msg.hasFirstPhaseResult())
         {
@@ -945,94 +913,6 @@ public abstract class Endpoint implements IReference
     	general_message.setBackoutCommitRequest(backout_commit_request);
     	_conn_obj.write(general_message.build(),this);
     }
-    
-    public void _notify_partner_stop()
-    {
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-    	general_message.setTimestamp(_clock.get_int_timestamp());
-    	PartnerStop.Builder partner_stop_message = PartnerStop.newBuilder();
-    	partner_stop_message.setDummy(false);
-    	
-    	general_message.setStop(partner_stop_message);
-
-        _conn_obj.write_stop(general_message.build(),this);
-    }
-    
-    /**
-     * @param {callable} to_exec_on_stop --- When this endpoint
-     stops, we execute to_exec_on_stop and any other
-     stop listeners that were waiting.
-
-     @returns {int or None} --- int id should be passed back inot
-     remove_stop_listener to remove associated stop
-     listener.
-    */
-    public Integer add_stop_listener(StopListener to_exec_on_stop)
-    {
-    	Util.logger_assert("Need to add stop listeners.");
-    	return null;
-    }
-
-    /**
-       int returned from add_stop_listener
-    */
-    public void remove_stop_listener(Integer stop_id)
-    {
-    	Util.logger_assert("Need to add stop listeners.");
-    }
-    	
-    /**
-     * Returns whether the endpoint is stopped.
-     * 
-     */
-    public boolean is_stopped()
-    {
-        return _stop_complete;
-    }
-
-    public void stop()
-    {
-    	Util.logger_assert("Not handling stop");
-    }
-    
-    public void stop(boolean skip_partner)
-    {
-    	Util.logger_assert("Not handling stop");
-    }
-
-    /**
-       Passed in as callback arugment to active event map, which calls
-       it.
-    
-       When this is executed:
-       1) Stop was called on this side
-       
-       2) Stop was called on the other side
-       
-       3) There are no longer any running events in active event map
-
-       Close the connection between both sides.  Unblock the stop call.
-    */
-    private void _stop_complete_cb()
-    {
-    	Util.logger_assert("Not handling stop");
-    }
-    
-    /**
-       @param {PartnerStop message object} --- Has a single boolean
-       field, which is meaningless.
-            
-       Received a stop message from partner:
-       1) Label partner stop as having been called
-       2) Initiate stop locally
-       3) If have already called stop myself then tell active event
-       map we're ready for a shutdown when it is
-    */
-    private void _handle_partner_stop_msg(PartnerStop msg)
-    {
-    	Util.logger_assert("Not handling stop");
-    }
-
 
     
     //# Builtin Endpoint methods
@@ -1070,8 +950,8 @@ public abstract class Endpoint implements IReference
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         Object...to_exec_args)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException;
+        throws ApplicationException, BackoutException, NetworkException;
+
 
     /**
        Just calls into _handle_rpc_calls.
@@ -1080,7 +960,7 @@ public abstract class Endpoint implements IReference
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         Object...args)
-        throws ApplicationException, BackoutException, NetworkException,StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         RalphObject result = null;
         try

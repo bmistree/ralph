@@ -4,7 +4,6 @@ public class RootCallResult
 {
     public static enum ResultType{
         COMPLETE,
-        RESCHEDULE,
-        STOP
+        RESCHEDULE
     }
 }

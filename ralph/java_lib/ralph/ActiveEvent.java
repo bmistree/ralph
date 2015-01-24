@@ -8,11 +8,9 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 
 import RalphDurability.DurabilityContext;
 
-import RalphExceptions.StoppedException;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import RalphExceptions.StoppedException;
 
 
 public abstract class ActiveEvent
@@ -129,7 +127,7 @@ public abstract class ActiveEvent
        Calling restore_from_atomic should return the parent that
        cloned the atomic event.
      */
-    public abstract ActiveEvent clone_atomic() throws StoppedException;
+    public abstract ActiveEvent clone_atomic();
     
     public abstract ActiveEvent restore_from_atomic();
 
@@ -217,11 +215,10 @@ public abstract class ActiveEvent
     */
     public abstract void _backout_touched_objs();
     public abstract void put_exception(Exception error);
-    public abstract void stop(boolean skip_partner);
     public abstract void blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request);
+        String backout_requester_host_uuid);
     public abstract void non_blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request);
+        String backout_requester_host_uuid);
     
     /**
        Either this or obj_request_no_backout_and_release_lock
@@ -333,10 +330,8 @@ public abstract class ActiveEvent
     public abstract void forward_backout_request_and_backout_self();
     public abstract void forward_backout_request_and_backout_self(
         boolean skip_partner);
-    public abstract void forward_backout_request_and_backout_self(
-        boolean skip_partner, boolean already_backed_out);
 
-    /**
+        /**
        @param {bool} skip_partner --- @see forward_commit_request
 
        @param {bool} already_backed_out --- Caller has already backed
@@ -344,9 +339,6 @@ public abstract class ActiveEvent
        function primarily to forward the backout message.  No need to
        do so again inside of function.
 
-       @param {bool} stop_request --- True if this backout is a
-       product of a stop request.  False otherwise.
-        
        When this is called, we want to disable all further additions
        to self.subscribed_to and self.partner_contacted.  (Ie, after we
        have requested to backout, we should not execute any further
@@ -355,17 +347,15 @@ public abstract class ActiveEvent
 
        * @param skip_partner
        * @param already_backed_out
-       * @param stop_request
        */
     public abstract void forward_backout_request_and_backout_self(
-        boolean skip_partner, boolean already_backed_out,
-        boolean stop_request);
+        boolean skip_partner, boolean already_backed_out);
+
     
     public void recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         if (durability_context != null)
             durability_context.add_rpc_arg(msg,endpt_recvd_on.uuid());
@@ -375,8 +365,7 @@ public abstract class ActiveEvent
     protected abstract void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException;
+        throws ApplicationException, BackoutException, NetworkException;
     
     
     public abstract void receive_unsuccessful_first_phase_commit_msg(

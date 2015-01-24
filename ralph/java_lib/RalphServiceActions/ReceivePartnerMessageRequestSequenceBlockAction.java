@@ -65,13 +65,6 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             
             evt.recv_partner_sequence_call_msg(local_endpoint,partner_request_block_msg);
         }
-        catch (RalphExceptions.StoppedException stopped_excep)
-        {
-            //  # FIXME: Think through, should I send message to other
-            //  # side that I am stopped?  Right now, I don't think that I
-            //  # need to.
-            return;
-        }
         catch (RalphExceptions.BackoutException _ex)
         {
             // do not have to do anything in this case.

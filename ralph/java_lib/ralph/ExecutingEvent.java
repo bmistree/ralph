@@ -9,8 +9,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import RalphExceptions.StoppedException;
-
 
 public class ExecutingEvent 
 {
@@ -56,8 +54,7 @@ public class ExecutingEvent
         String to_exec_internal_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         boolean takes_args, Object...to_exec_args)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         endpt_to_run_on.handle_rpc_call(
             to_exec_internal_name,active_event,
@@ -65,12 +62,10 @@ public class ExecutingEvent
     }
 			
     public void run()
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         static_run(
             endpt_to_run_on,to_exec_internal_name,
             active_event,ctx,takes_args,to_exec_args);
     }
-		
 }

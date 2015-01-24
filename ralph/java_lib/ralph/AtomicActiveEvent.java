@@ -16,11 +16,9 @@ import RalphServiceActions.ServiceAction;
 import RalphCallResults.MessageCallResultObject;
 
 import RalphExceptions.BackoutException;
-import RalphExceptions.StoppedException;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
-import RalphExceptions.StoppedException;
 
 import RalphDurability.DurabilityContext;
 
@@ -516,7 +514,7 @@ public class AtomicActiveEvent extends ActiveEvent
        atomic event, enclosing atomic event should just subsume
        original atomic event.
      */
-    public ActiveEvent clone_atomic() throws StoppedException
+    public ActiveEvent clone_atomic()
     {
         _lock();
         ++ atomic_reference_counts;
@@ -900,10 +898,10 @@ public class AtomicActiveEvent extends ActiveEvent
 
     @Override
     public void non_blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request)
+        String backout_requester_host_uuid)
     {
         _lock();
-        locked_non_blocking_backout(backout_requester_host_uuid,stop_request);
+        locked_non_blocking_backout(backout_requester_host_uuid);
         _unlock();
     }
     
@@ -934,7 +932,6 @@ public class AtomicActiveEvent extends ActiveEvent
        back.
 
        * @param backout_requester_host_uuid
-       * @param stop_request
 
        Changes internal state to BACKING_OUT.  Schedules an event to
        backout all remaining touched objects, but (unlike _backout)
@@ -942,7 +939,7 @@ public class AtomicActiveEvent extends ActiveEvent
        to other hosts.
        */
     private void locked_non_blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request)
+        String backout_requester_host_uuid)
     {
         //// DEBUG
         assert_if_not_holding_lock(
@@ -981,7 +978,7 @@ public class AtomicActiveEvent extends ActiveEvent
             service_action);
             
         //# 3
-        rollback_unblock_waiting_queues(stop_request);
+        rollback_unblock_waiting_queues();
 
         //# 4 remove the event.
         event_map.remove_event(uuid);
@@ -994,7 +991,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //# variable.
         event_parent.rollback(
             backout_requester_host_uuid,
-            local_endpoints_whose_partners_contacted,stop_request);
+            local_endpoints_whose_partners_contacted);
     }
 
     /**
@@ -1038,17 +1035,11 @@ public class AtomicActiveEvent extends ActiveEvent
     public void put_exception(Exception error)
     {
         if (RalphExceptions.BackoutException.class.isInstance(error))
-            blocking_backout(null,false);
+            blocking_backout(null);
         else
             event_parent.put_exception(error,message_listening_queues_map);
     }
 
-    public void stop(boolean skip_partner)
-    {
-        Util.logger_assert(
-            "\nError: must fill in stop method on event.\n");
-    }
-    
 
     /**
        ASSUMES ALREADY WITHIN _LOCK
@@ -1059,9 +1050,8 @@ public class AtomicActiveEvent extends ActiveEvent
        sentinel into the threadsafe queue indicating that the event
        has been rolled back and to not proceed further.
 
-       * @param stop_request
        */
-    private void rollback_unblock_waiting_queues(boolean stop_request)
+    private void rollback_unblock_waiting_queues()
     {
         //// DEBUG
         assert_if_not_holding_lock(
@@ -1074,15 +1064,9 @@ public class AtomicActiveEvent extends ActiveEvent
                  message_listening_queues_map.values())
         {
             MessageCallResultObject queue_feeder = null;
-            if (stop_request)
-            {
-                queue_feeder = MessageCallResultObject.stop_already_called();
-            }
-            else
-            {
-                queue_feeder =
-                    MessageCallResultObject.backout_before_receive_message();
-            }
+            queue_feeder =
+                MessageCallResultObject.backout_before_receive_message();
+
             msg_queue_to_unblock.add(queue_feeder);
         }
     }
@@ -1101,17 +1085,16 @@ public class AtomicActiveEvent extends ActiveEvent
        Otherwise, means that call to backout was made by either
        endpoint's partner, an endpoint that we called an endpoint
        method on, or an endpoint that called an endpoint method on us.
-       * @param stop_request
        */
     @Override
     public void blocking_backout(
-        String backout_requester_host_uuid, boolean stop_request)
+        String backout_requester_host_uuid)
     {
         assert_if_holding_lock(
             "Cannot be holding lock when enter backout.");
         
         _lock();
-        locked_non_blocking_backout(backout_requester_host_uuid,stop_request);
+        locked_non_blocking_backout(backout_requester_host_uuid);
         _unlock();
 
         _lock();
@@ -1156,7 +1139,7 @@ public class AtomicActiveEvent extends ActiveEvent
         touched_objs.remove(obj_requesting.uuid);
         _touched_objs_unlock();
 
-        locked_non_blocking_backout(null,false);
+        locked_non_blocking_backout(null);
         
         //# unlock after method
         _unlock();
@@ -1314,23 +1297,14 @@ public class AtomicActiveEvent extends ActiveEvent
 
     public void forward_backout_request_and_backout_self()
     {
-        forward_backout_request_and_backout_self(false,false,false);
+        forward_backout_request_and_backout_self(false,false);
     }
 	
     public void forward_backout_request_and_backout_self(
         boolean skip_partner)
     {
-        forward_backout_request_and_backout_self(skip_partner,false,false);
+        forward_backout_request_and_backout_self(skip_partner,false);
     }
-	
-    public void forward_backout_request_and_backout_self(
-        boolean skip_partner, boolean already_backed_out)
-    {
-        forward_backout_request_and_backout_self(
-            skip_partner,already_backed_out,false);
-    }
-	
-	
 
     /**
        @param {bool} skip_partner --- @see forward_commit_request
@@ -1339,9 +1313,6 @@ public class AtomicActiveEvent extends ActiveEvent
        out the commit through commit manager, and is calling this
        function primarily to forward the backout message.  No need to
        do so again inside of function.
-
-       @param {bool} stop_request --- True if this backout is a
-       product of a stop request.  False otherwise.
         
        When this is called, we want to disable all further additions
        to self.subscribed_to and self.partner_contacted.  (Ie, after we
@@ -1351,16 +1322,15 @@ public class AtomicActiveEvent extends ActiveEvent
 
        * @param skip_partner
        * @param already_backed_out
-       * @param stop_request
        */
     public void forward_backout_request_and_backout_self(
-        boolean skip_partner, boolean already_backed_out, boolean stop_request)
+        boolean skip_partner, boolean already_backed_out)
     {
         //# FIXME: may be needlessly forwarding backouts to partners and
         //# back to the endpoints that requested us to back out.
-        blocking_backout(null,stop_request);
+        blocking_backout(null);        
     }
-
+	
 
     /**
        ASSUMES ALREADY WITHIN LOCK
@@ -1379,8 +1349,7 @@ public class AtomicActiveEvent extends ActiveEvent
     private ExecutingEvent handle_first_sequence_msg_from_partner(
         Endpoint endpt_recvd_on,
         PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
 
         //// DEBUG
@@ -1448,8 +1417,7 @@ public class AtomicActiveEvent extends ActiveEvent
     @Override
     protected void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,PartnerRequestSequenceBlock msg)
-        throws ApplicationException, BackoutException, NetworkException,
-        StoppedException
+        throws ApplicationException, BackoutException, NetworkException
     {
         
         //# can be None... if it is means that the other side wants us

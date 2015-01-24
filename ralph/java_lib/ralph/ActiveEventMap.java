@@ -6,7 +6,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import RalphDurability.DurabilityContext;
-import RalphExceptions.StoppedException;
 
 
 public class ActiveEventMap
@@ -14,9 +13,6 @@ public class ActiveEventMap
     private java.util.concurrent.locks.ReentrantLock _mutex = 
         new java.util.concurrent.locks.ReentrantLock();
     public Endpoint local_endpoint = null;
-    private boolean in_stop_phase = false;
-    private boolean in_stop_complete_phase = false;
-    private StopCallback stop_callback = null;
     private BoostedManager boosted_manager = null;
     private final RalphGlobals ralph_globals;
     
@@ -48,16 +44,6 @@ public class ActiveEventMap
         _mutex.unlock();
     }
     
-    /**
-     *  When the endpoint that this is on has said to start
-     stopping, then
-     * @param skip_partner
-     */
-    public void initiate_stop(boolean skip_partner)
-    {
-        Util.logger_assert("Stop has been deprecated");
-    }
-
     public void inform_events_of_network_failure()
     {
         Util.logger_assert(
@@ -65,16 +51,10 @@ public class ActiveEventMap
             "in active event map\n");
     }
     
-    public void callback_when_stopped(StopCallback stop_callback_)
-    {
-        Util.logger_assert("Stop has been deprecated");
-    }
-    
 
     public AtomicActiveEvent create_root_atomic_event(
         ActiveEvent event_parent, Endpoint root_endpoint,
         String event_entry_point_name,DurabilityContext durability_context)
-        throws RalphExceptions.StoppedException
     {
         return (AtomicActiveEvent)create_root_event(
             true,event_parent,false,root_endpoint,
@@ -83,7 +63,6 @@ public class ActiveEventMap
 
     public NonAtomicActiveEvent create_root_non_atomic_event(
         Endpoint root_endpoint, String event_entry_point_name)
-        throws RalphExceptions.StoppedException
     {
         return (NonAtomicActiveEvent)create_root_event(
             false,null,false,root_endpoint,event_entry_point_name,null);
@@ -96,7 +75,6 @@ public class ActiveEventMap
      */
     public NonAtomicActiveEvent create_super_root_non_atomic_event(
         Endpoint root_endpoint, String event_entry_point_name)
-        throws RalphExceptions.StoppedException
     {
         return (NonAtomicActiveEvent)create_root_event(
             false,null,true,root_endpoint, event_entry_point_name,null);
@@ -120,7 +98,6 @@ public class ActiveEventMap
         boolean atomic, ActiveEvent event_parent, boolean super_priority,
         Endpoint root_endpoint, String event_entry_point_name,
         DurabilityContext durability_context)
-        throws RalphExceptions.StoppedException
     {
         // DEBUG
         if (super_priority && atomic)
@@ -191,11 +168,6 @@ public class ActiveEventMap
 
     /**
      * Get or create an event because partner endpoint requested it.
-     Note: if we have to create an event and are in stop phase,
-     then we throw a stopped exception.  If the event already
-     exists though, we return it (this is so that we can finish any
-     commits that we were waiting on).
-     * @throws StoppedException 
 
      @param event_entry_point_name --- If have to generate the partner
      event, then use this to label the entry point for the entry point
@@ -205,45 +177,37 @@ public class ActiveEventMap
     */
     public ActiveEvent get_or_create_partner_event(
         String uuid, String priority,boolean atomic,
-        String event_entry_point_name) throws StoppedException
+        String event_entry_point_name)
     {
         _lock();
 
         ActiveEvent to_return = local_endpoint.ralph_globals.all_events.get(uuid);
         if (to_return == null)
         {
-            if (in_stop_phase)
+            PartnerEventParent pep =
+                new PartnerEventParent(
+                    local_endpoint._host_uuid,local_endpoint,uuid,priority,
+                    ralph_globals,event_entry_point_name);
+            ActiveEvent new_event = null;
+            if (atomic)
             {
-                _unlock();
-                throw new RalphExceptions.StoppedException();
-            }
-            else 
-            {
-                PartnerEventParent pep =
-                    new PartnerEventParent(
-                        local_endpoint._host_uuid,local_endpoint,uuid,priority,
-                        ralph_globals,event_entry_point_name);
-                ActiveEvent new_event = null;
-                if (atomic)
+                DurabilityContext durability_context = null;
+                if (DurabilityInfo.instance.durability_saver != null)
                 {
-                    DurabilityContext durability_context = null;
-                    if (DurabilityInfo.instance.durability_saver != null)
-                    {
-                        durability_context =
-                            new DurabilityContext(pep.get_uuid());
-                    }
-                    new_event = new AtomicActiveEvent(
-                        pep,local_endpoint._thread_pool,this,null,ralph_globals,
-                        durability_context);
+                    durability_context =
+                        new DurabilityContext(pep.get_uuid());
                 }
-                else
-                    new_event = new NonAtomicActiveEvent(pep,this,ralph_globals);
-
-                local_endpoint.ralph_globals.all_events.put(uuid,new_event);
-                to_return = new_event;
+                new_event = new AtomicActiveEvent(
+                    pep,local_endpoint._thread_pool,this,null,ralph_globals,
+                    durability_context);
             }
+            else
+                new_event = new NonAtomicActiveEvent(pep,this,ralph_globals);
+
+            local_endpoint.ralph_globals.all_events.put(uuid,new_event);
+            to_return = new_event;
         }
         _unlock();
-        return to_return;
+        return to_return;        
     }
 }

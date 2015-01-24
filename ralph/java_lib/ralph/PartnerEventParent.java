@@ -48,15 +48,14 @@ public class PartnerEventParent extends EventParent
     @Override
     public void rollback(
         String backout_requester_host_uuid,
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
-        boolean stop_request)
+        Set<Endpoint> local_endpoints_whose_partners_contacted)
 	        
     {
         // add local endpoint to endpoints to roll back.
         local_endpoints_whose_partners_contacted.add(local_endpoint);
         super.rollback(
             backout_requester_host_uuid,
-            local_endpoints_whose_partners_contacted,stop_request);
+            local_endpoints_whose_partners_contacted);
     }
         
 	

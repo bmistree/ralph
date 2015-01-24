@@ -234,8 +234,7 @@ public abstract class EventParent
     */
     public void rollback(
         String backout_requester_host_uuid, 
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
-        boolean stop_request)
+        Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
         //# tell partners to backout their changes too
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
