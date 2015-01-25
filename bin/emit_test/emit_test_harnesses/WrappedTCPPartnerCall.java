@@ -12,7 +12,9 @@ import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
+
 import RalphDurability.DurabilityContext;
+import RalphDurability.DurabilityReplayContext;
 
 public class WrappedTCPPartnerCall
 {
@@ -95,12 +97,16 @@ public class WrappedTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context)
+            DurabilityContext durability_context,
+            DurabilityReplayContext durability_replay_context)
         {
             Endpoint to_return = null;
 
             try {
-                to_return = new SideA(globals,conn_obj,durability_context);
+                to_return =
+                    new SideA(
+                        globals,conn_obj,durability_context,
+                        durability_replay_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
                 assert(false);
@@ -113,7 +119,7 @@ public class WrappedTCPPartnerCall
             List<RalphObject> internal_val_list,
             DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj,durability_context);
+            return construct(globals,conn_obj,durability_context,null);
         }
 
         @Override
@@ -131,10 +137,14 @@ public class WrappedTCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context)
+            DurabilityContext durability_context,
+            DurabilityReplayContext durability_replay_context)
         {
             try {
-                side_b = new SideB(globals,conn_obj,durability_context);
+                side_b =
+                    new SideB(
+                        globals,conn_obj,durability_context,
+                        durability_replay_context);
             } catch (Exception _ex) {
                 _ex.printStackTrace();
             }
@@ -146,7 +156,7 @@ public class WrappedTCPPartnerCall
             List<RalphObject> internal_val_list,
             DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj,durability_context);
+            return construct(globals,conn_obj,durability_context,null);
         }
 
         @Override

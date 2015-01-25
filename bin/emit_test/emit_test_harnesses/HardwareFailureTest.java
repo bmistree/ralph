@@ -39,7 +39,7 @@ public class HardwareFailureTest
         double hardware_id, HardwareOwner endpt)
     {
         _InternalPieceOfHardware to_return =
-            new _InternalPieceOfHardware(endpt.ralph_globals,null);
+            new _InternalPieceOfHardware(endpt.ralph_globals,null,null);
         ExtendedInternalHardwareList internal_hardware_list =
             new ExtendedInternalHardwareList(hardware_id,endpt);
         

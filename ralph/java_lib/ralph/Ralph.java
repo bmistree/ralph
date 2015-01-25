@@ -36,7 +36,7 @@ public class Ralph {
         { 
             return constructor.construct(
                 all_globals, new RalphConnObj.SingleSideConnection(),
-                durability_context);
+                durability_context,null);
         }
         finally
         {
@@ -95,7 +95,7 @@ public class Ralph {
         try
         {
             return constructor_obj.construct(
-                all_globals,tcp_connection_obj,durability_context);
+                all_globals,tcp_connection_obj,durability_context,null);
         }
         finally
         {

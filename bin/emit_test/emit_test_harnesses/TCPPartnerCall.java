@@ -13,7 +13,7 @@ import ralph.Endpoint;
 import ralph.Ralph;
 
 import RalphDurability.DurabilityContext;
-
+import RalphDurability.DurabilityReplayContext;
 
 public class TCPPartnerCall
 {
@@ -96,11 +96,13 @@ public class TCPPartnerCall
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context)
+            DurabilityContext durability_context,
+            DurabilityReplayContext durability_replay_context)
         {
             side_b =
                 (SideB) SideB.factory.construct(
-                    globals,conn_obj,durability_context);
+                    globals,conn_obj,durability_context,
+                    durability_replay_context);
             return side_b;
         }
         @Override
@@ -109,7 +111,7 @@ public class TCPPartnerCall
             List<RalphObject> internal_val_list,
             DurabilityContext durability_context)
         {
-            return construct(globals,conn_obj,durability_context);
+            return construct(globals,conn_obj,durability_context,null);
         }
 
         @Override

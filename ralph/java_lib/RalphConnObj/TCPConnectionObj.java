@@ -268,7 +268,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 }
                 
                 Endpoint created_endpoint = endpoint_constructor.construct(
-                    ralph_globals, tcp_conn_obj, durability_context);
+                    ralph_globals, tcp_conn_obj, durability_context,null);
 
                 if (DurabilityInfo.instance.durability_saver != null)
                 {

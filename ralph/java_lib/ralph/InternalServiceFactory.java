@@ -117,7 +117,7 @@ public class InternalServiceFactory
     {
         SingleSideConnection ssc = new SingleSideConnection();
         return this.endpt_constructor.construct(
-            ralph_globals,ssc,active_event.durability_context);
+            ralph_globals,ssc,active_event.durability_context,null);
     }
     
     public Endpoint construct_from_reference(
@@ -152,6 +152,7 @@ public class InternalServiceFactory
         tcp_connection_obj.write_create_connection(
             create_connection_msg.build());
         return endpt_constructor.construct(
-            ralph_globals,tcp_connection_obj,active_event.durability_context);
+            ralph_globals,tcp_connection_obj,
+            active_event.durability_context,null);
     }
 }

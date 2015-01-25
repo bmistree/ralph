@@ -7,6 +7,7 @@ import RalphCallResults.MessageCallResultObject;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
 import RalphDurability.DurabilityContext;
+import RalphDurability.DurabilityReplayContext;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
@@ -18,11 +19,16 @@ public abstract class ActiveEvent
     public final String uuid;
     public final EventParent event_parent;
     protected final ThreadPool thread_pool;
-
+    
     /**
        Can be null, eg., if durability is turned off.
      */
     public final DurabilityContext durability_context;
+
+    // FIXME: initially set as null.  eventually will need to be set
+    // during replay.
+    public final DurabilityReplayContext durability_replay_context = null;
+    
     
     /**
        FIXME.

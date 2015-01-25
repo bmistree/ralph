@@ -3,6 +3,7 @@ package ralph;
 import java.util.List;
 
 import RalphDurability.DurabilityContext;
+import RalphDurability.DurabilityReplayContext;
 
 public interface EndpointConstructorObj 
 {
@@ -13,7 +14,9 @@ public interface EndpointConstructorObj
     public Endpoint construct(
         RalphGlobals globals, 
         RalphConnObj.ConnectionObj conn_obj,
-        DurabilityContext durability_context);
+        DurabilityContext durability_log_context,
+        DurabilityReplayContext durability_replay_context);
+    
 
     /**
        Constructs an endpoint/service object, while filling in its

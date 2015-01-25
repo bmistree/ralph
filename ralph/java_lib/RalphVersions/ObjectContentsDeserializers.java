@@ -270,7 +270,7 @@ public class ObjectContentsDeserializers
             {
                 // using null here because when replaying shouldn't
                 // durably re-log.
-                to_return = factory.construct(ralph_globals,null);
+                to_return = factory.construct(ralph_globals,null,null);
             }
             
             to_return.set_initial_reference(initial_reference);
@@ -303,7 +303,7 @@ public class ObjectContentsDeserializers
             // using null here because when replaying shouldn't
             // durably re-log.
             StructWrapperBaseClass to_return_wrapper =
-                factory.construct(ralph_globals,null);
+                factory.construct(ralph_globals,null,null);
 
             InternalStructBaseClass internal_struct =
                 (InternalStructBaseClass) to_return_wrapper.val.val;

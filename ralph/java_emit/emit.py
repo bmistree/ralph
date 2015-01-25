@@ -66,6 +66,7 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import RalphCallResults.RootCallResult;
 
 import RalphDurability.DurabilityContext;
+import RalphDurability.DurabilityReplayContext;
 import RalphDurability.IDurabilitySaver;
 
 
@@ -274,9 +275,14 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
     constructor_text = '''
 public %(endpoint_name)s (
     RalphGlobals ralph_globals,ConnectionObj conn_obj,
-    DurabilityContext durability_context) 
+    DurabilityContext durability_context,
+    DurabilityReplayContext durability_replay_context) 
 {
-    super(ralph_globals,conn_obj,factory,durability_context);
+    super(
+        ralph_globals,conn_obj,factory,durability_context,
+        durability_replay_context == null ?
+           ralph_globals.generate_local_uuid() :
+           ralph_globals.generate_local_uuid());
 
 %(endpt_globals_endpt_vars_text)s
 
@@ -322,11 +328,15 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     }
 
     @Override
-    public Endpoint construct (
-        RalphGlobals ralph_globals, ConnectionObj conn_obj,
-        DurabilityContext durability_context)
+    public Endpoint construct(
+        RalphGlobals ralph_globals, 
+        RalphConnObj.ConnectionObj conn_obj,
+        DurabilityContext durability_log_context,
+        DurabilityReplayContext durability_replay_context)
     {
-        return new %(endpoint_name)s(ralph_globals,conn_obj,durability_context);
+        return new %(endpoint_name)s(
+            ralph_globals,conn_obj,durability_log_context,
+            durability_replay_context);
     }
 
     @Override
@@ -336,7 +346,8 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
         DurabilityContext durability_context)
     {
         %(endpoint_name)s to_return =
-            new %(endpoint_name)s(ralph_globals,conn_obj,durability_context);
+            new %(endpoint_name)s(
+                ralph_globals,conn_obj,durability_context,null);
         %(version_unmapping_text)s
         return to_return;
     }
@@ -364,7 +375,7 @@ public final static %(endpoint_name)s external_create(
         try
         {
             return (%(endpoint_name)s) factory.construct(
-                ralph_globals,conn_obj,durability_context);
+                ralph_globals,conn_obj,durability_context,null);
         }
         finally
         {
@@ -1242,16 +1253,20 @@ new %(java_type_text)s  (
                 'new  %s(false,%s,ralph_globals)' % (struct_name,initializer_text))
         else:
             durability_context_text = '_active_event.durability_context'
+            durability_replay_context_text = (
+                '_active_event.durability_replay_context')
             if (emit_ctx.get_in_endpoint_constructor() or
                 emit_ctx.get_in_struct_constructor()):
                 durability_context_text = 'durability_context'
-            
+                durability_replay_context_text = 'durability_replay_context'
+
             to_return = (
                 ('new  %(struct_name)s(false,ralph_globals, ' +
-                 '%(durability_context)s)') %
+                 '%(durability_context)s,%(durability_replay_context_text)s)') %
                 {
                     'struct_name': struct_name,
-                    'durability_context': durability_context_text
+                    'durability_context': durability_context_text,
+                    'durability_replay_context_text': durability_replay_context_text
                     })
             
         return to_return
@@ -1271,16 +1286,23 @@ new %(java_type_text)s  (
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
-            durability_context_text = '_active_event.durability_context'
+            durability_ctx_text = '_active_event.durability_context'
+            durability_replay_ctx_text = '_active_event.durability_replay_context'
+
             if (emit_ctx.get_in_endpoint_constructor() or
                 emit_ctx.get_in_struct_constructor()):
-                durability_context_text = 'durability_context'
+                durability_ctx_text = 'durability_context'
+                durability_replay_ctx_text = 'durability_replay_context'
                 
             default_internal_endpoint_text = (
-                'new %(type_alias)s (ralph_globals,new SingleSideConnection(),%(durability_context)s)' %
+                ('new %(type_alias)s (ralph_globals, ' +
+                 'new SingleSideConnection(),%(durability_context)s,' +
+                 '%(durability_replay_context)s)')
+                 %
                 {
                     'type_alias': type_object.alias_name,
-                    'durability_context': durability_context_text
+                    'durability_context': durability_ctx_text,
+                    'durability_replay_context': durability_replay_ctx_text
                     })
 
             to_return = (
@@ -2657,14 +2679,15 @@ private static class %(struct_wrapper_class_factory_class_name)s
     }
     @Override
     public StructWrapperBaseClass construct(
-        RalphGlobals ralph_globals, DurabilityContext durability_context)
+        RalphGlobals ralph_globals, DurabilityContext durability_context,
+        DurabilityReplayContext durability_replay_context)
     {
         return new %(struct_name)s (
             // do not log operations
             false,
             ralph_globals,
             // decide whether to log or not.
-            durability_context);
+            durability_context,durability_replay_context);
     }
     @Override
     public StructWrapperBaseClass construct_null_internal(
@@ -2821,11 +2844,13 @@ public static class %s extends StructWrapperBaseClass<%s>
     external_struct_definition_constructor = '''
 public %(struct_name)s (
     boolean log_operations, RalphGlobals ralph_globals,
-    DurabilityContext durability_context)
+    DurabilityContext durability_context,
+    DurabilityReplayContext durability_replay_context)
 {
     super(
         log_operations,
-        new %(internal_struct_name)s(ralph_globals,durability_context),
+        new %(internal_struct_name)s(
+            ralph_globals,durability_context,durability_replay_context),
         %(data_wrapper_constructor_name)s,
         /** FIXME: emitting a null logger for structs.*/
         null,
@@ -2939,7 +2964,8 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
     emit_ctx.set_in_struct_constructor(True)
     internal_struct_body_text += (
         ('public %s (RalphGlobals ralph_globals,' +
-         'DurabilityContext durability_context)\n') %
+         'DurabilityContext durability_context,' +
+         'DurabilityReplayContext durability_replay_context)\n') %
         internal_struct_name)
     internal_struct_body_text += '''{
     // inherits from InternalStructBaseClass

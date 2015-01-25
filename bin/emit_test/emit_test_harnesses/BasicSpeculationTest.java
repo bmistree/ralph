@@ -1,10 +1,5 @@
 package emit_test_harnesses;
 
-import ralph_emitted.BasicSpeculationJava.SpeculativeEndpoint;
-import ralph_emitted.BasicSpeculationJava.SpeculativeInterface;
-import RalphConnObj.SingleSideConnection;
-import ralph.RalphGlobals;
-import ralph.EndpointConstructorObj;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -12,6 +7,14 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.Arrays;
 
+
+import ralph_emitted.BasicSpeculationJava.SpeculativeEndpoint;
+import ralph_emitted.BasicSpeculationJava.SpeculativeInterface;
+import RalphConnObj.SingleSideConnection;
+
+import ralph.RalphGlobals;
+import ralph.EndpointConstructorObj;
+import RalphDurability.DurabilityReplayContext;
 
 public class BasicSpeculationTest
 {
@@ -191,10 +194,11 @@ public class BasicSpeculationTest
     {
         try
         {
+            DurabilityReplayContext replay_context = null;
             SpeculativeInterface endpt =
                 (SpeculativeInterface) constructor_obj.construct(
                     speculative_interface_ralph_globals,
-                    new SingleSideConnection(),null);
+                    new SingleSideConnection(),null,replay_context);
             
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();
