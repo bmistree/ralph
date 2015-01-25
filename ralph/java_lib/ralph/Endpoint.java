@@ -128,7 +128,17 @@ public abstract class Endpoint implements IReference
         EndpointConstructorObj endpoint_constructor_obj,
         DurabilityContext durability_context)
     {
-        _uuid = ralph_globals.generate_local_uuid();
+        this (
+            ralph_globals, conn_obj, endpoint_constructor_obj,
+            durability_context,ralph_globals.generate_local_uuid());
+    }
+    
+    public Endpoint (
+        RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
+        EndpointConstructorObj endpoint_constructor_obj,
+        DurabilityContext durability_context,String endpt_uuid)
+    {
+        _uuid = endpt_uuid;
         this.ralph_globals = ralph_globals;
 
         _clock = ralph_globals.clock;
@@ -149,24 +159,13 @@ public abstract class Endpoint implements IReference
         // tell other side my uuid... skip initialization.
         _notify_partner_ready();
         
-        // FIXME: See issues #13 and #14 in Github.  Should have
-        // ready-wait and heartbeat code in Endpoint constructor.
-        // Util.logger_warn("Must add heartbeat code back in.");
-        // Util.logger_warn("Skipping ready wait");
-        /*
-          # start heartbeat thread
-          self._heartbeat = Heartbeat(socket=self._conn_obj, 
-          timeout_cb=self.partner_connection_failure,*args)
-          self._heartbeat.start()
-          _send_clock_update();
-        */
-
         if (durability_context != null)
         {
             durability_context.add_endpt_created_info(
                 _uuid,endpoint_constructor_obj.get_canonical_name());
         }
     }
+
     
     public String uuid()
     {
