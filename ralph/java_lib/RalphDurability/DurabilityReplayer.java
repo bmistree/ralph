@@ -7,17 +7,24 @@ import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 import ralph.Util;
 import ralph.InternalServiceFactory;
+import ralph.RalphGlobals;
+
+import RalphConnObj.SingleSideConnection;
 
 import ralph_protobuffs.DurabilityProto.Durability;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
+import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
+
 
 public class DurabilityReplayer implements IDurabilityReplayer
 {
     private final IDurabilityReader durability_reader;
     private final Map<String, EndpointConstructorObj> constructor_map =
         new HashMap<String,EndpointConstructorObj>();
+    private final Map<String, Endpoint> endpt_map =
+        new HashMap<String,Endpoint>();
     
     public DurabilityReplayer(IDurabilityReader durability_reader)
     {
@@ -37,7 +44,7 @@ public class DurabilityReplayer implements IDurabilityReplayer
     }
     
     @Override
-    public synchronized boolean step()
+    public synchronized boolean step(RalphGlobals ralph_globals)
     {
         // for now, just loading with endpoint constructor objects.
         Durability msg = durability_reader.get_durability_msg();
@@ -56,10 +63,45 @@ public class DurabilityReplayer implements IDurabilityReplayer
         }
         else if (msg.hasPrepare())
         {
-            DurabilityReplayContext replay_durability_context =
+            DurabilityReplayContext durability_replay_context =
                 new DurabilityReplayContext(msg.getPrepare());
-            Util.logger_warn(
-                "Must handle prepare message in durability replayer");
+
+            DurabilityPrepare prepare = msg.getPrepare();
+
+            // means that the event just created an endpoint, which is
+            // externally reachable.
+            if (prepare.getRpcArgsCount() == 0)
+            {
+                for (EndpointUUIDConstructorNamePair pair:
+                         prepare.getEndpointsCreatedList())
+                {
+                    String constructor_name =
+                        pair.getConstructorCanonicalName();
+
+                    EndpointConstructorObj constructor =
+                        constructor_map.get(constructor_name);
+                    //// DEBUG
+                    if (constructor == null)
+                    {
+                        Util.logger_assert(
+                            "Unknown endpt constructor during replay");
+                    }
+                    //// END DEBUG
+
+                    // FIXME: only allowing rebuilding endpoints as
+                    // SingleSideConnections and with no new
+                    // DurabilityContext-s
+                    Endpoint endpt = constructor.construct(
+                        ralph_globals,new SingleSideConnection(),
+                        null,durability_replay_context);
+                    endpt_map.put(endpt.uuid(),endpt);
+                }
+            }
+            else
+            {
+                Util.logger_warn(
+                    "Must handle prepare message in durability replayer");
+            }
         }
         else if (msg.hasComplete())
         {

@@ -1,6 +1,7 @@
 package RalphDurability;
 
 import ralph.Endpoint;
+import ralph.RalphGlobals;
 
 public interface IDurabilityReplayer
 {
@@ -8,7 +9,7 @@ public interface IDurabilityReplayer
        @return true if step succeeded.  false, if no more version info
        to replay.
      */
-    public boolean step();
+    public boolean step(RalphGlobals ralph_globals);
 
     /**
        @param endpt_uuid --- Return the endpoint associated with this
