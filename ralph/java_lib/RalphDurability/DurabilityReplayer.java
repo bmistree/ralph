@@ -42,6 +42,52 @@ public class DurabilityReplayer implements IDurabilityReplayer
     {
         return constructor_map.get(constructor_name);
     }
+
+    /**
+       Replay prepare message.  Note: currently assuming that prepare
+       commits.
+     */
+    private synchronized void handle_prepare(
+        DurabilityPrepare prepare_msg, RalphGlobals ralph_globals)
+    {
+        DurabilityReplayContext durability_replay_context =
+            new DurabilityReplayContext(prepare_msg);
+        // means that the event just created an endpoint, which is
+        // externally reachable.
+        if (prepare_msg.getRpcArgsCount() == 0)
+        {
+            for (EndpointUUIDConstructorNamePair pair:
+                     prepare_msg.getEndpointsCreatedList())
+            {
+                String constructor_name =
+                    pair.getConstructorCanonicalName();
+
+                EndpointConstructorObj constructor =
+                    constructor_map.get(constructor_name);
+                //// DEBUG
+                if (constructor == null)
+                {
+                    Util.logger_assert(
+                        "Unknown endpt constructor during replay");
+                }
+                //// END DEBUG
+
+                // FIXME: only allowing rebuilding endpoints as
+                // SingleSideConnections and with no new
+                // DurabilityContext-s
+                Endpoint endpt = constructor.construct(
+                    ralph_globals,new SingleSideConnection(),
+                    null,durability_replay_context);
+                endpt_map.put(endpt.uuid(),endpt);
+            }
+        }
+        else
+        {
+            Util.logger_warn(
+                "Must handle prepare message in durability replayer");
+        }
+    }
+    
     
     @Override
     public synchronized boolean step(RalphGlobals ralph_globals)
@@ -63,45 +109,7 @@ public class DurabilityReplayer implements IDurabilityReplayer
         }
         else if (msg.hasPrepare())
         {
-            DurabilityReplayContext durability_replay_context =
-                new DurabilityReplayContext(msg.getPrepare());
-
-            DurabilityPrepare prepare = msg.getPrepare();
-
-            // means that the event just created an endpoint, which is
-            // externally reachable.
-            if (prepare.getRpcArgsCount() == 0)
-            {
-                for (EndpointUUIDConstructorNamePair pair:
-                         prepare.getEndpointsCreatedList())
-                {
-                    String constructor_name =
-                        pair.getConstructorCanonicalName();
-
-                    EndpointConstructorObj constructor =
-                        constructor_map.get(constructor_name);
-                    //// DEBUG
-                    if (constructor == null)
-                    {
-                        Util.logger_assert(
-                            "Unknown endpt constructor during replay");
-                    }
-                    //// END DEBUG
-
-                    // FIXME: only allowing rebuilding endpoints as
-                    // SingleSideConnections and with no new
-                    // DurabilityContext-s
-                    Endpoint endpt = constructor.construct(
-                        ralph_globals,new SingleSideConnection(),
-                        null,durability_replay_context);
-                    endpt_map.put(endpt.uuid(),endpt);
-                }
-            }
-            else
-            {
-                Util.logger_warn(
-                    "Must handle prepare message in durability replayer");
-            }
+            handle_prepare(msg.getPrepare(), ralph_globals);
         }
         else if (msg.hasComplete())
         {
