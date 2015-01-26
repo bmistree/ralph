@@ -9,7 +9,7 @@ import ralph.RalphGlobals;
 import ralph.DurabilityInfo;
 import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
-
+import ralph.Endpoint;
 
 
 public class DurabilityConstructorCheck
@@ -40,7 +40,7 @@ public class DurabilityConstructorCheck
             DurabilityReplayer replayer =
                 (DurabilityReplayer)DurabilityInfo.instance.durability_replayer;
 
-            while(replayer.step()){}
+            while(replayer.step(ralph_globals)){}
 
             // check that the constructor objects are there for
             // AtomicSetterGetter and RangeTest
@@ -56,6 +56,18 @@ public class DurabilityConstructorCheck
                     AtomicSetterGetter.factory.get_canonical_name());
             
             if (atomic_setter_getter_constructor == null)
+                return false;
+
+            Endpoint replayed_atomic_setter_getter =
+                replayer.get_endpt(endpt.uuid());
+
+            if (replayed_atomic_setter_getter == null)
+                return false;
+            
+            Endpoint replayed_rt_service =
+                replayer.get_endpt(rt_service.uuid());
+
+            if (replayed_rt_service == null)
                 return false;
 
             return true;

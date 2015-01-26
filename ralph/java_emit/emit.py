@@ -282,7 +282,7 @@ public %(endpoint_name)s (
         ralph_globals,conn_obj,factory,durability_context,
         durability_replay_context == null ?
            ralph_globals.generate_local_uuid() :
-           ralph_globals.generate_local_uuid());
+           durability_replay_context.next_endpt_uuid());
 
 %(endpt_globals_endpt_vars_text)s
 

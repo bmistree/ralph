@@ -116,13 +116,10 @@ public class DurabilityReplayer implements IDurabilityReplayer
         return true;
     }
     
-
     @Override
     public synchronized Endpoint get_endpt(String endpt_uuid)
     {
-        Util.logger_assert(
-            "Unimplemented get_endpt method in DurabilityReplayer");
-        return null;
+        return endpt_map.get(endpt_uuid);
     }
 
     @Override
