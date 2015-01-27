@@ -44,12 +44,12 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
 
     /**
        Gets any outstanding message from the request map and returns
-       it wrapped in a DurabilityPair.  Note, we've already checked
+       it wrapped in a DurabilityEvent.  Note, we've already checked
        that we're out of other messages to read from the reader so
        that any messages left in outstanding_request_map will be
        outstanding.
      */
-    private DurabilityPair get_outstanding_if_exists()
+    private DurabilityEvent get_outstanding_if_exists()
     {
         String key_to_remove = null;
         
@@ -67,15 +67,16 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
         DurabilityPrepare durability_prepare =
             outstanding_request_map.remove(key_to_remove);
 
-        return new DurabilityPair(
-            DurabilityPair.DurabilityType.OUTSTANDING,
+        return new DurabilityEvent(
+            DurabilityEvent.DurabilityEventType.OUTSTANDING,
             durability_prepare);
     }
 
     /**
        @return null if out of durability messsages to replay.
      */
-    public DurabilityPair next_durability_message()
+    @Override
+    public DurabilityEvent next_durability_event()
     {
         // keep reading messages from reader until run out, or we can
         // return a complete message.
@@ -91,6 +92,8 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
             // remove from map and return durability pair.
             // 3) if message is a complete message with backout, then
             // remove from map, and keep reading.
+            // 4) message is a serialized service factory: wrap it and
+            // return it.
             if (msg.hasPrepare())
             {
                 // case 1
@@ -116,9 +119,10 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
                 if (comp.getSucceeded())
                 {
                     // case 2
-                    DurabilityPair to_return =
-                        new DurabilityPair(
-                            DurabilityPair.DurabilityType.COMPLETED, prep);
+                    DurabilityEvent to_return =
+                        new DurabilityEvent(
+                            DurabilityEvent.DurabilityEventType.COMPLETED,
+                            prep);
 
                     return to_return;
                 }
@@ -126,10 +130,18 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
             }
             else if (msg.hasServiceFactory())
             {
-                Util.logger_assert(
-                    "FIXME: not currently handling serialized " +
-                    "service factory.");
+                // case 4: message is a service factory
+                DurabilityEvent to_return =
+                    new DurabilityEvent(msg.getServiceFactory());
+                return to_return;
             }
+            //// DEBUG: shouldn't be any other message types.
+            else
+            {
+                Util.logger_assert(
+                    "Got uknown durability message when replaying.");
+            }
+            //// END DEBUG
         }
     }
 }

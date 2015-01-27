@@ -2,5 +2,5 @@ package RalphDurability;
 
 public interface ISerializedDurabilityReader
 {
-    public DurabilityPair next_durability_message();
+    public DurabilityEvent next_durability_event();
 }
