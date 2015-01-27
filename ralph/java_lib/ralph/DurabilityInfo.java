@@ -10,7 +10,8 @@ import RalphDurability.IDurabilityReplayer;
 import RalphDurability.DiskDurabilitySaver;
 import RalphDurability.DurabilityReplayer;
 import RalphDurability.DiskDurabilityReader;
-
+import RalphDurability.ISerializedDurabilityReader;
+import RalphDurability.SerializedDurabilityReader;
 
 /**
    Singleton: keeps track of all the data used for durability.
@@ -91,9 +92,13 @@ public class DurabilityInfo
 
                     DiskDurabilityReader durability_reader =
                         new DiskDurabilityReader(log_filename);
+
+                    ISerializedDurabilityReader serialized_durability_reader =
+                        new SerializedDurabilityReader(durability_reader);
                     
                     durability_replayer =
-                        new DurabilityReplayer(durability_reader);
+                        new DurabilityReplayer(serialized_durability_reader);
+                    
                 }
                 //// DEBUG
                 else

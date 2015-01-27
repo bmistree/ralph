@@ -20,13 +20,13 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDCon
 
 public class DurabilityReplayer implements IDurabilityReplayer
 {
-    private final IDurabilityReader durability_reader;
+    private final ISerializedDurabilityReader durability_reader;
     private final Map<String, EndpointConstructorObj> constructor_map =
         new HashMap<String,EndpointConstructorObj>();
     private final Map<String, Endpoint> endpt_map =
         new HashMap<String,Endpoint>();
     
-    public DurabilityReplayer(IDurabilityReader durability_reader)
+    public DurabilityReplayer(ISerializedDurabilityReader durability_reader)
     {
         this.durability_reader = durability_reader;
     }
@@ -44,10 +44,9 @@ public class DurabilityReplayer implements IDurabilityReplayer
     }
 
     /**
-       Replay prepare message.  Note: currently assuming that prepare
-       commits.
+       Replay prepare message.
      */
-    private synchronized void handle_prepare(
+    private synchronized void handle_prepare_completed(
         DurabilityPrepare prepare_msg, RalphGlobals ralph_globals)
     {
         DurabilityReplayContext durability_replay_context =
@@ -93,13 +92,14 @@ public class DurabilityReplayer implements IDurabilityReplayer
     public synchronized boolean step(RalphGlobals ralph_globals)
     {
         // for now, just loading with endpoint constructor objects.
-        Durability msg = durability_reader.get_durability_msg();
-        if (msg == null)
+        DurabilityEvent event = durability_reader.next_durability_event();
+        if (event == null)
             return false;
 
-        if (msg.hasServiceFactory())
+        if (event.event_type ==
+            DurabilityEvent.DurabilityEventType.SERVICE_FACTORY)
         {
-            ServiceFactoryDelta delta = msg.getServiceFactory();
+            ServiceFactoryDelta delta = event.service_factory_msg;
             EndpointConstructorObj constructor = 
                 InternalServiceFactory.deserialize_endpt_constructor(
                     delta.getSerializedFactory());
@@ -107,20 +107,24 @@ public class DurabilityReplayer implements IDurabilityReplayer
             String constructor_name = constructor.get_canonical_name();
             constructor_map.put(constructor_name,constructor);
         }
-        else if (msg.hasPrepare())
+        else if (event.event_type ==
+                 DurabilityEvent.DurabilityEventType.COMPLETED)
         {
-            handle_prepare(msg.getPrepare(), ralph_globals);
+            handle_prepare_completed(event.prepare_msg, ralph_globals);
         }
-        else if (msg.hasComplete())
+        else if (event.event_type ==
+                 DurabilityEvent.DurabilityEventType.OUTSTANDING)
         {
             Util.logger_warn(
-                "Must handle complete message in durability replayer");
+                "Must handle outstanding durability messages when stepping");
         }
+        //// DEBUG
         else
         {
             Util.logger_assert(
                 "Unknown durability message when stepping");
         }
+        //// END DEBUG
         return true;
     }
     
