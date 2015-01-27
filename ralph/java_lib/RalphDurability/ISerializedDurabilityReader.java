@@ -1,6 +1,6 @@
 package RalphDurability;
 
-public interface IDurabilityReaderShim
+public interface ISerializedDurabilityReader
 {
     public DurabilityPair next_durability_message();
 }

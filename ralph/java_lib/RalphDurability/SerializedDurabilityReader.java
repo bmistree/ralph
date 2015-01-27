@@ -25,7 +25,7 @@ import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
    Must maintain order that if some action was committed before
    another, it gets returned first.
  */
-public class InMemoryDurabilityReaderShim implements IDurabilityReaderShim
+public class SerializedDurabilityReader implements ISerializedDurabilityReader
 {
     final private IDurabilityReader durability_reader;
     /**
@@ -37,7 +37,7 @@ public class InMemoryDurabilityReaderShim implements IDurabilityReaderShim
     final private Map<String,DurabilityPrepare> outstanding_request_map =
         new HashMap<String,DurabilityPrepare> ();
     
-    public InMemoryDurabilityReaderShim(IDurabilityReader durability_reader)
+    public SerializedDurabilityReader(IDurabilityReader durability_reader)
     {
         this.durability_reader = durability_reader;
     }
