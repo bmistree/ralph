@@ -669,7 +669,8 @@
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
-        jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck">
+        jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
+        jar_DurabilitySingleSideReplayer">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -699,6 +700,11 @@
       depends="range_test,atomic_setter_getter,iface_basic_ralph">
   </target>
 
+  <target
+      name="ralph_DurabilitySingleSideReplayer"
+      depends="atomic_setter_getter,iface_basic_ralph">
+  </target>
+  
   <target
       name="ralph_VersionedIFace"
       depends="iface_basic_ralph,basic_ralph,versioned_iface">
@@ -1099,6 +1105,13 @@
     </antcall>
   </target>
 
+  <target name="harness_DurabilitySingleSideReplayer">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="DurabilitySingleSideReplayer.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_VersionedMap">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedMap.java"/>
@@ -1807,6 +1820,20 @@
     </antcall>
   </target>
 
+  <property
+      name="durability_single_side_replayer_jar"
+      value="durability_single_side_replayer.jar"/>
+  <target
+      name="jar_DurabilitySingleSideReplayer"
+      depends="ralph_DurabilitySingleSideReplayer,ralph_to_byte_code,
+               harness_DurabilitySingleSideReplayer">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilitySingleSideReplayer"/>
+      <param name="dest_jar" value="${durability_single_side_replayer_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="alias_enum_jar"
       value="alias_enum.jar"/>
