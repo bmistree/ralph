@@ -677,7 +677,7 @@
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
-        jar_DurabilitySingleSideReplayer">
+        jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -691,7 +691,12 @@
       name="ralph_DirectStructWrappedEndpoint"
       depends="direct_struct_wrapped_endpoint">
   </target>
-  
+
+  <target
+      name="ralph_RecursivePartnerAddition"
+      depends="recursive_partner_addition_ralph">
+  </target>
+
   <target
       name="ralph_VersionedSetterGetter"
       depends="iface_basic_ralph,basic_ralph">
@@ -1182,6 +1187,11 @@
     </antcall>
   </target>
 
+  <target name="harness_RecursivePartnerAddition">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="RecursivePartnerAddition.java"/>
+    </antcall>
+  </target>
   
   <target name="harness_ReplayPartnerNumberChange">
     <antcall target="compile_harness">
@@ -1643,7 +1653,6 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-
   
   <property
       name="versioned_setter_getter_jar"
@@ -1654,6 +1663,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="VersionedSetterGetter"/>
       <param name="dest_jar" value="${versioned_setter_getter_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="recursive_partner_addition_jar"
+      value="recursive_partner_addition.jar"/>
+  <target
+      name="jar_RecursivePartnerAddition"
+      depends="ralph_RecursivePartnerAddition,ralph_to_byte_code,harness_RecursivePartnerAddition">
+    <antcall target="make_jar">
+      <param name="main_class" value="RecursivePartnerAddition"/>
+      <param name="dest_jar" value="${recursive_partner_addition_jar}"/>
       <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>

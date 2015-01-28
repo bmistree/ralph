@@ -9,15 +9,20 @@ Endpoint RecursiveAdder
 
     partner_recursive_add_to_number(Number remaining_iters) returns Number
     {
+        Number to_return;
         atomically
         {
             if (remaining_iters == 0)
-                return 0;
-
-            remaining_iters -= 1;
-            Number recursive_result =
-                @partner.partner_recursive_add_to_number(remaining_iters);
-            return internal_num + recursive_result;
+                to_return = 0;
+            else
+            {
+                remaining_iters -= 1;
+                Number recursive_result;
+                recursive_result = 
+                    @partner.partner_recursive_add_to_number(remaining_iters);
+                to_return = internal_num + recursive_result;
+            }
         }
+        return to_return;
     }
 }
