@@ -854,12 +854,7 @@ if (DurabilityInfo.instance.durability_saver != null)
     # try to commit the event
     method_body_text += '''
 active_event.local_root_begin_first_phase_commit();
-try {
-    ((RootEventParent)active_event.event_parent).event_complete_queue.take();
-} catch (InterruptedException _ex) {
-    // TODO Auto-generated catch block
-    _ex.printStackTrace();
-}
+((RootEventParent)active_event.event_parent).event_complete_mvar.blocking_take();
 '''
 
     # return the grabbed value
@@ -1904,20 +1899,12 @@ def emit_statement(emit_ctx,statement_node):
             break;
         else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
         {
-            // means that the call to 
-            try {
+            // FIXME: should properly mangle __op_result__
+            RootCallResult.ResultType __op_result__ =
+                ((RootEventParent)_active_event.event_parent).event_complete_mvar.blocking_take();
 
-                // FIXME: should properly mangle __op_result__
-                RootCallResult.ResultType __op_result__ =
-                    ((RootEventParent)_active_event.event_parent).event_complete_queue.take();
-
-                if (__op_result__ == RootCallResult.ResultType.COMPLETE)
-                    break;
-            } catch (InterruptedException _ex) {
-                // TODO Auto-generated catch block
-                // FIXME: handle InterruptedException?
-                _ex.printStackTrace();
-            }
+            if (__op_result__ == RootCallResult.ResultType.COMPLETE)
+                break;
         }
 
         // if got here, means that this was the first atomic statement and it failed so

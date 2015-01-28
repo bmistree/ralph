@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -890,7 +889,7 @@ public class AtomicActiveEvent extends ActiveEvent
        2) Run through all objects that this event has touched and
        backout from them.
 
-       3) Unblock any queues that are waiting on results, with a
+       3) Unblock any mvars that are waiting on results, with a
        message to quit.
 
        4) Remove from active event map
@@ -945,7 +944,7 @@ public class AtomicActiveEvent extends ActiveEvent
             service_action);
             
         //# 3
-        rollback_unblock_waiting_queues();
+        rollback_unblock_waiting_mvars();
 
         //# 4 remove the event.
         event_map.remove_event(uuid);
@@ -1004,7 +1003,7 @@ public class AtomicActiveEvent extends ActiveEvent
         if (RalphExceptions.BackoutException.class.isInstance(error))
             blocking_backout(null);
         else
-            event_parent.put_exception(error,message_listening_queues_map);
+            event_parent.put_exception(error,message_listening_mvars_map);
     }
 
 
@@ -1103,15 +1102,14 @@ public class AtomicActiveEvent extends ActiveEvent
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished
        performing the requested block.  In this case, we do not need
-       to add result_queue to waiting queues.
+       to add result_queue to waiting mvars.
 
        @param {bool} first_msg --- True if this is the first message
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {Queue or null} threadsafe_unblock_queue --- None if
-       this was the last message sent in a sequence and we're not
-       waiting on a reply.
+       @param {MVar or null} result_mvar --- null if this was the last
+       message sent in a sequence and we're not waiting on a reply.
 
        @param {List or null} args --- The positional arguments
        inserted into the call as an rpc.  Includes whether the
@@ -1129,7 +1127,7 @@ public class AtomicActiveEvent extends ActiveEvent
     @Override
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, LiveMessageSender msg_sender, String func_name,
-        ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
+        MVar<MessageCallResultObject>result_mvar,
         boolean first_msg,List<RalphObject>args,RalphObject result)
     {
         boolean partner_call_requested = false;
@@ -1141,21 +1139,20 @@ public class AtomicActiveEvent extends ActiveEvent
             _others_contacted_lock();
             local_endpoints_whose_partners_contacted.add(endpoint);
             _others_contacted_unlock();
-            //# code is listening on threadsafe result_queue.  when we
-            //# receive a response, put it inside of the result queue.
-            //# put result queue in map so that can demultiplex messages
-            //# from partner to determine which result queue is finished
+            // code is listening on result_mvar.  when we
+            // receive a response, put it inside of the mvar.
+            // put result queue in map so that can demultiplex messages
+            // from partner to determine which result queue is finished
         	
             String reply_with_uuid =
                 event_parent.ralph_globals.generate_uuid();
 
-            if (threadsafe_unblock_queue != null)
+            if (result_mvar != null)
             {
                 //# may get None for result queue for the last message
                 //# sequence block requested.  It does not need to await
                 //# a response.
-                message_listening_queues_map.put(
-                    reply_with_uuid, threadsafe_unblock_queue);
+                message_listening_mvars_map.put(reply_with_uuid, result_mvar);
             }
 
             // changed to have rpc semantics: this means that if it's not
@@ -1328,23 +1325,23 @@ public class AtomicActiveEvent extends ActiveEvent
     public void send_exception_to_listener(PartnerError error)
     {
         _lock();
-        //# Send an ApplicationExceptionCallResult to each listening queue
-        for (String reply_with_uuid : message_listening_queues_map.keySet())
+        //# Send an ApplicationExceptionCallResult to each listening mvars
+        for (String reply_with_uuid : message_listening_mvars_map.keySet())
         {
             //### FIXME: It probably isn't necessary to send an exception result to
             //### each queue.
-            ArrayBlockingQueue<MessageCallResultObject> message_listening_queue = 
-                message_listening_queues_map.get(reply_with_uuid);
-
+            MVar<MessageCallResultObject> message_listening_mvar = 
+                message_listening_mvars_map.get(reply_with_uuid);
+            
             if (error.getType() == PartnerError.ErrorType.APPLICATION)
             {
-                message_listening_queue.add(
+                message_listening_mvar.put(
                     MessageCallResultObject.application_exception(
                         error.getTrace()));
             }
             else if (error.getType() == PartnerError.ErrorType.NETWORK)
             {
-                message_listening_queue.add(
+                message_listening_mvar.put(
                     MessageCallResultObject.network_failure(
                         error.getTrace()));
             }

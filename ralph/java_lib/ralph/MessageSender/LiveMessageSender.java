@@ -2,7 +2,6 @@ package ralph.MessageSender;
 
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
@@ -18,6 +17,7 @@ import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RPCDeserializationHelper;
 import ralph.ExecutingEvent;
+import ralph.MVar;
 
 /**
    Sends rpc calls through active events instead of simulating their
@@ -113,13 +113,13 @@ public class LiveMessageSender implements IMessageSender
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
-    	ArrayBlockingQueue<MessageCallResultObject> threadsafe_unblock_queue = 
-            new ArrayBlockingQueue<MessageCallResultObject> (Util.SMALL_QUEUE_CAPACITIES);
+    	MVar<MessageCallResultObject> result_mvar =
+            new MVar<MessageCallResultObject>();
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                endpoint,this, func_name, threadsafe_unblock_queue,
-                first_msg,args, result);
+                endpoint,this, func_name, result_mvar, first_msg,
+                args, result);
         
     	if (! partner_call_requested)
     	{
@@ -134,36 +134,28 @@ public class LiveMessageSender implements IMessageSender
             return null;
         
         // wait on result of call
-    	MessageCallResultObject queue_elem = null;
-        try {
-            queue_elem = threadsafe_unblock_queue.take();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            Util.logger_assert(
-                "Did not consider effect of interruption while waiting");            
-        }
-    	if (queue_elem.result_type ==
+    	MessageCallResultObject mvar_elem = result_mvar.blocking_take();
+    	if (mvar_elem.result_type ==
             MessageCallResultObject.ResultType.BACKOUT_BEFORE_RECEIVE_MESSAGE)
         {
             throw new BackoutException();
         }
-    	else if (queue_elem.result_type ==
+    	else if (mvar_elem.result_type ==
                  MessageCallResultObject.ResultType.NETWORK_FAILURE)
         {
             throw new NetworkException("network failure");
         }
-    	else if (queue_elem.result_type ==
+    	else if (mvar_elem.result_type ==
                  MessageCallResultObject.ResultType.APPLICATION_EXCEPTION)
         {
             throw new ApplicationException("appliaction exception");
         }
 
     	//means that it must be a sequence message call result
-    	set_to_reply_with(queue_elem.reply_with_msg_field);
+    	set_to_reply_with(mvar_elem.reply_with_msg_field);
         
         //# send more messages
-        String to_exec_next = queue_elem.to_exec_next_name_msg_field;
+        String to_exec_next = mvar_elem.to_exec_next_name_msg_field;
 
         if (to_exec_next != null)
         {
@@ -182,10 +174,9 @@ public class LiveMessageSender implements IMessageSender
 
         // if this was the response to an rpc that returned a value,
         // then return it here.
-        if (queue_elem.returned_objs != null)
+        if (mvar_elem.returned_objs != null)
         {
-            Arguments returned_objs_proto =
-                queue_elem.returned_objs;
+            Arguments returned_objs_proto = mvar_elem.returned_objs;
 
             // FIXME: only need a single element, not an entire list
             // of returned objects.  Using this call instead so that

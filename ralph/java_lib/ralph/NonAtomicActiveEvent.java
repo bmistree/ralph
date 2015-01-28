@@ -3,7 +3,6 @@ package ralph;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphDurability.DurabilityContext;
 
@@ -223,7 +222,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
             // do nothing: non-atomics cannot be backed out.
         }
         else
-            event_parent.put_exception(error,message_listening_queues_map);
+            event_parent.put_exception(error,message_listening_mvars_map);
     }
 
     /**
@@ -287,15 +286,14 @@ public class NonAtomicActiveEvent extends ActiveEvent
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished
        performing the requested block.  In this case, we do not need
-       to add result_queue to waiting queues.
+       to add result_mvar to waiting mvars.
 
        @param {bool} first_msg --- True if this is the first message
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {Queue or null} threadsafe_unblock_queue --- None if
-       this was the last message sent in a sequence and we're not
-       waiting on a reply.
+       @param {MVar or null} result_mvar --- None if this was the last
+       message sent in a sequence and we're not waiting on a reply.
 
        @param {List or null} args --- The positional arguments
        inserted into the call as an rpc.  Includes whether the
@@ -312,23 +310,22 @@ public class NonAtomicActiveEvent extends ActiveEvent
     */
     public boolean issue_partner_sequence_block_call(
         Endpoint endpoint, LiveMessageSender message_sender, String func_name,
-        ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
+        MVar<MessageCallResultObject>result_mvar,
         boolean first_msg,List<RalphObject>args,RalphObject result)
     {
         
-        //# code is listening on threadsafe result_queue.  when we
-        //# receive a response, put it inside of the result queue.
-        //# put result queue in map so that can demultiplex messages
-        //# from partner to determine which result queue is finished
+        //# code is listening on threadsafe result_mvar.  when we
+        //# receive a response, put it inside of the result mvar.
+        //# put result mvar in map so that can demultiplex messages
+        //# from partner to determine which result mvar is finished
         String reply_with_uuid = event_parent.ralph_globals.generate_uuid();
                 
-        if (threadsafe_unblock_queue != null)
+        if (result_mvar != null)
         {
-            //# may get None for result queue for the last message
+            //# may get None for result mvar for the last message
             //# sequence block requested.  It does not need to await
             //# a response.
-            message_listening_queues_map.put(
-                reply_with_uuid, threadsafe_unblock_queue);
+            message_listening_mvars_map.put(reply_with_uuid, result_mvar);
         }
 
         // changed to have rpc semantics: this means that if it's not

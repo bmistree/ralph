@@ -1,14 +1,13 @@
 package ralph;
 
 import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 
 import RalphCallResults.RootCallResult;
-import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
-import java.util.Set;
-import java.util.Map;
 
 public class RootEventParent extends EventParent
 {    
@@ -22,10 +21,10 @@ public class RootEventParent extends EventParent
     
     /**
        # when the root tries to commit the event, it blocks while
-       # reading the event_complete_queue
+       # reading the event_complete_mvar
     */
-    public ArrayBlockingQueue<RootCallResult.ResultType>event_complete_queue = 
-        new ArrayBlockingQueue<RootCallResult.ResultType>(Util.SMALL_QUEUE_CAPACITIES);
+    public MVar<RootCallResult.ResultType>event_complete_mvar = 
+        new MVar<RootCallResult.ResultType>();
 
     /**
        # we can add and remove events to waiting on commit lock from
@@ -70,7 +69,7 @@ public class RootEventParent extends EventParent
      */
     public void non_atomic_completed()
     {
-    	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
+    	event_complete_mvar.put(RootCallResult.ResultType.COMPLETE);
     }
     
     
@@ -80,30 +79,30 @@ public class RootEventParent extends EventParent
     public void second_phase_transition_success(
         Set<Endpoint> local_endpoints_whose_partners_contacted)
     {
-    	event_complete_queue.add(RootCallResult.ResultType.COMPLETE);
+    	event_complete_mvar.put(RootCallResult.ResultType.COMPLETE);
 
     	super.second_phase_transition_success(
             local_endpoints_whose_partners_contacted);
     }
 
     /**
-       Places the appropriate call result in the event complete queue to 
+       Places the appropriate call result in the event complete mvar to 
        indicate to the endpoint that an error has occured and the event
        must be handled.        
     */
     @Override
     public void put_exception(
         Exception error, 
-        Map<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
+        Map<String,MVar<MessageCallResultObject>> message_listening_mvars_map)
     {
     	if (RalphExceptions.NetworkException.class.isInstance(error))
     	{
-            //# Send a NetworkFailureCallResult to each listening queue
-            for (String reply_with_uuid : message_listening_queues_map.keySet())
+            // Send a NetworkFailureCallResult to each listening mvar
+            for (String reply_with_uuid : message_listening_mvars_map.keySet())
             {
-                ArrayBlockingQueue<MessageCallResultObject> message_listening_queue = 
-                    message_listening_queues_map.get(reply_with_uuid);
-                message_listening_queue.add(
+                MVar<MessageCallResultObject> message_listening_mvar = 
+                    message_listening_mvars_map.get(reply_with_uuid);
+                message_listening_mvar.put(
                     MessageCallResultObject.network_failure(error.toString()));
             }
     	}
@@ -170,7 +169,7 @@ public class RootEventParent extends EventParent
             backout_requester_host_uuid,
             local_endpoints_whose_partners_contacted);
 
-        event_complete_queue.add(
+        event_complete_mvar.put(
             RootCallResult.ResultType.RESCHEDULE);
     }
 

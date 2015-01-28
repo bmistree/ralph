@@ -2,7 +2,6 @@ package ralph;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
 import java.util.Set;
@@ -138,7 +137,7 @@ public abstract class EventParent
        */
     public abstract void put_exception(
         Exception error,
-        Map<String,ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map);
+        Map<String,MVar<MessageCallResultObject>> message_listening_mvars_map);
 
 
 

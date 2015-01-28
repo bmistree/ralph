@@ -3,7 +3,6 @@ package ralph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.Set;
 import RalphCallResults.MessageCallResultObject;
 
@@ -76,15 +75,14 @@ public class PartnerEventParent extends EventParent
      * Informs the partner that an exception has occured at runtime
      (thus the event should be backed out).
      * @param error
-     * @param message_listening_queues_map
+     * @param message_listening_mvars_map
      */
     @Override
     public void put_exception(
         Exception error,
-        Map<String, ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map)
+        Map<String, MVar<MessageCallResultObject>> message_listening_mvars_map)
     {
-        local_endpoint._propagate_back_exception(
-            uuid,get_priority(),error);		
+        local_endpoint._propagate_back_exception(uuid,get_priority(),error);
     }
 
     /**

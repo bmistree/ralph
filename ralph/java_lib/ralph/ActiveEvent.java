@@ -3,7 +3,6 @@ package ralph;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import RalphCallResults.MessageCallResultObject;
 
@@ -28,26 +27,26 @@ public abstract class ActiveEvent
     /**
       When an active event sends a message to the partner endpoint, it
       blocks until the response.  The way it blocks is by calling get
-      on an empty threadsafe queue.  There are two ways that data get
-      put into the queue.  The first is if the partner endpoint
-      completes its computation and replies.  In this case, _Endpoint
-      updates the associated ActiveEvent and puts a
+      on an empty mvar.  There are two ways that data get put into the
+      mvar.  The first is if the partner endpoint completes its
+      computation and replies.  In this case, _Endpoint updates the
+      associated ActiveEvent and puts a
       waldoCallResults._MessageFinishedCallResult object into the
-      queue.  When the listening endpoint receives this result, it
+      mvar.  When the listening endpoint receives this result, it
       continues processing.  The other way is if the event is backed
       out while we're waiting.  In that case, the runtime puts a
       waldoCallResults._BackoutBeforeReceiveMessageResult object into
-      the queue.
+      the mvar.
      
       We can be listening to more than one open threadsafe message
-      queue.  If endpoint A waits on its partner, and, while waiting,
+      mvar.  If endpoint A waits on its partner, and, while waiting,
       its partner executes a series of endpoint calls so that another
       method on A is invoked, and that method calls its partner again,
-      we could be waiting on 2 different message queues, each held by
-      the same active event.  To determine which queue a message is a
+      we could be waiting on 2 different message mvars, each held by
+      the same active event.  To determine which mvar a message is a
       reply to, we read the message's reply_to field.  If the reply_to
       field matches one of the indices in the map below, we know the
-      matching waiting queue.  If it does not match and is None, that
+      matching waiting mvar.  If it does not match and is None, that
       means that it is the first message in a message sequence.  If it
       does not match and is not None, there must be some error.  (@see
       waldoExecutingEvent._ExecutingEventContext.to_reply_with_uuid.)
@@ -56,8 +55,8 @@ public abstract class ActiveEvent
       map.
      */
     protected final Map<String,
-    	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
-    	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
+    	MVar<MessageCallResultObject>> message_listening_mvars_map = 
+    	new HashMap<String, MVar<MessageCallResultObject>>();
 
     
     /**
@@ -210,11 +209,11 @@ public abstract class ActiveEvent
        For each atomic block, emitter creates an atomic event from
        existing event.  Then, at end of atomic block, call
        begin_first_phase_commit.  If begin_first_phase_commit returns
-       SUCCEEDED, should read event parent's completion queue to see
+       SUCCEEDED, should read event parent's completion mvar to see
        if commit was successful or unsuccessful.  If returns FAILED,
        means that the commit was already backed out and that it
        failed.  If returns SKIP, likely trying to commit a nested
-       transaction, should not read from event parent queue because
+       transaction, should not read from event parent mvar because
        transaction is incomplete and will read it later.
 
        Importantly, nested transactions will receive calls to
@@ -230,7 +229,7 @@ public abstract class ActiveEvent
        SUCCEEDED, does not mean that the actual commit succeeded, it
        just means that we were able to process the request to begin
        the first phase of the commit.  Check results of
-       event_complete_queue in root object for whether the commit
+       event_complete_mvar in root object for whether the commit
        actually succeded.
      */
     public abstract FirstPhaseCommitResponseCode local_root_begin_first_phase_commit();
@@ -315,13 +314,13 @@ public abstract class ActiveEvent
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished
        performing the requested block.  In this case, we do not need
-       to add result_queue to waiting queues.
+       to add result_mvar to waiting mvars.
 
        @param {bool} first_msg --- True if this is the first message
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {Queue or null} threadsafe_unblock_queue --- None if
+       @param {MVar or null} result_mvar --- None if
        this was the last message sent in a sequence and we're not
        waiting on a reply.
 
@@ -340,7 +339,7 @@ public abstract class ActiveEvent
     */
     public abstract boolean issue_partner_sequence_block_call(
         Endpoint endpoint, LiveMessageSender msg_sender, String func_name,
-        ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
+        MVar<MessageCallResultObject>result_mvar,
         boolean first_msg,List<RalphObject>args,RalphObject result);
 
 
@@ -501,7 +500,7 @@ public abstract class ActiveEvent
         String reply_to_uuid = msg.getReplyToUuid().getData();
 
         //#### DEBUG
-        if (! message_listening_queues_map.containsKey(reply_to_uuid))
+        if (! message_listening_mvars_map.containsKey(reply_to_uuid))
         {
             Util.logger_assert(
                 "Error: partner response message responding to " +
@@ -515,40 +514,38 @@ public abstract class ActiveEvent
         if (msg.hasReturnObjs())
             returned_objs = msg.getReturnObjs();
         
-        //# unblock waiting listening queue.
-        message_listening_queues_map.get(reply_to_uuid).add(
+        //# unblock waiting listening mvar.
+        message_listening_mvars_map.get(reply_to_uuid).put(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid,name_of_block_to_exec_next,
                 // result of rpc
                 returned_objs));
-
-
         
-        //# no need holding onto queue waiting on a message response.
-        message_listening_queues_map.remove(reply_to_uuid);
+        //# no need holding onto mvar waiting on a message response.
+        message_listening_mvars_map.remove(reply_to_uuid);
     }
 
 
     /**
        ASSUMES ALREADY WITHIN LOCK on AtomicActiveEvent.
         
-       To provide blocking, whenever issue an endpoint call or
-       partner call, thread of execution blocks, waiting on a read
-       into a threadsafe queue.  When we rollback, we must put a
-       sentinel into the threadsafe queue indicating that the event
-       has been rolled back and to not proceed further.
+       To provide blocking, whenever issue an endpoint call or partner
+       call, thread of execution blocks, waiting on a read into a
+       mvar.  When we rollback, we must put a sentinel into the mvar
+       indicating that the event has been rolled back and to not
+       proceed further.
 
        */
-    protected void rollback_unblock_waiting_queues()
+    protected void rollback_unblock_waiting_mvars()
     {
-        for (ArrayBlockingQueue<MessageCallResultObject> msg_queue_to_unblock :
-                 message_listening_queues_map.values())
+        for (MVar<MessageCallResultObject> msg_mvar_to_unblock :
+                 message_listening_mvars_map.values())
         {
-            MessageCallResultObject queue_feeder = null;
-            queue_feeder =
+            MessageCallResultObject mvar_feeder = null;
+            mvar_feeder =
                 MessageCallResultObject.backout_before_receive_message();
 
-            msg_queue_to_unblock.add(queue_feeder);
+            msg_mvar_to_unblock.put(mvar_feeder);
         }
     }
 }
