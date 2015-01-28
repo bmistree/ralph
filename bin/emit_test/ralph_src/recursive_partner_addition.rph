@@ -1,0 +1,23 @@
+Endpoint RecursiveAdder
+{
+    TVar Number internal_num;
+    
+    set_internal_num(Number to_set_to)
+    {
+        internal_num = to_set_to;
+    }
+
+    partner_recursive_add_to_number(Number remaining_iters) returns Number
+    {
+        atomically
+        {
+            if (remaining_iters == 0)
+                return 0;
+
+            remaining_iters -= 1;
+            Number recursive_result =
+                @partner.partner_recursive_add_to_number(remaining_iters);
+            return internal_num + recursive_result;
+        }
+    }
+}

@@ -107,7 +107,14 @@
       <param name="class_name" value="EnumStructJava"/>
     </antcall>
   </target>
-  
+
+  <target name="recursive_partner_addition_ralph" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="recursive_partner_addition.rph"/>
+      <param name="class_name" value="RecursivePartnerAdditionJava"/>
+    </antcall>
+  </target>
+
   <target name="alias_enum_ralph" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="alias_enum.rph"/>
