@@ -39,30 +39,7 @@ public class ExecutingEventContext
     */
     private java.util.Stack<String> to_reply_with_uuid = new java.util.Stack<String>();
     
-    /**
-       If this context was created from an rpc call from another
-       endpoint, then we keep track of the RalphObjects that were
-       passed into the RPC as arguments.  We do this because we may
-       have to return one or more of these objects as references when
-       return result of rpc.
-
-       FIXME: get rid of args_to_reply_with reference.  Can only
-       return variables through rpc return.
-       
-     */
-    private List<RalphObject> args_to_reply_with = null;
-    
     boolean msg_send_initialized_bit = false;
-
-    /**
-       if this function were called via an endpoint call on another
-       endpoint, then from_endpoint_call will be true.  We check
-       whether this function was called from another endpoint so
-       that we know whether we need to copy in reference
-       containers.  Pass lists, maps, and user structs by value
-       type across endpoint calls unless they're declared external.
-    */
-    boolean from_endpoint_call = false;
 
 
     /**
@@ -72,28 +49,7 @@ public class ExecutingEventContext
     public ExecutingEventContext ()
     {}
     
-    /**
-       Use this constructor when creating an event context as a result
-       of an rpc call from another node.  Keeps track of which objects
-       need to return from the rpc call (in array list).
-     */
-    public ExecutingEventContext (List<RalphObject> _args_to_reply_with)
-    {
-        args_to_reply_with = _args_to_reply_with;
-    }
     
-    public void set_from_endpoint_true()
-    {
-        from_endpoint_call =true;
-    }
-	
-    public boolean check_and_set_from_endpoint_call_false ()
-    {
-        boolean to_return = from_endpoint_call;
-        from_endpoint_call = false;
-        return to_return;
-    }
-     
     /**
      * @param {uuid} to_reply_with_uuid --- @see comments above
      self.to_reply_with_uuid in __init__ method.
@@ -150,11 +106,6 @@ public class ExecutingEventContext
     }
 
 
-    //#### UTILITY FUNCTIONS  ####
-    //# all of these could be static: they don't touch any internal
-    //# state.
-
-
     /**
        When a sequence completes not on the endpoint that began the
        sequence, we must send a parting message so that the root
@@ -168,28 +119,11 @@ public class ExecutingEventContext
         Endpoint endpoint, ActiveEvent active_event,RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
-        // DEBUG: Should only call sequence completed if context was
-        // begun from an rpc.  If it was begun from an rpc, should
-        // have constructed it while passing in args_to_reply_with.
-        if (args_to_reply_with == null)
-        {
-            Util.logger_assert(
-                "Should not be completing a sequence call from " +
-                "a context that has no remembered rpc arguments. " +
-                "(Or did not use correct constructor.)");
-        }
-        // END DEBUG
-        
         hide_partner_call(
             endpoint,active_event,
             null,  // no function name
             false, // not first msg sent
-            
-            // FIXME: eventually want to disallow sending any
-            // arguments back.  Ie., disallow calling rpc with
-            // reference.  However, this call requires an array of
-            // ralph objects.  Providing them.
-            new ArrayList<RalphObject>(),
+            null, // send no arguments back to other side
             result);
     }
 
@@ -204,10 +138,11 @@ public class ExecutingEventContext
        in a sequence that we're sending.  Necessary so that we can
        tell whether or not to force sending sequence local data.
 
-       @param {List} args --- The positional arguments inserted
-       into the call as an rpc.  Includes whether the argument is a
-       reference or not (ie, we should update the variable's value on
-       the caller).
+       @param {List or null} args --- The positional arguments
+       inserted into the call as an rpc.  Includes whether the
+       argument is a reference or not (ie, we should update the
+       variable's value on the caller).  Note that can be null if we
+       have no args to pass back (or if is a sequence completed call).
 
        @param {boolean} transactional --- True if this call should be
        part of a transaction.  False if it's just a regular rpc.  Only
@@ -239,8 +174,8 @@ public class ExecutingEventContext
 
         boolean partner_call_requested =
             active_event.issue_partner_sequence_block_call(
-                endpoint,this, func_name, threadsafe_unblock_queue, first_msg,args,
-                result);
+                endpoint,this, func_name, threadsafe_unblock_queue,
+                first_msg,args, result);
         
     	if (! partner_call_requested)
     	{

@@ -172,29 +172,6 @@ public abstract class Endpoint implements IReference
         return _uuid;
     }
 
-    /**
-       Used to construct empty contexts from non-rpc calls.
-     */
-    public ExecutingEventContext create_context()
-    {
-        return new ExecutingEventContext();
-    }
-    
-    /**
-       Used to construct a context when receive rpc call from partner.
-       
-       @param {List<RalphObject>} rpc_args --- RPC arguments
-       supplied by caller.
-       
-       @param {boolean} transactional --- Whether or not the rpc
-       requested was transactional.
-     */
-    public ExecutingEventContext create_context_for_recv_rpc(
-        List<RalphObject> rpc_args)
-    {
-        return new ExecutingEventContext(rpc_args);
-    }
-
     public void update_connection_obj(
         RalphConnObj.ConnectionObj conn_obj,String partner_host_uuid)
     {

@@ -24,7 +24,13 @@ public class PartnerRequestSequenceBlockProducer
        how it is translated by the compiler into a function.)  It can
        also be None if this is the final message sequence block's
        execution.
-     
+
+       @param {List or null} args --- The positional arguments
+       inserted into the call as an rpc.  Includes whether the
+       argument is a reference or not (ie, we should update the
+       variable's value on the caller).  Note that can be null if we
+       have no args to pass back (or if is a sequence completed call).
+       
        @param {uuid} reply_with_uuid --- When the partner endpoint
        responds, it should place reply_with_uuid in its reply_to message
        field.  That way, we can determine which message the partner
@@ -41,21 +47,28 @@ public class PartnerRequestSequenceBlockProducer
        transaction.  False if it's just a regular rpc.  Only keeps track
        if this is not the first message sent.
      */
-    
     public static PartnerRequestSequenceBlock produce_request_block(
         String to_reply_to, String func_name, List<? extends RalphObject> args,
         RalphObject result, ActiveEvent active_event, boolean atomic,
         String reply_with_uuid) throws BackoutException
     {
-        SerializationContext serialization_context =
-            new SerializationContext(args,true);
-        Arguments.Builder serialized_arguments =
-            serialization_context.serialize_all(active_event);
+        Arguments.Builder serialized_arguments;
+        if (args != null)
+        {
+            SerializationContext serialization_context =
+                new SerializationContext(args,true);
+            serialized_arguments =
+                serialization_context.serialize_all(active_event);
+        }
+        else
+            serialized_arguments = Arguments.newBuilder();
 
+        
         Arguments.Builder serialized_results = null;
         if (result != null)
         {
-            serialization_context = new SerializationContext(result,true);
+            SerializationContext serialization_context =
+                new SerializationContext(result,true);
             serialized_results =
                 serialization_context.serialize_all(active_event);
         }

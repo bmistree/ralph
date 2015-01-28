@@ -285,10 +285,11 @@ public abstract class ActiveEvent
        this was the last message sent in a sequence and we're not
        waiting on a reply.
 
-       @param {List} args --- The positional arguments inserted
-       into the call as an rpc.  Includes whether the argument is a
-       reference or not (ie, we should update the variable's value on
-       the caller).
+       @param {List or null} args --- The positional arguments
+       inserted into the call as an rpc.  Includes whether the
+       argument is a reference or not (ie, we should update the
+       variable's value on the caller).  Note that can be null if we
+       have no args to pass back (or if is a sequence completed call).
 
        @param {RalphObject} result --- If this is a reply to an rpc
        and the called method had a return value, then we return it in

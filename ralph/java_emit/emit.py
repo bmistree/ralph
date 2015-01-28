@@ -769,7 +769,8 @@ def emit_external_method_body(
     to_return = ' {\n'
 
     # call the internal version of the function
-    method_body_text = 'ExecutingEventContext ctx = create_context();\n'
+    method_body_text = (
+        'ExecutingEventContext ctx = new ExecutingEventContext();\n')
 
     if with_super_arg:
         # check if should create the root active event as an active
