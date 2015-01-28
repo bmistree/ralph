@@ -27,7 +27,7 @@ import ralph.MessageSender.LiveMessageSender;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
+
 
 /**
    Interface between AtomicActiveEvent and SpeculativeAtomicObject:
@@ -306,40 +306,6 @@ public class AtomicActiveEvent extends ActiveEvent
     private ReentrantLock _others_contacted_mutex = new ReentrantLock();
 
     
-    /**
-     //# When an active event sends a message to the partner
-     //# endpoint, it blocks until the response.  The way it blocks
-     //# is by calling get on an empty threadsafe queue.  There are
-     //# two ways that data get put into the queue.  The first is if
-     //# the partner endpoint completes its computation and replies.
-     //# In this case, _Endpoint updates the associated ActiveEvent
-     //# and puts a waldoCallResults._MessageFinishedCallResult
-     //# object into the queue.  When the listening endpoint receives
-     //# this result, it continues processing.  The other way is if
-     //# the event is backed out while we're waiting.  In that case,
-     //# the runtime puts a
-     //# waldoCallResults._BackoutBeforeReceiveMessageResult object
-     //# into the queue.
-     //#
-     //# We can be listening to more than one open threadsafe message
-     //# queue.  If endpoint A waits on its partner, and, while
-     //# waiting, its partner executes a series of endpoint calls so
-     //# that another method on A is invoked, and that method calls
-     //# its partner again, we could be waiting on 2 different
-     //# message queues, each held by the same active event.  To
-     //# determine which queue a message is a reply to, we read the
-     //# message's reply_to field.  If the reply_to field matches one
-     //# of the indices in the map below, we know the matching
-     //# waiting queue.  If it does not match and is None, that means
-     //# that it is the first message in a message sequence.  If it
-     //# does not match and is not None, there must be some error.
-     //# (@see
-     //# waldoExecutingEvent._ExecutingEventContext.to_reply_with_uuid.)
-     */
-    private final Map<String,
-    	ArrayBlockingQueue<MessageCallResultObject>> message_listening_queues_map = 
-    	new HashMap<String, ArrayBlockingQueue<MessageCallResultObject>>();
-
     /**
      *  # Before we attempt to request a commit after a sequence, we need
      # to keep track of whether or not the network has failed; if it has
@@ -1043,36 +1009,6 @@ public class AtomicActiveEvent extends ActiveEvent
 
 
     /**
-       ASSUMES ALREADY WITHIN _LOCK
-        
-       To provide blocking, whenever issue an endpoint call or
-       partner call, thread of execution blocks, waiting on a read
-       into a threadsafe queue.  When we rollback, we must put a
-       sentinel into the threadsafe queue indicating that the event
-       has been rolled back and to not proceed further.
-
-       */
-    private void rollback_unblock_waiting_queues()
-    {
-        //// DEBUG
-        assert_if_not_holding_lock(
-            "rollback_unblock_waiting_queues in AtomicActiveEvent " +
-            "should be holding lock.");
-        //// END DEBUG
-
-        
-        for (ArrayBlockingQueue<MessageCallResultObject> msg_queue_to_unblock :
-                 message_listening_queues_map.values())
-        {
-            MessageCallResultObject queue_feeder = null;
-            queue_feeder =
-                MessageCallResultObject.backout_before_receive_message();
-
-            msg_queue_to_unblock.add(queue_feeder);
-        }
-    }
-
-    /**
        Must be called OUTSIDE of lock.
 
        Unlike locked_non_blocking_backout, blocks until all touched objects
@@ -1335,80 +1271,6 @@ public class AtomicActiveEvent extends ActiveEvent
 	
 
     /**
-       ASSUMES ALREADY WITHIN LOCK
-
-       @param {PartnerMessageRequestSequenceBlock.proto} msg ---
-
-       @param {string} name_of_block_to_exec_next --- the name of the
-       sequence block to execute next.
-
-       @returns {Executing event}
-    
-       means that the other side has generated a first message create
-       a new context to execute that message and do so in a new
-       thread.
-    */
-    private ExecutingEvent handle_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_on,
-        PartnerRequestSequenceBlock msg, String name_of_block_to_exec_next)
-        throws ApplicationException, BackoutException, NetworkException
-    {
-
-        //// DEBUG
-        assert_if_not_holding_lock(
-            "handle_first_sequence_msg_from_partner in AtomicActiveEvent " +
-            "should be holding lock.");
-        //// END DEBUG
-
-        
-        //#### DEBUG
-        if( name_of_block_to_exec_next == null)
-        {
-            Util.logger_assert(
-                "Error in _ActiveEvent.  Should not receive the " +
-                "beginning of a sequence message without some " +
-                "instruction for what to do next.");
-        }
-        //#### END DEBUG
-
-        // grab all arguments from message
-        
-        // FIXME: Check if necessary for args to be non-null;
-        List <RalphObject> args = new ArrayList<RalphObject>();
-        if (msg.hasArguments())
-        {
-            args =
-                RPCDeserializationHelper.deserialize_arguments_list(
-                    event_parent.ralph_globals,msg.getArguments(),this);
-        }
-
-        // create new ExecutingEventContext that copies current stack
-        // and keeps track of which arguments need to be returned as
-        // references.
-        LiveMessageSender msg_sender = new LiveMessageSender();
-        
-        // know how to reply to this message.
-        msg_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
-
-        // convert array list of args to optional array of arg objects.
-        Object [] rpc_call_arg_array = new Object[args.size()];
-        for (int i = 0; i < args.size(); ++i)
-            rpc_call_arg_array[i] = args.get(i);
-
-        boolean takes_args = args.size() != 0;
-        ExecutingEvent to_return = new ExecutingEvent (
-            endpt_recvd_on,
-            name_of_block_to_exec_next,this,msg_sender,
-            // whether has arguments
-            takes_args,
-            // what those arguments are.
-            rpc_call_arg_array);
-
-        return to_return;
-    }
-
-
-    /**
      * Exception that gets thrown is from executing internal code.
      * Could be backout, could be stopped, could be other errors (eg.,
      * div by zero).
@@ -1454,57 +1316,6 @@ public class AtomicActiveEvent extends ActiveEvent
         }
     }
 
-
-    /**
-     * ASSUMES ALREADY WITHIN LOCK
-     @param {PartnerMessageRequestSequenceBlock.proto} msg ---
-
-     @param {string or None} name_of_block_to_exec_next --- the
-     name of the sequence block to execute next. None if nothing to
-     execute next (ie, last sequence message).
-     * 
-     */
-    private void handle_non_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
-        String name_of_block_to_exec_next)
-    {
-
-        //// DEBUG
-        assert_if_not_holding_lock(
-            "handle_non_first_sequence_msg_from_partner in AtomicActiveEvent " +
-            "should be holding lock.");
-        //// END DEBUG
-
-        
-        String reply_to_uuid = msg.getReplyToUuid().getData();
-
-        //#### DEBUG
-        if (! message_listening_queues_map.containsKey(reply_to_uuid))
-        {
-            Util.logger_assert(
-                "Error: partner response message responding to " +
-                "unknown _ActiveEvent message in AtomicActiveEvent.");
-        }
-        //#### END DEBUG
-        
-        String reply_with_uuid = msg.getReplyWithUuid().getData();
-        
-        Arguments returned_objs = null;
-        if (msg.hasReturnObjs())
-            returned_objs = msg.getReturnObjs();
-        
-        //# unblock waiting listening queue.
-        message_listening_queues_map.get(reply_to_uuid).add(
-            RalphCallResults.MessageCallResultObject.completed(
-                reply_with_uuid,name_of_block_to_exec_next,
-                // result of rpc
-                returned_objs));
-
-
-        
-        //# no need holding onto queue waiting on a message response.
-        message_listening_queues_map.remove(reply_to_uuid);
-    }	
 
     /**
        @param error GeneralMessage.error
