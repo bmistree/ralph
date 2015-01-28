@@ -1166,7 +1166,6 @@ public class AtomicActiveEvent extends ActiveEvent
             if (! first_msg)
                 replying_to = msg_sender.get_to_reply_with();
 
-            
             PartnerRequestSequenceBlock request_sequence_block = null;
             try
             {

@@ -60,7 +60,7 @@ public class LiveMessageSender implements IMessageSender
      started fresh instead of viewed as a continuation of the
      previous sequence.
     */
-    public void reset_to_reply_with()
+    private void reset_to_reply_with()
     {
         if (! to_reply_with_uuid.empty())
             to_reply_with_uuid.pop();
