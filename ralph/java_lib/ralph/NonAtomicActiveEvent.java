@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-import ralph_protobuffs.PartnerErrorProto.PartnerError;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
-
 import RalphDurability.DurabilityContext;
 
 import RalphCallResults.MessageCallResultObject;
@@ -23,6 +19,11 @@ import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
+import ralph.MessageSender.LiveMessageSender;
+
+import ralph_protobuffs.PartnerErrorProto.PartnerError;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 
 public class NonAtomicActiveEvent extends ActiveEvent
@@ -338,7 +339,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        method on itself.
     */
     public boolean issue_partner_sequence_block_call(
-        Endpoint endpoint, ExecutingEventContext ctx, String func_name,
+        Endpoint endpoint, LiveMessageSender message_sender, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,List<RalphObject>args,RalphObject result)
     {
@@ -364,7 +365,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // anything.
         String replying_to = null;
         if (! first_msg)
-            replying_to = ctx.get_to_reply_with();
+            replying_to = message_sender.get_to_reply_with();
 
         PartnerRequestSequenceBlock request_sequence_block = null;
 
@@ -496,10 +497,10 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.
-        ExecutingEventContext ctx = new ExecutingEventContext();
+        LiveMessageSender message_sender = new LiveMessageSender();
         
         // know how to reply to this message.
-        ctx.set_to_reply_with(msg.getReplyWithUuid().getData());
+        message_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
 
         // convert array list of args to optional array of arg objects.
         Object [] rpc_call_arg_array = new Object[args.size()];
@@ -510,7 +511,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
         ExecutingEvent to_return = new ExecutingEvent (
             endpt_recvd_msg_on,
-            name_of_block_to_exec_next,this,ctx,
+            name_of_block_to_exec_next,this,message_sender,
             // whether has arguments
             takes_args,
             // what those arguments are.

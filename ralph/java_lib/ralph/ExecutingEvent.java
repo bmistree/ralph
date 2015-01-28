@@ -1,20 +1,16 @@
 package ralph;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ArrayBlockingQueue;
-
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+
+import ralph.MessageSender.IMessageSender;
 
 public class ExecutingEvent 
 {
     private String to_exec_method_name;
     private ActiveEvent active_event;
-    private ExecutingEventContext ctx;
+    private IMessageSender message_sender;
     private Object[] to_exec_args;
     private boolean takes_args;
     private Endpoint endpt_to_run_on = null;
@@ -26,7 +22,7 @@ public class ExecutingEvent
        @param {_ActiveEvent object} active_event --- The active event
        object that to_exec should use for accessing endpoint data.
 
-       @param {_ExecutingEventContext} ctx ---
+       @param {IMessageSender} _message_sender ---
     
        @param {*args} to_exec_args ---- Any additional arguments that
        get passed to the closure to be executed.
@@ -34,7 +30,7 @@ public class ExecutingEvent
     public ExecutingEvent(
         Endpoint _endpt_to_run_on,
         String _to_exec_method_name,ActiveEvent _active_event,
-        ExecutingEventContext _ctx,
+        IMessageSender _message_sender,
         boolean _takes_args,// sequence calls do not take arguments
         Object..._to_exec_args)
     {
@@ -42,7 +38,7 @@ public class ExecutingEvent
         to_exec_method_name = _to_exec_method_name;
         active_event = _active_event;
         takes_args = _takes_args;
-        ctx = _ctx;
+        message_sender = _message_sender;
         to_exec_args = _to_exec_args;
     }
 	
@@ -52,13 +48,13 @@ public class ExecutingEvent
     public static void static_run(
         Endpoint endpt_to_run_on,
         String to_exec_method_name,ActiveEvent active_event,
-        ExecutingEventContext ctx,
+        IMessageSender message_sender,
         boolean takes_args, Object...to_exec_args)
         throws ApplicationException, BackoutException, NetworkException
     {
         endpt_to_run_on.handle_rpc_call(
             to_exec_method_name,active_event,
-            ctx,to_exec_args);
+            message_sender,to_exec_args);
     }
 			
     public void run()
@@ -66,6 +62,6 @@ public class ExecutingEvent
     {
         static_run(
             endpt_to_run_on,to_exec_method_name,
-            active_event,ctx,takes_args,to_exec_args);
+            active_event,message_sender,takes_args,to_exec_args);
     }
 }

@@ -38,6 +38,9 @@ import ralph.Variables.AtomicServiceReferenceVariable;
 import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
 
+import ralph.MessageSender.IMessageSender;
+import ralph.MessageSender.LiveMessageSender;
+
 import ralph.BaseMapVariableFactory.MapVariableFactory;
 import ralph.BaseListVariableFactory.ListVariableFactory;
 
@@ -566,7 +569,7 @@ def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
     if args_text != '':
         args_text = ',' + args_text
 
-    actual_call = method_name + '(ctx,_active_event' + args_text + ')'
+    actual_call = method_name + '(message_sender,_active_event' + args_text + ')'
     if method_declaration_node.returns_value():
         return_type = method_declaration_node.get_return_type()
         new_expression = (
@@ -597,8 +600,8 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
         # {
         #     RalphObject<Double,Double> num_obj =
         #         (RalphObject<Double,Double>)args[0];
-        #     _test_partner_args_method(active_event, ctx, num_obj);
-        #     ctx.hide_sequence_completed_call(this, active_event);
+        #     _test_partner_args_method(active_event, message_sender, num_obj);
+        #     message_sender.hide_sequence_completed_call(this, active_event);
         # }
         # to method body.
 
@@ -636,7 +639,7 @@ else
     emitted_method = '''
 protected RalphObject _handle_rpc_call(
     String to_exec_method_name,ActiveEvent _active_event,
-    ExecutingEventContext ctx,
+    IMessageSender message_sender,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException
 {
@@ -770,7 +773,7 @@ def emit_external_method_body(
 
     # call the internal version of the function
     method_body_text = (
-        'ExecutingEventContext ctx = new ExecutingEventContext();\n')
+        'IMessageSender message_sender = new LiveMessageSender();\n')
 
     if with_super_arg:
         # check if should create the root active event as an active
@@ -836,7 +839,7 @@ if (DurabilityInfo.instance.durability_saver != null)
     emit_ctx.pop_scope()
 
     inner_method_call_text = (
-        '%s (ctx ,active_event' % method_signature_node.method_name)
+        '%s (message_sender ,active_event' % method_signature_node.method_name)
     for argument_name in argument_name_text_list:
         inner_method_call_text += ',' + argument_name
     inner_method_call_text += ');\n'
@@ -1000,7 +1003,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     @returns {String} --- A java signature for method.  Eg.,
 
     private Double some_method (
-        ExecutingEventContext _ctx, ActiveEvent _active_event,
+        IMessageSender message_sender, ActiveEvent _active_event,
         SomeType SomeVar) 
         throws ApplicationException, BackoutException, NetworkException
     {
@@ -1048,7 +1051,7 @@ def emit_internal_method_signature(emit_ctx,method_signature_node):
     # other endpoints and services.
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
-    to_return += 'ExecutingEventContext _ctx, ActiveEvent _active_event'
+    to_return += 'IMessageSender message_sender, ActiveEvent _active_event'
     
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
@@ -2005,12 +2008,12 @@ def emit_statement(emit_ctx,statement_node):
         # a map should not call .get_len on internal map and pass in a
         # _ctx.  It should just pass in _active_event.
         if statement_node.method_node.label != ast_labels.DOT:
-            method_text += '(_ctx,_active_event'
+            method_text += '(message_sender,_active_event'
         else:
             
             if isinstance(statement_node.method_node.type,WildcardType):
                 # means that calling dot on endpoint node
-                method_text += '(_ctx,_active_event'
+                method_text += '(message_sender,_active_event'
             else:
                 # means that calling dot on map/list/etc.
                 method_text += '(_active_event'
@@ -2047,7 +2050,7 @@ def emit_statement(emit_ctx,statement_node):
             'new ArrayList<RalphObject>( %s)' % array_list_arg)
 
         partner_call_text = '''
-_ctx.hide_partner_call(
+message_sender.hide_partner_call(
     this, _active_event,"%s",true, //whether or not first method call
     %s,null)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
 

@@ -1,10 +1,9 @@
-
 package ralph;
 
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+
 import RalphCallResults.MessageCallResultObject;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
 import RalphDurability.DurabilityContext;
 import RalphDurability.DurabilityReplayContext;
@@ -12,6 +11,10 @@ import RalphDurability.DurabilityReplayContext;
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
+
+import ralph.MessageSender.LiveMessageSender;
+
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
 
 public abstract class ActiveEvent
@@ -299,7 +302,7 @@ public abstract class ActiveEvent
        method on itself.
     */
     public abstract boolean issue_partner_sequence_block_call(
-        Endpoint endpoint, ExecutingEventContext ctx, String func_name,
+        Endpoint endpoint, LiveMessageSender msg_sender, String func_name,
         ArrayBlockingQueue<MessageCallResultObject>threadsafe_unblock_queue,
         boolean first_msg,List<RalphObject>args,RalphObject result);
 

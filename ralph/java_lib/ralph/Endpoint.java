@@ -31,6 +31,7 @@ import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
 import RalphDurability.DurabilityContext;
+import ralph.MessageSender.IMessageSender;
 
 
 /**
@@ -198,10 +199,14 @@ public abstract class Endpoint implements IReference
 
        other_service.method(); // where method can call methods on
                                // partner serv on other host.
-       
+
+       Note that the arguments to this method are unused.  This method
+       has the signature that it does simply because it's being called
+       from emitted code, which always expects to call with a message
+       sender and active event.
      */
     public InternalServiceReference rpc_reference(
-        ExecutingEventContext ctx, ActiveEvent active_event)
+        IMessageSender message_sender,ActiveEvent active_event)
     {
         return new InternalServiceReference(
             ralph_globals.ip_addr_to_listen_for_connections_on,
@@ -908,8 +913,6 @@ public abstract class Endpoint implements IReference
        @param {_ActiveEvent object} active_event --- The active event
        object that to_exec should use for accessing endpoint data.
 
-       @param {_ExecutingEventContext} ctx ---
-
        @param {result_queue or None} --- This value should be
        non-None for endpoint-call initiated events.  For endpoint
        call events, we wait for the endpoint to check if any of the
@@ -927,8 +930,7 @@ public abstract class Endpoint implements IReference
     */
     protected abstract RalphObject _handle_rpc_call(
         String to_exec_method_name,ActiveEvent active_event,
-        ExecutingEventContext ctx,
-        Object...to_exec_args)
+        IMessageSender message_sender,  Object...to_exec_args)
         throws ApplicationException, BackoutException, NetworkException;
 
     /**
@@ -936,15 +938,14 @@ public abstract class Endpoint implements IReference
      */
     public void handle_rpc_call(
         String to_exec_method_name,ActiveEvent active_event,
-        ExecutingEventContext ctx,
-        Object...args)
+        IMessageSender message_sender,  Object...args)
         throws ApplicationException, BackoutException, NetworkException
     {
         RalphObject result = null;
         try
         {
             result = _handle_rpc_call(
-                to_exec_method_name,active_event, ctx,args);
+                to_exec_method_name,active_event, message_sender,args);
         }
         catch (BackoutException _ex)
         {
@@ -970,6 +971,6 @@ public abstract class Endpoint implements IReference
         }
 
         // tell other side that the rpc call has completed
-        ctx.hide_sequence_completed_call(this, active_event,result);
+        message_sender.hide_sequence_completed_call(this, active_event,result);
     }
 }

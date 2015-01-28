@@ -1,13 +1,7 @@
-package ralph;
+package ralph.MessageSender;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Stack;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-
 import java.util.concurrent.ArrayBlockingQueue;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
@@ -18,8 +12,18 @@ import RalphExceptions.NetworkException;
 
 import RalphCallResults.MessageCallResultObject;
 
+import ralph.Util;
+import ralph.RalphObject;
+import ralph.Endpoint;
+import ralph.ActiveEvent;
+import ralph.RPCDeserializationHelper;
+import ralph.ExecutingEvent;
 
-public class ExecutingEventContext
+/**
+   Sends rpc calls through active events instead of simulating their
+   results during durability replay.
+ */
+public class LiveMessageSender implements IMessageSender
 {
     /**
        We can be listening to more than one open threadsafe message
@@ -37,23 +41,9 @@ public class ExecutingEventContext
        the reply_to field to index into a map of message listening
        queues in waldoActiveEvent._ActiveEvent.
     */
-    private java.util.Stack<String> to_reply_with_uuid = new java.util.Stack<String>();
-    
-    boolean msg_send_initialized_bit = false;
+    private final Stack<String> to_reply_with_uuid = new Stack<String>();
+    private boolean msg_send_initialized_bit = false;
 
-
-    /**
-       Use this constructor when creating a new event context not in
-       response to another endpoint's rpc request.
-     */
-    public ExecutingEventContext ()
-    {}
-    
-    
-    /**
-     * @param {uuid} to_reply_with_uuid --- @see comments above
-     self.to_reply_with_uuid in __init__ method.
-    */
     public void set_to_reply_with (String _to_reply_with_uuid)
     {
         to_reply_with_uuid.push(_to_reply_with_uuid);
@@ -63,7 +53,6 @@ public class ExecutingEventContext
         return to_reply_with_uuid.peek();
     }
 
-    
     /**
      *  Each time we finish a message sequence, we reset
      set_to_reply_with.  This is so that if we start any new
@@ -76,10 +65,8 @@ public class ExecutingEventContext
         if (! to_reply_with_uuid.empty())
             to_reply_with_uuid.pop();
     }
-     
-    /**
-       @see emitter.emit_statement._emit_msg_seq_begin_call
 
+    /**
        Essentially, it is difficult to keep track of whether we have
        initialized sequence local data in the presence of jumps.
        (What happens if we jump back into a message send function
@@ -95,8 +82,9 @@ public class ExecutingEventContext
     /**
        @see set_msg_send_initialized_bit_false
 
-       @returns {Bool} --- The previous state of the initialized bit.
-       Can use this to test whether to initialize sequence local data.
+       @returns {boolean} --- The previous state of the initialized
+       bit.  Can use this to test whether to initialize sequence local
+       data.
     */
     public boolean set_msg_send_initialized_bit_true()
     {
@@ -105,16 +93,7 @@ public class ExecutingEventContext
         return prev_initialized_bit;
     }
 
-
-    /**
-       When a sequence completes not on the endpoint that began the
-       sequence, we must send a parting message so that the root
-       endpoint can continue running.  This method sends that
-       message.
-
-       @param result --- result may be null if rpc call does not
-       return anything.
-    */
+    @Override
     public void hide_sequence_completed_call(
         Endpoint endpoint, ActiveEvent active_event,RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
@@ -127,42 +106,7 @@ public class ExecutingEventContext
             result);
     }
 
-
-    /**
-       @param {String or None} func_name --- When func_name is None,
-       then sending to the other side the message that we finished
-       performing the requested block.  In this case, we do not need
-       to add result_queue to waiting queues.
-
-       @param {bool} first_msg --- True if this is the first message
-       in a sequence that we're sending.  Necessary so that we can
-       tell whether or not to force sending sequence local data.
-
-       @param {List or null} args --- The positional arguments
-       inserted into the call as an rpc.  Includes whether the
-       argument is a reference or not (ie, we should update the
-       variable's value on the caller).  Note that can be null if we
-       have no args to pass back (or if is a sequence completed call).
-
-       @param {boolean} transactional --- True if this call should be
-       part of a transaction.  False if it's just a regular rpc.  Only
-       matters if it's the first message in a sequence.  
-
-       @param {RalphObject} result --- If this is the reply to an RPC
-       that returns a value, then result is non-null.  If it's the
-       first request, then this value is null.
-
-       The local endpoint is requesting its partner to call some
-       sequence block.
-
-       @returns {RalphObject} --- If this is not the reply to an rpc
-       request and the method called returns a value, then this
-       returns it.  Otherwise, null.
-       
-       * @throws NetworkException 
-       * @throws ApplicationException 
-       * @throws BackoutException 
-       */
+    @Override
     public RalphObject hide_partner_call(
         Endpoint endpoint, ActiveEvent active_event,
         String func_name, boolean first_msg,List<RalphObject> args,
