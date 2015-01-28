@@ -28,36 +28,6 @@ public class Util
      */
     public static int MEDIUM_QUEUE_CAPACITIES = 10;
 
-	
-    /**
-     * Takes in the name of the function that another endpoint has
-     requested to be called.  Adds a prefix to distinguish the
-     function as being called from an endpoint function call rather
-     than from external code.
-    */
-    static public String endpoint_call_func_name(String func_name)
-    {
-        return "_endpoint_func_call_prefix__waldo__" + func_name;
-    }
-	
-    static public String internal_call_func_name(String func_name)
-    {
-        return "_internal_func_call_prefix__waldo__" + func_name;
-    }
-	
-	
-    /**
-     *
-     @see endpoint_call_func_name, except as a result of partner
-     sending a message in a message sequence.
-     * @param func_name
-     * @return
-     */
-
-    static public String internal_oncreate_func_call_name(String func_name)
-    {
-        return "_onCreate";
-    }
 
     static public void logger_assert(String to_assert)
     {

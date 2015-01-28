@@ -593,7 +593,7 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
     for index in range(0,len(method_declaration_node_list)):
         method_declaration_node = method_declaration_node_list[index]
         # trying to add something like:
-        # else if (to_exec_internal_name.equals("test_partner_args_method"))
+        # else if (to_exec_method_name.equals("test_partner_args_method"))
         # {
         #     RalphObject<Double,Double> num_obj =
         #         (RalphObject<Double,Double>)args[0];
@@ -614,7 +614,7 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
             exec_dispatch_sequence_call(method_declaration_node,emit_ctx))
 
         rpc_text_for_methods += (
-            if_elif + '(to_exec_internal_name.equals("' +
+            if_elif + '(to_exec_method_name.equals("' +
             method_declaration_node.method_name + '")) {\n' + 
             indent_string(if_elif_body,1) + 
             '\n}\n')
@@ -627,7 +627,7 @@ else
 {
     Util.logger_assert(
         "Error handling rpc call: unknown method " +
-        to_exec_internal_name);
+        to_exec_method_name);
 }
 
 '''
@@ -635,7 +635,7 @@ else
         
     emitted_method = '''
 protected RalphObject _handle_rpc_call(
-    String to_exec_internal_name,ActiveEvent _active_event,
+    String to_exec_method_name,ActiveEvent _active_event,
     ExecutingEventContext ctx,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException

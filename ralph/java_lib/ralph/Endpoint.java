@@ -921,9 +921,12 @@ public abstract class Endpoint implements IReference
        endpoint and executes it.  The compiler should override this
        method so that it will call correct internal method name for
        each string (and pass correct arguments to it).
-       
-       @param {String} to_exec_internal_name --- The internal
-       name of the method to execute on this endpoint. 
+
+       @param {String} to_exec_method_name --- The name of the method
+       to execute on this endpoint.  Note that there had originally
+       been a distinction between internal, mangled, method names and
+       external method names.  This distinction no longer applies, and
+       can use one for the other.
 
        @param {_ActiveEvent object} active_event --- The active event
        object that to_exec should use for accessing endpoint data.
@@ -946,17 +949,16 @@ public abstract class Endpoint implements IReference
        get passed to the closure to be executed.
     */
     protected abstract RalphObject _handle_rpc_call(
-        String to_exec_internal_name,ActiveEvent active_event,
+        String to_exec_method_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         Object...to_exec_args)
         throws ApplicationException, BackoutException, NetworkException;
-
 
     /**
        Just calls into _handle_rpc_calls.
      */
     public void handle_rpc_call(
-        String to_exec_internal_name,ActiveEvent active_event,
+        String to_exec_method_name,ActiveEvent active_event,
         ExecutingEventContext ctx,
         Object...args)
         throws ApplicationException, BackoutException, NetworkException
@@ -965,7 +967,7 @@ public abstract class Endpoint implements IReference
         try
         {
             result = _handle_rpc_call(
-                to_exec_internal_name,active_event, ctx,args);
+                to_exec_method_name,active_event, ctx,args);
         }
         catch (BackoutException _ex)
         {
