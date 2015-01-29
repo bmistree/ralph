@@ -88,6 +88,41 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         return endpt_map.get_endpoint_if_exists(endpt_uuid);
     }
 
+    public static String get_method_call_associated_with_paired_rpc(
+        PairedPartnerRequestSequenceEndpointUUID pair)
+    {
+        PartnerRequestSequenceBlock req_seq_block = pair.getRpcArgs();
+        return req_seq_block.getNameOfBlockRequesting();
+    }
+
+    public static void durable_replay_exec_rpc(
+        ActiveEvent active_event, Endpoint to_rpc_on,
+        PartnerRequestSequenceBlock req_seq_block)
+    {
+        try
+        {
+            active_event.recv_partner_sequence_call_msg(
+                to_rpc_on, req_seq_block);
+        }
+        catch(ApplicationException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Unexpected application exception in replay context.");
+        }
+        catch (BackoutException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Unexpected backout exception in replay context.");
+        }
+        catch(NetworkException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert(
+                "Unexpected network exception in replay context.");
+        }
+    }
     
     @Override
     public RalphObject issue_rpc(
@@ -141,29 +176,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
             }
             //// END DEBUG
 
-            try
-            {
-                active_event.recv_partner_sequence_call_msg(
-                    to_rpc_on, req_seq_block);
-            }
-            catch(ApplicationException ex)
-            {
-                ex.printStackTrace();
-                Util.logger_assert(
-                    "Unexpected application exception in replay context.");
-            }
-            catch (BackoutException ex)
-            {
-                ex.printStackTrace();
-                Util.logger_assert(
-                    "Unexpected backout exception in replay context.");
-            }
-            catch(NetworkException ex)
-            {
-                ex.printStackTrace();
-                Util.logger_assert(
-                    "Unexpected network exception in replay context.");
-            }
+            durable_replay_exec_rpc(active_event, to_rpc_on, req_seq_block);
         }
     }
 }

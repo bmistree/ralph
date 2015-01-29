@@ -52,7 +52,8 @@ public class DurabilitySingleSideReplayer
 
 
             AtomicSetterGetter replayed_setter_getter =
-                (AtomicSetterGetter)replayer.get_endpt(original_setter_getter.uuid());
+                (AtomicSetterGetter)replayer.get_endpoint_if_exists(
+                    original_setter_getter.uuid());
 
             if (replayed_setter_getter == null)
                 return false;

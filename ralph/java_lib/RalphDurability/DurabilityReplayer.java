@@ -3,12 +3,13 @@ package RalphDurability;
 import java.util.Map;
 import java.util.HashMap;
 
-
 import ralph_protobuffs.DurabilityProto.Durability;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
 import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
+import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
@@ -16,6 +17,9 @@ import ralph.Util;
 import ralph.InternalServiceFactory;
 import ralph.RalphGlobals;
 import ralph.IEndpointMap;
+import ralph.RootEventParent;
+import ralph.ActiveEvent;
+import ralph.NonAtomicActiveEvent;
 
 import RalphConnObj.SingleSideConnection;
 
@@ -84,8 +88,29 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
         }
         else
         {
-            Util.logger_warn(
-                "Must handle prepare message in durability replayer");
+            // get entry rpc message.
+            PairedPartnerRequestSequenceEndpointUUID entry_call = 
+                prepare_msg.getRpcArgs(0);            
+            Endpoint to_run_on =
+                DurabilityReplayContext.get_endpt_associated_with_paired_rpc(
+                    entry_call,this);
+            String method_to_run =
+                DurabilityReplayContext.get_method_call_associated_with_paired_rpc(
+                    entry_call);
+            PartnerRequestSequenceBlock req_seq_block = entry_call.getRpcArgs();
+
+            // generate a new atomic event to run replay
+            NonAtomicActiveEvent non_atom_evt =
+                to_run_on._act_event_map.create_root_non_atomic_event(
+                    to_run_on, method_to_run);
+            ActiveEvent atom_evt = non_atom_evt.clone_atomic();
+
+            DurabilityReplayContext.durable_replay_exec_rpc(
+                atom_evt, to_run_on, req_seq_block);
+
+            // try committing and wait for commit.
+            atom_evt.local_root_begin_first_phase_commit();
+            ((RootEventParent)atom_evt.event_parent).event_complete_mvar.blocking_take();
         }
     }
     
