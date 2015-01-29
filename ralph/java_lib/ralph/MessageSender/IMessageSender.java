@@ -68,5 +68,5 @@ public interface IMessageSender
         Endpoint endpoint, ActiveEvent active_event,
         String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
-            throws NetworkException, ApplicationException, BackoutException;
+        throws NetworkException, ApplicationException, BackoutException;
 }

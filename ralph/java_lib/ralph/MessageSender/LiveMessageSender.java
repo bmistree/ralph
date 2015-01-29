@@ -3,8 +3,6 @@ package ralph.MessageSender;
 import java.util.List;
 import java.util.Stack;
 
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
-
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;

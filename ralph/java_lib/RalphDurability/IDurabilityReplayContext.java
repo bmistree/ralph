@@ -3,6 +3,9 @@ package RalphDurability;
 import java.util.List;
 
 import ralph.Endpoint;
+import ralph.RalphObject;
+import ralph.RalphGlobals;
+import ralph.ActiveEvent;
 
 /**
    When we replay for durability, we need to ensure that replayed
@@ -23,7 +26,9 @@ public interface IDurabilityReplayContext
     
     /**
        Returns the next endpoint uuid an endpoint should use during
-       construction.
+       construction.  (Side effect is that we pop the next uuid from
+       queue of uuids.  Ie., two consecutive calls to next_rpc_results
+       could return different uuids.)
      */
     public String next_endpt_uuid();
 
@@ -32,4 +37,14 @@ public interface IDurabilityReplayContext
        replaying this event.
      */
     public List<Endpoint> all_generated_endpoints();
+
+    /**
+       When issue RPC to other side, durability logs the results of
+       that RPC call.  To replay, we return the rpc results generated
+       in order.  (Side effect is that we pop the next rpc result from
+       queue of rpc results.  Ie., two consecutive calls to
+       next_rpc_results should return different objects.)
+     */
+    public RalphObject next_rpc_result(
+        RalphGlobals ralph_globals, ActiveEvent active_event);
 }
