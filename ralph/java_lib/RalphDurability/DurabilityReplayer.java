@@ -79,7 +79,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                 Endpoint endpt = constructor.construct(
                     ralph_globals,new SingleSideConnection(),
                     null,durability_replay_context);
-                endpt_map.put(endpt.uuid(),endpt);
+                add_endpoint(endpt);
             }
         }
         else

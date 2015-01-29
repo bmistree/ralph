@@ -60,7 +60,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     @Override
     public void register_endpoint(Endpoint new_endpt)
     {
-        endpts_created_during_event.add(new_endpt);
+        endpt_map.add_endpoint(new_endpt);
     }
     
     /**
@@ -75,16 +75,6 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         ++next_endpt_uuid_index;
 
         return pair.getEndptUuid().getData();
-    }
-
-    /**
-       Return a list of all endpoints that were created as part of
-       replaying this event.
-     */
-    @Override
-    public List<Endpoint> all_generated_endpoints()
-    {
-        return endpts_created_during_event;
     }
 
     @Override

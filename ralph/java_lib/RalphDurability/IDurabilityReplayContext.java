@@ -35,12 +35,6 @@ public interface IDurabilityReplayContext
     public String next_endpt_uuid();
 
     /**
-       Return a list of all endpoints that were created as part of
-       replaying this event.
-     */
-    public List<Endpoint> all_generated_endpoints();
-
-    /**
        When issue RPC to other side, durability logs the results of
        that RPC call.  To replay, we return the rpc results generated
        in order.  (Side effect is that we pop the next rpc result from
