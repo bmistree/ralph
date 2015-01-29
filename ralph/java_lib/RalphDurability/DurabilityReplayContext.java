@@ -81,6 +81,13 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         return pair.getEndptUuid().getData();
     }
 
+    public static Endpoint get_endpt_associated_with_paired_rpc(
+        PairedPartnerRequestSequenceEndpointUUID pair, IEndpointMap endpt_map)
+    {
+        String endpt_uuid = pair.getEndpointUuid().getData();
+        return endpt_map.get_endpoint_if_exists(endpt_uuid);
+    }
+
     
     @Override
     public RalphObject issue_rpc(
@@ -122,10 +129,9 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
             // if the remote host we issued an RPC to issued an RPC
             // back to this host before returning.  In this case, we
             // must process the RPC call before continuing.
-            String endpt_uuid = pair.getEndpointUuid().getData();
+            Endpoint to_rpc_on =
+                get_endpt_associated_with_paired_rpc(pair,endpt_map);
             
-            Endpoint to_rpc_on = endpt_map.get_endpoint_if_exists(endpt_uuid);
-
             //// DEBUG
             if (to_rpc_on == null)
             {
