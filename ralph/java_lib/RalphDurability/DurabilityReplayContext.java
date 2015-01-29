@@ -11,6 +11,10 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
 
+import RalphExceptions.ApplicationException;
+import RalphExceptions.BackoutException;
+import RalphExceptions.NetworkException;
+
 import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
@@ -77,33 +81,83 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         return pair.getEndptUuid().getData();
     }
 
+    
     @Override
     public RalphObject issue_rpc(
         RalphGlobals ralph_globals, ActiveEvent active_event)
     {
-        PairedPartnerRequestSequenceEndpointUUID pair = 
-            prepare_msg.getRpcArgs(next_rpc_request_index);
-        ++ next_rpc_request_index;
-        PartnerRequestSequenceBlock req_seq_block = pair.getRpcArgs();
-
-        // if it's an rpc result, then we should return the result
-        // immediately.  if it's not an rpc result, it means that
-        // there may have been nested rpcs, and we need to process the
-        // nested rpc calls in the meantime.
-        if (is_result_sequence_block(req_seq_block))
+        while (true)
         {
-            if (! req_seq_block.hasReturnObjs())
-                return null;
+            PairedPartnerRequestSequenceEndpointUUID pair = 
+                prepare_msg.getRpcArgs(next_rpc_request_index);
+            ++ next_rpc_request_index;
+            //// DEBUG
+            if (pair == null)
+            {
+                Util.logger_assert(
+                    "Ran out of RPCs to call.  Maybe number of " +
+                    "results do not match number of requests?");
+            }
+            //// END DEBUG
 
-            Arguments return_objs = req_seq_block.getReturnObjs();
-            // if this was the response to an rpc that returned a value,
-            // then return it here.
-            return RPCDeserializationHelper.return_args_to_ralph_object(
-                return_objs, ralph_globals, active_event);
+            
+            PartnerRequestSequenceBlock req_seq_block = pair.getRpcArgs();
+
+            // CASE 1: Next operation is an rpc result.  We should
+            // return it immediately.
+            if (is_result_sequence_block(req_seq_block))
+            {
+                if (! req_seq_block.hasReturnObjs())
+                    return null;
+
+                Arguments return_objs = req_seq_block.getReturnObjs();
+                // if this was the response to an rpc that returned a value,
+                // then return it here.
+                return RPCDeserializationHelper.return_args_to_ralph_object(
+                    return_objs, ralph_globals, active_event);
+            }
+
+            // CASE 2: Next operation is not an rpc result, but
+            // another RPC request.  This could happen, for instance,
+            // if the remote host we issued an RPC to issued an RPC
+            // back to this host before returning.  In this case, we
+            // must process the RPC call before continuing.
+            String endpt_uuid = pair.getEndpointUuid().getData();
+            
+            Endpoint to_rpc_on = endpt_map.get_endpoint_if_exists(endpt_uuid);
+
+            //// DEBUG
+            if (to_rpc_on == null)
+            {
+                Util.logger_assert(
+                    "Requested to issue RPC to an unknown endpt " +
+                    "during durability replay.");
+            }
+            //// END DEBUG
+
+            try
+            {
+                active_event.recv_partner_sequence_call_msg(
+                    to_rpc_on, req_seq_block);
+            }
+            catch(ApplicationException ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected application exception in replay context.");
+            }
+            catch (BackoutException ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected backout exception in replay context.");
+            }
+            catch(NetworkException ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Unexpected network exception in replay context.");
+            }
         }
-
-        // FIXME:
-        Util.logger_assert("\nStill must handle case of nested RPCs.");
-        return null;
     }
 }
