@@ -174,26 +174,8 @@ public class LiveMessageSender implements IMessageSender
 
         // if this was the response to an rpc that returned a value,
         // then return it here.
-        if (mvar_elem.returned_objs != null)
-        {
-            Arguments returned_objs_proto = mvar_elem.returned_objs;
-
-            // FIXME: only need a single element, not an entire list
-            // of returned objects.  Using this call instead so that
-            // can repurpose deserialization code
-            List<RalphObject> to_return_list =
-                RPCDeserializationHelper.deserialize_arguments_list(
-                    endpoint.ralph_globals,returned_objs_proto,active_event);
-            //// DEBUG
-            if (to_return_list.size() != 1)
-            {
-                Util.logger_assert(
-                    "Should only be able to return single object from rpc.");
-            }
-            //// END DEBUG
-
-            return to_return_list.get(0);
-        }
-        return null;
+        return RPCDeserializationHelper.return_args_to_ralph_object(
+            mvar_elem.returned_objs, endpoint.ralph_globals,
+            active_event);
     }
 }
