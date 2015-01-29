@@ -12,11 +12,11 @@ public interface IDurabilityReplayer
     public boolean step(RalphGlobals ralph_globals);
 
     /**
-       @param endpt_uuid --- Return the endpoint associated with this
+       @param uuid --- Return the endpoint associated with this
        uuid, if it exists.
      */
-    public Endpoint get_endpt(String endpt_uuid);
-
+    public Endpoint get_endpoint_if_exists(String uuid);
+    
     /**
        @returns The last timestamp for a committed lamport id.
      */

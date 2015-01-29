@@ -2,6 +2,8 @@ package RalphDurability;
 
 import java.util.List;
 
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+
 import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
@@ -45,6 +47,6 @@ public interface IDurabilityReplayContext
        queue of rpc results.  Ie., two consecutive calls to
        next_rpc_results should return different objects.)
      */
-    public RalphObject next_rpc_result(
+    public RalphObject issue_rpc(
         RalphGlobals ralph_globals, ActiveEvent active_event);
 }

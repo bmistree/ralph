@@ -16,31 +16,45 @@ import ralph.RalphObject;
 import ralph.RalphGlobals;
 import ralph.ActiveEvent;
 import ralph.RPCDeserializationHelper;
+import ralph.IEndpointMap;
+import ralph.Util;
 
 public class DurabilityReplayContext implements IDurabilityReplayContext
 {
     private final List<Endpoint> endpts_created_during_event =
         new ArrayList<Endpoint>();
-
-    private final Queue<PartnerRequestSequenceBlock> rpc_result_queue =
-        new ArrayDeque<PartnerRequestSequenceBlock>();
     
     private final DurabilityPrepare prepare_msg;
     private int next_endpt_uuid_index = 0;
     
-    public DurabilityReplayContext(DurabilityPrepare prepare_msg)
+    // the index to use for to read into rpc vector.  not separating
+    // rpc requests from responses yet because we wouldn't be able to
+    // distinguish if A issues an RPC to B and then B issues an RPC to
+    // A before returning from A issues an RPC to B, B returns, and
+    // then B issues an RPC to A.  Index starts at 1 because first rpc
+    // is entry point.
+    private int next_rpc_request_index = 1;
+
+    private final IEndpointMap endpt_map;
+    
+    public DurabilityReplayContext(
+        DurabilityPrepare prepare_msg, IEndpointMap endpt_map)
     {
         this.prepare_msg = prepare_msg;
-        
-        for (PairedPartnerRequestSequenceEndpointUUID pair : 
-                 prepare_msg.getRpcArgsList())
-        {
-            PartnerRequestSequenceBlock rpc_arg = pair.getRpcArgs();
-            // result objects should have empty names of blocks to
-            // request.
-            if (rpc_arg.getNameOfBlockRequesting().equals(""))
-                rpc_result_queue.add(rpc_arg);
-        }
+        this.endpt_map = endpt_map;
+    }
+
+    
+    /**
+       @return true if sequence_block is an rpc result instead of
+       request.
+     */
+    private boolean is_result_sequence_block(
+        PartnerRequestSequenceBlock sequence_block)
+    {
+        if (sequence_block.getNameOfBlockRequesting().equals(""))
+            return true;
+        return false;
     }
     
     @Override
@@ -74,19 +88,32 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     }
 
     @Override
-    public RalphObject next_rpc_result(
+    public RalphObject issue_rpc(
         RalphGlobals ralph_globals, ActiveEvent active_event)
     {
-        PartnerRequestSequenceBlock request_sequence_block =
-            rpc_result_queue.remove();
+        PairedPartnerRequestSequenceEndpointUUID pair = 
+            prepare_msg.getRpcArgs(next_rpc_request_index);
+        ++ next_rpc_request_index;
+        PartnerRequestSequenceBlock req_seq_block = pair.getRpcArgs();
 
-        if (! request_sequence_block.hasReturnObjs())
-            return null;
+        // if it's an rpc result, then we should return the result
+        // immediately.  if it's not an rpc result, it means that
+        // there may have been nested rpcs, and we need to process the
+        // nested rpc calls in the meantime.
+        if (is_result_sequence_block(req_seq_block))
+        {
+            if (! req_seq_block.hasReturnObjs())
+                return null;
 
-        Arguments return_objs = request_sequence_block.getReturnObjs();
-        // if this was the response to an rpc that returned a value,
-        // then return it here.
-        return RPCDeserializationHelper.return_args_to_ralph_object(
-            return_objs, ralph_globals, active_event);
+            Arguments return_objs = req_seq_block.getReturnObjs();
+            // if this was the response to an rpc that returned a value,
+            // then return it here.
+            return RPCDeserializationHelper.return_args_to_ralph_object(
+                return_objs, ralph_globals, active_event);
+        }
+
+        // FIXME:
+        Util.logger_assert("\nStill must handle case of nested RPCs.");
+        return null;
     }
 }

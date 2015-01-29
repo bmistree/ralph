@@ -3,13 +3,6 @@ package RalphDurability;
 import java.util.Map;
 import java.util.HashMap;
 
-import ralph.Endpoint;
-import ralph.EndpointConstructorObj;
-import ralph.Util;
-import ralph.InternalServiceFactory;
-import ralph.RalphGlobals;
-
-import RalphConnObj.SingleSideConnection;
 
 import ralph_protobuffs.DurabilityProto.Durability;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare;
@@ -17,8 +10,17 @@ import ralph_protobuffs.DurabilityCompleteProto.DurabilityComplete;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
 
+import ralph.Endpoint;
+import ralph.EndpointConstructorObj;
+import ralph.Util;
+import ralph.InternalServiceFactory;
+import ralph.RalphGlobals;
+import ralph.IEndpointMap;
 
-public class DurabilityReplayer implements IDurabilityReplayer
+import RalphConnObj.SingleSideConnection;
+
+
+public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
 {
     private final ISerializedDurabilityReader durability_reader;
     private final Map<String, EndpointConstructorObj> constructor_map =
@@ -50,7 +52,7 @@ public class DurabilityReplayer implements IDurabilityReplayer
         DurabilityPrepare prepare_msg, RalphGlobals ralph_globals)
     {
         DurabilityReplayContext durability_replay_context =
-            new DurabilityReplayContext(prepare_msg);
+            new DurabilityReplayContext(prepare_msg,this);
         // means that the event just created an endpoint, which is
         // externally reachable.
         if (prepare_msg.getRpcArgsCount() == 0)
@@ -129,12 +131,6 @@ public class DurabilityReplayer implements IDurabilityReplayer
     }
     
     @Override
-    public synchronized Endpoint get_endpt(String endpt_uuid)
-    {
-        return endpt_map.get(endpt_uuid);
-    }
-
-    @Override
     public synchronized long last_committed_local_lamport_timestamp()
     {
         Util.logger_assert(
@@ -142,4 +138,26 @@ public class DurabilityReplayer implements IDurabilityReplayer
             "in DurabilityReplayer");
         return -1;
     }
+
+    @Override
+    public synchronized void add_endpoint(Endpoint endpoint)
+    {
+        endpt_map.put(endpoint._uuid, endpoint);
+    }
+    
+    @Override
+    public synchronized void remove_endpoint_if_exists(Endpoint endpoint)
+    {
+        endpt_map.remove(endpoint._uuid);
+    }
+    
+    /**
+       @returns null if no endpoint available.
+     */
+    @Override
+    public synchronized Endpoint get_endpoint_if_exists(String uuid)
+    {
+        return endpt_map.get(uuid);
+    }
+    
 }

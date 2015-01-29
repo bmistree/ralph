@@ -40,7 +40,7 @@ public class DurabilityReplayMessageSender implements IMessageSender
         throws NetworkException, ApplicationException, BackoutException
     {
         // get next rpc result.
-        return replay_context.next_rpc_result(
+        return replay_context.issue_rpc(
             endpoint.ralph_globals,active_event);
     }
 }
