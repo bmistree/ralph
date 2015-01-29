@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class AllEndpoints extends Thread
+public class AllEndpoints extends Thread implements IEndpointMap
 {
     private ReentrantLock _mutex = new ReentrantLock();
     private HashMap<String,Endpoint> endpoint_map =
@@ -73,15 +73,17 @@ public class AllEndpoints extends Thread
         //new endpoints will already grab new clock dates
         endpoints_to_update_queue.add(copied_endpoint_list);
     }
-            
+
+    @Override
     public void add_endpoint(Endpoint endpoint)
     {
         _lock();
         endpoint_map.put(endpoint._uuid, endpoint);
         _unlock();
     }
-	
-    public void _remove_endpoint_if_exists(Endpoint endpoint)
+    
+    @Override
+    public void remove_endpoint_if_exists(Endpoint endpoint)
     {
         _lock();
         endpoint_map.remove(endpoint._uuid);
@@ -90,17 +92,18 @@ public class AllEndpoints extends Thread
 	
     public void endpoint_stopped(Endpoint which_endpoint_stopped)
     {
-        _remove_endpoint_if_exists(which_endpoint_stopped);
+        remove_endpoint_if_exists(which_endpoint_stopped);
     }
 
     public void network_exception(Endpoint which_endpoint_excepted)
     {
-        _remove_endpoint_if_exists(which_endpoint_excepted);
+        remove_endpoint_if_exists(which_endpoint_excepted);
     }
 
     /**
        @returns null if no endpoint available.
      */
+    @Override
     public Endpoint get_endpoint_if_exists(String uuid)
     {
         _lock();
