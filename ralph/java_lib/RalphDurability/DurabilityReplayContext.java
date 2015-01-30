@@ -22,6 +22,7 @@ import ralph.ActiveEvent;
 import ralph.RPCDeserializationHelper;
 import ralph.IEndpointMap;
 import ralph.Util;
+import ralph.MessageSender.DurabilityReplayMessageSender;
 
 public class DurabilityReplayContext implements IDurabilityReplayContext
 {
@@ -95,14 +96,15 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         return req_seq_block.getNameOfBlockRequesting();
     }
 
-    public static void durable_replay_exec_rpc(
+    public void durable_replay_exec_rpc(
         ActiveEvent active_event, Endpoint to_rpc_on,
         PartnerRequestSequenceBlock req_seq_block)
     {
         try
         {
-            active_event.recv_partner_sequence_call_msg(
-                to_rpc_on, req_seq_block);
+            active_event.replay_rpc(
+                to_rpc_on, req_seq_block,
+                new DurabilityReplayMessageSender(this));
         }
         catch(ApplicationException ex)
         {

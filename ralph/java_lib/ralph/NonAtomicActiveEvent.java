@@ -437,9 +437,6 @@ public class NonAtomicActiveEvent extends ActiveEvent
         if (msg.hasNameOfBlockRequesting())
             name_of_block_to_exec_next = msg.getNameOfBlockRequesting();
 
-        //# update peered data based on data contents of message.
-        //# (Note: still must update sequence local data from deltas
-        //# below.)
 
         ExecutingEvent exec_event = null;
 

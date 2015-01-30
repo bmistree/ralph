@@ -105,9 +105,9 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                     to_run_on, method_to_run);
             ActiveEvent atom_evt = non_atom_evt.clone_atomic();
 
-            DurabilityReplayContext.durable_replay_exec_rpc(
+            durability_replay_context.durable_replay_exec_rpc(
                 atom_evt, to_run_on, req_seq_block);
-
+            
             // try committing and wait for commit.
             atom_evt.local_root_begin_first_phase_commit();
             ((RootEventParent)atom_evt.event_parent).event_complete_mvar.blocking_take();

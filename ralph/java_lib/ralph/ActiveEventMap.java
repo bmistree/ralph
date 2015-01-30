@@ -51,7 +51,6 @@ public class ActiveEventMap
             "in active event map\n");
     }
     
-
     public AtomicActiveEvent create_root_atomic_event(
         ActiveEvent event_parent, Endpoint root_endpoint,
         String event_entry_point_name,DurabilityContext durability_context)

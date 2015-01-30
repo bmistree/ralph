@@ -4,19 +4,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
+
 import RalphCallResults.MessageCallResultObject;
 
 import RalphDurability.DurabilityContext;
 import RalphDurability.DurabilityReplayContext;
+import RalphDurability.IDurabilityReplayContext;
 
 import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 
 import ralph.MessageSender.LiveMessageSender;
+import ralph.MessageSender.DurabilityReplayMessageSender;
+import ralph.MessageSender.IMessageSender;
 
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 public abstract class ActiveEvent
 {
@@ -63,11 +67,6 @@ public abstract class ActiveEvent
        Can be null, eg., if durability is turned off.
      */
     public final DurabilityContext durability_context;
-
-    // FIXME: initially set as null.  eventually will need to be set
-    // during replay.
-    public final DurabilityReplayContext durability_replay_context = null;
-    
     
     /**
        FIXME.
@@ -408,16 +407,76 @@ public abstract class ActiveEvent
         internal_recv_partner_sequence_call_msg(endpt_recvd_on,msg);
     }
 
-    protected abstract void internal_recv_partner_sequence_call_msg(
+    public void replay_rpc(
         Endpoint endpt_recvd_on,
-        PartnerRequestSequenceBlock msg)
+        PartnerRequestSequenceBlock msg,
+        DurabilityReplayMessageSender msg_sender)
+        throws ApplicationException, BackoutException, NetworkException
+    {
+        //// DEBUG
+        if (! msg.hasNameOfBlockRequesting())
+        {
+            Util.logger_assert(
+                "When replaying RPC, must know which block to exec.");
+        }
+        //// END DEBUG
+        String name_of_block_to_exec_next = msg.getNameOfBlockRequesting();
+
+        ExecutingEvent exec_event = rpc_request_to_exec_evt(
+            endpt_recvd_on, msg, name_of_block_to_exec_next, msg_sender);
+        exec_event.run();
+    }
+
+    
+    protected abstract void internal_recv_partner_sequence_call_msg(
+        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException;
     
-    
     public abstract void receive_unsuccessful_first_phase_commit_msg(
-        String event_uuid,
-        String msg_originator_host_uuid);
+        String event_uuid,  String msg_originator_host_uuid);
 
+
+    protected ExecutingEvent rpc_request_to_exec_evt(
+        Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
+        String name_of_block_to_exec_next, IMessageSender message_sender)
+    {
+        //#### DEBUG
+        if( name_of_block_to_exec_next == null)
+        {
+            Util.logger_assert(
+                "Error in _NonAtomicActiveEvent.  Should not receive the " +
+                "beginning of a sequence message without some " +
+                "instruction for what to do next.");
+        }
+        //#### END DEBUG
+        
+        // grab all arguments from message
+        List <RalphObject> args = null;
+        if (msg.hasArguments())
+        {
+            args =
+                RPCDeserializationHelper.deserialize_arguments_list(
+                    event_parent.ralph_globals,msg.getArguments(),this);
+        }
+        
+
+        // convert array list of args to optional array of arg objects.
+        Object [] rpc_call_arg_array = new Object[args.size()];
+        for (int i = 0; i < args.size(); ++i)
+            rpc_call_arg_array[i] = args.get(i);
+        
+        boolean takes_args = args.size() != 0;
+
+        ExecutingEvent to_return = new ExecutingEvent (
+            endpt_recvd_msg_on,
+            name_of_block_to_exec_next,this,message_sender,
+            // whether has arguments
+            takes_args,
+            // what those arguments are.
+            rpc_call_arg_array);
+        
+        return to_return;
+    }
 
 
     /**
@@ -436,51 +495,16 @@ public abstract class ActiveEvent
         Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
         String name_of_block_to_exec_next)
     {
-        //#### DEBUG
-        if( name_of_block_to_exec_next == null)
-        {
-            Util.logger_assert(
-                "Error in _NonAtomicActiveEvent.  Should not receive the " +
-                "beginning of a sequence message without some " +
-                "instruction for what to do next.");
-        }
-        //#### END DEBUG
-
-        // grab all arguments from message
-        
-        // FIXME: Check if necessary for args to be non-null;
-        List <RalphObject> args = null;
-        if (msg.hasArguments())
-        {
-            args =
-                RPCDeserializationHelper.deserialize_arguments_list(
-                    event_parent.ralph_globals,msg.getArguments(),this);
-        }
-        
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.
         LiveMessageSender message_sender = new LiveMessageSender();
-        
         // know how to reply to this message.
         message_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
-
-        // convert array list of args to optional array of arg objects.
-        Object [] rpc_call_arg_array = new Object[args.size()];
-        for (int i = 0; i < args.size(); ++i)
-            rpc_call_arg_array[i] = args.get(i);
         
-        boolean takes_args = args.size() != 0;
-
-        ExecutingEvent to_return = new ExecutingEvent (
-            endpt_recvd_msg_on,
-            name_of_block_to_exec_next,this,message_sender,
-            // whether has arguments
-            takes_args,
-            // what those arguments are.
-            rpc_call_arg_array);
-        
-        return to_return;
+        return rpc_request_to_exec_evt(
+            endpt_recvd_msg_on, msg,name_of_block_to_exec_next,
+            message_sender);
     }
 
     /**
