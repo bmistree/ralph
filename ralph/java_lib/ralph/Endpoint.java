@@ -834,27 +834,6 @@ public abstract class Endpoint implements IReference
     
 
     /**
-     * @see waldoActiveEvent.wait_if_modified_peered
-     * @return
-     */
-    public void _notify_partner_peered_before_return(
-        String event_uuid,String reply_with_uuid,
-        ActiveEvent active_event)
-    {
-    	Util.logger_assert("Not handling multithreaded peereds");
-    }
-
-    /**
-     * @see PartnerNotifyOfPeeredModifiedResponse.proto
-     */
-    public void _notify_partner_peered_before_return_response(
-        String event_uuid, String reply_to_uuid,boolean invalidated)
-    {
-    	Util.logger_assert("Not handling multithreaded peereds");
-    }
-
-
-    /**
        Active event uuid on this endpoint has completed its commit
        and it wants you to tell partner endpoint as well to complete
        its commit.
