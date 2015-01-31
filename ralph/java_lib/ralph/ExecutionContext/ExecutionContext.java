@@ -2,37 +2,61 @@ package ralph.ExecutionContext;
 
 import java.util.Stack;
 
-import RalphDurability.DurabilityContext;
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+
+import RalphDurability.IDurabilityContext;
 
 import ralph.MessageSender.IMessageSender;
 import ralph.IUUIDGenerator;
 import ralph.ActiveEvent;
 
 
-public class ExecutionContext
+public class ExecutionContext implements IDurabilityContext
 {
     private final IMessageSender message_sender;
     private final IUUIDGenerator uuid_gen;
     /**
        Could be null if logging is off.
      */
-    private final DurabilityContext durability_context;
+    private final IDurabilityContext durability_context;
     
     private final Stack<ActiveEvent> active_event_stack =
         new Stack<ActiveEvent>();
 
     public ExecutionContext(
         IMessageSender message_sender, IUUIDGenerator uuid_gen,
-        DurabilityContext durability_context)
+        IDurabilityContext durability_context)
     {
         this.message_sender = message_sender;
         this.uuid_gen = uuid_gen;
         this.durability_context = durability_context;
     }
 
-    public DurabilityContext durability_context()
+    @Override
+    public IDurabilityContext clone(String new_event_uuid)
     {
-        return durability_context;
+        if (durability_context == null)
+            return null;
+        return durability_context.clone(new_event_uuid);
+    }
+
+    @Override
+    public void add_endpt_created_info(
+        String endpt_uuid,String endpt_constructor_name)
+    {
+        if (durability_context == null)
+            return;
+        durability_context.add_endpt_created_info(
+            endpt_uuid, endpt_constructor_name);
+    }
+
+    @Override
+    public void add_rpc_arg(
+        PartnerRequestSequenceBlock arg, String endpoint_uuid)
+    {
+        if (durability_context == null)
+            return;
+        durability_context.add_rpc_arg(arg,endpoint_uuid);
     }
     
     public IMessageSender message_sender()
