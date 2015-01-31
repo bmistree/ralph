@@ -19,7 +19,7 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRe
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 
-public class DurabilityContext
+public class DurabilityContext implements IDurabilityContext
 {
     public final String event_uuid;
     private final List<PartnerRequestSequenceBlock> rpc_args;
@@ -40,13 +40,8 @@ public class DurabilityContext
         this.endpts_created_info = new ArrayList<EndptUUIDConstructorPair>();
     }
 
-    /**
-       Makes a deep copy of the state of the current durability
-       context with a different event_uuid (new_event_uuid).  Basic
-       idea is that from a non-atomic event, when we encounter an
-       atomic event, we want to copy its durability context.  We only
-       do stable logging when we complete atomic events.
-     */
+
+    @Override
     public synchronized DurabilityContext clone(String new_event_uuid)
     {
         DurabilityContext to_return = new DurabilityContext(new_event_uuid);
@@ -66,6 +61,7 @@ public class DurabilityContext
         return to_return;
     }
 
+    @Override
     public synchronized void add_endpt_created_info(
         String endpt_uuid,String endpt_constructor_name)
     {
@@ -98,7 +94,7 @@ public class DurabilityContext
         }
     }
     
-    
+    @Override
     public synchronized void add_rpc_arg(
         PartnerRequestSequenceBlock arg, String endpoint_uuid)
     {
