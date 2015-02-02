@@ -12,6 +12,7 @@ import ralph.Endpoint;
 import ralph.ActiveEvent;
 import ralph.RalphObject;
 import ralph.Util;
+import ralph.ExecutionContext.ExecutionContext;
 
 public class DurabilityReplayMessageSender implements IMessageSender
 {
@@ -25,7 +26,7 @@ public class DurabilityReplayMessageSender implements IMessageSender
 
     @Override
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ActiveEvent active_event,RalphObject result)
+        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         // do nothing here: don't actually have to send message to
@@ -34,13 +35,13 @@ public class DurabilityReplayMessageSender implements IMessageSender
 
     @Override
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ActiveEvent active_event,
+        Endpoint endpoint, ExecutionContext exec_ctx,
         String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         // get next rpc result.
         return replay_context.issue_rpc(
-            endpoint.ralph_globals,active_event);
+            endpoint.ralph_globals,exec_ctx);
     }
 }

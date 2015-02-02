@@ -2,10 +2,13 @@ package ralph;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-import RalphExceptions.BackoutException;
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+
+import RalphExceptions.BackoutException;
 import RalphVersions.ObjectHistory;
 import RalphVersions.IReconstructionContext;
+
+import ralph.ExecutionContext.ExecutionContext;
 
 
 /**
@@ -32,7 +35,7 @@ public abstract class RalphObject<T,DeltaType> implements IReference
        more internal objects to be serialized.
      */
     public abstract ObjectContents serialize_contents(
-        ActiveEvent active_event,Object add_contents,
+        ActiveEvent active_event, Object add_contents,
         SerializationContext serialization_context)
         throws BackoutException;
     
@@ -57,7 +60,7 @@ public abstract class RalphObject<T,DeltaType> implements IReference
     public abstract void deserialize (
         IReconstructionContext reconstruction_context,
         ObjectHistory obj_history,Long to_play_until,
-        ActiveEvent deserialization_event) throws BackoutException;
+        ActiveEvent active_event) throws BackoutException;
 
     
     /**

@@ -20,7 +20,8 @@ import RalphExceptions.NetworkException;
 import ralph.MessageSender.LiveMessageSender;
 import ralph.MessageSender.DurabilityReplayMessageSender;
 import ralph.MessageSender.IMessageSender;
-
+import ralph.ExecutionContext.ExecutionContext;
+import ralph.ExecutionContext.LiveExecutionContext;
 
 public abstract class ActiveEvent
 {
@@ -408,9 +409,8 @@ public abstract class ActiveEvent
     }
 
     public void replay_rpc(
-        Endpoint endpt_recvd_on,
-        PartnerRequestSequenceBlock msg,
-        DurabilityReplayMessageSender msg_sender)
+        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        ExecutionContext exec_ctx)
         throws ApplicationException, BackoutException, NetworkException
     {
         //// DEBUG
@@ -423,7 +423,7 @@ public abstract class ActiveEvent
         String name_of_block_to_exec_next = msg.getNameOfBlockRequesting();
 
         ExecutingEvent exec_event = rpc_request_to_exec_evt(
-            endpt_recvd_on, msg, name_of_block_to_exec_next, msg_sender);
+            endpt_recvd_on, msg, name_of_block_to_exec_next, exec_ctx);
         exec_event.run();
     }
 
@@ -438,7 +438,7 @@ public abstract class ActiveEvent
 
     protected ExecutingEvent rpc_request_to_exec_evt(
         Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
-        String name_of_block_to_exec_next, IMessageSender message_sender)
+        String name_of_block_to_exec_next, ExecutionContext exec_ctx)
     {
         //#### DEBUG
         if( name_of_block_to_exec_next == null)
@@ -456,7 +456,7 @@ public abstract class ActiveEvent
         {
             args =
                 RPCDeserializationHelper.deserialize_arguments_list(
-                    event_parent.ralph_globals,msg.getArguments(),this);
+                    event_parent.ralph_globals,msg.getArguments(),exec_ctx);
         }
         
 
@@ -467,9 +467,10 @@ public abstract class ActiveEvent
         
         boolean takes_args = args.size() != 0;
 
+        
         ExecutingEvent to_return = new ExecutingEvent (
             endpt_recvd_msg_on,
-            name_of_block_to_exec_next,this,message_sender,
+            name_of_block_to_exec_next, exec_ctx,
             // whether has arguments
             takes_args,
             // what those arguments are.
@@ -498,13 +499,19 @@ public abstract class ActiveEvent
         // create new ExecutingEventContext that copies current stack
         // and keeps track of which arguments need to be returned as
         // references.
-        LiveMessageSender message_sender = new LiveMessageSender();
+        LiveExecutionContext live_exec_ctx =
+            new LiveExecutionContext(
+                event_parent.ralph_globals,durability_context);
+
+        LiveMessageSender message_sender =
+            live_exec_ctx.live_message_sender();
+        
         // know how to reply to this message.
         message_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
         
         return rpc_request_to_exec_evt(
             endpt_recvd_msg_on, msg,name_of_block_to_exec_next,
-            message_sender);
+            live_exec_ctx);
     }
 
     /**

@@ -23,6 +23,7 @@ import ralph.RPCDeserializationHelper;
 import ralph.IEndpointMap;
 import ralph.Util;
 import ralph.MessageSender.DurabilityReplayMessageSender;
+import ralph.ExecutionContext.ExecutionContext;
 
 public class DurabilityReplayContext implements IDurabilityReplayContext
 {
@@ -97,14 +98,13 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     }
 
     public void durable_replay_exec_rpc(
-        ActiveEvent active_event, Endpoint to_rpc_on,
+        ExecutionContext exec_ctx, Endpoint to_rpc_on,
         PartnerRequestSequenceBlock req_seq_block)
     {
         try
         {
-            active_event.replay_rpc(
-                to_rpc_on, req_seq_block,
-                new DurabilityReplayMessageSender(this));
+            exec_ctx.current_active_event().replay_rpc(
+                to_rpc_on, req_seq_block, exec_ctx);
         }
         catch(ApplicationException ex)
         {
@@ -128,7 +128,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     
     @Override
     public RalphObject issue_rpc(
-        RalphGlobals ralph_globals, ActiveEvent active_event)
+        RalphGlobals ralph_globals, ExecutionContext exec_ctx)
     {
         while (true)
         {
@@ -158,7 +158,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
                 // if this was the response to an rpc that returned a value,
                 // then return it here.
                 return RPCDeserializationHelper.return_args_to_ralph_object(
-                    return_objs, ralph_globals, active_event);
+                    return_objs, ralph_globals, exec_ctx);
             }
 
             // CASE 2: Next operation is not an rpc result, but
@@ -178,7 +178,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
             }
             //// END DEBUG
 
-            durable_replay_exec_rpc(active_event, to_rpc_on, req_seq_block);
+            durable_replay_exec_rpc(exec_ctx, to_rpc_on, req_seq_block);
         }
     }
 }

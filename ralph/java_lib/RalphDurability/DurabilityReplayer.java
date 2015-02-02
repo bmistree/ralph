@@ -11,6 +11,8 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDCon
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
+import RalphConnObj.SingleSideConnection;
+
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
 import ralph.Util;
@@ -20,8 +22,9 @@ import ralph.IEndpointMap;
 import ralph.RootEventParent;
 import ralph.ActiveEvent;
 import ralph.NonAtomicActiveEvent;
-
-import RalphConnObj.SingleSideConnection;
+import ralph.MessageSender.IMessageSender;
+import ralph.MessageSender.DurabilityReplayMessageSender;
+import ralph.ExecutionContext.ExecutionContext;
 
 
 public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
@@ -99,14 +102,32 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                     entry_call);
             PartnerRequestSequenceBlock req_seq_block = entry_call.getRpcArgs();
 
+            IMessageSender msg_sender =
+                new DurabilityReplayMessageSender(durability_replay_context);
+            ExecutionContext exec_ctx =
+                new ExecutionContext(
+                    msg_sender,
+                    // FIXME: should pass a uuid generator that
+                    // produces endpoint uuid, instead of using
+                    // RalphGlobals.
+                    ralph_globals,
+                    // do not log any additional to disk during replay
+                    null);
+            Util.logger_warn(
+                "Should pass in replay context's uuid generator.");
+            
+
             // generate a new atomic event to run replay
             NonAtomicActiveEvent non_atom_evt =
                 to_run_on._act_event_map.create_root_non_atomic_event(
                     to_run_on, method_to_run);
             ActiveEvent atom_evt = non_atom_evt.clone_atomic();
-
+            exec_ctx.push_active_event(atom_evt);
+            
+            // exec replay
             durability_replay_context.durable_replay_exec_rpc(
-                atom_evt, to_run_on, req_seq_block);
+                exec_ctx, to_run_on, req_seq_block);
+
             
             // try committing and wait for commit.
             atom_evt.local_root_begin_first_phase_commit();

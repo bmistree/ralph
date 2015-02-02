@@ -8,6 +8,8 @@ import ralph.Endpoint;
 import ralph.RalphObject;
 import ralph.RalphGlobals;
 import ralph.ActiveEvent;
+import ralph.ExecutionContext.ExecutionContext;
+
 
 /**
    When we replay for durability, we need to ensure that replayed
@@ -42,5 +44,5 @@ public interface IDurabilityReplayContext
        next_rpc_results should return different objects.)
      */
     public RalphObject issue_rpc(
-        RalphGlobals ralph_globals, ActiveEvent active_event);
+        RalphGlobals ralph_globals, ExecutionContext exec_ctx);
 }

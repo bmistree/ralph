@@ -16,6 +16,8 @@ import ralph.ActiveEvent;
 import ralph.RPCDeserializationHelper;
 import ralph.ExecutingEvent;
 import ralph.MVar;
+import ralph.ExecutionContext.ExecutionContext;
+
 
 /**
    Sends rpc calls through active events instead of simulating their
@@ -93,11 +95,11 @@ public class LiveMessageSender implements IMessageSender
 
     @Override
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ActiveEvent active_event,RalphObject result)
+        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         hide_partner_call(
-            endpoint,active_event,
+            endpoint, exec_ctx,
             null,  // no function name
             false, // not first msg sent
             null, // send no arguments back to other side
@@ -106,7 +108,7 @@ public class LiveMessageSender implements IMessageSender
 
     @Override
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ActiveEvent active_event,
+        Endpoint endpoint, ExecutionContext exec_ctx,
         String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
@@ -115,7 +117,7 @@ public class LiveMessageSender implements IMessageSender
             new MVar<MessageCallResultObject>();
 
         boolean partner_call_requested =
-            active_event.issue_partner_sequence_block_call(
+            exec_ctx.current_active_event().issue_partner_sequence_block_call(
                 endpoint,this, func_name, result_mvar, first_msg,
                 args, result);
         
@@ -158,7 +160,7 @@ public class LiveMessageSender implements IMessageSender
         if (to_exec_next != null)
         {
             ExecutingEvent.static_run(
-                endpoint,to_exec_next, active_event, this,false);
+                endpoint,to_exec_next, exec_ctx,false);
         }
         else
         {
@@ -174,6 +176,6 @@ public class LiveMessageSender implements IMessageSender
         // then return it here.
         return RPCDeserializationHelper.return_args_to_ralph_object(
             mvar_elem.returned_objs, endpoint.ralph_globals,
-            active_event);
+            exec_ctx);
     }
 }

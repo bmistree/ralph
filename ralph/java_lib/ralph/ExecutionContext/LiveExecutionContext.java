@@ -12,4 +12,10 @@ public class LiveExecutionContext extends ExecutionContext
     {
         super(new LiveMessageSender(), ralph_globals, durability_context);
     }
+
+
+    public LiveMessageSender live_message_sender()
+    {
+        return (LiveMessageSender) message_sender();
+    }
 }

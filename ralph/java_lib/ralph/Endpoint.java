@@ -32,6 +32,7 @@ import RalphDataWrappers.ListTypeDataWrapperFactory;
 
 import RalphDurability.DurabilityContext;
 import ralph.MessageSender.IMessageSender;
+import ralph.ExecutionContext.ExecutionContext;
 
 
 /**
@@ -206,7 +207,7 @@ public abstract class Endpoint implements IReference
        sender and active event.
      */
     public InternalServiceReference rpc_reference(
-        IMessageSender message_sender,ActiveEvent active_event)
+        ExecutionContext exec_ctx)
     {
         return new InternalServiceReference(
             ralph_globals.ip_addr_to_listen_for_connections_on,
@@ -908,32 +909,32 @@ public abstract class Endpoint implements IReference
        get passed to the closure to be executed.
     */
     protected abstract RalphObject _handle_rpc_call(
-        String to_exec_method_name,ActiveEvent active_event,
-        IMessageSender message_sender,  Object...to_exec_args)
+        String to_exec_method_name, ExecutionContext exec_ctx,
+        Object...to_exec_args)
         throws ApplicationException, BackoutException, NetworkException;
 
     /**
        Just calls into _handle_rpc_calls.
      */
     public void handle_rpc_call(
-        String to_exec_method_name,ActiveEvent active_event,
-        IMessageSender message_sender,  Object...args)
+        String to_exec_method_name, ExecutionContext exec_ctx,
+        Object...args)
         throws ApplicationException, BackoutException, NetworkException
     {
         RalphObject result = null;
         try
         {
             result = _handle_rpc_call(
-                to_exec_method_name,active_event, message_sender,args);
+                to_exec_method_name,exec_ctx,args);
         }
         catch (BackoutException _ex)
         {
-            active_event.put_exception(_ex);
+            exec_ctx.current_active_event().put_exception(_ex);
             throw _ex;
         }
         catch (NetworkException _ex)
         {
-            active_event.put_exception(_ex);
+            exec_ctx.current_active_event().put_exception(_ex);
             throw _ex;
         }
         catch (Exception _ex)
@@ -944,12 +945,13 @@ public abstract class Endpoint implements IReference
             System.out.println("\nHere was exception");
             _ex.printStackTrace();
             System.out.println("\n");
-            active_event.put_exception(_ex);
+            exec_ctx.current_active_event().put_exception(_ex);
             // FIXME: fill in backtrace for application exception.
             throw new ApplicationException("Caught application exception");
         }
 
         // tell other side that the rpc call has completed
-        message_sender.hide_sequence_completed_call(this, active_event,result);
+        exec_ctx.message_sender().hide_sequence_completed_call(
+            this, exec_ctx,result);
     }
 }

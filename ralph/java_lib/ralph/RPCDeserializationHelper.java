@@ -3,27 +3,30 @@ package ralph;
 import java.util.ArrayList;
 import java.util.List;
 
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.UtilProto.UUID;
+
 import RalphVersions.RPCVersionReplayer;
 import RalphVersions.ObjectContentsDeserializers;
 import RalphVersions.IReconstructionContext;
 import RalphVersions.RPCDeserializationReconstructionContext;
 
-import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
-import ralph_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_protobuffs.UtilProto.UUID;
+import ralph.ExecutionContext.ExecutionContext;
 
 
 public class RPCDeserializationHelper
 {
     public static List<RalphObject> deserialize_arguments_list(
-        RalphGlobals ralph_globals,Arguments arguments, ActiveEvent act_event)
+        RalphGlobals ralph_globals,Arguments arguments,
+        ExecutionContext exec_ctx)
     {
         List to_return = new ArrayList<RalphObject>();
         RPCVersionReplayer version_replayer =
             new RPCVersionReplayer(arguments);
         IReconstructionContext reconstruction_context =
             new RPCDeserializationReconstructionContext(
-                version_replayer,ralph_globals,act_event);
+                version_replayer,ralph_globals,exec_ctx);
 
         for (UUID arg_uuid : arguments.getArgumentUuidsList())
         {
@@ -58,7 +61,7 @@ public class RPCDeserializationHelper
 
     public static RalphObject return_args_to_ralph_object (
         Arguments returned_objs_proto, RalphGlobals ralph_globals,
-        ActiveEvent active_event)
+        ExecutionContext exec_ctx)
     {
         if (returned_objs_proto == null)
             return null;
@@ -68,7 +71,7 @@ public class RPCDeserializationHelper
         // can repurpose deserialization code
         List<RalphObject> to_return_list =
             RPCDeserializationHelper.deserialize_arguments_list(
-                ralph_globals,returned_objs_proto,active_event);
+                ralph_globals,returned_objs_proto,exec_ctx);
         //// DEBUG
         if (to_return_list.size() != 1)
         {

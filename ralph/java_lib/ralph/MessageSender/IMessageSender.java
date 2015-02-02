@@ -10,7 +10,7 @@ import RalphCallResults.MessageCallResultObject;
 
 import ralph.RalphObject;
 import ralph.Endpoint;
-import ralph.ActiveEvent;
+import ralph.ExecutionContext.ExecutionContext;
 
 
 public interface IMessageSender
@@ -25,7 +25,7 @@ public interface IMessageSender
        return anything.
     */
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ActiveEvent active_event,RalphObject result)
+        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException;
 
 
@@ -65,7 +65,7 @@ public interface IMessageSender
        * @throws BackoutException 
        */
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ActiveEvent active_event,
+        Endpoint endpoint, ExecutionContext exec_ctx,
         String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException;

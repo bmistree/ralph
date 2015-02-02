@@ -1,13 +1,15 @@
 package RalphVersions;
 
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+
+import RalphExceptions.BackoutException;
+
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.Util;
 import ralph.ActiveEvent;
+import ralph.ExecutionContext.ExecutionContext;
 
-import RalphExceptions.BackoutException;
-
-import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
 /**
    Used to deserialize rpc arguments.  Difference between this and
@@ -20,15 +22,16 @@ public class RPCDeserializationReconstructionContext
 {
     private final IVersionReplayer version_replayer;
     private final RalphGlobals ralph_globals;
-    private final ActiveEvent active_event;
+    private final ExecutionContext exec_ctx;
+
     
     public RPCDeserializationReconstructionContext(
         IVersionReplayer _version_replayer,
-        RalphGlobals _ralph_globals,ActiveEvent _active_event)
+        RalphGlobals _ralph_globals,ExecutionContext _exec_ctx)
     {
         version_replayer = _version_replayer;
         ralph_globals = _ralph_globals;
-        active_event = _active_event;
+        exec_ctx = _exec_ctx;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class RPCDeserializationReconstructionContext
             // plays deltas forward when reconstructing object.  
             ralph_object.deserialize(
                 this,obj_history,lamport_timestamp_before_or_during,
-                active_event);
+                exec_ctx.current_active_event());
         }
         catch (BackoutException ex)
         {
