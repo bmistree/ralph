@@ -9,13 +9,13 @@ import RalphCallResults.MessageCallResultObject;
 public class PartnerEventParent extends EventParent
 {
     public PartnerEventParent(
-        String _host_uuid, Endpoint local_endpoint, String _uuid,
+        Endpoint local_endpoint, String _uuid,
         String _priority, RalphGlobals _ralph_globals,
         String _event_entry_point_name)
     {
         super(
-            _host_uuid,_uuid,_priority,_ralph_globals,
-            false,local_endpoint,_event_entry_point_name);
+            _uuid,_priority,_ralph_globals,false,local_endpoint,
+            _event_entry_point_name);
     }
     
     @Override
@@ -24,24 +24,24 @@ public class PartnerEventParent extends EventParent
         ActiveEvent _event,long root_timestamp,
         String root_host_uuid,String application_uuid,String event_name)
     {
-        //# forwards the message to others
+        // forwards the message to others
         super.first_phase_transition_success(
-            // FIXME: Previous logic stated:
-            //# using false for partner contacted, because we know that
-            //# we do not have to forward the commit request back to
-            //# partner: our partner must have sent it to us.	
+            // FIXME: Previous logic stated: using false for partner
+            //contacted, because we know that we do not have to
+            //forward the commit request back to partner: our partner
+            //must have sent it to us.
             local_endpoints_whose_partners_contacted,_event,
             root_timestamp,root_host_uuid, application_uuid,event_name);
 
-        //# tell parent endpoint that first phase has gone well and that
-        //# it should wait on receiving responses from all the following
-        //# endpoint uuids before entering second phase
+        // tell parent endpoint that first phase has gone well and
+        // that it should wait on receiving responses from all the
+        // following endpoint uuids before entering second phase
         List<String> children_hosts = new ArrayList<String>();
         for (Endpoint endpt : local_endpoints_whose_partners_contacted)
             children_hosts.add(endpt._partner_host_uuid);
 
         local_endpoint._forward_first_phase_commit_successful(
-            uuid,local_endpoint._host_uuid,children_hosts);
+            uuid,ralph_globals.host_uuid,children_hosts);
     }
 	
     @Override

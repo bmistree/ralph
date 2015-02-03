@@ -17,7 +17,6 @@ import java.util.Set;
  */
 public abstract class EventParent
 {
-    protected final String host_uuid;
     public final String uuid;
     public final RalphGlobals ralph_globals;
     private String priority = null;
@@ -37,11 +36,10 @@ public abstract class EventParent
 
 	
     public EventParent(
-        String _host_uuid,String _uuid, String _priority,
+        String _uuid, String _priority,
         RalphGlobals _ralph_globals,boolean _is_root,
         Endpoint _local_endpoint, String _event_entry_point_name)
     {
-        host_uuid = _host_uuid;
         ralph_globals = _ralph_globals;
         
         if (_uuid == null)

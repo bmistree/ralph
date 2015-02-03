@@ -1,28 +1,28 @@
 package ralph;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import RalphDurability.DurabilityContext;
 
 
-public class ActiveEventMap
+public class ExecutionContextMap
 {
-    private java.util.concurrent.locks.ReentrantLock _mutex = 
-        new java.util.concurrent.locks.ReentrantLock();
-    public Endpoint local_endpoint = null;
-    private BoostedManager boosted_manager = null;
+    private final ReentrantLock mutex = new ReentrantLock();
+    private final BoostedManager boosted_manager;
     private final RalphGlobals ralph_globals;
+    private final Endpoint local_endpoint;
     
-    public ActiveEventMap(
-        Endpoint _local_endpoint, LamportClock clock,
-        DeadlockAvoidanceAlgorithm daa,RalphGlobals _ralph_globals)
+    public ExecutionContextMap(
+        RalphGlobals ralph_globals, Endpoint local_endpoint)
     {
-        ralph_globals = _ralph_globals;
-        local_endpoint = _local_endpoint;
-        boosted_manager = new BoostedManager(this,clock,daa,_ralph_globals);
+        this.ralph_globals = ralph_globals;
+        this.local_endpoint = local_endpoint;
+        boosted_manager = new BoostedManager(this,ralph_globals);
     }
 
     /**
@@ -37,18 +37,11 @@ public class ActiveEventMap
      */
     private void _lock()
     {    	
-        _mutex.lock();
+        mutex.lock();
     }
     private void _unlock()
     {
-        _mutex.unlock();
-    }
-    
-    public void inform_events_of_network_failure()
-    {
-        Util.logger_assert(
-            "\nMust fill in inform_events_of_network_failure " +
-            "in active event map\n");
+        mutex.unlock();
     }
     
     public AtomicActiveEvent create_root_atomic_event(
@@ -119,7 +112,7 @@ public class ActiveEventMap
                     super_priority,root_endpoint,event_entry_point_name);
         }
 
-        local_endpoint.ralph_globals.all_events.put(root_event.uuid,root_event);
+        ralph_globals.all_events.put(root_event.uuid,root_event);
         return root_event;
     }
     
@@ -144,7 +137,7 @@ public class ActiveEventMap
     public ActiveEvent remove_event_if_exists(String event_uuid)
     {        
         ActiveEvent to_remove =
-            local_endpoint.ralph_globals.all_events.remove(event_uuid);
+            ralph_globals.all_events.remove(event_uuid);
         
         if ((to_remove != null) && (to_remove.event_parent.is_root))
             boosted_manager.complete_root_event(event_uuid);
@@ -160,8 +153,7 @@ public class ActiveEventMap
     */
     public ActiveEvent get_event(String uuid)
     {
-        ActiveEvent to_return =
-            local_endpoint.ralph_globals.all_events.get(uuid);
+        ActiveEvent to_return = ralph_globals.all_events.get(uuid);
         return to_return;
     }
 
@@ -180,13 +172,13 @@ public class ActiveEventMap
     {
         _lock();
 
-        ActiveEvent to_return = local_endpoint.ralph_globals.all_events.get(uuid);
+        ActiveEvent to_return = ralph_globals.all_events.get(uuid);
         if (to_return == null)
         {
             PartnerEventParent pep =
                 new PartnerEventParent(
-                    local_endpoint._host_uuid,local_endpoint,uuid,priority,
-                    ralph_globals,event_entry_point_name);
+                    local_endpoint, uuid, priority, ralph_globals,
+                    event_entry_point_name);
             ActiveEvent new_event = null;
             if (atomic)
             {
@@ -203,7 +195,7 @@ public class ActiveEventMap
             else
                 new_event = new NonAtomicActiveEvent(pep,this,ralph_globals);
 
-            local_endpoint.ralph_globals.all_events.put(uuid,new_event);
+            ralph_globals.all_events.put(uuid,new_event);
             to_return = new_event;
         }
         _unlock();

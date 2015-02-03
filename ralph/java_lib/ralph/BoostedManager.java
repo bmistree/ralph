@@ -10,9 +10,8 @@ import RalphDurability.DurabilityContext;
 
 public class BoostedManager
 {
-    private LamportClock clock = null;
     private String last_boosted_complete = null;
-    private ActiveEventMap act_event_map = null;
+    private final ExecutionContextMap exec_ctx_map;
     /**
        Each element is a root event.  the closer to zero index an
        event is in this list, the older it is.  The oldest event in
@@ -36,24 +35,19 @@ public class BoostedManager
         BOOSTED, WOUND_WAIT
     }
 
-    private DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
-    
     private final RalphGlobals ralph_globals;
+
     
     /**
-     * @param _act_event_map
+     * @param _exec_ctx_map
      * @param _clock --- Host's global clock.
      */
     public BoostedManager(
-        ActiveEventMap _act_event_map, LamportClock _clock,
-        DeadlockAvoidanceAlgorithm _deadlock_avoidance_algorithm,
-        RalphGlobals _ralph_globals)
+        ExecutionContextMap exec_ctx_map, RalphGlobals ralph_globals)
     {
-        act_event_map = _act_event_map;
-        clock = _clock;
-        deadlock_avoidance_algorithm = _deadlock_avoidance_algorithm;
-        last_boosted_complete = clock.get_timestamp();
-        ralph_globals = _ralph_globals;
+        this.exec_ctx_map = exec_ctx_map;
+        last_boosted_complete = ralph_globals.clock.get_timestamp();
+        this.ralph_globals = ralph_globals;
     }
 
     public ActiveEvent create_root_atomic_event(
@@ -113,8 +107,8 @@ public class BoostedManager
         String evt_uuid = ralph_globals.generate_uuid();
         RootEventParent rep = 
             new RootEventParent(
-                act_event_map.local_endpoint._host_uuid,evt_uuid,null,
-                ralph_globals,requester_endpoint,event_entry_point_name);
+                evt_uuid,null, ralph_globals,requester_endpoint,
+                event_entry_point_name);
         
 
         ActiveEvent root_event = null;
@@ -129,15 +123,14 @@ public class BoostedManager
             
             root_event =
                 new AtomicActiveEvent(
-                    rep,
-                    act_event_map.local_endpoint._thread_pool,
-                    act_event_map,atomic_parent,ralph_globals,
+                    rep,ralph_globals.thread_pool,
+                    exec_ctx_map,atomic_parent,ralph_globals,
                     new_durability_context);
         }
         else
         {
             root_event =
-                new NonAtomicActiveEvent(rep,act_event_map,ralph_globals);
+                new NonAtomicActiveEvent(rep,exec_ctx_map,ralph_globals);
         }
 
         // trying to hold lock for as short a time as possible.  Add
@@ -147,8 +140,11 @@ public class BoostedManager
         if ((atomic_parent == null) && (! super_priority) &&
             (event_list.isEmpty()))
         {
-            if (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED)
+            if (ralph_globals.deadlock_avoidance_algorithm ==
+                DeadlockAvoidanceAlgorithm.BOOSTED)
+            {
                 should_be_boosted = true;
+            }
         }
 
         // do not insert supers into event list: event list is a queue
@@ -171,7 +167,7 @@ public class BoostedManager
             // super priority
             evt_priority =
                 EventPriority.generate_super_priority(
-                    clock.get_and_increment_timestamp());
+                    ralph_globals.clock.get_and_increment_timestamp());
         }
         else if (should_be_boosted)
         {
@@ -189,7 +185,7 @@ public class BoostedManager
             // standard priority... also used for wound-wait
             evt_priority =
                 EventPriority.generate_standard_priority(
-                    clock.get_and_increment_timestamp());
+                    ralph_globals.clock.get_and_increment_timestamp());
         }
 
         // Note: this will not overwrite a boosted priority that got
@@ -248,9 +244,12 @@ public class BoostedManager
             event_list.remove(counter);
             if (counter == 0)
             {
-                last_boosted_complete = clock.get_and_increment_timestamp();
-                if ( (! event_list.isEmpty()) &&
-                     (deadlock_avoidance_algorithm == DeadlockAvoidanceAlgorithm.BOOSTED))
+                last_boosted_complete =
+                    ralph_globals.clock.get_and_increment_timestamp();
+                if ( (! event_list.isEmpty())
+                     &&
+                     (ralph_globals.deadlock_avoidance_algorithm ==
+                      DeadlockAvoidanceAlgorithm.BOOSTED))
                 {
                     last_completed = last_boosted_complete;
                     to_promote = event_list.get(0);
@@ -277,7 +276,7 @@ public class BoostedManager
         ServiceAction service_action = new PromoteBoostedAction(
             to_promote,boosted_priority);
         
-        act_event_map.local_endpoint._thread_pool.add_service_action(
+        ralph_globals.thread_pool.add_service_action(
             service_action);
     }
 }

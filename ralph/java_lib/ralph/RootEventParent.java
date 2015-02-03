@@ -45,12 +45,12 @@ public class RootEventParent extends EventParent
        root events use a random uuid because some must be boosted.
     */
     public RootEventParent(
-        String _host_uuid,String _uuid, String _priority,
+        String _uuid, String _priority,
         RalphGlobals _ralph_globals, Endpoint _local_endpoint,
         String _event_entry_point_name)
     {
         super(
-            _host_uuid,_uuid,_priority,_ralph_globals,true,
+            _uuid,_priority,_ralph_globals,true,
             _local_endpoint, _event_entry_point_name);
     }
 
@@ -124,7 +124,8 @@ public class RootEventParent extends EventParent
             endpoints_waiting_on_commit.put(endpt._partner_host_uuid, false);
     	
         //# not waiting on self.
-        endpoints_waiting_on_commit.put(host_uuid, true);
+        endpoints_waiting_on_commit.put(
+            ralph_globals.host_uuid, true);
 
         _unlock_endpoints_waiting_on_commit();
 

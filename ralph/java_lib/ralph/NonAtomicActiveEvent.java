@@ -25,7 +25,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 
 public class NonAtomicActiveEvent extends ActiveEvent
 {
-    public ActiveEventMap event_map = null;
+    public ExecutionContextMap exec_ctx_map = null;
 
     /**
        Root AtomicActiveEvents can only be created by root
@@ -41,11 +41,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
     private final ReentrantLock _atomic_child_mutex = new ReentrantLock();
         
     public NonAtomicActiveEvent(
-        EventParent _event_parent, ActiveEventMap _event_map,
+        EventParent _event_parent, ExecutionContextMap _exec_ctx_map,
         RalphGlobals _ralph_globals)
     {
         super(_event_parent,null,_ralph_globals);
-        event_map = _event_map;
+        exec_ctx_map = _exec_ctx_map;
     }
     
     /**
@@ -117,7 +117,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     public ActiveEvent clone_atomic() 
     {
         atomic_child_lock();
-        atomic_child = event_map.create_root_atomic_event(
+        atomic_child = exec_ctx_map.create_root_atomic_event(
             this,event_parent.local_endpoint,
             event_parent.event_entry_point_name,durability_context);
         atomic_child_unlock();
@@ -149,7 +149,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
         // remove non-atomic's uuid from event map.
-        event_map.remove_event(uuid);
+        exec_ctx_map.remove_event(uuid);
 
         long root_timestamp =
             event_parent.ralph_globals.clock.get_and_increment_int_timestamp();

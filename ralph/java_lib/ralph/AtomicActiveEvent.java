@@ -216,7 +216,7 @@ public class AtomicActiveEvent extends ActiveEvent
         STATE_BACKED_OUT
     }
 
-    public final ActiveEventMap event_map;
+    public final ExecutionContextMap exec_ctx_map;
     
     /**
        When we are inside of one atomic event and encounter another
@@ -328,12 +328,12 @@ public class AtomicActiveEvent extends ActiveEvent
      */
     public AtomicActiveEvent(
         EventParent _event_parent, ThreadPool _thread_pool,
-        ActiveEventMap _event_map,
+        ExecutionContextMap _exec_ctx_map,
         ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals,
         DurabilityContext _durability_context)
     {
         super(_event_parent,_thread_pool,_ralph_globals,_durability_context);
-        event_map = _event_map;
+        exec_ctx_map = _exec_ctx_map;
         to_restore_from_atomic = _to_restore_from_atomic;
     }
 
@@ -816,7 +816,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // means that we're keeping objects that we never need
         // reachable.  And eventually we run out of memory.
         touched_objs.clear();
-        event_map.remove_event(uuid);
+        exec_ctx_map.remove_event(uuid);
         
         //# FIXME: which should happen first, notifying others or
         //# releasing locks locally?
@@ -948,7 +948,7 @@ public class AtomicActiveEvent extends ActiveEvent
         rollback_unblock_waiting_mvars();
 
         //# 4 remove the event.
-        event_map.remove_event(uuid);
+        exec_ctx_map.remove_event(uuid);
         
         //# 5
         //# do not need to acquire locks on
