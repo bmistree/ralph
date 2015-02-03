@@ -83,7 +83,7 @@ public abstract class Endpoint implements IReference
      */
     private final ReentrantLock _conn_obj_mutex = new ReentrantLock();
     private RalphConnObj.ConnectionObj _conn_obj = null;
-    public ExecutionContextMap _act_event_map = null;
+    public final ExecutionContextMap exec_ctx_map;
 	
     public final ThreadPool _thread_pool;
     private final AllEndpoints _all_endpoints;
@@ -144,7 +144,7 @@ public abstract class Endpoint implements IReference
         this.ralph_globals = ralph_globals;
 
         _clock = ralph_globals.clock;
-        _act_event_map = new ExecutionContextMap(ralph_globals,this);
+        exec_ctx_map = new ExecutionContextMap(ralph_globals,this);
         _conn_obj = conn_obj;
 
         _thread_pool = ralph_globals.thread_pool;

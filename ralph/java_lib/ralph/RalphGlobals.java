@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import RalphServiceConnectionListener.ConnectionListener;
 
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
+import ralph.ExecutionContext.ExecutionContext;
 
 /**
    Have a sort of tortured approach to RalphGlobals.  RalphGlobals is
@@ -46,9 +47,9 @@ public class RalphGlobals implements IUUIDGenerator
         
     public final AllEndpoints all_endpoints = new AllEndpoints();
     public final LamportClock clock = new LamportClock(all_endpoints);
-    
-    public final ConcurrentHashMap<String,ActiveEvent> all_events =
-        new ConcurrentHashMap<String,ActiveEvent>();
+
+    public final ConcurrentHashMap<String,ExecutionContext> all_ctx_map =
+        new ConcurrentHashMap<String,ExecutionContext>();
 
     private List<Stoppable> stoppable_list =
         Collections.synchronizedList(new ArrayList<Stoppable>());

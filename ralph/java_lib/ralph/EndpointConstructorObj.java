@@ -2,7 +2,7 @@ package ralph;
 
 import java.util.List;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
 public interface EndpointConstructorObj 
@@ -14,7 +14,7 @@ public interface EndpointConstructorObj
     public Endpoint construct(
         RalphGlobals globals, 
         RalphConnObj.ConnectionObj conn_obj,
-        DurabilityContext durability_log_context,
+        IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context);
     
 
@@ -27,7 +27,7 @@ public interface EndpointConstructorObj
     public Endpoint construct(
         RalphGlobals globals,RalphConnObj.ConnectionObj conn_obj,
         List<RalphObject> internal_values_list,
-        DurabilityContext durability_context);
+        IDurabilityContext durability_context);
 
     /**
        @returns a globally unique name for this constructor object so

@@ -51,14 +51,14 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     }
     
     @Override
-    public void prepare_operation(DurabilityContext dc)
+    public void prepare_operation(IDurabilityContext dc)
     {
         Durability durability_msg = dc.prepare_proto_buf();
         write_durability_msg(durability_msg,true);
     }
 
     @Override
-    public void complete_operation(DurabilityContext dc, boolean succeeded)
+    public void complete_operation(IDurabilityContext dc, boolean succeeded)
     {
         Durability durability_msg = dc.complete_proto_buf(succeeded);
         if (durability_msg != null)

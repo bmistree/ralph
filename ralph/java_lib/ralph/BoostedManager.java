@@ -5,7 +5,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import RalphServiceActions.ServiceAction;
 import RalphServiceActions.PromoteBoostedAction;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
+
+import ralph.ExecutionContext.ExecutionContext;
 
 
 public class BoostedManager
@@ -50,26 +52,26 @@ public class BoostedManager
         this.ralph_globals = ralph_globals;
     }
 
-    public ActiveEvent create_root_atomic_event(
+    public AtomicActiveEvent create_root_atomic_event(
         ActiveEvent atomic_parent, Endpoint root_endpoint,
-        String event_entry_point_name,DurabilityContext durability_context)
+        String event_entry_point_name, ExecutionContext exec_ctx)
     {
-        return create_root_event(
+        return (AtomicActiveEvent)create_root_event(
             true,atomic_parent,false,root_endpoint,event_entry_point_name,
-            durability_context);
+            exec_ctx);
     }
 
     /**
        @param {boolean} super_priority --- True if non atomic active
        event should have a super priority.
      */
-    public ActiveEvent create_root_non_atomic_event(
+    public NonAtomicActiveEvent create_root_non_atomic_event(
         boolean super_priority, Endpoint root_endpoint,
-        String event_entry_point_name)
+        String event_entry_point_name, ExecutionContext exec_ctx)
     {
-        return create_root_event(
+        return (NonAtomicActiveEvent)create_root_event(
             false,null,super_priority,root_endpoint,event_entry_point_name,
-            null);
+            exec_ctx);
     }
 
     private void _lock()
@@ -96,7 +98,7 @@ public class BoostedManager
     private ActiveEvent create_root_event(
         boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
         Endpoint requester_endpoint, String event_entry_point_name,
-        DurabilityContext durability_context)
+        ExecutionContext exec_ctx)
     {
         // DEBUG
         if (super_priority && atomic)
@@ -104,23 +106,18 @@ public class BoostedManager
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
 
-        String evt_uuid = ralph_globals.generate_uuid();
         RootEventParent rep = 
             new RootEventParent(
-                evt_uuid,null, ralph_globals,requester_endpoint,
+                exec_ctx.uuid,null, ralph_globals,requester_endpoint,
                 event_entry_point_name);
         
 
         ActiveEvent root_event = null;
         if (atomic)
         {
-            DurabilityContext new_durability_context = null;
-            if (durability_context != null)
-            {
-                new_durability_context =
-                    durability_context.clone(rep.get_uuid());
-            }
+            Util.logger_warn("Should maybe be cloning durability context");
             
+            IDurabilityContext new_durability_context = exec_ctx;
             root_event =
                 new AtomicActiveEvent(
                     rep,ralph_globals.thread_pool,

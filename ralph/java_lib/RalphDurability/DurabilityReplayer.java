@@ -93,7 +93,8 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
         {
             // get entry rpc message.
             PairedPartnerRequestSequenceEndpointUUID entry_call = 
-                prepare_msg.getRpcArgs(0);            
+                prepare_msg.getRpcArgs(0);
+            String evt_uuid = prepare_msg.getEventUuid().getData();
             Endpoint to_run_on =
                 DurabilityReplayContext.get_endpt_associated_with_paired_rpc(
                     entry_call,this);
@@ -104,34 +105,24 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
 
             IMessageSender msg_sender =
                 new DurabilityReplayMessageSender(durability_replay_context);
-            ExecutionContext exec_ctx =
-                new ExecutionContext(
-                    msg_sender,
-                    // FIXME: should pass a uuid generator that
-                    // produces endpoint uuid, instead of using
-                    // RalphGlobals.
-                    ralph_globals,
-                    // do not log any additional to disk during replay
-                    null);
-            Util.logger_warn(
-                "Should pass in replay context's uuid generator.");
-            
 
-            // generate a new atomic event to run replay
-            NonAtomicActiveEvent non_atom_evt =
-                to_run_on._act_event_map.create_root_non_atomic_event(
-                    to_run_on, method_to_run);
-            ActiveEvent atom_evt = non_atom_evt.clone_atomic();
-            exec_ctx.push_active_event(atom_evt);
-            
+            ExecutionContext exec_ctx =
+                to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
+                    to_run_on, method_to_run, evt_uuid, msg_sender);
+
+            to_run_on.exec_ctx_map.create_and_push_root_atomic_evt(
+                exec_ctx, to_run_on, method_to_run);
+
             // exec replay
             durability_replay_context.durable_replay_exec_rpc(
                 exec_ctx, to_run_on, req_seq_block);
 
-            
             // try committing and wait for commit.
+            ActiveEvent atom_evt = exec_ctx.current_active_event();
             atom_evt.local_root_begin_first_phase_commit();
             ((RootEventParent)atom_evt.event_parent).event_complete_mvar.blocking_take();
+
+            Util.logger_warn("Should also remove ");
         }
     }
     

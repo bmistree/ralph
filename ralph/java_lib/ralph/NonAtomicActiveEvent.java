@@ -17,6 +17,7 @@ import RalphExceptions.NetworkException;
 
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import ralph.MessageSender.LiveMessageSender;
+import ralph.ExecutionContext.ExecutionContext;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
@@ -113,23 +114,20 @@ public class NonAtomicActiveEvent extends ActiveEvent
         if (atomic_child_copy != null)
             atomic_child_copy.promote_boosted(new_priority);
     }
-    
-    public ActiveEvent clone_atomic() 
+
+    @Override
+    public void create_and_push_root_atomic_evt(
+        ExecutionContext exec_ctx) 
     {
+        exec_ctx_map.create_and_push_root_atomic_evt(
+            exec_ctx,event_parent.local_endpoint,
+            event_parent.event_entry_point_name);
+        
         atomic_child_lock();
-        atomic_child = exec_ctx_map.create_root_atomic_event(
-            this,event_parent.local_endpoint,
-            event_parent.event_entry_point_name,durability_context);
+        atomic_child = (AtomicActiveEvent)exec_ctx.current_active_event();
         atomic_child_unlock();
-        return atomic_child;
     }
-    public ActiveEvent restore_from_atomic()
-    {
-        Util.logger_assert(
-            "Should never reach a case where restoring " +
-            "an atomic from non-atomic");
-        return null;
-    }
+
     
     /**
        @returns {bool} --- False.  Will never backout a non-atomic
@@ -149,7 +147,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         // a non-atomic can only be started from root.
         ((RootEventParent)event_parent).non_atomic_completed();
         // remove non-atomic's uuid from event map.
-        exec_ctx_map.remove_event(uuid);
+        exec_ctx_map.remove_exec_ctx(uuid);
 
         long root_timestamp =
             event_parent.ralph_globals.clock.get_and_increment_int_timestamp();
@@ -467,7 +465,3 @@ public class NonAtomicActiveEvent extends ActiveEvent
             "an unsuccessful first phase message.");
     }
 }
-
-
-
-    

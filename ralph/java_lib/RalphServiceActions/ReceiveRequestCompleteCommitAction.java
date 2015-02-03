@@ -1,5 +1,8 @@
 package RalphServiceActions;
 
+import ralph.Endpoint;
+import ralph.ActiveEvent;
+import ralph.ExecutionContext.ExecutionContext;
 
 /**
  *  Another endpoint (either on the same host as I am or my
@@ -11,12 +14,12 @@ package RalphServiceActions;
  */
 public class ReceiveRequestCompleteCommitAction extends ServiceAction {
 
-    private ralph.Endpoint local_endpoint = null;
-    private String event_uuid;
-    private boolean request_from_partner;
+    private final Endpoint local_endpoint;
+    private final String event_uuid;
+    private final boolean request_from_partner;
 	
     public ReceiveRequestCompleteCommitAction(
-        ralph.Endpoint _local_endpoint, String _event_uuid,
+        Endpoint _local_endpoint, String _event_uuid,
         boolean _request_from_partner)
     {
         local_endpoint = _local_endpoint;
@@ -32,21 +35,20 @@ public class ReceiveRequestCompleteCommitAction extends ServiceAction {
     @Override
     public void run() 
     {
-        ralph.ActiveEvent evt =
-            local_endpoint._act_event_map.get_event(event_uuid);
-		
-        if (evt == null)
+        ExecutionContext exec_ctx =
+            local_endpoint.exec_ctx_map.get_exec_ctx(event_uuid);
+        if (exec_ctx == null)
         {
-            //# event may not exist, for instance if got multiple
-            //# complete commit messages because of loops in endpoint
-            //# call graph.
+            // event may not exist, for instance if got multiple
+            // complete commit messages because of loops in endpoint
+            // call graph.
             return;
         }
-		
 
-        //# if the request to complete the commit was from our partner,
-        //# then we can skip sending a request to our partner to
-        //# complete the commit.
+        // if the request to complete the commit was from our partner,
+        // then we can skip sending a request to our partner to
+        // complete the commit.
+        ActiveEvent evt = exec_ctx.current_active_event();
         evt.complete_commit_and_forward_complete_msg(request_from_partner);
     }
 }

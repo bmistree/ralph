@@ -1,6 +1,7 @@
 package RalphDurability;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.DurabilityProto.Durability;
 
 public interface IDurabilityContext
 {
@@ -19,4 +20,6 @@ public interface IDurabilityContext
     public void add_rpc_arg(
         PartnerRequestSequenceBlock arg, String endpoint_uuid);
 
+    public Durability prepare_proto_buf();
+    public Durability complete_proto_buf(boolean succeeded);
 }

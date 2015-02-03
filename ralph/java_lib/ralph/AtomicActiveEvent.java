@@ -19,10 +19,11 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import ralph.MessageSender.LiveMessageSender;
+import ralph.ExecutionContext.ExecutionContext;
 
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
@@ -330,7 +331,7 @@ public class AtomicActiveEvent extends ActiveEvent
         EventParent _event_parent, ThreadPool _thread_pool,
         ExecutionContextMap _exec_ctx_map,
         ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals,
-        DurabilityContext _durability_context)
+        IDurabilityContext _durability_context)
     {
         super(_event_parent,_thread_pool,_ralph_globals,_durability_context);
         exec_ctx_map = _exec_ctx_map;
@@ -475,33 +476,13 @@ public class AtomicActiveEvent extends ActiveEvent
             copied_local_other_endpoints_contacted,new_priority);
     }
 
-    /**
-       Nest transactions: when create a new atomic event inside of one
-       atomic event, enclosing atomic event should just subsume
-       original atomic event.
-     */
-    public ActiveEvent clone_atomic()
-    {
-        _lock();
-        ++ atomic_reference_counts;
-        _unlock();
-        return this; 
-    }
-    /**
-       When reference count gets back to zero, restore from parent
-       that created it.
-     */
-    public ActiveEvent restore_from_atomic()
-    {
-        _lock();
-        -- atomic_reference_counts;
-        boolean should_return_self = atomic_reference_counts >= 0;
-        _unlock();
-        if (should_return_self)
-            return this;
 
-        return to_restore_from_atomic;
+    @Override
+    public void create_and_push_root_atomic_evt(ExecutionContext exec_ctx)
+    {
+        exec_ctx.push_active_event(this);
     }
+    
     
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -816,7 +797,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // means that we're keeping objects that we never need
         // reachable.  And eventually we run out of memory.
         touched_objs.clear();
-        exec_ctx_map.remove_event(uuid);
+        exec_ctx_map.remove_exec_ctx(uuid);
         
         //# FIXME: which should happen first, notifying others or
         //# releasing locks locally?
@@ -948,7 +929,7 @@ public class AtomicActiveEvent extends ActiveEvent
         rollback_unblock_waiting_mvars();
 
         //# 4 remove the event.
-        exec_ctx_map.remove_event(uuid);
+        exec_ctx_map.remove_exec_ctx(uuid);
         
         //# 5
         //# do not need to acquire locks on

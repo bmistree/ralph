@@ -1,8 +1,10 @@
 package ralph.ExecutionContext;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+import ralph_protobuffs.DurabilityProto.Durability;
 
 import RalphDurability.IDurabilityContext;
 
@@ -20,13 +22,16 @@ public class ExecutionContext implements IDurabilityContext
      */
     private final IDurabilityContext durability_context;
     
-    private final Stack<ActiveEvent> active_event_stack =
-        new Stack<ActiveEvent>();
+    private final Deque<ActiveEvent> active_event_stack =
+        new ArrayDeque<ActiveEvent>();
+
+    public final String uuid;
 
     public ExecutionContext(
-        IMessageSender message_sender, IUUIDGenerator uuid_gen,
+        String uuid, IMessageSender message_sender, IUUIDGenerator uuid_gen,
         IDurabilityContext durability_context)
     {
+        this.uuid = uuid;
         this.message_sender = message_sender;
         this.uuid_gen = uuid_gen;
         this.durability_context = durability_context;
@@ -58,6 +63,22 @@ public class ExecutionContext implements IDurabilityContext
             return;
         durability_context.add_rpc_arg(arg,endpoint_uuid);
     }
+
+    @Override
+    public Durability prepare_proto_buf()
+    {
+        if (durability_context == null)
+            return null;
+        return durability_context.prepare_proto_buf();
+    }
+
+    @Override
+    public Durability complete_proto_buf(boolean succeeded)
+    {
+        if (durability_context == null)
+            return null;
+        return durability_context.complete_proto_buf(succeeded);
+    }
     
     public IMessageSender message_sender()
     {
@@ -67,18 +88,23 @@ public class ExecutionContext implements IDurabilityContext
     {
         return uuid_gen;
     }
+
+    public ActiveEvent base_active_event()
+    {
+        return active_event_stack.peekLast();
+    }
     
     public ActiveEvent current_active_event()
     {
-        return active_event_stack.peek();
+        return active_event_stack.peekFirst();
     }
     
     public void push_active_event(ActiveEvent evt)
     {
-        active_event_stack.push(evt);
+        active_event_stack.addFirst(evt);
     }
     public void pop_active_event()
     {
-        active_event_stack.pop();
+        active_event_stack.removeFirst();
     }
 }

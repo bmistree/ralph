@@ -1,7 +1,16 @@
 package RalphServiceActions;
 
-import ralph.Util;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+
+import ralph.Util;
+import ralph.ActiveEvent;
+import ralph.Endpoint;
+import ralph.DurabilityInfo;
+import ralph.ExecutionContext.ExecutionContext;
+import RalphDurability.IDurabilityContext;
+import RalphDurability.DurabilityContext;
+
+
 
 /**
    @param {_Endpoint object} local_endpoint --- The endpoint that
@@ -15,11 +24,11 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 public class ReceivePartnerMessageRequestSequenceBlockAction
     extends ServiceAction 
 {
-    private ralph.Endpoint local_endpoint = null;
-    private PartnerRequestSequenceBlock partner_request_block_msg;
+    private final Endpoint local_endpoint;
+    private final PartnerRequestSequenceBlock partner_request_block_msg;
 	
     public ReceivePartnerMessageRequestSequenceBlockAction(
-        ralph.Endpoint _local_endpoint,
+        Endpoint _local_endpoint,
         PartnerRequestSequenceBlock _partner_request_block_msg)
     {
         local_endpoint = _local_endpoint;
@@ -40,9 +49,9 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                 event_entry_point_name =
                     partner_request_block_msg.getNameOfBlockRequesting();
             }
-            
-            ralph.ActiveEvent evt = null;
 
+
+            ExecutionContext exec_ctx = null;
             if (partner_request_block_msg.hasReplyToUuid())
             {
                 // means that this message was a response to an rpc
@@ -52,18 +61,29 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                 // response.  in this case, we can just drop the
                 // response instead of creating a new active event to
                 // service it.
-                evt = local_endpoint._act_event_map.get_event(uuid);
+                exec_ctx = local_endpoint.exec_ctx_map.get_exec_ctx(uuid);
 
-                if (evt == null)
+                if (exec_ctx == null)
                     return;
             }
             else
             {
-                evt = local_endpoint._act_event_map.get_or_create_partner_event(
-                    uuid,priority,atomic,event_entry_point_name);
+                Util.logger_warn(
+                    "FIXME: check if need to generate durability contexts " +
+                    "in ReceivePartnerMessageRequestSequenceBlockAction.");
+
+                IDurabilityContext durability_ctx = null;
+                if (DurabilityInfo.instance.durability_saver != null)
+                    durability_ctx = new DurabilityContext(uuid);
+                
+                exec_ctx =
+                    local_endpoint.exec_ctx_map.get_or_create_partner_exec_ctx(
+                        uuid,priority,atomic,event_entry_point_name,
+                        durability_ctx);
             }
-            
-            evt.recv_partner_sequence_call_msg(local_endpoint,partner_request_block_msg);
+
+            exec_ctx.current_active_event().recv_partner_sequence_call_msg(
+                local_endpoint,partner_request_block_msg);
         }
         catch (RalphExceptions.BackoutException _ex)
         {
@@ -79,13 +99,5 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                 "with stack trace below: ");
             _ex.printStackTrace();
         }
-			
-//        except Exception as ex:
-//            # if hasattr(ex,'ralph_handled'):
-//            #     # Already processed exception in put exception
-//            #     return
-//            raise
-//
     }
-
 }

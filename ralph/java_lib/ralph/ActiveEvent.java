@@ -9,6 +9,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 
 import RalphCallResults.MessageCallResultObject;
 
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 import RalphDurability.IDurabilityReplayContext;
@@ -67,7 +68,7 @@ public abstract class ActiveEvent
     /**
        Can be null, eg., if durability is turned off.
      */
-    public final DurabilityContext durability_context;
+    public final IDurabilityContext durability_context;
     
     /**
        FIXME.
@@ -100,7 +101,7 @@ public abstract class ActiveEvent
 
     public ActiveEvent(
         EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals, DurabilityContext _durability_context)
+        RalphGlobals _ralph_globals, IDurabilityContext _durability_context)
     {
         this(
             _event_parent.get_uuid(),_event_parent,_thread_pool,
@@ -109,7 +110,7 @@ public abstract class ActiveEvent
     
     public ActiveEvent(
         String _uuid, EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals, DurabilityContext _durability_context)
+        RalphGlobals _ralph_globals, IDurabilityContext _durability_context)
     {
         uuid = _uuid;
         event_parent = _event_parent;
@@ -172,9 +173,9 @@ public abstract class ActiveEvent
        Calling restore_from_atomic should return the parent that
        cloned the atomic event.
      */
-    public abstract ActiveEvent clone_atomic();
+    public abstract void create_and_push_root_atomic_evt(
+        ExecutionContext exec_ctx);
     
-    public abstract ActiveEvent restore_from_atomic();
 
     public void only_remove_touched_obj(AtomicObject obj)
     {}

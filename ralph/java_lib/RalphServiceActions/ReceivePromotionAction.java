@@ -1,7 +1,9 @@
 package RalphServiceActions;
 
 import ralph.ActiveEvent;
-
+import ralph.Endpoint;
+import ralph.ActiveEvent;
+import ralph.ExecutionContext.ExecutionContext;
 
 /**
    When an action gets promoted, partner endpoint and other endpoints
@@ -9,29 +11,30 @@ import ralph.ActiveEvent;
    to us.  We handle the promotion message by finding the event (if
    it exists), and requesting it to promote its uuid.
 */
-public class ReceivePromotionAction extends ServiceAction {
-
-    private ralph.Endpoint local_endpoint = null;
-    private String event_uuid;
-    private String new_priority;
+public class ReceivePromotionAction extends ServiceAction
+{
+    private final Endpoint local_endpoint;
+    private final String event_uuid;
+    private final String new_priority;
 	
     public ReceivePromotionAction(
-        ralph.Endpoint _local_endpoint, String _event_uuid, String _new_priority)
+        Endpoint local_endpoint, String event_uuid, String new_priority)
     {
-        local_endpoint = _local_endpoint;
-        event_uuid = _event_uuid;
-        new_priority = _new_priority;
+        this.local_endpoint = local_endpoint;
+        this.event_uuid = event_uuid;
+        this.new_priority = new_priority;
     }
-	
-	
+
+    
     @Override
     public void run() 
     {
-        ActiveEvent evt =
-            local_endpoint._act_event_map.get_event(event_uuid);
-        if (evt != null)
+        ExecutionContext exec_ctx =
+            local_endpoint.exec_ctx_map.get_exec_ctx(event_uuid);
+        if (exec_ctx != null)
+        {
+            ActiveEvent evt = exec_ctx.base_active_event();
             evt.promote_boosted(new_priority);
-				
-
+        }
     }
 }

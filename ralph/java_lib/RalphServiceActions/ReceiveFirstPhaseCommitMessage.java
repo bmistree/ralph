@@ -2,6 +2,9 @@ package RalphServiceActions;
 
 import java.util.List;
 
+import ralph.ActiveEvent;
+import ralph.Endpoint;
+import ralph.ExecutionContext.ExecutionContext;
 
 /**
  * @see ralphEndpoint._EndpointServiceThread.receive_first_phase_commit_message
@@ -9,7 +12,7 @@ import java.util.List;
  */
 public class ReceiveFirstPhaseCommitMessage extends ServiceAction 
 {
-    private ralph.Endpoint local_endpoint = null;
+    private Endpoint local_endpoint = null;
     private String event_uuid;
     private String msg_originator_host_uuid;
     private boolean successful;
@@ -17,7 +20,7 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
 	
 	
     public ReceiveFirstPhaseCommitMessage (
-        ralph.Endpoint _local_endpoint,String _event_uuid,
+        Endpoint _local_endpoint,String _event_uuid,
         String _msg_originator_host_uuid,
         boolean _successful, List<String> _children_event_host_uuids)
     {
@@ -33,20 +36,23 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
     @Override
     public void run() 
     {
-        ralph.ActiveEvent act_event =
-            local_endpoint._act_event_map.get_event(event_uuid);
-
-        if (act_event != null)
+        ExecutionContext exec_ctx =
+            local_endpoint.exec_ctx_map.get_exec_ctx(
+                event_uuid);
+        
+        if (exec_ctx != null)
         {
+            ActiveEvent evt = exec_ctx.current_active_event();
+            
             if (successful)
             {
-                act_event.receive_successful_first_phase_commit_msg(
+                evt.receive_successful_first_phase_commit_msg(
                     event_uuid, msg_originator_host_uuid,
                     children_event_host_uuids);
             }
             else
             {
-                act_event.receive_unsuccessful_first_phase_commit_msg(
+                evt.receive_unsuccessful_first_phase_commit_msg(
                     event_uuid,msg_originator_host_uuid);
             }
         }

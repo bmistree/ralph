@@ -102,6 +102,7 @@ public class DurabilityContext implements IDurabilityContext
         endpoint_uuid_received_rpc_on.add(endpoint_uuid);
     }
 
+    @Override
     public synchronized Durability prepare_proto_buf()
     {
         UUID.Builder uuid_builder = UUID.newBuilder();
@@ -134,7 +135,7 @@ public class DurabilityContext implements IDurabilityContext
         return to_return.build();
     }
 
-
+    @Override
     public synchronized Durability complete_proto_buf(boolean succeeded)
     {
         if (! has_prepared)
