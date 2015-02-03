@@ -760,8 +760,8 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         _lock();
         boolean should_reraise = (atomic_reference_counts != 0);
-        if (should_reraise)
-            --atomic_reference_counts;
+        // if (should_reraise)
+        //     --atomic_reference_counts;
         _unlock();
 
         if (should_reraise)
@@ -770,6 +770,7 @@ public class AtomicActiveEvent extends ActiveEvent
             put_exception(be);
     }
 
+    
     public void second_phase_commit()
     {
         _lock();

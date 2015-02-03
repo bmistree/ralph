@@ -59,13 +59,13 @@ public class DurabilityConstructorCheck
                 return false;
 
             Endpoint replayed_atomic_setter_getter =
-                replayer.get_endpt(endpt.uuid());
-
+                replayer.get_endpoint_if_exists(endpt.uuid());
+            
             if (replayed_atomic_setter_getter == null)
                 return false;
             
             Endpoint replayed_rt_service =
-                replayer.get_endpt(rt_service.uuid());
+                replayer.get_endpoint_if_exists(rt_service.uuid());
 
             if (replayed_rt_service == null)
                 return false;

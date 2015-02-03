@@ -20,7 +20,36 @@ def emit(root_node,struct_types_ctx,package_name,program_name):
 
 package %s;
 
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import ralph_protobuffs.ObjectContentsProto.ObjectContents;
+import ralph_protobuffs.DeltaProto.Delta;
+
+import RalphVersions.IVersionSaver;
+import RalphVersions.IVersionReplayer;
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ObjectHistory;
+import RalphVersions.EnumSerializer;
+
+import RalphConnObj.ConnectionObj;
+import RalphConnObj.SingleSideConnection;
+import RalphExceptions.*;
+
+import RalphAtomicWrappers.BaseAtomicWrappers;
+import RalphAtomicWrappers.EnsureAtomicWrapper;
+import RalphDataWrappers.ValueTypeDataWrapperFactory;
+import RalphCallResults.RootCallResult;
+
+import RalphDurability.DurabilityContext;
+import RalphDurability.DurabilityReplayContext;
+import RalphDurability.IDurabilitySaver;
+
 import ralph.*;
+import ralph.Util;
+
 import ralph.Variables.AtomicNumberVariable;
 import ralph.Variables.AtomicTextVariable;
 import ralph.Variables.AtomicTrueFalseVariable;
@@ -37,6 +66,13 @@ import ralph.Variables.NonAtomicServiceReferenceVariable;
 import ralph.Variables.AtomicServiceReferenceVariable;
 import ralph.Variables.NonAtomicEnumVariable;
 import ralph.Variables.AtomicEnumVariable;
+import ralph.Variables.NonAtomicListVariable;
+import ralph.Variables.AtomicListVariable;
+
+import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
+
+import ralph.ExecutionContext.ExecutionContext;
+import ralph.ExecutionContext.LiveExecutionContext;
 
 import ralph.MessageSender.IMessageSender;
 import ralph.MessageSender.LiveMessageSender;
@@ -44,40 +80,11 @@ import ralph.MessageSender.LiveMessageSender;
 import ralph.BaseMapVariableFactory.MapVariableFactory;
 import ralph.BaseListVariableFactory.ListVariableFactory;
 
-import ralph.Variables.NonAtomicListVariable;
-import ralph.Variables.AtomicListVariable;
-
-import RalphVersions.IVersionSaver;
-import RalphVersions.IVersionReplayer;
-import RalphVersions.IReconstructionContext;
-import RalphVersions.ObjectHistory;
-import RalphVersions.EnumSerializer;
-
-import RalphConnObj.ConnectionObj;
-import RalphConnObj.SingleSideConnection;
-import RalphExceptions.*;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import ralph.Util;
-import java.util.concurrent.ArrayBlockingQueue;
-
-import RalphAtomicWrappers.BaseAtomicWrappers;
-import RalphAtomicWrappers.EnsureAtomicWrapper;
-import RalphDataWrappers.ValueTypeDataWrapperFactory;
-import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
-import RalphCallResults.RootCallResult;
-
-import RalphDurability.DurabilityContext;
-import RalphDurability.DurabilityReplayContext;
-import RalphDurability.IDurabilitySaver;
-
-
 import ralph.EventPriority.IsSuperFlag;
 import ralph.EndpointConstructorObj;
 
-import ralph_protobuffs.ObjectContentsProto.ObjectContents;
-import ralph_protobuffs.DeltaProto.Delta;
+
+
 
 public class %s
 {
@@ -454,7 +461,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
             single_arg_string = '''
 %(internal_container_type)s %(arg_name)s =
-    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(_active_event);\n
+    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(exec_ctx.current_active_event());\n
 ''' % { 'internal_container_type': internal_container_type,
         'arg_name': arg_name,
         'arg_vec_to_read_from': arg_vec_to_read_from,
@@ -463,7 +470,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
             single_arg_string = (
-                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(_active_event);\n''' %
+                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(exec_ctx.current_active_event());\n''' %
                 (arg_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, StructType):
@@ -473,7 +480,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(_active_event);\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.current_active_event());\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,struct_type_name,
                  arg_vec_to_read_from))
         elif isinstance(method_declaration_arg_node.type,EnumType):
@@ -485,7 +492,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             wrapped_enum_type_name = (
                 'RalphObject<%s,%s>' % (enum_type_name,enum_type_name))
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(_active_event);\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.current_active_event());\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,
                  wrapped_enum_type_name,arg_vec_to_read_from))
             
@@ -568,15 +575,15 @@ def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
     args_text = ','.join(arg_list)
     if args_text != '':
         args_text = ',' + args_text
-
-    actual_call = method_name + '(message_sender,_active_event' + args_text + ')'
+        
+    actual_call = method_name + '(exec_ctx' + args_text + ')'
     if method_declaration_node.returns_value():
         return_type = method_declaration_node.get_return_type()
         new_expression = (
             'result = %s;\n' %
             construct_new_expression(return_type,None,emit_ctx))
         assignment_statement = (
-            'result.set_val(_active_event,%s);' %
+            'result.set_val(exec_ctx.current_active_event(),%s);' %
             actual_call)
         actual_call = new_expression + assignment_statement
 
@@ -637,9 +644,9 @@ else
     #### End debug
         
     emitted_method = '''
+@Override
 protected RalphObject _handle_rpc_call(
-    String to_exec_method_name,ActiveEvent _active_event,
-    IMessageSender message_sender,
+    String to_exec_method_name, ExecutionContext exec_ctx,
     Object...args)
     throws ApplicationException, BackoutException, NetworkException
 {
@@ -772,8 +779,7 @@ def emit_external_method_body(
     to_return = ' {\n'
 
     # call the internal version of the function
-    method_body_text = (
-        'IMessageSender message_sender = new LiveMessageSender();\n')
+    method_body_text = ''
 
     if with_super_arg:
         # check if should create the root active event as an active
@@ -811,7 +817,7 @@ NonAtomicActiveEvent active_event =
 
     ralph_wrapped_arguments_text = method_args_to_ralph_wrapped_types(
         emit_ctx, method_signature_node,argument_name_text_list)
-        
+
     method_body_text += '''
 
 if (DurabilityInfo.instance.durability_saver != null)
@@ -819,7 +825,7 @@ if (DurabilityInfo.instance.durability_saver != null)
     // If durability is turned on, then package contents of call so
     // that will be able to replay them later.
 
-%(ralph_wrapped_arguments_text)s;
+%(ralph_wrapped_arguments_text)s
 
     List <? extends RalphObject> args =
         Arrays.asList(%(ralph_wrapped_args_list)s);
@@ -831,6 +837,10 @@ if (DurabilityInfo.instance.durability_saver != null)
         _uuid);
 }
 
+LiveExecutionContext exec_ctx =
+    new LiveExecutionContext(ralph_globals,active_event.durability_context);
+exec_ctx.push_active_event(active_event);
+
 ''' % {
         'func_name': method_signature_node.method_name,
         'ralph_wrapped_arguments_text': ralph_wrapped_arguments_text,
@@ -839,7 +849,7 @@ if (DurabilityInfo.instance.durability_saver != null)
     emit_ctx.pop_scope()
 
     inner_method_call_text = (
-        '%s (message_sender ,active_event' % method_signature_node.method_name)
+        '%s (exec_ctx ' % method_signature_node.method_name)
     for argument_name in argument_name_text_list:
         inner_method_call_text += ',' + argument_name
     inner_method_call_text += ');\n'
@@ -998,8 +1008,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     @returns {String} --- A java signature for method.  Eg.,
 
     private Double some_method (
-        IMessageSender message_sender, ActiveEvent _active_event,
-        SomeType SomeVar) 
+        ExecutionContext exec_ctx, SomeType SomeVar) 
         throws ApplicationException, BackoutException, NetworkException
     {
         try {
@@ -1046,7 +1055,7 @@ def emit_internal_method_signature(emit_ctx,method_signature_node):
     # other endpoints and services.
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
-    to_return += 'IMessageSender message_sender, ActiveEvent _active_event'
+    to_return += 'ExecutionContext exec_ctx'
     
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
@@ -1059,8 +1068,8 @@ def emit_internal_method_signature(emit_ctx,method_signature_node):
         argument_name_text_list.append(argument_name_text)
 
     to_return += (
-        ') throws ApplicationException, BackoutException, ' +
-        'NetworkException')
+        ')\n   throws ApplicationException, BackoutException, ' +
+        'NetworkException\n')
     return to_return, argument_name_text_list
 
 
@@ -1251,9 +1260,13 @@ new %(java_type_text)s  (
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (struct_name,initializer_text))
         else:
-            durability_context_text = '_active_event.durability_context'
+            durability_context_text = (
+                'exec_ctx.current_active_event().durability_context')
+            ### FIXME: pass correct replay through.
             durability_replay_context_text = (
-                '_active_event.durability_replay_context')
+                'null /** FIXME: not passing replay context ' +
+                'through for struct constructor*/')
+            
             if (emit_ctx.get_in_endpoint_constructor() or
                 emit_ctx.get_in_struct_constructor()):
                 durability_context_text = 'durability_context'
@@ -1285,8 +1298,12 @@ new %(java_type_text)s  (
             to_return = (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
-            durability_ctx_text = '_active_event.durability_context'
-            durability_replay_ctx_text = '_active_event.durability_replay_context'
+            durability_ctx_text = (
+                'exec_ctx.current_active_event().durability_context')
+            ### FIXME: pass correct replay through.
+            durability_replay_ctx_text = (
+                'null /** FIXME: not passing replay context ' +
+                'through for struct constructor*/')
 
             if (emit_ctx.get_in_endpoint_constructor() or
                 emit_ctx.get_in_struct_constructor()):
@@ -1796,14 +1813,15 @@ def emit_statement(emit_ctx,statement_node):
         # internal container.
         suffix_to_speculate_on = ''
         if statement_node.label == ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL:
-            suffix_to_speculate_on = '.get_val(_active_event)'
-
+            suffix_to_speculate_on = (
+                '.get_val(exec_ctx.current_active_event())')
+            
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for to_speculate_on in statement_node.speculate_call_args_list:
             emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
             to_return += (
-                '%s%s.speculate(_active_event);\n' %
+                '%s%s.speculate(exec_ctx.current_active_event());\n' %
                 (emitted_to_speculate_on,suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
         return to_return
@@ -1876,42 +1894,38 @@ def emit_statement(emit_ctx,statement_node):
     // atomically clause
     while(true)
     {
-        _active_event = _active_event.clone_atomic();
+        exec_ctx.push_active_event(
+            exec_ctx.current_active_event().clone_atomic());
 
         // what to actually execute inside of atomic block
         try
         {
 %s
+            FirstPhaseCommitResponseCode __ralph_internal_resp_code =
+                exec_ctx.current_active_event().local_root_begin_first_phase_commit();
+
+            if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
+                break;
+            else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
+            {
+                // FIXME: should properly mangle __op_result__
+                RootCallResult.ResultType __op_result__ =
+                    ((RootEventParent)exec_ctx.current_active_event().event_parent).event_complete_mvar.blocking_take();
+
+                if (__op_result__ == RootCallResult.ResultType.COMPLETE)
+                    break;
+            }
         }
         catch (BackoutException _be)
         {
-            _active_event.handle_backout_exception(_be);
+            exec_ctx.current_active_event().handle_backout_exception(_be);
         }
         finally
         {
+            exec_ctx.current_active_event().restore_from_atomic();
+            exec_ctx.pop_active_event();
         }
-
-        // FIXME: may want to mangle this further
-        FirstPhaseCommitResponseCode __ralph_internal_resp_code =
-            _active_event.local_root_begin_first_phase_commit();
-
-        if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
-            break;
-        else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
-        {
-            // FIXME: should properly mangle __op_result__
-            RootCallResult.ResultType __op_result__ =
-                ((RootEventParent)_active_event.event_parent).event_complete_mvar.blocking_take();
-
-            if (__op_result__ == RootCallResult.ResultType.COMPLETE)
-                break;
-        }
-
-        // if got here, means that this was the first atomic statement and it failed so
-        // we must retry: restore to previous nonatomicactiveevent and clone again
-        _active_event = _active_event.restore_from_atomic();
     }
-    _active_event = _active_event.restore_from_atomic();
 }
 ''' % atomic_logic
 
@@ -1927,15 +1941,17 @@ def emit_statement(emit_ctx,statement_node):
         is_partner_method_call = False
         if statement_node.rhs_node.label == ast_labels.PARTNER_METHOD_CALL:
             is_partner_method_call = True
-            get_val_text = '.get_val(_active_event)'
+            get_val_text = '.get_val(exec_ctx.current_active_event())'
 
         if not is_partner_method_call:
             return (
-                '%s.set_val(_active_event,%s);\n' % (lhs_text,rhs_text));
+                '%s.set_val(exec_ctx.current_active_event(),%s);\n' %
+                (lhs_text,rhs_text))
         
         internal_type = emit_internal_type(statement_node.lhs_node.type)
         return (
-            '%s.set_val(_active_event,(%s)%s.get_val(_active_event));\n' %
+            ('%s.set_val(exec_ctx.current_active_event(),' +
+             '(%s)%s.get_val(exec_ctx.current_active_event()));\n') %
             (lhs_text,internal_type,rhs_text));
 
     elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
@@ -1973,10 +1989,11 @@ def emit_statement(emit_ctx,statement_node):
                 # on it.  
                 aliased_endpoint_name = statement_node.type.alias_name
                 internal_var_name = (
-                    '((%s) %s.get_val(_active_event))' %
+                    '((%s) %s.get_val(exec_ctx.current_active_event()))' %
                     (aliased_endpoint_name, internal_var_name))
             else:
-                internal_var_name += '.get_val(_active_event)'
+                internal_var_name += (
+                    '.get_val(exec_ctx.current_active_event())')
 
         return internal_var_name
 
@@ -1995,15 +2012,15 @@ def emit_statement(emit_ctx,statement_node):
         # a map should not call .get_len on internal map and pass in a
         # _ctx.  It should just pass in _active_event.
         if statement_node.method_node.label != ast_labels.DOT:
-            method_text += '(message_sender,_active_event'
+            method_text += '(exec_ctx'
         else:
             
             if isinstance(statement_node.method_node.type,WildcardType):
                 # means that calling dot on endpoint node
-                method_text += '(message_sender,_active_event'
+                method_text += '(exec_ctx'
             else:
                 # means that calling dot on map/list/etc.
-                method_text += '(_active_event'
+                method_text += '(exec_ctx.current_active_event()'
 
                 
         for arg_node in statement_node.args_list:
@@ -2037,8 +2054,8 @@ def emit_statement(emit_ctx,statement_node):
             'new ArrayList<RalphObject>( %s)' % array_list_arg)
 
         partner_call_text = '''
-message_sender.hide_partner_call(
-    this, _active_event,"%s",true, //whether or not first method call
+exec_ctx.message_sender().hide_partner_call(
+    this, exec_ctx,"%s",true, //whether or not first method call
     %s,null)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
 
         return partner_call_text
@@ -2263,7 +2280,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         # then we should get the internal value of the struct so that
         # can access fields.
         if in_lhs_of_assign:
-            to_return += '.get_val(_active_event)'
+            to_return += '.get_val(exec_ctx.current_active_event())'
 
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
@@ -2274,7 +2291,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         rhs_node_identifier_name = right_of_dot_node.value
         rhs_node_text = '.' + rhs_node_identifier_name
         if not in_lhs_of_assign:
-            rhs_node_text += '.get_val(_active_event)'
+            rhs_node_text += '.get_val(exec_ctx.current_active_event())'
         to_return += rhs_node_text
 
     elif isinstance(left_of_dot_node.type,EndpointType):
@@ -2377,7 +2394,7 @@ def emit_for_statement(for_node,emit_ctx):
     # using for predicate because cannot perform cast of ArrayList<T>
     # to ArrayList<Y>.  Top of for loop casts __%s to %s.
     to_return += (
-        'for (Object __%s : %s.get_iterable(_active_event))'
+        'for (Object __%s : %s.get_iterable(exec_ctx.current_active_event()))'
         % (internal_var_name_text,
            in_statement_text))
 
