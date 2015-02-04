@@ -25,6 +25,7 @@ import ralph.NonAtomicActiveEvent;
 import ralph.MessageSender.IMessageSender;
 import ralph.MessageSender.DurabilityReplayMessageSender;
 import ralph.ExecutionContext.ExecutionContext;
+import ralph.ExecutionContext.ReplayNonAtomicExecutionContext;
 
 
 public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
@@ -103,26 +104,24 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                     entry_call);
             PartnerRequestSequenceBlock req_seq_block = entry_call.getRpcArgs();
 
-            IMessageSender msg_sender =
+            DurabilityReplayMessageSender msg_sender =
                 new DurabilityReplayMessageSender(durability_replay_context);
-
-            ExecutionContext exec_ctx =
+            
+            ReplayNonAtomicExecutionContext exec_ctx =
                 to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
-                    to_run_on, method_to_run, evt_uuid, msg_sender);
+                    to_run_on, method_to_run, msg_sender);
 
-            to_run_on.exec_ctx_map.create_and_push_root_atomic_evt(
-                exec_ctx, to_run_on, method_to_run);
-
+            ExecutionContext atom_exec_ctx = exec_ctx.clone_atomic_exec_ctx();
             // exec replay
             durability_replay_context.durable_replay_exec_rpc(
-                exec_ctx, to_run_on, req_seq_block);
+                atom_exec_ctx, to_run_on, req_seq_block);
 
             // try committing and wait for commit.
-            ActiveEvent atom_evt = exec_ctx.current_active_event();
+            ActiveEvent atom_evt = exec_ctx.curr_act_evt();
             atom_evt.local_root_begin_first_phase_commit();
             ((RootEventParent)atom_evt.event_parent).event_complete_mvar.blocking_take();
 
-            Util.logger_warn("Should also remove ");
+            Util.logger_warn("Should also remove the non-atom exec_ctx from map");
         }
     }
     

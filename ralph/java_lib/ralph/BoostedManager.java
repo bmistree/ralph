@@ -53,12 +53,16 @@ public class BoostedManager
     }
 
     public AtomicActiveEvent create_root_atomic_event(
-        ActiveEvent atomic_parent, Endpoint root_endpoint,
-        String event_entry_point_name, ExecutionContext exec_ctx)
+        NonAtomicActiveEvent atomic_parent)
     {
+        Endpoint root_endpt = atomic_parent.event_parent.local_endpoint;
+        String evt_entry_pt_name =
+            atomic_parent.event_parent.event_entry_point_name;
+        
         return (AtomicActiveEvent)create_root_event(
-            true,atomic_parent,false,root_endpoint,event_entry_point_name,
-            exec_ctx);
+            true,atomic_parent,false,
+            atomic_parent.event_parent.local_endpoint,
+            atomic_parent.event_parent.event_entry_point_name);
     }
 
     /**
@@ -67,11 +71,10 @@ public class BoostedManager
      */
     public NonAtomicActiveEvent create_root_non_atomic_event(
         boolean super_priority, Endpoint root_endpoint,
-        String event_entry_point_name, ExecutionContext exec_ctx)
+        String event_entry_point_name)
     {
         return (NonAtomicActiveEvent)create_root_event(
-            false,null,super_priority,root_endpoint,event_entry_point_name,
-            exec_ctx);
+            false,null,super_priority,root_endpoint,event_entry_point_name);
     }
 
     private void _lock()
@@ -97,8 +100,7 @@ public class BoostedManager
      */
     private ActiveEvent create_root_event(
         boolean atomic,ActiveEvent atomic_parent,boolean super_priority,
-        Endpoint requester_endpoint, String event_entry_point_name,
-        ExecutionContext exec_ctx)
+        Endpoint requester_endpoint, String event_entry_point_name)
     {
         // DEBUG
         if (super_priority && atomic)
@@ -106,23 +108,19 @@ public class BoostedManager
                 "Can only create non-atomic super root events.\n");
         // END DEBUG
 
+        String evt_uuid = ralph_globals.generate_uuid();
         RootEventParent rep = 
             new RootEventParent(
-                exec_ctx.uuid,null, ralph_globals,requester_endpoint,
+                evt_uuid, null, ralph_globals, requester_endpoint,
                 event_entry_point_name);
-        
 
         ActiveEvent root_event = null;
         if (atomic)
         {
             Util.logger_warn("Should maybe be cloning durability context");
-            
-            IDurabilityContext new_durability_context = exec_ctx;
             root_event =
                 new AtomicActiveEvent(
-                    rep,ralph_globals.thread_pool,
-                    exec_ctx_map,atomic_parent,ralph_globals,
-                    new_durability_context);
+                    rep, exec_ctx_map, atomic_parent, ralph_globals);
         }
         else
         {

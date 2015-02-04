@@ -45,10 +45,10 @@ public class NonAtomicActiveEvent extends ActiveEvent
         EventParent _event_parent, ExecutionContextMap _exec_ctx_map,
         RalphGlobals _ralph_globals)
     {
-        super(_event_parent,null,_ralph_globals);
+        super(_event_parent,_ralph_globals);
         exec_ctx_map = _exec_ctx_map;
     }
-    
+
     /**
        If we are logging for durability, when we first enter a call,
        we log the call, the endpoint it was made on, and the arguments
@@ -58,8 +58,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     public void durability_entry_call(
         PartnerRequestSequenceBlock prsb,String endpoint_uuid)
     {
-        if (durability_context != null)
-            durability_context.add_rpc_arg(prsb,endpoint_uuid);
+        exec_ctx.add_rpc_arg(prsb,endpoint_uuid);
     }
     
     /**
@@ -115,16 +114,10 @@ public class NonAtomicActiveEvent extends ActiveEvent
             atomic_child_copy.promote_boosted(new_priority);
     }
 
-    @Override
-    public void create_and_push_root_atomic_evt(
-        ExecutionContext exec_ctx) 
+    public void set_atomic_child(AtomicActiveEvent atom_evt)
     {
-        exec_ctx_map.create_and_push_root_atomic_evt(
-            exec_ctx,event_parent.local_endpoint,
-            event_parent.event_entry_point_name);
-        
         atomic_child_lock();
-        atomic_child = (AtomicActiveEvent)exec_ctx.current_active_event();
+        atomic_child = atom_evt;
         atomic_child_unlock();
     }
 

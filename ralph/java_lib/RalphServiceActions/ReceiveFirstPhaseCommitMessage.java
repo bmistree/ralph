@@ -42,7 +42,7 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
         
         if (exec_ctx != null)
         {
-            ActiveEvent evt = exec_ctx.current_active_event();
+            ActiveEvent evt = exec_ctx.curr_act_evt();
             
             if (successful)
             {

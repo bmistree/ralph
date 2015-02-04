@@ -57,7 +57,7 @@ public class ReceiveRequestBackoutAction extends ServiceAction
         if (requesting_endpoint == Util.PARTNER_ENDPOINT_SENTINEL)
             skip_partner = true;
 
-        ActiveEvent evt = exec_ctx.base_active_event();
+        ActiveEvent evt = exec_ctx.curr_act_evt();
         evt.forward_backout_request_and_backout_self(skip_partner);
     }
 }

@@ -103,7 +103,7 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     {
         try
         {
-            exec_ctx.current_active_event().replay_rpc(
+            exec_ctx.curr_act_evt().replay_rpc(
                 to_rpc_on, req_seq_block, exec_ctx);
         }
         catch(ApplicationException ex)

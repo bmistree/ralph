@@ -53,7 +53,7 @@ public class ReceiveRequestCommitAction extends ServiceAction
         }
         else
         {
-            ActiveEvent evt = exec_ctx.base_active_event();
+            ActiveEvent evt = exec_ctx.curr_act_evt();
             evt.non_local_root_begin_first_phase_commit(
                 root_timestamp, root_host_uuid,application_uuid,
                 event_name);

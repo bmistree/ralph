@@ -11,30 +11,29 @@ import RalphDurability.IDurabilityContext;
 import ralph.MessageSender.IMessageSender;
 import ralph.IUUIDGenerator;
 import ralph.ActiveEvent;
+import ralph.RalphGlobals;
 
 
-public class ExecutionContext implements IDurabilityContext
+public abstract class ExecutionContext implements IDurabilityContext
 {
-    private final IMessageSender message_sender;
-    private final IUUIDGenerator uuid_gen;
+    protected final IMessageSender message_sender;
+    protected final IUUIDGenerator uuid_gen;
     /**
        Could be null if logging is off.
      */
-    private final IDurabilityContext durability_context;
-    
-    private final Deque<ActiveEvent> active_event_stack =
-        new ArrayDeque<ActiveEvent>();
-
+    protected final IDurabilityContext durability_context;
     public final String uuid;
 
     public ExecutionContext(
-        String uuid, IMessageSender message_sender, IUUIDGenerator uuid_gen,
-        IDurabilityContext durability_context)
+        String uuid, IMessageSender message_sender,
+        IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
+        RalphGlobals ralph_globals)
     {
         this.uuid = uuid;
         this.message_sender = message_sender;
         this.uuid_gen = uuid_gen;
         this.durability_context = durability_context;
+        ralph_globals.all_ctx_map.put(uuid,this);
     }
 
     @Override
@@ -88,23 +87,8 @@ public class ExecutionContext implements IDurabilityContext
     {
         return uuid_gen;
     }
-
-    public ActiveEvent base_active_event()
-    {
-        return active_event_stack.peekLast();
-    }
     
-    public ActiveEvent current_active_event()
-    {
-        return active_event_stack.peekFirst();
-    }
-    
-    public void push_active_event(ActiveEvent evt)
-    {
-        active_event_stack.addFirst(evt);
-    }
-    public void pop_active_event()
-    {
-        active_event_stack.removeFirst();
-    }
+    public abstract ActiveEvent curr_act_evt();
+    public abstract ExecutionContext clone_atomic_exec_ctx();
+    public abstract ExecutionContext pop_exec_ctx();
 }

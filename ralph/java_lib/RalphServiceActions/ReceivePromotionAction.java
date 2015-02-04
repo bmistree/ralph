@@ -33,7 +33,7 @@ public class ReceivePromotionAction extends ServiceAction
             local_endpoint.exec_ctx_map.get_exec_ctx(event_uuid);
         if (exec_ctx != null)
         {
-            ActiveEvent evt = exec_ctx.base_active_event();
+            ActiveEvent evt = exec_ctx.curr_act_evt();
             evt.promote_boosted(new_priority);
         }
     }

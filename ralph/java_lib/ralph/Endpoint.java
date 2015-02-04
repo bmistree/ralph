@@ -926,12 +926,12 @@ public abstract class Endpoint implements IReference
         }
         catch (BackoutException _ex)
         {
-            exec_ctx.current_active_event().put_exception(_ex);
+            exec_ctx.curr_act_evt().put_exception(_ex);
             throw _ex;
         }
         catch (NetworkException _ex)
         {
-            exec_ctx.current_active_event().put_exception(_ex);
+            exec_ctx.curr_act_evt().put_exception(_ex);
             throw _ex;
         }
         catch (Exception _ex)
@@ -942,7 +942,7 @@ public abstract class Endpoint implements IReference
             System.out.println("\nHere was exception");
             _ex.printStackTrace();
             System.out.println("\n");
-            exec_ctx.current_active_event().put_exception(_ex);
+            exec_ctx.curr_act_evt().put_exception(_ex);
             // FIXME: fill in backtrace for application exception.
             throw new ApplicationException("Caught application exception");
         }

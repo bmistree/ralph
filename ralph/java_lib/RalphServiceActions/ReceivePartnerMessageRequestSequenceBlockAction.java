@@ -68,21 +68,12 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             }
             else
             {
-                Util.logger_warn(
-                    "FIXME: check if need to generate durability contexts " +
-                    "in ReceivePartnerMessageRequestSequenceBlockAction.");
-
-                IDurabilityContext durability_ctx = null;
-                if (DurabilityInfo.instance.durability_saver != null)
-                    durability_ctx = new DurabilityContext(uuid);
-                
                 exec_ctx =
-                    local_endpoint.exec_ctx_map.get_or_create_partner_exec_ctx(
-                        uuid,priority,atomic,event_entry_point_name,
-                        durability_ctx);
+                    local_endpoint.exec_ctx_map.get_or_create_partner_live_exec_ctx(
+                        uuid,priority,atomic,event_entry_point_name);
             }
 
-            exec_ctx.current_active_event().recv_partner_sequence_call_msg(
+            exec_ctx.curr_act_evt().recv_partner_sequence_call_msg(
                 local_endpoint,partner_request_block_msg);
         }
         catch (RalphExceptions.BackoutException _ex)

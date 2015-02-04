@@ -117,7 +117,7 @@ public class LiveMessageSender implements IMessageSender
             new MVar<MessageCallResultObject>();
 
         boolean partner_call_requested =
-            exec_ctx.current_active_event().issue_partner_sequence_block_call(
+            exec_ctx.curr_act_evt().issue_partner_sequence_block_call(
                 endpoint,this, func_name, result_mvar, first_msg,
                 args, result);
         

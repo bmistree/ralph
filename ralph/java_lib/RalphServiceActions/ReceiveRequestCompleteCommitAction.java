@@ -48,7 +48,7 @@ public class ReceiveRequestCompleteCommitAction extends ServiceAction {
         // if the request to complete the commit was from our partner,
         // then we can skip sending a request to our partner to
         // complete the commit.
-        ActiveEvent evt = exec_ctx.current_active_event();
+        ActiveEvent evt = exec_ctx.curr_act_evt();
         evt.complete_commit_and_forward_complete_msg(request_from_partner);
     }
 }

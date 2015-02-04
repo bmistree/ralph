@@ -22,13 +22,11 @@ import ralph.MessageSender.LiveMessageSender;
 import ralph.MessageSender.DurabilityReplayMessageSender;
 import ralph.MessageSender.IMessageSender;
 import ralph.ExecutionContext.ExecutionContext;
-import ralph.ExecutionContext.LiveExecutionContext;
 
 public abstract class ActiveEvent
 {
     public final String uuid;
     public final EventParent event_parent;
-    protected final ThreadPool thread_pool;
 
     /**
       When an active event sends a message to the partner endpoint, it
@@ -64,11 +62,11 @@ public abstract class ActiveEvent
     	MVar<MessageCallResultObject>> message_listening_mvars_map = 
     	new HashMap<String, MVar<MessageCallResultObject>>();
 
-    
     /**
-       Can be null, eg., if durability is turned off.
+       Starts as null, but eventually gets set when create wrapping
+       ExecutionContext.
      */
-    public final IDurabilityContext durability_context;
+    public ExecutionContext exec_ctx = null;
     
     /**
        FIXME.
@@ -91,43 +89,26 @@ public abstract class ActiveEvent
     public CommitMetadata commit_metadata = null;
     
     public ActiveEvent(
-        EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals)
+        EventParent _event_parent, RalphGlobals _ralph_globals)
     {
         this(
-            _event_parent.get_uuid(),_event_parent,_thread_pool,
-            _ralph_globals,create_new_durability_context(_event_parent.get_uuid()));
+            _event_parent.get_uuid(),_event_parent,_ralph_globals);
     }
 
     public ActiveEvent(
-        EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals, IDurabilityContext _durability_context)
-    {
-        this(
-            _event_parent.get_uuid(),_event_parent,_thread_pool,
-            _ralph_globals,_durability_context);
-    }
-    
-    public ActiveEvent(
-        String _uuid, EventParent _event_parent, ThreadPool _thread_pool,
-        RalphGlobals _ralph_globals, IDurabilityContext _durability_context)
+        String _uuid, EventParent _event_parent,  RalphGlobals _ralph_globals)
     {
         uuid = _uuid;
         event_parent = _event_parent;
-        thread_pool = _thread_pool;
         ralph_globals = _ralph_globals;
-        durability_context = _durability_context;
     }
 
-    private static DurabilityContext create_new_durability_context(
-        String event_uuid)
+    public final void init_execution_context(
+        ExecutionContext exec_ctx)
     {
-        if (DurabilityInfo.instance.durability_saver != null)
-            return new DurabilityContext(event_uuid);
-        return null;
+        this.exec_ctx = exec_ctx;
     }
     
-
     /**
        FIXME: See note above ralph_globals.
      */
@@ -165,16 +146,6 @@ public abstract class ActiveEvent
                 commit_metadata);
         }
     }
-    
-    /**
-       When we enter an atomic block from a non-atomic block, we
-       create a new atomic active event and return it.  The new atomic
-       active event should keep track of the parent that created it.
-       Calling restore_from_atomic should return the parent that
-       cloned the atomic event.
-     */
-    public abstract void create_and_push_root_atomic_evt(
-        ExecutionContext exec_ctx);
     
 
     public void only_remove_touched_obj(AtomicObject obj)
@@ -404,8 +375,7 @@ public abstract class ActiveEvent
         PartnerRequestSequenceBlock msg)
         throws ApplicationException, BackoutException, NetworkException
     {
-        if (durability_context != null)
-            durability_context.add_rpc_arg(msg,endpt_recvd_on.uuid());
+        exec_ctx.add_rpc_arg(msg,endpt_recvd_on.uuid());
         internal_recv_partner_sequence_call_msg(endpt_recvd_on,msg);
     }
 
@@ -497,22 +467,15 @@ public abstract class ActiveEvent
         Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
         String name_of_block_to_exec_next)
     {
-        // create new ExecutingEventContext that copies current stack
-        // and keeps track of which arguments need to be returned as
-        // references.
-        LiveExecutionContext live_exec_ctx =
-            new LiveExecutionContext(
-                event_parent.ralph_globals,durability_context);
-
-        LiveMessageSender message_sender =
-            live_exec_ctx.live_message_sender();
+        LiveMessageSender msg_sender =
+            (LiveMessageSender) exec_ctx.message_sender();
         
         // know how to reply to this message.
-        message_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
+        msg_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
         
         return rpc_request_to_exec_evt(
             endpt_recvd_msg_on, msg,name_of_block_to_exec_next,
-            live_exec_ctx);
+            exec_ctx);
     }
 
     /**

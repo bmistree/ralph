@@ -19,8 +19,6 @@ import RalphExceptions.ApplicationException;
 import RalphExceptions.BackoutException;
 import RalphExceptions.NetworkException;
 
-import RalphDurability.IDurabilityContext;
-
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import ralph.MessageSender.LiveMessageSender;
 import ralph.ExecutionContext.ExecutionContext;
@@ -328,12 +326,11 @@ public class AtomicActiveEvent extends ActiveEvent
        NonAtomicEvent, should already be cloned.)
      */
     public AtomicActiveEvent(
-        EventParent _event_parent, ThreadPool _thread_pool,
+        EventParent _event_parent,
         ExecutionContextMap _exec_ctx_map,
-        ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals,
-        IDurabilityContext _durability_context)
+        ActiveEvent _to_restore_from_atomic,RalphGlobals _ralph_globals)
     {
-        super(_event_parent,_thread_pool,_ralph_globals,_durability_context);
+        super(_event_parent,_ralph_globals);
         exec_ctx_map = _exec_ctx_map;
         to_restore_from_atomic = _to_restore_from_atomic;
     }
@@ -476,14 +473,6 @@ public class AtomicActiveEvent extends ActiveEvent
             copied_local_other_endpoints_contacted,new_priority);
     }
 
-
-    @Override
-    public void create_and_push_root_atomic_evt(ExecutionContext exec_ctx)
-    {
-        exec_ctx.push_active_event(this);
-    }
-    
-    
     /**
        @returns {bool} --- True if not in the midst of two phase
        commit.  False otherwise.
@@ -586,10 +575,10 @@ public class AtomicActiveEvent extends ActiveEvent
                 return FirstPhaseCommitResponseCode.FAILED;
             }
 
-            if (durability_context != null)
+            if (DurabilityInfo.instance.durability_saver != null)
             {
                 DurabilityInfo.instance.durability_saver.prepare_operation(
-                    durability_context);
+                    exec_ctx);
             }
             
             // update data after skip to prevent overwriting values on
@@ -697,7 +686,7 @@ public class AtomicActiveEvent extends ActiveEvent
                 // out.
                 ServiceAction service_action =
                     new RalphServiceActions.BackoutAtomicEventAction(this);
-                thread_pool.add_service_action(
+                ralph_globals.thread_pool.add_service_action(
                     service_action);
 
                 return FirstPhaseCommitResponseCode.FAILED;
@@ -813,10 +802,10 @@ public class AtomicActiveEvent extends ActiveEvent
         
         // FIXME: Check if this call really has to fsync.  I don't
         // think it does.
-        if (durability_context != null)
+        if (DurabilityInfo.instance.durability_saver != null)
         {
             DurabilityInfo.instance.durability_saver.complete_operation(
-                durability_context,true);
+                exec_ctx,true);
         }
     }
 
@@ -922,7 +911,7 @@ public class AtomicActiveEvent extends ActiveEvent
         //# separate thread instead.
         ServiceAction service_action =
             new RalphServiceActions.EventBackoutTouchedObjs(this);
-        thread_pool.add_service_action(
+        ralph_globals.thread_pool.add_service_action(
             service_action);
             
         //# 3
@@ -963,10 +952,10 @@ public class AtomicActiveEvent extends ActiveEvent
 
         // FIXME: Check if this call really has to fsync.  I don't
         // think it does.
-        if (durability_context != null)
+        if (DurabilityInfo.instance.durability_saver != null)
         {
             DurabilityInfo.instance.durability_saver.complete_operation(
-                durability_context,false);
+                exec_ctx,false);
         }
         
         state = State.STATE_BACKED_OUT;

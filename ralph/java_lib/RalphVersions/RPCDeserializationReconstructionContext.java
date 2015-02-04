@@ -69,7 +69,7 @@ public class RPCDeserializationReconstructionContext
             // plays deltas forward when reconstructing object.  
             ralph_object.deserialize(
                 this,obj_history,lamport_timestamp_before_or_during,
-                exec_ctx.current_active_event());
+                exec_ctx.curr_act_evt());
         }
         catch (BackoutException ex)
         {
