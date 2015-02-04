@@ -63,21 +63,21 @@ public class ExecutionContextMap
        change from being super to anything else.  Cannot change from
        anything else to becoming super.
      */
-    public NonAtomicActiveEvent create_super_root_non_atomic_exec_ctx(
+    public NonAtomicActiveEvent create_super_root_non_atomic_evt(
         Endpoint root_endpoint, String event_entry_point_name)
     {
-        return create_root_non_atomic_exec_ctx(
+        return create_root_non_atomic_evt(
             root_endpoint, event_entry_point_name, true);
     }
 
-    public NonAtomicActiveEvent create_root_non_atomic_exec_ctx(
+    public NonAtomicActiveEvent create_root_non_atomic_evt(
         Endpoint root_endpoint, String event_entry_point_name)
     {
-        return create_root_non_atomic_exec_ctx(
+        return create_root_non_atomic_evt(
             root_endpoint, event_entry_point_name, false);        
     }
 
-    private NonAtomicActiveEvent create_root_non_atomic_exec_ctx(
+    private NonAtomicActiveEvent create_root_non_atomic_evt(
         Endpoint root_endpoint, String event_entry_point_name,
         boolean is_super)
     {

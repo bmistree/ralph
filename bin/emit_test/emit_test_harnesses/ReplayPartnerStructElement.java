@@ -16,7 +16,7 @@ import RalphVersions.VersionUtil;
 import RalphVersions.ReconstructionContext;
 import RalphVersions.IReconstructionContext;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
 import ralph_emitted.ReplayPartnerStructElementJava.StructSender;
@@ -138,7 +138,7 @@ public class ReplayPartnerStructElement
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context,
+            IDurabilityContext durability_context,
             DurabilityReplayContext durability_replay_context)
         {
             receiver =
@@ -151,7 +151,7 @@ public class ReplayPartnerStructElement
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
             List<RalphObject> internal_val_list,
-            DurabilityContext durability_context)
+            IDurabilityContext durability_context)
         {
             return construct(globals,conn_obj,durability_context,null);
         }

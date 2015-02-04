@@ -117,7 +117,6 @@ public class BoostedManager
         ActiveEvent root_event = null;
         if (atomic)
         {
-            Util.logger_warn("Should maybe be cloning durability context");
             root_event =
                 new AtomicActiveEvent(
                     rep, exec_ctx_map, atomic_parent, ralph_globals);

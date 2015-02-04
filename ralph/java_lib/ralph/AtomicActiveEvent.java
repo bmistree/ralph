@@ -1346,7 +1346,3 @@ public class AtomicActiveEvent extends ActiveEvent
         forward_backout_request_and_backout_self();
     }
 }
-
-
-
-    

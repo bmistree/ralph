@@ -30,7 +30,7 @@ import RalphAtomicWrappers.BaseAtomicWrappers;
 import RalphDataWrappers.ListTypeDataWrapper;
 import RalphDataWrappers.ListTypeDataWrapperFactory;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import ralph.MessageSender.IMessageSender;
 import ralph.ExecutionContext.ExecutionContext;
 
@@ -128,7 +128,7 @@ public abstract class Endpoint implements IReference
     public Endpoint (
         RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
         EndpointConstructorObj endpoint_constructor_obj,
-        DurabilityContext durability_context)
+        IDurabilityContext durability_context)
     {
         this (
             ralph_globals, conn_obj, endpoint_constructor_obj,
@@ -138,7 +138,7 @@ public abstract class Endpoint implements IReference
     public Endpoint (
         RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
         EndpointConstructorObj endpoint_constructor_obj,
-        DurabilityContext durability_context,String endpt_uuid)
+        IDurabilityContext durability_context,String endpt_uuid)
     {
         _uuid = endpt_uuid;
         this.ralph_globals = ralph_globals;

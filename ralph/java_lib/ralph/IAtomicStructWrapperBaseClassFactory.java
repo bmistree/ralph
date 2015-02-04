@@ -1,12 +1,12 @@
 package ralph;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
 public interface IAtomicStructWrapperBaseClassFactory
 {
     public StructWrapperBaseClass construct(
-        RalphGlobals ralph_globals, DurabilityContext durability_context,
+        RalphGlobals ralph_globals, IDurabilityContext durability_context,
         DurabilityReplayContext durability_replay_context);
     
     /**

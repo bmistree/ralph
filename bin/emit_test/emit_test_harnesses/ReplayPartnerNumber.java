@@ -19,7 +19,7 @@ import RalphVersions.IReconstructionContext;
 import ralph_emitted.ReplayPartnerNumberChangeJava.NumberSender;
 import ralph_emitted.ReplayPartnerNumberChangeJava.NumberReceiver;
 
-import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
 
@@ -140,7 +140,7 @@ public class ReplayPartnerNumber
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context,
+            IDurabilityContext durability_context,
             DurabilityReplayContext durability_replay_context)
         {
             receiver =
@@ -153,7 +153,7 @@ public class ReplayPartnerNumber
         @Override
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list,DurabilityContext durability_context)
+            List<RalphObject> internal_val_list,IDurabilityContext durability_context)
         {
             return construct(globals,conn_obj,durability_context,null);
         }

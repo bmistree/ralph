@@ -12,6 +12,7 @@ import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
 import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
 public class AtomicTCPPartnerCall
@@ -96,7 +97,7 @@ public class AtomicTCPPartnerCall
         public Endpoint construct(
             RalphGlobals globals, 
             RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context,
+            IDurabilityContext durability_context,
             DurabilityReplayContext durability_replay_context)
         {
             Endpoint to_return = null;
@@ -115,7 +116,7 @@ public class AtomicTCPPartnerCall
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
             List<RalphObject> internal_val_list,
-            DurabilityContext durability_context)
+            IDurabilityContext durability_context)
         {
             return construct(globals,conn_obj,durability_context,null);
         }
@@ -136,7 +137,7 @@ public class AtomicTCPPartnerCall
         public Endpoint construct(
             RalphGlobals globals,
             RalphConnObj.ConnectionObj conn_obj,
-            DurabilityContext durability_context,
+            IDurabilityContext durability_context,
             DurabilityReplayContext durability_replay_context)
         {
             try {
@@ -152,7 +153,7 @@ public class AtomicTCPPartnerCall
         public Endpoint construct(
             RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
             List<RalphObject> internal_val_list,
-            DurabilityContext durability_context)
+            IDurabilityContext durability_context)
         {
             return construct(globals,conn_obj,durability_context,null);
         }

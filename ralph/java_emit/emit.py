@@ -44,6 +44,7 @@ import RalphDataWrappers.ValueTypeDataWrapperFactory;
 import RalphCallResults.RootCallResult;
 
 import RalphDurability.DurabilityContext;
+import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 import RalphDurability.IDurabilitySaver;
 
@@ -71,8 +72,8 @@ import ralph.Variables.AtomicListVariable;
 
 import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 
+import ralph.ExecutionContext.LiveNonAtomicExecutionContext;
 import ralph.ExecutionContext.ExecutionContext;
-import ralph.ExecutionContext.LiveExecutionContext;
 
 import ralph.MessageSender.IMessageSender;
 import ralph.MessageSender.LiveMessageSender;
@@ -285,7 +286,7 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
     constructor_text = '''
 public %(endpoint_name)s (
     RalphGlobals ralph_globals,ConnectionObj conn_obj,
-    DurabilityContext durability_context,
+    IDurabilityContext durability_context,
     DurabilityReplayContext durability_replay_context) 
 {
     super(
@@ -341,7 +342,7 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     public Endpoint construct(
         RalphGlobals ralph_globals, 
         RalphConnObj.ConnectionObj conn_obj,
-        DurabilityContext durability_log_context,
+        IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context)
     {
         return new %(endpoint_name)s(
@@ -353,7 +354,7 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     public Endpoint construct (
         RalphGlobals ralph_globals, ConnectionObj conn_obj,
         List<RalphObject> internal_values_list,
-        DurabilityContext durability_context)
+        IDurabilityContext durability_context)
     {
         %(endpoint_name)s to_return =
             new %(endpoint_name)s(
@@ -461,7 +462,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
             single_arg_string = '''
 %(internal_container_type)s %(arg_name)s =
-    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(exec_ctx.current_active_event());\n
+    (%(arg_vec_to_read_from)s == null) ? null : ((%(wrapped_container_type)s) %(arg_vec_to_read_from)s).get_val(exec_ctx.curr_act_evt());\n
 ''' % { 'internal_container_type': internal_container_type,
         'arg_name': arg_name,
         'arg_vec_to_read_from': arg_vec_to_read_from,
@@ -470,7 +471,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
         elif isinstance(method_declaration_arg_node.type, ServiceFactoryType):
             ## FIXME: Allow serializing service factories.
             single_arg_string = (
-                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(exec_ctx.current_active_event());\n''' %
+                '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(exec_ctx.curr_act_evt());\n''' %
                 (arg_name,arg_vec_to_read_from))
             
         elif isinstance(method_declaration_arg_node.type, StructType):
@@ -480,7 +481,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # as argument to method
             struct_type_name = method_declaration_arg_node.type.struct_name
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.current_active_event());\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.curr_act_evt());\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,struct_type_name,
                  arg_vec_to_read_from))
         elif isinstance(method_declaration_arg_node.type,EnumType):
@@ -492,7 +493,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             wrapped_enum_type_name = (
                 'RalphObject<%s,%s>' % (enum_type_name,enum_type_name))
             single_arg_string = (
-                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.current_active_event());\n' %
+                '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.curr_act_evt());\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,
                  wrapped_enum_type_name,arg_vec_to_read_from))
             
@@ -583,7 +584,7 @@ def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
             'result = %s;\n' %
             construct_new_expression(return_type,None,emit_ctx))
         assignment_statement = (
-            'result.set_val(exec_ctx.current_active_event(),%s);' %
+            'result.set_val(exec_ctx.curr_act_evt(),%s);' %
             actual_call)
         actual_call = new_expression + assignment_statement
 
@@ -787,10 +788,10 @@ def emit_external_method_body(
         method_body_text += '''
 NonAtomicActiveEvent active_event = null;
 if (%(super_argument_flag)s == IsSuperFlag.SUPER)
-    active_event = _act_event_map.create_super_root_non_atomic_event(
+    active_event = exec_ctx_map.create_super_root_non_atomic_evt(
         this,"%(event_entry_point_name)s");
 else
-    active_event = _act_event_map.create_root_non_atomic_event(
+    active_event = exec_ctx_map.create_root_non_atomic_evt(
         this,"%(event_entry_point_name)s");
 ''' % {
             'super_argument_flag': super_flag_argument(),
@@ -799,7 +800,7 @@ else
     else:
         method_body_text += '''
 NonAtomicActiveEvent active_event =
-    _act_event_map.create_root_non_atomic_event(
+    exec_ctx_map.create_root_non_atomic_evt(
         this,"%(event_entry_point_name)s");
 ''' % {
             'event_entry_point_name': method_signature_node.method_name
@@ -819,6 +820,9 @@ NonAtomicActiveEvent active_event =
         emit_ctx, method_signature_node,argument_name_text_list)
 
     method_body_text += '''
+LiveNonAtomicExecutionContext exec_ctx =
+    new LiveNonAtomicExecutionContext(
+        ralph_globals, active_event, exec_ctx_map);
 
 if (DurabilityInfo.instance.durability_saver != null)
 {
@@ -836,10 +840,6 @@ if (DurabilityInfo.instance.durability_saver != null)
             "-1" /* Empty reply with for entry call*/),
         _uuid);
 }
-
-LiveExecutionContext exec_ctx =
-    new LiveExecutionContext(ralph_globals,active_event.durability_context);
-exec_ctx.push_active_event(active_event);
 
 ''' % {
         'func_name': method_signature_node.method_name,
@@ -1261,7 +1261,7 @@ new %(java_type_text)s  (
                 'new  %s(false,%s,ralph_globals)' % (struct_name,initializer_text))
         else:
             durability_context_text = (
-                'exec_ctx.current_active_event().durability_context')
+                'exec_ctx.curr_act_evt().exec_ctx')
             ### FIXME: pass correct replay through.
             durability_replay_context_text = (
                 'null /** FIXME: not passing replay context ' +
@@ -1299,7 +1299,7 @@ new %(java_type_text)s  (
                 'new  %s(false,%s,ralph_globals)' % (java_type_text,initializer_text))
         else:
             durability_ctx_text = (
-                'exec_ctx.current_active_event().durability_context')
+                'exec_ctx.curr_act_evt().exec_ctx')
             ### FIXME: pass correct replay through.
             durability_replay_ctx_text = (
                 'null /** FIXME: not passing replay context ' +
@@ -1814,14 +1814,14 @@ def emit_statement(emit_ctx,statement_node):
         suffix_to_speculate_on = ''
         if statement_node.label == ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL:
             suffix_to_speculate_on = (
-                '.get_val(exec_ctx.current_active_event())')
+                '.get_val(exec_ctx.curr_act_evt())')
             
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for to_speculate_on in statement_node.speculate_call_args_list:
             emitted_to_speculate_on = emit_statement(emit_ctx,to_speculate_on)
             to_return += (
-                '%s%s.speculate(exec_ctx.current_active_event());\n' %
+                '%s%s.speculate(exec_ctx.curr_act_evt());\n' %
                 (emitted_to_speculate_on,suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
         return to_return
@@ -1894,15 +1894,14 @@ def emit_statement(emit_ctx,statement_node):
     // atomically clause
     while(true)
     {
-        exec_ctx.push_active_event(
-            exec_ctx.current_active_event().clone_atomic());
+        exec_ctx = exec_ctx.clone_atomic_exec_ctx();
 
         // what to actually execute inside of atomic block
         try
         {
 %s
             FirstPhaseCommitResponseCode __ralph_internal_resp_code =
-                exec_ctx.current_active_event().local_root_begin_first_phase_commit();
+                exec_ctx.curr_act_evt().local_root_begin_first_phase_commit();
 
             if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
                 break;
@@ -1910,7 +1909,7 @@ def emit_statement(emit_ctx,statement_node):
             {
                 // FIXME: should properly mangle __op_result__
                 RootCallResult.ResultType __op_result__ =
-                    ((RootEventParent)exec_ctx.current_active_event().event_parent).event_complete_mvar.blocking_take();
+                    ((RootEventParent)exec_ctx.curr_act_evt().event_parent).event_complete_mvar.blocking_take();
 
                 if (__op_result__ == RootCallResult.ResultType.COMPLETE)
                     break;
@@ -1918,12 +1917,11 @@ def emit_statement(emit_ctx,statement_node):
         }
         catch (BackoutException _be)
         {
-            exec_ctx.current_active_event().handle_backout_exception(_be);
+            exec_ctx.curr_act_evt().handle_backout_exception(_be);
         }
         finally
         {
-            exec_ctx.current_active_event().restore_from_atomic();
-            exec_ctx.pop_active_event();
+            exec_ctx = exec_ctx.pop_exec_ctx();
         }
     }
 }
@@ -1941,17 +1939,17 @@ def emit_statement(emit_ctx,statement_node):
         is_partner_method_call = False
         if statement_node.rhs_node.label == ast_labels.PARTNER_METHOD_CALL:
             is_partner_method_call = True
-            get_val_text = '.get_val(exec_ctx.current_active_event())'
+            get_val_text = '.get_val(exec_ctx.curr_act_evt())'
 
         if not is_partner_method_call:
             return (
-                '%s.set_val(exec_ctx.current_active_event(),%s);\n' %
+                '%s.set_val(exec_ctx.curr_act_evt(),%s);\n' %
                 (lhs_text,rhs_text))
         
         internal_type = emit_internal_type(statement_node.lhs_node.type)
         return (
-            ('%s.set_val(exec_ctx.current_active_event(),' +
-             '(%s)%s.get_val(exec_ctx.current_active_event()));\n') %
+            ('%s.set_val(exec_ctx.curr_act_evt(),' +
+             '(%s)%s.get_val(exec_ctx.curr_act_evt()));\n') %
             (lhs_text,internal_type,rhs_text));
 
     elif statement_node.label == ast_labels.IDENTIFIER_EXPRESSION:
@@ -1989,11 +1987,11 @@ def emit_statement(emit_ctx,statement_node):
                 # on it.  
                 aliased_endpoint_name = statement_node.type.alias_name
                 internal_var_name = (
-                    '((%s) %s.get_val(exec_ctx.current_active_event()))' %
+                    '((%s) %s.get_val(exec_ctx.curr_act_evt()))' %
                     (aliased_endpoint_name, internal_var_name))
             else:
                 internal_var_name += (
-                    '.get_val(exec_ctx.current_active_event())')
+                    '.get_val(exec_ctx.curr_act_evt())')
 
         return internal_var_name
 
@@ -2020,7 +2018,7 @@ def emit_statement(emit_ctx,statement_node):
                 method_text += '(exec_ctx'
             else:
                 # means that calling dot on map/list/etc.
-                method_text += '(exec_ctx.current_active_event()'
+                method_text += '(exec_ctx.curr_act_evt()'
 
                 
         for arg_node in statement_node.args_list:
@@ -2280,7 +2278,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         # then we should get the internal value of the struct so that
         # can access fields.
         if in_lhs_of_assign:
-            to_return += '.get_val(exec_ctx.current_active_event())'
+            to_return += '.get_val(exec_ctx.curr_act_evt())'
 
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
@@ -2291,7 +2289,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         rhs_node_identifier_name = right_of_dot_node.value
         rhs_node_text = '.' + rhs_node_identifier_name
         if not in_lhs_of_assign:
-            rhs_node_text += '.get_val(exec_ctx.current_active_event())'
+            rhs_node_text += '.get_val(exec_ctx.curr_act_evt())'
         to_return += rhs_node_text
 
     elif isinstance(left_of_dot_node.type,EndpointType):
@@ -2394,7 +2392,7 @@ def emit_for_statement(for_node,emit_ctx):
     # using for predicate because cannot perform cast of ArrayList<T>
     # to ArrayList<Y>.  Top of for loop casts __%s to %s.
     to_return += (
-        'for (Object __%s : %s.get_iterable(exec_ctx.current_active_event()))'
+        'for (Object __%s : %s.get_iterable(exec_ctx.curr_act_evt()))'
         % (internal_var_name_text,
            in_statement_text))
 
@@ -2687,7 +2685,7 @@ private static class %(struct_wrapper_class_factory_class_name)s
     }
     @Override
     public StructWrapperBaseClass construct(
-        RalphGlobals ralph_globals, DurabilityContext durability_context,
+        RalphGlobals ralph_globals, IDurabilityContext durability_context,
         DurabilityReplayContext durability_replay_context)
     {
         return new %(struct_name)s (
@@ -2852,7 +2850,7 @@ public static class %s extends StructWrapperBaseClass<%s>
     external_struct_definition_constructor = '''
 public %(struct_name)s (
     boolean log_operations, RalphGlobals ralph_globals,
-    DurabilityContext durability_context,
+    IDurabilityContext durability_context,
     DurabilityReplayContext durability_replay_context)
 {
     super(
@@ -2972,7 +2970,7 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
     emit_ctx.set_in_struct_constructor(True)
     internal_struct_body_text += (
         ('public %s (RalphGlobals ralph_globals,' +
-         'DurabilityContext durability_context,' +
+         'IDurabilityContext durability_context,' +
          'DurabilityReplayContext durability_replay_context)\n') %
         internal_struct_name)
     internal_struct_body_text += '''{

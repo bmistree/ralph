@@ -4,6 +4,7 @@ import java.util.List;
 
 import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
+import RalphConnObj.ConnectionObj;
 
 public interface EndpointConstructorObj 
 {
@@ -13,7 +14,7 @@ public interface EndpointConstructorObj
      */
     public Endpoint construct(
         RalphGlobals globals, 
-        RalphConnObj.ConnectionObj conn_obj,
+        ConnectionObj conn_obj,
         IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context);
     
@@ -25,7 +26,7 @@ public interface EndpointConstructorObj
        declared inside of service/endpoint.
      */
     public Endpoint construct(
-        RalphGlobals globals,RalphConnObj.ConnectionObj conn_obj,
+        RalphGlobals globals,ConnectionObj conn_obj,
         List<RalphObject> internal_values_list,
         IDurabilityContext durability_context);
 
