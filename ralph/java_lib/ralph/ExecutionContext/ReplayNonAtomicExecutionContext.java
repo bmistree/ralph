@@ -1,5 +1,7 @@
 package ralph.ExecutionContext;
 
+import ralph_protobuffs.DurabilityProto.Durability;
+
 import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityContext;
 
@@ -20,5 +22,17 @@ public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
         super(
             msg_sender, ralph_globals, null, act_evt, exec_ctx_map,
             ralph_globals);
+    }
+
+    @Override
+    public Durability prepare_proto_buf()
+    {
+        return null;
+    }
+
+    @Override
+    public Durability complete_proto_buf(boolean succeeded)
+    {
+        return null;
     }
 }

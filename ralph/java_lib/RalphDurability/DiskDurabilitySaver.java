@@ -54,7 +54,9 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     public void prepare_operation(IDurabilityContext dc)
     {
         Durability durability_msg = dc.prepare_proto_buf();
-        write_durability_msg(durability_msg,true);
+        // replayed durabilities return nulls.
+        if (durability_msg != null)
+            write_durability_msg(durability_msg,true);
     }
 
     @Override
