@@ -91,4 +91,12 @@ public abstract class ExecutionContext implements IDurabilityContext
     public abstract ActiveEvent curr_act_evt();
     public abstract ExecutionContext clone_atomic_exec_ctx();
     public abstract ExecutionContext pop_exec_ctx();
+    /**
+       Returns true if should try to commit the active event
+       associated with the executing context.  false, if shouldn't.
+
+       Handles nested atomically blocks: only try to commit at base of
+       atomically blocks.
+     */
+    public abstract boolean should_try_commit_act_evt();
 }

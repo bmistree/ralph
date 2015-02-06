@@ -184,9 +184,7 @@ public abstract class ActiveEvent
        SUCCEEDED, should read event parent's completion mvar to see
        if commit was successful or unsuccessful.  If returns FAILED,
        means that the commit was already backed out and that it
-       failed.  If returns SKIP, likely trying to commit a nested
-       transaction, should not read from event parent mvar because
-       transaction is incomplete and will read it later.
+       failed.
 
        Importantly, nested transactions will receive calls to
        local_root_begin_first_phase_commit whether or not the real
@@ -220,7 +218,7 @@ public abstract class ActiveEvent
     
     public static enum FirstPhaseCommitResponseCode
     {
-        FAILED, SUCCEEDED, SKIP
+        FAILED, SUCCEEDED
     }
     
     

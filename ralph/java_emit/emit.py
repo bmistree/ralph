@@ -1900,12 +1900,19 @@ def emit_statement(emit_ctx,statement_node):
         try
         {
 %s
+
+            if (! exec_ctx.should_try_commit_act_evt())
+            {
+                // don't commit now because inside of a nested
+                // atomically block.  don't want to commit multiple
+                // times on the same event.
+                break;
+            }
+
             FirstPhaseCommitResponseCode __ralph_internal_resp_code =
                 exec_ctx.curr_act_evt().local_root_begin_first_phase_commit();
 
-            if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SKIP)
-                break;
-            else if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
+            if (__ralph_internal_resp_code == FirstPhaseCommitResponseCode.SUCCEEDED)
             {
                 // FIXME: should properly mangle __op_result__
                 RootCallResult.ResultType __op_result__ =
@@ -1927,6 +1934,7 @@ def emit_statement(emit_ctx,statement_node):
 }
 ''' % atomic_logic
 
+    
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
         emit_ctx.set_lhs_of_assign(True)

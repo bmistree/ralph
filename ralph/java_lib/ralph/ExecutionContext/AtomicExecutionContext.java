@@ -51,4 +51,14 @@ public class AtomicExecutionContext extends ExecutionContext
         --reference_counter;
         return this;
     }
+
+    @Override
+    public boolean should_try_commit_act_evt()
+    {
+        // handles nested blocks: only commit on base of atomically
+        // blocks.
+        if (reference_counter == 1)
+            return true;
+        return false;
+    }
 }

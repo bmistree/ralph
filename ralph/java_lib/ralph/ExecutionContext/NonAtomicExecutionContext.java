@@ -67,4 +67,11 @@ public class NonAtomicExecutionContext extends ExecutionContext
         Util.logger_assert("Should never be popping a non-atomic exec ctx.");
         return null;
     }
+
+    @Override
+    public boolean should_try_commit_act_evt()
+    {
+        // can always commit non-atomics.
+        return true;
+    }
 }
