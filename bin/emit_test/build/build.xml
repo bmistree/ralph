@@ -1476,13 +1476,17 @@
     </antcall>
   </target>
 
-  <target name="harness_RandomDelaysAlwaysWorksBackedSpeculation">
+  <target
+      name="harness_RandomDelaysAlwaysWorksBackedSpeculation"
+      depends="harness_AlwaysWorksBackedSpeculation">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="RandomDelaysAlwaysWorksBackedSpeculationTest.java"/>
     </antcall>
   </target>
-  
-  <target name="harness_RandomFailuresBackedSpeculation">
+
+  <target
+      name="harness_RandomFailuresBackedSpeculation"
+      depends="harness_AlwaysWorksBackedSpeculation">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="RandomFailuresBackedSpeculationTest.java"/>
     </antcall>
