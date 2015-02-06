@@ -277,6 +277,13 @@
     </antcall>
   </target>
 
+  <target name="nested_atomic_setter_getter" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="nested_atomic_setter_getter.rph"/>
+      <param name="class_name" value="NestedAtomicSetterGetterJava"/>
+    </antcall>
+  </target>
+  
   <target name="basic_partner" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="basic_partner.rph"/>
@@ -702,6 +709,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_NestedAtomicSetterGetter"
+      depends="iface_basic_ralph,nested_atomic_setter_getter">
+  </target>
+  
   <target
       name="ralph_DurabilitySetterGetter"
       depends="iface_basic_ralph,atomic_setter_getter">
@@ -1186,7 +1198,7 @@
       <param name="arg_harness_file_list" value="VersionedIFace.java"/>
     </antcall>
   </target>
-
+  
   <target name="harness_RecursivePartnerAddition">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="RecursivePartnerAddition.java"/>

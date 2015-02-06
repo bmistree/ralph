@@ -1,0 +1,63 @@
+alias Interface ISetterGetter as 'IFaceBasicRalphJava.ISetterGetter';
+alias Service AtomicSetterGetter as 'AtomicSetterGetterJava.AtomicSetterGetter';
+
+Service NestedAtomicSetterGetter implements Interface ISetterGetter
+{
+    TVar Service AtomicSetterGetter atom_setter_getter;
+    
+
+    get_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = atom_setter_getter.get_number();
+        }
+        return to_return;
+    }
+
+    set_number(Number new_number)
+    {
+        atomically
+        {
+            atom_setter_getter.set_number(new_number);
+        }
+    }
+    
+    get_text() returns Text
+    {
+        Text to_return;
+        atomically
+        {
+            to_return = atom_setter_getter.get_text();
+        }
+        return to_return;
+    }
+
+    set_text(Text new_text)
+    {
+        atomically
+        {
+            atom_setter_getter.set_text(new_text);
+        }
+    }
+
+
+    get_tf() returns TrueFalse
+    {
+        TrueFalse to_return;
+        atomically
+        {
+            to_return = atom_setter_getter.get_tf();
+        }
+        return to_return;
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        atomically
+        {
+            atom_setter_getter.set_tf();
+        }
+    }
+}
