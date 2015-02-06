@@ -57,7 +57,7 @@ Service NestedAtomicSetterGetter implements Interface ISetterGetter
     {
         atomically
         {
-            atom_setter_getter.set_tf();
+            atom_setter_getter.set_tf(new_tf);
         }
     }
 }

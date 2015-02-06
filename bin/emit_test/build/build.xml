@@ -684,7 +684,8 @@
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
-        jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition">
+        jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
+        jar_NestedAtomicSetterGetter">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -711,9 +712,10 @@
 
   <target
       name="ralph_NestedAtomicSetterGetter"
-      depends="iface_basic_ralph,nested_atomic_setter_getter">
+      depends="iface_basic_ralph,basic_ralph,nested_atomic_setter_getter,
+               atomic_setter_getter">
   </target>
-  
+
   <target
       name="ralph_DurabilitySetterGetter"
       depends="iface_basic_ralph,atomic_setter_getter">
@@ -1177,6 +1179,14 @@
   <target name="harness_BasicSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicSetterGetter.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_NestedAtomicSetterGetter">
+    <antcall target="compile_harness">
+      <param
+          name="arg_harness_file_list"
+          value="BasicSetterGetter.java,NestedAtomicSetterGetterTest.java"/>
     </antcall>
   </target>
 
@@ -1653,6 +1663,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicSetterGetter"/>
       <param name="dest_jar" value="${basic_setter_getter_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="nested_atomic_setter_getter_jar"
+      value="nested_atomic_setter_getter.jar"/>
+  <target
+      name="jar_NestedAtomicSetterGetter"
+      depends="ralph_NestedAtomicSetterGetter,ralph_to_byte_code,harness_NestedAtomicSetterGetter">
+    <antcall target="make_jar">
+      <param name="main_class" value="NestedAtomicSetterGetterTest"/>
+      <param name="dest_jar" value="${nested_atomic_setter_getter_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>

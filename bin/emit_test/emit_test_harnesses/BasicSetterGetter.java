@@ -2,14 +2,13 @@ package emit_test_harnesses;
 
 import ralph_emitted.BasicRalphJava.SetterGetter;
 import ralph_emitted.IFaceBasicRalphJava.ISetterGetter;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class BasicSetterGetter
 {
     public static void main(String[] args)
     {
-        if (BasicSetterGetter.run_test())
+        if (run_test())
             System.out.println("\nSUCCESS in BasicSetterGetter\n");
         else
             System.out.println("\nFAILURE in BasicSetterGetter\n");
