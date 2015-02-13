@@ -57,7 +57,7 @@ public class AtomicExecutionContext extends ExecutionContext
     {
         // handles nested blocks: only commit on base of atomically
         // blocks.
-        if (reference_counter == 1)
+        if (reference_counter == 0)
             return true;
         return false;
     }
