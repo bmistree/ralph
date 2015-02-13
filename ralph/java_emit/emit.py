@@ -1925,6 +1925,8 @@ def emit_statement(emit_ctx,statement_node):
         catch (BackoutException _be)
         {
             exec_ctx.curr_act_evt().handle_backout_exception(_be);
+            if (! exec_ctx.should_try_commit_act_evt())
+                throw _be;
         }
         finally
         {
