@@ -110,17 +110,8 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
             ReplayNonAtomicExecutionContext exec_ctx =
                 to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
                     to_run_on, method_to_run, msg_sender);
-
-            ExecutionContext atom_exec_ctx = exec_ctx.clone_atomic_exec_ctx();
-            // exec replay
             durability_replay_context.durable_replay_exec_rpc(
-                atom_exec_ctx, to_run_on, req_seq_block);
-
-            // try committing and wait for commit.
-            ActiveEvent atom_evt = exec_ctx.curr_act_evt();
-            atom_evt.local_root_begin_first_phase_commit();
-            ((RootEventParent)atom_evt.event_parent).event_complete_mvar.blocking_take();
-
+                exec_ctx, to_run_on, req_seq_block);
             Util.logger_warn("Should also remove the non-atom exec_ctx from map");
         }
     }
