@@ -112,11 +112,9 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                     to_run_on, method_to_run, msg_sender);
             durability_replay_context.durable_replay_exec_rpc(
                 exec_ctx, to_run_on, req_seq_block);
-            Util.logger_warn("Should also remove the non-atom exec_ctx from map");
         }
     }
-    
-    
+
     @Override
     public synchronized boolean step(RalphGlobals ralph_globals)
     {

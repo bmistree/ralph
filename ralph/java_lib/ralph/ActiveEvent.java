@@ -394,8 +394,10 @@ public abstract class ActiveEvent
         ExecutingEvent exec_event = rpc_request_to_exec_evt(
             endpt_recvd_on, msg, name_of_block_to_exec_next, exec_ctx);
         exec_event.run();
-    }
 
+        local_root_begin_first_phase_commit();
+        ((RootEventParent)event_parent).event_complete_mvar.blocking_take();
+    }
     
     protected abstract void internal_recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg)
@@ -403,7 +405,6 @@ public abstract class ActiveEvent
     
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,  String msg_originator_host_uuid);
-
 
     protected ExecutingEvent rpc_request_to_exec_evt(
         Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
