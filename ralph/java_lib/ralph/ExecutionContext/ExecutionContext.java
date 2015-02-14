@@ -12,6 +12,7 @@ import ralph.MessageSender.IMessageSender;
 import ralph.IUUIDGenerator;
 import ralph.ActiveEvent;
 import ralph.RalphGlobals;
+import ralph.Endpoint;
 
 
 public abstract class ExecutionContext implements IDurabilityContext
@@ -37,6 +38,13 @@ public abstract class ExecutionContext implements IDurabilityContext
         this.ralph_globals = ralph_globals;
         this.ralph_globals.all_ctx_map.put(uuid,this);
     }
+
+    public Endpoint get_endpt_if_exists(String endpt_uuid)
+    {
+        return ralph_globals.all_endpoints.get_endpoint_if_exists(
+            endpt_uuid);
+    }
+    
 
     @Override
     public IDurabilityContext clone(String new_event_uuid)
