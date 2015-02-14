@@ -1,0 +1,71 @@
+alias Interface ISetterGetter as 'IFaceBasicRalphJava.ISetterGetter';
+
+Service SetterGetterWrapper implements Interface ISetterGetter
+{
+    TVar Interface ISetterGetter internal = null;
+
+    set_internal(Interface ISetterGetter new_internal)
+    {
+        atomically
+        {
+            internal = new_internal;
+        }
+    }
+
+    /**** ISetterGetter overrides */
+    
+    get_number() returns Number
+    {
+        Number to_return;
+        atomically
+        {
+            to_return = internal.get_number();
+        }
+        return to_return;
+    }
+
+    set_number(Number new_number)
+    {
+        atomically
+        {
+            internal.set_number(new_number);
+        }
+    }
+    
+    get_text() returns Text
+    {
+        Text to_return;
+        atomically
+        {
+            to_return = internal.get_text();
+        }
+        return to_return;
+    }
+
+    set_text(Text new_text)
+    {
+        atomically
+        {
+            internal.set_text(new_text);
+        }
+    }
+
+
+    get_tf() returns TrueFalse
+    {
+        TrueFalse to_return;
+        atomically
+        {
+            to_return = internal.get_tf();
+        }
+        return to_return;
+    }
+
+    set_tf(TrueFalse new_tf)
+    {
+        atomically
+        {
+            internal.set_tf(new_tf);
+        }
+    }
+}

@@ -79,6 +79,14 @@
     </antcall>
   </target>
 
+  <target name="durability_many_services" depends="init"
+          description="Durability replay over many services">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="durability_many_services.rph"/>
+      <param name="class_name" value="DurabilityManyServicesJava"/>
+    </antcall>
+  </target>
+  
   <target name="replay_enum" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -806,6 +814,11 @@
   <target
       name="ralph_VersionedEnum"
       depends="replay_enum">
+  </target>
+
+  <target
+      name="ralph_DurabilityManyServices"
+      depends="durability_many_services,iface_basic_ralph,atomic_setter_getter">
   </target>
   
   <target
