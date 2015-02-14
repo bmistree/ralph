@@ -1,0 +1,24 @@
+
+Endpoint NumHolder
+{
+    TVar Number internal_num = 0;
+
+    make_request(Number num_requests)
+    {
+        atomically
+        {
+            for (Number i in range(0,num_requests))
+                internal_num = @partner.increment_call();
+        }
+    }
+    get_internal_num () returns Number
+    {
+        return internal_num;
+    }
+
+    partner_increment_call() returns Number
+    {
+        internal_num += 1;
+        return internal_num;
+    }
+}
