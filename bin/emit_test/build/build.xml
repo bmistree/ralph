@@ -755,8 +755,9 @@
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
-        jar_NestedAtomicSetterGetter">
+        jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer">
   </target>
+
 
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
@@ -817,7 +818,7 @@
   </target>
 
   <target
-      name="ralph_DurabilityManyServices"
+      name="ralph_DurabilityManyServicesReplayer"
       depends="durability_many_services,iface_basic_ralph,atomic_setter_getter">
   </target>
   
@@ -1277,6 +1278,13 @@
     </antcall>
   </target>
 
+  <target name="harness_DurabilityManyServicesReplayer">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="DurabilityManyServicesReplayer.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_VersionedIFace"
           depends="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
@@ -1833,6 +1841,20 @@
     </antcall>
   </target>
 
+  <property
+      name="durability_many_services_replayer_jar"
+      value="durability_many_services_replayer.jar"/>
+  <target
+      name="jar_DurabilityManyServicesReplayer"
+      depends="ralph_DurabilityManyServicesReplayer,ralph_to_byte_code,
+               harness_DurabilityManyServicesReplayer">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilityManyServicesReplayer"/>
+      <param name="dest_jar" value="${durability_many_services_replayer_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="versioned_iface_jar"
       value="versioned_iface.jar"/>
