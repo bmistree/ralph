@@ -8,7 +8,7 @@ Endpoint NumHolder
         atomically
         {
             for (Number i in range(0,num_requests))
-                internal_num = @partner.increment_call();
+                internal_num = @partner.partner_increment_call();
         }
     }
     get_internal_num () returns Number
