@@ -23,7 +23,8 @@ public abstract class ExecutionContext implements IDurabilityContext
      */
     protected final IDurabilityContext durability_context;
     public final String uuid;
-
+    protected final RalphGlobals ralph_globals;
+    
     public ExecutionContext(
         String uuid, IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
@@ -33,7 +34,8 @@ public abstract class ExecutionContext implements IDurabilityContext
         this.message_sender = message_sender;
         this.uuid_gen = uuid_gen;
         this.durability_context = durability_context;
-        ralph_globals.all_ctx_map.put(uuid,this);
+        this.ralph_globals = ralph_globals;
+        this.ralph_globals.all_ctx_map.put(uuid,this);
     }
 
     @Override

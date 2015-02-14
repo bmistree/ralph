@@ -18,7 +18,7 @@ public class NonAtomicExecutionContext extends ExecutionContext
 {
     private final NonAtomicActiveEvent active_event;
     private final ExecutionContextMap exec_ctx_map;
-    private final RalphGlobals ralph_globals;
+
     
     public NonAtomicExecutionContext(
         IMessageSender message_sender,
@@ -31,7 +31,6 @@ public class NonAtomicExecutionContext extends ExecutionContext
             ralph_globals);
         this.active_event = active_event;
         this.exec_ctx_map = exec_ctx_map;
-        this.ralph_globals = ralph_globals;
         active_event.init_execution_context(this);
     }
     
