@@ -22,7 +22,7 @@ def run_all():
             os.path.join(JAR_DIRECTORY,test_to_run))
 
 def run_single_test(fq_test_filename):
-    cmd = ['java', '-jar', fq_test_filename]
+    cmd = ['java', '-ea', '-jar', fq_test_filename]
     subprocess.call(cmd)
     
 
