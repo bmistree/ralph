@@ -47,7 +47,6 @@
   <property name="emitted_package" value="ralph_emitted"/>
   <property name="harness_package" value="emit_test_harnesses"/>
 
-
   
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
@@ -80,42 +79,48 @@
     </antcall>
   </target>
 
-  <target name="replay_enum" depends="init" description="translate ralph files">
+  <target name="replay_enum" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="replay_enum.rph"/>
       <param name="class_name" value="ReplayEnumJava"/>
     </antcall>
   </target>
 
-  <target name="direct_struct_wrapped_endpoint" depends="init" description="translate ralph files">
+  <target name="direct_struct_wrapped_endpoint" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="direct_struct_wrapped_endpoint.rph"/>
       <param name="class_name" value="DirectStructWrappedEndpointJava"/>
     </antcall>
   </target>
   
-  <target name="atomic_number_incrementer" depends="init" description="translate ralph files">
+  <target name="atomic_number_incrementer" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_number_incrementer.rph"/>
       <param name="class_name" value="AtomicNumberIncrementerJava"/>
     </antcall>
   </target>
   
-  <target name="struct_enum_ralph" depends="init" description="translate ralph files">
+  <target name="struct_enum_ralph" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="enum_struct.rph"/>
       <param name="class_name" value="EnumStructJava"/>
     </antcall>
   </target>
 
-  <target name="recursive_partner_addition_ralph" depends="init" description="translate ralph files">
+  <target name="recursive_partner_addition_ralph" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="recursive_partner_addition.rph"/>
       <param name="class_name" value="RecursivePartnerAdditionJava"/>
     </antcall>
   </target>
 
-  <target name="alias_enum_ralph" depends="init" description="translate ralph files">
+  <target name="alias_enum_ralph" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="alias_enum.rph"/>
       <param name="class_name" value="AliasEnumJava"/>
@@ -130,119 +135,136 @@
     </antcall>
   </target>
   
-  <target name="iface_basic_ralph" depends="init" description="translate ralph files">
+  <target name="iface_basic_ralph" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="iface_basic_ralph.rph"/>
       <param name="class_name" value="IFaceBasicRalphJava"/>
     </antcall>
   </target>
 
-  <target name="versioned_iface" depends="init" description="translate ralph files">
+  <target name="versioned_iface" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="versioned_iface.rph"/>
       <param name="class_name" value="VersionedIFaceJava"/>
     </antcall>
   </target>
 
-  <target name="replay_partner_number_change" depends="init" description="translate ralph files">
+  <target name="replay_partner_number_change" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="replay_partner_number_change.rph"/>
       <param name="class_name" value="ReplayPartnerNumberChangeJava"/>
     </antcall>
   </target>
   
-  <target name="read_only_speculate" depends="init" description="translate ralph files">
+  <target name="read_only_speculate" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="read_only_speculate.rph"/>
       <param name="class_name" value="ReadOnlySpeculateJava"/>
     </antcall>
   </target>
   
-  <target name="multiple_interfaces" depends="init" description="translate ralph files">
+  <target name="multiple_interfaces" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="multiple_interfaces.rph"/>
       <param name="class_name" value="MultipleInterfacesJava"/>
     </antcall>
   </target>
 
-  <target name="iserialize_struct_sum" depends="init" description="translate ralph files">
+  <target name="iserialize_struct_sum" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="iserialize_struct_sum.rph"/>
       <param name="class_name" value="ISerializeStructSumJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_null" depends="init" description="translate ralph files">
+  <target name="serialize_null" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_null.rph"/>
       <param name="class_name" value="SerializeNullJava"/>
     </antcall>
   </target>
   
-  <target name="serialize_struct_with_list" depends="init" description="translate ralph files">
+  <target name="serialize_struct_with_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_struct_with_list.rph"/>
       <param name="class_name" value="SerializeStructWithListJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_struct_with_struct" depends="init" description="translate ralph files">
+  <target name="serialize_struct_with_struct" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_struct_with_struct.rph"/>
       <param name="class_name" value="SerializeStructWithStructJava"/>
     </antcall>
   </target>
   
-  <target name="serialize_struct_with_map" depends="init" description="translate ralph files">
+  <target name="serialize_struct_with_map" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_struct_with_map.rph"/>
       <param name="class_name" value="SerializeStructWithMapJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_map_of_structs" depends="init" description="translate ralph files">
+  <target name="serialize_map_of_structs" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_map_of_structs.rph"/>
       <param name="class_name" value="SerializeMapOfStructsJava"/>
     </antcall>
   </target>
     
-  <target name="struct_serialization" depends="init" description="translate ralph files">
+  <target name="struct_serialization" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="struct_serialization.rph"/>
       <param name="class_name" value="StructSerializationJava"/>
     </antcall>
   </target>
 
-  <target name="less_simplified_backed_speculation" depends="init" description="translate ralph files">
+  <target name="less_simplified_backed_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="less_simplified_backed_speculation.rph"/>
       <param name="class_name" value="LessSimplifiedBackedSpeculationJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_num_map" depends="init" description="translate ralph files">
+  <target name="serialize_num_map" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_num_map.rph"/>
       <param name="class_name" value="SerializeNumMapJava"/>
     </antcall>
   </target>
 
-  <target name="struct_list_serialization" depends="init" description="translate ralph files">
+  <target name="struct_list_serialization" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="struct_list_serialization.rph"/>
       <param name="class_name" value="StructListSerializationJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_text_list" depends="init" description="translate ralph files">
+  <target name="serialize_text_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_text_list.rph"/>
       <param name="class_name" value="SerializeTextListJava"/>
     </antcall>
   </target>
 
-  <target name="serialize_true_false_list" depends="init" description="translate ralph files">
+  <target name="serialize_true_false_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_true_false_list.rph"/>
       <param name="class_name" value="SerializeTrueFalseListJava"/>
@@ -256,35 +278,40 @@
     </antcall>
   </target>
 
-  <target name="atomic_setter_getter" depends="init" description="translate ralph files">
+  <target name="atomic_setter_getter" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_setter_getter.rph"/>
       <param name="class_name" value="AtomicSetterGetterJava"/>
     </antcall>
   </target>
   
-  <target name="internal_method_call" depends="init" description="translate ralph files">
+  <target name="internal_method_call" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="internal_method_call.rph"/>
       <param name="class_name" value="InternalMethodCallJava"/>
     </antcall>
   </target>
 
-  <target name="ralph_atomically" depends="init" description="translate ralph files">
+  <target name="ralph_atomically" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="ralph_atomically.rph"/>
       <param name="class_name" value="RalphAtomicallyJava"/>
     </antcall>
   </target>
 
-  <target name="nested_atomic_setter_getter" depends="init" description="translate ralph files">
+  <target name="nested_atomic_setter_getter" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="nested_atomic_setter_getter.rph"/>
       <param name="class_name" value="NestedAtomicSetterGetterJava"/>
     </antcall>
   </target>
   
-  <target name="basic_partner" depends="init" description="translate ralph files">
+  <target name="basic_partner" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="basic_partner.rph"/>
       <param name="class_name" value="BasicPartnerJava"/>
@@ -312,7 +339,8 @@
     </antcall>
   </target>
 
-  <target name="nested_structs" depends="init" description="translate ralph files">
+  <target name="nested_structs" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="nested_structs.rph"/>
       <param name="class_name" value="NestedStructsJava"/>
@@ -333,14 +361,16 @@
     </antcall>
   </target>
 
-  <target name="replay_struct_list" depends="init" description="translate ralph files">
+  <target name="replay_struct_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="replay_struct_list.rph"/>
       <param name="class_name" value="ReplayStructListJava"/>
     </antcall>
   </target>
 
-  <target name="replay_struct_map" depends="init" description="translate ralph files">
+  <target name="replay_struct_map" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="replay_struct_map.rph"/>
       <param name="class_name" value="ReplayStructMapJava"/>
@@ -368,28 +398,32 @@
     </antcall>
   </target>
 
-  <target name="struct_lib_user" depends="init" description="translate ralph files">
+  <target name="struct_lib_user" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="struct_lib_user.rph"/>
       <param name="class_name" value="StructLibUserJava"/>
     </antcall>
   </target>
 
-  <target name="interrupted_atomically" depends="init" description="translate ralph files">
+  <target name="interrupted_atomically" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="interrupted_atomically.rph"/>
       <param name="class_name" value="InterruptedAtomicallyJava"/>
     </antcall>
   </target>
 
-  <target name="endpoint_lib_user" depends="init" description="translate ralph files">
+  <target name="endpoint_lib_user" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="endpoint_lib_user.rph"/>
       <param name="class_name" value="EndpointLibUserJava"/>
     </antcall>
   </target>
 
-  <target name="interrupted_endpoint_atomically" depends="init" description="translate ralph files">
+  <target name="interrupted_endpoint_atomically" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="interrupted_endpoint_atomically.rph"/>
       <param name="class_name" value="InterruptedEndpointAtomicallyJava"/>
@@ -403,14 +437,16 @@
     </antcall>
   </target>
 
-  <target name="super_interrupted_atomically" depends="init" description="translate ralph files">
+  <target name="super_interrupted_atomically" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="super_interrupted_atomically.rph"/>
       <param name="class_name" value="SuperInterruptedAtomicallyJava"/>
     </antcall>
   </target>
 
-  <target name="hardware_failure" depends="init" description="translate ralph files">
+  <target name="hardware_failure" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="hardware_failure.rph"/>
       <param name="class_name" value="HardwareFailureJava"/>
@@ -424,70 +460,80 @@
     </antcall>
   </target>
 
-  <target name="atomic_partner" depends="init" description="translate ralph files">
+  <target name="atomic_partner" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_partner.rph"/>
       <param name="class_name" value="AtomicPartnerJava"/>
     </antcall>
   </target>
 
-  <target name="many_ops_atomic_list_fail" depends="init" description="translate ralph files">
+  <target name="many_ops_atomic_list_fail" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="many_ops_atomic_list_fail.rph"/>
       <param name="class_name" value="ManyOpsAtomicListFailJava"/>
     </antcall>
   </target>
 
-  <target name="atomic_list_append" depends="init" description="translate ralph files">
+  <target name="atomic_list_append" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_list_append.rph"/>
       <param name="class_name" value="AtomicListAppendJava"/>
     </antcall>
   </target>
 
-  <target name="endpoint_struct_list" depends="init" description="translate ralph files">
+  <target name="endpoint_struct_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="endpoint_struct_list.rph"/>
       <param name="class_name" value="EndpointStructListJava"/>
     </antcall>
   </target>
 
-  <target name="wrapped_partner" depends="init" description="translate ralph files">
+  <target name="wrapped_partner" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="wrapped_partner.rph"/>
       <param name="class_name" value="WrappedPartnerJava"/>
     </antcall>
   </target>
 
-  <target name="linked_instance" depends="init" description="translate ralph files">
+  <target name="linked_instance" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="linked_instance.rph"/>
       <param name="class_name" value="LinkedInstanceJava"/>
     </antcall>
   </target>
   
-  <target name="linked_connection" depends="init" description="translate ralph files">
+  <target name="linked_connection" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="linked_connection.rph"/>
       <param name="class_name" value="LinkedConnectionJava"/>
     </antcall>
   </target>
     
-  <target name="single_side_service_factory" depends="init" description="translate ralph files">
+  <target name="single_side_service_factory" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="single_side_service_factory.rph"/>
       <param name="class_name" value="SingleSideServiceFactoryJava"/>
     </antcall>
   </target>
 
-  <target name="partner_service_factory" depends="init" description="translate ralph files">
+  <target name="partner_service_factory" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="partner_service_factory.rph"/>
       <param name="class_name" value="PartnerServiceFactoryJava"/>
     </antcall>
   </target>
 
-  <target name="basic_speculation" depends="init" description="translate ralph files">
+  <target name="basic_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="basic_speculation.rph"/>
       <param name="class_name" value="BasicSpeculationJava"/>
@@ -501,7 +547,8 @@
     </antcall>
   </target>
 
-  <target name="internal_create_service" depends="init" description="translate ralph files">
+  <target name="internal_create_service" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="internal_create_service.rph"/>
       <param name="class_name" value="InternalCreateServiceJava"/>
@@ -515,14 +562,16 @@
     </antcall>
   </target>
 
-  <target name="wrapped_iface" depends="init" description="translate ralph files">
+  <target name="wrapped_iface" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="wrapped_iface.rph"/>
       <param name="class_name" value="WrappedIFaceJava"/>
     </antcall>
   </target>
 
-  <target name="container_speculation" depends="init" description="translate ralph files">
+  <target name="container_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="container_speculation.rph"/>
       <param name="class_name" value="ContainerSpeculationJava"/>
@@ -536,91 +585,104 @@
     </antcall>
   </target>
   
-  <target name="read_read_write_speculation" depends="init" description="translate ralph files">
+  <target name="read_read_write_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="read_read_write_speculation.rph"/>
       <param name="class_name" value="ReadReadWriteSpeculationJava"/>
     </antcall>
   </target>
 
-  <target name="interrupted_speculater" depends="init" description="translate ralph files">
+  <target name="interrupted_speculater" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="interrupted_speculater.rph"/>
       <param name="class_name" value="InterruptedSpeculaterJava"/>
     </antcall>
   </target>
 
-  <target name="middle_interrupted_speculater" depends="init" description="translate ralph files">
+  <target name="middle_interrupted_speculater" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="middle_interrupted_speculater.rph"/>
       <param name="class_name" value="MiddleInterruptedSpeculaterJava"/>
     </antcall>
   </target>
 
-  <target name="backed_speculation" depends="init" description="translate ralph files">
+  <target name="backed_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="backed_speculation.rph"/>
       <param name="class_name" value="BackedSpeculationJava"/>
     </antcall>
   </target>
 
-  <target name="atomic_struct" depends="init" description="translate ralph files">
+  <target name="atomic_struct" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_struct.rph"/>
       <param name="class_name" value="AtomicStructJava"/>
     </antcall>
   </target>
 
-  <target name="text_add_and_to_text" depends="init" description="translate ralph files">
+  <target name="text_add_and_to_text" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="text_add_and_to_text.rph"/>
       <param name="class_name" value="TextAddAndToTextJava"/>
     </antcall>
   </target>
 
-  <target name="lots_of_backouts" depends="init" description="translate ralph files">
+  <target name="lots_of_backouts" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="lots_of_backouts.rph"/>
       <param name="class_name" value="LotsOfBackoutsJava"/>
     </antcall>
   </target>
   
-  <target name="multiline_string" depends="init" description="translate ralph files">
+  <target name="multiline_string" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="multiline_string.rph"/>
       <param name="class_name" value="MultiLineStringJava"/>
     </antcall>
   </target>
 
-  <target name="simplified_backed_speculation" depends="init" description="translate ralph files">
+  <target name="simplified_backed_speculation" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="simplified_backed_speculation.rph"/>
       <param name="class_name" value="SimplifiedBackedSpeculationJava"/>
     </antcall>
   </target>
   
-  <target name="serialize_number_list" depends="init" description="translate ralph files">
+  <target name="serialize_number_list" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_number_list.rph"/>
       <param name="class_name" value="SerializeNumberListJava"/>
     </antcall>
   </target>
   
-  <target name="partner_number_return" depends="init" description="translate ralph files">
+  <target name="partner_number_return" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="partner_number_return.rph"/>
       <param name="class_name" value="PartnerNumberReturnJava"/>
     </antcall>
   </target>
   
-  <target name="internal_return_struct" depends="init" description="translate ralph files">
+  <target name="internal_return_struct" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="internal_return_struct.rph"/>
       <param name="class_name" value="InternalReturnStructJava"/>
     </antcall>
   </target>
   
-  <target name="reference_service_factory" depends="init" description="translate ralph files">
+  <target name="reference_service_factory" depends="init"
+          description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="reference_service_factory.rph"/>
       <param name="class_name" value="ReferenceServiceFactoryJava"/>
