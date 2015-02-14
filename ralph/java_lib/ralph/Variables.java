@@ -605,17 +605,7 @@ public class Variables
                 Delta.ReferenceType.newBuilder();
             
             if (internal_endpoint != null)
-            {
                 ref_type_builder.setReference(internal_endpoint.uuid());
-
-                if ((serialization_context != null) &&
-                    serialization_context.deep_copy)
-                {
-                    Util.logger_assert(
-                        "Cannot serialize a reference to an endpoint " +
-                        "to send as part of rpc.");
-                }
-            }
 
             ObjectContents.Interface.Builder interface_builder =
                 ObjectContents.Interface.newBuilder();
