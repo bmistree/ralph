@@ -7,4 +7,10 @@ message DurabilityComplete
 {
     required UUID event_uuid = 1;
     required bool succeeded = 2;
+    /**
+       For debugging, it can be useful to run multiple Ralph hosts
+       within the same process.  To distinguish which host is
+       associated with this prepare message, use host_uuid.
+     */
+    optional UUID host_uuid = 3;
 }

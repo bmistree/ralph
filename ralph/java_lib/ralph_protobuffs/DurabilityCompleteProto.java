@@ -34,6 +34,41 @@ public final class DurabilityCompleteProto {
      * <code>required bool succeeded = 2;</code>
      */
     boolean getSucceeded();
+
+    // optional .UUID host_uuid = 3;
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    boolean hasHostUuid();
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUID getHostUuid();
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder();
   }
   /**
    * Protobuf type {@code DurabilityComplete}
@@ -102,6 +137,19 @@ public final class DurabilityCompleteProto {
             case 16: {
               bitField0_ |= 0x00000002;
               succeeded_ = input.readBool();
+              break;
+            }
+            case 26: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = hostUuid_.toBuilder();
+              }
+              hostUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(hostUuid_);
+                hostUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
           }
@@ -182,9 +230,53 @@ public final class DurabilityCompleteProto {
       return succeeded_;
     }
 
+    // optional .UUID host_uuid = 3;
+    public static final int HOST_UUID_FIELD_NUMBER = 3;
+    private ralph_protobuffs.UtilProto.UUID hostUuid_;
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    public boolean hasHostUuid() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUID getHostUuid() {
+      return hostUuid_;
+    }
+    /**
+     * <code>optional .UUID host_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *For debugging, it can be useful to run multiple Ralph hosts
+     *within the same process.  To distinguish which host is
+     *associated with this prepare message, use host_uuid.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
+      return hostUuid_;
+    }
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       succeeded_ = false;
+      hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -203,6 +295,12 @@ public final class DurabilityCompleteProto {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (hasHostUuid()) {
+        if (!getHostUuid().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -215,6 +313,9 @@ public final class DurabilityCompleteProto {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBool(2, succeeded_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, hostUuid_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -232,6 +333,10 @@ public final class DurabilityCompleteProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(2, succeeded_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, hostUuid_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -342,6 +447,7 @@ public final class DurabilityCompleteProto {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getEventUuidFieldBuilder();
+          getHostUuidFieldBuilder();
         }
       }
       private static Builder create() {
@@ -358,6 +464,12 @@ public final class DurabilityCompleteProto {
         bitField0_ = (bitField0_ & ~0x00000001);
         succeeded_ = false;
         bitField0_ = (bitField0_ & ~0x00000002);
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        } else {
+          hostUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -398,6 +510,14 @@ public final class DurabilityCompleteProto {
           to_bitField0_ |= 0x00000002;
         }
         result.succeeded_ = succeeded_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (hostUuidBuilder_ == null) {
+          result.hostUuid_ = hostUuid_;
+        } else {
+          result.hostUuid_ = hostUuidBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -420,6 +540,9 @@ public final class DurabilityCompleteProto {
         if (other.hasSucceeded()) {
           setSucceeded(other.getSucceeded());
         }
+        if (other.hasHostUuid()) {
+          mergeHostUuid(other.getHostUuid());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -436,6 +559,12 @@ public final class DurabilityCompleteProto {
         if (!getEventUuid().isInitialized()) {
           
           return false;
+        }
+        if (hasHostUuid()) {
+          if (!getHostUuid().isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -609,6 +738,186 @@ public final class DurabilityCompleteProto {
         return this;
       }
 
+      // optional .UUID host_uuid = 3;
+      private ralph_protobuffs.UtilProto.UUID hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> hostUuidBuilder_;
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public boolean hasHostUuid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID getHostUuid() {
+        if (hostUuidBuilder_ == null) {
+          return hostUuid_;
+        } else {
+          return hostUuidBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public Builder setHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (hostUuidBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          hostUuid_ = value;
+          onChanged();
+        } else {
+          hostUuidBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public Builder setHostUuid(
+          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = builderForValue.build();
+          onChanged();
+        } else {
+          hostUuidBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public Builder mergeHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (hostUuidBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              hostUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            hostUuid_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(hostUuid_).mergeFrom(value).buildPartial();
+          } else {
+            hostUuid_ = value;
+          }
+          onChanged();
+        } else {
+          hostUuidBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public Builder clearHostUuid() {
+        if (hostUuidBuilder_ == null) {
+          hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          onChanged();
+        } else {
+          hostUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder getHostUuidBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getHostUuidFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder() {
+        if (hostUuidBuilder_ != null) {
+          return hostUuidBuilder_.getMessageOrBuilder();
+        } else {
+          return hostUuid_;
+        }
+      }
+      /**
+       * <code>optional .UUID host_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *For debugging, it can be useful to run multiple Ralph hosts
+       *within the same process.  To distinguish which host is
+       *associated with this prepare message, use host_uuid.
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getHostUuidFieldBuilder() {
+        if (hostUuidBuilder_ == null) {
+          hostUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                  hostUuid_,
+                  getParentForChildren(),
+                  isClean());
+          hostUuid_ = null;
+        }
+        return hostUuidBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:DurabilityComplete)
     }
 
@@ -634,10 +943,11 @@ public final class DurabilityCompleteProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\030durabilityComplete.proto\032\nutil.proto\"B" +
+      "\n\030durabilityComplete.proto\032\nutil.proto\"\\" +
       "\n\022DurabilityComplete\022\031\n\nevent_uuid\030\001 \002(\013" +
-      "2\005.UUID\022\021\n\tsucceeded\030\002 \002(\010B+\n\020ralph_prot" +
-      "obuffsB\027DurabilityCompleteProto"
+      "2\005.UUID\022\021\n\tsucceeded\030\002 \002(\010\022\030\n\thost_uuid\030" +
+      "\003 \001(\0132\005.UUIDB+\n\020ralph_protobuffsB\027Durabi" +
+      "lityCompleteProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -649,7 +959,7 @@ public final class DurabilityCompleteProto {
           internal_static_DurabilityComplete_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_DurabilityComplete_descriptor,
-              new java.lang.String[] { "EventUuid", "Succeeded", });
+              new java.lang.String[] { "EventUuid", "Succeeded", "HostUuid", });
           return null;
         }
       };
