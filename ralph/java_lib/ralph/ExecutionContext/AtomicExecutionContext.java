@@ -8,6 +8,7 @@ import ralph.AtomicActiveEvent;
 import ralph.IUUIDGenerator;
 import ralph.AtomicActiveEvent;
 import ralph.RalphGlobals;
+import ralph.IEndpointMap;
 
 
 public class AtomicExecutionContext extends ExecutionContext
@@ -20,11 +21,11 @@ public class AtomicExecutionContext extends ExecutionContext
         IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
         AtomicActiveEvent active_event, NonAtomicExecutionContext parent_ctx,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals, IEndpointMap endpt_map)
     {
         super(
             active_event.uuid,message_sender,uuid_gen,
-            durability_context,ralph_globals);
+            durability_context,ralph_globals,endpt_map);
         this.active_event = active_event;
         this.parent_ctx = parent_ctx;
         active_event.init_execution_context(this);

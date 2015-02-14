@@ -10,18 +10,19 @@ import ralph.RalphGlobals;
 import ralph.NonAtomicActiveEvent;
 import ralph.ExecutionContextMap;
 import ralph.DurabilityInfo;
-
+import ralph.IEndpointMap;
 
 public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
-{
+{    
     public ReplayNonAtomicExecutionContext(
         RalphGlobals ralph_globals, NonAtomicActiveEvent act_evt,
         ExecutionContextMap exec_ctx_map,
-        DurabilityReplayMessageSender msg_sender)
+        DurabilityReplayMessageSender msg_sender,
+        IEndpointMap endpt_map)
     {
         super(
             msg_sender, ralph_globals, null, act_evt, exec_ctx_map,
-            ralph_globals);
+            ralph_globals,endpt_map);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
     {
         return null;
     }
-
+    
     @Override
     public Durability complete_proto_buf(boolean succeeded)
     {

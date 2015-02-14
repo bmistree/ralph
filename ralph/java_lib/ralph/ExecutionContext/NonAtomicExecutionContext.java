@@ -12,7 +12,7 @@ import ralph.ExecutionContextMap;
 import ralph.Endpoint;
 import ralph.IUUIDGenerator;
 import ralph.RalphGlobals;
-
+import ralph.IEndpointMap;
 
 public class NonAtomicExecutionContext extends ExecutionContext
 {
@@ -24,11 +24,11 @@ public class NonAtomicExecutionContext extends ExecutionContext
         IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
         NonAtomicActiveEvent active_event,ExecutionContextMap exec_ctx_map,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals, IEndpointMap endpt_map)
     {
         super(
             active_event.uuid,message_sender,uuid_gen,durability_context,
-            ralph_globals);
+            ralph_globals,endpt_map);
         this.active_event = active_event;
         this.exec_ctx_map = exec_ctx_map;
         active_event.init_execution_context(this);
@@ -55,7 +55,7 @@ public class NonAtomicExecutionContext extends ExecutionContext
         AtomicExecutionContext to_return =
             new AtomicExecutionContext(
                 message_sender,uuid_gen,cloned_dur_ctx,atom_evt,this,
-                ralph_globals);
+                ralph_globals,endpt_map);
         
         return to_return;
     }

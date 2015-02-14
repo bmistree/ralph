@@ -90,7 +90,7 @@ public class ExecutionContextMap
 
     public ReplayNonAtomicExecutionContext replay_create_root_non_atomic_exec_ctx(
         Endpoint root_endpoint, String event_entry_point_name, 
-        DurabilityReplayMessageSender msg_sender)
+        DurabilityReplayMessageSender msg_sender, IEndpointMap endpt_map)
     {
         NonAtomicActiveEvent root_event =
             boosted_manager.create_root_non_atomic_event(
@@ -98,7 +98,7 @@ public class ExecutionContextMap
 
         ReplayNonAtomicExecutionContext exec_ctx =
             new ReplayNonAtomicExecutionContext (
-                ralph_globals, root_event, this, msg_sender);
+                ralph_globals, root_event, this, msg_sender,endpt_map);
 
         ralph_globals.all_ctx_map.put(exec_ctx.uuid,exec_ctx);
         return exec_ctx;

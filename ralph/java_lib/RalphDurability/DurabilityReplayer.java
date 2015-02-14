@@ -109,7 +109,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
             
             ReplayNonAtomicExecutionContext exec_ctx =
                 to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
-                    to_run_on, method_to_run, msg_sender);
+                    to_run_on, method_to_run, msg_sender,this);
             durability_replay_context.durable_replay_exec_rpc(
                 exec_ctx, to_run_on, req_seq_block);
         }

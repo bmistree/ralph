@@ -17,7 +17,7 @@ public class LiveNonAtomicExecutionContext extends NonAtomicExecutionContext
     {
         super(
             new LiveMessageSender(), ralph_globals, gen_dur_ctx(act_evt.uuid),
-            act_evt, exec_ctx_map, ralph_globals);
+            act_evt, exec_ctx_map, ralph_globals, ralph_globals.all_endpoints);
     }
 
     private static IDurabilityContext gen_dur_ctx(String evt_uuid)

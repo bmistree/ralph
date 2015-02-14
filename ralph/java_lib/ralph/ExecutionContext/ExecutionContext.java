@@ -13,6 +13,7 @@ import ralph.IUUIDGenerator;
 import ralph.ActiveEvent;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
+import ralph.IEndpointMap;
 
 
 public abstract class ExecutionContext implements IDurabilityContext
@@ -25,11 +26,12 @@ public abstract class ExecutionContext implements IDurabilityContext
     protected final IDurabilityContext durability_context;
     public final String uuid;
     protected final RalphGlobals ralph_globals;
+    protected final IEndpointMap endpt_map;
     
     public ExecutionContext(
         String uuid, IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
-        RalphGlobals ralph_globals)
+        RalphGlobals ralph_globals, IEndpointMap endpt_map)
     {
         this.uuid = uuid;
         this.message_sender = message_sender;
@@ -37,15 +39,14 @@ public abstract class ExecutionContext implements IDurabilityContext
         this.durability_context = durability_context;
         this.ralph_globals = ralph_globals;
         this.ralph_globals.all_ctx_map.put(uuid,this);
+        this.endpt_map = endpt_map;
     }
 
     public Endpoint get_endpt_if_exists(String endpt_uuid)
     {
-        return ralph_globals.all_endpoints.get_endpoint_if_exists(
-            endpt_uuid);
+        return endpt_map.get_endpoint_if_exists(endpt_uuid);
     }
     
-
     @Override
     public IDurabilityContext clone(String new_event_uuid)
     {

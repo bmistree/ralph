@@ -18,7 +18,7 @@ public class LiveAtomicExecutionContext extends AtomicExecutionContext
     {
         super(
             new LiveMessageSender(), ralph_globals, durability_context,
-            act_evt, null, ralph_globals);
+            act_evt, null, ralph_globals,ralph_globals.all_endpoints);
     }
 
     public static LiveAtomicExecutionContext exec_ctx_from_non_atomic(
