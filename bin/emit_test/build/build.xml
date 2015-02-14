@@ -763,7 +763,8 @@
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
-        jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer">
+        jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
+        jar_DurabilityReplayRPC">
   </target>
 
 
@@ -878,6 +879,11 @@
   <target
       name="ralph_StructEnum"
       depends="struct_enum_ralph">
+  </target>
+
+  <target
+      name="ralph_DurabilityReplayRPC"
+      depends="durability_replay_rpc">
   </target>
   
   <target
@@ -1257,6 +1263,13 @@
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
              value="StructEnumTest.java"/>
+    </antcall>
+  </target>
+  
+  <target name="harness_DurabilityReplayRPC">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="DurabilityReplayRPC.java"/>
     </antcall>
   </target>
   
@@ -2033,6 +2046,20 @@
     </antcall>
   </target>
 
+  <property
+      name="durability_replay_rpc_jar"
+      value="durability_replay_rpc.jar"/>
+  <target
+      name="jar_DurabilityReplayRPC"
+      depends="ralph_DurabilityReplayRPC,ralph_to_byte_code,
+               harness_DurabilityReplayRPC">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilityReplayRPC"/>
+      <param name="dest_jar" value="${durability_replay_rpc_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="read_only_speculate_jar"
       value="read_only_speculate.jar"/>
