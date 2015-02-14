@@ -1119,8 +1119,8 @@ public class Variables
             ObjectHistory obj_history,Long to_play_until,
             ActiveEvent deserialization_event) throws BackoutException
         {
-            Util.logger_assert(
-                "Should not allow serializing and deserializing endpoints");
+            Endpoint internal = reconstruction_context.get_endpt(uuid);
+            direct_set_val((T)internal);
         }
 
         

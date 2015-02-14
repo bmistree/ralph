@@ -3,6 +3,7 @@ package RalphVersions;
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.Util;
+import ralph.Endpoint;
 
 import ralph_protobuffs.ObjectContentsProto.ObjectContents;
 
@@ -26,6 +27,13 @@ public class ReconstructionContext implements IReconstructionContext
         ralph_globals = _ralph_globals;
     }
 
+    @Override
+    public Endpoint get_endpt(String uuid)
+    {
+        return ralph_globals.all_endpoints.get_endpoint_if_exists(uuid);
+    }
+
+    
     @Override
     public IVersionReplayer get_version_replayer()
     {

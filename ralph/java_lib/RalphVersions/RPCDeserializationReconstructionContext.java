@@ -9,7 +9,7 @@ import ralph.RalphObject;
 import ralph.Util;
 import ralph.ActiveEvent;
 import ralph.ExecutionContext.ExecutionContext;
-
+import ralph.Endpoint;
 
 /**
    Used to deserialize rpc arguments.  Difference between this and
@@ -23,7 +23,6 @@ public class RPCDeserializationReconstructionContext
     private final IVersionReplayer version_replayer;
     private final RalphGlobals ralph_globals;
     private final ExecutionContext exec_ctx;
-
     
     public RPCDeserializationReconstructionContext(
         IVersionReplayer _version_replayer,
@@ -34,6 +33,12 @@ public class RPCDeserializationReconstructionContext
         exec_ctx = _exec_ctx;
     }
 
+    @Override
+    public Endpoint get_endpt(String uuid)
+    {
+        return exec_ctx.get_endpt_if_exists(uuid);
+    }
+    
     @Override
     public IVersionReplayer get_version_replayer()
     {
