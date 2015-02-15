@@ -12,6 +12,8 @@ import RalphDurability.DurabilityReplayer;
 import RalphDurability.DiskDurabilityReader;
 import RalphDurability.ISerializedDurabilityReader;
 import RalphDurability.SerializedDurabilityReader;
+import RalphDurability.MultiDiskDurabilitySaver;
+
 
 /**
    Singleton: keeps track of all the data used for durability.
@@ -58,6 +60,20 @@ public class DurabilityInfo
                     // deltas from on replay.
                     String log_filename = (String) obj_log_filename;
                     durability_saver = new DiskDurabilitySaver(log_filename);
+                }
+                else if (which_durability.equals("multidisk"))
+                {
+                    Object obj_dirname = 
+                        properties.get("disk-durability-dirname");
+                    String dirname = (String) obj_dirname;
+
+                    Object obj_num_log_files =
+                        properties.get("disk-durability-num-log-files");
+                    int num_log_files = Integer.parseInt(
+                        (String) obj_num_log_files);
+                    
+                    durability_saver =
+                        new MultiDiskDurabilitySaver(dirname,num_log_files);
                 }
                 //// DEBUG
                 else
