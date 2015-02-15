@@ -264,7 +264,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 {
                     String dummy_event_uuid = ralph_globals.generate_uuid();
                     durability_context =
-                        new DurabilityContext(dummy_event_uuid);
+                        new DurabilityContext(
+                            dummy_event_uuid,ralph_globals.host_uuid);
                 }
                 
                 Endpoint created_endpoint = endpoint_constructor.construct(

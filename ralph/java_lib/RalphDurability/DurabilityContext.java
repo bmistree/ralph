@@ -22,6 +22,7 @@ import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 public class DurabilityContext implements IDurabilityContext
 {
     public final String event_uuid;
+    private final String host_uuid;
     private final List<PartnerRequestSequenceBlock> rpc_args;
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
@@ -32,19 +33,21 @@ public class DurabilityContext implements IDurabilityContext
     // got to prepare step.
     private boolean has_prepared = false;
     
-    public DurabilityContext(String event_uuid)
+    public DurabilityContext(String event_uuid, String host_uuid)
     {
         this.event_uuid = event_uuid;
         this.rpc_args = new ArrayList<PartnerRequestSequenceBlock>();
         this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
         this.endpts_created_info = new ArrayList<EndptUUIDConstructorPair>();
+        this.host_uuid = host_uuid;
     }
 
 
     @Override
     public synchronized DurabilityContext clone(String new_event_uuid)
     {
-        DurabilityContext to_return = new DurabilityContext(new_event_uuid);
+        DurabilityContext to_return =
+            new DurabilityContext(new_event_uuid,host_uuid);
 
         for (int i = 0; i < rpc_args.size(); ++i)
         {
@@ -128,6 +131,16 @@ public class DurabilityContext implements IDurabilityContext
         
         for (EndptUUIDConstructorPair pair : endpts_created_info)
             prepare_msg.addEndpointsCreated(pair.to_proto_buf());
+
+        // FIXME: note that setting host uuid is actually optional,
+        // and we only do this for debugging.  Maybe refactor so that
+        // there's a version of durability context that does not set
+        // host uuid.
+        
+        // set host uuid
+        UUID.Builder host_uuid_builder = UUID.newBuilder();
+        host_uuid_builder.setData(host_uuid);
+        prepare_msg.setHostUuid(host_uuid_builder);
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setPrepare(prepare_msg);
@@ -148,6 +161,16 @@ public class DurabilityContext implements IDurabilityContext
             DurabilityComplete.newBuilder();
         complete_msg.setEventUuid(uuid_builder);
         complete_msg.setSucceeded(succeeded);
+
+        // FIXME: note that setting host uuid is actually optional,
+        // and we only do this for debugging.  Maybe refactor so that
+        // there's a version of durability context that does not set
+        // host uuid.
+        
+        // set host uuid
+        UUID.Builder host_uuid_builder = UUID.newBuilder();
+        host_uuid_builder.setData(host_uuid);
+        complete_msg.setHostUuid(host_uuid_builder);
         
         Durability.Builder to_return = Durability.newBuilder();
         to_return.setComplete(complete_msg);

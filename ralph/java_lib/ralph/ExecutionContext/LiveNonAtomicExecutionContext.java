@@ -9,6 +9,7 @@ import ralph.NonAtomicActiveEvent;
 import ralph.ExecutionContextMap;
 import ralph.DurabilityInfo;
 
+
 public class LiveNonAtomicExecutionContext extends NonAtomicExecutionContext
 {
     public LiveNonAtomicExecutionContext(
@@ -16,14 +17,16 @@ public class LiveNonAtomicExecutionContext extends NonAtomicExecutionContext
         ExecutionContextMap exec_ctx_map)
     {
         super(
-            new LiveMessageSender(), ralph_globals, gen_dur_ctx(act_evt.uuid),
+            new LiveMessageSender(), ralph_globals,
+            gen_dur_ctx(act_evt.uuid,ralph_globals.host_uuid),
             act_evt, exec_ctx_map, ralph_globals, ralph_globals.all_endpoints);
     }
 
-    private static IDurabilityContext gen_dur_ctx(String evt_uuid)
+    private static IDurabilityContext gen_dur_ctx(
+        String evt_uuid,String host_uuid)
     {
         if (DurabilityInfo.instance.durability_saver != null)
-            return new DurabilityContext(evt_uuid);
+            return new DurabilityContext(evt_uuid,host_uuid);
         return null;
     }
 
