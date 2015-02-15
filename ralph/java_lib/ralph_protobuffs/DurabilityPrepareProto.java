@@ -109,6 +109,20 @@ public final class DurabilityPrepareProto {
      * </pre>
      */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getHostUuidOrBuilder();
+
+    // optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    boolean hasCommitMetadata();
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata getCommitMetadata();
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder getCommitMetadataOrBuilder();
   }
   /**
    * Protobuf type {@code DurabilityPrepare}
@@ -201,6 +215,19 @@ public final class DurabilityPrepareProto {
                 hostUuid_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
+              break;
+            }
+            case 42: {
+              ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = commitMetadata_.toBuilder();
+              }
+              commitMetadata_ = input.readMessage(ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(commitMetadata_);
+                commitMetadata_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
           }
@@ -1804,11 +1831,34 @@ public final class DurabilityPrepareProto {
       return hostUuid_;
     }
 
+    // optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;
+    public static final int COMMIT_METADATA_FIELD_NUMBER = 5;
+    private ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata commitMetadata_;
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    public boolean hasCommitMetadata() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    public ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata getCommitMetadata() {
+      return commitMetadata_;
+    }
+    /**
+     * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+     */
+    public ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder getCommitMetadataOrBuilder() {
+      return commitMetadata_;
+    }
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       rpcArgs_ = java.util.Collections.emptyList();
       endpointsCreated_ = java.util.Collections.emptyList();
       hostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      commitMetadata_ = ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1841,6 +1891,12 @@ public final class DurabilityPrepareProto {
           return false;
         }
       }
+      if (hasCommitMetadata()) {
+        if (!getCommitMetadata().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1859,6 +1915,9 @@ public final class DurabilityPrepareProto {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(4, hostUuid_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(5, commitMetadata_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1884,6 +1943,10 @@ public final class DurabilityPrepareProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, hostUuid_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, commitMetadata_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1997,6 +2060,7 @@ public final class DurabilityPrepareProto {
           getRpcArgsFieldBuilder();
           getEndpointsCreatedFieldBuilder();
           getHostUuidFieldBuilder();
+          getCommitMetadataFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2029,6 +2093,12 @@ public final class DurabilityPrepareProto {
           hostUuidBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
+        if (commitMetadataBuilder_ == null) {
+          commitMetadata_ = ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.getDefaultInstance();
+        } else {
+          commitMetadataBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -2090,6 +2160,14 @@ public final class DurabilityPrepareProto {
           result.hostUuid_ = hostUuid_;
         } else {
           result.hostUuid_ = hostUuidBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (commitMetadataBuilder_ == null) {
+          result.commitMetadata_ = commitMetadata_;
+        } else {
+          result.commitMetadata_ = commitMetadataBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -2165,6 +2243,9 @@ public final class DurabilityPrepareProto {
         if (other.hasHostUuid()) {
           mergeHostUuid(other.getHostUuid());
         }
+        if (other.hasCommitMetadata()) {
+          mergeCommitMetadata(other.getCommitMetadata());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -2192,6 +2273,12 @@ public final class DurabilityPrepareProto {
         }
         if (hasHostUuid()) {
           if (!getHostUuid().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasCommitMetadata()) {
+          if (!getCommitMetadata().isInitialized()) {
             
             return false;
           }
@@ -2995,6 +3082,123 @@ public final class DurabilityPrepareProto {
         return hostUuidBuilder_;
       }
 
+      // optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;
+      private ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata commitMetadata_ = ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder> commitMetadataBuilder_;
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public boolean hasCommitMetadata() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata getCommitMetadata() {
+        if (commitMetadataBuilder_ == null) {
+          return commitMetadata_;
+        } else {
+          return commitMetadataBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public Builder setCommitMetadata(ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata value) {
+        if (commitMetadataBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          commitMetadata_ = value;
+          onChanged();
+        } else {
+          commitMetadataBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public Builder setCommitMetadata(
+          ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder builderForValue) {
+        if (commitMetadataBuilder_ == null) {
+          commitMetadata_ = builderForValue.build();
+          onChanged();
+        } else {
+          commitMetadataBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public Builder mergeCommitMetadata(ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata value) {
+        if (commitMetadataBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              commitMetadata_ != ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.getDefaultInstance()) {
+            commitMetadata_ =
+              ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.newBuilder(commitMetadata_).mergeFrom(value).buildPartial();
+          } else {
+            commitMetadata_ = value;
+          }
+          onChanged();
+        } else {
+          commitMetadataBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public Builder clearCommitMetadata() {
+        if (commitMetadataBuilder_ == null) {
+          commitMetadata_ = ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.getDefaultInstance();
+          onChanged();
+        } else {
+          commitMetadataBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder getCommitMetadataBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getCommitMetadataFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      public ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder getCommitMetadataOrBuilder() {
+        if (commitMetadataBuilder_ != null) {
+          return commitMetadataBuilder_.getMessageOrBuilder();
+        } else {
+          return commitMetadata_;
+        }
+      }
+      /**
+       * <code>optional .VersionSaverMessages.CommitMetadata commit_metadata = 5;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder> 
+          getCommitMetadataFieldBuilder() {
+        if (commitMetadataBuilder_ == null) {
+          commitMetadataBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadata.Builder, ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages.CommitMetadataOrBuilder>(
+                  commitMetadata_,
+                  getParentForChildren(),
+                  isClean());
+          commitMetadata_ = null;
+        }
+        return commitMetadataBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:DurabilityPrepare)
     }
 
@@ -3031,20 +3235,22 @@ public final class DurabilityPrepareProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\027durabilityPrepare.proto\032\nutil.proto\032!p" +
-      "artnerRequestSequenceBlock.proto\"\302\003\n\021Dur" +
-      "abilityPrepare\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUI" +
-      "D\022M\n\010rpc_args\030\002 \003(\0132;.DurabilityPrepare." +
+      "artnerRequestSequenceBlock.proto\032\032versio" +
+      "nSaverMessages.proto\"\201\004\n\021DurabilityPrepa" +
+      "re\022\031\n\nevent_uuid\030\001 \002(\0132\005.UUID\022M\n\010rpc_arg" +
+      "s\030\002 \003(\0132;.DurabilityPrepare.PairedPartne" +
+      "rRequestSequenceEndpointUUID\022M\n\021endpoint" +
+      "s_created\030\003 \003(\01322.DurabilityPrepare.Endp" +
+      "ointUUIDConstructorNamePair\022\030\n\thost_uuid" +
+      "\030\004 \001(\0132\005.UUID\022=\n\017commit_metadata\030\005 \001(\0132$" +
+      ".VersionSaverMessages.CommitMetadata\032x\n(",
       "PairedPartnerRequestSequenceEndpointUUID" +
-      "\022M\n\021endpoints_created\030\003 \003(\01322.Durability" +
-      "Prepare.EndpointUUIDConstructorNamePair\022" +
-      "\030\n\thost_uuid\030\004 \001(\0132\005.UUID\032x\n(PairedPartn" +
-      "erRequestSequenceEndpointUUID\022.\n\010rpc_arg" +
-      "s\030\001 \002(\0132\034.PartnerRequestSequenceBlock\022\034\n",
-      "\rendpoint_uuid\030\002 \002(\0132\005.UUID\032`\n\037EndpointU" +
-      "UIDConstructorNamePair\022\031\n\nendpt_uuid\030\001 \002" +
-      "(\0132\005.UUID\022\"\n\032constructor_canonical_name\030" +
-      "\002 \002(\tB*\n\020ralph_protobuffsB\026DurabilityPre" +
-      "pareProto"
+      "\022.\n\010rpc_args\030\001 \002(\0132\034.PartnerRequestSeque" +
+      "nceBlock\022\034\n\rendpoint_uuid\030\002 \002(\0132\005.UUID\032`" +
+      "\n\037EndpointUUIDConstructorNamePair\022\031\n\nend" +
+      "pt_uuid\030\001 \002(\0132\005.UUID\022\"\n\032constructor_cano" +
+      "nical_name\030\002 \002(\tB*\n\020ralph_protobuffsB\026Du" +
+      "rabilityPrepareProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3056,7 +3262,7 @@ public final class DurabilityPrepareProto {
           internal_static_DurabilityPrepare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_DurabilityPrepare_descriptor,
-              new java.lang.String[] { "EventUuid", "RpcArgs", "EndpointsCreated", "HostUuid", });
+              new java.lang.String[] { "EventUuid", "RpcArgs", "EndpointsCreated", "HostUuid", "CommitMetadata", });
           internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_descriptor =
             internal_static_DurabilityPrepare_descriptor.getNestedTypes().get(0);
           internal_static_DurabilityPrepare_PairedPartnerRequestSequenceEndpointUUID_fieldAccessorTable = new
@@ -3077,6 +3283,7 @@ public final class DurabilityPrepareProto {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           ralph_protobuffs.UtilProto.getDescriptor(),
           ralph_protobuffs.PartnerRequestSequenceBlockProto.getDescriptor(),
+          ralph_protobuffs.VersionSaverMessagesProto.getDescriptor(),
         }, assigner);
   }
 

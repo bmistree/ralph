@@ -3,6 +3,8 @@ option java_outer_classname = "DurabilityPrepareProto";
 
 import "util.proto";
 import "partnerRequestSequenceBlock.proto";
+import "versionSaverMessages.proto";
+
 
 message DurabilityPrepare
 {
@@ -34,4 +36,6 @@ message DurabilityPrepare
        associated with this prepare message, use host_uuid.
      */
     optional UUID host_uuid = 4;
+
+    optional VersionSaverMessages.CommitMetadata commit_metadata = 5;
 }
