@@ -18,15 +18,15 @@ public class LiveNonAtomicExecutionContext extends NonAtomicExecutionContext
     {
         super(
             new LiveMessageSender(), ralph_globals,
-            gen_dur_ctx(act_evt.uuid,ralph_globals.host_uuid),
+            gen_dur_ctx(act_evt.uuid,ralph_globals),
             act_evt, exec_ctx_map, ralph_globals, ralph_globals.all_endpoints);
     }
 
     private static IDurabilityContext gen_dur_ctx(
-        String evt_uuid,String host_uuid)
+        String evt_uuid,RalphGlobals ralph_globals)
     {
         if (DurabilityInfo.instance.durability_saver != null)
-            return new DurabilityContext(evt_uuid,host_uuid);
+            return new DurabilityContext(evt_uuid,ralph_globals);
         return null;
     }
 

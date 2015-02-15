@@ -24,7 +24,6 @@ import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 import ralph_protobuffs.CreateConnectionProto.CreateConnection;
 
 
-
 public class TCPConnectionObj implements ConnectionObj, Runnable
 {
     private Endpoint local_endpoint = null;
@@ -264,8 +263,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 {
                     String dummy_event_uuid = ralph_globals.generate_uuid();
                     durability_context =
-                        new DurabilityContext(
-                            dummy_event_uuid,ralph_globals.host_uuid);
+                        new DurabilityContext(dummy_event_uuid,ralph_globals);
                 }
                 
                 Endpoint created_endpoint = endpoint_constructor.construct(

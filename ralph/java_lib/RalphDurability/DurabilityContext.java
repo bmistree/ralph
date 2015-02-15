@@ -9,6 +9,12 @@ import com.google.protobuf.ByteString;
 import ralph.EndpointConstructorObj;
 import ralph.Util;
 import ralph.InternalServiceFactory;
+import ralph.CommitMetadata;
+import ralph.ExecutionContext.ExecutionContext;
+import ralph.ActiveEvent;
+import ralph.RalphGlobals;
+
+import RalphVersions.VersionUtil;
 
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.DurabilityProto.Durability;
@@ -18,11 +24,11 @@ import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDConstructorNamePair;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
+import ralph_protobuffs.VersionSaverMessagesProto.VersionSaverMessages;
 
 public class DurabilityContext implements IDurabilityContext
 {
     public final String event_uuid;
-    private final String host_uuid;
     private final List<PartnerRequestSequenceBlock> rpc_args;
     // need to know which endpoint handled the rpc request.
     private final List<String> endpoint_uuid_received_rpc_on;
@@ -32,22 +38,23 @@ public class DurabilityContext implements IDurabilityContext
     // we can skip writing complete messages for contexts that never
     // got to prepare step.
     private boolean has_prepared = false;
-    
-    public DurabilityContext(String event_uuid, String host_uuid)
+
+    private final RalphGlobals ralph_globals;
+
+    public DurabilityContext(String event_uuid, RalphGlobals ralph_globals)
     {
         this.event_uuid = event_uuid;
         this.rpc_args = new ArrayList<PartnerRequestSequenceBlock>();
         this.endpoint_uuid_received_rpc_on = new ArrayList<String>();
         this.endpts_created_info = new ArrayList<EndptUUIDConstructorPair>();
-        this.host_uuid = host_uuid;
+        this.ralph_globals = ralph_globals;
     }
-
 
     @Override
     public synchronized DurabilityContext clone(String new_event_uuid)
     {
         DurabilityContext to_return =
-            new DurabilityContext(new_event_uuid,host_uuid);
+            new DurabilityContext(new_event_uuid,ralph_globals);
 
         for (int i = 0; i < rpc_args.size(); ++i)
         {
@@ -108,10 +115,31 @@ public class DurabilityContext implements IDurabilityContext
     @Override
     public synchronized Durability prepare_proto_buf()
     {
+        DurabilityPrepare.Builder prepare_msg =
+            DurabilityPrepare.newBuilder();
+
+        // generate commit metadata info.
+        ExecutionContext exec_ctx =
+            ralph_globals.all_ctx_map.get(event_uuid);
+        if (exec_ctx != null)
+        {
+            ActiveEvent curr_act_evt = exec_ctx.curr_act_evt();
+            if (curr_act_evt != null)
+            {
+                CommitMetadata commit_metadata = curr_act_evt.commit_metadata;
+                if (commit_metadata != null)
+                {
+                    VersionSaverMessages.CommitMetadata.Builder commit_builder =
+                        VersionUtil.commit_metadata_message_builder(
+                            commit_metadata);
+                    prepare_msg.setCommitMetadata(commit_builder);
+                }
+            }
+        }
+        
+        // generate rest of message
         UUID.Builder uuid_builder = UUID.newBuilder();
         uuid_builder.setData(event_uuid);
-        
-        DurabilityPrepare.Builder prepare_msg = DurabilityPrepare.newBuilder();
         prepare_msg.setEventUuid(uuid_builder);
 
         for (int i = 0; i < rpc_args.size(); ++i)
@@ -139,7 +167,7 @@ public class DurabilityContext implements IDurabilityContext
         
         // set host uuid
         UUID.Builder host_uuid_builder = UUID.newBuilder();
-        host_uuid_builder.setData(host_uuid);
+        host_uuid_builder.setData(ralph_globals.host_uuid);
         prepare_msg.setHostUuid(host_uuid_builder);
         
         Durability.Builder to_return = Durability.newBuilder();
@@ -169,7 +197,7 @@ public class DurabilityContext implements IDurabilityContext
         
         // set host uuid
         UUID.Builder host_uuid_builder = UUID.newBuilder();
-        host_uuid_builder.setData(host_uuid);
+        host_uuid_builder.setData(ralph_globals.host_uuid);
         complete_msg.setHostUuid(host_uuid_builder);
         
         Durability.Builder to_return = Durability.newBuilder();

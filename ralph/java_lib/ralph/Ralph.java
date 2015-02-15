@@ -29,8 +29,7 @@ public class Ralph {
         {
             String dummy_event_uuid = all_globals.generate_uuid();
             durability_context =
-                new DurabilityContext(
-                    dummy_event_uuid,all_globals.host_uuid);
+                new DurabilityContext(dummy_event_uuid,all_globals);
         }
 
         try
@@ -88,8 +87,7 @@ public class Ralph {
         {
             String dummy_event_uuid = all_globals.generate_uuid();
             durability_context =
-                new DurabilityContext(
-                    dummy_event_uuid,all_globals.host_uuid);
+                new DurabilityContext(dummy_event_uuid,all_globals);
         }
         
         RalphConnObj.TCPConnectionObj tcp_connection_obj = 
@@ -152,9 +150,8 @@ public class Ralph {
         {
             String dummy_event_uuid = all_globals.generate_uuid();
             durability_context =
-                new DurabilityContext(dummy_event_uuid,all_globals.host_uuid);
+                new DurabilityContext(dummy_event_uuid,all_globals);
         }
-
 
         try
         {

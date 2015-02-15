@@ -36,7 +36,7 @@ public class LiveAtomicExecutionContext extends AtomicExecutionContext
         if (DurabilityInfo.instance.durability_saver != null)
         {
             dur_ctx =
-                new DurabilityContext(act_evt.uuid,ralph_globals.host_uuid);
+                new DurabilityContext(act_evt.uuid,ralph_globals);
         }
             
         return new LiveAtomicExecutionContext(

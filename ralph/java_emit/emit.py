@@ -380,8 +380,7 @@ public final static %(endpoint_name)s external_create(
         {
             String dummy_event_uuid = ralph_globals.generate_uuid();
             durability_context =
-                new DurabilityContext(
-                    dummy_event_uuid,ralph_globals.host_uuid);
+                new DurabilityContext(dummy_event_uuid,ralph_globals);
         }
 
         try
