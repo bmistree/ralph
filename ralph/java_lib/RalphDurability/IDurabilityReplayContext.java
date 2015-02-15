@@ -45,4 +45,9 @@ public interface IDurabilityReplayContext
      */
     public RalphObject issue_rpc(
         RalphGlobals ralph_globals, ExecutionContext exec_ctx);
+
+    /**
+       @returns -1 if no more to replay.
+     */
+    public int get_next_index_and_increment();
 }

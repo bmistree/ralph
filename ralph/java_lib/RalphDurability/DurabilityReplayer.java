@@ -92,26 +92,36 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
         }
         else
         {
-            // get entry rpc message.
-            PairedPartnerRequestSequenceEndpointUUID entry_call = 
-                prepare_msg.getRpcArgs(0);
-            String evt_uuid = prepare_msg.getEventUuid().getData();
-            Endpoint to_run_on =
-                DurabilityReplayContext.get_endpt_associated_with_paired_rpc(
-                    entry_call,this);
-            String method_to_run =
-                DurabilityReplayContext.get_method_call_associated_with_paired_rpc(
-                    entry_call);
-            PartnerRequestSequenceBlock req_seq_block = entry_call.getRpcArgs();
+            int next_index =
+                durability_replay_context.get_next_index_and_increment();
+            while (next_index != -1)
+            {
+                // get entry rpc message.
+                PairedPartnerRequestSequenceEndpointUUID entry_call = 
+                    prepare_msg.getRpcArgs(next_index);
+                String evt_uuid = prepare_msg.getEventUuid().getData();
+                Endpoint to_run_on =
+                    DurabilityReplayContext.get_endpt_associated_with_paired_rpc(
+                        entry_call,this);
+                String method_to_run =
+                    DurabilityReplayContext.get_method_call_associated_with_paired_rpc(
+                        entry_call);
+                PartnerRequestSequenceBlock req_seq_block =
+                    entry_call.getRpcArgs();
 
-            DurabilityReplayMessageSender msg_sender =
-                new DurabilityReplayMessageSender(durability_replay_context);
-            
-            ReplayNonAtomicExecutionContext exec_ctx =
-                to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
-                    to_run_on, method_to_run, msg_sender,this);
-            durability_replay_context.durable_replay_exec_rpc(
-                exec_ctx, to_run_on, req_seq_block);
+                DurabilityReplayMessageSender msg_sender =
+                    new DurabilityReplayMessageSender(
+                        durability_replay_context);
+
+                ReplayNonAtomicExecutionContext exec_ctx =
+                    to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
+                        to_run_on, method_to_run, msg_sender,this);
+                durability_replay_context.durable_replay_exec_rpc(
+                    exec_ctx, to_run_on, req_seq_block);
+
+                next_index =
+                    durability_replay_context.get_next_index_and_increment();
+            }
         }
     }
 

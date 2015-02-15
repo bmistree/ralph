@@ -76,7 +76,7 @@ public class DurabilityReplayRPC
                 if (! replayed_internal.equals(original_internal))
                     return false;
             }
-
+            
             // second, checking rpc recipient.
             {
                 NumHolder replayed_called_on =

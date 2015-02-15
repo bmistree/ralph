@@ -37,9 +37,8 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
     // rpc requests from responses yet because we wouldn't be able to
     // distinguish if A issues an RPC to B and then B issues an RPC to
     // A before returning from A issues an RPC to B, B returns, and
-    // then B issues an RPC to A.  Index starts at 1 because first rpc
-    // is entry point.
-    private int next_rpc_request_index = 1;
+    // then B issues an RPC to A.
+    private int next_rpc_request_index = 0;
 
     private final IEndpointMap endpt_map;
     
@@ -50,6 +49,13 @@ public class DurabilityReplayContext implements IDurabilityReplayContext
         this.endpt_map = endpt_map;
     }
 
+    @Override
+    public int get_next_index_and_increment()
+    {
+        if (next_rpc_request_index >= prepare_msg.getRpcArgsCount())
+            return -1;
+        return next_rpc_request_index++;
+    }
     
     /**
        @return true if sequence_block is an rpc result instead of
