@@ -32,7 +32,9 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
        Contains unmatched commit messages.  If we reach the end of
        durability_reader and there are still elements in this map,
        these are outstanding commits, and calls to
-       next_durability_message can return them in any order as 
+       next_durability_message can return them in any order as
+
+       Keys are a combination of host uuid (if it exists) and event uuids.
      */
     final private Map<String,DurabilityPrepare> outstanding_request_map =
         new HashMap<String,DurabilityPrepare> ();
@@ -72,6 +74,13 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
             durability_prepare);
     }
 
+    private String key_from_combination(String host_uuid, String event_uuid)
+    {
+        if (host_uuid != null)
+            return host_uuid + ":" + event_uuid;
+        return event_uuid;
+    }
+    
     /**
        @return null if out of durability messsages to replay.
      */
@@ -86,6 +95,7 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
             if (msg == null)
                 return get_outstanding_if_exists();
 
+            
             // 1) if message is a prepare message, add it to map, and
             // keep reading.
             // 2) if message is a complete message without backout,
@@ -98,15 +108,29 @@ public class SerializedDurabilityReader implements ISerializedDurabilityReader
             {
                 // case 1
                 DurabilityPrepare prep = msg.getPrepare();
-                outstanding_request_map.put(
-                    prep.getEventUuid().getData(),prep);
+
+                String event_uuid = prep.getEventUuid().getData();
+                String host_uuid =  null;
+                if (prep.hasHostUuid())
+                    host_uuid = prep.getHostUuid().getData();
+                String outstanding_map_key =
+                    key_from_combination(host_uuid,event_uuid);
+                
+                outstanding_request_map.put(outstanding_map_key,prep);
             }
             else if (msg.hasComplete())
             {
                 DurabilityComplete comp = msg.getComplete();
-                String uuid = comp.getEventUuid().getData();
+
+                String event_uuid = comp.getEventUuid().getData();
+                String host_uuid =  null;
+                if (comp.hasHostUuid())
+                    host_uuid = comp.getHostUuid().getData();
+                String outstanding_map_key =
+                    key_from_combination(host_uuid,event_uuid);
+                
                 DurabilityPrepare prep =
-                    outstanding_request_map.remove(uuid);
+                    outstanding_request_map.remove(outstanding_map_key);
                 //// DEBUG
                 if (prep == null)
                 {
