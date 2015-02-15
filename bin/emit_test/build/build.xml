@@ -31,7 +31,10 @@
   <property
       name="disk_log_config"
       location="${lib_build_path}/disk_log_config/config.properties"/>
-
+  <property
+      name="multidisk_log_config"
+      location="${lib_build_path}/multidisk_durability_config/config.properties"/>
+  
   <property
       name="disk_durability_config"
       location="${lib_build_path}/disk_durability_config/config.properties"/>
@@ -764,7 +767,7 @@
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
-        jar_DurabilityReplayRPC">
+        jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer">
   </target>
 
 
@@ -2019,6 +2022,21 @@
       <param name="config_properties" value="${disk_durability_config}"/>
     </antcall>
   </target>
+
+  <property
+      name="multidisk_durability_single_side_replayer_jar"
+      value="multidisk_durability_single_side_replayer.jar"/>
+  <target
+      name="jar_MultidiskDurabilitySingleSideReplayer"
+      depends="ralph_DurabilitySingleSideReplayer,ralph_to_byte_code,
+               harness_DurabilitySingleSideReplayer">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilitySingleSideReplayer"/>
+      <param name="dest_jar" value="${multidisk_durability_single_side_replayer_jar}"/>
+      <param name="config_properties" value="${multidisk_log_config}"/>
+    </antcall>
+  </target>
+  
   
   <property
       name="alias_enum_jar"
