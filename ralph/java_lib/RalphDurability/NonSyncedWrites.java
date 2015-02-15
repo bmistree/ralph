@@ -23,7 +23,7 @@ public class NonSyncedWrites
                 BUFFERED_WRITER_BUFFER_SIZE_BYTES);
     }
 
-    public void write_complete_operation(
+    public void complete_operation(
         IDurabilityContext dc, boolean succeeded) throws IOException
     {
         Durability durability_msg = dc.complete_proto_buf(succeeded);
