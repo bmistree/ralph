@@ -1,0 +1,17 @@
+Service MixedAccesses
+{
+    TVar List(element: Number) num_list;
+
+    read_size() returns Number
+    {
+        return num_list.size();
+    }
+
+    append_element(Number to_append)
+    {
+        atomically
+        {
+            num_list.append(to_append);
+        }
+    }
+}

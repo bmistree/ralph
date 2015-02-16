@@ -98,6 +98,14 @@
     </antcall>
   </target>
 
+  <target name="mixed_accesses" depends="init"
+          description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="mixed_accesses.rph"/>
+      <param name="class_name" value="MixedAccessesJava"/>
+    </antcall>
+  </target>
+  
   <target name="direct_struct_wrapped_endpoint" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -819,6 +827,11 @@
       depends="iface_basic_ralph,basic_ralph,versioned_iface">
   </target>
 
+  <target
+      name="ralph_MixedAccesses"
+      depends="mixed_accesses">
+  </target>
+  
   <target
       name="ralph_ReplayPartnerNumberChange"
       depends="replay_partner_number_change">
