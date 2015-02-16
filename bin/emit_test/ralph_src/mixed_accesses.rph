@@ -1,17 +1,44 @@
-Service MixedAccesses
+Struct NumListHolder
 {
     TVar List(element: Number) num_list;
+}
+
+Service MixedAccesses
+{
+    Struct NumListHolder holder;
 
     read_size() returns Number
     {
-        return num_list.size();
+        return more_accesses();
     }
 
+    set_holder(Struct NumListHolder new_holder)
+    {
+        holder = new_holder;
+        atomically
+        {
+            append_element(3);
+        }
+    }
+    
+    more_accesses() returns Number
+    {
+        return holder.num_list.size();
+    }
+    
     append_element(Number to_append)
     {
         atomically
         {
-            num_list.append(to_append);
+            internal_append_element(to_append);
+        }
+    }
+
+    internal_append_element(Number to_append)
+    {
+        atomically
+        {
+            holder.num_list.append(to_append);
         }
     }
 }

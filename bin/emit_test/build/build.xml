@@ -1921,10 +1921,10 @@
     <antcall target="make_jar">
       <param name="main_class" value="MixedAccessesTester"/>
       <param name="dest_jar" value="${mixed_accesses_jar}"/>
-      <param name="config_properties" value="${in_memory_log_config}"/>
+      <param name="config_properties" value="${multidisk_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="replay_partner_number_change_jar"
       value="replay_partner_number_change.jar"/>
