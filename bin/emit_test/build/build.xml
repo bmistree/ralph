@@ -775,7 +775,8 @@
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
-        jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer">
+        jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer,
+        jar_MixedAccesses">
   </target>
 
 
@@ -1326,6 +1327,12 @@
           depends="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedIFace.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_MixedAccesses">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="MixedAccessesTester.java"/>
     </antcall>
   </target>
   
@@ -1905,6 +1912,19 @@
     </antcall>
   </target>
 
+  <property
+      name="mixed_accesses_jar"
+      value="mixed_accesses.jar"/>
+  <target
+      name="jar_MixedAccesses"
+      depends="ralph_MixedAccesses,ralph_to_byte_code,harness_MixedAccesses">
+    <antcall target="make_jar">
+      <param name="main_class" value="MixedAccessesTester"/>
+      <param name="dest_jar" value="${mixed_accesses_jar}"/>
+      <param name="config_properties" value="${in_memory_log_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="replay_partner_number_change_jar"
       value="replay_partner_number_change.jar"/>
