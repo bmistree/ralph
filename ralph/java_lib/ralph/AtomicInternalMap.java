@@ -106,7 +106,7 @@ public class AtomicInternalMap<K,V,ValueDeltaType>
 
         return RalphInternalMap.<K,V,ValueDeltaType>serialize_contents(
             active_event,key_type_name,value_type_name,serialization_context,
-            true,uuid(),this);
+            true,uuid(),this,this);
     }
 
     @Override

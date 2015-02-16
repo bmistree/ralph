@@ -331,7 +331,8 @@ public class RalphInternalList<V,ValueDeltaType>
         ActiveEvent active_event,String value_type_name,
         SerializationContext serialization_context, boolean is_atomic,
         String internal_container_uuid,
-        ListTypeDataWrapperSupplier<ValueType,ValueDeltaType> data_wrapper_supplier)
+        ListTypeDataWrapperSupplier<ValueType,ValueDeltaType> data_wrapper_supplier,
+        ImmediateCommitSupplier immediate_commit_supplier)
         throws BackoutException
     {
 
@@ -386,6 +387,7 @@ public class RalphInternalList<V,ValueDeltaType>
             }
             serialization_context.add_argument_container_delta(
                 arg_container_deltas_builder);
+            immediate_commit_supplier.check_immediate_commit(active_event);
         }
 
         ObjectContents.InternalList.Builder internal_list_builder =
@@ -396,6 +398,7 @@ public class RalphInternalList<V,ValueDeltaType>
         to_return.setInternalListType(internal_list_builder);
         to_return.setUuid(internal_container_uuid);
         to_return.setAtomic(is_atomic);
+
         return to_return.build();
     }
 

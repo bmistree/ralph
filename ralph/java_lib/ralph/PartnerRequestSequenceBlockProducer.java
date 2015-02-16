@@ -63,7 +63,6 @@ public class PartnerRequestSequenceBlockProducer
         else
             serialized_arguments = Arguments.newBuilder();
 
-        
         Arguments.Builder serialized_results = null;
         if (result != null)
         {

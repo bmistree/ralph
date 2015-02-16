@@ -141,7 +141,7 @@ public class AtomicInternalList<V,ValueDeltaType>
 
         return RalphInternalList.<V,ValueDeltaType>serialize_contents(
             active_event,value_type_name,serialization_context,true,
-            uuid(),this);
+            uuid(),this,this);
     }
 
     /** ImmediateCommitSupplier interface*/

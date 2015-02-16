@@ -225,7 +225,8 @@ public class RalphInternalMap<K,V,ValueDeltaType>
         ActiveEvent active_event,String key_type_name, String value_type_name,
         SerializationContext serialization_context, boolean is_atomic,
         String internal_container_uuid,
-        MapTypeDataWrapperSupplier<KeyType,ValueType,ValueDeltaType> data_wrapper_supplier)
+        MapTypeDataWrapperSupplier<KeyType,ValueType,ValueDeltaType> data_wrapper_supplier,
+        ImmediateCommitSupplier immediate_commit_supplier)
         throws BackoutException
     {
         if ((serialization_context != null) &&
@@ -316,6 +317,7 @@ public class RalphInternalMap<K,V,ValueDeltaType>
                     container_delta_builder);
             }
 
+            immediate_commit_supplier.check_immediate_commit(active_event);
             serialization_context.add_argument_container_delta(
                 arg_container_deltas_builder);
         }

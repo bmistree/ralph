@@ -111,7 +111,7 @@ public class NonAtomicInternalMap<K,V,ValueDeltaType>
 
         return RalphInternalMap.<K,V,ValueDeltaType>serialize_contents(
             active_event,key_type_name,value_type_name,serialization_context,
-            false,uuid(),this);
+            false,uuid(),this,this);
     }
     
     /** ImmediateCommitSupplier interface*/
