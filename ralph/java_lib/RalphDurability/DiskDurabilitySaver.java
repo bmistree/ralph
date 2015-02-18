@@ -100,7 +100,7 @@ public class DiskDurabilitySaver implements IDurabilitySaver
         EndpointConstructorObj endpt_constructor_obj)
     {
         boolean should_log_to_disk = false;
-        if (endpt_constructor_obj != null)
+        if (constructor_obj_index != null)
         {
             // require synchronized access to lru cache
             synchronized(this)
