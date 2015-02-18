@@ -8,6 +8,7 @@ import java.util.List;
 import RalphDurability.IDurabilitySaver;
 import RalphDurability.IDurabilityReplayer;
 import RalphDurability.DiskDurabilitySaver;
+import RalphDurability.NonSyncedWrites;
 import RalphDurability.DurabilityReplayer;
 import RalphDurability.DiskDurabilityReader;
 import RalphDurability.ISerializedDurabilityReader;
@@ -67,13 +68,47 @@ public class DurabilityInfo
                         properties.get("disk-durability-dirname");
                     String dirname = (String) obj_dirname;
 
-                    Object obj_num_log_files =
-                        properties.get("disk-durability-num-log-files");
-                    int num_log_files = Integer.parseInt(
-                        (String) obj_num_log_files);
+                    Object obj_num_synced_log_files =
+                        properties.get("disk-durability-num-synced-log-files");
+                    int num_synced_log_files = Integer.parseInt(
+                        (String) obj_num_synced_log_files);
+
+                    Object obj_num_non_synced_log_files =
+                        properties.get(
+                            "disk-durability-num-non-synced-log-files");
+                    int num_non_synced_log_files = Integer.parseInt(
+                        (String) obj_num_non_synced_log_files);
+
+                    durability_saver =
+                        new MultiDiskDurabilitySaver(
+                            dirname,num_synced_log_files,
+                            num_non_synced_log_files,
+                            DiskDurabilitySaver.MANAGED_CONSTRUCTOR_FACTORY,
+                            NonSyncedWrites.CONSTRUCTOR_FACTORY);
+                }
+                else if (which_durability.equals("lazy"))
+                {
+                    Object obj_dirname = 
+                        properties.get("disk-durability-dirname");
+                    String dirname = (String) obj_dirname;
+
+                    Object obj_num_synced_log_files =
+                        properties.get("disk-durability-num-synced-log-files");
+                    int num_synced_log_files = Integer.parseInt(
+                        (String) obj_num_synced_log_files);
+                    
+                    Object obj_num_non_synced_log_files =
+                        properties.get(
+                            "disk-durability-num-non-synced-log-files");
+                    int num_non_synced_log_files = Integer.parseInt(
+                        (String) obj_num_non_synced_log_files);
                     
                     durability_saver =
-                        new MultiDiskDurabilitySaver(dirname,num_log_files);
+                        new MultiDiskDurabilitySaver(
+                            dirname,num_synced_log_files,
+                            num_non_synced_log_files,
+                            NonSyncedWrites.CONSTRUCTOR_FACTORY,
+                            NonSyncedWrites.CONSTRUCTOR_FACTORY);
                 }
                 //// DEBUG
                 else

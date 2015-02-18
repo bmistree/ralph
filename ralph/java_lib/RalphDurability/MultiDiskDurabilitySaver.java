@@ -11,59 +11,58 @@ import ralph.Util;
 
 public class MultiDiskDurabilitySaver implements IDurabilitySaver
 {
-    private final int num_log_files;
+    private final int num_synced_log_files;
+    private final int num_non_synced_log_files;
 
     // disk durability savers
-    private final List<DiskDurabilitySaver> list_of_dur_savers =
-        new ArrayList<DiskDurabilitySaver>();
-    private final AtomicInteger saver_index = new AtomicInteger(0);
+    private final List<IDurabilitySaver> list_of_synced_savers =
+        new ArrayList<IDurabilitySaver>();
+    private final AtomicInteger synced_index = new AtomicInteger(0);
 
     // lazy file writers
-    private final List<NonSyncedWrites> list_of_lazy_writers =
-        new ArrayList<NonSyncedWrites>();
-    private final AtomicInteger lazy_index = new AtomicInteger(0);
+    private final List<IDurabilitySaver> list_of_non_synced_savers =
+        new ArrayList<IDurabilitySaver>();
+    private final AtomicInteger non_synced_index = new AtomicInteger(0);
 
     private final LRUCache<String,Boolean> constructor_obj_index =
         new LRUCache<String,Boolean>();
     
-    public MultiDiskDurabilitySaver(String dir_to_save_to,int num_log_files)
+    public MultiDiskDurabilitySaver(
+        String dir_to_save_to, int num_synced_log_files,
+        int num_non_synced_log_files, IDurabilitySaverFactory synced_saver,
+        IDurabilitySaverFactory non_synced_saver)
     {
-        this.num_log_files = num_log_files;
-        try
+        this.num_synced_log_files = num_synced_log_files;
+        this.num_non_synced_log_files = num_non_synced_log_files;
+        for (int i = 0; i < num_synced_log_files; ++i)
         {
-            for (int i = 0; i <num_log_files; ++i)
-            {
-                // initialize durability writers
-                String log_filename =
-                    dir_to_save_to + File.separator +
-                    "durability_log_" + i + ".bin";
-                DiskDurabilitySaver dds =
-                    new DiskDurabilitySaver (log_filename,false);
-                list_of_dur_savers.add(dds);
+            String log_filename =
+                dir_to_save_to + File.separator +
+                "durability_log_" + i + ".bin";
 
-                // initialize lazy writers
-                String lazy_filename =
-                    dir_to_save_to + File.separator +
-                    "durability_lazy_log_" + i + ".bin";
-                NonSyncedWrites nsw =
-                    new NonSyncedWrites (lazy_filename);
-                list_of_lazy_writers.add(nsw);
-            }
+            IDurabilitySaver ids = synced_saver.construct(log_filename);
+            list_of_synced_savers.add(ids);
         }
-        catch(IOException ex)
+
+        for (int i = 0; i <num_non_synced_log_files; ++i)
         {
-            ex.printStackTrace();
-            Util.logger_assert(
-                "File exception opening durability loggers");
+            // initialize lazy writers
+            String lazy_filename =
+                dir_to_save_to + File.separator +
+                "durability_lazy_log_" + i + ".bin";
+
+            IDurabilitySaver ids =
+                non_synced_saver.construct(lazy_filename);
+            list_of_non_synced_savers.add(ids);
         }
     }
 
     @Override
     public void prepare_operation(IDurabilityContext dc)
     {
-        int index = saver_index.addAndGet(1) % num_log_files;
-        DiskDurabilitySaver dds = list_of_dur_savers.get(index);
-        dds.prepare_operation(dc);
+        int index = synced_index.addAndGet(1) % num_synced_log_files;
+        IDurabilitySaver ids = list_of_synced_savers.get(index);
+        ids.prepare_operation(dc);
     }
 
     @Override
@@ -86,17 +85,17 @@ public class MultiDiskDurabilitySaver implements IDurabilitySaver
 
         if (should_log_to_disk)
         {
-            int index = saver_index.addAndGet(1) % num_log_files;
-            DiskDurabilitySaver dds = list_of_dur_savers.get(index);
-            dds.ensure_logged_endpt_constructor(endpt_constructor_obj);
+            int index = synced_index.addAndGet(1) % num_synced_log_files;
+            IDurabilitySaver ids = list_of_synced_savers.get(index);
+            ids.ensure_logged_endpt_constructor(endpt_constructor_obj);
         }
     }
 
     @Override
     public void complete_operation(IDurabilityContext dc, boolean succeeded)
     {
-        int index = lazy_index.addAndGet(1) % num_log_files;
-        NonSyncedWrites nsw = list_of_lazy_writers.get(index);
-        nsw.complete_operation(dc,succeeded);
+        int index = non_synced_index.addAndGet(1) % num_non_synced_log_files;
+        IDurabilitySaver ids = list_of_non_synced_savers.get(index);
+        ids.complete_operation(dc,succeeded);
     }
 }
