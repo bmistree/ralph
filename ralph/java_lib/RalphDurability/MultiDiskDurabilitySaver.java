@@ -22,6 +22,9 @@ public class MultiDiskDurabilitySaver implements IDurabilitySaver
     private final List<NonSyncedWrites> list_of_lazy_writers =
         new ArrayList<NonSyncedWrites>();
     private final AtomicInteger lazy_index = new AtomicInteger(0);
+
+    private final LRUCache<String,Boolean> constructor_obj_index =
+        new LRUCache<String,Boolean>();
     
     public MultiDiskDurabilitySaver(String dir_to_save_to,int num_log_files)
     {
@@ -35,7 +38,7 @@ public class MultiDiskDurabilitySaver implements IDurabilitySaver
                     dir_to_save_to + File.separator +
                     "durability_log_" + i + ".bin";
                 DiskDurabilitySaver dds =
-                    new DiskDurabilitySaver (log_filename);
+                    new DiskDurabilitySaver (log_filename,false);
                 list_of_dur_savers.add(dds);
 
                 // initialize lazy writers
@@ -67,9 +70,26 @@ public class MultiDiskDurabilitySaver implements IDurabilitySaver
     public void ensure_logged_endpt_constructor(
         EndpointConstructorObj endpt_constructor_obj)
     {
-        int index = saver_index.addAndGet(1) % num_log_files;
-        DiskDurabilitySaver dds = list_of_dur_savers.get(index);
-        dds.ensure_logged_endpt_constructor(endpt_constructor_obj);
+        boolean should_log_to_disk = false;
+        // require synchronized access to lru cache
+        synchronized(this)
+        {
+            String const_name = endpt_constructor_obj.get_canonical_name();
+            Boolean value =
+                constructor_obj_index.get(const_name);
+            if (value == null)
+            {
+                should_log_to_disk = true;
+                constructor_obj_index.put(const_name,true);
+            }
+        }
+
+        if (should_log_to_disk)
+        {
+            int index = saver_index.addAndGet(1) % num_log_files;
+            DiskDurabilitySaver dds = list_of_dur_savers.get(index);
+            dds.ensure_logged_endpt_constructor(endpt_constructor_obj);
+        }
     }
 
     @Override
