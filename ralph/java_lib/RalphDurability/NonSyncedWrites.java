@@ -86,7 +86,17 @@ public class NonSyncedWrites implements IDurabilitySaver
         @Override
         public IDurabilitySaver construct(String filename)
         {
-            return new DiskDurabilitySaver(filename,false);
+            try
+            {
+                return new NonSyncedWrites(filename);
+            }
+            catch(IOException ex)
+            {
+                ex.printStackTrace();
+                Util.logger_assert(
+                    "Could not open non-synced durability saver.");
+            }
+            return null;
         }
     }
 
