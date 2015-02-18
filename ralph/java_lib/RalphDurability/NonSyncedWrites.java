@@ -78,4 +78,18 @@ public class NonSyncedWrites implements IDurabilitySaver
                 "Could not write ensure_logged_endpt_constructor");
         }
     }
+
+    /**************** Factory for DiskDurabilitySaver ******/
+    private static class ConstructorFactory
+        implements IDurabilitySaverFactory
+    {
+        @Override
+        public IDurabilitySaver construct(String filename)
+        {
+            return new DiskDurabilitySaver(filename,false);
+        }
+    }
+
+    public final static ConstructorFactory CONSTRUCTOR_FACTORY =
+        new ConstructorFactory();
 }

@@ -105,7 +105,8 @@ public class DiskDurabilitySaver implements IDurabilitySaver
             // require synchronized access to lru cache
             synchronized(this)
             {
-                String const_name = endpt_constructor_obj.get_canonical_name();
+                String const_name =
+                    endpt_constructor_obj.get_canonical_name();
                 Boolean value =
                     constructor_obj_index.get(const_name);
 
@@ -126,4 +127,18 @@ public class DiskDurabilitySaver implements IDurabilitySaver
             write_durability_msg(msg,true);
         }
     }
+
+    /**************** Factory for DiskDurabilitySaver ******/
+    private static class ManagedConstructorFactory
+        implements IDurabilitySaverFactory
+    {
+        @Override
+        public IDurabilitySaver construct(String filename)
+        {
+            return new DiskDurabilitySaver(filename,false);
+        }
+    }
+
+    public final static ManagedConstructorFactory MANAGED_CONSTRUCTOR_FACTORY =
+        new ManagedConstructorFactory();
 }
