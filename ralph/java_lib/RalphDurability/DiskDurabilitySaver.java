@@ -23,18 +23,29 @@ public class DiskDurabilitySaver implements IDurabilitySaver
     private final FileOutputStream f_output;
     // key is endpoint constructor object's canonical name; value
     // doesn't matter.
-    private final LRUCache<String,Boolean> constructor_obj_index =
-        new LRUCache<String,Boolean>();
-    
+    private final LRUCache<String,Boolean> constructor_obj_index;
+
+
     public DiskDurabilitySaver (String log_filename)
     {
+        this(log_filename,true);
+    }
+
+    public DiskDurabilitySaver (
+        String log_filename, boolean handle_constructor_cache)
+    {
+        if (handle_constructor_cache)
+            constructor_obj_index = new LRUCache<String,Boolean>();
+        else
+            constructor_obj_index = null;
+        
         f_output = initialize_f_output(log_filename);
         if (f_output == null)
             f_channel = null;
         else
             f_channel = f_output.getChannel();
     }
-
+    
     private FileOutputStream initialize_f_output(String log_filename)
     {
         FileOutputStream to_return = null;
@@ -45,7 +56,8 @@ public class DiskDurabilitySaver implements IDurabilitySaver
         catch(IOException ex)
         {
             ex.printStackTrace();
-            Util.logger_assert("Could not initialize logging output stream.");
+            Util.logger_assert(
+                "Could not initialize logging output stream.");
         }
         return to_return;
     }
@@ -88,17 +100,20 @@ public class DiskDurabilitySaver implements IDurabilitySaver
         EndpointConstructorObj endpt_constructor_obj)
     {
         boolean should_log_to_disk = false;
-        // require synchronized access to lru cache
-        synchronized(this)
+        if (endpt_constructor_obj != null)
         {
-            String const_name = endpt_constructor_obj.get_canonical_name();
-            Boolean value =
-                constructor_obj_index.get(const_name);
-
-            if (value == null)
+            // require synchronized access to lru cache
+            synchronized(this)
             {
-                should_log_to_disk = true;
-                constructor_obj_index.put(const_name,true);
+                String const_name = endpt_constructor_obj.get_canonical_name();
+                Boolean value =
+                    constructor_obj_index.get(const_name);
+
+                if (value == null)
+                {
+                    should_log_to_disk = true;
+                    constructor_obj_index.put(const_name,true);
+                }
             }
         }
 
