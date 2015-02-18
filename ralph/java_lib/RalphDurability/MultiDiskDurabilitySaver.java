@@ -75,17 +75,8 @@ public class MultiDiskDurabilitySaver implements IDurabilitySaver
     @Override
     public void complete_operation(IDurabilityContext dc, boolean succeeded)
     {
-        try
-        {
-            int index = lazy_index.addAndGet(1) % num_log_files;
-            NonSyncedWrites nsw = list_of_lazy_writers.get(index);
-            nsw.complete_operation(dc,succeeded);
-        }
-        catch(IOException ex)
-        {
-            ex.printStackTrace();
-            Util.logger_assert(
-                "File exception opening durability loggers");            
-        }
+        int index = lazy_index.addAndGet(1) % num_log_files;
+        NonSyncedWrites nsw = list_of_lazy_writers.get(index);
+        nsw.complete_operation(dc,succeeded);
     }
 }
