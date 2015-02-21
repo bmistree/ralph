@@ -32,6 +32,8 @@ public class NonSyncedWrites implements IDurabilitySaver
         IDurabilityContext dc, boolean succeeded)
     {
         Durability durability_msg = dc.complete_proto_buf(succeeded);
+        if (durability_msg == null)
+            return;
         try
         {
             durability_msg.writeDelimitedTo(buffered_file_output_stream);
