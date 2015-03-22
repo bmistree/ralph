@@ -1,9 +1,11 @@
 package ralph;
 
-import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.List;
+import java.util.Arrays;
+
 
 import RalphDurability.IDurabilitySaver;
 import RalphDurability.IDurabilityReplayer;
@@ -66,7 +68,10 @@ public class DurabilityInfo
                 {
                     Object obj_dirname = 
                         properties.get("disk-durability-dirname");
-                    String dirname = (String) obj_dirname;
+                    String dirname_str = (String) obj_dirname;
+
+                    List<String> saver_dirnames =
+                        Arrays.asList(dirname_str.split(":"));
 
                     Object obj_num_synced_log_files =
                         properties.get("disk-durability-num-synced-log-files");
@@ -81,7 +86,7 @@ public class DurabilityInfo
 
                     durability_saver =
                         new MultiDiskDurabilitySaver(
-                            dirname,num_synced_log_files,
+                            saver_dirnames, num_synced_log_files,
                             num_non_synced_log_files,
                             DiskDurabilitySaver.MANAGED_CONSTRUCTOR_FACTORY,
                             NonSyncedWrites.CONSTRUCTOR_FACTORY);
