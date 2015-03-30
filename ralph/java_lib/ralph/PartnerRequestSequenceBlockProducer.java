@@ -42,16 +42,17 @@ public class PartnerRequestSequenceBlockProducer
        @param {bool} first_msg --- If we are sending the first message
        in a sequence block, then we must force the sequence local data
        to be transmitted whether or not it was modified.
-     
-       @param {boolean} atomic --- True if this call should be part of a
-       transaction.  False if it's just a regular rpc.  Only keeps track
-       if this is not the first message sent.
      */
     public static PartnerRequestSequenceBlock produce_request_block(
         String to_reply_to, String func_name, List<? extends RalphObject> args,
-        RalphObject result, ActiveEvent active_event, boolean atomic,
-        String reply_with_uuid) throws BackoutException
+        RalphObject result, ActiveEvent active_event, String reply_with_uuid)
+        throws BackoutException
     {
+        // true if this call should be part of a transaction.  alse if
+        // it's just a regular rpc.  Only keeps track if this is not
+        // the first message sent.
+        boolean atomic = active_event.rpc_should_be_atomic();
+        
         Arguments.Builder serialized_arguments;
         if (args != null)
         {

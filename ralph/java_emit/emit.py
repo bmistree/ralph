@@ -836,7 +836,7 @@ if (DurabilityInfo.instance.durability_saver != null)
 
     active_event.durability_entry_call(
         PartnerRequestSequenceBlockProducer.produce_request_block(
-            null,"%(func_name)s", args, null,active_event,false,
+            null,"%(func_name)s", args, null, active_event,
             "-1" /* Empty reply with for entry call*/),
         _uuid);
 }

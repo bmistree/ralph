@@ -16,7 +16,11 @@ import ralph.ActiveEvent;
 import ralph.RPCDeserializationHelper;
 import ralph.ExecutingEvent;
 import ralph.MVar;
+import ralph.PartnerRequestSequenceBlockProducer;
 import ralph.ExecutionContext.ExecutionContext;
+
+import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
+
 
 
 /**
@@ -109,24 +113,43 @@ public class LiveMessageSender implements IMessageSender
     @Override
     public RalphObject hide_partner_call(
         Endpoint endpoint, ExecutionContext exec_ctx,
-        String func_name, boolean first_msg,List<RalphObject> args,
+        String func_name, boolean first_msg, List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
     	MVar<MessageCallResultObject> result_mvar =
             new MVar<MessageCallResultObject>();
 
-        boolean partner_call_requested =
-            exec_ctx.curr_act_evt().issue_partner_sequence_block_call(
-                endpoint,this, func_name, result_mvar, first_msg,
-                args, result);
+        // If the other side responds to this rpc, it will contain
+        // this uuid.
+        String other_side_reply_with_uuid =
+            endpoint.ralph_globals.generate_local_uuid();
         
-    	if (! partner_call_requested)
-    	{
-            //# already backed out.  did not schedule message.  raise
-            //# exception
+        ActiveEvent act_evt = exec_ctx.curr_act_evt();
+        boolean can_issue_rpc = act_evt.note_issue_rpc(
+            endpoint, other_side_reply_with_uuid, result_mvar);
+
+        if (! can_issue_rpc)
+        {
+            // already backed out.  did not schedule message.  raise
+            // exception
             throw new BackoutException();
-    	}
+        }
+
+        String this_is_replying_to_uuid = null;
+        if (! first_msg)
+        {
+            this_is_replying_to_uuid = get_to_reply_with();
+            reset_to_reply_with();
+        }
+
+        PartnerRequestSequenceBlock request_sequence_block =
+            PartnerRequestSequenceBlockProducer.produce_request_block(
+                this_is_replying_to_uuid, func_name, args,result, act_evt,
+                other_side_reply_with_uuid);
+        
+        endpoint._send_partner_message_sequence_block_request(
+            request_sequence_block);
         
         // do not wait on result of call if it was the final return of
         // the call.

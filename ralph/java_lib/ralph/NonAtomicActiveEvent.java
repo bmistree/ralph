@@ -19,9 +19,7 @@ import ralph.ActiveEvent.FirstPhaseCommitResponseCode;
 import ralph.MessageSender.LiveMessageSender;
 import ralph.ExecutionContext.ExecutionContext;
 
-import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
-
 
 
 public class NonAtomicActiveEvent extends ActiveEvent
@@ -353,7 +351,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
         {
             request_sequence_block =
                 PartnerRequestSequenceBlockProducer.produce_request_block(
-                    replying_to,func_name,args,result,this,false,
+                    replying_to, func_name, args, result, this,
                     reply_with_uuid);
         }
         catch (BackoutException ex)
@@ -476,5 +474,11 @@ public class NonAtomicActiveEvent extends ActiveEvent
         Util.logger_assert(
             "Non-atomic active event should never receive " +
             "an unsuccessful first phase message.");
+    }
+
+    @Override
+    public boolean rpc_should_be_atomic()
+    {
+        return false;
     }
 }

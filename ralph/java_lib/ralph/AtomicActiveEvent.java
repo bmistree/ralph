@@ -1152,7 +1152,7 @@ public class AtomicActiveEvent extends ActiveEvent
             {
                 request_sequence_block =
                     PartnerRequestSequenceBlockProducer.produce_request_block(
-                        replying_to,func_name,args,result,this,true,
+                        replying_to, func_name, args, result, this,
                         reply_with_uuid);
             }
             catch (BackoutException ex)
@@ -1357,5 +1357,11 @@ public class AtomicActiveEvent extends ActiveEvent
         String msg_originator_host_uuid) 
     {
         forward_backout_request_and_backout_self();
+    }
+
+    @Override
+    public boolean rpc_should_be_atomic()
+    {
+        return true;
     }
 }

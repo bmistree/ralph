@@ -146,7 +146,8 @@ public abstract class ActiveEvent
                 commit_metadata);
         }
     }
-    
+
+    public abstract boolean rpc_should_be_atomic();
 
     public void only_remove_touched_obj(AtomicObject obj)
     {}
