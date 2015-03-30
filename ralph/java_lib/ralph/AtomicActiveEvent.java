@@ -1047,7 +1047,41 @@ public class AtomicActiveEvent extends ActiveEvent
         _unlock();
     }
 
-	
+
+    @Override
+    public boolean note_issue_rpc(
+        Endpoint endpt, String other_side_reply_with_uuid,
+        MVar<MessageCallResultObject> result_mvar)
+    {
+        boolean partner_call_requested = false;
+        _lock();
+
+        if (state == State.STATE_RUNNING)
+        {
+            partner_call_requested = true;
+            _others_contacted_lock();
+            local_endpoints_whose_partners_contacted.add(endpt);
+            _others_contacted_unlock();
+
+            
+            // code is listening on result_mvar.  when we
+            // receive a response, put it inside of the mvar.
+            // put result queue in map so that can demultiplex messages
+            // from partner to determine which result queue is finished
+            if (result_mvar != null)
+            {
+                //# may get None for result queue for the last message
+                //# sequence block requested.  It does not need to await
+                //# a response.
+                message_listening_mvars_map.put(
+                    other_side_reply_with_uuid, result_mvar);
+            }
+        }
+        _unlock();
+        return partner_call_requested;
+    }
+
+    
     /**
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished

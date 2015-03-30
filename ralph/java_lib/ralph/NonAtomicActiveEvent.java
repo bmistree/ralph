@@ -271,6 +271,26 @@ public class NonAtomicActiveEvent extends ActiveEvent
         Util.logger_assert(
             "Non-atomic should never be asked to backout and release lock.");
     }
+
+    @Override
+    public boolean note_issue_rpc(
+        Endpoint endpt, String other_side_reply_with_uuid,
+        MVar<MessageCallResultObject> result_mvar)
+    {
+        // code is listening on result_mvar.  when we
+        // receive a response, put it inside of the mvar.
+        // put result queue in map so that can demultiplex messages
+        // from partner to determine which result queue is finished
+        if (result_mvar != null)
+        {
+            //# may get None for result queue for the last message
+            //# sequence block requested.  It does not need to await
+            //# a response.
+            message_listening_mvars_map.put(
+                other_side_reply_with_uuid, result_mvar);
+        }
+        return true;
+    }
     
 	
     /**

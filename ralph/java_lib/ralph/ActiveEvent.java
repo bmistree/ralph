@@ -313,6 +313,23 @@ public abstract class ActiveEvent
         boolean first_msg,List<RalphObject>args,RalphObject result);
 
 
+    /**
+       @param {Endpoint} endpt
+       
+       @param {String} other_side_reply_with_uuid --- If the other
+       side responds to this rpc, it will contain this uuid.
+              
+       @param {MVar or null} result_mvar --- null if this was the last
+       message sent in a sequence and we're not waiting on a reply.
+
+       @returns true if still running and can send rpc
+     */
+    public abstract boolean note_issue_rpc(
+        Endpoint endpt, String other_side_reply_with_uuid,
+        MVar<MessageCallResultObject> result_mvar);
+
+
+
     public abstract String get_priority();
 
     /**
