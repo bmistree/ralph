@@ -784,10 +784,10 @@
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
         jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer,
-        jar_MixedAccesses">
+        jar_MixedAccesses, jar_DelayAndContend">
   </target>
 
-
+  
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
   <target
@@ -974,6 +974,11 @@
   <target
       name="ralph_StructLibraries"
       depends="struct_lib_user,struct_lib">
+  </target>
+
+  <target
+      name="ralph_DelayAndContend"
+      depends="delay_and_contend">
   </target>
   
   <target
@@ -1467,6 +1472,12 @@
   <target name="harness_StructLibraries">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="StructLibraries.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_DelayAndContend">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="DelayAndContendTest.java"/>
     </antcall>
   </target>
   
@@ -2314,6 +2325,21 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
+
+
+  <property
+      name="delay_and_contend_jar"
+      value="delay_and_contend.jar"/>
+  <target
+      name="jar_DelayAndContend"
+      depends="ralph_DelayAndContend,ralph_to_byte_code,harness_DelayAndContend">
+    <antcall target="make_jar">
+      <param name="main_class" value="DelayAndContendTest"/>
+      <param name="dest_jar" value="${delay_and_contend_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
 
   <property
       name="interrupted_atomically_jar"

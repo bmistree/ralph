@@ -8,12 +8,9 @@ Service DelayAndContend
         atomically
         {
             Number original_number = to_contend_on;
-            Text verbatim_string =
-                'try{Thread.sleep(1);} ' +
-                'catch(InterruptedException ex){ ' +
-                'ex.printStackTrace(); assert(false);}';
-            
-            verbatim(verbatim_string);
+            verbatim(
+                'try{Thread.sleep(1);} catch(InterruptedException ex){ ex.printStackTrace(); assert(false);}');
+
             to_contend_on += 1;
         }
     }
