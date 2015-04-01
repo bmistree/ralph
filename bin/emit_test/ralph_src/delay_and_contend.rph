@@ -12,6 +12,9 @@ Service DelayAndContend
                 'try{Thread.sleep(1);} catch(InterruptedException ex){ ex.printStackTrace(); assert(false);}');
 
             to_contend_on += 1;
+            speculate(to_contend_on);
+            verbatim(
+                'try{Thread.sleep(1);} catch(InterruptedException ex){ ex.printStackTrace(); assert(false);}');
         }
     }
 }
