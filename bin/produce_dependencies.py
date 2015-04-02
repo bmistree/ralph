@@ -133,6 +133,6 @@ def single_file_deps(fq_filename,lib_dir_list):
 
             if not found_dependency:
                 raise DependencyException(
-                    fq_input_filename,next_to_try_to_include)
+                    fq_filename, next_to_try_to_include)
 
     return dep_set
