@@ -251,6 +251,9 @@ public abstract class Endpoint implements IReference
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
         general_message.setTimestamp(_clock.get_int_timestamp());
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
         _conn_obj.write(general_message.build(),this);
     }
 
@@ -360,6 +363,11 @@ public abstract class Endpoint implements IReference
         String event_uuid,String priority,Exception exception)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerError.Builder error = PartnerError.newBuilder();
         UUID.Builder msg_evt_uuid = UUID.newBuilder();
@@ -521,6 +529,10 @@ public abstract class Endpoint implements IReference
     private void _notify_partner_ready()
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
         general_message.setTimestamp(_clock.get_int_timestamp());
 		
         PartnerNotifyReady.Builder partner_notify_ready =
@@ -546,6 +558,10 @@ public abstract class Endpoint implements IReference
     public void _forward_promotion_message(String uuid,String new_priority)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
         general_message.setTimestamp(_clock.get_int_timestamp());
         Promotion.Builder promotion_message = Promotion.newBuilder();
 		
@@ -594,6 +610,10 @@ public abstract class Endpoint implements IReference
         String event_uuid, String host_uuid)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder local_host_uuid = UUID.newBuilder();
+        local_host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(local_host_uuid);
+        
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerFirstPhaseResultMessage.Builder first_phase_result =
             PartnerFirstPhaseResultMessage.newBuilder();
@@ -635,6 +655,10 @@ public abstract class Endpoint implements IReference
         List<String> children_event_host_uuids)
     {
         GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid_builder = UUID.newBuilder();
+        host_uuid_builder.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid_builder);
+        
         general_message.setTimestamp(_clock.get_int_timestamp());
         PartnerFirstPhaseResultMessage.Builder first_phase_result_msg =
             PartnerFirstPhaseResultMessage.newBuilder();
@@ -780,6 +804,10 @@ public abstract class Endpoint implements IReference
     {
     	GeneralMessage.Builder general_message =
             GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
     	general_message.setTimestamp(_clock.get_int_timestamp());
         
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
@@ -798,6 +826,10 @@ public abstract class Endpoint implements IReference
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerCommitRequest.Builder commit_request_msg =
             PartnerCommitRequest.newBuilder();
@@ -840,6 +872,10 @@ public abstract class Endpoint implements IReference
         String active_event_uuid)
     {
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerCompleteCommitRequest.Builder complete_commit_request_msg =
             PartnerCompleteCommitRequest.newBuilder();
@@ -862,6 +898,10 @@ public abstract class Endpoint implements IReference
         String active_event_uuid)
     {
     	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid = UUID.newBuilder();
+        host_uuid.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid);
+        
     	general_message.setTimestamp(_clock.get_int_timestamp());
     	PartnerBackoutCommitRequest.Builder backout_commit_request =
             PartnerBackoutCommitRequest.newBuilder();
