@@ -13,7 +13,7 @@ public class MessageCallResultObject
     /**
        Common to all.
      */
-    public ResultType result_type;
+    public final ResultType result_type;
 
     /**
        Used for exceptions.
@@ -26,6 +26,7 @@ public class MessageCallResultObject
        ralphActiveEvent._ActiveEvent.
     */
     public String reply_with_msg_field;
+    public String remote_host_uuid;
 	
     /**
      *
@@ -68,7 +69,7 @@ public class MessageCallResultObject
 
     public static MessageCallResultObject completed(
         String _reply_with_msg_field, String _to_exec_next_name_msg_field,
-        Arguments _returned_objs)
+        String _remote_host_uuid, Arguments _returned_objs)
     {
         MessageCallResultObject to_return =
             new MessageCallResultObject(ResultType.COMPLETED);
@@ -76,6 +77,7 @@ public class MessageCallResultObject
         to_return.reply_with_msg_field = _reply_with_msg_field;
         to_return.to_exec_next_name_msg_field = _to_exec_next_name_msg_field;
         to_return.returned_objs = _returned_objs;
+        to_return.remote_host_uuid = _remote_host_uuid;
         return to_return;
     }
 

@@ -355,11 +355,12 @@ public abstract class ActiveEvent
     
     public void recv_partner_sequence_call_msg(
         Endpoint endpt_recvd_on,
-        PartnerRequestSequenceBlock msg)
+        PartnerRequestSequenceBlock msg, String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException
     {
         exec_ctx.add_rpc_arg(msg,endpt_recvd_on.uuid());
-        internal_recv_partner_sequence_call_msg(endpt_recvd_on,msg);
+        internal_recv_partner_sequence_call_msg(
+            endpt_recvd_on, msg, remote_host_uuid);
     }
 
     public void replay_rpc(
@@ -385,7 +386,8 @@ public abstract class ActiveEvent
     }
     
     protected abstract void internal_recv_partner_sequence_call_msg(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg)
+        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException;
     
     public abstract void receive_unsuccessful_first_phase_commit_msg(
@@ -448,14 +450,15 @@ public abstract class ActiveEvent
        thread.
     */
     protected ExecutingEvent handle_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
-        String name_of_block_to_exec_next)
+        Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg,
+        String name_of_block_to_exec_next, String remote_host_uuid)
     {
         LiveMessageSender msg_sender =
             (LiveMessageSender) exec_ctx.message_sender();
         
         // know how to reply to this message.
-        msg_sender.set_to_reply_with(msg.getReplyWithUuid().getData());
+        msg_sender.push_message_reply_stack(
+            msg.getReplyWithUuid().getData(), remote_host_uuid);
         
         return rpc_request_to_exec_evt(
             endpt_recvd_msg_on, msg,name_of_block_to_exec_next,
@@ -474,7 +477,7 @@ public abstract class ActiveEvent
      */
     protected void handle_non_first_sequence_msg_from_partner(
         Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
-        String name_of_block_to_exec_next)
+        String name_of_block_to_exec_next, String remote_host_uuid)
     {
         String reply_to_uuid = msg.getReplyToUuid().getData();
 
@@ -497,9 +500,10 @@ public abstract class ActiveEvent
         message_listening_mvars_map.get(reply_to_uuid).put(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid,name_of_block_to_exec_next,
+                remote_host_uuid,
                 // result of rpc
                 returned_objs));
-        
+
         //# no need holding onto mvar waiting on a message response.
         message_listening_mvars_map.remove(reply_to_uuid);
     }

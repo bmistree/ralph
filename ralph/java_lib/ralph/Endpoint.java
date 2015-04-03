@@ -408,6 +408,8 @@ public abstract class Endpoint implements IReference
     */
     public void _receive_msg_from_partner(GeneralMessage general_msg)
     {
+        String remote_host_uuid = general_msg.getSenderHostUuid().getData();
+            
         long tstamp = general_msg.getTimestamp();
         _clock.check_update_timestamp(tstamp);
 
@@ -420,7 +422,7 @@ public abstract class Endpoint implements IReference
         {
             RalphServiceActions.ServiceAction service_action =  
                 new RalphServiceActions.ReceivePartnerMessageRequestSequenceBlockAction(
-                    this,general_msg.getRequestSequenceBlock());
+                    this, general_msg.getRequestSequenceBlock(), remote_host_uuid);
             _thread_pool.add_service_action(service_action);
         }
         else if (general_msg.hasFirstPhaseResult())

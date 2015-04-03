@@ -26,13 +26,16 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
 {
     private final Endpoint local_endpoint;
     private final PartnerRequestSequenceBlock partner_request_block_msg;
-	
+    private final String remote_host_uuid;
+    
     public ReceivePartnerMessageRequestSequenceBlockAction(
-        Endpoint _local_endpoint,
-        PartnerRequestSequenceBlock _partner_request_block_msg)
+        Endpoint local_endpoint,
+        PartnerRequestSequenceBlock partner_request_block_msg,
+        String remote_host_uuid)
     {
-        local_endpoint = _local_endpoint;
-        partner_request_block_msg = _partner_request_block_msg;
+        this.local_endpoint = local_endpoint;
+        this.partner_request_block_msg = partner_request_block_msg;
+        this.remote_host_uuid = remote_host_uuid;
     }
 	
     @Override
@@ -74,7 +77,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             }
 
             exec_ctx.curr_act_evt().recv_partner_sequence_call_msg(
-                local_endpoint,partner_request_block_msg);
+                local_endpoint, partner_request_block_msg, remote_host_uuid);
         }
         catch (RalphExceptions.BackoutException _ex)
         {

@@ -29,6 +29,23 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
  */
 public class LiveMessageSender implements IMessageSender
 {
+    /** When we receive an RPC request and have to issue a response,
+     * we need to keep track of who we're supposed to reply to.  See
+     * additional notes on message_reply_stack.
+     */
+    private class MessageStackElement
+    {
+        public final String to_reply_with_uuid;
+        public final String remote_host_uuid;
+
+        public MessageStackElement(
+            String to_reply_with_uuid, String remote_host_uuid)
+        {
+            this.to_reply_with_uuid = to_reply_with_uuid;
+            this.remote_host_uuid = remote_host_uuid;
+        }
+    }
+    
     /**
        We can be listening to more than one open threadsafe message
        queue.  If endpoint A waits on its partner, and, while
@@ -45,29 +62,33 @@ public class LiveMessageSender implements IMessageSender
        the reply_to field to index into a map of message listening
        queues in waldoActiveEvent._ActiveEvent.
     */
-    private final Stack<String> to_reply_with_uuid = new Stack<String>();
+    private final Stack<MessageStackElement> message_reply_stack =
+        new Stack<MessageStackElement>();
     private boolean msg_send_initialized_bit = false;
 
-    public void set_to_reply_with (String _to_reply_with_uuid)
+    public void push_message_reply_stack(
+        String to_reply_with_uuid, String remote_host_uuid)
     {
-        to_reply_with_uuid.push(_to_reply_with_uuid);
+        message_reply_stack.push(
+            new MessageStackElement(to_reply_with_uuid, remote_host_uuid));
     }
-    public String get_to_reply_with()
+
+    public MessageStackElement get_message_stack_element()
     {
-        return to_reply_with_uuid.peek();
+        return message_reply_stack.peek();
     }
 
     /**
-     *  Each time we finish a message sequence, we reset
-     set_to_reply_with.  This is so that if we start any new
-     message sequences, the calls to the message sequences will be
-     started fresh instead of viewed as a continuation of the
-     previous sequence.
+     * Each time we finish a message sequence, we reset
+     message_reply_stack.  This is so that if we start any new message
+     sequences, the calls to the message sequences will be started
+     fresh instead of viewed as a continuation of the previous
+     sequence.
     */
-    private void reset_to_reply_with()
+    private void pop_message_reply_stack()
     {
-        if (! to_reply_with_uuid.empty())
-            to_reply_with_uuid.pop();
+        if (! message_reply_stack.empty())
+            message_reply_stack.pop();
     }
 
     /**
@@ -137,15 +158,18 @@ public class LiveMessageSender implements IMessageSender
         }
 
         String this_is_replying_to_uuid = null;
+        String remote_host_replying_to = null;
         if (! first_msg)
         {
-            this_is_replying_to_uuid = get_to_reply_with();
-            reset_to_reply_with();
+            MessageStackElement elem = get_message_stack_element();
+            this_is_replying_to_uuid = elem.to_reply_with_uuid;
+            remote_host_replying_to = elem.remote_host_uuid;
+            pop_message_reply_stack();
         }
 
         PartnerRequestSequenceBlock request_sequence_block =
             PartnerRequestSequenceBlockProducer.produce_request_block(
-                this_is_replying_to_uuid, func_name, args,result, act_evt,
+                this_is_replying_to_uuid, func_name, args, result, act_evt,
                 other_side_reply_with_uuid);
         
         endpoint._send_partner_message_sequence_block_request(
@@ -171,11 +195,12 @@ public class LiveMessageSender implements IMessageSender
     	else if (mvar_elem.result_type ==
                  MessageCallResultObject.ResultType.APPLICATION_EXCEPTION)
         {
-            throw new ApplicationException("appliaction exception");
+            throw new ApplicationException("application exception");
         }
 
     	//means that it must be a sequence message call result
-    	set_to_reply_with(mvar_elem.reply_with_msg_field);
+        push_message_reply_stack(
+            mvar_elem.reply_with_msg_field, mvar_elem.remote_host_uuid);
         
         //# send more messages
         String to_exec_next = mvar_elem.to_exec_next_name_msg_field;
@@ -183,16 +208,16 @@ public class LiveMessageSender implements IMessageSender
         if (to_exec_next != null)
         {
             ExecutingEvent.static_run(
-                endpoint,to_exec_next, exec_ctx,false);
+                endpoint, to_exec_next, exec_ctx, false);
         }
         else
         {
-            //# end of sequence: reset to_reply_with_uuid in context.  we do
-            //# this so that if we go on to execute another message sequence
-            //# following this one, then the message sequence will be viewed as
-            //# a new message sequence, rather than the continuation of a
-            //# previous one.
-            reset_to_reply_with();
+            // end of sequence: reset message_reply_stack in context.
+            // we do this so that if we go on to execute another
+            // message sequence following this one, then the message
+            // sequence will be viewed as a new message sequence,
+            // rather than the continuation of a previous one.
+            pop_message_reply_stack();
         }
 
         // if this was the response to an rpc that returned a value,
