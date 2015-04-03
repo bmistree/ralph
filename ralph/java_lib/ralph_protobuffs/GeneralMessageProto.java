@@ -146,6 +146,20 @@ public final class GeneralMessageProto {
      * <code>required uint64 timestamp = 10;</code>
      */
     long getTimestamp();
+
+    // required .UUID sender_host_uuid = 11;
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    boolean hasSenderHostUuid();
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    ralph_protobuffs.UtilProto.UUID getSenderHostUuid();
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder();
   }
   /**
    * Protobuf type {@code GeneralMessage}
@@ -318,6 +332,19 @@ public final class GeneralMessageProto {
             case 80: {
               bitField0_ |= 0x00000200;
               timestamp_ = input.readUInt64();
+              break;
+            }
+            case 90: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000400) == 0x00000400)) {
+                subBuilder = senderHostUuid_.toBuilder();
+              }
+              senderHostUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(senderHostUuid_);
+                senderHostUuid_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000400;
               break;
             }
           }
@@ -574,6 +601,28 @@ public final class GeneralMessageProto {
       return timestamp_;
     }
 
+    // required .UUID sender_host_uuid = 11;
+    public static final int SENDER_HOST_UUID_FIELD_NUMBER = 11;
+    private ralph_protobuffs.UtilProto.UUID senderHostUuid_;
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    public boolean hasSenderHostUuid() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    public ralph_protobuffs.UtilProto.UUID getSenderHostUuid() {
+      return senderHostUuid_;
+    }
+    /**
+     * <code>required .UUID sender_host_uuid = 11;</code>
+     */
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder() {
+      return senderHostUuid_;
+    }
+
     private void initFields() {
       notifyReady_ = ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady.getDefaultInstance();
       requestSequenceBlock_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.getDefaultInstance();
@@ -585,6 +634,7 @@ public final class GeneralMessageProto {
       heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
       promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
       timestamp_ = 0L;
+      senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -592,6 +642,10 @@ public final class GeneralMessageProto {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasTimestamp()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSenderHostUuid()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -649,6 +703,10 @@ public final class GeneralMessageProto {
           return false;
         }
       }
+      if (!getSenderHostUuid().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -685,6 +743,9 @@ public final class GeneralMessageProto {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeUInt64(10, timestamp_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeMessage(11, senderHostUuid_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -734,6 +795,10 @@ public final class GeneralMessageProto {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(10, timestamp_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, senderHostUuid_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -852,6 +917,7 @@ public final class GeneralMessageProto {
           getErrorFieldBuilder();
           getHeartbeatFieldBuilder();
           getPromotionFieldBuilder();
+          getSenderHostUuidFieldBuilder();
         }
       }
       private static Builder create() {
@@ -916,6 +982,12 @@ public final class GeneralMessageProto {
         bitField0_ = (bitField0_ & ~0x00000100);
         timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000200);
+        if (senderHostUuidBuilder_ == null) {
+          senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        } else {
+          senderHostUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -1020,6 +1092,14 @@ public final class GeneralMessageProto {
           to_bitField0_ |= 0x00000200;
         }
         result.timestamp_ = timestamp_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        if (senderHostUuidBuilder_ == null) {
+          result.senderHostUuid_ = senderHostUuid_;
+        } else {
+          result.senderHostUuid_ = senderHostUuidBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1066,12 +1146,19 @@ public final class GeneralMessageProto {
         if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
         }
+        if (other.hasSenderHostUuid()) {
+          mergeSenderHostUuid(other.getSenderHostUuid());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasTimestamp()) {
+          
+          return false;
+        }
+        if (!hasSenderHostUuid()) {
           
           return false;
         }
@@ -1128,6 +1215,10 @@ public final class GeneralMessageProto {
             
             return false;
           }
+        }
+        if (!getSenderHostUuid().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -2237,6 +2328,123 @@ public final class GeneralMessageProto {
         return this;
       }
 
+      // required .UUID sender_host_uuid = 11;
+      private ralph_protobuffs.UtilProto.UUID senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> senderHostUuidBuilder_;
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public boolean hasSenderHostUuid() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUID getSenderHostUuid() {
+        if (senderHostUuidBuilder_ == null) {
+          return senderHostUuid_;
+        } else {
+          return senderHostUuidBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public Builder setSenderHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (senderHostUuidBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          senderHostUuid_ = value;
+          onChanged();
+        } else {
+          senderHostUuidBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public Builder setSenderHostUuid(
+          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (senderHostUuidBuilder_ == null) {
+          senderHostUuid_ = builderForValue.build();
+          onChanged();
+        } else {
+          senderHostUuidBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public Builder mergeSenderHostUuid(ralph_protobuffs.UtilProto.UUID value) {
+        if (senderHostUuidBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+              senderHostUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            senderHostUuid_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(senderHostUuid_).mergeFrom(value).buildPartial();
+          } else {
+            senderHostUuid_ = value;
+          }
+          onChanged();
+        } else {
+          senderHostUuidBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public Builder clearSenderHostUuid() {
+        if (senderHostUuidBuilder_ == null) {
+          senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          onChanged();
+        } else {
+          senderHostUuidBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder getSenderHostUuidBuilder() {
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return getSenderHostUuidFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder() {
+        if (senderHostUuidBuilder_ != null) {
+          return senderHostUuidBuilder_.getMessageOrBuilder();
+        } else {
+          return senderHostUuid_;
+        }
+      }
+      /**
+       * <code>required .UUID sender_host_uuid = 11;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getSenderHostUuidFieldBuilder() {
+        if (senderHostUuidBuilder_ == null) {
+          senderHostUuidBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                  senderHostUuid_,
+                  getParentForChildren(),
+                  isClean());
+          senderHostUuid_ = null;
+        }
+        return senderHostUuidBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:GeneralMessage)
     }
 
@@ -2269,7 +2477,7 @@ public final class GeneralMessageProto {
       "rtnerCompleteCommitRequest.proto\032\032partne" +
       "rCommitRequest.proto\032\022partnerError.proto" +
       "\032\017heartbeat.proto\032\026promotionMessage.prot" +
-      "o\032\nutil.proto\"\322\003\n\016GeneralMessage\022)\n\014noti" +
+      "o\032\nutil.proto\"\363\003\n\016GeneralMessage\022)\n\014noti" +
       "fy_ready\030\001 \001(\0132\023.PartnerNotifyReady\022<\n\026r" +
       "equest_sequence_block\030\002 \001(\0132\034.PartnerReq",
       "uestSequenceBlock\022;\n\022first_phase_result\030" +
@@ -2281,8 +2489,8 @@ public final class GeneralMessageProto {
       "mmitRequest\022\034\n\005error\030\007 \001(\0132\r.PartnerErro" +
       "r\022\035\n\theartbeat\030\010 \001(\0132\n.Heartbeat\022\035\n\tprom" +
       "otion\030\t \001(\0132\n.Promotion\022\021\n\ttimestamp\030\n \002" +
-      "(\004B\'\n\020ralph_protobuffsB\023GeneralMessagePr",
-      "oto"
+      "(\004\022\037\n\020sender_host_uuid\030\013 \002(\0132\005.UUIDB\'\n\020r",
+      "alph_protobuffsB\023GeneralMessageProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2294,7 +2502,7 @@ public final class GeneralMessageProto {
           internal_static_GeneralMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_GeneralMessage_descriptor,
-              new java.lang.String[] { "NotifyReady", "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Error", "Heartbeat", "Promotion", "Timestamp", });
+              new java.lang.String[] { "NotifyReady", "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Error", "Heartbeat", "Promotion", "Timestamp", "SenderHostUuid", });
           return null;
         }
       };

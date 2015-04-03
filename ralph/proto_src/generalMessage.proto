@@ -25,4 +25,5 @@ message GeneralMessage
     optional Promotion promotion = 9;
     
     required uint64 timestamp = 10;
+    required UUID sender_host_uuid = 11;
 }
