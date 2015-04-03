@@ -1,4 +1,3 @@
-import "partnerNotifyReady.proto";
 import "partnerRequestSequenceBlock.proto";
 import "partnerFirstPhaseResultMessage.proto";
 import "partnerBackoutCommitRequest.proto";
@@ -14,16 +13,15 @@ option java_outer_classname = "GeneralMessageProto";
 
 message GeneralMessage
 {
-    optional PartnerNotifyReady notify_ready = 1;
-    optional PartnerRequestSequenceBlock request_sequence_block = 2;
-    optional PartnerFirstPhaseResultMessage first_phase_result = 3;
-    optional PartnerBackoutCommitRequest backout_commit_request = 4;
-    optional PartnerCompleteCommitRequest complete_commit_request = 5;
-    optional PartnerCommitRequest commit_request = 6;
-    optional PartnerError error = 7;
-    optional Heartbeat heartbeat = 8;
-    optional Promotion promotion = 9;
+    optional PartnerRequestSequenceBlock request_sequence_block = 1;
+    optional PartnerFirstPhaseResultMessage first_phase_result = 2;
+    optional PartnerBackoutCommitRequest backout_commit_request = 3;
+    optional PartnerCompleteCommitRequest complete_commit_request = 4;
+    optional PartnerCommitRequest commit_request = 5;
+    optional PartnerError error = 6;
+    optional Heartbeat heartbeat = 7;
+    optional Promotion promotion = 8;
     
-    required uint64 timestamp = 10;
-    required UUID sender_host_uuid = 11;
+    required uint64 timestamp = 9;
+    required UUID sender_host_uuid = 10;
 }

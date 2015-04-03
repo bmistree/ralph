@@ -15,7 +15,6 @@ import ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest;
 import ralph_protobuffs.PartnerCompleteCommitRequestProto.PartnerCompleteCommitRequest;
 import ralph_protobuffs.PartnerErrorProto.PartnerError;
 import ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseResultMessage;
-import ralph_protobuffs.PartnerNotifyReadyProto.PartnerNotifyReady;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.UtilProto.UUID;
@@ -155,9 +154,6 @@ public abstract class Endpoint implements IReference
 
         _conn_obj.register_endpoint(this);
 
-        // tell other side my uuid... skip initialization.
-        _notify_partner_ready();
-        
         if (durability_context != null)
         {
             durability_context.add_endpt_created_info(
@@ -413,12 +409,7 @@ public abstract class Endpoint implements IReference
         long tstamp = general_msg.getTimestamp();
         _clock.check_update_timestamp(tstamp);
 
-        if (general_msg.hasNotifyReady())
-        {
-            String partner_host_uuid = general_msg.getNotifyReady().getHostUuid().getData();
-            _receive_partner_ready(partner_host_uuid);
-        }
-        else if (general_msg.hasRequestSequenceBlock())
+        if (general_msg.hasRequestSequenceBlock())
         {
             RalphServiceActions.ServiceAction service_action =  
                 new RalphServiceActions.ReceivePartnerMessageRequestSequenceBlockAction(
@@ -519,39 +510,7 @@ public abstract class Endpoint implements IReference
                 this,event_uuid,new_priority);
         _thread_pool.add_service_action(promotion_action);
     }
-        
-    private void _receive_partner_ready(String partner_host_uuid)
-    {
-        _set_partner_host_uuid(partner_host_uuid);
-    }
 	
-    /**
-     * Tell partner endpoint that I have completed my onReady action.
-     */
-    private void _notify_partner_ready()
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-        general_message.setTimestamp(_clock.get_int_timestamp());
-		
-        PartnerNotifyReady.Builder partner_notify_ready =
-            PartnerNotifyReady.newBuilder();
-		
-		
-        UtilProto.UUID.Builder host_uuid_builder =
-            UtilProto.UUID.newBuilder();
-        host_uuid_builder.setData(_host_uuid);
-        
-        partner_notify_ready.setHostUuid(host_uuid_builder);
-		
-        general_message.setNotifyReady(partner_notify_ready);
-
-        _conn_obj.write(general_message.build(),this);
-    }
-        
     /**
      * Send partner message that event has been promoted
      * @param uuid

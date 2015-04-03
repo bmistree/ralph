@@ -37,7 +37,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
         this.partner_request_block_msg = partner_request_block_msg;
         this.remote_host_uuid = remote_host_uuid;
     }
-	
+
     @Override
     public void run() 
     {
