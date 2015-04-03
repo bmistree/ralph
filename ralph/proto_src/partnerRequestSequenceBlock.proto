@@ -81,4 +81,9 @@ message PartnerRequestSequenceBlock
        values.
      */
     optional Arguments return_objs = 8;
+
+    /**
+       For an RPC request, designate which endpoint to run rpc on.
+     */
+    optional UUID target_endpt = 9;
 }

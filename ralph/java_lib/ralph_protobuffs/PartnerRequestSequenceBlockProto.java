@@ -248,6 +248,35 @@ public final class PartnerRequestSequenceBlockProto {
      * </pre>
      */
     ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.ArgumentsOrBuilder getReturnObjsOrBuilder();
+
+    // optional .UUID target_endpt = 9;
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    boolean hasTargetEndpt();
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUID getTargetEndpt();
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    ralph_protobuffs.UtilProto.UUIDOrBuilder getTargetEndptOrBuilder();
   }
   /**
    * Protobuf type {@code PartnerRequestSequenceBlock}
@@ -386,6 +415,19 @@ public final class PartnerRequestSequenceBlockProto {
                 returnObjs_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000080;
+              break;
+            }
+            case 74: {
+              ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+                subBuilder = targetEndpt_.toBuilder();
+              }
+              targetEndpt_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(targetEndpt_);
+                targetEndpt_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000100;
               break;
             }
           }
@@ -3483,6 +3525,43 @@ public final class PartnerRequestSequenceBlockProto {
       return returnObjs_;
     }
 
+    // optional .UUID target_endpt = 9;
+    public static final int TARGET_ENDPT_FIELD_NUMBER = 9;
+    private ralph_protobuffs.UtilProto.UUID targetEndpt_;
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    public boolean hasTargetEndpt() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUID getTargetEndpt() {
+      return targetEndpt_;
+    }
+    /**
+     * <code>optional .UUID target_endpt = 9;</code>
+     *
+     * <pre>
+     **
+     *For an RPC request, designate which endpoint to run rpc on.
+     * </pre>
+     */
+    public ralph_protobuffs.UtilProto.UUIDOrBuilder getTargetEndptOrBuilder() {
+      return targetEndpt_;
+    }
+
     private void initFields() {
       eventUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       priority_ = ralph_protobuffs.UtilProto.Priority.getDefaultInstance();
@@ -3492,6 +3571,7 @@ public final class PartnerRequestSequenceBlockProto {
       arguments_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
       transaction_ = false;
       returnObjs_ = ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments.getDefaultInstance();
+      targetEndpt_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3544,6 +3624,12 @@ public final class PartnerRequestSequenceBlockProto {
           return false;
         }
       }
+      if (hasTargetEndpt()) {
+        if (!getTargetEndpt().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3574,6 +3660,9 @@ public final class PartnerRequestSequenceBlockProto {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(8, returnObjs_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeMessage(9, targetEndpt_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -3615,6 +3704,10 @@ public final class PartnerRequestSequenceBlockProto {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, returnObjs_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, targetEndpt_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3730,6 +3823,7 @@ public final class PartnerRequestSequenceBlockProto {
           getReplyToUuidFieldBuilder();
           getArgumentsFieldBuilder();
           getReturnObjsFieldBuilder();
+          getTargetEndptFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3778,6 +3872,12 @@ public final class PartnerRequestSequenceBlockProto {
           returnObjsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000080);
+        if (targetEndptBuilder_ == null) {
+          targetEndpt_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+        } else {
+          targetEndptBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -3862,6 +3962,14 @@ public final class PartnerRequestSequenceBlockProto {
         } else {
           result.returnObjs_ = returnObjsBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        if (targetEndptBuilder_ == null) {
+          result.targetEndpt_ = targetEndpt_;
+        } else {
+          result.targetEndpt_ = targetEndptBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3903,6 +4011,9 @@ public final class PartnerRequestSequenceBlockProto {
         }
         if (other.hasReturnObjs()) {
           mergeReturnObjs(other.getReturnObjs());
+        }
+        if (other.hasTargetEndpt()) {
+          mergeTargetEndpt(other.getTargetEndpt());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3951,6 +4062,12 @@ public final class PartnerRequestSequenceBlockProto {
         }
         if (hasReturnObjs()) {
           if (!getReturnObjs().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasTargetEndpt()) {
+          if (!getTargetEndpt().isInitialized()) {
             
             return false;
           }
@@ -5131,6 +5248,168 @@ public final class PartnerRequestSequenceBlockProto {
         return returnObjsBuilder_;
       }
 
+      // optional .UUID target_endpt = 9;
+      private ralph_protobuffs.UtilProto.UUID targetEndpt_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> targetEndptBuilder_;
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public boolean hasTargetEndpt() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID getTargetEndpt() {
+        if (targetEndptBuilder_ == null) {
+          return targetEndpt_;
+        } else {
+          return targetEndptBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public Builder setTargetEndpt(ralph_protobuffs.UtilProto.UUID value) {
+        if (targetEndptBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          targetEndpt_ = value;
+          onChanged();
+        } else {
+          targetEndptBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public Builder setTargetEndpt(
+          ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
+        if (targetEndptBuilder_ == null) {
+          targetEndpt_ = builderForValue.build();
+          onChanged();
+        } else {
+          targetEndptBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public Builder mergeTargetEndpt(ralph_protobuffs.UtilProto.UUID value) {
+        if (targetEndptBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+              targetEndpt_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
+            targetEndpt_ =
+              ralph_protobuffs.UtilProto.UUID.newBuilder(targetEndpt_).mergeFrom(value).buildPartial();
+          } else {
+            targetEndpt_ = value;
+          }
+          onChanged();
+        } else {
+          targetEndptBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public Builder clearTargetEndpt() {
+        if (targetEndptBuilder_ == null) {
+          targetEndpt_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
+          onChanged();
+        } else {
+          targetEndptBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
+        return this;
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUID.Builder getTargetEndptBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return getTargetEndptFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      public ralph_protobuffs.UtilProto.UUIDOrBuilder getTargetEndptOrBuilder() {
+        if (targetEndptBuilder_ != null) {
+          return targetEndptBuilder_.getMessageOrBuilder();
+        } else {
+          return targetEndpt_;
+        }
+      }
+      /**
+       * <code>optional .UUID target_endpt = 9;</code>
+       *
+       * <pre>
+       **
+       *For an RPC request, designate which endpoint to run rpc on.
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
+          getTargetEndptFieldBuilder() {
+        if (targetEndptBuilder_ == null) {
+          targetEndptBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder>(
+                  targetEndpt_,
+                  getParentForChildren(),
+                  isClean());
+          targetEndpt_ = null;
+        }
+        return targetEndptBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:PartnerRequestSequenceBlock)
     }
 
@@ -5168,7 +5447,7 @@ public final class PartnerRequestSequenceBlockProto {
     java.lang.String[] descriptorData = {
       "\n!partnerRequestSequenceBlock.proto\032\nuti" +
       "l.proto\032\024objectContents.proto\032\013delta.pro" +
-      "to\"\312\004\n\033PartnerRequestSequenceBlock\022\031\n\nev" +
+      "to\"\347\004\n\033PartnerRequestSequenceBlock\022\031\n\nev" +
       "ent_uuid\030\001 \002(\0132\005.UUID\022\033\n\010priority\030\002 \002(\0132" +
       "\t.Priority\022 \n\030name_of_block_requesting\030\003" +
       " \001(\t\022\036\n\017reply_with_uuid\030\004 \002(\0132\005.UUID\022\034\n\r" +
@@ -5176,15 +5455,15 @@ public final class PartnerRequestSequenceBlockProto {
       "\006 \001(\0132&.PartnerRequestSequenceBlock.Argu" +
       "ments\022\023\n\013transaction\030\007 \002(\010\022;\n\013return_obj" +
       "s\030\010 \001(\0132&.PartnerRequestSequenceBlock.Ar",
-      "guments\032\245\001\n\tArguments\022)\n\020context_content" +
-      "s\030\001 \003(\0132\017.ObjectContents\022N\n\020container_de" +
-      "ltas\030\002 \003(\01324.PartnerRequestSequenceBlock" +
-      ".ArgumentContainerDeltas\022\035\n\016argument_uui" +
-      "ds\030\003 \003(\0132\005.UUID\032^\n\027ArgumentContainerDelt" +
-      "as\022\023\n\013object_uuid\030\001 \002(\t\022.\n\017container_del" +
-      "ta\030\002 \003(\0132\025.Delta.ContainerDeltaB4\n\020ralph" +
-      "_protobuffsB PartnerRequestSequenceBlock" +
-      "Proto"
+      "guments\022\033\n\014target_endpt\030\t \001(\0132\005.UUID\032\245\001\n" +
+      "\tArguments\022)\n\020context_contents\030\001 \003(\0132\017.O" +
+      "bjectContents\022N\n\020container_deltas\030\002 \003(\0132" +
+      "4.PartnerRequestSequenceBlock.ArgumentCo" +
+      "ntainerDeltas\022\035\n\016argument_uuids\030\003 \003(\0132\005." +
+      "UUID\032^\n\027ArgumentContainerDeltas\022\023\n\013objec" +
+      "t_uuid\030\001 \002(\t\022.\n\017container_delta\030\002 \003(\0132\025." +
+      "Delta.ContainerDeltaB4\n\020ralph_protobuffs" +
+      "B PartnerRequestSequenceBlockProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5196,7 +5475,7 @@ public final class PartnerRequestSequenceBlockProto {
           internal_static_PartnerRequestSequenceBlock_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_PartnerRequestSequenceBlock_descriptor,
-              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", "ReturnObjs", });
+              new java.lang.String[] { "EventUuid", "Priority", "NameOfBlockRequesting", "ReplyWithUuid", "ReplyToUuid", "Arguments", "Transaction", "ReturnObjs", "TargetEndpt", });
           internal_static_PartnerRequestSequenceBlock_Arguments_descriptor =
             internal_static_PartnerRequestSequenceBlock_descriptor.getNestedTypes().get(0);
           internal_static_PartnerRequestSequenceBlock_Arguments_fieldAccessorTable = new
