@@ -162,7 +162,7 @@ public class ExecutionContextMap
     */
     public ExecutionContext get_or_create_partner_live_exec_ctx(
         String uuid, String priority,boolean atomic,
-        String event_entry_point_name)
+        String event_entry_point_name, String caller_host_uuid)
     {
         _lock();
 
@@ -172,7 +172,7 @@ public class ExecutionContextMap
             PartnerEventParent pep =
                 new PartnerEventParent(
                     local_endpoint, uuid, priority, ralph_globals,
-                    event_entry_point_name);
+                    event_entry_point_name, caller_host_uuid);
             
             ActiveEvent new_event = null;
             if (atomic)

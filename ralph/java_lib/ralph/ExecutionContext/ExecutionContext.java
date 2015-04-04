@@ -25,7 +25,7 @@ public abstract class ExecutionContext implements IDurabilityContext
      */
     protected final IDurabilityContext durability_context;
     public final String uuid;
-    protected final RalphGlobals ralph_globals;
+    public final RalphGlobals ralph_globals;
     protected final IEndpointMap endpt_map;
     
     public ExecutionContext(

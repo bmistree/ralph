@@ -1,6 +1,6 @@
 package RalphServiceActions;
 
-import java.util.List;
+import java.util.Set;
 
 import ralph.ActiveEvent;
 import ralph.Endpoint;
@@ -16,13 +16,13 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
     private String event_uuid;
     private String msg_originator_host_uuid;
     private boolean successful;
-    private final List<String> children_event_host_uuids;
+    private final Set<String> children_event_host_uuids;
 	
 	
     public ReceiveFirstPhaseCommitMessage (
         Endpoint _local_endpoint,String _event_uuid,
         String _msg_originator_host_uuid,
-        boolean _successful, List<String> _children_event_host_uuids)
+        boolean _successful, Set<String> _children_event_host_uuids)
     {
         local_endpoint = _local_endpoint;
         event_uuid = _event_uuid;
@@ -30,9 +30,7 @@ public class ReceiveFirstPhaseCommitMessage extends ServiceAction
         successful = _successful;
         children_event_host_uuids= _children_event_host_uuids;
     }
-	
-	
-	
+
     @Override
     public void run() 
     {

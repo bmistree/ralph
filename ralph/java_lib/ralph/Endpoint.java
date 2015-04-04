@@ -2,6 +2,8 @@ package ralph;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -80,20 +82,10 @@ public abstract class Endpoint implements IReference
        
        partner is installed on a foreign 
      */
-    private final ReentrantLock _conn_obj_mutex = new ReentrantLock();
-    private RalphConnObj.ConnectionObj _conn_obj = null;
     public final ExecutionContextMap exec_ctx_map;
-	
     public final ThreadPool _thread_pool;
-    private final AllEndpoints _all_endpoints;
-
     public final String _uuid;
     
-    private boolean _conn_failed = false;
-    private ReentrantLock _conn_mutex = new ReentrantLock();
-
-
-	
     /**
      //# When go through first phase of commit, may need to forward
      //# partner's host's endpoint uuid back to the root, so the
@@ -114,9 +106,6 @@ public abstract class Endpoint implements IReference
        @param {uuid} host_uuid --- The uuid of the host this endpoint
        lives on.
         
-       @param {ConnectionObject} conn_obj --- Used to write messages
-       to partner endpoint.
-
        @param{EndpointConstructorObj} endpoint_constructor_obj --- Can
        be used to instantiate a version of this class, using construct
        method.
@@ -125,17 +114,17 @@ public abstract class Endpoint implements IReference
        eg., if durability is off.
     */
     public Endpoint (
-        RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
+        RalphGlobals ralph_globals,
         EndpointConstructorObj endpoint_constructor_obj,
         IDurabilityContext durability_context)
     {
         this (
-            ralph_globals, conn_obj, endpoint_constructor_obj,
+            ralph_globals, endpoint_constructor_obj,
             durability_context,ralph_globals.generate_local_uuid());
     }
     
     public Endpoint (
-        RalphGlobals ralph_globals,RalphConnObj.ConnectionObj conn_obj,
+        RalphGlobals ralph_globals,
         EndpointConstructorObj endpoint_constructor_obj,
         IDurabilityContext durability_context,String endpt_uuid)
     {
@@ -144,15 +133,11 @@ public abstract class Endpoint implements IReference
 
         _clock = ralph_globals.clock;
         exec_ctx_map = new ExecutionContextMap(ralph_globals,this);
-        _conn_obj = conn_obj;
 
         _thread_pool = ralph_globals.thread_pool;
-        _all_endpoints = ralph_globals.all_endpoints;
-        _all_endpoints.add_endpoint(this);
+        ralph_globals.all_endpoints.add_endpoint(this);
 
         _host_uuid = ralph_globals.host_uuid;
-
-        _conn_obj.register_endpoint(this);
 
         if (durability_context != null)
         {
@@ -167,18 +152,6 @@ public abstract class Endpoint implements IReference
         return _uuid;
     }
 
-    public void update_connection_obj(
-        RalphConnObj.ConnectionObj conn_obj,String partner_host_uuid)
-    {
-        _conn_obj_mutex.lock();
-        
-        _conn_obj = conn_obj;
-        _conn_obj.register_endpoint(this);
-        
-        _partner_host_uuid = partner_host_uuid;
-        _conn_obj_mutex.unlock();
-    }
-    
     /**
        Using this mechanism, a service on a remote host can connect to
        this endpoint.  Series of required operations:
@@ -208,60 +181,6 @@ public abstract class Endpoint implements IReference
             _uuid);
     }
     
-    /**
-       Called when it has been determined that the connection to the partner
-       endpoint has failed prematurely. Closes the socket and raises a network
-       exception, thus backing out from all current events, and sets the 
-       conn_failed flag, but only if this method has not been called before.
-    */
-    public void partner_connection_failure()
-    {
-        //# notify all_endpoints to remove this endpoint because it has
-        //# been stopped
-        _all_endpoints.network_exception(this);
-		
-        _conn_mutex.lock();
-        _conn_obj.close();
-        _raise_network_exception();
-        _conn_failed = true;
-        _conn_mutex.unlock();
-    }
-	
-    /**
-     * Returns true if the runtime has detected a network failure and false
-     otherwise.
-    */
-    public boolean get_conn_failed()
-    {
-        _conn_mutex.lock();
-        boolean conn_failed = _conn_failed;
-        _conn_mutex.unlock();
-        return conn_failed;
-    }
-
-	
-    /**
-     *  Grab timestamp from clock and send it over to partner.
-     */
-    public void _send_clock_update()
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        general_message.setTimestamp(_clock.get_int_timestamp());
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        _conn_obj.write(general_message.build(),this);
-    }
-
-
-    /**
-     * @see noe above _partner_uuid.
-     * @param uuid
-     */
-    public void _set_partner_host_uuid(String uuid)
-    {
-        _partner_host_uuid = uuid;
-    }
 
     /**
        FIXME: Should I remove this?  Is it still useful?
@@ -334,65 +253,6 @@ public abstract class Endpoint implements IReference
 	
 
     /**
-     *  Called by the connection object when a network error is detected.
-
-     Sends a message to each active event indicating that the connection
-     with the partner endpoint has failed. Any corresponding endpoint calls
-     waiting on an event involving the partner will throw a NetworkException,
-     which will result in a backout (and be re-raised) if not caught by
-     the programmer.
-
-    */
-    private void _raise_network_exception()
-    {
-        Util.logger_assert("FIXME: should process network exception.");
-    }
-
-    /**
-     *  Called by the active event when an exception has occured in
-     the midst of a sequence and it needs to be propagated back
-     towards the root of the active event. Sends a partner_error
-     message to the partner containing the event and endpoint
-     uuids.
-    */
-    public void _propagate_back_exception(
-        String event_uuid,String priority,Exception exception)
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-        general_message.setTimestamp(_clock.get_int_timestamp());
-        PartnerError.Builder error = PartnerError.newBuilder();
-        UUID.Builder msg_evt_uuid = UUID.newBuilder();
-        msg_evt_uuid.setData(event_uuid);
-        UUID.Builder msg_host_uuid = UUID.newBuilder();
-        msg_host_uuid.setData(_host_uuid);
-		
-        error.setEventUuid(msg_evt_uuid);
-        error.setHostUuid(msg_host_uuid);
-		
-        if (RalphExceptions.NetworkException.class.isInstance(exception))
-        {
-            error.setType(PartnerError.ErrorType.NETWORK);
-            error.setTrace("Incorrect trace for now");
-        }
-        else if (RalphExceptions.ApplicationException.class.isInstance(exception))
-        {
-            error.setType(PartnerError.ErrorType.APPLICATION);
-            error.setTrace("Incorrect trace for now");
-        }
-        else
-        {
-            error.setType(PartnerError.ErrorType.APPLICATION);
-            error.setTrace("Incorrect trace for now");            
-        }
-        _conn_obj.write(general_message.build(),this);
-    }
-
-    /**
        @param {String} string_msg --- A raw byte string sent from
        partner.  Should be able to deserialize it, convert it into a
        message, and dispatch it as an event.
@@ -424,7 +284,7 @@ public abstract class Endpoint implements IReference
             
             if (general_msg.getFirstPhaseResult().getSuccessful())
             {	
-                List<String> children_event_host_uuids = new ArrayList<String>();
+                Set<String> children_event_host_uuids = new HashSet<String>();
                 for (int i = 0; i < fpr.getChildrenEventHostUuidsCount(); ++i)
                 {
                     String child_event_uuid = fpr.getChildrenEventHostUuids(i).getData();
@@ -510,192 +370,8 @@ public abstract class Endpoint implements IReference
                 this,event_uuid,new_priority);
         _thread_pool.add_service_action(promotion_action);
     }
-	
-    /**
-     * Send partner message that event has been promoted
-     * @param uuid
-     * @param new_priority
-     */
-    public void _forward_promotion_message(String uuid,String new_priority)
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-        general_message.setTimestamp(_clock.get_int_timestamp());
-        Promotion.Builder promotion_message = Promotion.newBuilder();
-		
-        UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
-        event_uuid_builder.setData(uuid);
-		
-        UtilProto.Priority.Builder new_priority_builder =
-            UtilProto.Priority.newBuilder();
-        new_priority_builder.setData(new_priority);
-		
-        promotion_message.setEventUuid(event_uuid_builder);
-        promotion_message.setNewPriority(new_priority_builder);
-		
-        general_message.setPromotion(promotion_message);
-		
-        _conn_obj.write(general_message.build(),this);
-    }
 
-    /**
-     * Send a message to partner that a subscriber is no longer
-       holding a lock on a resource to commit it.
-	
-     * @param event_uuid
-     * @param removed_subscriber_uuid
-     * @param host_uuid
-     * @param resource_uuid
-     */
-    public void _notify_partner_removed_subscriber(
-        String event_uuid,String removed_subscriber_uuid,
-        String host_uuid,String resource_uuid)
-    {
-        Util.logger_assert("Not filled in partner removed subscriber");
-    }            
 
-	
-    /**
-       @param {uuid} event_uuid
-    
-       Partner endpoint is subscriber of event on this endpoint with
-       uuid event_uuid.  Send to partner a message that the first
-       phase of the commit was unsuccessful on endpoint with uuid
-       host_uuid (and therefore, it and everything along the path
-       should roll back their commits).
-    */
-    public void _forward_first_phase_commit_unsuccessful(
-        String event_uuid, String host_uuid)
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder local_host_uuid = UUID.newBuilder();
-        local_host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(local_host_uuid);
-        
-        general_message.setTimestamp(_clock.get_int_timestamp());
-        PartnerFirstPhaseResultMessage.Builder first_phase_result =
-            PartnerFirstPhaseResultMessage.newBuilder();
-		
-        UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
-        event_uuid_msg.setData(event_uuid);
-		
-        UtilProto.UUID.Builder sending_host_uuid_msg =
-            UtilProto.UUID.newBuilder();
-        sending_host_uuid_msg.setData(host_uuid);
-		
-        first_phase_result.setSuccessful(false);
-        first_phase_result.setEventUuid(event_uuid_msg);
-        first_phase_result.setSendingHostUuid(sending_host_uuid_msg);
-		
-        general_message.setFirstPhaseResult(first_phase_result);
-		
-        _conn_obj.write(general_message.build(),this);
-    }
-	
-
-    /**
-     * @param {uuid} event_uuid
-
-     @param {uuid} host_uuid
-        
-     @param {array} children_event_host_uuids --- 
-        
-     Partner endpoint is subscriber of event on this endpoint with
-     uuid event_uuid.  Send to partner a message that the first
-     phase of the commit was successful for the endpoint with uuid
-     host_uuid, and that the root can go on to second phase of
-     commit when all endpoints with uuids in
-     children_event_host_uuids have confirmed that they are
-     clear to commit.
-    */
-    public void _forward_first_phase_commit_successful(
-        String event_uuid,String host_uuid,
-        List<String> children_event_host_uuids)
-    {
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid_builder = UUID.newBuilder();
-        host_uuid_builder.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid_builder);
-        
-        general_message.setTimestamp(_clock.get_int_timestamp());
-        PartnerFirstPhaseResultMessage.Builder first_phase_result_msg =
-            PartnerFirstPhaseResultMessage.newBuilder();
-		
-        UtilProto.UUID.Builder event_uuid_msg =
-            UtilProto.UUID.newBuilder();
-        event_uuid_msg.setData(event_uuid);
-		
-        UtilProto.UUID.Builder sending_host_uuid_msg =
-            UtilProto.UUID.newBuilder();
-        sending_host_uuid_msg.setData(host_uuid);
-		
-        first_phase_result_msg.setSuccessful(true);
-        first_phase_result_msg.setEventUuid(event_uuid_msg);
-        first_phase_result_msg.setSendingHostUuid(
-            sending_host_uuid_msg);
-		
-        for (String child_event_uuid : children_event_host_uuids)
-        {
-            UtilProto.UUID.Builder child_event_uuid_msg =
-                UtilProto.UUID.newBuilder();
-            child_event_uuid_msg.setData(child_event_uuid);
-            first_phase_result_msg.addChildrenEventHostUuids(
-                child_event_uuid_msg);
-        }
-
-        general_message.setFirstPhaseResult(first_phase_result_msg);
-		
-        _conn_obj.write(general_message.build(),this);
-    }
-	
-    /**
-       Send a message to partner that a subscriber has just started
-       holding a lock on a resource to commit it.
-       * @param event_uuid
-       * @param additional_subscriber_uuid
-       * @param host_uuid
-       * @param resource_uuid
-       */
-    public void  _notify_partner_of_additional_subscriber(
-        String event_uuid, String additional_subscriber_uuid, 
-        String host_uuid, String resource_uuid)
-    {
-        Util.logger_assert("No longer building waits-for");
-    }
-	
-    /**
-     * @param {uuid} event_uuid --- The uuid of the event that also
-     exists on this endpoint that is trying to subscribe to a
-     resource (with uuid resource_uuid) that subscriber_event_uuid
-     is also subscribed for.
-
-     @param {uuid} subscriber_event_uuid --- UUID for an event that
-     is not necesarilly on this host that holds a subscription on
-     the same resource that we are trying to subscribe to.
-
-     @see notify_additional_subscriber (in _ActiveEvent.py)
-    */
-    public void  _receive_additional_subscriber(
-        String event_uuid,String subscriber_event_uuid,
-        String host_uuid,String resource_uuid)
-    {
-    	Util.logger_assert("No longer building waits-for");
-    }
-    
-    /**
-       @see _receive_additional_subscriber
-    */
-    public void _receive_removed_subscriber(
-        String event_uuid,String removed_subscriber_event_uuid,
-        String host_uuid,String resource_uuid)
-    {
-    	Util.logger_assert("No longer building waits-for");
-    }
-
-    
     /**
        One of the endpoints, with uuid host_uuid, that we are
        subscribed to was able to complete first phase commit for
@@ -723,9 +399,8 @@ public abstract class Endpoint implements IReference
     */    
     public void  _receive_first_phase_commit_successful(
         String event_uuid,String host_uuid,
-        List<String> children_event_host_uuids)
+        Set<String> children_event_host_uuids)
     {
-      
         RalphServiceActions.ServiceAction service_action = 
             new RalphServiceActions.ReceiveFirstPhaseCommitMessage(
                 this,event_uuid,host_uuid,true,children_event_host_uuids);
@@ -753,126 +428,6 @@ public abstract class Endpoint implements IReference
         _thread_pool.add_service_action(service_action);
     }
     
-
-    /**
-     * 
-     Sends a message using connection object to the partner
-     endpoint requesting it to perform some message sequence
-     action.
-    */
-    public void _send_partner_message_sequence_block_request(
-        PartnerRequestSequenceBlock request_sequence_block_msg)
-    {
-    	GeneralMessage.Builder general_message =
-            GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(_clock.get_int_timestamp());
-        
-    	general_message.setRequestSequenceBlock(request_sequence_block_msg);
-    	_conn_obj.write(general_message.build(),this);
-    }    
-
-    /**
-       @param {UUID} active_event_uuid --- The uuid of the event we
-       will forward a commit to our partner for.
-    */
-    public void _forward_commit_request_partner(
-        String active_event_uuid,long root_timestamp,
-        String root_host_uuid,String application_uuid,
-        String event_name)
-    {
-        //# FIXME: may be a way to piggyback commit with final event in
-        //# sequence.
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(_clock.get_int_timestamp());
-    	PartnerCommitRequest.Builder commit_request_msg =
-            PartnerCommitRequest.newBuilder();
-
-        // event uuid
-    	UtilProto.UUID.Builder event_uuid_msg = UtilProto.UUID.newBuilder();
-    	event_uuid_msg.setData(active_event_uuid);
-    	commit_request_msg.setEventUuid(event_uuid_msg);
-
-        // root host uuid
-    	UtilProto.UUID.Builder root_host_uuid_msg =
-            UtilProto.UUID.newBuilder();
-    	root_host_uuid_msg.setData(root_host_uuid);
-    	commit_request_msg.setRootHostUuid(root_host_uuid_msg);
-
-        // root timestamp
-        commit_request_msg.setRootTimestamp(root_timestamp);
-
-        // application_uuid
-        UtilProto.UUID.Builder application_uuid_msg =
-            UtilProto.UUID.newBuilder();
-        application_uuid_msg.setData(application_uuid);
-        commit_request_msg.setApplicationUuid(application_uuid_msg);
-        
-        // event_name
-        commit_request_msg.setEventName(event_name);
-        
-        // actually populate general message
-    	general_message.setCommitRequest(commit_request_msg);
-    	_conn_obj.write(general_message.build(),this);
-    }
-    
-
-    /**
-       Active event uuid on this endpoint has completed its commit
-       and it wants you to tell partner endpoint as well to complete
-       its commit.
-    */
-    public void _forward_complete_commit_request_partner(
-        String active_event_uuid)
-    {
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(_clock.get_int_timestamp());
-    	PartnerCompleteCommitRequest.Builder complete_commit_request_msg =
-            PartnerCompleteCommitRequest.newBuilder();
-    	
-    	UtilProto.UUID.Builder active_event_uuid_msg =
-            UtilProto.UUID.newBuilder();
-    	active_event_uuid_msg.setData(active_event_uuid);
-    	
-    	complete_commit_request_msg.setEventUuid(active_event_uuid_msg);
-    	
-    	general_message.setCompleteCommitRequest(complete_commit_request_msg);
-    	_conn_obj.write(general_message.build(),this);
-    }
-    		
-    /**
-       @param {UUID} active_event_uuid --- The uuid of the event we
-       will forward a backout request to our partner for.
-    */
-    public void _forward_backout_request_partner(
-        String active_event_uuid)
-    {
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(_clock.get_int_timestamp());
-    	PartnerBackoutCommitRequest.Builder backout_commit_request =
-            PartnerBackoutCommitRequest.newBuilder();
-    	UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
-    	event_uuid_builder.setData(active_event_uuid);
-        backout_commit_request.setEventUuid(event_uuid_builder);
-    	general_message.setBackoutCommitRequest(backout_commit_request);
-    	_conn_obj.write(general_message.build(),this);
-    }
-
     
     //# Builtin Endpoint methods
 
@@ -950,6 +505,6 @@ public abstract class Endpoint implements IReference
 
         // tell other side that the rpc call has completed
         exec_ctx.message_sender().hide_sequence_completed_call(
-            this, exec_ctx,result);
+            exec_ctx, result);
     }
 }

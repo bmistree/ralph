@@ -73,7 +73,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
             {
                 exec_ctx =
                     local_endpoint.exec_ctx_map.get_or_create_partner_live_exec_ctx(
-                        uuid,priority,atomic,event_entry_point_name);
+                        uuid,priority,atomic,event_entry_point_name, remote_host_uuid);
             }
 
             exec_ctx.curr_act_evt().recv_partner_sequence_call_msg(

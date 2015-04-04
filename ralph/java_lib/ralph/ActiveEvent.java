@@ -1,6 +1,7 @@
 package ralph;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -282,7 +283,7 @@ public abstract class ActiveEvent
 
 
     /**
-       @param {Endpoint} endpt
+       @param remote_host_uuid
        
        @param {String} other_side_reply_with_uuid --- If the other
        side responds to this rpc, it will contain this uuid.
@@ -293,9 +294,8 @@ public abstract class ActiveEvent
        @returns true if still running and can send rpc
      */
     public abstract boolean note_issue_rpc(
-        Endpoint endpt, String other_side_reply_with_uuid,
+        String remote_host_uuid, String other_side_reply_with_uuid,
         MVar<MessageCallResultObject> result_mvar);
-
 
 
     public abstract String get_priority();
@@ -318,7 +318,7 @@ public abstract class ActiveEvent
        */
     public abstract void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        List<String> children_event_host_uuids);
+        Set<String> children_event_host_uuids);
 
 
     /**
@@ -499,8 +499,8 @@ public abstract class ActiveEvent
         //# unblock waiting listening mvar.
         message_listening_mvars_map.get(reply_to_uuid).put(
             RalphCallResults.MessageCallResultObject.completed(
-                reply_with_uuid,name_of_block_to_exec_next,
-                remote_host_uuid,
+                reply_with_uuid, name_of_block_to_exec_next,
+                endpt_recvd_on._uuid, remote_host_uuid,
                 // result of rpc
                 returned_objs));
 

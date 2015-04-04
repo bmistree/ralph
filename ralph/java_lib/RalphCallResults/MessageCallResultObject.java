@@ -27,7 +27,7 @@ public class MessageCallResultObject
     */
     public String reply_with_msg_field;
     public String remote_host_uuid;
-	
+    
     /**
      *
      Used for completeds.  In a message sequence, tells us the next
@@ -35,7 +35,13 @@ public class MessageCallResultObject
      then it means that there is no more to execute in the sequence.
     */
     public String to_exec_next_name_msg_field = null;
-
+    /**
+       Can be null.  Only non-null when issuing rpc (not returning
+       from it).  Whenever to_exec_next_name_msg_field is not null,
+       this shouldn't be null.
+     */
+    public String target_endpt_uuid;
+    
     /**
        If the rpc was supposed to return a value, that value will be
        in returned_objs.
@@ -69,7 +75,8 @@ public class MessageCallResultObject
 
     public static MessageCallResultObject completed(
         String _reply_with_msg_field, String _to_exec_next_name_msg_field,
-        String _remote_host_uuid, Arguments _returned_objs)
+        String _target_endpt_uuid, String _remote_host_uuid,
+        Arguments _returned_objs)
     {
         MessageCallResultObject to_return =
             new MessageCallResultObject(ResultType.COMPLETED);
@@ -78,6 +85,7 @@ public class MessageCallResultObject
         to_return.to_exec_next_name_msg_field = _to_exec_next_name_msg_field;
         to_return.returned_objs = _returned_objs;
         to_return.remote_host_uuid = _remote_host_uuid;
+        to_return.target_endpt_uuid = _target_endpt_uuid;
         return to_return;
     }
 

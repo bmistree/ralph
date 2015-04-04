@@ -1,6 +1,6 @@
 package ralph;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import RalphCallResults.MessageCallResultObject;
@@ -18,6 +18,9 @@ import java.util.Set;
 public abstract class EventParent
 {
     public final String uuid;
+    
+    // can be null (eg., if this is a root event)
+    public final String spanning_tree_parent_uuid;
     public final RalphGlobals ralph_globals;
     private String priority = null;
     private final ReentrantLock _priority_mutex = new ReentrantLock();
@@ -38,7 +41,8 @@ public abstract class EventParent
     public EventParent(
         String _uuid, String _priority,
         RalphGlobals _ralph_globals,boolean _is_root,
-        Endpoint _local_endpoint, String _event_entry_point_name)
+        Endpoint _local_endpoint, String _event_entry_point_name,
+        String spanning_tree_parent_uuid)
     {
         ralph_globals = _ralph_globals;
         
@@ -51,6 +55,7 @@ public abstract class EventParent
         is_root = _is_root;
         local_endpoint = _local_endpoint;
         event_entry_point_name = _event_entry_point_name;
+        this.spanning_tree_parent_uuid = spanning_tree_parent_uuid;
     }
     
     private void _priority_lock()
@@ -115,18 +120,6 @@ public abstract class EventParent
 
 
     /**
-       @param {bool} copied_partner_contacted --- True if
-    */
-    public void send_promotion_messages(
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
-        String new_priority)
-    {
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            endpt._forward_promotion_message(uuid,new_priority);
-    }
-                
-
-    /**
        Places the appropriate call result in the event complete queue to 
        indicate to the endpoint that an error has occured and the event
        must be handled.
@@ -157,7 +150,7 @@ public abstract class EventParent
 	
     public abstract void receive_successful_first_phase_commit_msg(
         String event_uuid,String msg_originator_host_uuid,
-        List<String>children_event_host_uuids);
+        Set<String>children_event_host_uuids);
 
 
     /**
@@ -177,68 +170,20 @@ public abstract class EventParent
        the endpoints in this list have affirmed that they got into
        first phase.
 
-       Also forwards a message on to other endpoints that this
+       Does *not* forward a message on to other endpoints that this
        endpoint called/touched as part of its computation.  Requests
        each of them to enter first phase commit as well.
     */
-    public void first_phase_transition_success(
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
+    public abstract void first_phase_transition_success(
+        Set<String> remote_hosts_contacted_uuid,
         ActiveEvent _event, long root_commit_timestamp,
         String root_host_uuid,String application_uuid,
-        String event_name)
-    {
-        event = _event;
-        //# first keep track of all events that we are waiting on
-        //# hearing that first phase commit succeeded.
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-        {
-            //# send message to partner telling it to enter first phase
-            //# commit
-            endpt._forward_commit_request_partner(
-                uuid,root_commit_timestamp,
-                root_host_uuid,application_uuid,event_name);
-        }
-    }
+        String event_name);
 
-	
-    /**
-       @param {bool} partner_contacted --- True if the event has sent
-       a message as part of a sequence to partner.  False otherwise.
-
-       Forwards a message on to other endpoints that this endpoint
-       called/touched as part of its computation.  Requests each of
-       them to enter complete commit.
-    */
-    public void second_phase_transition_success(
-        Set<Endpoint> local_endpoints_whose_partners_contacted)
-    {
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            endpt._forward_complete_commit_request_partner(uuid);
-    }
-
-	
-    /**
-       @param {uuid or None} backout_requester_host_uuid --- If
-       None, means that the call to backout originated on local
-       endpoint.  Otherwise, means that call to backout was made by
-       a remote host.
-
-       @param {bool} partner_contacted --- True if the event has sent
-       a message as part of a sequence to partner.  False otherwise.
-
-       Tells all endpoints that we have contacted to rollback their
-       events as well.  
-    */
-    public void rollback(
-        String backout_requester_host_uuid, 
-        Set<Endpoint> local_endpoints_whose_partners_contacted)
-    {
-        //# tell partners to backout their changes too
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-        {
-            endpt._forward_backout_request_partner(uuid);
-        }
-    }
+    public abstract void second_phase_transition_success();
+    
+    public void rollback()
+    {}
 }
 	
 		

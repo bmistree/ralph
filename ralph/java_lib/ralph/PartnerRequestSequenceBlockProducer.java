@@ -42,10 +42,14 @@ public class PartnerRequestSequenceBlockProducer
        @param {bool} first_msg --- If we are sending the first message
        in a sequence block, then we must force the sequence local data
        to be transmitted whether or not it was modified.
+
+       @param target_endpt_uuid --- Null if reply.  Otherwise, should
+       be the uuid of remote endpoint uuid.
      */
     public static PartnerRequestSequenceBlock produce_request_block(
         String to_reply_to, String func_name, List<? extends RalphObject> args,
-        RalphObject result, ActiveEvent active_event, String reply_with_uuid)
+        RalphObject result, ActiveEvent active_event, String reply_with_uuid,
+        String target_endpt_uuid)
         throws BackoutException
     {
         // true if this call should be part of a transaction.  alse if
@@ -112,6 +116,16 @@ public class PartnerRequestSequenceBlockProducer
         if (serialized_results != null)
             request_sequence_block_msg.setReturnObjs(serialized_results);
 
+        if (target_endpt_uuid != null)
+        {
+            UtilProto.UUID.Builder target_endpt_uuid_builder =
+                UtilProto.UUID.newBuilder();
+            target_endpt_uuid_builder.setData(target_endpt_uuid);
+            
+            request_sequence_block_msg.setTargetEndpt(
+                target_endpt_uuid_builder);
+        }
+        
         return request_sequence_block_msg.build();
     }
 }

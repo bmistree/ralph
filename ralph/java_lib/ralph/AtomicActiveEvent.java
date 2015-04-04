@@ -215,6 +215,21 @@ public class AtomicActiveEvent extends ActiveEvent
         STATE_BACKED_OUT
     }
 
+    private final Set<String> remote_hosts_contacted =
+        new HashSet<String> ();
+
+    /**
+      using a separate lock for remote_hosts_contacted and
+      other_endpoints_contacted so that if we are holding the commit
+      lock on this event, we can still access other_endpoints_contaced
+      and partner_contacted (for promoting priority).  note that the
+      only time we will write to either variable is when we have
+      already used the event's _lock method.  Therefore, if we are
+      already inside of a _lock and just reading, we do not need to
+      acquire _others_contacted_mutex_mutex.
+     */
+    private ReentrantLock _others_contacted_mutex = new ReentrantLock();
+
     public final ExecutionContextMap exec_ctx_map;
     
     /**
@@ -278,30 +293,7 @@ public class AtomicActiveEvent extends ActiveEvent
      //# to acquire _touched_objs_mutex.   
      */
     private ReentrantLock _touched_objs_mutex = new ReentrantLock(); 
-
-    /**
-       This active event makes calls to other endpoints' partners.
-       This contains all the endpoints we do that for so that we can
-       forward promotion, abort, and two phase commit messages.
-     */
-    private Set<Endpoint> local_endpoints_whose_partners_contacted =
-        new HashSet<Endpoint>();
     
-    
-    /**
-     //# using a separate lock for partner_contacted and
-     //# other_endpoints_contacted so that if we are holding the
-     //# commit lock on this event, we can still access
-     //# other_endpoints_contaced and partner_contacted (for
-     //# promoting priority).  note that the only time we will write
-     //# to either variable is when we have already used the event's
-     //# _lock method.  Therefore, if we are already inside of a
-     //# _lock and just reading, we do not need to acquire
-     //# _others_contacted_mutex_mutex.
-     * 
-     */
-    private ReentrantLock _others_contacted_mutex = new ReentrantLock();
-
     
     /**
      *  # Before we attempt to request a commit after a sequence, we need
@@ -463,14 +455,16 @@ public class AtomicActiveEvent extends ActiveEvent
             obj.update_event_priority(uuid, new_priority);
 
         _others_contacted_lock();
-        Set<Endpoint> copied_local_other_endpoints_contacted = new HashSet<Endpoint>(
-            local_endpoints_whose_partners_contacted);
-            
+        Set<String> copied_remote_hosts_contacted =
+            new HashSet<String> (remote_hosts_contacted);
         _others_contacted_unlock();
-		
-        event_parent.send_promotion_messages(
-            copied_local_other_endpoints_contacted,new_priority);
+
+        copied_remote_hosts_contacted.remove(
+            event_parent.spanning_tree_parent_uuid);
+        ralph_globals.message_manager.send_promotion_msgs(
+            copied_remote_hosts_contacted, event_parent.uuid, new_priority);
     }
+
 
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -695,12 +689,37 @@ public class AtomicActiveEvent extends ActiveEvent
         // enter first phase commit, these are immutable.  forwards
         // message on to others and affirmatively replies that now in
         // first pahse of commit.
+
+        // send messages to remote hosts
+        _others_contacted_lock();
+        Set<String> copied_remote_hosts_contacted =
+            new HashSet<String> (remote_hosts_contacted);
+        _others_contacted_unlock();
+
+        // do not need to forward request to parent (parent would have
+        // sent it to us)
+        copied_remote_hosts_contacted.remove(
+            event_parent.spanning_tree_parent_uuid);
+
+        // FIXME: probably do not need to pass as many args as this
+        // through.
+        
+        // FIXME: double-check the ordering between sending and
+        // transitioning.
         event_parent.first_phase_transition_success(
-            local_endpoints_whose_partners_contacted,
-            this,commit_metadata.root_commit_lamport_time,
+            copied_remote_hosts_contacted, this,
+            commit_metadata.root_commit_lamport_time,
             root_first_phase_commit_host_uuid,
             commit_metadata.root_application_uuid,
             commit_metadata.event_name);
+        
+        ralph_globals.message_manager.send_commit_request_msgs(
+            copied_remote_hosts_contacted, event_parent.uuid,
+            this.commit_metadata.root_commit_lamport_time,
+            root_first_phase_commit_host_uuid,
+            commit_metadata.root_application_uuid,
+            commit_metadata.event_name);
+        
         
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;
@@ -767,17 +786,27 @@ public class AtomicActiveEvent extends ActiveEvent
         touched_objs.clear();
         exec_ctx_map.remove_exec_ctx(uuid);
         
-        //# FIXME: which should happen first, notifying others or
-        //# releasing locks locally?
+        // FIXME: which should happen first, notifying others or
+        // releasing locks locally?
 
-        //# do not need to acquire locks for partner_contacted and
-        //# local_endpoints_whose_partners_contacted because once
-        //# entered commit, these values are immutable.
+        // do not need to acquire locks for partner_contacted and
+        // local_endpoints_whose_partners_contacted because once
+        // entered commit, these values are immutable.
         
-        // # notify other endpoints to also complete their commits
-        event_parent.second_phase_transition_success(
-            local_endpoints_whose_partners_contacted);
+        // notify other endpoints to also complete their commits
+        
+        // clear waiting queues
+        event_parent.second_phase_transition_success();
 
+        _others_contacted_lock();
+        Set<String> copied_remote_hosts_contacted =
+            new HashSet<String> (remote_hosts_contacted);
+        _others_contacted_unlock();
+        copied_remote_hosts_contacted.remove(
+            event_parent.spanning_tree_parent_uuid);
+        ralph_globals.message_manager.send_complete_commit_request_msg(
+            copied_remote_hosts_contacted, event_parent.uuid);
+        
         
         // FIXME: Check if this call really has to fsync.  I don't
         // think it does.
@@ -905,9 +934,15 @@ public class AtomicActiveEvent extends ActiveEvent
         //# place that it can be written to is when already holding
         //# _lock.  Therefore, we already have exclusive access to
         //# variable.
-        event_parent.rollback(
-            backout_requester_host_uuid,
-            local_endpoints_whose_partners_contacted);
+        event_parent.rollback();
+
+        _others_contacted_lock();
+        Set<String> copied_remote_hosts_contacted =
+            new HashSet<String> (remote_hosts_contacted);
+        _others_contacted_unlock();
+
+        ralph_globals.message_manager.send_backout_request(
+            copied_remote_hosts_contacted, event_parent.uuid);
     }
 
     /**
@@ -953,7 +988,16 @@ public class AtomicActiveEvent extends ActiveEvent
         if (RalphExceptions.BackoutException.class.isInstance(error))
             blocking_backout(null);
         else
+        {
             event_parent.put_exception(error,message_listening_mvars_map);
+
+            if (event_parent.spanning_tree_parent_uuid != null)
+            {
+                ralph_globals.message_manager.send_exception_msg(
+                    event_parent.spanning_tree_parent_uuid, event_parent.uuid,
+                    event_parent.get_priority(), error);
+            }
+        }
     }
 
 
@@ -1050,17 +1094,17 @@ public class AtomicActiveEvent extends ActiveEvent
 
     @Override
     public boolean note_issue_rpc(
-        Endpoint endpt, String other_side_reply_with_uuid,
+        String remote_host_uuid, String other_side_reply_with_uuid,
         MVar<MessageCallResultObject> result_mvar)
     {
         boolean partner_call_requested = false;
+        
         _lock();
-
         if (state == State.STATE_RUNNING)
         {
             partner_call_requested = true;
             _others_contacted_lock();
-            local_endpoints_whose_partners_contacted.add(endpt);
+            remote_hosts_contacted.add(remote_host_uuid);
             _others_contacted_unlock();
 
             
@@ -1105,11 +1149,19 @@ public class AtomicActiveEvent extends ActiveEvent
        */
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        List<String> children_event_host_uuids)
+        Set<String> children_event_host_uuids)
     {
         event_parent.receive_successful_first_phase_commit_msg(
             event_uuid,msg_originator_host_uuid,
             children_event_host_uuids);
+
+        // forward successful first phase commit back up to root.
+        if (event_parent.spanning_tree_parent_uuid != null)
+        {
+            ralph_globals.message_manager.send_first_phase_commit_successful(
+                event_parent.spanning_tree_parent_uuid,event_uuid,
+                children_event_host_uuids);
+        }
     }
 
     /**

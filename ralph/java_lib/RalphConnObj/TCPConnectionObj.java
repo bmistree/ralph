@@ -67,17 +67,9 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
     
     
     /**
-     * Actually close the socket
-     * @throws IOException 
      */
     public void close() 
-    {
-        try {
-            sock.close();
-        } catch (IOException e) {
-            local_endpoint.partner_connection_failure();
-        }
-    }
+    {}
 
     public void write_stop(
         GeneralMessage msg_to_write,ralph.Endpoint endpoint_writing)
@@ -103,7 +95,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         }
         catch (IOException e)
         {
-            local_endpoint.partner_connection_failure();            
+            e.printStackTrace();
+            // local_endpoint.partner_connection_failure();
         }
         finally
         {
@@ -164,8 +157,11 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
             try {
                 gm = GeneralMessage.parseDelimitedFrom(
                     sock.getInputStream());
-            } catch (IOException e) {
-                local_endpoint.partner_connection_failure();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+                // local_endpoint.partner_connection_failure();
                 break;
             }
             local_endpoint._receive_msg_from_partner(gm);            

@@ -120,21 +120,30 @@ public class LiveMessageSender implements IMessageSender
 
     @Override
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
+        ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         hide_partner_call(
-            endpoint, exec_ctx,
+            null, null,
+            exec_ctx,
             null,  // no function name
             false, // not first msg sent
             null, // send no arguments back to other side
             result);
     }
+    
+    /**
+       @param remote_host_uuid --- Can be null (eg., if this is a
+       reply to an rpc).
 
+       @param target_endpt_uuid --- Can be null (eg., if this is
+       replying to an rpc).
+     */
     @Override
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ExecutionContext exec_ctx,
-        String func_name, boolean first_msg, List<RalphObject> args,
+        String remote_host_uuid, String target_endpt_uuid,
+        ExecutionContext exec_ctx, String func_name,
+        boolean first_msg, List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
@@ -144,11 +153,11 @@ public class LiveMessageSender implements IMessageSender
         // If the other side responds to this rpc, it will contain
         // this uuid.
         String other_side_reply_with_uuid =
-            endpoint.ralph_globals.generate_local_uuid();
+            exec_ctx.ralph_globals.generate_local_uuid();
         
         ActiveEvent act_evt = exec_ctx.curr_act_evt();
         boolean can_issue_rpc = act_evt.note_issue_rpc(
-            endpoint, other_side_reply_with_uuid, result_mvar);
+            remote_host_uuid, other_side_reply_with_uuid, result_mvar);
 
         if (! can_issue_rpc)
         {
@@ -158,22 +167,22 @@ public class LiveMessageSender implements IMessageSender
         }
 
         String this_is_replying_to_uuid = null;
-        String remote_host_replying_to = null;
         if (! first_msg)
         {
             MessageStackElement elem = get_message_stack_element();
             this_is_replying_to_uuid = elem.to_reply_with_uuid;
-            remote_host_replying_to = elem.remote_host_uuid;
+            remote_host_uuid = elem.remote_host_uuid;
             pop_message_reply_stack();
         }
 
         PartnerRequestSequenceBlock request_sequence_block =
             PartnerRequestSequenceBlockProducer.produce_request_block(
                 this_is_replying_to_uuid, func_name, args, result, act_evt,
-                other_side_reply_with_uuid);
-        
-        endpoint._send_partner_message_sequence_block_request(
-            request_sequence_block);
+                other_side_reply_with_uuid, target_endpt_uuid);
+
+        exec_ctx.ralph_globals.message_manager.send_sequence_block_request_msg(
+            remote_host_uuid, request_sequence_block);
+
         
         // do not wait on result of call if it was the final return of
         // the call.
@@ -204,11 +213,15 @@ public class LiveMessageSender implements IMessageSender
         
         //# send more messages
         String to_exec_next = mvar_elem.to_exec_next_name_msg_field;
-
+        String next_target_endpt_uuid = mvar_elem.target_endpt_uuid;
         if (to_exec_next != null)
         {
+            Endpoint endpt =
+                exec_ctx.ralph_globals.all_endpoints.get_endpoint_if_exists(
+                    next_target_endpt_uuid);
+
             ExecutingEvent.static_run(
-                endpoint, to_exec_next, exec_ctx, false);
+                endpt, to_exec_next, exec_ctx, false);
         }
         else
         {
@@ -223,7 +236,7 @@ public class LiveMessageSender implements IMessageSender
         // if this was the response to an rpc that returned a value,
         // then return it here.
         return RPCDeserializationHelper.return_args_to_ralph_object(
-            mvar_elem.returned_objs, endpoint.ralph_globals,
+            mvar_elem.returned_objs, exec_ctx.ralph_globals,
             exec_ctx);
     }
 }

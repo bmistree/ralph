@@ -44,8 +44,8 @@ public class SameHostConnection implements Runnable, ConnectionObj {
         {
             // now have both endpoints
             endpoint2 = endpoint;
-            endpoint1._set_partner_host_uuid(endpoint2._host_uuid);
-            endpoint2._set_partner_host_uuid(endpoint1._host_uuid);
+            // endpoint1._set_partner_host_uuid(endpoint2._host_uuid);
+            // endpoint2._set_partner_host_uuid(endpoint1._host_uuid);
             Thread to_start = new Thread(this);
             to_start.setDaemon(true);
             to_start.start();

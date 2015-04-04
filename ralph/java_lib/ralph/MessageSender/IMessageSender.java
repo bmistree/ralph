@@ -25,11 +25,17 @@ public interface IMessageSender
        return anything.
     */
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
+        ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException;
 
 
     /**
+       @param remote_host_uuid --- Can be null (eg., if this is a
+       reply to an rpc).
+
+       @param target_endpt_uuid --- Can be null (eg., if this is
+       replying to an rpc).
+       
        @param {String or None} func_name --- When func_name is None,
        then sending to the other side the message that we finished
        performing the requested block.  In this case, we do not need
@@ -65,7 +71,8 @@ public interface IMessageSender
        * @throws BackoutException 
        */
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ExecutionContext exec_ctx,
+        String remote_host_uuid, String target_endpt_uuid,
+        ExecutionContext exec_ctx,
         String func_name, boolean first_msg,List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException;

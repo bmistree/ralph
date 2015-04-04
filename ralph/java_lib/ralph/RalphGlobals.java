@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import RalphServiceConnectionListener.ConnectionListener;
-
+import ralph.MessageManager.MessageManager;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ExecutionContext.ExecutionContext;
 
@@ -62,6 +62,9 @@ public class RalphGlobals implements IUUIDGenerator
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
+
+    public final MessageManager message_manager =
+        new MessageManager(this);
     
     public RalphGlobals()
     {

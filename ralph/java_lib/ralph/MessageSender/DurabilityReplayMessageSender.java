@@ -26,7 +26,7 @@ public class DurabilityReplayMessageSender implements IMessageSender
 
     @Override
     public void hide_sequence_completed_call(
-        Endpoint endpoint, ExecutionContext exec_ctx, RalphObject result)
+        ExecutionContext exec_ctx, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         // do nothing here: don't actually have to send message to
@@ -35,13 +35,12 @@ public class DurabilityReplayMessageSender implements IMessageSender
 
     @Override
     public RalphObject hide_partner_call(
-        Endpoint endpoint, ExecutionContext exec_ctx,
-        String func_name, boolean first_msg,List<RalphObject> args,
-        RalphObject result)
+        String remote_host_uuid, String target_endpt_uuid,
+        ExecutionContext exec_ctx, String func_name, boolean first_msg,
+        List<RalphObject> args, RalphObject result)
         throws NetworkException, ApplicationException, BackoutException
     {
         // get next rpc result.
-        return replay_context.issue_rpc(
-            endpoint.ralph_globals,exec_ctx);
+        return replay_context.issue_rpc(exec_ctx.ralph_globals, exec_ctx);
     }
 }

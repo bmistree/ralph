@@ -1,7 +1,6 @@
 package ralph;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import RalphDurability.DurabilityContext;
@@ -272,7 +271,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
 
     @Override
     public boolean note_issue_rpc(
-        Endpoint endpt, String other_side_reply_with_uuid,
+        String remote_host_uuid, String other_side_reply_with_uuid,
         MVar<MessageCallResultObject> result_mvar)
     {
         // code is listening on result_mvar.  when we
@@ -314,7 +313,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
        */
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        List<String> children_event_host_uuids)
+        Set<String> children_event_host_uuids)
     {
         Util.logger_assert(
             "Non-atomic should not receive first phase commit.");

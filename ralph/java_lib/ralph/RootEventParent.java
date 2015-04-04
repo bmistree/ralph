@@ -51,7 +51,7 @@ public class RootEventParent extends EventParent
     {
         super(
             _uuid,_priority,_ralph_globals,true,
-            _local_endpoint, _event_entry_point_name);
+            _local_endpoint, _event_entry_point_name, null);
     }
 
     private void  _lock_endpoints_waiting_on_commit()
@@ -76,13 +76,9 @@ public class RootEventParent extends EventParent
     /**
      * @see second_phase_transition_success in EventParent
      */
-    public void second_phase_transition_success(
-        Set<Endpoint> local_endpoints_whose_partners_contacted)
+    public void second_phase_transition_success()
     {
     	event_complete_mvar.put(RootCallResult.ResultType.COMPLETE);
-
-    	super.second_phase_transition_success(
-            local_endpoints_whose_partners_contacted);
     }
 
     /**
@@ -107,32 +103,27 @@ public class RootEventParent extends EventParent
             }
     	}
     }
-    
+
     /**
      * For arguments, @see EventParent.
      */
     @Override
     public void first_phase_transition_success(
-        Set<Endpoint> local_endpoints_whose_partners_contacted,
-        ActiveEvent _event, long root_commit_timestamp,
-        String root_host_uuid,String application_uuid, String event_name)
+        Set<String> remote_hosts_contacted_uuid,  ActiveEvent _event,
+        long root_commit_timestamp, String root_host_uuid,
+        String application_uuid, String event_name)
     {
         // # note that we should not wait on ourselves to commit
     	_lock_endpoints_waiting_on_commit();
 
-        for (Endpoint endpt : local_endpoints_whose_partners_contacted)
-            endpoints_waiting_on_commit.put(endpt._partner_host_uuid, false);
+        for (String remote_host_uuid : remote_hosts_contacted_uuid)
+            endpoints_waiting_on_commit.put(remote_host_uuid, false);
     	
         //# not waiting on self.
         endpoints_waiting_on_commit.put(
             ralph_globals.host_uuid, true);
 
         _unlock_endpoints_waiting_on_commit();
-
-        super.first_phase_transition_success(
-            local_endpoints_whose_partners_contacted, _event,
-            root_commit_timestamp,root_host_uuid, application_uuid,
-            event_name);
 
         //# after first phase has completed, should check if can
         //# transition directly to second phase (ie, no other endpoints
@@ -162,14 +153,8 @@ public class RootEventParent extends EventParent
     }
 	
     @Override
-    public void rollback(
-        String backout_requester_host_uuid, 
-        Set<Endpoint> local_endpoints_whose_partners_contacted)
+    public void rollback()
     {
-        super.rollback(
-            backout_requester_host_uuid,
-            local_endpoints_whose_partners_contacted);
-
         event_complete_mvar.put(
             RootCallResult.ResultType.RESCHEDULE);
     }
@@ -184,7 +169,7 @@ public class RootEventParent extends EventParent
     @Override
     public void receive_successful_first_phase_commit_msg(
         String event_uuid, String msg_originator_host_uuid,
-        List<String> children_event_host_uuids)
+        Set<String> children_event_host_uuids)
     {
     	_lock_endpoints_waiting_on_commit();
     	endpoints_waiting_on_commit.put(msg_originator_host_uuid, true);

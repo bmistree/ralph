@@ -126,36 +126,36 @@ public class ConnectionListener implements Runnable
      */
     private void handle_new_connection(Socket connector_sock)
     {
-        CreateConnection create_connection_message = null;
-        try
-        {
-            create_connection_message = CreateConnection.parseDelimitedFrom(
-                connector_sock.getInputStream());
+        // CreateConnection create_connection_message = null;
+        // try
+        // {
+        //     create_connection_message = CreateConnection.parseDelimitedFrom(
+        //         connector_sock.getInputStream());
 
-            String host_uuid =
-                create_connection_message.getHostUuid().getData();
-            String obj_uuid =
-                create_connection_message.getTargetEndpointUuid().getData();
+        //     String host_uuid =
+        //         create_connection_message.getHostUuid().getData();
+        //     String obj_uuid =
+        //         create_connection_message.getTargetEndpointUuid().getData();
 
-            Endpoint local_endpt = all_endpoints.get_endpoint_if_exists(obj_uuid);
-            if (local_endpt == null)
-            {
-                // FIXME: Do something more sane here.
-                Util.logger_assert(
-                    "\nAttempting to connect to unknown endpoint locally.");
-            }
+        //     Endpoint local_endpt = all_endpoints.get_endpoint_if_exists(obj_uuid);
+        //     if (local_endpt == null)
+        //     {
+        //         // FIXME: Do something more sane here.
+        //         Util.logger_assert(
+        //             "\nAttempting to connect to unknown endpoint locally.");
+        //     }
 
-            TCPConnectionObj conn_obj = new TCPConnectionObj(connector_sock);
-            local_endpt.update_connection_obj(conn_obj,host_uuid);
-        }
-        catch (IOException e)
-        {
-            // FIXME: probably don't actually need to assert out here.
-            // That's because have not yet allocated any resources for
-            // this connection.
-            e.printStackTrace();
-            Util.logger_assert(
-                "Received an ioexception when handling new connections.");
-        }
+        //     TCPConnectionObj conn_obj = new TCPConnectionObj(connector_sock);
+        //     local_endpt.update_connection_obj(conn_obj,host_uuid);
+        // }
+        // catch (IOException e)
+        // {
+        //     // FIXME: probably don't actually need to assert out here.
+        //     // That's because have not yet allocated any resources for
+        //     // this connection.
+        //     e.printStackTrace();
+        //     Util.logger_assert(
+        //         "Received an ioexception when handling new connections.");
+        // }
     }
 }
