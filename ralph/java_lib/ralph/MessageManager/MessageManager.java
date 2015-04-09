@@ -37,7 +37,7 @@ public class MessageManager implements IMessageListener
     }
     
     @Override
-    public void msg_recvd(GeneralMessage msg, String sender_host_uuid)
+    public void msg_recvd(GeneralMessage msg)
     {
         Util.logger_assert("Not handling messages in MessageManager.");
     }

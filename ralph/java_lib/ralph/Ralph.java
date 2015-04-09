@@ -91,7 +91,7 @@ public class Ralph {
         }
         
         RalphConnObj.TCPConnectionObj tcp_connection_obj = 
-            new RalphConnObj.TCPConnectionObj(host,port);
+            new RalphConnObj.TCPConnectionObj(all_globals, host, port);
         try
         {
             return constructor_obj.construct(

@@ -26,9 +26,9 @@ import ralph_protobuffs.CreateConnectionProto.CreateConnection;
 
 public class TCPConnectionObj implements ConnectionObj, Runnable
 {
-    private Endpoint local_endpoint = null;
-    private java.net.Socket sock = null;
-
+    private String local_host_uuid;
+    private final Socket sock;
+    private final RalphGlobals ralph_globals;
     private final ReentrantLock _mutex = new ReentrantLock();
     
     /**
@@ -38,19 +38,25 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
      * @throws IOException 
 
      */
-    public TCPConnectionObj(String dst_host, int dst_port) throws IOException
+    public TCPConnectionObj(
+        RalphGlobals ralph_globals, String dst_host, int dst_port)
+        throws IOException
     {
-        sock = new java.net.Socket(dst_host,dst_port);
+        sock = new Socket(dst_host,dst_port);
         sock.setTcpNoDelay(true);
+        this.ralph_globals = ralph_globals;
     }
 
-    public TCPConnectionObj(java.net.Socket _sock) 
+    public TCPConnectionObj(RalphGlobals ralph_globals, Socket _sock) 
     {
         sock = _sock;
-		
-        try {
+        this.ralph_globals = ralph_globals;
+        try
+        {
             sock.setTcpNoDelay(true);
-        } catch (SocketException e) {
+        }
+        catch (SocketException e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -65,46 +71,12 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         _mutex.unlock();
     }
     
-    
-    /**
-     */
+    @Override
     public void close() 
     {}
 
-    public void write_stop(
-        GeneralMessage msg_to_write,ralph.Endpoint endpoint_writing)
-    {
-    	write(msg_to_write,endpoint_writing);
-    }
-     
-    
-
-    /**
-       @param {String} msg_str_to_write
-       @param {Endpoint} sender_endpoint_obj
-        
-       Gets called from endpoint to send message from one side to the
-       other.
-    */    
-    public void write(
-        GeneralMessage msg_to_write, ralph.Endpoint sender_endpoint_obj)
-    {
-        _lock();
-        try {
-            msg_to_write.writeDelimitedTo(sock.getOutputStream());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            // local_endpoint.partner_connection_failure();
-        }
-        finally
-        {
-            _unlock();
-        }
-    }
-
-    public void write_create_connection(CreateConnection msg_to_write)
+    @Override
+    public void write(GeneralMessage msg_to_write)
     {
         _lock();
         try
@@ -113,30 +85,18 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         }
         catch (IOException e)
         {
-            // FIXME: consider writing back NetworkException error.
             e.printStackTrace();
-            Util.logger_assert(
-                "Not handling IOExceptions on write_create_connection.  " +
-                "Should likely throw a NetworkException for event.");
         }
         finally
         {
             _unlock();
         }
     }
-    
 
-    /**
-       @param {_Endpoint object} local_endpoint --- @see the emitted
-       code for a list of _Endpoint object methods.
-        
-       Once we have an attached endpoint, we start listening for data
-       to send to that endpoint.
-    */
-    public void register_endpoint(ralph.Endpoint _local_endpoint)
+    @Override
+    public void register_host(String host_uuid)
     {
-        local_endpoint = _local_endpoint;
-        
+        local_host_uuid = host_uuid;
         // create anonymous thread to start listening on the
         // connection:
         Thread t = new Thread(this);
@@ -144,6 +104,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         t.start();
     }
 
+    @Override
     public void run ()
     {
         listening_loop();
@@ -154,7 +115,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
         while (true)
         {
             GeneralMessage gm = null;
-            try {
+            try
+            {
                 gm = GeneralMessage.parseDelimitedFrom(
                     sock.getInputStream());
             } 
@@ -164,7 +126,7 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                 // local_endpoint.partner_connection_failure();
                 break;
             }
-            local_endpoint._receive_msg_from_partner(gm);            
+            ralph_globals.message_manager.msg_recvd(gm);
         }
     }
 	
@@ -251,7 +213,8 @@ public class TCPConnectionObj implements ConnectionObj, Runnable
                         break;
                     continue;
                 }
-                TCPConnectionObj tcp_conn_obj = new TCPConnectionObj(client_conn);
+                TCPConnectionObj tcp_conn_obj =
+                    new TCPConnectionObj(ralph_globals, client_conn);
 
                 // log the newly created endpoint
                 DurabilityContext durability_context = null;

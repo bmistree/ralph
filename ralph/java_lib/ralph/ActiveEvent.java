@@ -78,7 +78,7 @@ public abstract class ActiveEvent
        to allow simpler testing (instantiating multiple partners with
        different ralph globals).
      */
-    protected RalphGlobals ralph_globals;
+    public RalphGlobals ralph_globals;
     
     /**
        Want to start adding version control into RalphObjects.  Keep

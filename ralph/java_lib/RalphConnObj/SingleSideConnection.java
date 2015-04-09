@@ -3,31 +3,21 @@ package RalphConnObj;
 import ralph.Endpoint;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 
-public class SingleSideConnection implements ConnectionObj {
-
-    private ralph.Endpoint endpoint = null;
-	
+/**
+   Should just be a dummy implementation that doesn't send or use any
+   messages.
+ */
+public class SingleSideConnection implements ConnectionObj
+{
     @Override
-    public void register_endpoint(Endpoint _endpoint) 
-    {
-        endpoint = _endpoint;
-    }
-
-    @Override
-    public void write(
-        GeneralMessage msg_to_write, Endpoint endpoint_writing)
-    {
-        return;
-    }
+    public void register_host(String host_uuid) 
+    {}
 
     @Override
-    public void write_stop(
-        GeneralMessage msg_to_write, Endpoint endpoint_writing) 
-    {
-        endpoint._receive_msg_from_partner(msg_to_write);
-    }
+    public void write(GeneralMessage msg_to_write)
+    {}
 
     @Override
-    public void close() { }
-
+    public void close()
+    { }
 }

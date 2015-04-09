@@ -7,9 +7,6 @@ import java.io.IOException;
 
 import com.google.protobuf.ByteString;
 
-import ralph_protobuffs.CreateConnectionProto.CreateConnection;
-import ralph_protobuffs.UtilProto.UUID;
-
 import RalphConnObj.SingleSideConnection;
 
 /**
@@ -128,7 +125,8 @@ public class InternalServiceFactory
         {
             tcp_connection_obj =
                 new RalphConnObj.TCPConnectionObj(
-                    service_reference.ip_addr,service_reference.tcp_port);
+                    active_event.ralph_globals, service_reference.ip_addr,
+                    service_reference.tcp_port);
         }
         catch (IOException ex)
         {
@@ -137,20 +135,6 @@ public class InternalServiceFactory
             Util.logger_assert(
                 "Unhandled IOEXception in construct_from_reference");
         }
-        
-        CreateConnection.Builder create_connection_msg =
-            CreateConnection.newBuilder();
-        
-        UUID.Builder target_endpoint_uuid = UUID.newBuilder();
-        target_endpoint_uuid.setData(service_reference.service_uuid);
-        create_connection_msg.setTargetEndpointUuid(target_endpoint_uuid);
-
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        create_connection_msg.setHostUuid(host_uuid);
-        
-        tcp_connection_obj.write_create_connection(
-            create_connection_msg.build());
         return endpt_constructor.construct(
             ralph_globals,tcp_connection_obj,
             active_event.exec_ctx,null);
