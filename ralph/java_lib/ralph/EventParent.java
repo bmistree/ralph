@@ -24,8 +24,6 @@ public abstract class EventParent
     public final RalphGlobals ralph_globals;
     private String priority = null;
     private final ReentrantLock _priority_mutex = new ReentrantLock();
-    
-    protected ActiveEvent event = null;
     private boolean has_been_boosted = false;
     public final boolean is_root;
 
@@ -149,7 +147,7 @@ public abstract class EventParent
        */
 	
     public abstract void receive_successful_first_phase_commit_msg(
-        String event_uuid,String msg_originator_host_uuid,
+        ActiveEvent event, String msg_originator_host_uuid,
         Set<String>children_event_host_uuids);
 
 
@@ -175,8 +173,8 @@ public abstract class EventParent
        each of them to enter first phase commit as well.
     */
     public abstract void first_phase_transition_success(
-        Set<String> remote_hosts_contacted_uuid,
-        ActiveEvent _event, long root_commit_timestamp,
+        Set<String> remote_hosts_contacted_uuid, ActiveEvent event,
+        long root_commit_timestamp,
         String root_host_uuid,String application_uuid,
         String event_name);
 

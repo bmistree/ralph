@@ -20,7 +20,7 @@ public class PartnerEventParent extends EventParent
     
     @Override
     public void first_phase_transition_success(
-        Set<String> remote_hosts_contacted_uuid, ActiveEvent _event,
+        Set<String> remote_hosts_contacted_uuid, ActiveEvent event,
         long root_timestamp, String root_host_uuid, String application_uuid,
         String event_name)
     {}
@@ -46,7 +46,7 @@ public class PartnerEventParent extends EventParent
      */
     @Override
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_host_uuid,
+        ActiveEvent evt, String msg_originator_host_uuid,
         Set<String> children_event_host_uuids) 
     {}
 }

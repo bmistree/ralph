@@ -109,7 +109,7 @@ public class RootEventParent extends EventParent
      */
     @Override
     public void first_phase_transition_success(
-        Set<String> remote_hosts_contacted_uuid,  ActiveEvent _event,
+        Set<String> remote_hosts_contacted_uuid, ActiveEvent event,
         long root_commit_timestamp, String root_host_uuid,
         String application_uuid, String event_name)
     {
@@ -128,14 +128,14 @@ public class RootEventParent extends EventParent
         //# after first phase has completed, should check if can
         //# transition directly to second phase (ie, no other endpoints
         //# were involved in event.)
-        check_transition();
+        check_transition(event);
     }
 
     /**
        If we are no longer waiting on any endpoint to acknowledge
        first phase commit, then transition into second phase commit.
     */
-    public void check_transition()
+    public void check_transition(ActiveEvent event)
     {
         _lock_endpoints_waiting_on_commit();
         for (Boolean endpoint_transitioned :
@@ -168,7 +168,7 @@ public class RootEventParent extends EventParent
     */
     @Override
     public void receive_successful_first_phase_commit_msg(
-        String event_uuid, String msg_originator_host_uuid,
+        ActiveEvent event, String msg_originator_host_uuid,
         Set<String> children_event_host_uuids)
     {
     	_lock_endpoints_waiting_on_commit();
@@ -185,6 +185,6 @@ public class RootEventParent extends EventParent
     	}
         _unlock_endpoints_waiting_on_commit();
     	if (may_transition)
-            check_transition();
+            check_transition(event);
     }
 }

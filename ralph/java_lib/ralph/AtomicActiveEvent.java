@@ -1152,8 +1152,7 @@ public class AtomicActiveEvent extends ActiveEvent
         Set<String> children_event_host_uuids)
     {
         event_parent.receive_successful_first_phase_commit_msg(
-            event_uuid,msg_originator_host_uuid,
-            children_event_host_uuids);
+            this, msg_originator_host_uuid, children_event_host_uuids);
 
         // forward successful first phase commit back up to root.
         if (event_parent.spanning_tree_parent_uuid != null)
