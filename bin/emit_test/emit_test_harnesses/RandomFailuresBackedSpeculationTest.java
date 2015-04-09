@@ -7,7 +7,6 @@ import java.util.Random;
 import ralph.EventPriority.IsSuperFlag;
 import ralph_emitted.BackedSpeculationJava.BackedSpeculation;
 import ralph_emitted.BackedSpeculationJava._InternalSwitch;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 import RalphServiceActions.ServiceAction;
 import ralph.ActiveEvent;

@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 import ralph_emitted.BasicSpeculationJava.SpeculativeEndpoint;
 import ralph_emitted.BasicSpeculationJava.SpeculativeInterface;
-import RalphConnObj.SingleSideConnection;
 
 import ralph.RalphGlobals;
 import ralph.EndpointConstructorObj;
@@ -197,8 +196,7 @@ public class BasicSpeculationTest
             DurabilityReplayContext replay_context = null;
             SpeculativeInterface endpt =
                 (SpeculativeInterface) constructor_obj.construct(
-                    speculative_interface_ralph_globals,
-                    new SingleSideConnection(),null,replay_context);
+                    speculative_interface_ralph_globals, null,replay_context);
             
             // testing numbers
             double original_internal_number = endpt.get_number().doubleValue();

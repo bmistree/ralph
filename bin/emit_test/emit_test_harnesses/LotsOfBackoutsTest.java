@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.LotsOfBackoutsJava.LotsOfBackouts;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class LotsOfBackoutsTest

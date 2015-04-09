@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.EnumJava.IEnumTest;
 import ralph_emitted.AliasEnumJava.Test;
-import RalphConnObj.SingleSideConnection;
 import ralph.RalphGlobals;
 
 public class AliasEnumTest
