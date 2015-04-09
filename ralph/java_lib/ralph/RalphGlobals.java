@@ -9,6 +9,8 @@ import RalphServiceConnectionListener.ConnectionListener;
 import ralph.MessageManager.MessageManager;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ExecutionContext.ExecutionContext;
+import ralph.Connection.SameHostConnection;
+import ralph.Connection.TCPConnection.TCPAcceptThread;
 
 /**
    Have a sort of tortured approach to RalphGlobals.  RalphGlobals is
@@ -34,6 +36,7 @@ public class RalphGlobals implements IUUIDGenerator
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
         public boolean logging_on = false;
+        public String host_uuid = null;
     }
 
     /**
@@ -51,46 +54,65 @@ public class RalphGlobals implements IUUIDGenerator
     public final ConcurrentHashMap<String,ExecutionContext> all_ctx_map =
         new ConcurrentHashMap<String,ExecutionContext>();
 
-    private List<Stoppable> stoppable_list =
-        Collections.synchronizedList(new ArrayList<Stoppable>());
-
     // set in constructor
     private final IUUIDGenerator uuid_generator;
     public final String host_uuid;    
-    public final String ip_addr_to_listen_for_connections_on;
-    public final int tcp_port_to_listen_for_connections_on;
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
 
+    public final SameHostConnection same_host_connection;
     public final MessageManager message_manager =
         new MessageManager(this);
+
+    // each ralph_globals object have a single connection listener
+    // that listens for connections from remote hosts that we then can
+    // send service factories, etc. to.
+    private final TCPAcceptThread new_connection_listener;
+    
+    /**
+       Some services need to know when we're stopping (eg., tcp
+       listening for connections).  They call stop on ralph_globals
+       object, which calls stop on stoppable.  RalphGlobals can pass
+       stoppable to other objects and they check whether to stop.
+     */
+    private final Stoppable stoppable = new Stoppable();
     
     public RalphGlobals()
     {
         this(DEFAULT_PARAMETERS);
     }
+
+    public void stop()
+    {
+        stoppable.stop();
+    }
     
     public RalphGlobals(Parameters params)
     {
-        ip_addr_to_listen_for_connections_on =
-            params.ip_addr_to_listen_for_connections_on;
-        tcp_port_to_listen_for_connections_on =
-            params.tcp_port_to_listen_for_connections_on;
         deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
         
         connection_listener =
             new ConnectionListener(
-                all_endpoints,params.tcp_port_to_listen_for_connections_on);
+                this, params.tcp_port_to_listen_for_connections_on);
 
         thread_pool = new ThreadPool(params.threadpool_params);
         uuid_generator = params.uuid_generator;
         // For now, generating host uuids as unique identifiers.  If
         // accidentally use local_atom_int generator, will get
         // collisions with other hosts.
-        host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
-    }
+        if (params.host_uuid != null)
+            host_uuid = params.host_uuid;
+        else
+            host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
+        
+        same_host_connection = new SameHostConnection(this);
 
+        new_connection_listener = new TCPAcceptThread(
+            stoppable, this, params.ip_addr_to_listen_for_connections_on,
+            params.tcp_port_to_listen_for_connections_on);
+    }
+    
     @Override
     public String generate_uuid()
     {
@@ -100,11 +122,5 @@ public class RalphGlobals implements IUUIDGenerator
     public String generate_local_uuid()
     {
         return UUIDGenerators.LOCAL_ATOM_INT_UUID_GENERATOR.generate_uuid();
-    }
-    
-    // FIXME: get rid of this?
-    public void add_stoppable(Stoppable stoppable)
-    {
-        stoppable_list.add(stoppable);
     }
 }

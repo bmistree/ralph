@@ -812,10 +812,8 @@ public class Variables
 
             if (internal_service_reference != null)
             {
-                service_reference_builder.setIpAddr(
-                    internal_service_reference.ip_addr);
-                service_reference_builder.setTcpPort(
-                    internal_service_reference.tcp_port);
+                service_reference_builder.setRemoteHostUuid(
+                    internal_service_reference.remote_host_uuid);
                 service_reference_builder.setServiceUuid(
                     internal_service_reference.service_uuid);
             }

@@ -176,9 +176,7 @@ public abstract class Endpoint implements IReference
         ExecutionContext exec_ctx)
     {
         return new InternalServiceReference(
-            ralph_globals.ip_addr_to_listen_for_connections_on,
-            ralph_globals.tcp_port_to_listen_for_connections_on,
-            _uuid);
+            ralph_globals.host_uuid, _uuid);
     }
     
 

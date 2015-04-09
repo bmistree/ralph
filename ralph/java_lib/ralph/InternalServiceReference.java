@@ -4,29 +4,26 @@ import ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta;
 
 public class InternalServiceReference
 {
-    public final String ip_addr;
-    public final int tcp_port;
+    public final String remote_host_uuid;
     public final String service_uuid;
     
     
     public InternalServiceReference(
-        String _ip_addr, int _tcp_port, String _service_uuid)
+        String remote_host_uuid, String service_uuid)
     {
-        ip_addr = _ip_addr;
-        tcp_port = _tcp_port;
-        service_uuid = _service_uuid;
+        this.remote_host_uuid = remote_host_uuid;
+        this.service_uuid = service_uuid;
     }
 
     public static InternalServiceReference deserialize_delta (
         ServiceReferenceDelta delta)
     {
-        if (! delta.hasIpAddr())
+        if (! delta.hasRemoteHostUuid())
             return null;
 
-        String ip_addr = delta.getIpAddr();
-        int tcp_port = delta.getTcpPort();
+        String remote_host_uuid = delta.getRemoteHostUuid();
         String service_uuid = delta.getServiceUuid();
 
-        return new InternalServiceReference(ip_addr,tcp_port,service_uuid);
+        return new InternalServiceReference(remote_host_uuid, service_uuid);
     }
 }

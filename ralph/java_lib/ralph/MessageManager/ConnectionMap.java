@@ -3,6 +3,8 @@ package ralph.MessageManager;
 import java.util.Map;
 import java.util.HashMap;
 
+import ralph.Connection.IConnection;
+
 public class ConnectionMap
 {
     private final Map<String, IConnection> connection_map =

@@ -50,9 +50,8 @@ message Delta
     {
         // either all these are here or none are.  if none are, then
         // service reference holds a reference to null.
-        optional string ip_addr = 1;
-        optional int32 tcp_port = 2;
-        optional string service_uuid = 3;
+        optional string remote_host_uuid = 1;
+        optional string service_uuid = 2;
     }
     
     message ReferenceType

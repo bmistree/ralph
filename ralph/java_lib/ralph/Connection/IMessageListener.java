@@ -1,4 +1,4 @@
-package ralph.MessageManager;
+package ralph.Connection;
 
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 

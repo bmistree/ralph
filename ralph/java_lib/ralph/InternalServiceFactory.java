@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import com.google.protobuf.ByteString;
 
-import RalphConnObj.SingleSideConnection;
+import ralph.Connection.SingleSideConnection;
+import ralph.Connection.TCPConnection;
 
 /**
    Should cast to whatever type expect outside of construct.
@@ -112,31 +113,16 @@ public class InternalServiceFactory
     
     public Endpoint construct(ActiveEvent active_event)
     {
-        SingleSideConnection ssc = new SingleSideConnection();
         return this.endpt_constructor.construct(
-            ralph_globals,ssc,active_event.exec_ctx,null);
+            ralph_globals, SingleSideConnection.INSTANCE,
+            active_event.exec_ctx, null);
     }
     
     public Endpoint construct_from_reference(
         ActiveEvent active_event,InternalServiceReference service_reference)
     {
-        RalphConnObj.TCPConnectionObj tcp_connection_obj = null;
-        try
-        {
-            tcp_connection_obj =
-                new RalphConnObj.TCPConnectionObj(
-                    active_event.ralph_globals, service_reference.ip_addr,
-                    service_reference.tcp_port);
-        }
-        catch (IOException ex)
-        {
-            // FIXME: handle rejected tcp connection to alternate host.
-            ex.printStackTrace();
-            Util.logger_assert(
-                "Unhandled IOEXception in construct_from_reference");
-        }
         return endpt_constructor.construct(
-            ralph_globals,tcp_connection_obj,
-            active_event.exec_ctx,null);
+            ralph_globals, SingleSideConnection.INSTANCE,
+            active_event.exec_ctx, null);
     }
 }

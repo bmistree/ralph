@@ -352,13 +352,12 @@ public class ObjectContentsDeserializers
                 obj_contents.getServiceReferenceType();
 
             // internal service reference is null if missing fields.
-            if (service_reference_delta.hasIpAddr())
+            if (service_reference_delta.hasRemoteHostUuid())
             {
-                String ip_addr = service_reference_delta.getIpAddr();
-                int tcp_port = service_reference_delta.getTcpPort();
+                String remote_host_uuid = service_reference_delta.getRemoteHostUuid();
                 String service_uuid = service_reference_delta.getServiceUuid();
                 internal_service_reference =
-                    new InternalServiceReference(ip_addr,tcp_port,service_uuid);
+                    new InternalServiceReference(remote_host_uuid, service_uuid);
             }
 
             if (obj_contents.getAtomic())

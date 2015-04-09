@@ -11,7 +11,7 @@ import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.EndpointUUIDCon
 import ralph_protobuffs.DurabilityPrepareProto.DurabilityPrepare.PairedPartnerRequestSequenceEndpointUUID;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 
-import RalphConnObj.SingleSideConnection;
+import ralph.Connection.SingleSideConnection;
 
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
@@ -85,8 +85,8 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                 // SingleSideConnections and with no new
                 // DurabilityContext-s
                 Endpoint endpt = constructor.construct(
-                    ralph_globals,new SingleSideConnection(),
-                    null,durability_replay_context);
+                    ralph_globals, SingleSideConnection.INSTANCE,
+                    null, durability_replay_context);
                 add_endpoint(endpt);
             }
         }

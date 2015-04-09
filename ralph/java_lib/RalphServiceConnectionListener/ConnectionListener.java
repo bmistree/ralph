@@ -7,11 +7,9 @@ import java.lang.Thread;
 
 import ralph_protobuffs.CreateConnectionProto.CreateConnection;
 
-import RalphConnObj.TCPConnectionObj;
-
-import ralph.AllEndpoints;
+import ralph.Connection.TCPConnection;
 import ralph.Util;
-import ralph.Endpoint;
+import ralph.RalphGlobals;
 
 /**
    To create a Service, we can use a ServiceFactory.  Eg.,
@@ -56,13 +54,13 @@ import ralph.Endpoint;
  */
 public class ConnectionListener implements Runnable
 {
-    private final AllEndpoints all_endpoints;
+    private final RalphGlobals ralph_globals;
     private final int tcp_port_to_listen_on;
     
     public ConnectionListener(
-        AllEndpoints _all_endpoints,int _tcp_port_to_listen_on)
+        RalphGlobals ralph_globals, int _tcp_port_to_listen_on)
     {
-        all_endpoints = _all_endpoints;
+        this.ralph_globals = ralph_globals;
         tcp_port_to_listen_on = _tcp_port_to_listen_on;
         Thread t = new Thread(this);
         t.setDaemon(true);
@@ -126,36 +124,8 @@ public class ConnectionListener implements Runnable
      */
     private void handle_new_connection(Socket connector_sock)
     {
-        // CreateConnection create_connection_message = null;
-        // try
-        // {
-        //     create_connection_message = CreateConnection.parseDelimitedFrom(
-        //         connector_sock.getInputStream());
-
-        //     String host_uuid =
-        //         create_connection_message.getHostUuid().getData();
-        //     String obj_uuid =
-        //         create_connection_message.getTargetEndpointUuid().getData();
-
-        //     Endpoint local_endpt = all_endpoints.get_endpoint_if_exists(obj_uuid);
-        //     if (local_endpt == null)
-        //     {
-        //         // FIXME: Do something more sane here.
-        //         Util.logger_assert(
-        //             "\nAttempting to connect to unknown endpoint locally.");
-        //     }
-
-        //     TCPConnectionObj conn_obj = new TCPConnectionObj(connector_sock);
-        //     local_endpt.update_connection_obj(conn_obj,host_uuid);
-        // }
-        // catch (IOException e)
-        // {
-        //     // FIXME: probably don't actually need to assert out here.
-        //     // That's because have not yet allocated any resources for
-        //     // this connection.
-        //     e.printStackTrace();
-        //     Util.logger_assert(
-        //         "Received an ioexception when handling new connections.");
-        // }
+        TCPConnection tcp_connection =
+            new TCPConnection(ralph_globals, connector_sock);
+        ralph_globals.message_manager.add_connection(tcp_connection);
     }
 }

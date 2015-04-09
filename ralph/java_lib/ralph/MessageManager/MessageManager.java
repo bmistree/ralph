@@ -4,7 +4,9 @@ import java.util.Set;
 
 import ralph.Util;
 import ralph.RalphGlobals;
-import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
+import ralph.Connection.IMessageListener;
+import ralph.Connection.IConnection;
+
 import ralph_protobuffs.PromotionProto.Promotion;
 import ralph_protobuffs.UtilProto;
 import ralph_protobuffs.UtilProto.UUID;

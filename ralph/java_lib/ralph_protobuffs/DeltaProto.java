@@ -3240,27 +3240,27 @@ public final class DeltaProto {
     public interface ServiceReferenceDeltaOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
-      // optional string ip_addr = 1;
+      // optional string remote_host_uuid = 1;
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
        * service reference holds a reference to null.
        * </pre>
        */
-      boolean hasIpAddr();
+      boolean hasRemoteHostUuid();
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
        * service reference holds a reference to null.
        * </pre>
        */
-      java.lang.String getIpAddr();
+      java.lang.String getRemoteHostUuid();
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
@@ -3268,29 +3268,19 @@ public final class DeltaProto {
        * </pre>
        */
       com.google.protobuf.ByteString
-          getIpAddrBytes();
+          getRemoteHostUuidBytes();
 
-      // optional int32 tcp_port = 2;
+      // optional string service_uuid = 2;
       /**
-       * <code>optional int32 tcp_port = 2;</code>
-       */
-      boolean hasTcpPort();
-      /**
-       * <code>optional int32 tcp_port = 2;</code>
-       */
-      int getTcpPort();
-
-      // optional string service_uuid = 3;
-      /**
-       * <code>optional string service_uuid = 3;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
       boolean hasServiceUuid();
       /**
-       * <code>optional string service_uuid = 3;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
       java.lang.String getServiceUuid();
       /**
-       * <code>optional string service_uuid = 3;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
       com.google.protobuf.ByteString
           getServiceUuidBytes();
@@ -3348,16 +3338,11 @@ public final class DeltaProto {
               }
               case 10: {
                 bitField0_ |= 0x00000001;
-                ipAddr_ = input.readBytes();
+                remoteHostUuid_ = input.readBytes();
                 break;
               }
-              case 16: {
+              case 18: {
                 bitField0_ |= 0x00000002;
-                tcpPort_ = input.readInt32();
-                break;
-              }
-              case 26: {
-                bitField0_ |= 0x00000004;
                 serviceUuid_ = input.readBytes();
                 break;
               }
@@ -3401,30 +3386,30 @@ public final class DeltaProto {
       }
 
       private int bitField0_;
-      // optional string ip_addr = 1;
-      public static final int IP_ADDR_FIELD_NUMBER = 1;
-      private java.lang.Object ipAddr_;
+      // optional string remote_host_uuid = 1;
+      public static final int REMOTE_HOST_UUID_FIELD_NUMBER = 1;
+      private java.lang.Object remoteHostUuid_;
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
        * service reference holds a reference to null.
        * </pre>
        */
-      public boolean hasIpAddr() {
+      public boolean hasRemoteHostUuid() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
        * service reference holds a reference to null.
        * </pre>
        */
-      public java.lang.String getIpAddr() {
-        java.lang.Object ref = ipAddr_;
+      public java.lang.String getRemoteHostUuid() {
+        java.lang.Object ref = remoteHostUuid_;
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
@@ -3432,13 +3417,13 @@ public final class DeltaProto {
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
-            ipAddr_ = s;
+            remoteHostUuid_ = s;
           }
           return s;
         }
       }
       /**
-       * <code>optional string ip_addr = 1;</code>
+       * <code>optional string remote_host_uuid = 1;</code>
        *
        * <pre>
        * either all these are here or none are.  if none are, then
@@ -3446,46 +3431,30 @@ public final class DeltaProto {
        * </pre>
        */
       public com.google.protobuf.ByteString
-          getIpAddrBytes() {
-        java.lang.Object ref = ipAddr_;
+          getRemoteHostUuidBytes() {
+        java.lang.Object ref = remoteHostUuid_;
         if (ref instanceof java.lang.String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          ipAddr_ = b;
+          remoteHostUuid_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
 
-      // optional int32 tcp_port = 2;
-      public static final int TCP_PORT_FIELD_NUMBER = 2;
-      private int tcpPort_;
+      // optional string service_uuid = 2;
+      public static final int SERVICE_UUID_FIELD_NUMBER = 2;
+      private java.lang.Object serviceUuid_;
       /**
-       * <code>optional int32 tcp_port = 2;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
-      public boolean hasTcpPort() {
+      public boolean hasServiceUuid() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional int32 tcp_port = 2;</code>
-       */
-      public int getTcpPort() {
-        return tcpPort_;
-      }
-
-      // optional string service_uuid = 3;
-      public static final int SERVICE_UUID_FIELD_NUMBER = 3;
-      private java.lang.Object serviceUuid_;
-      /**
-       * <code>optional string service_uuid = 3;</code>
-       */
-      public boolean hasServiceUuid() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string service_uuid = 3;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
       public java.lang.String getServiceUuid() {
         java.lang.Object ref = serviceUuid_;
@@ -3502,7 +3471,7 @@ public final class DeltaProto {
         }
       }
       /**
-       * <code>optional string service_uuid = 3;</code>
+       * <code>optional string service_uuid = 2;</code>
        */
       public com.google.protobuf.ByteString
           getServiceUuidBytes() {
@@ -3519,8 +3488,7 @@ public final class DeltaProto {
       }
 
       private void initFields() {
-        ipAddr_ = "";
-        tcpPort_ = 0;
+        remoteHostUuid_ = "";
         serviceUuid_ = "";
       }
       private byte memoizedIsInitialized = -1;
@@ -3536,13 +3504,10 @@ public final class DeltaProto {
                           throws java.io.IOException {
         getSerializedSize();
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          output.writeBytes(1, getIpAddrBytes());
+          output.writeBytes(1, getRemoteHostUuidBytes());
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeInt32(2, tcpPort_);
-        }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          output.writeBytes(3, getServiceUuidBytes());
+          output.writeBytes(2, getServiceUuidBytes());
         }
         getUnknownFields().writeTo(output);
       }
@@ -3555,15 +3520,11 @@ public final class DeltaProto {
         size = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(1, getIpAddrBytes());
+            .computeBytesSize(1, getRemoteHostUuidBytes());
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeInt32Size(2, tcpPort_);
-        }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(3, getServiceUuidBytes());
+            .computeBytesSize(2, getServiceUuidBytes());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -3681,12 +3642,10 @@ public final class DeltaProto {
 
         public Builder clear() {
           super.clear();
-          ipAddr_ = "";
+          remoteHostUuid_ = "";
           bitField0_ = (bitField0_ & ~0x00000001);
-          tcpPort_ = 0;
-          bitField0_ = (bitField0_ & ~0x00000002);
           serviceUuid_ = "";
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
 
@@ -3718,13 +3677,9 @@ public final class DeltaProto {
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
             to_bitField0_ |= 0x00000001;
           }
-          result.ipAddr_ = ipAddr_;
+          result.remoteHostUuid_ = remoteHostUuid_;
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
             to_bitField0_ |= 0x00000002;
-          }
-          result.tcpPort_ = tcpPort_;
-          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-            to_bitField0_ |= 0x00000004;
           }
           result.serviceUuid_ = serviceUuid_;
           result.bitField0_ = to_bitField0_;
@@ -3743,16 +3698,13 @@ public final class DeltaProto {
 
         public Builder mergeFrom(ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta other) {
           if (other == ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta.getDefaultInstance()) return this;
-          if (other.hasIpAddr()) {
+          if (other.hasRemoteHostUuid()) {
             bitField0_ |= 0x00000001;
-            ipAddr_ = other.ipAddr_;
+            remoteHostUuid_ = other.remoteHostUuid_;
             onChanged();
           }
-          if (other.hasTcpPort()) {
-            setTcpPort(other.getTcpPort());
-          }
           if (other.hasServiceUuid()) {
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000002;
             serviceUuid_ = other.serviceUuid_;
             onChanged();
           }
@@ -3783,40 +3735,40 @@ public final class DeltaProto {
         }
         private int bitField0_;
 
-        // optional string ip_addr = 1;
-        private java.lang.Object ipAddr_ = "";
+        // optional string remote_host_uuid = 1;
+        private java.lang.Object remoteHostUuid_ = "";
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
          * service reference holds a reference to null.
          * </pre>
          */
-        public boolean hasIpAddr() {
+        public boolean hasRemoteHostUuid() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
          * service reference holds a reference to null.
          * </pre>
          */
-        public java.lang.String getIpAddr() {
-          java.lang.Object ref = ipAddr_;
+        public java.lang.String getRemoteHostUuid() {
+          java.lang.Object ref = remoteHostUuid_;
           if (!(ref instanceof java.lang.String)) {
             java.lang.String s = ((com.google.protobuf.ByteString) ref)
                 .toStringUtf8();
-            ipAddr_ = s;
+            remoteHostUuid_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
           }
         }
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
@@ -3824,112 +3776,79 @@ public final class DeltaProto {
          * </pre>
          */
         public com.google.protobuf.ByteString
-            getIpAddrBytes() {
-          java.lang.Object ref = ipAddr_;
+            getRemoteHostUuidBytes() {
+          java.lang.Object ref = remoteHostUuid_;
           if (ref instanceof String) {
             com.google.protobuf.ByteString b = 
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
-            ipAddr_ = b;
+            remoteHostUuid_ = b;
             return b;
           } else {
             return (com.google.protobuf.ByteString) ref;
           }
         }
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
          * service reference holds a reference to null.
          * </pre>
          */
-        public Builder setIpAddr(
+        public Builder setRemoteHostUuid(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-          ipAddr_ = value;
+          remoteHostUuid_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
          * service reference holds a reference to null.
          * </pre>
          */
-        public Builder clearIpAddr() {
+        public Builder clearRemoteHostUuid() {
           bitField0_ = (bitField0_ & ~0x00000001);
-          ipAddr_ = getDefaultInstance().getIpAddr();
+          remoteHostUuid_ = getDefaultInstance().getRemoteHostUuid();
           onChanged();
           return this;
         }
         /**
-         * <code>optional string ip_addr = 1;</code>
+         * <code>optional string remote_host_uuid = 1;</code>
          *
          * <pre>
          * either all these are here or none are.  if none are, then
          * service reference holds a reference to null.
          * </pre>
          */
-        public Builder setIpAddrBytes(
+        public Builder setRemoteHostUuidBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-          ipAddr_ = value;
+          remoteHostUuid_ = value;
           onChanged();
           return this;
         }
 
-        // optional int32 tcp_port = 2;
-        private int tcpPort_ ;
+        // optional string service_uuid = 2;
+        private java.lang.Object serviceUuid_ = "";
         /**
-         * <code>optional int32 tcp_port = 2;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
-        public boolean hasTcpPort() {
+        public boolean hasServiceUuid() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
-         * <code>optional int32 tcp_port = 2;</code>
-         */
-        public int getTcpPort() {
-          return tcpPort_;
-        }
-        /**
-         * <code>optional int32 tcp_port = 2;</code>
-         */
-        public Builder setTcpPort(int value) {
-          bitField0_ |= 0x00000002;
-          tcpPort_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>optional int32 tcp_port = 2;</code>
-         */
-        public Builder clearTcpPort() {
-          bitField0_ = (bitField0_ & ~0x00000002);
-          tcpPort_ = 0;
-          onChanged();
-          return this;
-        }
-
-        // optional string service_uuid = 3;
-        private java.lang.Object serviceUuid_ = "";
-        /**
-         * <code>optional string service_uuid = 3;</code>
-         */
-        public boolean hasServiceUuid() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
-        }
-        /**
-         * <code>optional string service_uuid = 3;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
         public java.lang.String getServiceUuid() {
           java.lang.Object ref = serviceUuid_;
@@ -3943,7 +3862,7 @@ public final class DeltaProto {
           }
         }
         /**
-         * <code>optional string service_uuid = 3;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
         public com.google.protobuf.ByteString
             getServiceUuidBytes() {
@@ -3959,36 +3878,36 @@ public final class DeltaProto {
           }
         }
         /**
-         * <code>optional string service_uuid = 3;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
         public Builder setServiceUuid(
             java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000002;
           serviceUuid_ = value;
           onChanged();
           return this;
         }
         /**
-         * <code>optional string service_uuid = 3;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
         public Builder clearServiceUuid() {
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
           serviceUuid_ = getDefaultInstance().getServiceUuid();
           onChanged();
           return this;
         }
         /**
-         * <code>optional string service_uuid = 3;</code>
+         * <code>optional string service_uuid = 2;</code>
          */
         public Builder setServiceUuidBytes(
             com.google.protobuf.ByteString value) {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000002;
           serviceUuid_ = value;
           onChanged();
           return this;
@@ -6092,7 +6011,7 @@ public final class DeltaProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013delta.proto\"\316\006\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
+      "\n\013delta.proto\"\305\006\n\005Delta\022\037\n\005value\030\001 \001(\0132\020" +
       ".Delta.ValueType\022\'\n\treference\030\002 \001(\0132\024.De" +
       "lta.ReferenceType\022.\n\017container_delta\030\003 \003" +
       "(\0132\025.Delta.ContainerDelta\022$\n\nenum_delta\030" +
@@ -6109,12 +6028,12 @@ public final class DeltaProto {
       "numDelta\022\'\n\037enum_constructor_obj_class_n" +
       "ame\030\001 \002(\t\022\024\n\014enum_ordinal\030\002 \002(\005\0321\n\023Servi" +
       "ceFactoryDelta\022\032\n\022serialized_factory\030\001 \002" +
-      "(\014\032P\n\025ServiceReferenceDelta\022\017\n\007ip_addr\030\001" +
-      " \001(\t\022\020\n\010tcp_port\030\002 \001(\005\022\024\n\014service_uuid\030\003" +
-      " \001(\t\032\"\n\rReferenceType\022\021\n\treference\030\001 \001(\t",
-      "\"<\n\017ContainerOpType\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001" +
-      "\022\t\n\005WRITE\020\002\022\t\n\005CLEAR\020\003B\036\n\020ralph_protobuf" +
-      "fsB\nDeltaProto"
+      "(\014\032G\n\025ServiceReferenceDelta\022\030\n\020remote_ho" +
+      "st_uuid\030\001 \001(\t\022\024\n\014service_uuid\030\002 \001(\t\032\"\n\rR" +
+      "eferenceType\022\021\n\treference\030\001 \001(\t\"<\n\017Conta",
+      "inerOpType\022\n\n\006DELETE\020\000\022\007\n\003ADD\020\001\022\t\n\005WRITE" +
+      "\020\002\022\t\n\005CLEAR\020\003B\036\n\020ralph_protobuffsB\nDelta" +
+      "Proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6156,7 +6075,7 @@ public final class DeltaProto {
           internal_static_Delta_ServiceReferenceDelta_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Delta_ServiceReferenceDelta_descriptor,
-              new java.lang.String[] { "IpAddr", "TcpPort", "ServiceUuid", });
+              new java.lang.String[] { "RemoteHostUuid", "ServiceUuid", });
           internal_static_Delta_ReferenceType_descriptor =
             internal_static_Delta_descriptor.getNestedTypes().get(5);
           internal_static_Delta_ReferenceType_fieldAccessorTable = new
