@@ -3,7 +3,6 @@ package RalphVersions;
 import java.util.List;
 import java.util.ArrayList;
 
-import ralph.Connection.SingleSideConnection;
 import ralph.RalphGlobals;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
@@ -59,8 +58,7 @@ public class VersionUtil
         }
         
         return endpt_constructor_obj.construct(
-            ralph_globals,SingleSideConnection.INSTANCE,
-            endpt_initialization_vars,null);
+            ralph_globals, endpt_initialization_vars, null);
     }
 
     

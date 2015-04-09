@@ -114,15 +114,13 @@ public class InternalServiceFactory
     public Endpoint construct(ActiveEvent active_event)
     {
         return this.endpt_constructor.construct(
-            ralph_globals, SingleSideConnection.INSTANCE,
-            active_event.exec_ctx, null);
+            ralph_globals, active_event.exec_ctx, null);
     }
     
     public Endpoint construct_from_reference(
         ActiveEvent active_event,InternalServiceReference service_reference)
     {
         return endpt_constructor.construct(
-            ralph_globals, SingleSideConnection.INSTANCE,
-            active_event.exec_ctx, null);
+            ralph_globals, active_event.exec_ctx, null);
     }
 }

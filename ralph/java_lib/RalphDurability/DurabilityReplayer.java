@@ -85,8 +85,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                 // SingleSideConnections and with no new
                 // DurabilityContext-s
                 Endpoint endpt = constructor.construct(
-                    ralph_globals, SingleSideConnection.INSTANCE,
-                    null, durability_replay_context);
+                    ralph_globals, null, durability_replay_context);
                 add_endpoint(endpt);
             }
         }

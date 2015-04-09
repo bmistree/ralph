@@ -14,7 +14,6 @@ public interface EndpointConstructorObj
      */
     public Endpoint construct(
         RalphGlobals globals, 
-        IConnection conn,
         IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context);
     
@@ -26,7 +25,7 @@ public interface EndpointConstructorObj
        declared inside of service/endpoint.
      */
     public Endpoint construct(
-        RalphGlobals globals, IConnection conn,
+        RalphGlobals globals,
         List<RalphObject> internal_values_list,
         IDurabilityContext durability_context);
 
