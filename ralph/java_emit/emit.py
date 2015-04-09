@@ -34,8 +34,8 @@ import RalphVersions.IReconstructionContext;
 import RalphVersions.ObjectHistory;
 import RalphVersions.EnumSerializer;
 
-import RalphConnObj.ConnectionObj;
-import RalphConnObj.SingleSideConnection;
+import ralph.Connection.IConnection;
+import ralph.Connection.SingleSideConnection;
 import RalphExceptions.*;
 
 import RalphAtomicWrappers.BaseAtomicWrappers;
@@ -285,12 +285,12 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
 
     constructor_text = '''
 public %(endpoint_name)s (
-    RalphGlobals ralph_globals,ConnectionObj conn_obj,
+    RalphGlobals ralph_globals,
     IDurabilityContext durability_context,
     DurabilityReplayContext durability_replay_context) 
 {
     super(
-        ralph_globals,conn_obj,factory,durability_context,
+        ralph_globals, factory, durability_context,
         durability_replay_context == null ?
            ralph_globals.generate_local_uuid() :
            durability_replay_context.next_endpt_uuid());
@@ -341,24 +341,23 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
     @Override
     public Endpoint construct(
         RalphGlobals ralph_globals, 
-        RalphConnObj.ConnectionObj conn_obj,
         IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context)
     {
         return new %(endpoint_name)s(
-            ralph_globals,conn_obj,durability_log_context,
+            ralph_globals, durability_log_context,
             durability_replay_context);
     }
 
     @Override
     public Endpoint construct (
-        RalphGlobals ralph_globals, ConnectionObj conn_obj,
+        RalphGlobals ralph_globals,
         List<RalphObject> internal_values_list,
         IDurabilityContext durability_context)
     {
         %(endpoint_name)s to_return =
             new %(endpoint_name)s(
-                ralph_globals,conn_obj,durability_context,null);
+                ralph_globals, durability_context, null);
         %(version_unmapping_text)s
         return to_return;
     }
@@ -372,7 +371,7 @@ public final static %(endpoint_name)s create_single_sided(RalphGlobals ralph_glo
 }
 
 public final static %(endpoint_name)s external_create(
-    RalphGlobals ralph_globals,ConnectionObj conn_obj)
+    RalphGlobals ralph_globals)
 {
         // log the newly created endpoint
         DurabilityContext durability_context = null;
@@ -386,7 +385,7 @@ public final static %(endpoint_name)s external_create(
         try
         {
             return (%(endpoint_name)s) factory.construct(
-                ralph_globals,conn_obj,durability_context,null);
+                ralph_globals, durability_context, null);
         }
         finally
         {
@@ -834,9 +833,12 @@ if (DurabilityInfo.instance.durability_saver != null)
     List <? extends RalphObject> args =
         Arrays.asList(%(ralph_wrapped_args_list)s);
 
+    // treat calls from external code as rpcs from imaginary hosts
+    // (ie., ones with -1 as their host uuid).
     active_event.durability_entry_call(
         PartnerRequestSequenceBlockProducer.produce_request_block(
             null,"%(func_name)s", args, null, active_event,
+            "-1" /* Empty reply with for entry call*/,
             "-1" /* Empty reply with for entry call*/),
         _uuid);
 }
@@ -1312,7 +1314,7 @@ new %(java_type_text)s  (
                 
             default_internal_endpoint_text = (
                 ('new %(type_alias)s (ralph_globals, ' +
-                 'new SingleSideConnection(),%(durability_context)s,' +
+                 'SingleSideConnection.INSTANCE, %(durability_context)s,' +
                  '%(durability_replay_context)s)')
                  %
                 {
