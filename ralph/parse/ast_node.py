@@ -546,6 +546,31 @@ class PrintCallNode(_AstNode):
     def type_check_pass_two(self,type_check_ctx):
         self.print_arg_node.type_check_pass_two(type_check_ctx)
 
+class InstallCallNode(_AstNode):
+    def __init__(self,filename,method_args_node,line_number):
+        super(InstallCallNode,self).__init__(
+            filename,ast_labels.INSTALL_CALL,line_number)
+        self.type = ServiceReferenceType(False)
+        
+        install_call_args_list = method_args_node.get_args_list()
+        if len(install_call_args_list) != 2:
+            raise TypeCheckException(
+                self.filename,self.line_number,
+                ('install requires 2 arguments, not %s.' %
+                 len(print_call_args_list)))
+        
+        self.remote_uuid_node = install_call_args_list[0]
+        self.service_factory_node = install_call_args_list[1]
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        self.remote_uuid_node.type_check_pass_one(struct_types_ctx)
+        self.service_factory_node.type_check_pass_one(struct_types_ctx)
+
+    def type_check_pass_two(self,type_check_ctx):
+        self.remote_uuid_node.type_check_pass_two(type_check_ctx)
+        self.service_factory_node.type_check_pass_two(type_check_ctx)
+
+        
 class ToTextCallNode(_AstNode):
     def __init__(self,filename,method_args_node,line_number):
         super(ToTextCallNode,self).__init__(

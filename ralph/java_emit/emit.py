@@ -1777,7 +1777,18 @@ def emit_statement(emit_ctx,statement_node):
 
     elif statement_node.label == ast_labels.CONNECTED_UUIDS_CALL:
         return 'ralph_globals.connected_uuids()'
-    
+
+    elif statement_node.label == ast_labels.INSTALL_CALL:
+        remote_uuid_statement = emit_statement(
+            emit_ctx, statement_node.remote_uuid_node)
+        service_factory_node_statement = emit_statement(
+            emit_ctx, statement_node.service_factory_node)
+
+        return (
+            'ralph_globals.install_remote(' + remote_uuid_statement +
+            ',' + service_factory_node_statement)
+
+
     elif statement_node.label in [ast_labels.SPECULATE_CALL,
                                   ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL]:
         to_return = ''

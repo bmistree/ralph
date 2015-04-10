@@ -9,7 +9,7 @@ from ralph.lex.ralph_lex import SERVICE_REFERENCE_TOKEN
 from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
 from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
 from ralph.lex.ralph_lex import ENUM_TOKEN, LOCAL_UUID_TOKEN
-from ralph.lex.ralph_lex import CONNECTED_UUIDS_TOKEN
+from ralph.lex.ralph_lex import CONNECTED_UUIDS_TOKEN, INSTALL_TOKEN
 
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
@@ -408,6 +408,7 @@ def p_MethodCall(p):
                | TO_TEXT LEFT_PAREN MethodCallArgs RIGHT_PAREN
                | LOCAL_UUID LEFT_PAREN RIGHT_PAREN
                | CONNECTED_UUIDS LEFT_PAREN RIGHT_PAREN
+               | INSTALL LEFT_PAREN MethodCallArgs RIGHT_PAREN
     '''
     if p[1] == PRINT_TYPE_TOKEN:
         line_number = p.lineno(1)
@@ -444,6 +445,12 @@ def p_MethodCall(p):
     elif p[1] == CONNECTED_UUIDS_TOKEN:
         line_number = p.lineno(1)
         p[0] = ConnectedUuidsCallNode(global_parsing_filename, line_number)
+    elif p[1] == INSTALL_TOKEN:
+        line_number = p.lineno(1)
+        install_args_node = p[3]
+        p[0] = InstallCallNode(
+            global_parsing_filename, install_args_node, line_number)
+
         
     elif len(p) == 8:
         # dynamic cast

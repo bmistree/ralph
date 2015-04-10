@@ -148,4 +148,14 @@ public class RalphGlobals implements IUUIDGenerator
 
         return to_return;
     }
+
+    /**
+       
+     */
+    public InternalServiceReference install_remote(
+        String remote_uuid, InternalServiceFactory internal_service_factory)
+    {
+        // FIXME: for now, just returning null
+        return null;
+    }
 }

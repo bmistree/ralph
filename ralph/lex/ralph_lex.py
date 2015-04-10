@@ -15,6 +15,7 @@ SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
 SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 TO_TEXT_TOKEN = 'to_text'
+INSTALL_TOKEN = 'install'
 LOCAL_UUID_TOKEN = 'local_uuid'
 CONNECTED_UUIDS_TOKEN = 'connected_uuids'
 PLUS_EQUAL_TOKEN = '+='
@@ -74,6 +75,7 @@ reserved = {
     'continue': 'CONTINUE',
     'local_uuid': 'LOCAL_UUID',
     'connected_uuids': 'CONNECTED_UUIDS',
+    'install': 'INSTALL',
     }
 
 tokens = [
