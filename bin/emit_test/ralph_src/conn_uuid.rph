@@ -1,0 +1,26 @@
+Service ConnUuid
+{
+    loc_uuid () returns Text
+    {
+        return local_uuid();
+    }
+
+    size_conn_uuids () returns Number
+    {
+        List(element: Text) conn_uuids;
+        conn_uuids = connected_uuids();
+        return conn_uuids.size();
+    }
+    
+    in_conn_uuids (Text conn_uuid) returns TrueFalse
+    {
+        List(element: Text) conn_uuids;
+        conn_uuids = connected_uuids();
+        for (Text remote_uuid in conn_uuids)
+        {
+            if (remote_uuid == conn_uuid)
+                return True;
+        }
+        return False;
+    }
+}

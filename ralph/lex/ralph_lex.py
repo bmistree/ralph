@@ -73,7 +73,7 @@ reserved = {
     'break': 'BREAK',
     'continue': 'CONTINUE',
     'local_uuid': 'LOCAL_UUID',
-    'connected_uuids', 'CONNECTED_UUIDS',
+    'connected_uuids': 'CONNECTED_UUIDS',
     }
 
 tokens = [

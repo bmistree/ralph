@@ -128,7 +128,7 @@ public class RalphGlobals implements IUUIDGenerator
         return UUIDGenerators.LOCAL_ATOM_INT_UUID_GENERATOR.generate_uuid();
     }
 
-    public NonAtomicInternalList<Double,Double> connected_uuids()
+    public NonAtomicInternalList<String,String> connected_uuids()
     {
         List<RalphObject<String,String>> init_val =
             new ArrayList<RalphObject<String,String>>();
@@ -139,7 +139,7 @@ public class RalphGlobals implements IUUIDGenerator
                     false, remote_uuid, this));
         }
         
-        NonAtomicInternalList<Double,Double> to_return =
+        NonAtomicInternalList<String,String> to_return =
             new NonAtomicInternalList(
                 this,
                 new ListTypeDataWrapperFactory<String,String>(java.lang.String.class),

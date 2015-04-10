@@ -583,7 +583,7 @@ class ConnectedUuidsCallNode(_AstNode):
     def __init__(self,filename, line_number):
         super(ConnectedUuidsCallNode,self).__init__(
             filename,ast_labels.CONNECTED_UUIDS_CALL,line_number)
-        text_element_type_node = TextTypeNode(
+        text_element_type_node = BasicTypeNode(
             filename,ast_labels.STRING_TYPE,False,line_number)
         self.type = ListType(text_element_type_node,False)
 

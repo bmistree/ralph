@@ -154,6 +154,14 @@
     </antcall>
   </target>
 
+  <target name="conn_uuid_ralph" depends="init"
+          description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="conn_uuid.rph"/>
+      <param name="class_name" value="ConnUuidJava"/>
+    </antcall>
+  </target>
+  
   <target name="replay_partner_struct_element_ralph"
           depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
@@ -792,10 +800,9 @@
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
         jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer,
-        jar_MixedAccesses, jar_DelayAndContend, jar_LocUuid">
+        jar_MixedAccesses, jar_DelayAndContend, jar_LocUuid, jar_ConnUuid">
   </target>
 
-  
   <!-- Instructions for building ralph for each test   -->
   <!-- Single side setter getter -->
   <target
@@ -909,6 +916,11 @@
       depends="enum_ralph,alias_enum_ralph">
   </target>
 
+  <target
+      name="ralph_ConnUuid"
+      depends="conn_uuid_ralph">
+  </target>
+  
   <target
       name="ralph_ReplayPartnerStructElement"
       depends="replay_partner_struct_element_ralph">
@@ -1302,6 +1314,13 @@
     </antcall>
   </target>
 
+  <target name="harness_ConnUuid">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="ConnUuidTest.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_StructEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
@@ -2131,6 +2150,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="AliasEnumTest"/>
       <param name="dest_jar" value="${alias_enum_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="conn_uuid_jar"
+      value="conn_uuid.jar"/>
+  <target
+      name="jar_ConnUuid"
+      depends="ralph_ConnUuid,ralph_to_byte_code,harness_ConnUuid">
+    <antcall target="make_jar">
+      <param name="main_class" value="ConnUuidTest"/>
+      <param name="dest_jar" value="${conn_uuid_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
