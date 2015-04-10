@@ -11,6 +11,7 @@ import ralph.Connection.ConnectionListenerManager;
 import ralph_protobuffs.PromotionProto.Promotion;
 import ralph_protobuffs.UtilProto;
 import ralph_protobuffs.UtilProto.UUID;
+import ralph_protobuffs.InstallProto.Install;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 import ralph_protobuffs.PartnerBackoutCommitRequestProto.PartnerBackoutCommitRequest;
 import ralph_protobuffs.PartnerCommitRequestProto.PartnerCommitRequest;
@@ -20,7 +21,7 @@ import ralph_protobuffs.PartnerFirstPhaseResultMessageProto.PartnerFirstPhaseRes
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock;
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
-
+import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 
 public class MessageManager extends ConnectionListenerManager
                             implements IMessageListener
@@ -66,7 +67,27 @@ public class MessageManager extends ConnectionListenerManager
 
         return general_message;
     }
-    
+
+    public void send_install_request(
+        String remote_host_uuid, String request_uuid,
+        ServiceFactoryDelta service_factory_contents)
+    {
+        // generate request of install
+        Install.Request.Builder req_builder = Install.Request.newBuilder();
+        req_builder.setServiceFactory(service_factory_contents);
+        
+        // generate install message
+        Install.Builder install_msg = Install.newBuilder();
+        install_msg.setRequest(req_builder);
+        install_msg.setInstallUuid(request_uuid);
+
+        // generate genereal message to wrap install
+        GeneralMessage.Builder general_message = base_general_msg();
+        general_message.setInstall(install_msg);
+        send_msg(remote_host_uuid, general_message.build());
+    }
+
+
     /**
      @param {uuid} event_uuid
 
