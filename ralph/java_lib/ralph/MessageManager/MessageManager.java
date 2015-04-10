@@ -37,7 +37,7 @@ public class MessageManager implements IMessageListener
         conn_map.add_connection(conn);
         conn.subscribe_listener(this);
     }
-    
+
     @Override
     public void msg_recvd(GeneralMessage msg)
     {

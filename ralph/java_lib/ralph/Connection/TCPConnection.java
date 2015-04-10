@@ -26,7 +26,7 @@ import ralph_protobuffs.UtilProto.UUID;
 import ralph_protobuffs.GeneralMessageProto.GeneralMessage;
 
 public class TCPConnection extends ConnectionListenerManager
-                           implements Runnable
+    implements Runnable, IConnection
 {
     private final Socket sock;
     private final RalphGlobals ralph_globals;

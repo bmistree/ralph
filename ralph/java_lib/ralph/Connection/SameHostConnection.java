@@ -17,7 +17,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
    Each RalphGlobals will have its own version of this object.
  */
-public class SameHostConnection extends ConnectionListenerManager
+public class SameHostConnection extends ConnectionListenerManager implements IConnection
 {
     private final RalphGlobals ralph_globals;
 
