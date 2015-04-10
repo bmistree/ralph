@@ -15,6 +15,7 @@ SPECULATE_CONTAINER_INTERNALS_TOKEN = 'speculate_container_internals'
 SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 TO_TEXT_TOKEN = 'to_text'
+LOCAL_UUID_TOKEN = 'local_uuid'
 PLUS_EQUAL_TOKEN = '+='
 MINUS_EQUAL_TOKEN = '-='
 MULTIPLY_EQUAL_TOKEN = '*='
@@ -69,7 +70,8 @@ reserved = {
     'Interface': 'INTERFACE',
     'dynamic_cast': 'DYNAMIC_CAST',
     'break': 'BREAK',
-    'continue': 'CONTINUE'
+    'continue': 'CONTINUE',
+    'local_uuid': 'LOCAL_UUID',
     }
 
 tokens = [

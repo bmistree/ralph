@@ -1,0 +1,7 @@
+Service LocUuid
+{
+    test () returns Text
+    {
+        return local_uuid();
+    }
+}

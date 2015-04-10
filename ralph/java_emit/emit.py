@@ -1772,6 +1772,9 @@ def emit_statement(emit_ctx,statement_node):
         print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
         return 'System.out.print(%s)' % print_arg_statement
 
+    elif statement_node.label == ast_labels.LOCAL_UUID_CALL:
+        return 'ralph_globals.host_uuid'
+    
     elif statement_node.label in [ast_labels.SPECULATE_CALL,
                                   ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL]:
         to_return = ''

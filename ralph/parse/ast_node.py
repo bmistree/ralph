@@ -566,6 +566,18 @@ class ToTextCallNode(_AstNode):
 
     def type_check_pass_two(self,type_check_ctx):
         self.to_text_arg_node.type_check_pass_two(type_check_ctx)
+
+class LocalUuidCallNode(_AstNode):
+    def __init__(self,filename, line_number):
+        super(LocalUuidCallNode,self).__init__(
+            filename,ast_labels.LOCAL_UUID_CALL,line_number,
+            ast_labels.STRING_TYPE)
+        
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
         
 
 class DynamicCastNode(_AstNode):

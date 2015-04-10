@@ -161,6 +161,14 @@
       <param name="class_name" value="ReplayPartnerStructElementJava"/>
     </antcall>
   </target>
+
+  <target name="loc_uuid_ralph"
+          depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="loc_uuid.rph"/>
+      <param name="class_name" value="LocUuidJava"/>
+    </antcall>
+  </target>
   
   <target name="iface_basic_ralph" depends="init"
           description="translate ralph files">
@@ -784,7 +792,7 @@
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
         jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer,
-        jar_MixedAccesses, jar_DelayAndContend">
+        jar_MixedAccesses, jar_DelayAndContend, jar_LocUuid">
   </target>
 
   
@@ -795,6 +803,11 @@
       depends="iface_basic_ralph,basic_ralph">
   </target>
 
+  <target
+      name="ralph_LocUuid"
+      depends="loc_uuid_ralph">
+  </target>
+  
   <target
       name="ralph_DirectStructWrappedEndpoint"
       depends="direct_struct_wrapped_endpoint">
@@ -1309,6 +1322,12 @@
     </antcall>
   </target>
 
+  <target name="harness_LocUuid">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="LocUuidTest.java"/>
+    </antcall>
+  </target>
+  
   <target name="harness_NestedAtomicSetterGetter">
     <antcall target="compile_harness">
       <param
@@ -1813,6 +1832,19 @@
     </antcall>
   </target>
 
+  <property
+      name="loc_uuid_jar"
+      value="loc_uuid.jar"/>
+  <target
+      name="jar_LocUuid"
+      depends="ralph_LocUuid,ralph_to_byte_code,harness_LocUuid">
+    <antcall target="make_jar">
+      <param name="main_class" value="LocUuidTest"/>
+      <param name="dest_jar" value="${loc_uuid_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+  
   <property
       name="nested_atomic_setter_getter_jar"
       value="nested_atomic_setter_getter.jar"/>
