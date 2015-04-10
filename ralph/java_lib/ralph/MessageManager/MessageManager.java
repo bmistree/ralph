@@ -51,6 +51,21 @@ public class MessageManager extends ConnectionListenerManager
     {
         return conn_map.remote_connection_uuids();
     }
+
+    /**
+       Constructs the skeleton of a general message: holds just
+       timestamp and sender_host_uuid.
+     */
+    private GeneralMessage.Builder base_general_msg()
+    {
+        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
+        UUID.Builder host_uuid_builder = UUID.newBuilder();
+        host_uuid_builder.setData(ralph_globals.host_uuid);
+        general_message.setSenderHostUuid(host_uuid_builder);
+        general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+
+        return general_message;
+    }
     
     /**
      @param {uuid} event_uuid
@@ -71,13 +86,9 @@ public class MessageManager extends ConnectionListenerManager
         String remote_host_uuid, String event_uuid,
         Set<String> children_event_host_uuids)
     {
-        // construct message to send
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid_builder = UUID.newBuilder();
-        host_uuid_builder.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid_builder);
+        GeneralMessage.Builder general_message = base_general_msg();
         
-        general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+        // construct message to send
         PartnerFirstPhaseResultMessage.Builder first_phase_result_msg =
             PartnerFirstPhaseResultMessage.newBuilder();
 		
@@ -114,13 +125,8 @@ public class MessageManager extends ConnectionListenerManager
     {
         if (remote_host_uuid_set.size() == 0)
             return;
-        
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+
+        GeneralMessage.Builder general_message = base_general_msg();
     	PartnerBackoutCommitRequest.Builder backout_commit_request =
             PartnerBackoutCommitRequest.newBuilder();
     	UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
@@ -146,13 +152,8 @@ public class MessageManager extends ConnectionListenerManager
         Exception exception)
     {
         // Construct message
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
+        GeneralMessage.Builder general_message = base_general_msg();
         
-        general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
         PartnerError.Builder error = PartnerError.newBuilder();
         UUID.Builder msg_evt_uuid = UUID.newBuilder();
         msg_evt_uuid.setData(event_uuid);
@@ -189,13 +190,8 @@ public class MessageManager extends ConnectionListenerManager
     {
         if (remote_host_uuid_set.size() == 0)
             return;
-        
-        GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-        general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+
+        GeneralMessage.Builder general_message = base_general_msg();
         Promotion.Builder promotion_message = Promotion.newBuilder();
 		
         UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
@@ -227,12 +223,8 @@ public class MessageManager extends ConnectionListenerManager
         
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
+        GeneralMessage.Builder general_message = base_general_msg();
         
-    	general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
     	PartnerCommitRequest.Builder commit_request_msg =
             PartnerCommitRequest.newBuilder();
 
@@ -275,15 +267,8 @@ public class MessageManager extends ConnectionListenerManager
         String remote_host_uuid,
         PartnerRequestSequenceBlock request_sequence_block_msg)
     {
-    	GeneralMessage.Builder general_message =
-            GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+        GeneralMessage.Builder general_message = base_general_msg();
     	general_message.setRequestSequenceBlock(request_sequence_block_msg);
-
         send_msg(remote_host_uuid, general_message.build());
     }
 
@@ -297,13 +282,8 @@ public class MessageManager extends ConnectionListenerManager
     {
         if (remote_host_uuid_set.size() == 0)
             return;
-        
-    	GeneralMessage.Builder general_message = GeneralMessage.newBuilder();
-        UUID.Builder host_uuid = UUID.newBuilder();
-        host_uuid.setData(ralph_globals.host_uuid);
-        general_message.setSenderHostUuid(host_uuid);
-        
-    	general_message.setTimestamp(ralph_globals.clock.get_int_timestamp());
+        GeneralMessage.Builder general_message = base_general_msg();
+
     	PartnerCompleteCommitRequest.Builder complete_commit_request_msg =
             PartnerCompleteCommitRequest.newBuilder();
     	
