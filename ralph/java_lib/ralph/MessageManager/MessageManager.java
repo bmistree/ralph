@@ -22,6 +22,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
+import ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta;
 
 public class MessageManager extends ConnectionListenerManager
                             implements IMessageListener
@@ -87,7 +88,25 @@ public class MessageManager extends ConnectionListenerManager
         send_msg(remote_host_uuid, general_message.build());
     }
 
+    public void send_install_reply(
+        String remote_host_uuid, String request_uuid,
+        ServiceReferenceDelta service_reference_contents)
+    {
+        // generate reply of install
+        Install.Reply.Builder reply_builder = Install.Reply.newBuilder();
+        reply_builder.setServiceReference(service_reference_contents);
+        
+        // generate install message
+        Install.Builder install_msg = Install.newBuilder();
+        install_msg.setReply(reply_builder);
+        install_msg.setInstallUuid(request_uuid);
 
+        // generate genereal message to wrap install
+        GeneralMessage.Builder general_message = base_general_msg();
+        general_message.setInstall(install_msg);
+        send_msg(remote_host_uuid, general_message.build());
+    }
+    
     /**
      @param {uuid} event_uuid
 
