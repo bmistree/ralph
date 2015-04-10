@@ -1,0 +1,27 @@
+import "delta.proto";
+
+option java_package = "ralph_protobuffs";
+option java_outer_classname = "InstallProto";
+
+message Install
+{
+    message Request
+    {
+        required Delta.ServiceFactoryDelta service_factory = 1;
+    }
+
+    message Reply
+    {
+        required Delta.ServiceReferenceDelta service_reference = 1;
+    }
+
+    optional Request request = 1;
+    optional Reply reply = 2;
+    /**
+       We essentially want to have install look like an rpc.  We need
+       to associate replies with requests.  This is the way to do it:
+       requests will have unique ids, and wait for the same uuid in a
+       response.
+    */
+    required string install_uuid = 3;
+}

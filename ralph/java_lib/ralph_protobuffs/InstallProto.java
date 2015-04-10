@@ -38,6 +38,45 @@ public final class InstallProto {
      * <code>optional .Install.Reply reply = 2;</code>
      */
     ralph_protobuffs.InstallProto.Install.ReplyOrBuilder getReplyOrBuilder();
+
+    // required string install_uuid = 3;
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    boolean hasInstallUuid();
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    java.lang.String getInstallUuid();
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getInstallUuidBytes();
   }
   /**
    * Protobuf type {@code Install}
@@ -114,6 +153,11 @@ public final class InstallProto {
                 reply_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              installUuid_ = input.readBytes();
               break;
             }
           }
@@ -1238,15 +1282,87 @@ public final class InstallProto {
       return reply_;
     }
 
+    // required string install_uuid = 3;
+    public static final int INSTALL_UUID_FIELD_NUMBER = 3;
+    private java.lang.Object installUuid_;
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    public boolean hasInstallUuid() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    public java.lang.String getInstallUuid() {
+      java.lang.Object ref = installUuid_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          installUuid_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string install_uuid = 3;</code>
+     *
+     * <pre>
+     **
+     *We essentially want to have install look like an rpc.  We need
+     *to associate replies with requests.  This is the way to do it:
+     *requests will have unique ids, and wait for the same uuid in a
+     *response.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getInstallUuidBytes() {
+      java.lang.Object ref = installUuid_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        installUuid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       request_ = ralph_protobuffs.InstallProto.Install.Request.getDefaultInstance();
       reply_ = ralph_protobuffs.InstallProto.Install.Reply.getDefaultInstance();
+      installUuid_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
+      if (!hasInstallUuid()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (hasRequest()) {
         if (!getRequest().isInitialized()) {
           memoizedIsInitialized = 0;
@@ -1272,6 +1388,9 @@ public final class InstallProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, reply_);
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getInstallUuidBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1288,6 +1407,10 @@ public final class InstallProto {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, reply_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getInstallUuidBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1419,6 +1542,8 @@ public final class InstallProto {
           replyBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000002);
+        installUuid_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1463,6 +1588,10 @@ public final class InstallProto {
         } else {
           result.reply_ = replyBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.installUuid_ = installUuid_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1485,11 +1614,20 @@ public final class InstallProto {
         if (other.hasReply()) {
           mergeReply(other.getReply());
         }
+        if (other.hasInstallUuid()) {
+          bitField0_ |= 0x00000004;
+          installUuid_ = other.installUuid_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
+        if (!hasInstallUuid()) {
+          
+          return false;
+        }
         if (hasRequest()) {
           if (!getRequest().isInitialized()) {
             
@@ -1758,6 +1896,128 @@ public final class InstallProto {
         return replyBuilder_;
       }
 
+      // required string install_uuid = 3;
+      private java.lang.Object installUuid_ = "";
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public boolean hasInstallUuid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public java.lang.String getInstallUuid() {
+        java.lang.Object ref = installUuid_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          installUuid_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getInstallUuidBytes() {
+        java.lang.Object ref = installUuid_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          installUuid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public Builder setInstallUuid(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        installUuid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public Builder clearInstallUuid() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        installUuid_ = getDefaultInstance().getInstallUuid();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string install_uuid = 3;</code>
+       *
+       * <pre>
+       **
+       *We essentially want to have install look like an rpc.  We need
+       *to associate replies with requests.  This is the way to do it:
+       *requests will have unique ids, and wait for the same uuid in a
+       *response.
+       * </pre>
+       */
+      public Builder setInstallUuidBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        installUuid_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:Install)
     }
 
@@ -1793,13 +2053,14 @@ public final class InstallProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rinstall.proto\032\013delta.proto\"\315\001\n\007Install" +
+      "\n\rinstall.proto\032\013delta.proto\"\343\001\n\007Install" +
       "\022!\n\007request\030\001 \001(\0132\020.Install.Request\022\035\n\005r" +
-      "eply\030\002 \001(\0132\016.Install.Reply\032>\n\007Request\0223\n" +
-      "\017service_factory\030\001 \002(\0132\032.Delta.ServiceFa" +
-      "ctoryDelta\032@\n\005Reply\0227\n\021service_reference" +
-      "\030\001 \002(\0132\034.Delta.ServiceReferenceDeltaB \n\020" +
-      "ralph_protobuffsB\014InstallProto"
+      "eply\030\002 \001(\0132\016.Install.Reply\022\024\n\014install_uu" +
+      "id\030\003 \002(\t\032>\n\007Request\0223\n\017service_factory\030\001" +
+      " \002(\0132\032.Delta.ServiceFactoryDelta\032@\n\005Repl" +
+      "y\0227\n\021service_reference\030\001 \002(\0132\034.Delta.Ser" +
+      "viceReferenceDeltaB \n\020ralph_protobuffsB\014" +
+      "InstallProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1811,7 +2072,7 @@ public final class InstallProto {
           internal_static_Install_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Install_descriptor,
-              new java.lang.String[] { "Request", "Reply", });
+              new java.lang.String[] { "Request", "Reply", "InstallUuid", });
           internal_static_Install_Request_descriptor =
             internal_static_Install_descriptor.getNestedTypes().get(0);
           internal_static_Install_Request_fieldAccessorTable = new
