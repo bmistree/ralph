@@ -124,8 +124,9 @@ public class ConnectionListener implements Runnable
      */
     private void handle_new_connection(Socket connector_sock)
     {
-        TCPConnection tcp_connection =
-            new TCPConnection(ralph_globals, connector_sock);
-        ralph_globals.message_manager.add_connection(tcp_connection);
+        Thread t = 
+            new Thread(new TCPConnection(ralph_globals, connector_sock));
+        t.setDaemon(true);
+        t.start();
     }
 }

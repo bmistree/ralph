@@ -75,6 +75,9 @@ public class Ralph
         String host, int port, RalphGlobals all_globals)
         throws IOException
     {
-        new TCPConnection(all_globals, host, port);
+        Thread t = 
+            new Thread(new TCPConnection(all_globals, host, port));
+        t.setDaemon(true);
+        t.start();
     }
 }
