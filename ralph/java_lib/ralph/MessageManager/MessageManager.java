@@ -6,6 +6,7 @@ import ralph.Util;
 import ralph.RalphGlobals;
 import ralph.Connection.IMessageListener;
 import ralph.Connection.IConnection;
+import ralph.Connection.ConnectionListenerManager;
 
 import ralph_protobuffs.PromotionProto.Promotion;
 import ralph_protobuffs.UtilProto;
@@ -21,7 +22,8 @@ import ralph_protobuffs.UtilProto.Timestamp;
 import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceBlock.Arguments;
 
 
-public class MessageManager implements IMessageListener
+public class MessageManager extends ConnectionListenerManager
+                            implements IMessageListener
 {
     // contains local endpoints
     private final ConnectionMap conn_map = new ConnectionMap();
@@ -41,6 +43,7 @@ public class MessageManager implements IMessageListener
     @Override
     public void msg_recvd(GeneralMessage msg)
     {
+        recvd_msg_to_listeners(msg);
         Util.logger_assert("Not handling messages in MessageManager.");
     }
 
