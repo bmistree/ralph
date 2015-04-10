@@ -578,7 +578,21 @@ class LocalUuidCallNode(_AstNode):
 
     def type_check_pass_two(self,type_check_ctx):
         pass
-        
+
+class ConnectedUuidsCallNode(_AstNode):
+    def __init__(self,filename, line_number):
+        super(ConnectedUuidsCallNode,self).__init__(
+            filename,ast_labels.CONNECTED_UUIDS_CALL,line_number)
+        text_element_type_node = TextTypeNode(
+            filename,ast_labels.STRING_TYPE,False,line_number)
+        self.type = ListType(text_element_type_node,False)
+
+    def type_check_pass_one(self,struct_types_ctx):
+        pass
+
+    def type_check_pass_two(self,type_check_ctx):
+        pass
+    
 
 class DynamicCastNode(_AstNode):
     def __init__(self,filename,to_variable_type_node,method_args_node,

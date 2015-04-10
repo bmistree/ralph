@@ -44,6 +44,11 @@ public class MessageManager implements IMessageListener
         Util.logger_assert("Not handling messages in MessageManager.");
     }
 
+    public Set<String> remote_connection_uuids()
+    {
+        return conn_map.remote_connection_uuids();
+    }
+    
     /**
      @param {uuid} event_uuid
 

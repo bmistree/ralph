@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import RalphServiceConnectionListener.ConnectionListener;
+import RalphDataWrappers.ListTypeDataWrapper;
+import RalphDataWrappers.ListTypeDataWrapperFactory;
+import RalphAtomicWrappers.BaseAtomicWrappers;
+
 import ralph.MessageManager.MessageManager;
 import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ExecutionContext.ExecutionContext;
@@ -122,5 +126,26 @@ public class RalphGlobals implements IUUIDGenerator
     public String generate_local_uuid()
     {
         return UUIDGenerators.LOCAL_ATOM_INT_UUID_GENERATOR.generate_uuid();
+    }
+
+    public NonAtomicInternalList<Double,Double> connected_uuids()
+    {
+        List<RalphObject<String,String>> init_val =
+            new ArrayList<RalphObject<String,String>>();
+        for (String remote_uuid : message_manager.remote_connection_uuids())
+        {
+            init_val.add(
+                new Variables.NonAtomicTextVariable(
+                    false, remote_uuid, this));
+        }
+        
+        NonAtomicInternalList<Double,Double> to_return =
+            new NonAtomicInternalList(
+                this,
+                new ListTypeDataWrapperFactory<String,String>(java.lang.String.class),
+                init_val,
+                BaseAtomicWrappers.NON_ATOMIC_TEXT_WRAPPER);
+
+        return to_return;
     }
 }

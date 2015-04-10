@@ -16,6 +16,7 @@ SPECULATE_ALL_TOKEN = 'speculate_all'
 VERBATIM_TOKEN = 'verbatim'
 TO_TEXT_TOKEN = 'to_text'
 LOCAL_UUID_TOKEN = 'local_uuid'
+CONNECTED_UUIDS_TOKEN = 'connected_uuids'
 PLUS_EQUAL_TOKEN = '+='
 MINUS_EQUAL_TOKEN = '-='
 MULTIPLY_EQUAL_TOKEN = '*='
@@ -72,6 +73,7 @@ reserved = {
     'break': 'BREAK',
     'continue': 'CONTINUE',
     'local_uuid': 'LOCAL_UUID',
+    'connected_uuids', 'CONNECTED_UUIDS',
     }
 
 tokens = [
