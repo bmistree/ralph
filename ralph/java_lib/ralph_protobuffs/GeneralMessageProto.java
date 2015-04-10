@@ -123,27 +123,41 @@ public final class GeneralMessageProto {
      */
     ralph_protobuffs.PromotionProto.PromotionOrBuilder getPromotionOrBuilder();
 
-    // required uint64 timestamp = 9;
+    // optional .Install install = 9;
     /**
-     * <code>required uint64 timestamp = 9;</code>
+     * <code>optional .Install install = 9;</code>
+     */
+    boolean hasInstall();
+    /**
+     * <code>optional .Install install = 9;</code>
+     */
+    ralph_protobuffs.InstallProto.Install getInstall();
+    /**
+     * <code>optional .Install install = 9;</code>
+     */
+    ralph_protobuffs.InstallProto.InstallOrBuilder getInstallOrBuilder();
+
+    // required uint64 timestamp = 10;
+    /**
+     * <code>required uint64 timestamp = 10;</code>
      */
     boolean hasTimestamp();
     /**
-     * <code>required uint64 timestamp = 9;</code>
+     * <code>required uint64 timestamp = 10;</code>
      */
     long getTimestamp();
 
-    // required .UUID sender_host_uuid = 10;
+    // required .UUID sender_host_uuid = 11;
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     boolean hasSenderHostUuid();
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     ralph_protobuffs.UtilProto.UUID getSenderHostUuid();
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder();
   }
@@ -302,14 +316,27 @@ public final class GeneralMessageProto {
               bitField0_ |= 0x00000080;
               break;
             }
-            case 72: {
+            case 74: {
+              ralph_protobuffs.InstallProto.Install.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+                subBuilder = install_.toBuilder();
+              }
+              install_ = input.readMessage(ralph_protobuffs.InstallProto.Install.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(install_);
+                install_ = subBuilder.buildPartial();
+              }
               bitField0_ |= 0x00000100;
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000200;
               timestamp_ = input.readUInt64();
               break;
             }
-            case 82: {
+            case 90: {
               ralph_protobuffs.UtilProto.UUID.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000200) == 0x00000200)) {
+              if (((bitField0_ & 0x00000400) == 0x00000400)) {
                 subBuilder = senderHostUuid_.toBuilder();
               }
               senderHostUuid_ = input.readMessage(ralph_protobuffs.UtilProto.UUID.PARSER, extensionRegistry);
@@ -317,7 +344,7 @@ public final class GeneralMessageProto {
                 subBuilder.mergeFrom(senderHostUuid_);
                 senderHostUuid_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000400;
               break;
             }
           }
@@ -536,39 +563,61 @@ public final class GeneralMessageProto {
       return promotion_;
     }
 
-    // required uint64 timestamp = 9;
-    public static final int TIMESTAMP_FIELD_NUMBER = 9;
-    private long timestamp_;
+    // optional .Install install = 9;
+    public static final int INSTALL_FIELD_NUMBER = 9;
+    private ralph_protobuffs.InstallProto.Install install_;
     /**
-     * <code>required uint64 timestamp = 9;</code>
+     * <code>optional .Install install = 9;</code>
      */
-    public boolean hasTimestamp() {
+    public boolean hasInstall() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>required uint64 timestamp = 9;</code>
+     * <code>optional .Install install = 9;</code>
+     */
+    public ralph_protobuffs.InstallProto.Install getInstall() {
+      return install_;
+    }
+    /**
+     * <code>optional .Install install = 9;</code>
+     */
+    public ralph_protobuffs.InstallProto.InstallOrBuilder getInstallOrBuilder() {
+      return install_;
+    }
+
+    // required uint64 timestamp = 10;
+    public static final int TIMESTAMP_FIELD_NUMBER = 10;
+    private long timestamp_;
+    /**
+     * <code>required uint64 timestamp = 10;</code>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>required uint64 timestamp = 10;</code>
      */
     public long getTimestamp() {
       return timestamp_;
     }
 
-    // required .UUID sender_host_uuid = 10;
-    public static final int SENDER_HOST_UUID_FIELD_NUMBER = 10;
+    // required .UUID sender_host_uuid = 11;
+    public static final int SENDER_HOST_UUID_FIELD_NUMBER = 11;
     private ralph_protobuffs.UtilProto.UUID senderHostUuid_;
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     public boolean hasSenderHostUuid() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     public ralph_protobuffs.UtilProto.UUID getSenderHostUuid() {
       return senderHostUuid_;
     }
     /**
-     * <code>required .UUID sender_host_uuid = 10;</code>
+     * <code>required .UUID sender_host_uuid = 11;</code>
      */
     public ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder() {
       return senderHostUuid_;
@@ -583,6 +632,7 @@ public final class GeneralMessageProto {
       error_ = ralph_protobuffs.PartnerErrorProto.PartnerError.getDefaultInstance();
       heartbeat_ = ralph_protobuffs.HeartbeatProto.Heartbeat.getDefaultInstance();
       promotion_ = ralph_protobuffs.PromotionProto.Promotion.getDefaultInstance();
+      install_ = ralph_protobuffs.InstallProto.Install.getDefaultInstance();
       timestamp_ = 0L;
       senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
     }
@@ -647,6 +697,12 @@ public final class GeneralMessageProto {
           return false;
         }
       }
+      if (hasInstall()) {
+        if (!getInstall().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       if (!getSenderHostUuid().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
@@ -683,10 +739,13 @@ public final class GeneralMessageProto {
         output.writeMessage(8, promotion_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeUInt64(9, timestamp_);
+        output.writeMessage(9, install_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeMessage(10, senderHostUuid_);
+        output.writeUInt64(10, timestamp_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeMessage(11, senderHostUuid_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -731,11 +790,15 @@ public final class GeneralMessageProto {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(9, timestamp_);
+          .computeMessageSize(9, install_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, senderHostUuid_);
+          .computeUInt64Size(10, timestamp_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, senderHostUuid_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -853,6 +916,7 @@ public final class GeneralMessageProto {
           getErrorFieldBuilder();
           getHeartbeatFieldBuilder();
           getPromotionFieldBuilder();
+          getInstallFieldBuilder();
           getSenderHostUuidFieldBuilder();
         }
       }
@@ -910,14 +974,20 @@ public final class GeneralMessageProto {
           promotionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000080);
-        timestamp_ = 0L;
+        if (installBuilder_ == null) {
+          install_ = ralph_protobuffs.InstallProto.Install.getDefaultInstance();
+        } else {
+          installBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000100);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
         if (senderHostUuidBuilder_ == null) {
           senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
         } else {
           senderHostUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -1013,9 +1083,17 @@ public final class GeneralMessageProto {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
         }
-        result.timestamp_ = timestamp_;
+        if (installBuilder_ == null) {
+          result.install_ = install_;
+        } else {
+          result.install_ = installBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
+        }
+        result.timestamp_ = timestamp_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
         }
         if (senderHostUuidBuilder_ == null) {
           result.senderHostUuid_ = senderHostUuid_;
@@ -1061,6 +1139,9 @@ public final class GeneralMessageProto {
         }
         if (other.hasPromotion()) {
           mergePromotion(other.getPromotion());
+        }
+        if (other.hasInstall()) {
+          mergeInstall(other.getInstall());
         }
         if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
@@ -1125,6 +1206,12 @@ public final class GeneralMessageProto {
         }
         if (hasPromotion()) {
           if (!getPromotion().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasInstall()) {
+          if (!getInstall().isInitialized()) {
             
             return false;
           }
@@ -2091,51 +2178,168 @@ public final class GeneralMessageProto {
         return promotionBuilder_;
       }
 
-      // required uint64 timestamp = 9;
-      private long timestamp_ ;
+      // optional .Install install = 9;
+      private ralph_protobuffs.InstallProto.Install install_ = ralph_protobuffs.InstallProto.Install.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.InstallProto.Install, ralph_protobuffs.InstallProto.Install.Builder, ralph_protobuffs.InstallProto.InstallOrBuilder> installBuilder_;
       /**
-       * <code>required uint64 timestamp = 9;</code>
+       * <code>optional .Install install = 9;</code>
        */
-      public boolean hasTimestamp() {
+      public boolean hasInstall() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>required uint64 timestamp = 9;</code>
+       * <code>optional .Install install = 9;</code>
+       */
+      public ralph_protobuffs.InstallProto.Install getInstall() {
+        if (installBuilder_ == null) {
+          return install_;
+        } else {
+          return installBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public Builder setInstall(ralph_protobuffs.InstallProto.Install value) {
+        if (installBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          install_ = value;
+          onChanged();
+        } else {
+          installBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public Builder setInstall(
+          ralph_protobuffs.InstallProto.Install.Builder builderForValue) {
+        if (installBuilder_ == null) {
+          install_ = builderForValue.build();
+          onChanged();
+        } else {
+          installBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public Builder mergeInstall(ralph_protobuffs.InstallProto.Install value) {
+        if (installBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+              install_ != ralph_protobuffs.InstallProto.Install.getDefaultInstance()) {
+            install_ =
+              ralph_protobuffs.InstallProto.Install.newBuilder(install_).mergeFrom(value).buildPartial();
+          } else {
+            install_ = value;
+          }
+          onChanged();
+        } else {
+          installBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public Builder clearInstall() {
+        if (installBuilder_ == null) {
+          install_ = ralph_protobuffs.InstallProto.Install.getDefaultInstance();
+          onChanged();
+        } else {
+          installBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
+        return this;
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public ralph_protobuffs.InstallProto.Install.Builder getInstallBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return getInstallFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      public ralph_protobuffs.InstallProto.InstallOrBuilder getInstallOrBuilder() {
+        if (installBuilder_ != null) {
+          return installBuilder_.getMessageOrBuilder();
+        } else {
+          return install_;
+        }
+      }
+      /**
+       * <code>optional .Install install = 9;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ralph_protobuffs.InstallProto.Install, ralph_protobuffs.InstallProto.Install.Builder, ralph_protobuffs.InstallProto.InstallOrBuilder> 
+          getInstallFieldBuilder() {
+        if (installBuilder_ == null) {
+          installBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ralph_protobuffs.InstallProto.Install, ralph_protobuffs.InstallProto.Install.Builder, ralph_protobuffs.InstallProto.InstallOrBuilder>(
+                  install_,
+                  getParentForChildren(),
+                  isClean());
+          install_ = null;
+        }
+        return installBuilder_;
+      }
+
+      // required uint64 timestamp = 10;
+      private long timestamp_ ;
+      /**
+       * <code>required uint64 timestamp = 10;</code>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>required uint64 timestamp = 10;</code>
        */
       public long getTimestamp() {
         return timestamp_;
       }
       /**
-       * <code>required uint64 timestamp = 9;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public Builder setTimestamp(long value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         timestamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required uint64 timestamp = 9;</code>
+       * <code>required uint64 timestamp = 10;</code>
        */
       public Builder clearTimestamp() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         timestamp_ = 0L;
         onChanged();
         return this;
       }
 
-      // required .UUID sender_host_uuid = 10;
+      // required .UUID sender_host_uuid = 11;
       private ralph_protobuffs.UtilProto.UUID senderHostUuid_ = ralph_protobuffs.UtilProto.UUID.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> senderHostUuidBuilder_;
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public boolean hasSenderHostUuid() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public ralph_protobuffs.UtilProto.UUID getSenderHostUuid() {
         if (senderHostUuidBuilder_ == null) {
@@ -2145,7 +2349,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public Builder setSenderHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (senderHostUuidBuilder_ == null) {
@@ -2157,11 +2361,11 @@ public final class GeneralMessageProto {
         } else {
           senderHostUuidBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public Builder setSenderHostUuid(
           ralph_protobuffs.UtilProto.UUID.Builder builderForValue) {
@@ -2171,15 +2375,15 @@ public final class GeneralMessageProto {
         } else {
           senderHostUuidBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public Builder mergeSenderHostUuid(ralph_protobuffs.UtilProto.UUID value) {
         if (senderHostUuidBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
               senderHostUuid_ != ralph_protobuffs.UtilProto.UUID.getDefaultInstance()) {
             senderHostUuid_ =
               ralph_protobuffs.UtilProto.UUID.newBuilder(senderHostUuid_).mergeFrom(value).buildPartial();
@@ -2190,11 +2394,11 @@ public final class GeneralMessageProto {
         } else {
           senderHostUuidBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         return this;
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public Builder clearSenderHostUuid() {
         if (senderHostUuidBuilder_ == null) {
@@ -2203,19 +2407,19 @@ public final class GeneralMessageProto {
         } else {
           senderHostUuidBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public ralph_protobuffs.UtilProto.UUID.Builder getSenderHostUuidBuilder() {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         onChanged();
         return getSenderHostUuidFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       public ralph_protobuffs.UtilProto.UUIDOrBuilder getSenderHostUuidOrBuilder() {
         if (senderHostUuidBuilder_ != null) {
@@ -2225,7 +2429,7 @@ public final class GeneralMessageProto {
         }
       }
       /**
-       * <code>required .UUID sender_host_uuid = 10;</code>
+       * <code>required .UUID sender_host_uuid = 11;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ralph_protobuffs.UtilProto.UUID, ralph_protobuffs.UtilProto.UUID.Builder, ralph_protobuffs.UtilProto.UUIDOrBuilder> 
@@ -2272,20 +2476,21 @@ public final class GeneralMessageProto {
       "uest.proto\032\"partnerCompleteCommitRequest" +
       ".proto\032\032partnerCommitRequest.proto\032\022part" +
       "nerError.proto\032\017heartbeat.proto\032\026promoti" +
-      "onMessage.proto\032\nutil.proto\"\310\003\n\016GeneralM" +
-      "essage\022<\n\026request_sequence_block\030\001 \001(\0132\034" +
-      ".PartnerRequestSequenceBlock\022;\n\022first_ph" +
-      "ase_result\030\002 \001(\0132\037.PartnerFirstPhaseResu",
-      "ltMessage\022<\n\026backout_commit_request\030\003 \001(" +
-      "\0132\034.PartnerBackoutCommitRequest\022>\n\027compl" +
-      "ete_commit_request\030\004 \001(\0132\035.PartnerComple" +
-      "teCommitRequest\022-\n\016commit_request\030\005 \001(\0132" +
-      "\025.PartnerCommitRequest\022\034\n\005error\030\006 \001(\0132\r." +
-      "PartnerError\022\035\n\theartbeat\030\007 \001(\0132\n.Heartb" +
-      "eat\022\035\n\tpromotion\030\010 \001(\0132\n.Promotion\022\021\n\tti" +
-      "mestamp\030\t \002(\004\022\037\n\020sender_host_uuid\030\n \002(\0132" +
-      "\005.UUIDB\'\n\020ralph_protobuffsB\023GeneralMessa" +
-      "geProto"
+      "onMessage.proto\032\nutil.proto\032\rinstall.pro" +
+      "to\"\343\003\n\016GeneralMessage\022<\n\026request_sequenc" +
+      "e_block\030\001 \001(\0132\034.PartnerRequestSequenceBl" +
+      "ock\022;\n\022first_phase_result\030\002 \001(\0132\037.Partne",
+      "rFirstPhaseResultMessage\022<\n\026backout_comm" +
+      "it_request\030\003 \001(\0132\034.PartnerBackoutCommitR" +
+      "equest\022>\n\027complete_commit_request\030\004 \001(\0132" +
+      "\035.PartnerCompleteCommitRequest\022-\n\016commit" +
+      "_request\030\005 \001(\0132\025.PartnerCommitRequest\022\034\n" +
+      "\005error\030\006 \001(\0132\r.PartnerError\022\035\n\theartbeat" +
+      "\030\007 \001(\0132\n.Heartbeat\022\035\n\tpromotion\030\010 \001(\0132\n." +
+      "Promotion\022\031\n\007install\030\t \001(\0132\010.Install\022\021\n\t" +
+      "timestamp\030\n \002(\004\022\037\n\020sender_host_uuid\030\013 \002(" +
+      "\0132\005.UUIDB\'\n\020ralph_protobuffsB\023GeneralMes",
+      "sageProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2297,7 +2502,7 @@ public final class GeneralMessageProto {
           internal_static_GeneralMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_GeneralMessage_descriptor,
-              new java.lang.String[] { "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Error", "Heartbeat", "Promotion", "Timestamp", "SenderHostUuid", });
+              new java.lang.String[] { "RequestSequenceBlock", "FirstPhaseResult", "BackoutCommitRequest", "CompleteCommitRequest", "CommitRequest", "Error", "Heartbeat", "Promotion", "Install", "Timestamp", "SenderHostUuid", });
           return null;
         }
       };
@@ -2313,6 +2518,7 @@ public final class GeneralMessageProto {
           ralph_protobuffs.HeartbeatProto.getDescriptor(),
           ralph_protobuffs.PromotionProto.getDescriptor(),
           ralph_protobuffs.UtilProto.getDescriptor(),
+          ralph_protobuffs.InstallProto.getDescriptor(),
         }, assigner);
   }
 

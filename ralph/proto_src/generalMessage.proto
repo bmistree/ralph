@@ -7,6 +7,7 @@ import "partnerError.proto";
 import "heartbeat.proto";
 import "promotionMessage.proto";
 import "util.proto";
+import "install.proto";
 
 option java_package = "ralph_protobuffs";
 option java_outer_classname = "GeneralMessageProto";
@@ -21,7 +22,8 @@ message GeneralMessage
     optional PartnerError error = 6;
     optional Heartbeat heartbeat = 7;
     optional Promotion promotion = 8;
+    optional Install install = 9;
     
-    required uint64 timestamp = 9;
-    required UUID sender_host_uuid = 10;
+    required uint64 timestamp = 10;
+    required UUID sender_host_uuid = 11;
 }
