@@ -661,21 +661,20 @@ public class Variables
                 active_event, serialization_context,this,true);
         }
 
-        public static ObjectContents service_factory_serialize_contents(
-            ActiveEvent active_event,SerializationContext serialization_context,
-            RalphObject<InternalServiceFactory,InternalServiceFactory> service_factory_holder,
-            boolean is_atomic) throws BackoutException
+        /**
+           @param internal_service_factory --- Can be null as well.
+         */
+        public static Delta.ServiceFactoryDelta.Builder
+            internal_service_factory_serialize (
+                InternalServiceFactory internal_service_factory)
         {
-            InternalServiceFactory internal_val =
-                service_factory_holder.get_val(active_event);
-
             ByteString internal_byte_string = null;
-            if (internal_val != null)
+            if (internal_service_factory != null)
             {
                 try
                 {
                     internal_byte_string =
-                        internal_val.convert_constructor_to_byte_string();
+                        internal_service_factory.convert_constructor_to_byte_string();
                 }
                 catch(IOException ex)
                 {
@@ -699,6 +698,20 @@ public class Variables
                 Delta.ServiceFactoryDelta.newBuilder();
             service_factory_delta_builder.setSerializedFactory(
                 internal_byte_string);
+
+            return service_factory_delta_builder;
+        }
+        
+        public static ObjectContents service_factory_serialize_contents(
+            ActiveEvent active_event,SerializationContext serialization_context,
+            RalphObject<InternalServiceFactory,InternalServiceFactory> service_factory_holder,
+            boolean is_atomic) throws BackoutException
+        {
+            InternalServiceFactory internal_val =
+                service_factory_holder.get_val(active_event);
+
+            Delta.ServiceFactoryDelta.Builder service_factory_delta_builder =
+                internal_service_factory_serialize (internal_val);
 
             ObjectContents.Builder obj_contents_builder =
                 ObjectContents.newBuilder();
