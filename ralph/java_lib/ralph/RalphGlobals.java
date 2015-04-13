@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
 
 import RalphServiceConnectionListener.ConnectionListener;
 import RalphDataWrappers.ListTypeDataWrapper;
@@ -15,6 +17,10 @@ import ralph.BoostedManager.DeadlockAvoidanceAlgorithm;
 import ralph.ExecutionContext.ExecutionContext;
 import ralph.Connection.SameHostConnection;
 import ralph.Connection.TCPConnection.TCPAcceptThread;
+
+import ralph.Install.InstallSender;
+import ralph.MessageManager.InstallMessageProvider;
+
 
 /**
    Have a sort of tortured approach to RalphGlobals.  RalphGlobals is
@@ -69,6 +75,9 @@ public class RalphGlobals implements IUUIDGenerator
     public final MessageManager message_manager =
         new MessageManager(this);
 
+    private final InstallMessageProvider install_msg_provider;
+    private final InstallSender install_sender;
+
     // each ralph_globals object have a single connection listener
     // that listens for connections from remote hosts that we then can
     // send service factories, etc. to.
@@ -115,6 +124,9 @@ public class RalphGlobals implements IUUIDGenerator
         new_connection_listener = new TCPAcceptThread(
             stoppable, this, params.ip_addr_to_listen_for_connections_on,
             params.tcp_port_to_listen_for_connections_on);
+
+        install_msg_provider = new InstallMessageProvider(message_manager);
+        install_sender = new InstallSender(install_msg_provider, this);
     }
     
     @Override
@@ -150,12 +162,33 @@ public class RalphGlobals implements IUUIDGenerator
     }
 
     /**
-       
+       Forwards request to install on remote host.
      */
     public InternalServiceReference install_remote(
-        String remote_uuid, InternalServiceFactory internal_service_factory)
+        String remote_host_uuid,
+        InternalServiceFactory internal_service_factory)
     {
-        // FIXME: for now, just returning null
-        return null;
+        Future<InternalServiceReference> fut_service_ref =
+            install_sender.install_remote (
+                remote_host_uuid, internal_service_factory);
+
+        InternalServiceReference to_return = null;
+        try
+        {
+            to_return = fut_service_ref.get();
+        }
+        catch (InterruptedException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert("Unexpected interrupted exception in install");
+        }
+        catch (ExecutionException ex)
+        {
+            ex.printStackTrace();
+            Util.logger_assert("Unexpected execution exception in install");
+        }
+
+        
+        return to_return;
     }
 }

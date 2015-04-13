@@ -28,7 +28,7 @@ public class InstallSender implements IInstallMessageListener
         outstanding_request_map =
         new ConcurrentHashMap<String, InstallSettableFuture>();
 
-    
+
     public InstallSender(
         InstallMessageProvider inst_msg_provider,
         RalphGlobals ralph_globals)
