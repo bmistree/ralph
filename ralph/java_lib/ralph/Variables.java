@@ -808,6 +808,24 @@ public class Variables
                 deserialization_event);
         }
 
+        public static Delta.ServiceReferenceDelta.Builder
+            internal_service_reference_serialize (
+                InternalServiceReference internal_service_reference)
+        {
+            Delta.ServiceReferenceDelta.Builder service_reference_builder =
+                Delta.ServiceReferenceDelta.newBuilder();
+
+            if (internal_service_reference != null)
+            {
+                service_reference_builder.setRemoteHostUuid(
+                    internal_service_reference.remote_host_uuid);
+                service_reference_builder.setServiceUuid(
+                    internal_service_reference.service_uuid);
+            }
+            return service_reference_builder;
+        }
+
+            
         public static ObjectContents serialize_service_reference_contents(
             ActiveEvent active_event,
             RalphObject<InternalServiceReference,InternalServiceReference> service_reference_holder,
@@ -819,17 +837,8 @@ public class Variables
             InternalServiceReference internal_service_reference =
                 service_reference_holder.get_val(active_event);
 
-            
             Delta.ServiceReferenceDelta.Builder service_reference_builder =
-                Delta.ServiceReferenceDelta.newBuilder();
-
-            if (internal_service_reference != null)
-            {
-                service_reference_builder.setRemoteHostUuid(
-                    internal_service_reference.remote_host_uuid);
-                service_reference_builder.setServiceUuid(
-                    internal_service_reference.service_uuid);
-            }
+                internal_service_reference_serialize(internal_service_reference);
 
             ObjectContents.Builder object_contents_builder =
                 ObjectContents.newBuilder();

@@ -27,7 +27,10 @@ public class InstallMessageProvider implements IMessageListener
     public void msg_recvd(GeneralMessage msg)
     {
         if (msg.hasInstall())
-            push_install_msg(msg.getInstall());
+        {
+            push_install_msg(
+                msg.getSenderHostUuid().getData(), msg.getInstall());
+        }
     }
     
     public synchronized void subscribe_install_message_listener(
@@ -36,9 +39,13 @@ public class InstallMessageProvider implements IMessageListener
         msg_listener_set.add(inst_msg_listener);
     }
 
-    protected synchronized void push_install_msg(Install install_msg)
+    protected synchronized void push_install_msg(
+        String msg_sender_remote_host_uuid, Install install_msg)
     {
         for (IInstallMessageListener msg_listener : msg_listener_set)
-            msg_listener.recv_install_msg(install_msg);
+        {
+            msg_listener.recv_install_msg(
+                msg_sender_remote_host_uuid, install_msg);
+        }
     }
 }

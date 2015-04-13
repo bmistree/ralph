@@ -4,6 +4,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.protobuf.ByteString;
+
 import ralph.Connection.IConnection;
 import ralph.MessageManager.InstallMessageProvider;
 import ralph.MessageManager.IInstallMessageListener;
@@ -13,9 +15,11 @@ import ralph.InternalServiceFactory;
 import ralph.InternalServiceReference;
 import ralph.Variables;
 import ralph.RalphGlobals;
+import ralph.Endpoint;
 
 import ralph_protobuffs.InstallProto.Install;
 import ralph_protobuffs.DeltaProto.Delta;
+
 
 public class InstallSender implements IInstallMessageListener
 {
@@ -52,16 +56,15 @@ public class InstallSender implements IInstallMessageListener
 
     
     @Override
-    public void recv_install_msg(Install msg)
+    public void recv_install_msg(String from_host_uuid, Install msg)
     {
+        String install_uuid = msg.getInstallUuid();
         if (msg.hasReply())
-        {
-            String replying_to_uuid = msg.getInstallUuid();
-            handle_install_reply (replying_to_uuid, msg.getReply());
-        }
+            handle_install_reply (install_uuid, msg.getReply());
         else if (msg.hasRequest())
         {
-            handle_install_request();
+            handle_install_request(
+                from_host_uuid, install_uuid, msg.getRequest());
         }
         //// DEBUG
         else
@@ -71,12 +74,38 @@ public class InstallSender implements IInstallMessageListener
         //// END DEBUG
     }
 
-    protected void handle_install_request()
+    protected void handle_install_request(
+        String reply_to_remote_host_uuid, String install_uuid,
+        Install.Request request_msg)
     {
-        // FIXME
-        Util.logger_assert("Must finish handle_install_request");
+        // deserialize message
+        ByteString byte_string =
+            request_msg.getServiceFactory().getSerializedFactory();
+        
+        InternalServiceFactory internal_service_factory =
+            InternalServiceFactory.deserialize (byte_string, ralph_globals);
+
+        // actually construct the object locally
+        InstallActiveEvent install_act_evt =
+            new InstallActiveEvent(ralph_globals);
+        Endpoint local_endpt =
+            internal_service_factory.construct(install_act_evt);
+
+        // construct and send reply
+        InternalServiceReference service_ref =
+            new InternalServiceReference(
+                ralph_globals.host_uuid, local_endpt._uuid);
+
+        Delta.ServiceReferenceDelta.Builder service_reference_delta =
+            Variables.AtomicServiceReferenceVariable.internal_service_reference_serialize(
+                service_ref);
+
+        ralph_globals.message_manager.send_install_reply(
+            reply_to_remote_host_uuid, install_uuid,
+            service_reference_delta.build());
     }
-    
+
+
     protected void handle_install_reply(
         String replying_to_uuid, Install.Reply reply_msg)
     {
