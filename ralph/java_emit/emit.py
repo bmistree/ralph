@@ -2038,37 +2038,9 @@ def emit_statement(emit_ctx,statement_node):
 
     elif statement_node.label == ast_labels.FOR:
         return emit_for_statement(statement_node,emit_ctx)
+
     elif statement_node.label == ast_labels.METHOD_CALL:
-        # FIXME: Need to handle method calls on objects as well
-        method_text = emit_statement(
-            emit_ctx,
-            # statement_node.method node is an identifier or dot node
-            statement_node.method_node)
-
-        # dot statements should only take in ExecutingEventContexts if
-        # they are calls to endpoint objects.  Otherwise, they are
-        # likely calls to map, list, etc., objects.  Calling .size on
-        # a map should not call .get_len on internal map and pass in a
-        # _ctx.  It should just pass in _active_event.
-        if statement_node.method_node.label != ast_labels.DOT:
-            method_text += '(exec_ctx'
-        else:
-            
-            if isinstance(statement_node.method_node.type,WildcardType):
-                # means that calling dot on endpoint node
-                method_text += '(exec_ctx'
-            else:
-                # means that calling dot on map/list/etc.
-                method_text += '(exec_ctx.curr_act_evt()'
-
-                
-        for arg_node in statement_node.args_list:
-            arg_text = emit_statement(emit_ctx,arg_node)
-                
-            method_text += ',' + arg_text
-        method_text += ')'
-        return method_text
-
+        return emit_method_call(statement_node, emit_ctx)
 
     elif statement_node.label == ast_labels.PARTNER_METHOD_CALL:
         rpc_args = []
@@ -2356,6 +2328,7 @@ def emit_dot_statement(emit_ctx,dot_node):
                 left_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for service factory.')
         #### END DEBUG
+
     else:
         raise InternalEmitException(
             dot_node.filename,
@@ -3176,3 +3149,88 @@ public ObjectContents serialize_contents(
 ''' % {'field_serialization_text': indent_string(field_serialization_text),
        'internal_struct_builder_var_name': internal_struct_builder_var_name,
        'struct_name': struct_name}
+
+
+def is_remote_method_call(method_call_node):
+    '''
+    FIXME: Super-ugly way to distinguish between remote and normal
+    method calls.
+    '''
+    if isinstance(method_call_node.method_node.type, WildcardType):
+        method_node = method_call_node.method_node
+        left_of_dot_node = method_node.left_of_dot_node
+        
+        if isinstance(left_of_dot_node.type, RemoteVariableType):
+            return True
+
+    return False
+
+
+
+def emit_method_call(method_call_node, emit_ctx):
+    if is_remote_method_call(method_call_node):
+        # Remote call
+        serivce_reference_text = emit_statement(
+            emit_ctx, method_call_node.method_node)
+
+        rpc_args = []
+
+        # FIXME: only allowing putting identifiers into arguments of
+        # remote method call because must create RPC arguments
+        prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
+        emit_ctx.set_lhs_of_assign(True)
+        for rpc_arg_node in statement_node.args_list:
+
+            # FIXME: Setting false here, which disallows sending arg
+            # as reference.
+            rpc_arg_text = emit_statement(emit_ctx,rpc_arg_node)
+            rpc_args.append(rpc_arg_text)
+        emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
+
+        array_list_arg = ''
+        if len(rpc_args) != 0:
+            array_list_arg = 'Arrays.asList(%s)' % ','.join(rpc_args)
+            
+        rpc_args_list_text = (
+            'new ArrayList<RalphObject>( %s)' % array_list_arg)
+
+        remote_call_text = '''
+exec_ctx.message_sender().hide_partner_call(
+    %(service_reference)s.remote_host_uuid, %(service_reference)s.service_uuid,
+    exec_ctx,"%s",true, //whether or not first method call
+    %(rpc_args_list)s,null)''' %  {
+            'service_reference': service_reference_text,
+            'func_name': statement_node.partner_method_name,
+            'rpc_args_list': rpc_args_list_text}
+
+        return remote_call_text
+
+    # not a remote call
+    method_text = emit_statement(
+        emit_ctx,
+        # method_call_node.method node is an identifier or dot node
+        method_call_node.method_node)
+
+    # dot statements should only take in ExecutingEventContexts if
+    # they are calls to endpoint objects.  Otherwise, they are
+    # likely calls to map, list, etc., objects.  Calling .size on
+    # a map should not call .get_len on internal map and pass in a
+    # _ctx.  It should just pass in _active_event.
+    if method_call_node.method_node.label != ast_labels.DOT:
+        method_text += '(exec_ctx'
+    else:
+
+        if isinstance(method_call_node.method_node.type,WildcardType):
+            # means that calling dot on endpoint node
+            method_text += '(exec_ctx'
+        else:
+            # means that calling dot on map/list/etc.
+            method_text += '(exec_ctx.curr_act_evt()'
+
+
+    for arg_node in method_call_node.args_list:
+        arg_text = emit_statement(emit_ctx,arg_node)
+
+        method_text += ',' + arg_text
+    method_text += ')'
+    return method_text
