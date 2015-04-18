@@ -17,6 +17,7 @@ VERBATIM_TOKEN = 'verbatim'
 TO_TEXT_TOKEN = 'to_text'
 INSTALL_TOKEN = 'install'
 LOCAL_UUID_TOKEN = 'local_uuid'
+REMOTE_TOKEN = 'remote'
 CONNECTED_UUIDS_TOKEN = 'connected_uuids'
 PLUS_EQUAL_TOKEN = '+='
 MINUS_EQUAL_TOKEN = '-='
@@ -76,6 +77,7 @@ reserved = {
     'local_uuid': 'LOCAL_UUID',
     'connected_uuids': 'CONNECTED_UUIDS',
     'install': 'INSTALL',
+    'Remote': 'REMOTE'
     }
 
 tokens = [

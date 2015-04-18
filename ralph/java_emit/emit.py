@@ -2,9 +2,9 @@ import ralph.parse.ast_labels as ast_labels
 from ralph.java_emit.emit_utils import indent_string
 from ralph.java_emit.emit_context import EmitContext
 from ralph.parse.type import BasicType,MethodType,WildcardType
-from ralph.parse.type import MapType,StructType,ListType,EndpointType
+from ralph.parse.type import MapType, StructType, ListType,EndpointType
 from ralph.parse.type import ServiceFactoryType, ServiceReferenceType
-from ralph.parse.type import EnumType
+from ralph.parse.type import EnumType, RemoteVariableType
 from ralph.parse.ast_labels import BOOL_TYPE, NUMBER_TYPE, STRING_TYPE,NULL_TYPE
 from ralph.java_emit.emit_utils import InternalEmitException
 
@@ -272,8 +272,10 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
 
     emit_ctx.set_in_endpoint_constructor(True)
     for variable_declaration_node in variable_declaration_node_list:
-        if (isinstance(variable_declaration_node.type,EndpointType) or
-            isinstance(variable_declaration_node.type,StructType)):
+        if (isinstance(variable_declaration_node.type, EndpointType) or
+            isinstance(variable_declaration_node.type, StructType) or
+            isinstance(variable_declaration_node.type, RemoteVariableType)):
+            # endpoints, remotes, and structs
             endpt_globals_endpt_vars_text += (
                 emit_statement(emit_ctx,variable_declaration_node) )
             endpt_globals_endpt_vars_text += '\n'
@@ -1112,6 +1114,11 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
             return 'AtomicInterfaceVariable<%s>' % type_object.alias_name
         return 'NonAtomicInterfaceVariable<%s>' % type_object.alias_name
 
+    # emit for remote variables
+    if isinstance(type_object,RemoteVariableType):
+        print 'Still need to emit for remote variables'
+        assert False
+
     # emit for service factories
     if isinstance(type_object,ServiceFactoryType):
         if type_object.is_tvar and (not force_single_threaded):
@@ -1119,11 +1126,12 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         return 'NonAtomicServiceFactoryVariable'
 
     # emit for service references
-    if isinstance(type_object,ServiceReferenceType):
+    if (isinstance(type_object, ServiceReferenceType) or
+        isinstance(type_object, ServiceReferenceType)):
         if type_object.is_tvar and (not force_single_threaded):
             return 'AtomicServiceReferenceVariable'
         return 'NonAtomicServiceReferenceVariable'
-    
+
     # emit for others
     if isinstance(type_object,BasicType):
         typer = type_object.basic_type

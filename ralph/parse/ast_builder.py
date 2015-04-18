@@ -10,6 +10,7 @@ from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
 from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
 from ralph.lex.ralph_lex import ENUM_TOKEN, LOCAL_UUID_TOKEN
 from ralph.lex.ralph_lex import CONNECTED_UUIDS_TOKEN, INSTALL_TOKEN
+from ralph.lex.ralph_lex import REMOTE_TOKEN
 
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
@@ -958,6 +959,9 @@ def p_VariableType(p):
                  | ENDPOINT Identifier
                  | TVAR ENDPOINT Identifier
 
+                 | REMOTE Identifier
+                 | TVAR REMOTE Identifier
+
                  | SERVICE Identifier
                  | TVAR SERVICE Identifier
 
@@ -1041,6 +1045,20 @@ def p_VariableType(p):
         endpoint_name_node = p[endpoint_name_node_index]
         p[0] = EndpointVariableTypeNode(
             global_parsing_filename,endpoint_name_node,is_tvar,line_number)
+
+    elif ((p[1] == REMOTE_TOKEN) or
+           ((len(p) >= 3) and (p[2] == REMOTE_TOKEN))):
+        # emitting a remote type
+        is_tvar = False
+        endpoint_name_node_index = 2
+        if len(p) == 4:
+            # remote is a tvar
+            is_tvar = True
+            endpoint_name_node_index = 3
+        line_number = p.lineno(1)
+        endpoint_name_node = p[endpoint_name_node_index]
+        p[0] = RemoteVariableTypeNode(
+            global_parsing_filename, endpoint_name_node, is_tvar, line_number)
 
     elif ((p[1] == ENUM_TOKEN) or
            ((len(p) >= 3) and (p[2] == ENUM_TOKEN))):

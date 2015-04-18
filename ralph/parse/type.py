@@ -44,6 +44,27 @@ class EndpointType(Type):
         return (
             'Endpoint %s %s' % (tvar_string,self.endpoint_name))
 
+class RemoteVariableType(Type):
+    def __init__(
+            self,endpoint_name,is_tvar,alias_name):
+        '''@see constructor for map type
+        '''
+        self.endpoint_name = endpoint_name
+        self.is_tvar = is_tvar
+        self.alias_name = alias_name
+
+    def clone(self,is_tvar):
+        return RemoteVariableType(self.endpoint_name,is_tvar,self.alias_name)
+        
+    def __str__(self):
+        tvar_string = 'TVar'
+        if not self.is_tvar:
+            tvar_string = ''
+            
+        return (
+            'Remote %s %s' % (tvar_string,self.endpoint_name))
+
+
 # When call .construct on ServiceFactory, it produces a generic
 # endpoint (ie., not a Endpoint SomeEndpoint).  Use these to represent
 # those types.

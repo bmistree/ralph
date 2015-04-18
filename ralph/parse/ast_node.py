@@ -1409,7 +1409,47 @@ class EnumVariableTypeNode(VariableTypeNode):
         
     def type_check_pass_two(self,type_check_ctx):
         pass
-    
+
+
+class RemoteVariableTypeNode(VariableTypeNode):
+    def __init__(self, filename, endpoint_name_identifier_node,
+                 is_tvar, line_number):
+        super(RemoteVariableTypeNode,self).__init__(
+            filename,ast_labels.REMOTE_VARIABLE_TYPE,line_number)
+        self.endpoint_name = endpoint_name_identifier_node.value
+        self.is_tvar = is_tvar
+        self.alias_name = None
+        self.fixupable_object = FixupableObject(
+            FixupableObject.FIXUPABLE_TYPE_ENDPOINT,
+            self.endpoint_name, self.is_tvar)
+
+    def get_fixupable_object(self):
+        return self.fixupable_object
+
+    def setup_type_from_alias(self, struct_types_ctx):
+        self.alias_name = struct_types_ctx.alias_ctx.get_endpoint_alias(
+            self.endpoint_name)
+        
+        if self.alias_name is None:
+            raise TypeCheckException(
+                self.filename, self.line_number,
+                ('Require alias definition for remote endpoint %s.' %
+                 self.endpoint_name))
+
+        self.type = RemoteVariableType(
+            self.endpoint_name, self.is_tvar, self.alias_name)
+
+        struct_types_ctx.add_endpoint_type_obj_for_name(
+            self.endpoint_name, self.type, self.line_number)
+        
+    def type_check_pass_one(self, struct_types_ctx):
+        if self.alias_name is None:
+            self.setup_type_from_alias(struct_types_ctx)
+
+    def type_check_pass_two(self, type_check_ctx):
+        pass
+
+
 class EndpointVariableTypeNode(VariableTypeNode):
     def __init__(self,filename,endpoint_name_identifier_node,is_tvar,
                  line_number):
@@ -1476,7 +1516,7 @@ class ServiceReferenceVariableTypeNode(VariableTypeNode):
     
     def type_check_pass_two(self,type_check_ctx):
         pass
-    
+
 class _BinaryExpressionNode(_AstNode):
     def __init__(self,filename,label,lhs_expression_node,rhs_expression_node):
         super (_BinaryExpressionNode,self).__init__(
@@ -1843,7 +1883,12 @@ class StructBodyNode(_AstNode):
 
     def register_struct_endpoint_fields(self,struct_types_ctx):
         for declaration_statement_node in self.children:
-            if isinstance(declaration_statement_node.type_node,EndpointVariableTypeNode):
+            if (isinstance(
+                    declaration_statement_node.type_node,
+                    EndpointVariableTypeNode) or
+                isinstance(
+                    declaration_statement_node.type_node,
+                    RemoteVariableTypeNode)):
                 # tell the endpoint variable what its alias is if it
                 # needs one
                 declaration_statement_node.type_node.setup_type_from_alias(
