@@ -2308,7 +2308,7 @@ def emit_dot_statement(emit_ctx,dot_node):
     elif isinstance(left_of_dot_node.type,EndpointType):
         right_hand_side_method = right_of_dot_node.value
         to_return += '.' + right_hand_side_method
-        
+
     elif isinstance(left_of_dot_node.type,ServiceFactoryType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
@@ -2328,7 +2328,7 @@ def emit_dot_statement(emit_ctx,dot_node):
                 left_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for service factory.')
         #### END DEBUG
-
+        
     else:
         raise InternalEmitException(
             dot_node.filename,
@@ -3166,12 +3166,15 @@ def is_remote_method_call(method_call_node):
     return False
 
 
-
 def emit_method_call(method_call_node, emit_ctx):
     if is_remote_method_call(method_call_node):
         # Remote call
-        serivce_reference_text = emit_statement(
-            emit_ctx, method_call_node.method_node)
+        
+        # FIXME: really gross assumption about format of remotes.
+        service_reference_text = emit_statement(
+            emit_ctx, method_call_node.method_node.left_of_dot_node)
+        partner_method_name = (
+            method_call_node.method_node.right_of_dot_node.value)
 
         rpc_args = []
 
@@ -3179,8 +3182,7 @@ def emit_method_call(method_call_node, emit_ctx):
         # remote method call because must create RPC arguments
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
-        for rpc_arg_node in statement_node.args_list:
-
+        for rpc_arg_node in method_call_node.args_list:
             # FIXME: Setting false here, which disallows sending arg
             # as reference.
             rpc_arg_text = emit_statement(emit_ctx,rpc_arg_node)
@@ -3193,14 +3195,14 @@ def emit_method_call(method_call_node, emit_ctx):
             
         rpc_args_list_text = (
             'new ArrayList<RalphObject>( %s)' % array_list_arg)
-
+        
         remote_call_text = '''
 exec_ctx.message_sender().hide_partner_call(
     %(service_reference)s.remote_host_uuid, %(service_reference)s.service_uuid,
-    exec_ctx,"%s",true, //whether or not first method call
-    %(rpc_args_list)s,null)''' %  {
+    exec_ctx,"%(func_name)s", true, //whether or not first method call
+    %(rpc_args_list)s, null)''' %  {
             'service_reference': service_reference_text,
-            'func_name': statement_node.partner_method_name,
+            'func_name': partner_method_name,
             'rpc_args_list': rpc_args_list_text}
 
         return remote_call_text
