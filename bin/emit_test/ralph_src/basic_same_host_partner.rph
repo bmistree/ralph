@@ -10,8 +10,8 @@ Service RemoteAccessor
         Text remote_uuid = local_uuid();
         ServiceReference service_reference = null;
         service_reference = install(remote_uuid, factory);
-        remote_endpt = dynamic_cast<Endpoint SenderCreated>(
-            factory.construct_from_reference(sr));
+        remote_endpt = dynamic_cast<Endpoint SideB>(
+            factory.construct_from_reference(service_reference));
     }
 
     increment_other_side_number(Number amt_to_increment_by)
