@@ -1798,7 +1798,7 @@ def emit_statement(emit_ctx,statement_node):
 
         return (
             'ralph_globals.install_remote(' + remote_uuid_statement +
-            ',' + service_factory_node_statement)
+            ',' + service_factory_node_statement + ')')
 
 
     elif statement_node.label in [ast_labels.SPECULATE_CALL,
