@@ -82,6 +82,13 @@
     </antcall>
   </target>
 
+  <target name="basic_same_host_partner" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="basic_same_host_partner.rph"/>
+      <param name="class_name" value="BaicSameHostPartnerJava"/>
+    </antcall>
+  </target>
+
   <target name="durability_many_services" depends="init"
           description="Durability replay over many services">
     <antcall target="compile_ralph">

@@ -1,0 +1,39 @@
+Service RemoteAccessor
+{
+    Remote RemoteEndpoint remote_endpt = null;
+
+    // Should be a RemoteEndpoint ServiceFactory
+    install_remote_endpt(ServiceFactory factory)
+    {
+        Text remote_uuid = local_uuid();
+        ServiceReference service_reference = null;
+        service_reference = install(remote_uuid, factory);
+        remote_endpt = dynamic_cast<Endpoint SenderCreated>(
+            factory.construct_from_reference(sr));
+    }
+    increment_other_side_number(Number amt_to_increment_by)
+    {
+        remote_endpt.increment_number(amt_to_increment_by);
+    }
+    get_remote_number() returns Number
+    {
+        return remote_endpt.get_number();
+    }
+
+}
+
+Service RemoteEndpoint
+{
+    TVar Number internal_number = 15;
+
+    get_number() returns Number
+    {
+        return internal_number;
+    }
+
+    increment_number(Number amt_to_increment_by)
+    {
+        internal_number = internal_number + amt_to_increment_by;
+    }
+}
+
