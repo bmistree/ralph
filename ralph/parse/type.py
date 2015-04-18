@@ -200,8 +200,6 @@ class BasicType(Type):
 
         #### DEBUG
         if self.basic_type not in ast_labels.BASIC_TYPES_LIST:
-            import pdb
-            pdb.set_trace()
             raise InternalParseException(
                 'unknown',0,'Unknown type in basic type')
         #### END DEBUG
