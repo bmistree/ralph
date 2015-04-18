@@ -1115,9 +1115,12 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         return 'NonAtomicInterfaceVariable<%s>' % type_object.alias_name
 
     # emit for remote variables
-    if isinstance(type_object,RemoteVariableType):
-        print 'Still need to emit for remote variables'
-        assert False
+    if isinstance(type_object, RemoteVariableType):
+        # Remote variables are just service references that we send
+        # messages to.
+        if type_object.is_tvar and (not force_single_threaded):
+            return 'AtomicServiceReferenceVariable'
+        return 'NonAtomicServiceReferenceVariable'
 
     # emit for service factories
     if isinstance(type_object,ServiceFactoryType):
@@ -2332,7 +2335,7 @@ def emit_dot_statement(emit_ctx,dot_node):
     elif isinstance(left_of_dot_node.type,EndpointType):
         right_hand_side_method = right_of_dot_node.value
         to_return += '.' + right_hand_side_method
-
+        
     elif isinstance(left_of_dot_node.type,ServiceFactoryType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
             raise InternalEmitException(
