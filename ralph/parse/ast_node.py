@@ -3,8 +3,8 @@ from ralph.parse.parse_util import TypeCheckException
 import ralph.parse.ast_labels as ast_labels
 from ralph.parse.type import BasicType, MethodType, MapType,StructType
 from ralph.parse.type import ListType, Type, EndpointType, WildcardType
-from ralph.parse.type import ServiceFactoryType,NullType,ServiceReferenceType
-from ralph.parse.type import EnumType
+from ralph.parse.type import ServiceFactoryType, NullType, ServiceReferenceType
+from ralph.parse.type import EnumType, RemoteVariableType
 from ralph.parse.type_check_context import TypeCheckContext,StructTypesContext
 from ralph.parse.type_check_context import AliasContext,EnumTypesContext
 from ralph.parse.type_check_context import FixupableObject
