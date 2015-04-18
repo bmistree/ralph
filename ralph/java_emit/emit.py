@@ -1353,7 +1353,8 @@ new %(java_type_text)s  (
 
         return to_return
 
-    elif isinstance(type_object,ServiceReferenceType):
+    elif (isinstance(type_object, ServiceReferenceType) or 
+          isinstance(type_object, RemoteVariableType)):
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
