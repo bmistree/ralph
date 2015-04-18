@@ -1168,7 +1168,8 @@ class DotNode(_AstNode):
         elif self.right_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
             identifier_name = self.right_of_dot_node.value
 
-            if not isinstance(self.left_of_dot_node.type,EndpointType):
+            if ((not isinstance(self.left_of_dot_node.type, EndpointType)) and
+                (not isinstance(self.left_of_dot_node.type, RemoteVariableType))):
                 dict_dot_fields = self.left_of_dot_node.type.dict_dot_fields()
 
                 if identifier_name not in dict_dot_fields:
