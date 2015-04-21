@@ -73,7 +73,7 @@ public interface IMessageSender
     public RalphObject hide_partner_call(
         String remote_host_uuid, String target_endpt_uuid,
         ExecutionContext exec_ctx,
-        String func_name, boolean first_msg,List<RalphObject> args,
+        String func_name, boolean first_msg, List<RalphObject> args,
         RalphObject result)
         throws NetworkException, ApplicationException, BackoutException;
 }

@@ -85,7 +85,7 @@
   <target name="basic_same_host_partner" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="basic_same_host_partner.rph"/>
-      <param name="class_name" value="BaicSameHostPartnerJava"/>
+      <param name="class_name" value="BasicSameHostPartnerJava"/>
     </antcall>
   </target>
 
@@ -807,7 +807,8 @@
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
         jar_NestedAtomicSetterGetter,jar_DurabilityManyServicesReplayer,
         jar_DurabilityReplayRPC, jar_MultidiskDurabilitySingleSideReplayer,
-        jar_MixedAccesses, jar_DelayAndContend, jar_LocUuid, jar_ConnUuid">
+        jar_MixedAccesses, jar_DelayAndContend, jar_LocUuid, jar_ConnUuid,
+        jar_BasicSameHostPartner">
   </target>
 
   <!-- Instructions for building ralph for each test   -->
@@ -921,6 +922,11 @@
   <target
       name="ralph_AliasEnum"
       depends="enum_ralph,alias_enum_ralph">
+  </target>
+
+  <target
+      name="ralph_BasicSameHostPartner"
+      depends="basic_same_host_partner, basic_partner">
   </target>
 
   <target
@@ -1318,6 +1324,13 @@
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
              value="EnumTest.java,AliasEnumTest.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_BasicSameHostPartner">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="BasicSameHostPartnerTest.java"/>
     </antcall>
   </target>
 
@@ -2170,6 +2183,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="ConnUuidTest"/>
       <param name="dest_jar" value="${conn_uuid_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="basic_same_host_partner_jar"
+      value="basic_same_host_partner.jar"/>
+  <target
+      name="jar_BasicSameHostPartner"
+      depends="ralph_BasicSameHostPartner, ralph_to_byte_code, harness_BasicSameHostPartner">
+    <antcall target="make_jar">
+      <param name="main_class" value="BasicSameHostPartnerTest"/>
+      <param name="dest_jar" value="${basic_same_host_partner_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>

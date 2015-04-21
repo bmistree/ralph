@@ -123,4 +123,10 @@ public class InternalServiceFactory
         return endpt_constructor.construct(
             ralph_globals, active_event.exec_ctx, null);
     }
+    
+    public InternalServiceReference construct_remote_from_reference(
+        ActiveEvent active_event,InternalServiceReference service_reference)
+    {
+        return service_reference;
+    }
 }

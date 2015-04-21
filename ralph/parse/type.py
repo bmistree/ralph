@@ -64,6 +64,8 @@ class RemoteVariableType(Type):
         return (
             'Remote %s %s' % (tvar_string,self.endpoint_name))
 
+GENERIC_REMOTE_VARIABLE_TYPE = RemoteVariableType('Remote', False, 'Remote')
+    
 
 # When call .construct on ServiceFactory, it produces a generic
 # endpoint (ie., not a Endpoint SomeEndpoint).  Use these to represent
@@ -461,6 +463,7 @@ class ServiceReferenceType(Type):
 class ServiceFactoryType(Type):
     CONSTRUCT_METHOD_NAME = 'construct'
     CONSTRUCT_FROM_REFERENCE_METHOD_NAME = 'construct_from_reference'
+    CONSTRUCT_REMOTE_FROM_REFERENCE_METHOD_NAME = 'construct_remote_from_reference'
 
     SERVICE_FACTORY_DOT_DICT_METHODS = {
         CONSTRUCT_METHOD_NAME : MethodType(
@@ -472,6 +475,13 @@ class ServiceFactoryType(Type):
         CONSTRUCT_FROM_REFERENCE_METHOD_NAME : MethodType(
             # returns Endpoint
             GENERIC_ENDPOINT_TYPE,
+            # takes single argument: a ServiceReferenceType. By
+            # default, using non-atomic ServiceReferenceType.
+            [ServiceReferenceType(False)]) ,
+
+        CONSTRUCT_REMOTE_FROM_REFERENCE_METHOD_NAME : MethodType(
+            # returns ServiceReference
+            GENERIC_REMOTE_VARIABLE_TYPE,
             # takes single argument: a ServiceReferenceType. By
             # default, using non-atomic ServiceReferenceType.
             [ServiceReferenceType(False)]) 

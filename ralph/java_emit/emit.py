@@ -1982,6 +1982,11 @@ def emit_statement(emit_ctx,statement_node):
             is_partner_method_call = True
             get_val_text = '.get_val(exec_ctx.curr_act_evt())'
 
+        elif is_remote_method_call(statement_node.rhs_node):
+            is_partner_method_call = True
+            get_val_text = '.get_val(exec_ctx.curr_act_evt())'
+
+            
         if not is_partner_method_call:
             return (
                 '%s.set_val(exec_ctx.curr_act_evt(),%s);\n' %
@@ -2117,7 +2122,7 @@ exec_ctx.message_sender().hide_partner_call(
             return_text += ' ' + emit_statement(
                 emit_ctx,statement_node.what_to_return_node)
         return return_text
-    
+
     elif statement_node.label == ast_labels.CONDITION:
 
         if_text = emit_statement(emit_ctx,statement_node.if_node)
@@ -2321,6 +2326,8 @@ def emit_dot_statement(emit_ctx,dot_node):
             to_return += '.construct'
         elif right_hand_side_method == ServiceFactoryType.CONSTRUCT_FROM_REFERENCE_METHOD_NAME:
             to_return += '.construct_from_reference'
+        elif right_hand_side_method == ServiceFactoryType.CONSTRUCT_REMOTE_FROM_REFERENCE_METHOD_NAME:
+            to_return += '.construct_remote_from_reference'
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -3151,13 +3158,19 @@ public ObjectContents serialize_contents(
        'struct_name': struct_name}
 
 
-def is_remote_method_call(method_call_node):
+def is_remote_method_call(potential_method_call_node):
     '''
+    @param {AstNode} potential_method_call_node --- May or may not be
+    a method call node.  Function will check.
+
     FIXME: Super-ugly way to distinguish between remote and normal
     method calls.
     '''
-    if isinstance(method_call_node.method_node.type, WildcardType):
-        method_node = method_call_node.method_node
+    if potential_method_call_node.label != ast_labels.METHOD_CALL:
+        return False
+
+    if isinstance(potential_method_call_node.method_node.type, WildcardType):
+        method_node = potential_method_call_node.method_node
         left_of_dot_node = method_node.left_of_dot_node
         
         if isinstance(left_of_dot_node.type, RemoteVariableType):
