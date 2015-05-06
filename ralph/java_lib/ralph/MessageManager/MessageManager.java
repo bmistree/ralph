@@ -25,17 +25,19 @@ import ralph_protobuffs.DeltaProto.Delta.ServiceFactoryDelta;
 import ralph_protobuffs.DeltaProto.Delta.ServiceReferenceDelta;
 
 public class MessageManager extends ConnectionListenerManager
-                            implements IMessageListener
+    implements IMessageListener
 {
     // contains local endpoints
     private final ConnectionMap conn_map = new ConnectionMap();
     private final RalphGlobals ralph_globals;
 
     public final InstallMessageProvider install_message_provider;
-    
+
     public MessageManager(RalphGlobals ralph_globals)
     {
         this.ralph_globals = ralph_globals;
+        // MessageHandler's constructor will subscribe it as a message
+        // listener.
         this.install_message_provider =
             new MessageHandler(this, ralph_globals);
     }
@@ -50,7 +52,6 @@ public class MessageManager extends ConnectionListenerManager
     public void msg_recvd(GeneralMessage msg)
     {
         recvd_msg_to_listeners(msg);
-        Util.logger_assert("Not handling messages in MessageManager.");
     }
 
     public Set<String> remote_connection_uuids()
@@ -80,7 +81,7 @@ public class MessageManager extends ConnectionListenerManager
         // generate request of install
         Install.Request.Builder req_builder = Install.Request.newBuilder();
         req_builder.setServiceFactory(service_factory_contents);
-        
+
         // generate install message
         Install.Builder install_msg = Install.newBuilder();
         install_msg.setRequest(req_builder);
@@ -99,7 +100,7 @@ public class MessageManager extends ConnectionListenerManager
         // generate reply of install
         Install.Reply.Builder reply_builder = Install.Reply.newBuilder();
         reply_builder.setServiceReference(service_reference_contents);
-        
+
         // generate install message
         Install.Builder install_msg = Install.newBuilder();
         install_msg.setReply(reply_builder);
@@ -110,14 +111,14 @@ public class MessageManager extends ConnectionListenerManager
         general_message.setInstall(install_msg);
         send_msg(remote_host_uuid, general_message.build());
     }
-    
+
     /**
      @param {uuid} event_uuid
 
      @param {uuid} host_uuid
-        
-     @param {array} children_event_host_uuids --- 
-        
+
+     @param {array} children_event_host_uuids ---
+
      Partner endpoint is subscriber of event on this endpoint with
      uuid event_uuid.  Send to partner a message that the first
      phase of the commit was successful for the endpoint with uuid
@@ -131,24 +132,24 @@ public class MessageManager extends ConnectionListenerManager
         Set<String> children_event_host_uuids)
     {
         GeneralMessage.Builder general_message = base_general_msg();
-        
+
         // construct message to send
         PartnerFirstPhaseResultMessage.Builder first_phase_result_msg =
             PartnerFirstPhaseResultMessage.newBuilder();
-		
+
         UtilProto.UUID.Builder event_uuid_msg =
             UtilProto.UUID.newBuilder();
         event_uuid_msg.setData(event_uuid);
-		
+
         UtilProto.UUID.Builder sending_host_uuid_msg =
             UtilProto.UUID.newBuilder();
         sending_host_uuid_msg.setData(ralph_globals.host_uuid);
-		
+
         first_phase_result_msg.setSuccessful(true);
         first_phase_result_msg.setEventUuid(event_uuid_msg);
         first_phase_result_msg.setSendingHostUuid(
             sending_host_uuid_msg);
-		
+
         for (String child_event_uuid : children_event_host_uuids)
         {
             UtilProto.UUID.Builder child_event_uuid_msg =
@@ -183,7 +184,7 @@ public class MessageManager extends ConnectionListenerManager
         for (String remote_host_uuid : remote_host_uuid_set)
             send_msg(remote_host_uuid, msg);
     }
-    
+
     /**
      *  Called by the active event when an exception has occured in
      the midst of a sequence and it needs to be propagated back
@@ -197,16 +198,16 @@ public class MessageManager extends ConnectionListenerManager
     {
         // Construct message
         GeneralMessage.Builder general_message = base_general_msg();
-        
+
         PartnerError.Builder error = PartnerError.newBuilder();
         UUID.Builder msg_evt_uuid = UUID.newBuilder();
         msg_evt_uuid.setData(event_uuid);
         UUID.Builder msg_host_uuid = UUID.newBuilder();
         msg_host_uuid.setData(ralph_globals.host_uuid);
-		
+
         error.setEventUuid(msg_evt_uuid);
         error.setHostUuid(msg_host_uuid);
-		
+
         if (RalphExceptions.NetworkException.class.isInstance(exception))
         {
             error.setType(PartnerError.ErrorType.NETWORK);
@@ -220,14 +221,14 @@ public class MessageManager extends ConnectionListenerManager
         else
         {
             error.setType(PartnerError.ErrorType.APPLICATION);
-            error.setTrace("Incorrect trace for now");            
+            error.setTrace("Incorrect trace for now");
         }
 
         // actually send the message
         send_msg(remote_host_uuid, general_message.build());
     }
-    
-    
+
+
     public void send_promotion_msgs(
         Set<String> remote_host_uuid_set, String event_uuid,
         String new_priority)
@@ -237,17 +238,17 @@ public class MessageManager extends ConnectionListenerManager
 
         GeneralMessage.Builder general_message = base_general_msg();
         Promotion.Builder promotion_message = Promotion.newBuilder();
-		
+
         UtilProto.UUID.Builder event_uuid_builder = UtilProto.UUID.newBuilder();
         event_uuid_builder.setData(event_uuid);
 
         UtilProto.Priority.Builder new_priority_builder =
             UtilProto.Priority.newBuilder();
         new_priority_builder.setData(new_priority);
-		
+
         promotion_message.setEventUuid(event_uuid_builder);
         promotion_message.setNewPriority(new_priority_builder);
-		
+
         general_message.setPromotion(promotion_message);
 
         GeneralMessage prom_msg = general_message.build();
@@ -264,11 +265,11 @@ public class MessageManager extends ConnectionListenerManager
     {
         if (remote_host_uuid_set.size() == 0)
             return;
-        
+
         //# FIXME: may be a way to piggyback commit with final event in
         //# sequence.
         GeneralMessage.Builder general_message = base_general_msg();
-        
+
     	PartnerCommitRequest.Builder commit_request_msg =
             PartnerCommitRequest.newBuilder();
 
@@ -291,10 +292,10 @@ public class MessageManager extends ConnectionListenerManager
             UtilProto.UUID.newBuilder();
         application_uuid_msg.setData(application_uuid);
         commit_request_msg.setApplicationUuid(application_uuid_msg);
-        
+
         // event_name
         commit_request_msg.setEventName(event_name);
-        
+
         // actually populate general message
     	general_message.setCommitRequest(commit_request_msg);
 
@@ -330,13 +331,13 @@ public class MessageManager extends ConnectionListenerManager
 
     	PartnerCompleteCommitRequest.Builder complete_commit_request_msg =
             PartnerCompleteCommitRequest.newBuilder();
-    	
+
     	UtilProto.UUID.Builder active_event_uuid_msg =
             UtilProto.UUID.newBuilder();
     	active_event_uuid_msg.setData(active_event_uuid);
-    	
+
     	complete_commit_request_msg.setEventUuid(active_event_uuid_msg);
-    	
+
     	general_message.setCompleteCommitRequest(complete_commit_request_msg);
         GeneralMessage complete_commit_request = general_message.build();
 
