@@ -3,6 +3,7 @@ package RalphServiceActions;
 import ralph.ActiveEvent;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
+import ralph.RalphGlobals;
 import ralph.ExecutionContext.ExecutionContext;
 
 /**
@@ -13,24 +14,23 @@ import ralph.ExecutionContext.ExecutionContext;
 */
 public class ReceivePromotionAction extends ServiceAction
 {
-    private final Endpoint local_endpoint;
+    private final RalphGlobals ralph_globals;
     private final String event_uuid;
     private final String new_priority;
-	
+
     public ReceivePromotionAction(
-        Endpoint local_endpoint, String event_uuid, String new_priority)
+        RalphGlobals ralph_globals, String event_uuid, String new_priority)
     {
-        this.local_endpoint = local_endpoint;
+        this.ralph_globals = ralph_globals;
         this.event_uuid = event_uuid;
         this.new_priority = new_priority;
     }
 
-    
     @Override
-    public void run() 
+    public void run()
     {
-        ExecutionContext exec_ctx =
-            local_endpoint.exec_ctx_map.get_exec_ctx(event_uuid);
+        ExecutionContext exec_ctx = ralph_globals.all_ctx_map.get(event_uuid);
+
         if (exec_ctx != null)
         {
             ActiveEvent evt = exec_ctx.curr_act_evt();

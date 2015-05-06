@@ -30,10 +30,14 @@ public class MessageManager extends ConnectionListenerManager
     // contains local endpoints
     private final ConnectionMap conn_map = new ConnectionMap();
     private final RalphGlobals ralph_globals;
+
+    public final InstallMessageProvider install_message_provider;
     
     public MessageManager(RalphGlobals ralph_globals)
     {
         this.ralph_globals = ralph_globals;
+        this.install_message_provider =
+            new MessageHandler(this, ralph_globals);
     }
 
     public void add_connection(IConnection conn)

@@ -1,6 +1,6 @@
 package RalphServiceActions;
 
-import ralph.Endpoint;
+import ralph.RalphGlobals;
 import ralph.ActiveEvent;
 import ralph.ExecutionContext.ExecutionContext;
 
@@ -14,17 +14,17 @@ import ralph.ExecutionContext.ExecutionContext;
  */
 public class ReceiveRequestCompleteCommitAction extends ServiceAction {
 
-    private final Endpoint local_endpoint;
+    private final RalphGlobals ralph_globals;
     private final String event_uuid;
     private final boolean request_from_partner;
-	
+
     public ReceiveRequestCompleteCommitAction(
-        Endpoint _local_endpoint, String _event_uuid,
-        boolean _request_from_partner)
+        RalphGlobals ralph_globals, String event_uuid,
+        boolean request_from_partner)
     {
-        local_endpoint = _local_endpoint;
-        event_uuid = _event_uuid;
-        request_from_partner = _request_from_partner;
+        this.ralph_globals = ralph_globals;
+        this.event_uuid = event_uuid;
+        this.request_from_partner = request_from_partner;
     }
 
     /**
@@ -33,10 +33,9 @@ public class ReceiveRequestCompleteCommitAction extends ServiceAction {
      2.  Call its complete_commit_and_forward_complete_msg method.
     */
     @Override
-    public void run() 
+    public void run()
     {
-        ExecutionContext exec_ctx =
-            local_endpoint.exec_ctx_map.get_exec_ctx(event_uuid);
+        ExecutionContext exec_ctx = ralph_globals.all_ctx_map.get(event_uuid);
         if (exec_ctx == null)
         {
             // event may not exist, for instance if got multiple

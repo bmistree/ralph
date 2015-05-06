@@ -3,6 +3,7 @@ package RalphServiceActions;
 import ralph.Util;
 import ralph.Endpoint;
 import ralph.ActiveEvent;
+import ralph.RalphGlobals;
 import ralph.ExecutionContext.ExecutionContext;
 
 /**
@@ -11,7 +12,7 @@ import ralph.ExecutionContext.ExecutionContext;
     this action will take place.)
 
     @param{UUID}  uuid --- @see _EndpointServiceThread.request_backout
-    
+
     @param{either Endpoint object or
     util.PARTNER_ENDPOINT_SENTINEL} requesting_endpoint ---
     @see _EndpointServiceThread.request_backout
@@ -20,30 +21,28 @@ import ralph.ExecutionContext.ExecutionContext;
 
 public class ReceiveRequestBackoutAction extends ServiceAction
 {
-    private final Endpoint local_endpoint;
-    private final String uuid;
-    private final Endpoint requesting_endpoint;
-	
+    private final RalphGlobals ralph_globals;
+    private final String evt_uuid;
+    private final boolean skip_partner;
+
     /**
      *  We were requested to backout an event.  Check if we have the
      event, back it out if can, and forward the backout message to
      others.
-     * @param endpoint
      * @param uuid
-     * @param requesting_endpoint
      */
     public ReceiveRequestBackoutAction(
-        Endpoint _endpoint, String _uuid, Endpoint _requesting_endpoint)
+        RalphGlobals ralph_globals, String evt_uuid, boolean skip_partner)
     {
-        local_endpoint = _endpoint;
-        uuid = _uuid;
-        requesting_endpoint = _requesting_endpoint;
+        this.ralph_globals = ralph_globals;
+        this.evt_uuid = evt_uuid;
+        this.skip_partner = skip_partner;
     }
 
+    @Override
     public void run()
     {
-        ExecutionContext exec_ctx =
-            local_endpoint.exec_ctx_map.get_exec_ctx(uuid);
+        ExecutionContext exec_ctx = ralph_globals.all_ctx_map.get(evt_uuid);
         if (exec_ctx == null)
         {
             // could happen for instance if there are loops in
@@ -53,9 +52,6 @@ public class ReceiveRequestBackoutAction extends ServiceAction
             // the active event map.
             return;
         }
-        boolean skip_partner = false;
-        if (requesting_endpoint == Util.PARTNER_ENDPOINT_SENTINEL)
-            skip_partner = true;
 
         ActiveEvent evt = exec_ctx.curr_act_evt();
         evt.forward_backout_request_and_backout_self(skip_partner);

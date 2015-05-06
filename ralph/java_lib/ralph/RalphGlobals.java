@@ -74,8 +74,6 @@ public class RalphGlobals implements IUUIDGenerator
     public final SameHostConnection same_host_connection;
     public final MessageManager message_manager =
         new MessageManager(this);
-
-    private final InstallMessageProvider install_msg_provider;
     private final InstallSender install_sender;
 
     // each ralph_globals object have a single connection listener
@@ -125,8 +123,8 @@ public class RalphGlobals implements IUUIDGenerator
             stoppable, this, params.ip_addr_to_listen_for_connections_on,
             params.tcp_port_to_listen_for_connections_on);
 
-        install_msg_provider = new InstallMessageProvider(message_manager);
-        install_sender = new InstallSender(install_msg_provider, this);
+        install_sender = new InstallSender(
+            message_manager.install_message_provider, this);
     }
     
     @Override

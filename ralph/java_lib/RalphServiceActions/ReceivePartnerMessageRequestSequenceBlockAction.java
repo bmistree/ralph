@@ -11,7 +11,6 @@ import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityContext;
 
 
-
 /**
    @param {_Endpoint object} local_endpoint --- The endpoint that
    received a message requesting it to execute one of its
@@ -22,12 +21,12 @@ import RalphDurability.DurabilityContext;
    *
    */
 public class ReceivePartnerMessageRequestSequenceBlockAction
-    extends ServiceAction 
+    extends ServiceAction
 {
     private final Endpoint local_endpoint;
     private final PartnerRequestSequenceBlock partner_request_block_msg;
     private final String remote_host_uuid;
-    
+
     public ReceivePartnerMessageRequestSequenceBlockAction(
         Endpoint local_endpoint,
         PartnerRequestSequenceBlock partner_request_block_msg,
@@ -39,7 +38,7 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
     }
 
     @Override
-    public void run() 
+    public void run()
     {
         try
         {
