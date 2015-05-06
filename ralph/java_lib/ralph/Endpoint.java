@@ -35,10 +35,6 @@ import ralph.ExecutionContext.ExecutionContext;
  */
 public abstract class Endpoint implements IReference
 {
-    public final String _host_uuid;
-	
-    private final LamportClock _clock;
-
     /**
        Can update the connection object of a service factory.  This
        happens, for instance, if one endpoint sends a ServiceFactory
@@ -70,20 +66,8 @@ public abstract class Endpoint implements IReference
        partner is installed on a foreign 
      */
     public final ExecutionContextMap exec_ctx_map;
-    public final ThreadPool _thread_pool;
     public final String _uuid;
     
-    /**
-     //# When go through first phase of commit, may need to forward
-     //# partner's host's endpoint uuid back to the root, so the
-     //# endpoint needs to keep track of its partner's uuid.  FIXME:
-     //# right now, manually setting partner uuids in connection
-     //# object.  And not checking to ensure that the partner endpoint
-     //# is set before doing additional work. should create a proper
-     //# handshake instead.
-     */
-    public String _partner_host_uuid = null;
-
     public final RalphGlobals ralph_globals;
     
     /**
@@ -117,14 +101,9 @@ public abstract class Endpoint implements IReference
     {
         _uuid = endpt_uuid;
         this.ralph_globals = ralph_globals;
-
-        _clock = ralph_globals.clock;
         exec_ctx_map = new ExecutionContextMap(ralph_globals,this);
 
-        _thread_pool = ralph_globals.thread_pool;
         ralph_globals.all_endpoints.add_endpoint(this);
-
-        _host_uuid = ralph_globals.host_uuid;
 
         if (durability_context != null)
         {
