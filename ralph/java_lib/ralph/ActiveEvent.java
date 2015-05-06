@@ -42,7 +42,7 @@ public abstract class ActiveEvent
       out while we're waiting.  In that case, the runtime puts a
       waldoCallResults._BackoutBeforeReceiveMessageResult object into
       the mvar.
-     
+
       We can be listening to more than one open threadsafe message
       mvar.  If endpoint A waits on its partner, and, while waiting,
       its partner executes a series of endpoint calls so that another
@@ -60,7 +60,7 @@ public abstract class ActiveEvent
       map.
      */
     protected final Map<String,
-    	MVar<MessageCallResultObject>> message_listening_mvars_map = 
+    	MVar<MessageCallResultObject>> message_listening_mvars_map =
     	new HashMap<String, MVar<MessageCallResultObject>>();
 
     /**
@@ -68,10 +68,10 @@ public abstract class ActiveEvent
        ExecutionContext.
      */
     public ExecutionContext exec_ctx = null;
-    
+
     /**
        FIXME.
-       
+
        Note: this really should be final.  But deserialization event
        needs to set it because it may not have RalphGlobal at correct
        time.  This is because do not have singleton for ralph globals
@@ -79,7 +79,7 @@ public abstract class ActiveEvent
        different ralph globals).
      */
     public RalphGlobals ralph_globals;
-    
+
     /**
        Want to start adding version control into RalphObjects.  Keep
        track of timestamps during commit to ensure that can establish
@@ -88,7 +88,7 @@ public abstract class ActiveEvent
        begin_first_phase_commit.
      */
     public CommitMetadata commit_metadata = null;
-    
+
     public ActiveEvent(
         EventParent _event_parent, RalphGlobals _ralph_globals)
     {
@@ -109,7 +109,7 @@ public abstract class ActiveEvent
     {
         this.exec_ctx = exec_ctx;
     }
-    
+
     /**
        FIXME: See note above ralph_globals.
      */
@@ -121,7 +121,7 @@ public abstract class ActiveEvent
     {
         return ralph_globals;
     }
-    
+
     /**
        NonatomicActive events that immediately commit their changes to
        a tvar-d object must log their version change.  To do so, they
@@ -152,7 +152,7 @@ public abstract class ActiveEvent
 
     public void only_remove_touched_obj(AtomicObject obj)
     {}
-    
+
     /**
      *  @param {WaldoLockedObj} obj --- Whenever we try to perform a
      read or a write on a Waldo object, if this event has not
@@ -166,7 +166,7 @@ public abstract class ActiveEvent
     public abstract boolean add_touched_obj(AtomicObject obj);
     public abstract boolean remove_touched_obj(AtomicObject obj);
 
-    
+
     public abstract void promote_boosted(String new_priority);
     /**
        @returns {bool} --- True if not in the midst of two phase
@@ -195,7 +195,7 @@ public abstract class ActiveEvent
        that has a nested atomically block, when that endpoint exits
        its atomically block, that endpoint will call a
        local_root_begin_first_phase_commit, even though the true root
-       of the entire event is the first endpoint.  
+       of the entire event is the first endpoint.
 
        Note: just because the call to begin_first_phase_commit returns
        SUCCEEDED, does not mean that the actual commit succeeded, it
@@ -217,13 +217,13 @@ public abstract class ActiveEvent
         String root_first_phase_commit_host_uuid,
         String application_uuid, String event_name);
 
-    
+
     public static enum FirstPhaseCommitResponseCode
     {
         FAILED, SUCCEEDED
     }
-    
-    
+
+
     public abstract void second_phase_commit();
 
     /**
@@ -236,11 +236,11 @@ public abstract class ActiveEvent
         String backout_requester_host_uuid);
     public abstract void non_blocking_backout(
         String backout_requester_host_uuid);
-    
+
     /**
        Either this or obj_request_no_backout_and_release_lock
        are called after can_backout_and_hold_lock returns
-       True.  
+       True.
 
        Called by an Atomicbject to preempt this event.
 
@@ -252,11 +252,11 @@ public abstract class ActiveEvent
     /**
        Either this or obj_request_backout_and_release_lock
        are called after can_backout_and_hold_lock returns
-       True.  
+       True.
 
        Called by an AtomicObject.  AtomicObject will not
        preempt this event.
-        
+
        Do not have backout event.  Just release lock.
     */
     public abstract void obj_request_no_backout_and_release_lock();
@@ -284,10 +284,10 @@ public abstract class ActiveEvent
 
     /**
        @param remote_host_uuid
-       
+
        @param {String} other_side_reply_with_uuid --- If the other
        side responds to this rpc, it will contain this uuid.
-              
+
        @param {MVar or null} result_mvar --- null if this was the last
        message sent in a sequence and we're not waiting on a reply.
 
@@ -352,15 +352,15 @@ public abstract class ActiveEvent
     public abstract void forward_backout_request_and_backout_self(
         boolean skip_partner, boolean already_backed_out);
 
-    
+
     public void recv_partner_sequence_call_msg(
-        Endpoint endpt_recvd_on,
+        String endpt_recvd_on_uuid,
         PartnerRequestSequenceBlock msg, String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException
     {
-        exec_ctx.add_rpc_arg(msg,endpt_recvd_on.uuid());
+        exec_ctx.add_rpc_arg(msg,endpt_recvd_on_uuid);
         internal_recv_partner_sequence_call_msg(
-            endpt_recvd_on, msg, remote_host_uuid);
+            endpt_recvd_on_uuid, msg, remote_host_uuid);
     }
 
     public void replay_rpc(
@@ -376,7 +376,6 @@ public abstract class ActiveEvent
         }
         //// END DEBUG
         String name_of_block_to_exec_next = msg.getNameOfBlockRequesting();
-
         ExecutingEvent exec_event = rpc_request_to_exec_evt(
             endpt_recvd_on, msg, name_of_block_to_exec_next, exec_ctx);
         exec_event.run();
@@ -384,17 +383,17 @@ public abstract class ActiveEvent
         local_root_begin_first_phase_commit();
         ((RootEventParent)event_parent).event_complete_mvar.blocking_take();
     }
-    
+
     protected abstract void internal_recv_partner_sequence_call_msg(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        String endpt_recvd_on_uuid, PartnerRequestSequenceBlock msg,
         String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException;
-    
+
     public abstract void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,  String msg_originator_host_uuid);
 
     protected ExecutingEvent rpc_request_to_exec_evt(
-        Endpoint endpt_recvd_msg_on,PartnerRequestSequenceBlock msg,
+        Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg,
         String name_of_block_to_exec_next, ExecutionContext exec_ctx)
     {
         //#### DEBUG
@@ -406,7 +405,7 @@ public abstract class ActiveEvent
                 "instruction for what to do next.");
         }
         //#### END DEBUG
-        
+
         // grab all arguments from message
         List <RalphObject> args = null;
         if (msg.hasArguments())
@@ -415,16 +414,15 @@ public abstract class ActiveEvent
                 RPCDeserializationHelper.deserialize_arguments_list(
                     event_parent.ralph_globals,msg.getArguments(),exec_ctx);
         }
-        
+
 
         // convert array list of args to optional array of arg objects.
         Object [] rpc_call_arg_array = new Object[args.size()];
         for (int i = 0; i < args.size(); ++i)
             rpc_call_arg_array[i] = args.get(i);
-        
+
         boolean takes_args = args.size() != 0;
 
-        
         ExecutingEvent to_return = new ExecutingEvent (
             endpt_recvd_msg_on,
             name_of_block_to_exec_next, exec_ctx,
@@ -432,7 +430,7 @@ public abstract class ActiveEvent
             takes_args,
             // what those arguments are.
             rpc_call_arg_array);
-        
+
         return to_return;
     }
 
@@ -444,39 +442,49 @@ public abstract class ActiveEvent
        sequence block to execute next.
 
        @returns {Executing event}
-    
+
        means that the other side has generated a first message create
        a new context to execute that message and do so in a new
        thread.
     */
     protected ExecutingEvent handle_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg,
+        String endpt_recvd_msg_on_uuid, PartnerRequestSequenceBlock msg,
         String name_of_block_to_exec_next, String remote_host_uuid)
     {
         LiveMessageSender msg_sender =
             (LiveMessageSender) exec_ctx.message_sender();
-        
+
         // know how to reply to this message.
         msg_sender.push_message_reply_stack(
             msg.getReplyWithUuid().getData(), remote_host_uuid);
-        
+
+        Endpoint endpt_recvd_msg_on =
+            ralph_globals.all_endpoints.get_endpoint_if_exists(
+                endpt_recvd_msg_on_uuid);
+        //// DEBUG
+        if (endpt_recvd_msg_on == null)
+        {
+            Util.logger_assert("Message from partner on unknown endpoint.");
+        }
+        //// END DEBUG
+
         return rpc_request_to_exec_evt(
-            endpt_recvd_msg_on, msg,name_of_block_to_exec_next,
+            endpt_recvd_msg_on, msg, name_of_block_to_exec_next,
             exec_ctx);
     }
 
     /**
      * ASSUMES ALREADY WITHIN LOCK on AtomicActiveEvent.
-     
+
      @param {PartnerMessageRequestSequenceBlock.proto} msg ---
 
      @param {string or None} name_of_block_to_exec_next --- the
      name of the sequence block to execute next. None if nothing to
      execute next (ie, last sequence message).
-     * 
+     *
      */
     protected void handle_non_first_sequence_msg_from_partner(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        String endpt_recvd_on_uuid, PartnerRequestSequenceBlock msg,
         String name_of_block_to_exec_next, String remote_host_uuid)
     {
         String reply_to_uuid = msg.getReplyToUuid().getData();
@@ -489,18 +497,18 @@ public abstract class ActiveEvent
                 "unknown _ActiveEvent message in AtomicActiveEvent.");
         }
         //#### END DEBUG
-        
+
         String reply_with_uuid = msg.getReplyWithUuid().getData();
-        
+
         Arguments returned_objs = null;
         if (msg.hasReturnObjs())
             returned_objs = msg.getReturnObjs();
-        
+
         //# unblock waiting listening mvar.
         message_listening_mvars_map.get(reply_to_uuid).put(
             RalphCallResults.MessageCallResultObject.completed(
                 reply_with_uuid, name_of_block_to_exec_next,
-                endpt_recvd_on._uuid, remote_host_uuid,
+                endpt_recvd_on_uuid, remote_host_uuid,
                 // result of rpc
                 returned_objs));
 
@@ -511,7 +519,7 @@ public abstract class ActiveEvent
 
     /**
        ASSUMES ALREADY WITHIN LOCK on AtomicActiveEvent.
-        
+
        To provide blocking, whenever issue an endpoint call or partner
        call, thread of execution blocks, waiting on a read into a
        mvar.  When we rollback, we must put a sentinel into the mvar

@@ -31,14 +31,14 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
    Interface between AtomicActiveEvent and SpeculativeAtomicObject:
 
    Locks in system:
-   
+
      touched_objs_lock --- Protects touched_objs map that contains all
      atomic objects that this event has read or written to.
-     
+
      general_lock --- Protects event's state variable (which
      represents state transition machine).
-     
-   
+
+
    Deadlock prevention invariants:
      1) Object can hold its internal lock and then try to assume
         event's general_lock.  Should never hold event's general lock
@@ -48,11 +48,11 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
         also acquire touched_objs_lock directly.  If acquire
         touched_objs_lock, *cannot* then acquire general_lock.
 
-        
+
    Preemption from speculative object:
 
      When:
-     
+
      An object can try to preempt an event that is holding a lock on
      it if another event with higher priority attempts to acquire a
      conflicting lock on the same object.  The object is not
@@ -61,7 +61,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
      state_first_phase_commit (see below), it may refuse preemption.
 
      How:
-     
+
      The preempting object locks itself first.  It then issues
      can_backout_and_hold_lock requests on all events that hold locks
      on it.  These assume general_locks on all targetted events,
@@ -76,11 +76,11 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
      succeeded in response to can_backout_and_hold_lock.  This unlocks
      the held lock.
 
-         
+
    Backout of object from event:
-   
+
      When:
-     
+
      An event on one host can backout of a lock on an object if its
      sister event on another host is preempted, if one of the commits
      it is pushing to hardware cannot be set, or if another object
@@ -104,7 +104,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
    Avoiding deadlock 2:
 
    Thread 1:
-   
+
      In begin_first_phase_commit, event acquires general_lock, then
      touched_objs lock.  It makes a copy of the map touched_objs,
      copy_touched_objs, and then releases touched_objs lock and
@@ -117,7 +117,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
      Following, we try to read from each objects future.
 
    Thread 2:
-   
+
      If, between the first and second paragraphs of Thread 1, the
      event backs out, we send a backout message to the object.  The
      object will not invalidate any future because we have not yet
@@ -128,7 +128,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 
   -----------
   Deadlock + Speculate.
-  
+
   Deadlock can occur if programmers are permitted to call speculate
   before their events have completed.  Consider two events, One and
   Two, and two atomic variables A and B.
@@ -163,7 +163,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 
 public class AtomicActiveEvent extends ActiveEvent
 {
-    private enum State 
+    private enum State
     {
         // Non-terminal, initial state.  Can transition to
         // STATE_BACKING_OUT and STATE_PUSHING_TO_HARDWARE.
@@ -184,7 +184,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // state after calls backout on all touched objects and
         // enters STATE_BACKED_OUT.
         STATE_BACKING_OUT,
-            
+
         // Non-terminal state.  Enters this state from
         // STATE_RUNNING.  Transitions either to
         // STATE_FIRST_PHASE_COMMIT or to STATE_BACKING_OUT.
@@ -231,7 +231,7 @@ public class AtomicActiveEvent extends ActiveEvent
     private ReentrantLock _others_contacted_mutex = new ReentrantLock();
 
     public final ExecutionContextMap exec_ctx_map;
-    
+
     /**
        When we are inside of one atomic event and encounter another
        atomic block, we increase our reference count.  We decrement
@@ -242,7 +242,7 @@ public class AtomicActiveEvent extends ActiveEvent
        nested our atomic statements are.
      */
     private final ActiveEvent to_restore_from_atomic;
-	
+
     private final ReentrantLock mutex = new ReentrantLock();
     /**
        Occasionally, we need to wait until an event has completely
@@ -264,23 +264,23 @@ public class AtomicActiveEvent extends ActiveEvent
      */
     private final Condition completely_backed_out_condition =
         mutex.newCondition();
-    
-	
+
+
     private State state = State.STATE_RUNNING;
-	
+
     /**
        See note in locked_non_blocking_backout: can get a call to
        locked_non_blocking_backout twice.
      */
     private boolean received_backout_already = false;
-    
+
     /**
      //# a dict containing all local objects that this event has
      //# touched while executing.  On commit, must run through each
      //# and complete commit.  On backout, must run through each and
      //# call backout.
      */
-    Map<String,AtomicObject>touched_objs = 
+    Map<String,AtomicObject>touched_objs =
         new HashMap<String,AtomicObject>();
 
     /**
@@ -290,21 +290,21 @@ public class AtomicActiveEvent extends ActiveEvent
      //# the only time we will write to touched_objs is when we have
      //# already used the event's _lock method.  Therefore, if we are
      //# already inside of a _lock and just reading, we do not need
-     //# to acquire _touched_objs_mutex.   
+     //# to acquire _touched_objs_mutex.
      */
-    private ReentrantLock _touched_objs_mutex = new ReentrantLock(); 
-    
-    
+    private ReentrantLock _touched_objs_mutex = new ReentrantLock();
+
+
     /**
      *  # Before we attempt to request a commit after a sequence, we need
      # to keep track of whether or not the network has failed; if it has
-     # we will not be able to forward a request commit message to our 
+     # we will not be able to forward a request commit message to our
      # partner. This variable is only set to True at runtime if a network
      # exception is caught during an event.
 
     */
     private boolean _network_failure = false;
-    
+
     /**
        @param {ActiveEvent} _to_restore_from_atomic --- We frequently
        create atomic events from within nonatomicevents.  We want to
@@ -329,15 +329,15 @@ public class AtomicActiveEvent extends ActiveEvent
 
     private void _lock()
     {
-        mutex.lock();		
+        mutex.lock();
     }
-	
+
     private void _unlock()
     {
         mutex.unlock();
     }
 
-	
+
     /**
      * @param {WaldoLockedObj} obj --- Whenever we try to perform a
        read or a write on a Waldo object, if this event has not
@@ -399,10 +399,10 @@ public class AtomicActiveEvent extends ActiveEvent
         touched_objs.remove(obj.uuid);
         _touched_objs_unlock();
     }
-    
-    
+
+
     /**
-     * 
+     *
      Gets called either from active event map or from a service
      action.  Used to update event priorities.
 
@@ -425,7 +425,7 @@ public class AtomicActiveEvent extends ActiveEvent
      guarantee that any objects that are added to the dict after
      we make the copy will have the correct, new priority
      anyways.
-        
+
      3: For each object in the copied touched obj, request it to
      update its priority for this event.
 
@@ -433,7 +433,7 @@ public class AtomicActiveEvent extends ActiveEvent
      promotion message to each endpoint we've already contacted
      and partner.  (Note: lots of similar reasoning to 2.)
 
-     * 
+     *
      * @param new_priority
      */
     public void promote_boosted(String new_priority)
@@ -445,9 +445,9 @@ public class AtomicActiveEvent extends ActiveEvent
             //# about it, notify touched objs, etc.
             return;
         }
-         
+
         _touched_objs_lock();
-        Map<String,AtomicObject> touched_objs_copy = 
+        Map<String,AtomicObject> touched_objs_copy =
             new HashMap<String,AtomicObject>(touched_objs);
         _touched_objs_unlock();
 
@@ -492,7 +492,7 @@ public class AtomicActiveEvent extends ActiveEvent
         // obj_request_no_backout_and_release_lock.
         return true;
     }
-    
+
     public boolean immediate_complete()
     {
         return false;
@@ -535,17 +535,17 @@ public class AtomicActiveEvent extends ActiveEvent
         String root_first_phase_commit_host_uuid,
         String application_uuid, String event_name)
     {
-        
+
         // set of objects trying to push to hardware.
         Set<ICancellableFuture> obj_could_commit =
             new HashSet<ICancellableFuture>();
 
         Map<String,AtomicObject> touched_objs_copy = null;
-        
+
         try
         {
             _lock();
-            
+
             if (state != State.STATE_RUNNING)
             {
                 //# note: do not need to respond negatively to first phase
@@ -562,15 +562,15 @@ public class AtomicActiveEvent extends ActiveEvent
                 DurabilityInfo.instance.durability_saver.prepare_operation(
                     exec_ctx);
             }
-            
+
             // update data after skip to prevent overwriting values on
             // root in case of cycles.
             this.commit_metadata = new CommitMetadata(
                 root_first_phase_commit_timestamp,
                 application_uuid,event_name,uuid);
-            
+
             state = State.STATE_PUSHING_TO_HARDWARE;
-            
+
             // Note: actually pushing individual touched objects
             // outside of lock.  This is to allow the following
             // potential sequences:
@@ -614,8 +614,8 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             try
             {
-                // FIXME: Is this condition still necessary?  
-                
+                // FIXME: Is this condition still necessary?
+
                 // note ordering of && below: this ensures that all
                 // sub-objects will have tried to push their changes
                 // before we return whether or not we could apply
@@ -660,7 +660,7 @@ public class AtomicActiveEvent extends ActiveEvent
             }
             //// END DEBUG
 
-            
+
             if (! can_commit)
             {
                 // event could not push one of the changes to hardware
@@ -703,7 +703,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
         // FIXME: probably do not need to pass as many args as this
         // through.
-        
+
         // FIXME: double-check the ordering between sending and
         // transitioning.
         event_parent.first_phase_transition_success(
@@ -712,15 +712,15 @@ public class AtomicActiveEvent extends ActiveEvent
             root_first_phase_commit_host_uuid,
             commit_metadata.root_application_uuid,
             commit_metadata.event_name);
-        
+
         ralph_globals.message_manager.send_commit_request_msgs(
             copied_remote_hosts_contacted, event_parent.uuid,
             this.commit_metadata.root_commit_lamport_time,
             root_first_phase_commit_host_uuid,
             commit_metadata.root_application_uuid,
             commit_metadata.event_name);
-        
-        
+
+
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
@@ -738,7 +738,7 @@ public class AtomicActiveEvent extends ActiveEvent
         put_exception(be);
     }
 
-    
+
     public void second_phase_commit()
     {
         _lock();
@@ -760,7 +760,7 @@ public class AtomicActiveEvent extends ActiveEvent
             VersioningInfo.instance.version_saver.save_commit_metadata(
                 this.commit_metadata);
         }
-        
+
         // complete commit on each individual object that we touched
         // note that by the time we get here, we know that we will not
         // be modifying touched_objs dict (event has completed), and
@@ -785,16 +785,16 @@ public class AtomicActiveEvent extends ActiveEvent
         // reachable.  And eventually we run out of memory.
         touched_objs.clear();
         exec_ctx_map.remove_exec_ctx(uuid);
-        
+
         // FIXME: which should happen first, notifying others or
         // releasing locks locally?
 
         // do not need to acquire locks for partner_contacted and
         // local_endpoints_whose_partners_contacted because once
         // entered commit, these values are immutable.
-        
+
         // notify other endpoints to also complete their commits
-        
+
         // clear waiting queues
         event_parent.second_phase_transition_success();
 
@@ -806,8 +806,8 @@ public class AtomicActiveEvent extends ActiveEvent
             event_parent.spanning_tree_parent_uuid);
         ralph_globals.message_manager.send_complete_commit_request_msg(
             copied_remote_hosts_contacted, event_parent.uuid);
-        
-        
+
+
         // FIXME: Check if this call really has to fsync.  I don't
         // think it does.
         if (DurabilityInfo.instance.durability_saver != null)
@@ -849,22 +849,22 @@ public class AtomicActiveEvent extends ActiveEvent
         locked_non_blocking_backout(backout_requester_host_uuid);
         _unlock();
     }
-    
+
     /**
        MUST BE CALLED FROM WITHIN LOCK
-        
+
        @param {uuid or None} backout_requester_host_uuid --- If
        None, means that the call to backout originated on local
        endpoint.  Otherwise, means that call to backout was made by
        either endpoint's partner, an endpoint that we called an
        endpoint method on, or an endpoint that called an endpoint
        method on us.
-        
+
        0) If we're already in backed out state, do nothing: we've
        already taken appropriate action.
-        
+
        1) Change state to backed out.
-        
+
        2) Run through all objects that this event has touched and
        backout from them.
 
@@ -891,7 +891,7 @@ public class AtomicActiveEvent extends ActiveEvent
             "locked_non_blocking_backout in AtomicActiveEvent should " +
             "be holding lock.");
         //// END DEBUG
-        
+
         //# 0
         if (received_backout_already)
         {
@@ -900,13 +900,13 @@ public class AtomicActiveEvent extends ActiveEvent
             //# message to this node.  Do nothing: cannot backout twice.
             return;
         }
-        
+
         //# 1
         received_backout_already = true;
         // transition to backout completed in backout_touched_objects.
         state = State.STATE_BACKING_OUT;
-        
-        
+
+
         //# 2: Using a separate thread to backout from objects.  This is
         //# because: 1) does not violate any correctness guarantees to
         //# backout individually and 2) prevents deadlock.  Can get a
@@ -921,13 +921,13 @@ public class AtomicActiveEvent extends ActiveEvent
             new RalphServiceActions.EventBackoutTouchedObjs(this);
         ralph_globals.thread_pool.add_service_action(
             service_action);
-            
+
         //# 3
         rollback_unblock_waiting_mvars();
 
         //# 4 remove the event.
         exec_ctx_map.remove_exec_ctx(uuid);
-        
+
         //# 5
         //# do not need to acquire locks on
         //# local_endpoints_whose_partners_contacted because the only
@@ -958,7 +958,7 @@ public class AtomicActiveEvent extends ActiveEvent
         Map<String,AtomicObject> copied_touched_objs = touched_objs;
         touched_objs = new HashMap<String,AtomicObject>();
         _touched_objs_unlock();
-        
+
         for (AtomicObject touched_obj : copied_touched_objs.values())
             touched_obj.backout(this);
 
@@ -971,7 +971,7 @@ public class AtomicActiveEvent extends ActiveEvent
             DurabilityInfo.instance.durability_saver.complete_operation(
                 exec_ctx,false);
         }
-        
+
         state = State.STATE_BACKED_OUT;
         completely_backed_out_condition.signalAll();
         _unlock();
@@ -979,7 +979,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
     /**
      *  @param error {Exception}
-     * 
+     *
      *  Note that if error is a BackoutException, this will block
      *  until has backed out of all objects.
      */
@@ -1008,8 +1008,8 @@ public class AtomicActiveEvent extends ActiveEvent
        have processed backout (ie, we've transitioned into
        STATE_BACKED_OUT).  See note "Dirty speculate" at top of file
        for why we do this.
-       
-       
+
+
        @param {uuid or None} backout_requester_host_uuid --- If None,
        means that the call to backout originated on local endpoint.
        Otherwise, means that call to backout was made by either
@@ -1022,7 +1022,7 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         assert_if_holding_lock(
             "Cannot be holding lock when enter backout.");
-        
+
         _lock();
         locked_non_blocking_backout(backout_requester_host_uuid);
         _unlock();
@@ -1044,12 +1044,12 @@ public class AtomicActiveEvent extends ActiveEvent
         }
         _unlock();
     }
-        
+
 
     /**
        Either this or obj_request_no_backout_and_release_lock
        are called after can_backout_and_hold_lock returns
-       True.  
+       True.
 
        Called by an AtomicObject to preempt this event.
 
@@ -1070,7 +1070,7 @@ public class AtomicActiveEvent extends ActiveEvent
         _touched_objs_unlock();
 
         locked_non_blocking_backout(null);
-        
+
         //# unlock after method
         _unlock();
     }
@@ -1078,11 +1078,11 @@ public class AtomicActiveEvent extends ActiveEvent
     /**
        Either this or obj_request_backout_and_release_lock
        are called after can_backout_and_hold_lock returns
-       True.  
+       True.
 
        Called by an AtomicObject.  AtomicObject will not
        preempt this event.
-        
+
        Do not have backout event.  Just release lock.
 
     */
@@ -1098,7 +1098,7 @@ public class AtomicActiveEvent extends ActiveEvent
         MVar<MessageCallResultObject> result_mvar)
     {
         boolean partner_call_requested = false;
-        
+
         _lock();
         if (state == State.STATE_RUNNING)
         {
@@ -1107,7 +1107,7 @@ public class AtomicActiveEvent extends ActiveEvent
             remote_hosts_contacted.add(remote_host_uuid);
             _others_contacted_unlock();
 
-            
+
             // code is listening on result_mvar.  when we
             // receive a response, put it inside of the mvar.
             // put result queue in map so that can demultiplex messages
@@ -1129,8 +1129,8 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         return event_parent.get_priority();
     }
-    
-	
+
+
     /**
        Using two phase commit.  All committers must report to root
        that they were successful in first phase of commit before root
@@ -1179,7 +1179,7 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         forward_backout_request_and_backout_self(false,false);
     }
-	
+
     public void forward_backout_request_and_backout_self(
         boolean skip_partner)
     {
@@ -1193,7 +1193,7 @@ public class AtomicActiveEvent extends ActiveEvent
        out the commit through commit manager, and is calling this
        function primarily to forward the backout message.  No need to
        do so again inside of function.
-        
+
        When this is called, we want to disable all further additions
        to self.subscribed_to and self.partner_contacted.  (Ie, after we
        have requested to backout, we should not execute any further
@@ -1208,9 +1208,9 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         //# FIXME: may be needlessly forwarding backouts to partners and
         //# back to the endpoints that requested us to back out.
-        blocking_backout(null);        
+        blocking_backout(null);
     }
-	
+
 
     /**
      * Exception that gets thrown is from executing internal code.
@@ -1221,11 +1221,10 @@ public class AtomicActiveEvent extends ActiveEvent
      */
     @Override
     protected void internal_recv_partner_sequence_call_msg(
-        Endpoint endpt_recvd_on, PartnerRequestSequenceBlock msg,
+        String endpt_recvd_on_uuid, PartnerRequestSequenceBlock msg,
         String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException
     {
-        
         //# can be None... if it is means that the other side wants us
         //# to decide what to do next (eg, the other side performed its
         //# last message sequence action)
@@ -1243,17 +1242,17 @@ public class AtomicActiveEvent extends ActiveEvent
         if (! msg.hasReplyToUuid())
         {
             exec_event = handle_first_sequence_msg_from_partner(
-                endpt_recvd_on, msg, name_of_block_to_exec_next,
+                endpt_recvd_on_uuid, msg, name_of_block_to_exec_next,
                 remote_host_uuid);
         }
         else
         {
             handle_non_first_sequence_msg_from_partner(
-                endpt_recvd_on, msg, name_of_block_to_exec_next,
+                endpt_recvd_on_uuid, msg, name_of_block_to_exec_next,
                 remote_host_uuid);
         }
         _unlock();
-        
+
         if (exec_event != null)
         {
             //### ACTUALLY START EXECUTION CONTEXT THREAD
@@ -1265,11 +1264,11 @@ public class AtomicActiveEvent extends ActiveEvent
     /**
        @param error GeneralMessage.error
 
-       Places an ApplicationExceptionCallResult in the event complete queue to 
-       indicate to the endpoint that an application exception has been raised 
+       Places an ApplicationExceptionCallResult in the event complete queue to
+       indicate to the endpoint that an application exception has been raised
        somewhere down the call graph.
 
-       Note that the type of error is 
+       Note that the type of error is
     */
     public void send_exception_to_listener(PartnerError error)
     {
@@ -1279,9 +1278,9 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             //### FIXME: It probably isn't necessary to send an exception result to
             //### each queue.
-            MVar<MessageCallResultObject> message_listening_mvar = 
+            MVar<MessageCallResultObject> message_listening_mvar =
                 message_listening_mvars_map.get(reply_with_uuid);
-            
+
             if (error.getType() == PartnerError.ErrorType.APPLICATION)
             {
                 message_listening_mvar.put(
@@ -1307,7 +1306,7 @@ public class AtomicActiveEvent extends ActiveEvent
     {
         _others_contacted_mutex.unlock();
     }
-     
+
     private void _touched_objs_lock()
     {
         _touched_objs_mutex.lock();
@@ -1319,7 +1318,7 @@ public class AtomicActiveEvent extends ActiveEvent
 
     public void receive_unsuccessful_first_phase_commit_msg(
         String event_uuid,
-        String msg_originator_host_uuid) 
+        String msg_originator_host_uuid)
     {
         forward_backout_request_and_backout_self();
     }

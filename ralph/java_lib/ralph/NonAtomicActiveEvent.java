@@ -360,7 +360,7 @@ public class NonAtomicActiveEvent extends ActiveEvent
     
     @Override
     protected void internal_recv_partner_sequence_call_msg(
-        Endpoint endpt_recvd_msg_on, PartnerRequestSequenceBlock msg,
+        String endpt_recvd_msg_on_uuid, PartnerRequestSequenceBlock msg,
         String remote_host_uuid)
         throws ApplicationException, BackoutException, NetworkException
     {
@@ -371,19 +371,18 @@ public class NonAtomicActiveEvent extends ActiveEvent
         if (msg.hasNameOfBlockRequesting())
             name_of_block_to_exec_next = msg.getNameOfBlockRequesting();
 
-
         ExecutingEvent exec_event = null;
 
         if (! msg.hasReplyToUuid())
         {
             exec_event = handle_first_sequence_msg_from_partner(
-                endpt_recvd_msg_on, msg, name_of_block_to_exec_next,
+                endpt_recvd_msg_on_uuid, msg, name_of_block_to_exec_next,
                 remote_host_uuid);
         }
         else
         {
             handle_non_first_sequence_msg_from_partner(
-                endpt_recvd_msg_on, msg, name_of_block_to_exec_next,
+                endpt_recvd_msg_on_uuid, msg, name_of_block_to_exec_next,
                 remote_host_uuid);
         }
         

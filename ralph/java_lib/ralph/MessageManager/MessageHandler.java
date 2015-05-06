@@ -55,22 +55,9 @@ public class MessageHandler extends InstallMessageProvider
         }
         else if (general_msg.hasRequestSequenceBlock())
         {
-            PartnerRequestSequenceBlock partner_msg_block =
-                general_msg.getRequestSequenceBlock();
-
-            Endpoint local_endpt =
-                ralph_globals.all_endpoints.get_endpoint_if_exists(
-                    partner_msg_block.getTargetEndpt().getData());
-
-            if (local_endpt == null)
-            {
-                Util.logger_assert(
-                    "Received a message request for an unknown endpoint.");
-            }
-
             ServiceAction service_action =
                 new ReceivePartnerMessageRequestSequenceBlockAction(
-                    local_endpt, general_msg.getRequestSequenceBlock(),
+                    ralph_globals, general_msg.getRequestSequenceBlock(),
                     remote_host_uuid);
 
             ralph_globals.thread_pool.add_service_action(service_action);

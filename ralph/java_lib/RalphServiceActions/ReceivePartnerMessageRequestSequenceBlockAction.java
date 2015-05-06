@@ -5,6 +5,7 @@ import ralph_protobuffs.PartnerRequestSequenceBlockProto.PartnerRequestSequenceB
 import ralph.Util;
 import ralph.ActiveEvent;
 import ralph.Endpoint;
+import ralph.RalphGlobals;
 import ralph.DurabilityInfo;
 import ralph.ExecutionContext.ExecutionContext;
 import RalphDurability.IDurabilityContext;
@@ -23,16 +24,16 @@ import RalphDurability.DurabilityContext;
 public class ReceivePartnerMessageRequestSequenceBlockAction
     extends ServiceAction
 {
-    private final Endpoint local_endpoint;
+    private final RalphGlobals ralph_globals;
     private final PartnerRequestSequenceBlock partner_request_block_msg;
     private final String remote_host_uuid;
 
     public ReceivePartnerMessageRequestSequenceBlockAction(
-        Endpoint local_endpoint,
+        RalphGlobals ralph_globals,
         PartnerRequestSequenceBlock partner_request_block_msg,
         String remote_host_uuid)
     {
-        this.local_endpoint = local_endpoint;
+        this.ralph_globals = ralph_globals;
         this.partner_request_block_msg = partner_request_block_msg;
         this.remote_host_uuid = remote_host_uuid;
     }
@@ -52,7 +53,6 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                     partner_request_block_msg.getNameOfBlockRequesting();
             }
 
-
             ExecutionContext exec_ctx = null;
             if (partner_request_block_msg.hasReplyToUuid())
             {
@@ -63,20 +63,33 @@ public class ReceivePartnerMessageRequestSequenceBlockAction
                 // response.  in this case, we can just drop the
                 // response instead of creating a new active event to
                 // service it.
-                exec_ctx = local_endpoint.exec_ctx_map.get_exec_ctx(uuid);
-
+                exec_ctx = ralph_globals.all_ctx_map.get(uuid);
                 if (exec_ctx == null)
                     return;
             }
             else
             {
+                Endpoint local_endpt =
+                    ralph_globals.all_endpoints.get_endpoint_if_exists(
+                        partner_request_block_msg.getTargetEndpt().getData());
+
+                if (local_endpt == null)
+                {
+                    Util.logger_assert(
+                        "Received a message request for an unknown endpoint.");
+                }
+
                 exec_ctx =
-                    local_endpoint.exec_ctx_map.get_or_create_partner_live_exec_ctx(
-                        uuid,priority,atomic,event_entry_point_name, remote_host_uuid);
+                    local_endpt.exec_ctx_map.get_or_create_partner_live_exec_ctx(
+                        uuid, priority, atomic, event_entry_point_name,
+                        remote_host_uuid);
             }
+            String target_endpt_uuid =
+                partner_request_block_msg.getTargetEndpt().getData();
 
             exec_ctx.curr_act_evt().recv_partner_sequence_call_msg(
-                local_endpoint, partner_request_block_msg, remote_host_uuid);
+                target_endpt_uuid, partner_request_block_msg,
+                remote_host_uuid);
         }
         catch (RalphExceptions.BackoutException _ex)
         {
