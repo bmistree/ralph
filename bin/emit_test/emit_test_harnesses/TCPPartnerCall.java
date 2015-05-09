@@ -3,6 +3,8 @@ package emit_test_harnesses;
 import java.io.IOException;
 import java.util.List;
 
+lkjs;
+
 import ralph_emitted.BasicPartnerJava.SideA;
 import ralph_emitted.BasicPartnerJava.SideB;
 import RalphConnObj.TCPConnectionObj;

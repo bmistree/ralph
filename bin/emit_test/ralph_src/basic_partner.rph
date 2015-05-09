@@ -1,15 +1,3 @@
-Endpoint SideA
-{
-    increment_other_side_number(Number amt_to_increment_by)
-    {
-        // @partner.increment_number(amt_to_increment_by);
-        // atomically
-        // {
-        //     @partner.increment_number(amt_to_increment_by);
-        // }
-    }
-}
-
 Endpoint SideB
 {
     TVar Number internal_number = 15;
