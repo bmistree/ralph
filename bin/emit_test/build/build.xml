@@ -771,7 +771,7 @@
       name="jarify_all"
       depends= "ralph_to_byte_code,
         jar_BasicSetterGetter, jar_BasicInternalMethodCall,
-        jar_BasicTestAtomically,jar_BasicPartnerCall,jar_Map,
+        jar_BasicTestAtomically, jar_Map,
         jar_AtomicMap,jar_StructSetterGetter,jar_NestedStructs,
         jar_List,jar_AtomicList,jar_ForList,jar_ForMap,
         jar_StructLibraries,jar_InterruptedAtomically,jar_EndpointCalls,
@@ -962,11 +962,6 @@
   <target
       name="ralph_BasicTestAtomically"
       depends="ralph_atomically">
-  </target>
-
-  <target
-      name="ralph_BasicPartnerCall"
-      depends="basic_partner">
   </target>
 
   <target
@@ -1464,12 +1459,6 @@
   <target name="harness_BasicTestAtomically">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicTestAtomically.java"/>
-    </antcall>
-  </target>
-
-  <target name="harness_BasicPartnerCall">
-    <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="BasicPartnerCall.java"/>
     </antcall>
   </target>
 
@@ -2275,19 +2264,6 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicTestAtomically"/>
       <param name="dest_jar" value="${basic_test_atomically_jar}"/>
-      <param name="config_properties" value="${no_log_config}"/>
-    </antcall>
-  </target>
-
-  <property
-      name="basic_partner_call_jar"
-      value="basic_partner_call.jar"/>
-  <target
-      name="jar_BasicPartnerCall"
-      depends="ralph_BasicPartnerCall,ralph_to_byte_code,harness_BasicPartnerCall">
-    <antcall target="make_jar">
-      <param name="main_class" value="BasicPartnerCall"/>
-      <param name="dest_jar" value="${basic_partner_call_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
