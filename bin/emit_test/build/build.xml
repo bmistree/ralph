@@ -971,7 +971,7 @@
 
   <target
       name="ralph_TCPPartnerCall"
-      depends="basic_partner">
+      depends="basic_partner, basic_same_host_partner">
   </target>
 
   <target

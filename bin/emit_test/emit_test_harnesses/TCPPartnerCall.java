@@ -1,34 +1,19 @@
 package emit_test_harnesses;
 
-import java.io.IOException;
-import java.util.List;
-
-lkjs;
-
-import ralph_emitted.BasicPartnerJava.SideA;
 import ralph_emitted.BasicPartnerJava.SideB;
-import RalphConnObj.TCPConnectionObj;
+import ralph_emitted.BasicSameHostPartnerJava.RemoteAccessor;
+
 import ralph.RalphGlobals;
-import ralph.RalphObject;
-import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
-
-import RalphDurability.IDurabilityContext;
-import RalphDurability.DurabilityReplayContext;
+import ralph.InternalServiceFactory;
 
 public class TCPPartnerCall
 {
-    private static final String HOST_NAME = "localhost";
-    private static final int TCP_LISTENING_PORT = 38689;
-    private static final EndpointConstructorObj SIDE_B_CONSTRUCTOR =
-        new SideBConstructor();
-    
-    private static SideA side_a = null;
-    private static SideB side_b = null;
+    private static RemoteAccessor remote_accessor = null;
     private final static int TCP_CONNECTION_PORT_A = 20494;
     private final static int TCP_CONNECTION_PORT_B = 20495;
-    
+
     public static void main(String[] args)
     {
         if (TCPPartnerCall.run_test())
@@ -41,40 +26,43 @@ public class TCPPartnerCall
     {
         RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
         params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
-        
+        RalphGlobals globals_a = new RalphGlobals(params_a);
+
         RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
         params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
-        
+        RalphGlobals globals_b = new RalphGlobals(params_b);
+
         try
         {
-            Ralph.tcp_accept(
-                SIDE_B_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
-                new RalphGlobals(params_b));
+            // connect the two hosts together
+            Ralph.tcp_connect(
+                "127.0.0.1", TCP_CONNECTION_PORT_A, globals_b);
 
-            // wait for the other side to ensure that it's listening
-            Thread.sleep(1000);
-            try {
-                side_a = (SideA)Ralph.tcp_connect(
-                    SideA.factory, HOST_NAME, TCP_LISTENING_PORT,
-                    new RalphGlobals(params_a));
-            } catch (IOException e) {
-                e.printStackTrace();
-                assert(false);
-            }
+            InternalServiceFactory side_b_service_factory =
+                new InternalServiceFactory(SideB.factory, globals_b);
 
             // wait for everything to settle down
             Thread.sleep(1000);
-            double prev_number = side_b.get_number().doubleValue();
 
+            // generate an endpoint which will then install a remote
+            // service.
+            RemoteAccessor remote_accessor =
+                RemoteAccessor.create_single_sided(globals_a);
+
+            remote_accessor.install_remote_endpt(side_b_service_factory);
+
+            double init_number = 
+                remote_accessor.get_remote_number().doubleValue();
+            double expected_number = init_number;
             for (int i = 0; i < 20; ++i)
             {
-                side_a.increment_other_side_number(new Double(i));
-                double new_number = side_b.get_number().doubleValue();
+                expected_number += i;
+                remote_accessor.increment_other_side_number(new Double(i));
+                double new_number =
+                    remote_accessor.get_remote_number().doubleValue();
 
-                if ( (prev_number + i) != new_number)
+                if (expected_number != new_number)
                     return false;
-                
-                prev_number = new_number;
             }
                         
             return true;
@@ -83,43 +71,6 @@ public class TCPPartnerCall
         {
             _ex.printStackTrace();
             return false;
-        }
-    }
-
-    /**
-       Must override constructor so that can save global SideB after
-       constructing it.
-     */
-    private static class SideBConstructor implements EndpointConstructorObj
-    {
-        private final static String canonical_name =
-            SideBConstructor.class.getName();
-        
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            IDurabilityContext durability_context,
-            DurabilityReplayContext durability_replay_context)
-        {
-            side_b =
-                (SideB) SideB.factory.construct(
-                    globals,conn_obj,durability_context,
-                    durability_replay_context);
-            return side_b;
-        }
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list,
-            IDurabilityContext durability_context)
-        {
-            return construct(globals,conn_obj,durability_context,null);
-        }
-
-        @Override
-        public String get_canonical_name()
-        {
-            return canonical_name;
         }
     }
 }
