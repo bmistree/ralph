@@ -1,10 +1,19 @@
+alias Endpoint SideB as 'AtomicPartnerJava.SideB';
+
 Endpoint SideA
 {
+    Endpoint SideB side_b = null;
+
+    set_side_b(Endpoint SideB side_b_)
+    {
+        side_b = side_b_;
+    }
+
     increment_other_side_number(Number amt_to_increment_by)
     {
         atomically
         {
-            @partner.increment_number(amt_to_increment_by);
+            side_b.increment_number(amt_to_increment_by);
         }
     }
 }

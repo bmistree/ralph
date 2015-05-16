@@ -2,7 +2,6 @@ package emit_test_harnesses;
 
 import ralph_emitted.AtomicPartnerJava.SideA;
 import ralph_emitted.AtomicPartnerJava.SideB;
-import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 
 public class AtomicPartnerCall
@@ -28,11 +27,11 @@ public class AtomicPartnerCall
         
         try
         {
-            SameHostConnection conn_obj = new SameHostConnection();
             SideA side_a =
-                SideA.external_create(new RalphGlobals(params_a),conn_obj);
+                SideA.external_create(new RalphGlobals(params_a));
             SideB side_b =
-                SideB.external_create(new RalphGlobals(params_b),conn_obj);
+                SideB.external_create(new RalphGlobals(params_b));
+            side_a.set_side_b(side_b);
 
             double prev_number = side_b.get_number().doubleValue();
 
