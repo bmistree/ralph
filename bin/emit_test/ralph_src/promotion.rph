@@ -1,3 +1,4 @@
+alias Endpoint PromoterEndpoint as 'PromotionJava.PromoterEndpoint';
 
 /**
    Want to ensure that get quality of service amongst endpoints.  Way to test
@@ -9,15 +10,22 @@
 
    Put results of each call into a threadsafe array.  After all events are run,
    look through the array.  If promotion is set up correctly, then should get a
-   1 in array, then a -1 in array, then 1, etc.  
+   1 in array, then a -1 in array, then 1, etc.
  */
 Endpoint PromoterEndpoint
 {
     TVar Number my_number = 0;
+    Endpoint PromoterEndpoint promoter_endpt = null;
+
     call_from_partner()
     {
         // forces a write lock on my_number
         my_number = 1;
+    }
+
+    set_promoter(Endpoint PromoterEndpoint promoter_endpt_)
+    {
+        promoter_endpt = promoter_endpt_;
     }
 
     call_from_external(TrueFalse positive) returns Number
@@ -27,9 +35,9 @@ Endpoint PromoterEndpoint
             to_return = 1;
         atomically
         {
-            @partner.call_from_partner();
+            promoter_endpt.call_from_partner();
             // force a write lock on my_number
-            my_number = 1;            
+            my_number = 1;
             verbatim('try{Thread.sleep(150);}catch(InterruptedException _ex){}');
         }
         return to_return;

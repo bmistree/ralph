@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.PromotionJava.PromoterEndpoint;
-import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
 import java.util.concurrent.ExecutorService;
@@ -13,7 +12,7 @@ import java.lang.Math;
 
 /**
    Reproduced from top of promotion.rph file.
-   
+
    Want to ensure that get quality of service amongst endpoints.  Way to test
    this is to create two, connected LongAndWrite endpoints, A and B.  Issue a
    bunch of call_from_external calls on A (with arg true).  Before these
@@ -42,7 +41,7 @@ public class PromotionTest
     private final static int TCP_CONNECTION_PORT_A = 20494;
     private final static int TCP_CONNECTION_PORT_B = 20495;
 
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -67,25 +66,25 @@ public class PromotionTest
             });
         return executor;
     }
-    
+
     public static boolean run_test()
     {
         RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
         params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
-        
+
         RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
         params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
 
-        
+
         try
         {
-            SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a =
-                PromoterEndpoint.external_create(
-                    new RalphGlobals(params_a),conn_obj);
+                PromoterEndpoint.external_create(new RalphGlobals(params_a));
             PromoterEndpoint side_b =
-                PromoterEndpoint.external_create(
-                    new RalphGlobals(params_b),conn_obj);
+                PromoterEndpoint.external_create(new RalphGlobals(params_b));
+
+            side_a.set_promoter(side_b);
+            side_b.set_promoter(side_a);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();
@@ -94,26 +93,25 @@ public class PromotionTest
             EndpointTask task_a = new EndpointTask(side_a,true);
             EndpointTask task_b = new EndpointTask(side_b,false);
 
-            
             // put a bunch of tasks rooted at A into system.
             for (int i = 0; i < NUM_EXTERNAL_CALLS; ++i)
                 executor_a.execute(task_a);
 
             // wait a bit so that those tasks can get good and
             // started.
-            
+
             Thread.sleep(50);
             // put a bunch of tasks rooted at B into system.
             for (int i = 0; i < NUM_EXTERNAL_CALLS; ++i)
                 executor_b.execute(task_b);
-            
+
 
             // join on executor services
             executor_a.shutdown();
             executor_b.shutdown();
             while (!(executor_a.isTerminated() && executor_b.isTerminated()))
                 Thread.sleep(50);
-            
+
             // Scan through array: events should alternate.  This means that
             // should see 1, then -1, then 1, then -1, etc.: a partial sum of
             // the array should never yield a result where abs of the sum > 1.
@@ -134,10 +132,9 @@ public class PromotionTest
             _ex.printStackTrace();
             return false;
         }
-        
+
         return true;
     }
-
 
     public static class EndpointTask implements Runnable
     {
@@ -153,16 +150,17 @@ public class PromotionTest
 
         public void run()
         {
-            try {
+            try
+            {
                 Double result =
                     endpt_to_run_on.call_from_external(is_positive);
                 tsafe_queue.add(result);
-            } catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 ex.printStackTrace();
                 had_exception.set(true);
             }
         }
     }
-    
 }
