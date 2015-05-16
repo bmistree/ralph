@@ -778,7 +778,7 @@
         jar_InterruptedEndpointCallAtomically,jar_Promotion,
         jar_SuperInterruptedAtomically,jar_HardwareFailure,jar_ReturnList,
         jar_WoundWait,jar_TCPPartnerCall,jar_AtomicPartnerCall,
-        jar_AtomicTCPPartnerCall,jar_RandomFailureExtendedList,
+        jar_RandomFailureExtendedList,
         jar_WrappedPartnerTCPCall,jar_Linked,jar_SingleSideServiceFactory,
         jar_PartnerServiceFactory,jar_EndpointStructList,jar_BasicSpeculation,
         jar_Null,jar_InternalCreateService,jar_Self,jar_ContainerSpeculation,
@@ -2530,19 +2530,6 @@
     <antcall target="make_jar">
       <param name="main_class" value="AtomicPartnerCall"/>
       <param name="dest_jar" value="${atomic_partner_call_jar}"/>
-      <param name="config_properties" value="${no_log_config}"/>
-    </antcall>
-  </target>
-
-  <property
-      name="atomic_tcp_partner_call_jar"
-      value="atomic_tcp_partner_call.jar"/>
-  <target
-      name="jar_AtomicTCPPartnerCall"
-      depends="ralph_AtomicTCPPartnerCall,ralph_to_byte_code,harness_AtomicTCPPartnerCall">
-    <antcall target="make_jar">
-      <param name="main_class" value="AtomicTCPPartnerCall"/>
-      <param name="dest_jar" value="${atomic_tcp_partner_call_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
