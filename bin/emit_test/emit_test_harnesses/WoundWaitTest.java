@@ -1,7 +1,6 @@
 package emit_test_harnesses;
 
 import ralph_emitted.PromotionJava.PromoterEndpoint;
-import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
 import ralph.Endpoint;
 import java.util.concurrent.ExecutorService;
@@ -66,13 +65,14 @@ public class WoundWaitTest
         
         try
         {
-            SameHostConnection conn_obj = new SameHostConnection();
             PromoterEndpoint side_a = PromoterEndpoint.external_create(
-                new RalphGlobals(params_a),
-                conn_obj);
+                new RalphGlobals(params_a));
+
             PromoterEndpoint side_b = PromoterEndpoint.external_create(
-                new RalphGlobals(params_b),
-                conn_obj);
+                new RalphGlobals(params_b));
+
+            side_a.set_promoter(side_b);
+            side_b.set_promoter(side_a);
 
             ExecutorService executor_a = create_executor();
             ExecutorService executor_b = create_executor();
@@ -81,7 +81,6 @@ public class WoundWaitTest
             EndpointTask task_a = new EndpointTask(side_a,true);
             EndpointTask task_b = new EndpointTask(side_b,false);
 
-            
             // put a bunch of tasks rooted at A into system.
             for (int i = 0; i < NUM_EXTERNAL_CALLS; ++i)
                 executor_a.execute(task_a);
