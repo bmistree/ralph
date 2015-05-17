@@ -24,7 +24,8 @@ Endpoint InternalHolder
     {
         atomically
         {
-            side_b.increment_other_side_number(1.0);
+            Number num_to_inc_by = 1.0;
+            side_b.increment_other_side_number(num_to_inc_by);
         }
     }
 }
