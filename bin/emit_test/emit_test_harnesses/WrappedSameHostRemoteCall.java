@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import ralph_emitted.BasicPartnerJava.SideB;
-import ralph_emitted.WrappedSameHostRemoteCallJava.SingleSidedHolder;
-import ralph_emitted.WrappedSameHostRemoteCallJava.InternalHolder;
+import ralph_emitted.WrappedRemoteJava.SingleSidedHolder;
+import ralph_emitted.WrappedRemoteJava.InternalHolder;
 import ralph.RalphGlobals;
 import ralph.RalphObject;
 import ralph.EndpointConstructorObj;
 import ralph.Endpoint;
 import ralph.Ralph;
+import ralph.InternalServiceFactory;
 
 import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
@@ -34,7 +35,10 @@ public class WrappedSameHostRemoteCall
             RalphGlobals ralph_globals = new RalphGlobals();
             SingleSidedHolder single_holder =
                 SingleSidedHolder.create_single_sided(ralph_globals);
-            single_holder.install_remote(SideB.factory);
+
+            InternalServiceFactory side_b_service_factory =
+                new InternalServiceFactory(SideB.factory, ralph_globals);
+            single_holder.install_remote(side_b_service_factory);
 
             for (int i = 0; i < 20; ++i)
                 single_holder.issue_call();

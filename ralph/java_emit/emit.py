@@ -35,7 +35,6 @@ import RalphVersions.ObjectHistory;
 import RalphVersions.EnumSerializer;
 
 import ralph.Connection.IConnection;
-import ralph.Connection.SingleSideConnection;
 import RalphExceptions.*;
 
 import RalphAtomicWrappers.BaseAtomicWrappers;
@@ -1325,7 +1324,7 @@ new %(java_type_text)s  (
                 
             default_internal_endpoint_text = (
                 ('new %(type_alias)s (ralph_globals, ' +
-                 'SingleSideConnection.INSTANCE, %(durability_context)s,' +
+                 '%(durability_context)s,' +
                  '%(durability_replay_context)s)')
                  %
                 {
