@@ -550,11 +550,11 @@
     </antcall>
   </target>
 
-  <target name="wrapped_partner" depends="init"
+  <target name="wrapped_remote" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
-      <param name="rph_filename" value="wrapped_partner.rph"/>
-      <param name="class_name" value="WrappedPartnerJava"/>
+      <param name="rph_filename" value="wrapped_remote.rph"/>
+      <param name="class_name" value="WrappedRemoteJava"/>
     </antcall>
   </target>
 
@@ -779,7 +779,8 @@
         jar_SuperInterruptedAtomically,jar_HardwareFailure,jar_ReturnList,
         jar_WoundWait,jar_TCPPartnerCall,jar_AtomicPartnerCall,
         jar_RandomFailureExtendedList,
-        jar_WrappedPartnerTCPCall,jar_Linked,jar_SingleSideServiceFactory,
+        jar_WrappedSameHostRemoteCall,
+        jar_Linked,jar_SingleSideServiceFactory,
         jar_PartnerServiceFactory,jar_EndpointStructList,jar_BasicSpeculation,
         jar_Null,jar_InternalCreateService,jar_Self,jar_ContainerSpeculation,
         jar_Range,jar_ReadReadWriteSpeculation,jar_InterruptedSpeculater,
@@ -1075,8 +1076,8 @@
   </target>
 
   <target
-      name="ralph_WrappedPartnerTCPCall"
-      depends="basic_partner,wrapped_partner">
+      name="ralph_WrappedSameHostRemoteCall"
+      depends="basic_partner,wrapped_remote">
   </target>
 
   <target
@@ -1600,9 +1601,9 @@
     </antcall>
   </target>
 
-  <target name="harness_WrappedPartnerTCPCall">
+  <target name="harness_WrappedSameHostRemoteCall">
     <antcall target="compile_harness">
-      <param name="arg_harness_file_list" value="WrappedTCPPartnerCall.java"/>
+      <param name="arg_harness_file_list" value="WrappedSameHostRemoteCall.java"/>
     </antcall>
   </target>
 
@@ -2561,15 +2562,15 @@
   </target>
 
   <property
-      name="wrapped_partner_tcp_call_jar"
-      value="wrapped_partner_tcp_call.jar"/>
+      name="wrapped_same_host_remote_call_jar"
+      value="wrapped_same_host_remote_call.jar"/>
   <target
-      name="jar_WrappedPartnerTCPCall"
-      depends="ralph_WrappedPartnerTCPCall,
-               ralph_to_byte_code,harness_WrappedPartnerTCPCall">
+      name="jar_WrappedSameHostRemoteCall"
+      depends="ralph_WrappedSameHostRemoteCall,
+               ralph_to_byte_code,harness_WrappedSameHostRemoteCall">
     <antcall target="make_jar">
-      <param name="main_class" value="WrappedTCPPartnerCall"/>
-      <param name="dest_jar" value="${wrapped_partner_tcp_call_jar}"/>
+      <param name="main_class" value="WrappedSameHostRemoteCall"/>
+      <param name="dest_jar" value="${wrapped_same_host_remote_call_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>

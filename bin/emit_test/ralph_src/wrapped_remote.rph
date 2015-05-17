@@ -1,0 +1,60 @@
+alias Endpoint SideB as 'ralph_emitted.BasicPartnerJava.SideB';
+alias Endpoint InternalHolder as 'ralph_emitted.WrappedRemoteJava.InternalHolder';
+
+Endpoint InternalHolder
+{
+    Remote SideB side_b = null;
+
+    install_remote(Text remote_uuid, ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        service_reference = install(remote_uuid, factory);
+        side_b =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
+    get_number() returns Number
+    {
+        Number to_return;
+        to_return = side_b.get_number();
+        return to_return;
+    }
+
+    issue_call()
+    {
+        atomically
+        {
+            side_b.increment_other_side_number(1.0);
+        }
+    }
+}
+
+Endpoint SingleSidedHolder
+{
+    Endpoint InternalHolder internal_holder;
+
+    install_remote(ServiceFactory factory)
+    {
+        List(element: Text) conn_uuids;
+        conn_uuids = connected_uuids();
+
+        Text remote_uuid;
+        remote_uuid = conn_uuids.get(0);
+        internal_holder.install_remote(remote_uuid, factory);
+    }
+
+    get_number() returns Number
+    {
+        Number to_return;
+        to_return = internal_holder.get_number();
+        return to_return;
+    }
+
+    issue_call()
+    {
+        atomically
+        {
+            internal_holder.issue_call();
+        }
+    }
+}
