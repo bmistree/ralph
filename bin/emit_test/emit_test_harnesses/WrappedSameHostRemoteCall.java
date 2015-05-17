@@ -40,12 +40,16 @@ public class WrappedSameHostRemoteCall
                 new InternalServiceFactory(SideB.factory, ralph_globals);
             single_holder.install_remote(side_b_service_factory);
 
+            int initial_number = single_holder.get_number().intValue();
+
             for (int i = 0; i < 20; ++i)
                 single_holder.issue_call();
-
+            int expected_number = 20 + initial_number;
+            
             int internal_number = single_holder.get_number().intValue();
-            if (internal_number != 20)
+            if (internal_number != expected_number)
                 return false;
+
             return true;
         }
         catch(Exception _ex)
