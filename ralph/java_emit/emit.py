@@ -11,7 +11,7 @@ from ralph.java_emit.emit_utils import InternalEmitException
 def emit(root_node,struct_types_ctx,package_name,program_name):
     '''
     @param {RootStatementNode} root_node
-    
+
     @returns {String} --- Emitted program text
     '''
 
@@ -98,7 +98,7 @@ public class %s
         prog_txt += indent_string(
             emit_struct_definition(struct_name,struct_type,struct_types_ctx))
         prog_txt += '\n'
-        
+
     # emit individual enum types
     prog_txt += indent_string(
         '/*********** ENUM DEFINITIONS ******/\n')
@@ -108,7 +108,7 @@ public class %s
         prog_txt += indent_string(
             emit_enum_definition(enum_name,enum_type,struct_types_ctx))
         prog_txt += '\n'
-        
+
     # emit individual interfaces
     prog_txt += indent_string(
         '/*********** INTERFACE DEFINITIONS ******/\n')
@@ -116,7 +116,7 @@ public class %s
         prog_txt += indent_string(
             emit_interface(interface_node,struct_types_ctx))
         prog_txt += '\n'
-        
+
     # emit individual endpoints
     prog_txt += indent_string(
         '/*********** ENDPOINT DEFINITIONS ******/\n')
@@ -131,14 +131,14 @@ public class %s
 def emit_interface(interface_node,struct_types_ctx):
     emit_ctx = EmitContext(struct_types_ctx)
     emit_ctx.push_scope()
-    
+
     # contains emitted code that actually gets returned
     interface_signature = '''
 public static interface %s extends IReference {
 ''' % interface_node.name
 
     interface_body = ''
-    
+
     body_node = interface_node.body_node
     for iface_method_decl_node in body_node.method_declaration_nodes:
         # internal signature
@@ -157,7 +157,7 @@ public static interface %s extends IReference {
             emit_ctx,iface_method_decl_node.method_signature_node,False)
         interface_body += signature
         interface_body += ';\n\n\n'
-        
+
     interface_signature = (
         interface_signature + indent_string(interface_body) + '}\n')
 
@@ -172,7 +172,7 @@ def produce_what_implements(variable_type_node_list):
         VariableTypeNode.
 
     Returns:
-    
+
         String.  Containing the implements suffix for a class
         declaration in Java.  Eg., '' if variable_type_node_list is
         empty, 'implements Something1, Something2' if two elements in
@@ -197,7 +197,7 @@ def emit_endpt(endpt_node,struct_types_ctx):
 
     implements_text = produce_what_implements(
         endpt_node.implements_variable_type_node_list)
-    
+
     endpt_class_signature = '''
 public static class %s extends Endpoint %s {
 ''' % (endpt_node.name, implements_text)
@@ -207,7 +207,7 @@ public static class %s extends Endpoint %s {
     endpt_class_body += '\n'
     endpt_class_body += emit_constructor(
         emit_ctx,endpt_node,endpt_node.body_node.variable_declaration_nodes)
-    
+
     endpt_class_body += emit_endpt_method_declarations(
         emit_ctx,endpt_node.body_node.method_declaration_nodes)
     endpt_class_body += '\n'
@@ -240,7 +240,7 @@ version_saver.save_endpoint_global_mapping(
     "%(variable_name)s",%(variable_name)s.uuid(), _uuid,
     factory.getClass().getName(), local_lamport_time);''' %
         { 'variable_name': internal_var_name })
-        
+
     # line up with internal if statements
     version_mapping_text = indent_string(version_mapping_text,2)
 
@@ -281,14 +281,14 @@ to_return.%(internal_var_name)s = ( %(variable_type)s ) internal_values_list.get
 
     endpt_globals_endpt_vars_text = indent_string(
         endpt_globals_endpt_vars_text)
-    
+
     emit_ctx.set_in_endpoint_constructor(False)
 
     constructor_text = '''
 public %(endpoint_name)s (
     RalphGlobals ralph_globals,
     IDurabilityContext durability_context,
-    DurabilityReplayContext durability_replay_context) 
+    DurabilityReplayContext durability_replay_context)
 {
     super(
         ralph_globals, factory, durability_context,
@@ -341,7 +341,7 @@ public static class %(endpoint_name)s_ConstructorObj implements EndpointConstruc
 
     @Override
     public Endpoint construct(
-        RalphGlobals ralph_globals, 
+        RalphGlobals ralph_globals,
         IDurabilityContext durability_log_context,
         DurabilityReplayContext durability_replay_context)
     {
@@ -419,7 +419,7 @@ def emit_endpt_variable_declarations(emit_ctx,variable_declaration_node_list):
     for variable_declaration_node in variable_declaration_node_list:
         endpoint_variable_text += (
             emit_statement(emit_ctx,variable_declaration_node) )
-        
+
     emit_ctx.set_in_endpoint_global_vars(False)
     return endpoint_variable_text
 
@@ -438,7 +438,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 
     If method has return value, then put the result into variable
     named result.
-    
+
     @param {int} index --- Which value of args array to read from and
     how to name transalted arg (eg., "arg0" above instead of "arg1" or
     "arg2".)
@@ -473,7 +473,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
             single_arg_string = (
                 '''InternalServiceFactory %s = ((RalphObject<InternalServiceFactory,InternalServiceFactory>) %s).get_val(exec_ctx.curr_act_evt());\n''' %
                 (arg_name,arg_vec_to_read_from))
-            
+
         elif isinstance(method_declaration_arg_node.type, StructType):
             internal_struct_type = emit_internal_struct_type(
                 method_declaration_arg_node.type)
@@ -496,7 +496,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
                 '%s %s = (%s == null) ? null : ((%s) %s).get_val(exec_ctx.curr_act_evt());\n' %
                 (internal_struct_type, arg_name, arg_vec_to_read_from,
                  wrapped_enum_type_name,arg_vec_to_read_from))
-            
+
         elif isinstance(method_declaration_arg_node.type, EndpointType):
             # note: unable to dispatch for rpc for methods that
             # requires endpoint argument because cannot pass endpoint
@@ -514,7 +514,7 @@ def convert_args_text_for_dispatch(method_declaration_node):
 %s %s = (%s == null) ? null : ((%s)%s).get_val(null);
 ''' % (java_type,arg_name,arg_vec_to_read_from, locked_type,arg_vec_to_read_from)
 
-            
+
         to_return += single_arg_string
     return to_return
 
@@ -545,7 +545,7 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
                 'Unknown basic type when emitting.')
         #### END DEBUG
         return ('RalphObject<%s,%s>' % (java_type,java_type)), java_type
-    
+
     #### DEBUG
     else:
         raise InternalEmitException(
@@ -553,7 +553,7 @@ def get_method_arg_type_as_locked(method_declaration_arg_node):
             method_declaration_arg_node.line_number,
             'Unknown argument type for method.')
     #### END DEBUG
-        
+
 
 def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
     '''
@@ -572,11 +572,11 @@ def exec_dispatch_sequence_call(method_declaration_node,emit_ctx):
         lambda arg_number:
             'arg%i'%arg_number,
         range(0,len(method_declaration_arg_node_list)))
-    
+
     args_text = ','.join(arg_list)
     if args_text != '':
         args_text = ',' + args_text
-        
+
     actual_call = method_name + '(exec_ctx' + args_text + ')'
     if method_declaration_node.returns_value():
         return_type = method_declaration_node.get_return_type()
@@ -626,10 +626,10 @@ def emit_rpc_dispatch(emit_ctx,method_declaration_node_list):
 
         rpc_text_for_methods += (
             if_elif + '(to_exec_method_name.equals("' +
-            method_declaration_node.method_name + '")) {\n' + 
-            indent_string(if_elif_body,1) + 
+            method_declaration_node.method_name + '")) {\n' +
+            indent_string(if_elif_body,1) +
             '\n}\n')
-        
+
     #### For debugging: what happens if asked to run an rpc method
     #### that isn't available locally.
     if rpc_text_for_methods != '':
@@ -643,7 +643,7 @@ else
 
 '''
     #### End debug
-        
+
     emitted_method = '''
 @Override
 protected RalphObject _handle_rpc_call(
@@ -673,7 +673,7 @@ def emit_endpt_method_declarations(emit_ctx,method_declaration_node_list):
     # reference it later.
     for method_declaration_node in method_declaration_node_list:
         add_method_signature_to_ctx(emit_ctx,method_declaration_node)
-    
+
     for method_declaration_node in method_declaration_node_list:
         to_return += emit_method_declaration_node(
             emit_ctx,method_declaration_node)
@@ -694,7 +694,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     '''
     external_method_text = emit_external_facing_method(
         emit_ctx,method_declaration_node.method_signature_node)
-    
+
     emit_ctx.push_scope()
     signature_plus_head = emit_method_signature_plus_head(
         emit_ctx,
@@ -704,7 +704,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     for statement in method_declaration_node.method_body_statement_list:
         body += indent_string(emit_statement(emit_ctx,statement))
         body += indent_string(emit_semicolon_line_break(statement))
-        
+
     emit_ctx.pop_scope()
 
     # all method bodies are defined in try-finally blocks.  At
@@ -712,7 +712,7 @@ def emit_method_declaration_node(emit_ctx,method_declaration_node):
     # pop from it.
     body += '\n} finally {}'
     internal_method_text = signature_plus_head + indent_string(body) + '\n}'
-    
+
     return external_method_text + internal_method_text
 
 def emit_semicolon_line_break(statement_node):
@@ -756,11 +756,11 @@ def emit_external_signature(emit_ctx,method_signature_node,with_super_arg):
         # pass superflag on to internal calls.
         argument_text_list.append(
             'IsSuperFlag ' + super_flag_argument())
-        
+
     # finish method signature
     to_return += ','.join(argument_text_list) + ') throws Exception '
     return to_return,return_type,void_return_type,argument_name_text_list
-    
+
 def super_flag_argument():
     return '__is_super_flag_arg___'
 
@@ -771,9 +771,9 @@ def emit_external_method_body(
     '''
     All these arguments should pretty much been produced by
     emit_external_signature.
-    
+
     @param{list} argument_name_text_list --- Note: does not include
-    super argument in list.  
+    super argument in list.
     '''
 
     # finish method signature
@@ -863,7 +863,7 @@ if (DurabilityInfo.instance.durability_saver != null)
             '%s to_return = %s' % (return_type, inner_method_call_text))
 
     method_body_text += inner_method_call_text
-    
+
     # try to commit the event
     method_body_text += '''
 active_event.local_root_begin_first_phase_commit();
@@ -873,8 +873,8 @@ active_event.local_root_begin_first_phase_commit();
     # return the grabbed value
     if not void_return_type:
         method_body_text += 'return to_return;'
-        
-    to_return += indent_string(method_body_text) + '\n}\n' 
+
+    to_return += indent_string(method_body_text) + '\n}\n'
     return to_return
 
 
@@ -916,16 +916,16 @@ def method_args_to_ralph_wrapped_types(emit_ctx,method_signature_node,
     '''
     Runs through method signature and produces code that wraps all
     arguments in Ralph wrappers.
-    
+
     @param {} emit_ctx
     @param {MethodSignatureNode} method_signature_node
-    
+
     @param {list} argument_name_text_list --- Each element of the list
     is a string that corresponds to the names of arguments (without
     types) as they will appear in the emitted method signature.
     '''
     to_return = ''
-    
+
     # convert each method argument to ralph variable and then add to
     # stack.  Note: skip this step for maps, which caller already
     # cloned for us.
@@ -939,7 +939,7 @@ def method_args_to_ralph_wrapped_types(emit_ctx,method_signature_node,
             isinstance(argument_type,StructType) or
             isinstance(argument_type,ListType)):
             reference_type = True
-            
+
         java_type_statement = emit_ralph_wrapped_type(argument_type,True)
 
         initializer = argument_name
@@ -952,7 +952,7 @@ def method_args_to_ralph_wrapped_types(emit_ctx,method_signature_node,
 
             internal_map_version_helper = (
                 internal_map_version_helper_from_map_type(argument_type))
-            
+
             new_ralph_variable = '''
 new %(java_type_statement)s (
     false,
@@ -966,7 +966,7 @@ new %(java_type_statement)s (
         'key_type_class': key_type_class,
         'value_type_class': value_type_class,
         'internal_map_version_helper': internal_map_version_helper}
-            
+
         elif isinstance(argument_type,ListType):
             element_type = argument_type.element_type_node.type
             element_type_class = class_from_element_type(element_type)
@@ -1011,7 +1011,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     @returns {String} --- A java signature for method.  Eg.,
 
     private Double some_method (
-        ExecutionContext exec_ctx, SomeType SomeVar) 
+        ExecutionContext exec_ctx, SomeType SomeVar)
         throws ApplicationException, BackoutException, NetworkException
     {
         try {
@@ -1019,7 +1019,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     to_return,argument_name_text_list = emit_internal_method_signature(
         emit_ctx,method_signature_node)
     to_return += '{\n'
-    
+
     # (starting at #3, because #1 and #2 are in
     # emit_internal_method_signature)
     # 3: emit head section where add to scope stack and push arguments
@@ -1031,7 +1031,7 @@ def emit_method_signature_plus_head(emit_ctx,method_signature_node):
     converted_args_text = 'try{ \n'
     converted_args_text += method_args_to_ralph_wrapped_types(
         emit_ctx,method_signature_node,argument_name_text_list)
-    
+
     to_return += indent_string(converted_args_text)
     return to_return
 
@@ -1059,7 +1059,7 @@ def emit_internal_method_signature(emit_ctx,method_signature_node):
     to_return = (
         'public %s %s (' % (return_type, method_signature_node.method_name) )
     to_return += 'ExecutionContext exec_ctx'
-    
+
     argument_name_text_list = []
     for argument_node in method_signature_node.method_declaration_args:
         # for placing the arguments actually in method signature
@@ -1083,7 +1083,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
 
     @returns{String} --- Java-ized version of wrapped Ralph type: eg.,
     AtomicNumberVariable, etc.
-    '''    
+    '''
     if type_object is None:
         return 'void'
 
@@ -1096,7 +1096,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         return emit_list_type(type_object)
 
     # FIXME: ALLOW TVAR Structs????
-    
+
     # emit for structs
     if isinstance(type_object,StructType):
         return type_object.struct_name
@@ -1106,7 +1106,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
         if type_object.is_tvar and (not force_single_threaded):
             return 'AtomicEnumVariable<%s>' % type_object.get_emit_name()
         return 'NonAtomicEnumVariable<%s>' % type_object.get_emit_name()
-    
+
     # emit for endpoints
     if isinstance(type_object,EndpointType):
         if type_object.is_tvar and (not force_single_threaded):
@@ -1141,7 +1141,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     elif isinstance(type_object,MethodType):
         typer = type_object.returns_type
         is_tvar = False
-        
+
     if typer == BOOL_TYPE:
         if is_tvar and (not force_single_threaded):
             return 'AtomicTrueFalseVariable'
@@ -1149,7 +1149,7 @@ def emit_ralph_wrapped_type(type_object,force_single_threaded=False):
     elif typer == NUMBER_TYPE:
         if is_tvar and (not force_single_threaded):
             return 'AtomicNumberVariable'
-        return 'NonAtomicNumberVariable'        
+        return 'NonAtomicNumberVariable'
     elif typer == STRING_TYPE:
         if is_tvar and (not force_single_threaded):
             return 'AtomicTextVariable'
@@ -1166,7 +1166,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
 
     Args:
         type_object: {BasicType object}
-        
+
         initializer_node: {None or AstNode} What to assign with new
         expression.  If initializer node has null_type, then will be
         initialized to null.  If initializer_node is None, then
@@ -1182,7 +1182,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         initializer_text = None
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
-            
+
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_text is None:
             return 'new %s (false,ralph_globals)' % java_type_text
@@ -1197,11 +1197,11 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
                     initializer_node.filename,
                     initializer_node.line_number,
                     'Not handling initializers for map types')
-            
+
         internal_map_version_helper = (
             internal_map_version_helper_from_map_type(type_object))
 
-        # require EnsureAtomicWrapper object to 
+        # require EnsureAtomicWrapper object to
         value_type_is_tvar = type_object.to_type_node.type.is_tvar
         value_type = type_object.to_type_node.type
         key_type = type_object.from_type_node.type
@@ -1220,7 +1220,7 @@ def construct_new_expression(type_object,initializer_node,emit_ctx):
         to_return = '''
 new %(java_type_text)s  (
     false,
-    %(internal_val_text)s  
+    %(internal_val_text)s
     %(value_type_wrapper)s,
     %(internal_map_version_helper)s,
     %(key_type_class)s,
@@ -1231,7 +1231,7 @@ new %(java_type_text)s  (
         'key_type_class': key_type_class,
         'value_type_class': value_type_class,
         'internal_map_version_helper': internal_map_version_helper}
-        
+
         return to_return
 
     elif isinstance(type_object,ListType):
@@ -1242,25 +1242,25 @@ new %(java_type_text)s  (
             if initializer_node.label != NULL_TYPE:
                 raise InternalEmitException(
                     initializer_node.filename,
-                    initializer_node.line_number,                    
+                    initializer_node.line_number,
                     'Not handling initializers for list types')
-        
-        # require EnsureAtomicWrapper object to 
+
+        # require EnsureAtomicWrapper object to
         element_type = type_object.element_type_node.type
         element_type_class = class_from_element_type(element_type)
         element_type_wrapper = list_map_wrappers(element_type)
-        
+
         internal_val_txt = ''
         if initializer_node is not None:
             # internal val should be null
             internal_val_txt = 'null,'
-            
+
         to_return = (
             'new %s(false,%s%s,%s,ralph_globals)' %
             (java_type_text,internal_val_txt,element_type_wrapper,
              element_type_class))
         return to_return
-    
+
     elif isinstance(type_object,StructType):
         struct_name = type_object.struct_name
 
@@ -1278,7 +1278,7 @@ new %(java_type_text)s  (
             durability_replay_context_text = (
                 'null /** FIXME: not passing replay context ' +
                 'through for struct constructor*/')
-            
+
             if (emit_ctx.get_in_endpoint_constructor() or
                 emit_ctx.get_in_struct_constructor()):
                 durability_context_text = 'durability_context'
@@ -1292,9 +1292,9 @@ new %(java_type_text)s  (
                     'durability_context': durability_context_text,
                     'durability_replay_context_text': durability_replay_context_text
                     })
-            
+
         return to_return
-    
+
     elif isinstance(type_object,EndpointType):
         java_type_text = emit_ralph_wrapped_type(type_object)
 
@@ -1304,7 +1304,7 @@ new %(java_type_text)s  (
             # of endpoints so that we have a durability context
             # available.
             to_return = 'null'
-            
+
         elif initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = (
@@ -1321,7 +1321,7 @@ new %(java_type_text)s  (
                 emit_ctx.get_in_struct_constructor()):
                 durability_ctx_text = 'durability_context'
                 durability_replay_ctx_text = 'durability_replay_context'
-                
+
             default_internal_endpoint_text = (
                 ('new %(type_alias)s (ralph_globals, ' +
                  '%(durability_context)s,' +
@@ -1352,7 +1352,7 @@ new %(java_type_text)s  (
 
         return to_return
 
-    elif (isinstance(type_object, ServiceReferenceType) or 
+    elif (isinstance(type_object, ServiceReferenceType) or
           isinstance(type_object, RemoteVariableType)):
         java_type_text = emit_ralph_wrapped_type(type_object)
         if initializer_node is not None:
@@ -1371,7 +1371,7 @@ new %(java_type_text)s  (
             type_object)
         enum_version_helper_obj_name = emit_fully_qualified_enum_version_helper_singleton_name(
             type_object)
-        
+
         if initializer_node is not None:
             initializer_text = emit_statement(emit_ctx,initializer_node)
             to_return = ('''
@@ -1391,19 +1391,19 @@ new %(java_type_text)s(
                             'enum_constructor_obj_name': enum_constructor_obj_name,
                             'enum_version_helper_obj_name': enum_version_helper_obj_name})
         return to_return
-    
+
     #### DEBUG
     else:
         raise InternalEmitException(
             'unknown',0,
             'Can only construct new expression from basic, map, or struct type')
-    #### END DEBUG    
+    #### END DEBUG
 
 
 def internal_map_version_helper_from_map_type(map_type):
     '''
     @param {TypeObject} map_type --- Type of map.
-    
+
     @returns{string} --- internal version helper associated with
     internal map with given index type.
     '''
@@ -1426,14 +1426,14 @@ def internal_map_version_helper_from_map_type(map_type):
             'Unknown',0,
             'Map only accepts value types for indices')
     #### END DEBUG
-    
+
     return internal_map_version_helper
 
-    
+
 def class_from_element_type(element_type):
     '''
     @param {TypeObject} element_type
-    
+
     When constructing lists or maps, we need to pass in the class
     object associated with the list's/map's parameterized type.  For
     instance, for
@@ -1455,7 +1455,7 @@ def class_from_element_type(element_type):
             raise InternalEmitException('unknown',0,'Unknown basic type.')
         #### END DEBUG
     elif isinstance(element_type,StructType):
-        internal_struct_name = emit_internal_struct_type(element_type)        
+        internal_struct_name = emit_internal_struct_type(element_type)
         return internal_struct_name + '.class'
     elif isinstance(element_type,EnumType):
         return emit_internal_enum_type(element_type) + '.class'
@@ -1465,7 +1465,7 @@ def class_from_element_type(element_type):
         raise InternalEmitException(
             'unknown',0,
             'FIXME: Still need to emit wrappers for non-basic value types.')
-    
+
 def list_map_wrappers(element_type):
     '''The type object of a list's elements or a map's values.
     '''
@@ -1504,7 +1504,7 @@ def list_map_wrappers(element_type):
 
     return element_type_wrapper
 
-    
+
 def emit_internal_map_type(type_object):
     key_type_node = type_object.from_type_node
     value_type_node = type_object.to_type_node
@@ -1517,12 +1517,12 @@ def emit_internal_map_type(type_object):
     delta_value_internal_type_text = value_internal_type_text
     if isinstance(value_type_node.type,StructType):
         delta_value_internal_type_text = 'IReference'
-    
+
     if type_object.is_tvar:
         internal_map_var_type = 'AtomicInternalMap'
     else:
         internal_map_var_type = 'NonAtomicInternalMap'
-        
+
     return (
         internal_map_var_type +
         ('<%s,%s,%s>' %
@@ -1542,7 +1542,7 @@ def emit_internal_list_type(type_object):
     delta_element_type_text = element_type_text
     if isinstance(element_type_node.type,StructType):
         delta_element_type_text = 'IReference'
-        
+
     return (
         internal_map_var_type +
         ('<%s,%s>' % (element_type_text,delta_element_type_text)))
@@ -1567,7 +1567,7 @@ def emit_map_type(type_object):
         delta_value_internal_type_text = value_internal_type_text
         if isinstance(value_type_node.type,StructType):
             delta_value_internal_type_text = 'IReference'
-            
+
         # FIXME: May not be dewaldo-ifying maps correctly
         to_return = (
             '%s<%s,%s,%s>' %
@@ -1580,7 +1580,7 @@ def emit_map_type(type_object):
             'unknown',0,
             'Requires map type in emit_map_type')
 
-    
+
 def emit_list_type(type_object):
     # emit for lists
     if isinstance(type_object,ListType):
@@ -1592,7 +1592,7 @@ def emit_list_type(type_object):
         if isinstance(element_type_node.type,StructType):
             delta_element_internal_type_text = 'IReference'
 
-        
+
         list_var_type = 'NonAtomicListVariable'
         if type_object.is_tvar:
             list_var_type = 'AtomicListVariable'
@@ -1626,7 +1626,7 @@ def emit_internal_type(type_object):
         # emit for list type
         if isinstance(type_object,ListType):
             return emit_internal_list_type(type_object)
-        
+
         # emit for struct type
         if isinstance(type_object,StructType):
             return emit_internal_struct_type(type_object)
@@ -1635,18 +1635,22 @@ def emit_internal_type(type_object):
         if isinstance(type_object,EndpointType):
             return type_object.alias_name
 
+        # emit for remote variables
+        if isinstance(type_object,RemoteVariableType):
+            return 'InternalServiceReference'
+
         # emit for enums
         if isinstance(type_object,EnumType):
             return emit_internal_enum_type(type_object)
 
-        
+
         # emit for ServiceFactories
         if isinstance(type_object,ServiceFactoryType):
             return 'InternalServiceFactory'
         # emit for ServiceReference
         if isinstance(type_object,ServiceReferenceType):
             return 'InternalServiceReference'
-        
+
         # emit for basic types
         if isinstance(type_object,BasicType):
             typer = type_object.basic_type
@@ -1674,11 +1678,14 @@ def emit_internal_type(type_object):
                 # FIXME: Ugly, hackish way to return enums
                 if isinstance(typer,EnumType):
                     return emit_internal_type(typer)
-                
+                # FIXME: Ugly, hackish way to return remote variables
+                if isinstance(typer, RemoteVariableType):
+                    return emit_internal_type(typer)
+
                 # FIXME: Need to support returning ServiceFactories,
                 # Services, and ServiceReferenceType
                 typer = typer.basic_type
-                
+
         if typer == BOOL_TYPE:
             return 'Boolean'
         elif typer == NUMBER_TYPE:
@@ -1726,7 +1733,7 @@ def emit_statement(emit_ctx,statement_node):
     if statement_node.label in NUMERICAL_ONLY_BINARY_LABELS_DICT:
         lhs = emit_statement(emit_ctx,statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx,statement_node.rhs_expression_node)
-        
+
         java_operator = NUMERICAL_ONLY_BINARY_LABELS_DICT[statement_node.label]
         return (
             '(new Double(%s.doubleValue() %s %s.doubleValue() ) )' %
@@ -1753,7 +1760,7 @@ def emit_statement(emit_ctx,statement_node):
         return (
             '(new String(%s.toString() + %s.toString() ) )' %
             (lhs, rhs))
-    
+
     elif statement_node.label == ast_labels.NUMBER_LITERAL:
         return '(new Double(%f))' % statement_node.value
 
@@ -1761,7 +1768,7 @@ def emit_statement(emit_ctx,statement_node):
         to_text_arg_statement = (
             emit_statement(emit_ctx,statement_node.to_text_arg_node))
         return '(%s).toString()' % to_text_arg_statement
-    
+
     elif statement_node.label == ast_labels.NOT:
         to_not_text = emit_statement(emit_ctx,statement_node.to_not_node)
         return '(new Boolean( ! %s.booleanValue()))' % to_not_text
@@ -1817,7 +1824,7 @@ def emit_statement(emit_ctx,statement_node):
         # Allows other events to now read/write on top of
         # some_other_list when accessing some_list.
         #
-        # However, 
+        # However,
         #
         #    List(element: Number) some_list;
         #    some_list.append(1);
@@ -1845,7 +1852,7 @@ def emit_statement(emit_ctx,statement_node):
         if statement_node.label == ast_labels.SPECULATE_CONTAINER_INTERNALS_CALL:
             suffix_to_speculate_on = (
                 '.get_val(exec_ctx.curr_act_evt())')
-            
+
         prev_lhs_of_assign = emit_ctx.get_lhs_of_assign()
         emit_ctx.set_lhs_of_assign(True)
         for to_speculate_on in statement_node.speculate_call_args_list:
@@ -1855,7 +1862,7 @@ def emit_statement(emit_ctx,statement_node):
                 (emitted_to_speculate_on,suffix_to_speculate_on))
         emit_ctx.set_lhs_of_assign(prev_lhs_of_assign)
         return to_return
-        
+
     elif statement_node.label == ast_labels.SPECULATE_ALL_CALL:
         raise InternalEmitException(
             statement_node.filename,
@@ -1877,20 +1884,20 @@ def emit_statement(emit_ctx,statement_node):
             'this._produce_range(%s,%s,%s)' %
             (start_expression_text,end_expression_text,
              increment_expression_text))
-    
+
     elif statement_node.label == ast_labels.CONTINUE:
         return 'continue'
-    
+
     elif statement_node.label == ast_labels.VERBATIM_CALL:
         return statement_node.verbatim_arg_node.value.replace('\\n','\n')
 
     elif statement_node.label == ast_labels.SELF:
-        return '(this)' 
-    
+        return '(this)'
+
     elif statement_node.label == ast_labels.EQUALS:
         lhs_node = statement_node.lhs_expression_node
         rhs_node = statement_node.rhs_expression_node
-        
+
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
         if ((lhs_node.label == NULL_TYPE) or
@@ -1902,7 +1909,7 @@ def emit_statement(emit_ctx,statement_node):
     elif statement_node.label == ast_labels.NOT_EQUALS:
         lhs_node = statement_node.lhs_expression_node
         rhs_node = statement_node.rhs_expression_node
-        
+
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
         if ((lhs_node.label == NULL_TYPE) or
@@ -1910,7 +1917,7 @@ def emit_statement(emit_ctx,statement_node):
             return '(new Boolean(%s != %s))' % (lhs,rhs)
         return ('(new Boolean(! (%s == null ? %s == %s : %s.equals(%s))))'
                 % (lhs,lhs,rhs,lhs,rhs))
-    
+
     elif statement_node.label == ast_labels.ATOMICALLY:
         atomic_logic = ''
         for statement in statement_node.statement_list:
@@ -1918,7 +1925,7 @@ def emit_statement(emit_ctx,statement_node):
             atomic_logic += emit_semicolon_line_break(statement)
 
         atomic_logic = indent_string(atomic_logic,2)
-        
+
         return '''
 {
     // atomically clause
@@ -1966,7 +1973,7 @@ def emit_statement(emit_ctx,statement_node):
 }
 ''' % atomic_logic
 
-    
+
     elif statement_node.label == ast_labels.ASSIGNMENT:
         rhs_text = emit_statement(emit_ctx,statement_node.rhs_node)
         emit_ctx.set_lhs_of_assign(True)
@@ -1985,12 +1992,12 @@ def emit_statement(emit_ctx,statement_node):
             is_partner_method_call = True
             get_val_text = '.get_val(exec_ctx.curr_act_evt())'
 
-            
+
         if not is_partner_method_call:
             return (
                 '%s.set_val(exec_ctx.curr_act_evt(),%s);\n' %
                 (lhs_text,rhs_text))
-        
+
         internal_type = emit_internal_type(statement_node.lhs_node.type)
         return (
             ('%s.set_val(exec_ctx.curr_act_evt(),' +
@@ -2014,7 +2021,7 @@ def emit_statement(emit_ctx,statement_node):
         # guaranteed that the identifier is for a non-method object type
         internal_var_name = emit_ctx.lookup_internal_var_name(
             statement_node.value)
-        
+
         if internal_var_name is None:
             # internal_var_name is not declared in this scope: some
             # type of error.
@@ -2029,7 +2036,7 @@ def emit_statement(emit_ctx,statement_node):
             if isinstance(statement_node.type,EndpointType):
                 # must cast endpoint object to expected aliased
                 # endpoint type so that can call its correct methods
-                # on it.  
+                # on it.
                 aliased_endpoint_name = statement_node.type.alias_name
                 internal_var_name = (
                     '((%s) %s.get_val(exec_ctx.curr_act_evt()))' %
@@ -2064,7 +2071,7 @@ def emit_statement(emit_ctx,statement_node):
         array_list_arg = ''
         if len(rpc_args) != 0:
             array_list_arg = 'Arrays.asList(%s)' % ','.join(rpc_args)
-            
+
         rpc_args_list_text = (
             'new ArrayList<RalphObject>( %s)' % array_list_arg)
 
@@ -2074,7 +2081,7 @@ exec_ctx.message_sender().hide_partner_call(
     %s,null)''' %  ( statement_node.partner_method_name, rpc_args_list_text)
 
         return partner_call_text
-    
+
     elif statement_node.label in NUMERICAL_ONLY_COMPARISONS_DICT:
         lhs = emit_statement(emit_ctx, statement_node.lhs_expression_node)
         rhs = emit_statement(emit_ctx, statement_node.rhs_expression_node)
@@ -2091,7 +2098,7 @@ exec_ctx.message_sender().hide_partner_call(
 
     elif statement_node.label == ast_labels.TEXT_LITERAL:
         return '("' + statement_node.value + '")'
-    
+
     elif statement_node.label == ast_labels.DECLARATION_STATEMENT:
         java_type_statement = emit_ralph_wrapped_type(statement_node.type)
         new_expression = construct_new_expression(
@@ -2154,12 +2161,12 @@ exec_ctx.message_sender().hide_partner_call(
         elif_body_text += emit_semicolon_line_break(statement_node.body_node)
         elif_text += indent_string(elif_body_text) + '\n}\n'
         return elif_text
-    
+
     elif statement_node.label == ast_labels.SCOPE:
         to_return = '{\n'
 
         scope_body_text = 'try \n {\n'
-        
+
         # Any variable declared in this scope should be removed after
         # this scope statement: so push on a scope to emit_ctx and
         # after emitting individual statements (ie, at end of for
@@ -2176,7 +2183,7 @@ exec_ctx.message_sender().hide_partner_call(
         scope_body_text +='}\n'
         scope_body_text += 'finally {}\n'
         to_return += indent_string(scope_body_text) + '\n}\n'
-        
+
         return to_return
 
     elif statement_node.label == ast_labels.DOT:
@@ -2188,13 +2195,13 @@ exec_ctx.message_sender().hide_partner_call(
     elif statement_node.label == ast_labels.DYNAMIC_CAST:
         what_casting_node = statement_node.cast_arg_node
         what_casting_text = emit_statement(emit_ctx,what_casting_node)
-        
+
         casting_to_variable_type_node = statement_node.to_variable_type_node
         casting_to_type_text = emit_internal_type(
             casting_to_variable_type_node.type)
-        
+
         return '((%s) %s)' % (casting_to_type_text,what_casting_text)
-    
+
     return (
         '\n/** FIXME: must fill in emit_method_body for label %s */\n' %
         statement_node.label)
@@ -2214,7 +2221,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         # however, a struct with an enum field will have the same dot
         # structure.  We distinguish between references to these two
         # in the following way: if the left of dot node is an
-        # identifier and it appears in the 
+        # identifier and it appears in the
         if left_of_dot_node.label == ast_labels.IDENTIFIER_EXPRESSION:
             left_value = left_of_dot_node.get_value()
             enum_type = (
@@ -2229,7 +2236,7 @@ def emit_dot_statement(emit_ctx,dot_node):
                 # should both be identifiers
                 enum_field_name = right_of_dot_node.get_value()
                 return dot_node.type.get_emit_name() + '.' + enum_field_name
-    
+
     to_return = emit_statement(emit_ctx,left_of_dot_node)
     if isinstance(left_of_dot_node.type,MapType):
         if right_of_dot_node.label != ast_labels.IDENTIFIER_EXPRESSION:
@@ -2250,7 +2257,7 @@ def emit_dot_statement(emit_ctx,dot_node):
         elif right_hand_side_method == MapType.REMOVE_METHOD_NAME:
             to_return += '.remove'
         elif right_hand_side_method == MapType.CLEAR_METHOD_NAME:
-            to_return += '.clear'            
+            to_return += '.clear'
         #### DEBUG
         else:
             raise InternalEmitException(
@@ -2334,13 +2341,13 @@ def emit_dot_statement(emit_ctx,dot_node):
                 left_of_dot_node.line_number,
                 'Unknown identifier on rhs of dot for service factory.')
         #### END DEBUG
-        
+
     else:
         raise InternalEmitException(
             dot_node.filename,
             dot_node.line_number,
             'Unknown dot statement: not dot on map or struct.')
-        
+
     return to_return
 
 def emit_for_loop_cast_line_list(
@@ -2365,7 +2372,7 @@ def emit_for_loop_cast_line_map(
     internal_var_name_text,variable_type_node):
     '''
     @see emit_internal_for_statement_for_list
-    
+
     Big difference between list and map is that map should hold a raw
     Java boxed value that needs to get wrapped in Ralph object
     '''
@@ -2386,7 +2393,7 @@ def emit_for_statement(for_node,emit_ctx):
     # loop's predicate will only be local to the for loop.
     to_return = ''
     emit_ctx.push_scope()
-    
+
     # add new variable to emit_ctx stack
     emit_ctx.add_var_name(for_node.variable_node.value)
     internal_var_name_text = emit_ctx.lookup_internal_var_name(
@@ -2404,7 +2411,7 @@ def emit_for_statement(for_node,emit_ctx):
             for_node.filename,
             for_node.line_number,
             'Running for loop over non-map/-list is disallowed.')
-        
+
 
     # identifier iterating over should not use its get_val (see
     # comments about assignment)
@@ -2424,11 +2431,11 @@ def emit_for_statement(for_node,emit_ctx):
 %s;
 // for body
 %s%s
-'''  % (cast_line,        
+'''  % (cast_line,
         # for body
         statement_body_text,
         emit_semicolon_line_break(for_node.statement_node))
-    
+
     to_return += '''
 {
     try
@@ -2440,18 +2447,18 @@ def emit_for_statement(for_node,emit_ctx):
     }
 }
 ''' % indent_string(internal_statement_text)
-       
+
     emit_ctx.pop_scope()
     return to_return
 
 
 ######### HANDLING ENUMS ########
 def emit_enum_definition(enum_name,enum_type,struct_ctx):
-    
+
     # Only emit enums for this file.
     where_declared_enum = (
         struct_ctx.enum_ctx.get_decl_point_from_enum_name(enum_name))
-    
+
     if struct_ctx.filename != where_declared_enum.filename:
         return ''
 
@@ -2488,7 +2495,7 @@ public static %(enum_name)s from_ordinal(int ordinal)
         emit_enum_constructor_obj_and_instance(enum_type))
     to_return += indent_string(
         emit_enum_serializer_and_version_helper_singleton(enum_type))
-    
+
     enum_version_helper_name = emit_enum_version_helper_singleton_name(enum_type)
     ### FIXME: kind of stupid that have to special case no logic for
     ### empty enums.
@@ -2526,7 +2533,7 @@ public final static %(enum_class_name)s_wrapper_class %(enum_locked_map_wrapper_
     # atomic wrapper var.
     to_return += indent_string(
         emit_enum_map_list_variable_factories(enum_type))
-        
+
     to_return += '}'
     return to_return
 
@@ -2574,7 +2581,7 @@ def emit_enum_map_list_variable_factories(enum_type):
     enum_name = enum_type.get_emit_name()
     enum_locked_wrapper_name = emit_enum_locked_map_wrapper_name(enum_type)
     # FIXME: duplicated code with structs
-    
+
     # map deserializers
     param_tuples = (
         ('Double',
@@ -2586,12 +2593,12 @@ def emit_enum_map_list_variable_factories(enum_type):
         ('Boolean',
          ('ralph.BaseTypeVersionHelpers.' +
              'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
-     
+
     text = ''
     for params in param_tuples:
         key_type = params[0]
         version_helper = params[1]
-        
+
         text += '''
 private final static MapVariableFactory<%(key_type)s,%(enum_name)s,%(enum_name)s>
     %(key_type)s_atom_map_serializer_%(enum_name)s =
@@ -2627,7 +2634,7 @@ def emit_enum_constructor_obj_and_instance(enum_type):
 
     to_return = '''
 public static class %(enum_constructor_class_name)s
-    extends EnumConstructorObj < %(enum_name)s> 
+    extends EnumConstructorObj < %(enum_name)s>
 {
     @Override
     public AtomicEnumVariable<%(enum_name)s> construct(
@@ -2655,7 +2662,7 @@ public static final %(enum_constructor_class_name)s %(enum_constructor_obj_name)
        'enum_name': enum_type.get_emit_name(),
        'enum_constructor_obj_name': enum_constructor_obj_name,
        'enum_version_helper': enum_version_helper_name}
-    
+
     return to_return
 
 
@@ -2672,17 +2679,17 @@ def emit_struct_definition(struct_name,struct_type,struct_ctx):
     # Only emit structs for this file.
     where_declared_struct = (
         struct_ctx.get_decl_point_from_struct_name(struct_name))
-    
+
     if struct_ctx.filename != where_declared_struct.filename:
         return ''
-    
+
     dw_constructor_text = emit_struct_data_wrapper_constructor(struct_type)
     external_struct_definition_text = emit_struct_wrapper(struct_type)
     internal_struct_definition_text = emit_internal_struct(struct_type)
     struct_map_wrapper = emit_struct_map_wrapper(struct_type)
     contents_deserializer = emit_struct_content_deserializer(struct_type)
     struct_wrapper_deserializer = emit_struct_wrapper_deserializer(struct_type)
-    
+
     return (
         dw_constructor_text + '\n' +
         external_struct_definition_text + '\n' +
@@ -2757,12 +2764,12 @@ def emit_struct_content_deserializer(struct_type):
         ('Boolean',
          ('ralph.BaseTypeVersionHelpers.' +
              'BOOLEAN_KEYED_INTERNAL_MAP_TYPE_VERSION_HELPER')))
-     
+
     text = ''
     for params in param_tuples:
         key_type = params[0]
         version_helper = params[1]
-        
+
         text += '''
 private final static MapVariableFactory<%(key_type)s,%(internal_struct_name)s,IReference>
     %(key_type)s_atom_map_serializer_%(internal_struct_name)s =
@@ -2784,7 +2791,7 @@ private final static ListVariableFactory<%(internal_struct_name)s,IReference>
         'internal_struct_name': internal_struct_name}
 
     return text
-    
+
 def emit_struct_data_wrapper_constructor(struct_type):
     '''
     Each user-defined struct has its own data wrapper const
@@ -2799,20 +2806,20 @@ def emit_struct_data_wrapper_constructor(struct_type):
         struct_name)
     data_wrapper_constructor_text = '''
 final static %s
-    %s = 
+    %s =
     new %s();
 ''' % (
         data_wrapper_type_text,data_wrapper_constructor_name,
         data_wrapper_type_text)
     return data_wrapper_constructor_text
-    
+
 def struct_data_wrapper_constructor_name(struct_name):
     return '%s_type_data_wrapper_constructor' % struct_name
 
 def emit_struct_map_wrapper(struct_type):
     struct_name = struct_type.struct_name
     internal_struct_name = emit_internal_struct_type(struct_type)
-    
+
     # ensure locked wrappers
     locked_wrappers_text = '''
 public static class %s_ensure_atomic_wrapper implements EnsureAtomicWrapper<%s,IReference>
@@ -2857,7 +2864,7 @@ def emit_struct_wrapper(struct_type):
     '''
     struct_name = struct_type.struct_name
     internal_struct_name = emit_internal_struct_type(struct_type)
-    
+
     ##### External wrapped struct
     # FIXME: structs are always atomic.
     external_struct_definition_text = '''
@@ -2866,7 +2873,7 @@ public static class %s extends StructWrapperBaseClass<%s>
 
     data_wrapper_constructor_name = struct_data_wrapper_constructor_name(
         struct_name)
-    
+
     external_struct_definition_constructor = '''
 public %(struct_name)s (
     boolean log_operations, RalphGlobals ralph_globals,
@@ -2886,7 +2893,7 @@ public %(struct_name)s (
 }
 
 @Override
-public boolean return_internal_val_from_container() 
+public boolean return_internal_val_from_container()
 {
     // return internal val when getting from container
     return true;
@@ -2923,7 +2930,7 @@ public ObjectContents serialize_contents(
 ''' % ({'struct_name': struct_name,
         'internal_struct_name': internal_struct_name,
         'data_wrapper_constructor_name': data_wrapper_constructor_name})
-    
+
     external_struct_definition_constructor += '''
 @Override
 protected SpeculativeAtomicObject<%s,IReference>
@@ -2957,7 +2964,7 @@ public %s (
         external_struct_definition_constructor +
         clone_for_args_method_constructor_text)
     external_struct_definition_text += '}\n'
-    
+
     return external_struct_definition_text
 
 
@@ -2968,8 +2975,8 @@ def emit_internal_struct(struct_type):
     '''
     internal_struct_name = emit_internal_struct_type(
         struct_type)
-    
-    ### Internal wrapped struct    
+
+    ### Internal wrapped struct
     internal_struct_definition_text = '''
 public static class %(internal_struct_name)s extends InternalStructBaseClass
 {
@@ -2985,7 +2992,7 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
             'public %s %s = null;\n' %
             (emit_ralph_wrapped_type(field_type),field_name))
     emit_ctx.set_in_struct_global_vars(False)
-        
+
     # emit constructor for struct
     emit_ctx.set_in_struct_constructor(True)
     internal_struct_body_text += (
@@ -3007,19 +3014,19 @@ public static class %(internal_struct_name)s extends InternalStructBaseClass
             (field_name,
              construct_new_expression(field_type,initializer_node,emit_ctx)))
 
-    emit_ctx.set_in_struct_constructor(False)        
+    emit_ctx.set_in_struct_constructor(False)
     # registers struct with version manager, if on.
     internal_constructor_text += '\nlog_obj_constructor_during_init(null);\n'
-        
+
     internal_struct_body_text += indent_string(internal_constructor_text)
     internal_struct_body_text += '}\n'
 
-    # emit other methods of internal struct 
+    # emit other methods of internal struct
     internal_struct_body_text += (
         emit_internal_struct_replay_and_deserialize(struct_type))
     internal_struct_body_text += (
         emit_internal_struct_serialize_contents(struct_type))
-    
+
     internal_struct_definition_text += indent_string(
         internal_struct_body_text)
     internal_struct_definition_text += '\n}'
@@ -3105,7 +3112,7 @@ def emit_internal_struct_serialize_contents(struct_type):
     struct_name = struct_type.struct_name
     internal_struct_builder_var_name = 'internal_struct_builder'
     field_serialization_text = ''
-    
+
     # note that it's important to add these in alphabetically sorted
     # order.  deserializer, expects them in alphabetically sorted order
     for field_name in sorted(struct_type.name_to_field_type_dict.keys()):
@@ -3171,7 +3178,7 @@ def is_remote_method_call(potential_method_call_node):
     if isinstance(potential_method_call_node.method_node.type, WildcardType):
         method_node = potential_method_call_node.method_node
         left_of_dot_node = method_node.left_of_dot_node
-        
+
         if isinstance(left_of_dot_node.type, RemoteVariableType):
             return True
 
@@ -3181,7 +3188,7 @@ def is_remote_method_call(potential_method_call_node):
 def emit_method_call(method_call_node, emit_ctx):
     if is_remote_method_call(method_call_node):
         # Remote call
-        
+
         # FIXME: really gross assumption about format of remotes.
         service_reference_text = emit_statement(
             emit_ctx, method_call_node.method_node.left_of_dot_node)
@@ -3204,10 +3211,10 @@ def emit_method_call(method_call_node, emit_ctx):
         array_list_arg = ''
         if len(rpc_args) != 0:
             array_list_arg = 'Arrays.asList(%s)' % ','.join(rpc_args)
-            
+
         rpc_args_list_text = (
             'new ArrayList<RalphObject>( %s)' % array_list_arg)
-        
+
         remote_call_text = '''
 exec_ctx.message_sender().hide_partner_call(
     %(service_reference)s.remote_host_uuid, %(service_reference)s.service_uuid,

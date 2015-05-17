@@ -1,31 +1,72 @@
-alias Endpoint LinkedConnectionEndpoint as 'LinkedConnectionJava.LinkedConnectionEndpoint';
+alias Endpoint LinkedInstanceEndpoint as 'LinkedInstanceJava.LinkedInstanceEndpoint';
 
-Struct ConnectionWrapper
+Struct Wrapper
 {
-    Endpoint LinkedConnectionEndpoint child = null;
+    Remote LinkedInstanceEndpoint child = null;
 }
-
 
 Endpoint LinkedInstanceEndpoint
 {
     TVar Number to_increment = 0;
-    TVar List(element : Struct ConnectionWrapper) children;
-
+    TVar List(element : Struct Wrapper) children;
     Text name;
+
 
     set_name(Text new_name)
     {
         name = new_name;
     }
-    
-    add_child(Endpoint LinkedConnectionEndpoint to_add)
+
+    get_empty_text_list() returns List(element: Text)
     {
+        List (element: Text) to_return;
+        return to_return;
+    }
+
+    append_text_to_text_list(
+        Text to_append, List(element: Text) text_list)
+        returns List(element: Text)
+    {
+        text_list.append(to_append);
+        return text_list;
+    }
+
+    chain_add_children(
+        List(element: Text) remote_uuids, List(element: Text) names,
+        ServiceFactory factory)
+    {
+        if (remote_uuids.size() == 0)
+            return;
+
+        Text remote_uuid = remote_uuids.get(0);
+        remote_uuids.remove(0);
+
+        Text next_name = names.get(0);
+        names.remove(0);
+
+        Remote LinkedInstanceEndpoint next = null;
+        next = add_child(remote_uuid, factory);
+        next.chain_add_children(remote_uuids, factory);
+        next.set_name(next_name);
+    }
+
+    add_child(Text remote_uuid, ServiceFactory factory)
+        returns Remote LinkedInstanceEndpoint
+    {
+        Remote LinkedInstanceEndpoint child = null;
         atomically
         {
-            Struct ConnectionWrapper wrapper;
-            wrapper.child = to_add;
+            ServiceReference service_reference = null;
+            service_reference = install(remote_uuid, factory);
+
+            child =
+                factory.construct_remote_from_reference(service_reference);
+
+            Struct Wrapper wrapper;
+            wrapper.child = child;
             children.append(wrapper);
         }
+        return child;
     }
 
     increment_and_request_others_to_increment()
@@ -34,9 +75,10 @@ Endpoint LinkedInstanceEndpoint
         {
             to_increment = to_increment + 1;
 
-            for (Struct ConnectionWrapper wrapper in children)
+            for (Struct Wrapper wrapper in children)
             {
-                Endpoint LinkedConnectionEndpoint endpt = wrapper.child;
+                Remote LinkedInstanceEndpoint endpt = null;
+                endpt = wrapper.child;
                 endpt.request_increment_from_instance();
             }
         }

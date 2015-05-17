@@ -565,14 +565,6 @@
       <param name="class_name" value="LinkedInstanceJava"/>
     </antcall>
   </target>
-  
-  <target name="linked_connection" depends="init"
-          description="translate ralph files">
-    <antcall target="compile_ralph">
-      <param name="rph_filename" value="linked_connection.rph"/>
-      <param name="class_name" value="LinkedConnectionJava"/>
-    </antcall>
-  </target>
     
   <target name="single_side_service_factory" depends="init"
           description="translate ralph files">
@@ -1082,7 +1074,7 @@
 
   <target
       name="ralph_Linked"
-      depends="linked_connection,linked_instance">
+      depends="linked_instance">
   </target>
 
   <target
