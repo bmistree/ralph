@@ -1208,7 +1208,7 @@
 
   <target
       name="ralph_SerializeTrueFalseList"
-      depends="serialize_true_false_list">
+      depends="serialize_true_false_list, ralph_RemoteInstaller">
   </target>
 
   <target
@@ -1268,7 +1268,7 @@
 
   <target
       name="ralph_SerializeStructWithStruct"
-      depends="serialize_struct_with_struct,iserialize_struct_sum">
+      depends="serialize_struct_with_struct,iserialize_struct_sum, remote_installer">
   </target>
 
 
