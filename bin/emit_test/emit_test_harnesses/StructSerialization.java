@@ -5,18 +5,16 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 import ralph_emitted.StructSerializationJava.StructSerializer;
-import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
-
-
+import ralph.InternalServiceFactory;
+import ralph.Ralph;
 
 public class StructSerialization
 {
     private final static int TCP_CONNECTION_PORT_A = 20494;
     private final static int TCP_CONNECTION_PORT_B = 20495;
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -30,17 +28,28 @@ public class StructSerialization
         Random rand = new Random();
         RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
         params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
-        
+
         RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
         params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
-        
+
         try
         {
-            SameHostConnection conn_obj = new SameHostConnection();
-            StructSerializer side_a = StructSerializer.external_create(
-                new RalphGlobals(params_a),conn_obj);
-            StructSerializer side_b = StructSerializer.external_create(
-                new RalphGlobals(params_b),conn_obj);
+            RalphGlobals globals_a = new RalphGlobals(params_a);
+            RalphGlobals globals_b = new RalphGlobals(params_b);
+
+            // connect hosts a and b, via a tcp connection
+            Thread.sleep(500);
+            Ralph.tcp_connect("127.0.0.1", TCP_CONNECTION_PORT_B, globals_a);
+            Thread.sleep(500);
+
+
+            // Instantiate StructSerializer and have it build a remote copy
+            StructSerializer side_a = StructSerializer.external_create(globals_a);
+            InternalServiceFactory service_receiver_factory_to_send =
+                new InternalServiceFactory(
+                    StructSerializer.factory, globals_a);
+            side_a.install_partner(service_receiver_factory_to_send);
+
 
             List<SerializerTest> tests_to_run =
                 new ArrayList<SerializerTest>(
@@ -62,7 +71,7 @@ public class StructSerialization
                 if (! st.run_test())
                     return false;
             }
-            
+
             return true;
         }
         catch(Exception _ex)
@@ -77,7 +86,7 @@ public class StructSerialization
         private final double num_a;
         private final double num_b;
         private final StructSerializer serializer;
-        
+
         public SerializerTest(
             double _num_a, double _num_b, StructSerializer _serializer)
         {
