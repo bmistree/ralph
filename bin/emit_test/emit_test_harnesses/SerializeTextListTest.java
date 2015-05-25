@@ -1,14 +1,17 @@
 package emit_test_harnesses;
 
 import ralph_emitted.SerializeTextListJava.ListSerializer;
-import RalphConnObj.SameHostConnection;
 import ralph.RalphGlobals;
+import ralph.InternalServiceFactory;
+import ralph.Ralph;
+
+
 
 public class SerializeTextListTest
 {
     private final static int TCP_CONNECTION_PORT_A = 20494;
     private final static int TCP_CONNECTION_PORT_B = 20495;
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -21,26 +24,37 @@ public class SerializeTextListTest
     {
         RalphGlobals.Parameters params_a = new RalphGlobals.Parameters();
         params_a.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_A;
-        
+
         RalphGlobals.Parameters params_b = new RalphGlobals.Parameters();
         params_b.tcp_port_to_listen_for_connections_on = TCP_CONNECTION_PORT_B;
 
         try
         {
-            SameHostConnection conn_obj = new SameHostConnection();
-            ListSerializer side_a = ListSerializer.external_create(
-                new RalphGlobals(params_a),conn_obj);
-            ListSerializer side_b = ListSerializer.external_create(
-                new RalphGlobals(params_b),conn_obj);
+            RalphGlobals globals_a = new RalphGlobals(params_a);
+            RalphGlobals globals_b = new RalphGlobals(params_b);
+
+            // connect hosts a and b, via a tcp connection
+            Thread.sleep(500);
+            Ralph.tcp_connect("127.0.0.1", TCP_CONNECTION_PORT_B, globals_a);
+            Thread.sleep(500);
+
+
+            // Instantiate ListSerializer and have it build a remote copy
+            ListSerializer side_a = ListSerializer.external_create(globals_a);
+            InternalServiceFactory service_receiver_factory_to_send =
+                new InternalServiceFactory(
+                    ListSerializer.factory, globals_a);
+            side_a.install_partner(service_receiver_factory_to_send);
+
 
             // tests atomic text list serialization
             if (! text_list_concat_test(true,side_a))
                 return false;
-            
+
             // tests non atomic text list serialization
             if (! text_list_concat_test(false,side_a))
                 return false;
-            
+
             return true;
         }
         catch(Exception _ex)
@@ -75,7 +89,7 @@ public class SerializeTextListTest
                 result = to_call_on.atom_concatenate_strings(a,b,c);
             else
                 result = to_call_on.concatenate_strings(a,b,c);
-            
+
             if (! result.equals(expected))
                 return false;
         }

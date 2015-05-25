@@ -37,7 +37,7 @@ public class SerializeNumberListTest
             Ralph.tcp_connect("127.0.0.1", TCP_CONNECTION_PORT_B, globals_a);
             Thread.sleep(500);
 
-
+            // Instantiate ListSerializer and have it build a remote copy
             ListSerializer side_a = ListSerializer.external_create(globals_a);
             InternalServiceFactory service_receiver_factory_to_send =
                 new InternalServiceFactory(
