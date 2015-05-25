@@ -1,11 +1,48 @@
-/**
-   Should be partnered with Endpoint ServiceReceiver in
-   single_side_service_factory.rph
- */
+alias Endpoint ServiceReceiver as 'SingleSideServiceFacotryJava.ServiceReceiver';
+
 Endpoint ServiceFactorySender
 {
+    Remote ServiceReceiver service_receiver = null;
+
+    /**
+       to_send should be a factory for an Endpoint ServiceReceiver
+     */
+    install_remote_service_receiver(ServiceFactory to_send)
+    {
+        List(element: Text) connected_list = null;
+        connected_list = connected_uuids();
+
+        Text to_install_on = connected_list.get(1);
+        ServiceReference service_reference = null;
+        service_reference = install(to_install_on, to_send);
+        service_receiver =
+            to_send.construct_remote_from_reference(service_reference);
+    }
+
+    construct_endpt_on_remote()
+    {
+        service_receiver.construct_endpt();
+    }
+
+    get_remote_endpt_number() returns Number
+    {
+        Number to_return;
+        to_return = service_receiver.get_endpt_number();
+        return to_return;
+    }
+
+    increment_remote_endpt_number(Number to_increment_by) returns Number
+    {
+        Number to_return;
+        to_return = service_receiver.increment_endpt_number(to_increment_by);
+        return to_return;
+    }
+
+    /**
+       to_send should be a SetterGetter ServiceFactory.
+     */
     send_service_factory_to_partner(ServiceFactory to_send)
     {
-        @partner.set_service_factory(to_send);
+        service_receiver.set_service_factory(to_send);
     }
 }
