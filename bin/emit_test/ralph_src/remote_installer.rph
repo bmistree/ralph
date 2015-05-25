@@ -1,0 +1,26 @@
+
+Service RemoteInstaller
+{
+    install_remote_service_factory(ServiceFactory factory)
+        returns ServiceReference
+    {
+        List(element: Text) conn_uuids = null;
+        conn_uuids = connected_uuids();
+        Text loc_uuid = local_uuid();
+
+        Text to_install_on = loc_uuid;
+        for (Number i in range(0, conn_uuids.size()))
+        {
+            Text potential_uuid = conn_uuids.get(i);
+            if (potential_uuid != loc_uuid)
+            {
+                to_install_on = potential_uuid;
+                break;
+            }
+        }
+
+        ServiceReference service_reference = null;
+        service_reference = install(to_install_on, factory);
+        return service_reference;
+    }
+}

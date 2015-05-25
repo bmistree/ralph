@@ -1,5 +1,5 @@
 <project name="RalphEmitTest" default="compile" basedir=".">
-  
+
   <description>
     Test cases for java libraries.
   </description>
@@ -8,13 +8,13 @@
     property="emit_test_dir"
     file="${ant.file.RalphJavaLibTest}"
   />
-    
+
   <!-- global properties for this build file -->
   <property name="build.dir" location="${emit_test_dir}/classes"/>
   <property name="config_dir" location="${emit_test_dir}/config"/>
 
   <property name="jar_dir" location="${emit_test_dir}/jar_dir"/>
-  
+
   <property name="ralph_src.dir" location="${emit_test_dir}/../ralph_src"/>
   <property name="ralph_emitted.dir" location="${emit_test_dir}/../ralph_emitted"/>
   <property name="test_src.dir" location="${emit_test_dir}/../emit_test_harnesses"/>
@@ -34,11 +34,11 @@
   <property
       name="multidisk_log_config"
       location="${lib_build_path}/multidisk_durability_config/config.properties"/>
-  
+
   <property
       name="disk_durability_config"
       location="${lib_build_path}/disk_durability_config/config.properties"/>
-  
+
   <property
       name="lib_class_path" location="${lib_build_path}/classes/"/>
   <property
@@ -50,7 +50,7 @@
   <property name="emitted_package" value="ralph_emitted"/>
   <property name="harness_package" value="emit_test_harnesses"/>
 
-  
+
   <!-- set up build directories for test -->
   <target name="init" description="setup build directories">
     <echo message="Setting up build directories for tests"/>
@@ -96,7 +96,7 @@
       <param name="class_name" value="DurabilityManyServicesJava"/>
     </antcall>
   </target>
-  
+
   <target name="replay_enum" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -112,7 +112,7 @@
       <param name="class_name" value="MixedAccessesJava"/>
     </antcall>
   </target>
-  
+
   <target name="direct_struct_wrapped_endpoint" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -120,7 +120,7 @@
       <param name="class_name" value="DirectStructWrappedEndpointJava"/>
     </antcall>
   </target>
-  
+
   <target name="atomic_number_incrementer" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -128,7 +128,7 @@
       <param name="class_name" value="AtomicNumberIncrementerJava"/>
     </antcall>
   </target>
-  
+
   <target name="struct_enum_ralph" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -144,7 +144,7 @@
       <param name="class_name" value="DurabilityReplayRPCJava"/>
     </antcall>
   </target>
-  
+
   <target name="recursive_partner_addition_ralph" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -168,7 +168,7 @@
       <param name="class_name" value="ConnUuidJava"/>
     </antcall>
   </target>
-  
+
   <target name="replay_partner_struct_element_ralph"
           depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
@@ -184,7 +184,7 @@
       <param name="class_name" value="LocUuidJava"/>
     </antcall>
   </target>
-  
+
   <target name="iface_basic_ralph" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -208,7 +208,7 @@
       <param name="class_name" value="ReplayPartnerNumberChangeJava"/>
     </antcall>
   </target>
-  
+
   <target name="read_only_speculate" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -216,7 +216,7 @@
       <param name="class_name" value="ReadOnlySpeculateJava"/>
     </antcall>
   </target>
-  
+
   <target name="multiple_interfaces" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -240,7 +240,7 @@
       <param name="class_name" value="SerializeNullJava"/>
     </antcall>
   </target>
-  
+
   <target name="serialize_struct_with_list" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -256,7 +256,7 @@
       <param name="class_name" value="SerializeStructWithStructJava"/>
     </antcall>
   </target>
-  
+
   <target name="serialize_struct_with_map" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -272,7 +272,7 @@
       <param name="class_name" value="SerializeMapOfStructsJava"/>
     </antcall>
   </target>
-    
+
   <target name="struct_serialization" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -335,7 +335,7 @@
       <param name="class_name" value="AtomicSetterGetterJava"/>
     </antcall>
   </target>
-  
+
   <target name="internal_method_call" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -359,7 +359,7 @@
       <param name="class_name" value="NestedAtomicSetterGetterJava"/>
     </antcall>
   </target>
-  
+
   <target name="basic_partner" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -403,7 +403,7 @@
       <param name="class_name" value="TestListJava"/>
     </antcall>
   </target>
-  
+
   <target name="atomic_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="atomic_list.rph"/>
@@ -426,7 +426,7 @@
       <param name="class_name" value="ReplayStructMapJava"/>
     </antcall>
   </target>
-  
+
   <target name="for_list" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="for_list.rph"/>
@@ -565,7 +565,7 @@
       <param name="class_name" value="LinkedInstanceJava"/>
     </antcall>
   </target>
-    
+
   <target name="single_side_service_factory" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -604,7 +604,7 @@
       <param name="class_name" value="InternalCreateServiceJava"/>
     </antcall>
   </target>
-  
+
   <target name="self" depends="init" description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="self.rph"/>
@@ -634,7 +634,7 @@
       <param name="class_name" value="RangeTestJava"/>
     </antcall>
   </target>
-  
+
   <target name="read_read_write_speculation" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -690,7 +690,7 @@
       <param name="class_name" value="LotsOfBackoutsJava"/>
     </antcall>
   </target>
-  
+
   <target name="multiline_string" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -706,12 +706,20 @@
       <param name="class_name" value="SimplifiedBackedSpeculationJava"/>
     </antcall>
   </target>
-  
+
   <target name="serialize_number_list" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
       <param name="rph_filename" value="serialize_number_list.rph"/>
       <param name="class_name" value="SerializeNumberListJava"/>
+    </antcall>
+  </target>
+
+  <target name="remote_installer" depends="init"
+          description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="remote_installer.rph"/>
+      <param name="class_name" value="RemoteInstallerJava"/>
     </antcall>
   </target>
   
@@ -722,7 +730,7 @@
       <param name="class_name" value="PartnerNumberReturnJava"/>
     </antcall>
   </target>
-  
+
   <target name="internal_return_struct" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -730,7 +738,7 @@
       <param name="class_name" value="InternalReturnStructJava"/>
     </antcall>
   </target>
-  
+
   <target name="reference_service_factory" depends="init"
           description="translate ralph files">
     <antcall target="compile_ralph">
@@ -742,10 +750,10 @@
   <!-- COMPILING -->
   <!-- compile java libraries -->
   <target name="compile_libs" depends="init" description="compile library files">
-    <ant antfile="${lib_build_path}/build.xml" target="compile_all" />  
+    <ant antfile="${lib_build_path}/build.xml" target="compile_all" />
   </target>
 
-  
+
   <target name="ralph_to_byte_code" depends="init,compile_libs" description="compile ralph files">
     <!-- Compile all ralph java to bytecode -->
     <javac
@@ -815,7 +823,7 @@
       name="ralph_LocUuid"
       depends="loc_uuid_ralph">
   </target>
-  
+
   <target
       name="ralph_DirectStructWrappedEndpoint"
       depends="direct_struct_wrapped_endpoint">
@@ -851,7 +859,7 @@
       name="ralph_DurabilitySingleSideReplayer"
       depends="atomic_setter_getter,iface_basic_ralph">
   </target>
-  
+
   <target
       name="ralph_VersionedIFace"
       depends="iface_basic_ralph,basic_ralph,versioned_iface">
@@ -861,12 +869,12 @@
       name="ralph_MixedAccesses"
       depends="mixed_accesses">
   </target>
-  
+
   <target
       name="ralph_ReplayPartnerNumberChange"
       depends="replay_partner_number_change">
   </target>
-  
+
   <target
       name="ralph_VersionedEnum"
       depends="replay_enum">
@@ -876,7 +884,7 @@
       name="ralph_DurabilityManyServicesReplayer"
       depends="durability_many_services,iface_basic_ralph,atomic_setter_getter">
   </target>
-  
+
   <target
       name="ralph_VersionedMap"
       depends="atomic_map">
@@ -896,7 +904,7 @@
       name="ralph_VersionedStructMap"
       depends="replay_struct_map">
   </target>
-  
+
   <target
       name="ralph_ReadOnlySpeculate"
       depends="read_only_speculate">
@@ -926,12 +934,12 @@
       name="ralph_ConnUuid"
       depends="conn_uuid_ralph">
   </target>
-  
+
   <target
       name="ralph_ReplayPartnerStructElement"
       depends="replay_partner_struct_element_ralph">
   </target>
-  
+
   <target
       name="ralph_StructEnum"
       depends="struct_enum_ralph">
@@ -941,7 +949,7 @@
       name="ralph_DurabilityReplayRPC"
       depends="durability_replay_rpc">
   </target>
-  
+
   <target
       name="ralph_StructSetterGetter"
       depends="iface_basic_ralph,struct_test">
@@ -1006,7 +1014,7 @@
       name="ralph_DelayAndContend"
       depends="delay_and_contend">
   </target>
-  
+
   <target
       name="ralph_InterruptedAtomically"
       depends="interrupted_atomically">
@@ -1092,17 +1100,17 @@
       name="ralph_EndpointStructList"
       depends="basic_ralph,endpoint_struct_list">
   </target>
-  
+
   <target
       name="ralph_BasicSpeculation"
       depends="basic_speculation">
   </target>
-  
+
   <target
       name="ralph_Null"
       depends="null">
   </target>
-  
+
   <target
       name="ralph_InternalCreateService"
       depends="internal_create_service">
@@ -1122,7 +1130,7 @@
       name="ralph_Range"
       depends="range_test">
   </target>
-  
+
   <target
       name="ralph_ReadReadWriteSpeculation"
       depends="read_read_write_speculation">
@@ -1184,8 +1192,13 @@
   </target>
 
   <target
+     name="ralph_RemoteInstaller"
+     depends="remote_installer">
+  </target>
+
+  <target
       name="ralph_SerializeNumberList"
-      depends="serialize_number_list">
+      depends="serialize_number_list, ralph_RemoteInstaller">
   </target>
 
   <target
@@ -1197,22 +1210,22 @@
       name="ralph_SerializeTrueFalseList"
       depends="serialize_true_false_list">
   </target>
-  
+
   <target
       name="ralph_SerializeStructTest"
       depends="struct_serialization">
   </target>
-  
+
   <target
       name="ralph_ListOfStructsSerialization"
       depends="struct_list_serialization,struct_serialization">
   </target>
-  
+
   <target
       name="ralph_LessSimplifiedTimedBackedSpeculation"
       depends="less_simplified_backed_speculation">
   </target>
-  
+
   <target
       name="ralph_SerializeNumberNumberMap"
       depends="serialize_num_map">
@@ -1258,7 +1271,7 @@
       depends="serialize_struct_with_struct,iserialize_struct_sum">
   </target>
 
-  
+
   <!-- Compiling tests themselves -->
   <target name="compile_harness" depends="ralph_to_byte_code">
     <javac
@@ -1283,7 +1296,7 @@
              value="DurabilitySingleSideReplayer.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_VersionedMap">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedMap.java"/>
@@ -1307,7 +1320,7 @@
       <param name="arg_harness_file_list" value="VersionedStructMap.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_AliasEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
@@ -1328,21 +1341,21 @@
              value="ConnUuidTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_StructEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
              value="StructEnumTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_DurabilityReplayRPC">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
              value="DurabilityReplayRPC.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_BasicSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicSetterGetter.java"/>
@@ -1354,7 +1367,7 @@
       <param name="arg_harness_file_list" value="LocUuidTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_NestedAtomicSetterGetter">
     <antcall target="compile_harness">
       <param
@@ -1368,7 +1381,7 @@
       <param name="arg_harness_file_list" value="DirectStructWrappedEndpoint.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_VersionedEnum">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedEnum.java"/>
@@ -1381,7 +1394,7 @@
              value="DurabilityManyServicesReplayer.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_VersionedIFace"
           depends="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
@@ -1394,13 +1407,13 @@
       <param name="arg_harness_file_list" value="MixedAccessesTester.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_RecursivePartnerAddition">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="RecursivePartnerAddition.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_ReplayPartnerNumberChange">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReplayPartnerNumber.java"/>
@@ -1412,7 +1425,7 @@
       <param name="arg_harness_file_list" value="ReplayPartnerStructElement.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_VersionedSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="VersionedSetterGetter.java"/>
@@ -1430,13 +1443,13 @@
       <param name="arg_harness_file_list" value="DurabilityConstructorCheck.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_ReadOnlySpeculate">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReadOnlySpeculate.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_StructSetterGetter">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="StructSetterGetter.java"/>
@@ -1490,7 +1503,7 @@
       <param name="arg_harness_file_list" value="ManyListOps.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_NestedStructs">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="NestedStructs.java"/>
@@ -1520,7 +1533,7 @@
       <param name="arg_harness_file_list" value="DelayAndContendTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_InterruptedAtomically">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="InterruptedTestAtomically.java"/>
@@ -1622,19 +1635,19 @@
       <param name="arg_harness_file_list" value="EndpointStructListTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_BasicSpeculation">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="BasicSpeculationTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_Null">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="NullTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_InternalCreateService">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="InternalCreateServiceTest.java"/>
@@ -1658,7 +1671,7 @@
       <param name="arg_harness_file_list" value="Range.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_ReadReadWriteSpeculation">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReadReadWriteTest.java"/>
@@ -1756,13 +1769,13 @@
       <param name="arg_harness_file_list" value="SerializeTrueFalseListTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_SerializeStruct">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="StructSerialization.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_ListOfStructsSerialization">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ListOfStructsSerialization.java"/>
@@ -1774,7 +1787,7 @@
       <param name="arg_harness_file_list" value="LessSimplifiedTimedSpeculationTest.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_SerializeNumberNumberMap">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="SerializeNumberNumberMapTest.java"/>
@@ -1820,7 +1833,7 @@
           value="SerializeNullStruct.java,SerializeStructHarnessHelper.java"/>
     </antcall>
   </target>
-  
+
   <target name="harness_SerializeStructWithList">
     <antcall target="compile_harness">
       <param
@@ -1838,7 +1851,7 @@
   </target>
 
 
-  
+
   <!-- jarify experiments -->
   <property
       name="basic_setter_getter_jar"
@@ -1865,7 +1878,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="nested_atomic_setter_getter_jar"
       value="nested_atomic_setter_getter.jar"/>
@@ -1891,7 +1904,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="versioned_setter_getter_jar"
       value="versioned_setter_getter.jar"/>
@@ -1943,7 +1956,7 @@
       <param name="config_properties" value="${disk_durability_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="versioned_enum_jar"
       value="versioned_enum.jar"/>
@@ -1970,7 +1983,7 @@
       <param name="config_properties" value="${disk_durability_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="versioned_iface_jar"
       value="versioned_iface.jar"/>
@@ -2022,7 +2035,7 @@
       <param name="config_properties" value="${in_memory_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="versioned_map_jar"
       value="versioned_map.jar"/>
@@ -2100,7 +2113,7 @@
       <param name="config_properties" value="${disk_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="enum_jar"
       value="enum.jar"/>
@@ -2141,8 +2154,8 @@
       <param name="config_properties" value="${multidisk_log_config}"/>
     </antcall>
   </target>
-  
-  
+
+
   <property
       name="alias_enum_jar"
       value="alias_enum.jar"/>
@@ -2208,7 +2221,7 @@
       <param name="config_properties" value="${disk_durability_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="read_only_speculate_jar"
       value="read_only_speculate.jar"/>
@@ -2221,7 +2234,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="struct_setter_getter_jar"
       value="struct_setter_getter.jar"/>
@@ -2339,7 +2352,7 @@
     </antcall>
   </target>
 
-  
+
   <property
       name="nested_structs_jar"
       value="nested_structs.jar"/>
@@ -2419,7 +2432,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="endpoint_calls_jar"
       value="endpoint_calls.jar"/>
@@ -2446,7 +2459,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="promotion_jar"
       value="promotion.jar"/>
@@ -2856,7 +2869,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="partner_call_return_jar"
       value="partner_call_return.jar"/>
@@ -2884,7 +2897,7 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
+
   <property
       name="serialize_text_list_jar"
       value="serialize_text_list.jar"/>
@@ -2913,7 +2926,7 @@
     </antcall>
   </target>
 
-  
+
   <property
       name="serialize_struct_jar"
       value="serialize_struct.jar"/>
@@ -3081,8 +3094,8 @@
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>
-  
-  
+
+
   <!-- Make a jar -->
   <target
       name="make_jar"
@@ -3099,7 +3112,7 @@
     </jar>
   </target>
 
-  
+
   <!-- Delete the build directories -->
   <target name="clean" description="get rid of build dir">
     <delete dir="${build.dir}"/>
@@ -3108,15 +3121,15 @@
     <!-- Delete ralph compiler output -->
     <delete file="parser.out"/>
     <delete file="parsetab.py"/>
-    
+
   </target>
 
   <target
       name="clean_all"
       depends="clean"
       description="get rid of build dir and all built libs">
-    
+
     <ant antfile="${lib_build_path}/build.xml" target="clean" />
-    
+
   </target>
 </project>
