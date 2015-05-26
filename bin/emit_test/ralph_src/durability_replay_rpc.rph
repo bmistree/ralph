@@ -1,16 +1,39 @@
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint NumHolder as 'DurabilityReplayRPCJava.NumHolder';
 
 Endpoint NumHolder
 {
     TVar Number internal_num = 0;
+    Remote NumHolder remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for NumHolder
+    */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
 
     make_request(Number num_requests)
     {
         atomically
         {
             for (Number i in range(0,num_requests))
-                internal_num = @partner.partner_increment_call();
+                internal_num = remote_endpt.partner_increment_call();
         }
     }
+
+    get_partner_internal_num() returns Number
+    {
+        Number to_return;
+        to_return = remote_endpt.get_internal_num();
+        return to_return;
+    }
+
     get_internal_num () returns Number
     {
         return internal_num;
