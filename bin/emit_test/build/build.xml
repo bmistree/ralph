@@ -1243,7 +1243,7 @@
 
   <target
       name="ralph_ReferenceServiceFactory"
-      depends="reference_service_factory">
+      depends="reference_service_factory, ralph_RemoteInstaller">
   </target>
 
   <target
