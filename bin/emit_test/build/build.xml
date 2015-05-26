@@ -1218,7 +1218,7 @@
 
   <target
       name="ralph_ListOfStructsSerialization"
-      depends="struct_list_serialization,struct_serialization">
+      depends="struct_list_serialization,struct_serialization, ralph_RemoteInstaller">
   </target>
 
   <target
