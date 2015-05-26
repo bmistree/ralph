@@ -31,7 +31,6 @@ public class SerializeStructWithList
 
         try
         {
-
             RalphGlobals globals_a = new RalphGlobals(params_a);
             RalphGlobals globals_b = new RalphGlobals(params_b);
 

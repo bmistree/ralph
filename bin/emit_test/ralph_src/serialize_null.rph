@@ -1,4 +1,6 @@
 alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint SerializeNull as 'SerializeNullJava.SerializeNull';
 
 Struct ListHolder
 {
@@ -7,12 +9,26 @@ Struct ListHolder
 
 Service SerializeNull implements Interface ISerializeStructSum
 {
+    Remote SerializeNull remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for MapSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     /** Lists */
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
     {
         Struct ListHolder s1 = null;
-        s1 = @partner.partner_nuller(s1);
+        s1 = remote_endpt.partner_nuller(s1);
         if (s1 != null)
             return -1;
 

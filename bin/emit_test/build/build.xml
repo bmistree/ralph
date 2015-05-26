@@ -1258,7 +1258,7 @@
 
   <target
       name="ralph_SerializeNullStruct"
-      depends="serialize_null,iserialize_struct_sum">
+      depends="serialize_null, iserialize_struct_sum, ralph_RemoteInstaller">
   </target>
 
   <target
