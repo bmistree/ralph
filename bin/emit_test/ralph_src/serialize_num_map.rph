@@ -1,7 +1,6 @@
 alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
 alias Endpoint MapSerializer as 'SerializeNumMapJava.MapSerializer';
 
-
 Endpoint MapSerializer
 {
     Remote MapSerializer remote_endpt = null;

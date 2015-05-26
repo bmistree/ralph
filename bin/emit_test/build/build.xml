@@ -1233,7 +1233,7 @@
 
   <target
       name="ralph_SerializeMapOfStructs"
-      depends="serialize_map_of_structs">
+      depends="serialize_map_of_structs, ralph_RemoteInstaller">
   </target>
 
   <target
