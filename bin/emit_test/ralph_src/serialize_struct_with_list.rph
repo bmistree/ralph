@@ -1,4 +1,6 @@
 alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint ListSerializer as 'SerializeStructWithListJava.ListSerializer';
 
 Struct ListHolder
 {
@@ -7,6 +9,20 @@ Struct ListHolder
 
 Service ListSerializer implements Interface ISerializeStructSum
 {
+    Remote ListSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for ListSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     /** Lists */
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
@@ -17,7 +33,7 @@ Service ListSerializer implements Interface ISerializeStructSum
         s1.list_holder.append(c);
         s1.list_holder.append(d);
         Number to_return;
-        to_return = @partner.partner_list_sum(s1);
+        to_return = remote_endpt.partner_list_sum(s1);
         return to_return;
     }
 
