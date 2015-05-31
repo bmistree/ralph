@@ -720,7 +720,6 @@ public class AtomicActiveEvent extends ActiveEvent
             commit_metadata.root_application_uuid,
             commit_metadata.event_name);
 
-
         // FIXME: Handle network failure condition
         return FirstPhaseCommitResponseCode.SUCCEEDED;
     }
@@ -1112,7 +1111,6 @@ public class AtomicActiveEvent extends ActiveEvent
                 remote_hosts_contacted.add(remote_host_uuid);
                 _others_contacted_unlock();
             }
-
             // code is listening on result_mvar.  when we
             // receive a response, put it inside of the mvar.
             // put result queue in map so that can demultiplex messages
@@ -1164,7 +1162,7 @@ public class AtomicActiveEvent extends ActiveEvent
         {
             ralph_globals.message_manager.send_first_phase_commit_successful(
                 event_parent.spanning_tree_parent_uuid,event_uuid,
-                children_event_host_uuids);
+                children_event_host_uuids, msg_originator_host_uuid);
         }
     }
 

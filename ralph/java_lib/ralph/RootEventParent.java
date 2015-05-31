@@ -10,7 +10,7 @@ import RalphCallResults.RootCallResult;
 import RalphCallResults.MessageCallResultObject;
 
 public class RootEventParent extends EventParent
-{    
+{
     /**
      * 	# indices are event uuids.  Values are bools.  When all values
      # are true in this dict, then we can transition into second
@@ -18,12 +18,12 @@ public class RootEventParent extends EventParent
     */
     private Map<String,Boolean> endpoints_waiting_on_commit =
         new HashMap<String,Boolean>();
-    
+
     /**
        # when the root tries to commit the event, it blocks while
        # reading the event_complete_mvar
     */
-    public MVar<RootCallResult.ResultType>event_complete_mvar = 
+    public MVar<RootCallResult.ResultType>event_complete_mvar =
         new MVar<RootCallResult.ResultType>();
 
     /**
@@ -38,7 +38,7 @@ public class RootEventParent extends EventParent
     */
     private ReentrantLock _endpoints_waiting_on_commit_lock =
         new ReentrantLock();
-	
+
     /**
        @param{uuid} uuid --- If None, then generate a random uuid and
        use that.  Otherwise, use the uuid specified.  Note: not all
@@ -58,7 +58,7 @@ public class RootEventParent extends EventParent
     {
         _endpoints_waiting_on_commit_lock.lock();
     }
-    
+
     private void _unlock_endpoints_waiting_on_commit()
     {
         _endpoints_waiting_on_commit_lock.unlock();
@@ -71,8 +71,8 @@ public class RootEventParent extends EventParent
     {
     	event_complete_mvar.put(RootCallResult.ResultType.COMPLETE);
     }
-    
-    
+
+
     /**
      * @see second_phase_transition_success in EventParent
      */
@@ -82,13 +82,13 @@ public class RootEventParent extends EventParent
     }
 
     /**
-       Places the appropriate call result in the event complete mvar to 
+       Places the appropriate call result in the event complete mvar to
        indicate to the endpoint that an error has occured and the event
-       must be handled.        
+       must be handled.
     */
     @Override
     public void put_exception(
-        Exception error, 
+        Exception error,
         Map<String,MVar<MessageCallResultObject>> message_listening_mvars_map)
     {
     	if (RalphExceptions.NetworkException.class.isInstance(error))
@@ -96,7 +96,7 @@ public class RootEventParent extends EventParent
             // Send a NetworkFailureCallResult to each listening mvar
             for (String reply_with_uuid : message_listening_mvars_map.keySet())
             {
-                MVar<MessageCallResultObject> message_listening_mvar = 
+                MVar<MessageCallResultObject> message_listening_mvar =
                     message_listening_mvars_map.get(reply_with_uuid);
                 message_listening_mvar.put(
                     MessageCallResultObject.network_failure(error.toString()));
@@ -118,7 +118,7 @@ public class RootEventParent extends EventParent
 
         for (String remote_host_uuid : remote_hosts_contacted_uuid)
             endpoints_waiting_on_commit.put(remote_host_uuid, false);
-    	
+
         //# not waiting on self.
         endpoints_waiting_on_commit.put(
             ralph_globals.host_uuid, true);
@@ -147,11 +147,11 @@ public class RootEventParent extends EventParent
                 return;
             }
         }
-            
+
         _unlock_endpoints_waiting_on_commit();
         event.second_phase_commit();
     }
-	
+
     @Override
     public void rollback()
     {
@@ -173,6 +173,7 @@ public class RootEventParent extends EventParent
     {
     	_lock_endpoints_waiting_on_commit();
     	endpoints_waiting_on_commit.put(msg_originator_host_uuid, true);
+
     	boolean may_transition = true;
     	for (String end_uuid : children_event_host_uuids)
     	{
