@@ -301,7 +301,9 @@ public class MessageManager extends ConnectionListenerManager
 
         GeneralMessage general_commit_request_msg = general_message.build();
         for (String remote_host_uuid : remote_host_uuid_set)
+        {
             send_msg(remote_host_uuid, general_commit_request_msg);
+        }
     }
 
     /**
@@ -348,8 +350,9 @@ public class MessageManager extends ConnectionListenerManager
     public void send_msg(String remote_host_uuid, GeneralMessage to_send)
     {
         IConnection conn = conn_map.get_connection(remote_host_uuid);
-        if (conn == null)
+        if (conn == null) {
             Util.logger_assert("No connection to send message");
+        }
         conn.send_msg(to_send);
     }
 }
