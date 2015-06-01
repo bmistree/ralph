@@ -872,7 +872,7 @@
 
   <target
       name="ralph_ReplayPartnerNumberChange"
-      depends="replay_partner_number_change">
+      depends="replay_partner_number_change, ralph_RemoteInstaller">
   </target>
 
   <target

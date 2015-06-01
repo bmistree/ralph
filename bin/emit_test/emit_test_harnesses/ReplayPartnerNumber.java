@@ -9,8 +9,7 @@ import ralph.RalphGlobals;
 import ralph.VersioningInfo;
 import ralph.Endpoint;
 import ralph.EndpointConstructorObj;
-
-import RalphConnObj.TCPConnectionObj;
+import ralph.InternalServiceFactory;
 
 import RalphVersions.VersionUtil;
 import RalphVersions.ReconstructionContext;
@@ -22,24 +21,18 @@ import ralph_emitted.ReplayPartnerNumberChangeJava.NumberReceiver;
 import RalphDurability.IDurabilityContext;
 import RalphDurability.DurabilityReplayContext;
 
-
 public class ReplayPartnerNumber
 {
     private static final String HOST_NAME = "localhost";
     private static final int TCP_LISTENING_PORT = 38689;
 
-    private static final ReceiverConstructor RECEIVER_CONSTRUCTOR =
-        new ReceiverConstructor();
-    
-    private static NumberSender sender = null;
-    private static NumberReceiver receiver = null;
     private final static int TCP_CONNECTION_PORT_SENDER = 20494;
     private final static int TCP_CONNECTION_PORT_RECEIVER = 20495;
     private final static int TCP_CONNECTION_PORT_RECONSTRUCTOR = 20496;
-    
+
     private final static int LAST_NUMBER_UPDATED = 100;
-    
-    
+
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -64,40 +57,39 @@ public class ReplayPartnerNumber
             new RalphGlobals.Parameters();
         params_reconstructor.tcp_port_to_listen_for_connections_on =
             TCP_CONNECTION_PORT_RECONSTRUCTOR;
-        
+
         try
         {
-            // populates receiver
-            Ralph.tcp_accept(
-                RECEIVER_CONSTRUCTOR, HOST_NAME, TCP_LISTENING_PORT,
-                new RalphGlobals(params_receiver));
+            RalphGlobals ralph_globals_receiver =
+                new RalphGlobals(params_receiver);
+            RalphGlobals ralph_globals_sender =
+                new RalphGlobals(params_sender);
 
+            Ralph.tcp_connect("127.0.0.1", TCP_CONNECTION_PORT_SENDER,
+                              ralph_globals_receiver);
 
             // wait for the other side to ensure that it's listening
             Thread.sleep(1000);
-            try
-            {
-                sender = (NumberSender)Ralph.tcp_connect(
-                    NumberSender.factory, HOST_NAME, TCP_LISTENING_PORT,
-                    new RalphGlobals(params_sender));
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-                assert(false);
-            }
 
-            // wait for everything to settle down
-            Thread.sleep(1000);
+            NumberSender sender =
+                NumberSender.create_single_sided(ralph_globals_sender);
+
+            InternalServiceFactory receiver_factory =
+                new InternalServiceFactory(
+                    NumberReceiver.factory, ralph_globals_receiver);
+            sender.install_partner(receiver_factory);
+
 
             for (int i = 0; i <= LAST_NUMBER_UPDATED; ++i)
                 sender.send_update_number((double) i);
 
             // double check that number on receiver is what we'd expect:
-            int receive_value = receiver.get_number().intValue();
+            int receive_value = sender.get_number().intValue();
             if (receive_value != LAST_NUMBER_UPDATED)
                 return false;
-            
+
+            String receiver_endpt_uuid = sender.get_remote_endpt().service_uuid;
+
             VersioningInfo.instance.version_saver.flush();
 
 
@@ -109,16 +101,16 @@ public class ReplayPartnerNumber
                     VersioningInfo.instance.version_replayer,
                     ralph_globals_reconstructor);
 
-            // now, tries to replay changes to endpoint.  
+            // now, tries to replay changes to endpoint.
             NumberReceiver replayed_receiver =
                 (NumberReceiver) VersionUtil.rebuild_endpoint(
-                    receiver._uuid,ralph_globals_reconstructor,
+                    receiver_endpt_uuid,ralph_globals_reconstructor,
                     reconstruction_context);
 
-            int replayed_value = receiver.get_number().intValue();
+            int replayed_value = replayed_receiver.get_number().intValue();
             if (replayed_value != LAST_NUMBER_UPDATED)
                 return false;
-            
+
             return true;
         }
         catch(Exception _ex)
@@ -127,42 +119,4 @@ public class ReplayPartnerNumber
             return false;
         }
     }
-
-    /**
-       Must override constructor so that can save global SideB after
-       constructing it.
-     */
-    private static class ReceiverConstructor implements EndpointConstructorObj
-    {
-        private final static String canonical_name =
-            ReceiverConstructor.class.getName();
-        
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            IDurabilityContext durability_context,
-            DurabilityReplayContext durability_replay_context)
-        {
-            receiver =
-                (NumberReceiver)
-                NumberReceiver.factory.construct(
-                    globals,conn_obj,durability_context,
-                    durability_replay_context);
-            return receiver;
-        }
-        @Override
-        public Endpoint construct(
-            RalphGlobals globals, RalphConnObj.ConnectionObj conn_obj,
-            List<RalphObject> internal_val_list,IDurabilityContext durability_context)
-        {
-            return construct(globals,conn_obj,durability_context,null);
-        }
-
-        @Override
-        public String get_canonical_name()
-        {
-            return canonical_name;
-        }
-    }
-    
 }

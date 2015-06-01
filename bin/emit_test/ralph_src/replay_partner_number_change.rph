@@ -1,9 +1,36 @@
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint NumberReceiver as 'ReplayPartnerNumberChangeJava.NumberReceiver';
 
 Endpoint NumberSender
 {
+    Remote NumberReceiver remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for NumberReceiver
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference =
+            remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     send_update_number(Number num_to_send)
     {
-        @partner.partner_receive_set_number(num_to_send);
+        remote_endpt.partner_receive_set_number(num_to_send);
+    }
+
+    get_number() returns Number {
+        Number to_return;
+        to_return = remote_endpt.get_number();
+        return to_return;
+    }
+
+    get_remote_endpt () returns Remote NumberReceiver {
+        return remote_endpt;
     }
 }
 
