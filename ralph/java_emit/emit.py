@@ -506,6 +506,13 @@ def convert_args_text_for_dispatch(method_declaration_node):
             single_arg_string = ('''
 %s %s = null; /** WARN: cannot receive partner request with endpoint arg.*/'''
                                  % (endpoint_alias,arg_name))
+
+        elif isinstance(method_declaration_arg_node.type, ServiceReferenceType):
+            single_arg_string = (
+                ('InternalServiceReference %s = ((RalphObject<InternalServiceReference, ' +
+                 'InternalServiceReference>)%s).get_val(exec_ctx.curr_act_evt());\n') %
+                (arg_name, arg_vec_to_read_from))
+
         else:
             locked_type,java_type = get_method_arg_type_as_locked(
             method_declaration_arg_node)
