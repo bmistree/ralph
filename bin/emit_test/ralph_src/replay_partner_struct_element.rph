@@ -1,3 +1,5 @@
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint StructReceiver as 'ReplayPartnerStructElementJava.StructReceiver';
 
 Struct SomeStruct
 {
@@ -6,14 +8,45 @@ Struct SomeStruct
 
 Endpoint StructSender
 {
+    Remote StructReceiver remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for NumberReceiver
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference =
+            remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     send_struct(Number internal_struct_number)
     {
         atomically
         {
             Struct SomeStruct s;
             s.some_num = internal_struct_number;
-            @partner.receive_additional_struct(s);
+            remote_endpt.receive_additional_struct(s);
         }
+    }
+
+    struct_list_size() returns Number {
+        Number to_return;
+        to_return = remote_endpt.struct_list_size();
+        return to_return;
+    }
+
+    struct_list_internal_val(Number index) returns Number {
+        Number to_return;
+        to_return = remote_endpt.struct_list_internal_val(index);
+        return to_return;
+    }
+
+    get_remote_endpt() returns Remote StructReceiver {
+        return remote_endpt;
     }
 }
 

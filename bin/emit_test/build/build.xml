@@ -937,7 +937,7 @@
 
   <target
       name="ralph_ReplayPartnerStructElement"
-      depends="replay_partner_struct_element_ralph">
+      depends="replay_partner_struct_element_ralph, ralph_RemoteInstaller">
   </target>
 
   <target
