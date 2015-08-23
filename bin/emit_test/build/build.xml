@@ -947,7 +947,7 @@
 
   <target
       name="ralph_DurabilityReplayRPC"
-      depends="durability_replay_rpc">
+      depends="durability_replay_rpc, ralph_RemoteInstaller">
   </target>
 
   <target
