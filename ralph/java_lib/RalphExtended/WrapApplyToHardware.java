@@ -22,7 +22,7 @@ public class WrapApplyToHardware<T> extends ServiceAction
         new SpeculativeFuture(null,false);
     private final IHardwareChangeApplier<T> hardware_change_applier;
     private final CommitMetadata commit_metadata;
-    
+
     public WrapApplyToHardware(
         T _to_apply, boolean _undo_changes,
         ExtendedObjectStateController _state_controller,
@@ -34,19 +34,30 @@ public class WrapApplyToHardware<T> extends ServiceAction
         hardware_change_applier = _applier;
         commit_metadata = _commit_metadata;
     }
-    
+
     @Override
     public void run()
     {
         boolean application_successful = false;
-        if (undo_changes)
+        if (undo_changes) {
             application_successful = hardware_change_applier.undo(to_apply);
-        else
+        }
+        else {
             application_successful = hardware_change_applier.apply(to_apply);
+        }
 
         state_controller.get_state_hold_lock();
-        if (! application_successful)
-            state_controller.move_state_failed();
+        if (! application_successful) {
+            if (undo_changes) {
+                state_controller.move_state_failed();
+            } else {
+                if (hardware_change_applier.partial_undo(to_apply)) {
+                    state_controller.move_state_clean();
+                } else {
+                    state_controller.move_state_failed();
+                }
+            }
+        }
         else if (undo_changes) // undo succeeded
             state_controller.move_state_clean();
         else // apply succeeded

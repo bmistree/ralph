@@ -1,0 +1,51 @@
+alias Interface IApp as 'InitializationRegisterJava.IApp';
+alias Interface IInitializer as 'ralph.IInitializer';
+alias Service AppInitializer as 'InitializationRegisterJava.AppInitializer';
+alias Service App as 'InitializationRegisterJava.App';
+alias Service Tmp as 'ralph.Endpoint';
+
+Interface IApp {
+    get_num() returns Number;
+    init(Number num);
+}
+
+Service App implements Interface IApp {
+    Number internal_num = 0;
+
+
+    // @Override
+    get_num() returns Number {
+        return internal_num;
+    }
+
+    // @Override
+    init(Number num) {
+        internal_num = num;
+    }
+}
+
+Service AppInitializer implements Interface IInitializer {
+    init_new(Service Tmp s_to_init) {
+        Interface IApp app = null;
+        app = dynamic_cast<Service IApp>(s_to_init);
+        app.init(55);
+    }
+}
+
+Service Main {
+    run(ServiceFactory factory) returns Number {
+        Service AppInitializer initer;
+        register_initializer(Service IApp, initer);
+
+        Text loc_uuid;
+        loc_uuid = local_uuid();
+        ServiceReference service_reference = null;
+        service_reference = install(loc_uuid, factory);
+
+        Remote App app = null;
+        app = factory.construct_remote_from_reference(service_reference);
+        Number num;
+        num = app.get_num();
+        return num;
+    }
+}

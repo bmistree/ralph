@@ -40,7 +40,7 @@ public class InstallSender implements IInstallMessageListener
     public Future<InternalServiceReference> install_remote (
         String remote_uuid, InternalServiceFactory internal_service_factory)
     {
-        Delta.ServiceFactoryDelta.Builder service_factory_delta = 
+        Delta.ServiceFactoryDelta.Builder service_factory_delta =
             Variables.AtomicServiceFactoryVariable.internal_service_factory_serialize(
                 internal_service_factory);
 
@@ -54,7 +54,7 @@ public class InstallSender implements IInstallMessageListener
         return settable_future;
     }
 
-    
+
     @Override
     public void recv_install_msg(String from_host_uuid, Install msg)
     {
@@ -81,7 +81,7 @@ public class InstallSender implements IInstallMessageListener
         // deserialize message
         ByteString byte_string =
             request_msg.getServiceFactory().getSerializedFactory();
-        
+
         InternalServiceFactory internal_service_factory =
             InternalServiceFactory.deserialize (byte_string, ralph_globals);
 
@@ -90,6 +90,8 @@ public class InstallSender implements IInstallMessageListener
             new InstallActiveEvent(ralph_globals);
         Endpoint local_endpt =
             internal_service_factory.construct(install_act_evt);
+
+        ralph_globals.initialize_installed(local_endpt);
 
         // construct and send reply
         InternalServiceReference service_ref =

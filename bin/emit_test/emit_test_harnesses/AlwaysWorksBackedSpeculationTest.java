@@ -26,7 +26,7 @@ public class AlwaysWorksBackedSpeculationTest
         new AtomicInteger(0);
 
     private final static RalphGlobals ralph_globals = new RalphGlobals();
-    
+
     public static void main(String[] args)
     {
         if (AlwaysWorksBackedSpeculationTest.run_test())
@@ -54,7 +54,7 @@ public class AlwaysWorksBackedSpeculationTest
             hardware_state_supplier_switch1, hardware_state_supplier_switch2,
             true,null,NUM_OPS_PER_THREAD);
     }
-    
+
     /**
        @param time_to_run --- Returns the time it took to run both
        events.  Can be null.  If it's null, then do not report it.
@@ -92,7 +92,7 @@ public class AlwaysWorksBackedSpeculationTest
                 new EventThread(endpt,true,num_ops_to_run,had_exception);
 
             long start = System.nanoTime();
-            
+
             event_1.start();
             event_2.start();
             event_1.join();
@@ -102,8 +102,8 @@ public class AlwaysWorksBackedSpeculationTest
 
             if (time_to_run != null)
                 time_to_run.set(end - start);
-            
-            
+
+
             if (had_exception.get())
                 return false;
 
@@ -111,7 +111,7 @@ public class AlwaysWorksBackedSpeculationTest
             // num_ops_set_on_hardware.
             if (num_ops_set_on_hardware.get() != (2*num_ops_to_run))
                 return false;
-            
+
             return true;
         }
         catch(Exception _ex)
@@ -120,7 +120,7 @@ public class AlwaysWorksBackedSpeculationTest
             return false;
         }
     }
-    
+
 
     /**
        Just ensures that the change always gets applied to hardware.
@@ -142,6 +142,10 @@ public class AlwaysWorksBackedSpeculationTest
             // event.
             num_ops_set_on_hardware.getAndDecrement();
             return true;
+        }
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
         }
     }
 

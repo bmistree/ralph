@@ -31,7 +31,7 @@ public class TimedAlwaysWorksBackedSpeculationTest
         AtomicLong no_speculation_time = new AtomicLong(0);
         AtomicInteger num_ops_set_on_hardware =
             AlwaysWorksBackedSpeculationTest.num_ops_set_on_hardware;
-        
+
         // run under speculation
         num_ops_set_on_hardware.set(0);
         worked = AlwaysWorksBackedSpeculationTest.run_test(
@@ -42,7 +42,7 @@ public class TimedAlwaysWorksBackedSpeculationTest
 
         if (! worked)
             return false;
-        
+
         // run under no speculation
         num_ops_set_on_hardware.set(0);
         worked = AlwaysWorksBackedSpeculationTest.run_test(
@@ -53,7 +53,7 @@ public class TimedAlwaysWorksBackedSpeculationTest
 
         if (! worked)
             return false;
-        
+
         // speculative version should take no more than 70% of time of
         // non-speculative version.  (In fact, should take only ~50% of time,
         // but adding the additional fudge factor to acommodate start/stop,
@@ -78,7 +78,7 @@ public class TimedAlwaysWorksBackedSpeculationTest
             num_ops_set_on_hardware = _num_ops_set_on_hardware;
         }
 
-        
+
         @Override
         public boolean apply(Double to_apply)
         {
@@ -91,7 +91,7 @@ public class TimedAlwaysWorksBackedSpeculationTest
                 ex.printStackTrace();
                 assert(false);
             }
-            
+
             num_ops_set_on_hardware.getAndIncrement();
             return true;
         }
@@ -103,6 +103,11 @@ public class TimedAlwaysWorksBackedSpeculationTest
             // event.
             num_ops_set_on_hardware.getAndDecrement();
             return true;
+        }
+
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
         }
     }
 }

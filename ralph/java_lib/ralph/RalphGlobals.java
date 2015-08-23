@@ -3,6 +3,8 @@ package ralph;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
@@ -41,7 +43,7 @@ public class RalphGlobals implements IUUIDGenerator
             DeadlockAvoidanceAlgorithm.BOOSTED;
         public int tcp_port_to_listen_for_connections_on =
             Util.DEFAULT_TCP_PORT_NEW_CONNECTIONS;
-        public String ip_addr_to_listen_for_connections_on = 
+        public String ip_addr_to_listen_for_connections_on =
             Util.DEFAULT_IP_ADDRESS_NEW_CONNECTIONS;
         public IUUIDGenerator uuid_generator =
             UUIDGenerators.ATOM_INT_UUID_GENERATOR;
@@ -55,9 +57,9 @@ public class RalphGlobals implements IUUIDGenerator
      */
     private static final String BASE_UUID =
         UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
-    
+
     public static final Parameters DEFAULT_PARAMETERS = new Parameters();
-        
+
     public final AllEndpoints all_endpoints = new AllEndpoints();
     public final LamportClock clock = new LamportClock(all_endpoints);
 
@@ -66,7 +68,7 @@ public class RalphGlobals implements IUUIDGenerator
 
     // set in constructor
     private final IUUIDGenerator uuid_generator;
-    public final String host_uuid;    
+    public final String host_uuid;
     public final DeadlockAvoidanceAlgorithm deadlock_avoidance_algorithm;
     private final ConnectionListener connection_listener;
     public final ThreadPool thread_pool;
@@ -80,7 +82,7 @@ public class RalphGlobals implements IUUIDGenerator
     // that listens for connections from remote hosts that we then can
     // send service factories, etc. to.
     private final TCPAcceptThread new_connection_listener;
-    
+
     /**
        Some services need to know when we're stopping (eg., tcp
        listening for connections).  They call stop on ralph_globals
@@ -88,7 +90,7 @@ public class RalphGlobals implements IUUIDGenerator
        stoppable to other objects and they check whether to stop.
      */
     private final Stoppable stoppable = new Stoppable();
-    
+
     public RalphGlobals()
     {
         this(DEFAULT_PARAMETERS);
@@ -98,11 +100,11 @@ public class RalphGlobals implements IUUIDGenerator
     {
         stoppable.stop();
     }
-    
+
     public RalphGlobals(Parameters params)
     {
         deadlock_avoidance_algorithm = params.deadlock_avoidance_algorithm;
-        
+
         connection_listener =
             new ConnectionListener(
                 this, params.tcp_port_to_listen_for_connections_on);
@@ -116,7 +118,7 @@ public class RalphGlobals implements IUUIDGenerator
             host_uuid = params.host_uuid;
         else
             host_uuid = UUIDGenerators.REAL_UUID_GENERATOR.generate_uuid();
-        
+
         same_host_connection = new SameHostConnection(this);
 
         new_connection_listener = new TCPAcceptThread(
@@ -126,7 +128,45 @@ public class RalphGlobals implements IUUIDGenerator
         install_sender = new InstallSender(
             message_manager.install_message_provider, this);
     }
-    
+
+    private static class EndpointClassInitializerPair {
+        private final Class<?> clazz;
+        private final IInitializer initializer;
+
+        public EndpointClassInitializerPair(Class<?> clazz,
+                                            IInitializer initializer) {
+            this.clazz = clazz;
+            this.initializer = initializer;
+        }
+        public Class<?> getClazz() {
+            return clazz;
+        }
+        public IInitializer getInitializer() {
+            return initializer;
+        }
+    }
+
+    private final Set<EndpointClassInitializerPair> all_initializers =
+        new HashSet<EndpointClassInitializerPair>();
+    public synchronized void register_initializer(Class<?> clazz,
+                                                  IInitializer initializer) {
+        all_initializers.add(new EndpointClassInitializerPair(clazz, initializer));
+    }
+    public synchronized void initialize_installed(Endpoint installed_endpoint) {
+        for (EndpointClassInitializerPair pair : all_initializers) {
+            Class<?> clazz = pair.getClazz();
+            if (clazz.isInstance(installed_endpoint)) {
+                IInitializer initializer = pair.getInitializer();
+                try {
+                    initializer.init_new(installed_endpoint);
+                } catch (Exception ex) {
+                    Util.logger_warn("Warning, encountered exception " + ex.toString() +
+                                     "while initializing installed endpoint. Proceeding.");
+                }
+            }
+        }
+    }
+
     @Override
     public String generate_uuid()
     {
@@ -148,7 +188,7 @@ public class RalphGlobals implements IUUIDGenerator
                 new Variables.NonAtomicTextVariable(
                     false, remote_uuid, this));
         }
-        
+
         NonAtomicInternalList<String,String> to_return =
             new NonAtomicInternalList(
                 this,
@@ -186,7 +226,7 @@ public class RalphGlobals implements IUUIDGenerator
             Util.logger_assert("Unexpected execution exception in install");
         }
 
-        
+
         return to_return;
     }
 }

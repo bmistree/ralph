@@ -23,7 +23,7 @@ PLUS_EQUAL_TOKEN = '+='
 MINUS_EQUAL_TOKEN = '-='
 MULTIPLY_EQUAL_TOKEN = '*='
 DIVIDE_EQUAL_TOKEN = '/='
-
+REGISTER_INITIALIZER_TOKEN = 'register_initializer'
 
 reserved = {
     'Endpoint' : 'ENDPOINT',
@@ -77,7 +77,8 @@ reserved = {
     'local_uuid': 'LOCAL_UUID',
     'connected_uuids': 'CONNECTED_UUIDS',
     'install': 'INSTALL',
-    'Remote': 'REMOTE'
+    'Remote': 'REMOTE',
+    'register_initializer': 'REGISTER_INITIALIZER',
     }
 
 tokens = [
@@ -87,23 +88,23 @@ tokens = [
     "MULTI_LINE_COMMENT_END",
 
     'PRE_PROCESSOR', # gets treated as a comment
-    
+
     "EQUALS",
     "BOOL_EQUALS",
     "BOOL_NOT_EQUALS",
-    
+
     "GREATER_THAN_EQ",
     "GREATER_THAN",
     "LESS_THAN_EQ",
     "LESS_THAN",
-    
+
     #whitespace
     "SPACE",
     "TAB",
     "NEWLINE",
-    
+
     #other
-    "SEMI_COLON",    
+    "SEMI_COLON",
     "COMMA",
     "COLON",
     "AT",
@@ -113,13 +114,13 @@ tokens = [
     "MINUS_EQUAL",
     "DIVIDE_EQUAL",
     "MULTIPLY_EQUAL",
-    
+
     #math operators
     "PLUS",
     "MINUS",
     "DIVIDE",
     "MULTIPLY",
-    
+
     #brackets/braces
     "LEFT_PAREN",
     "RIGHT_PAREN",
@@ -129,15 +130,15 @@ tokens = [
     "CURLY_RIGHT",
 
     'DOT',
-    
+
     "NUMBER",
     _IDENTIFIER_TOKEN,
 
-    
+
     #Strings and quotes
     "SINGLE_LINE_STRING",
     "MULTI_LINE_STRING",
-    
+
     "ALL_ELSE",
     ] + list(reserved.values())
 
@@ -153,7 +154,7 @@ def generate_token_err_msg(toke):
     err_msg = 'Error lexing input.  '
     err_msg += '\n' + toke_val + '\n'
     return err_msg
-    
+
 
 class LexStateMachine():
     def __init__ (self,lex_filename):
@@ -167,9 +168,9 @@ class LexStateMachine():
         self.in_multi_line_string   = False
         self.in_single_line_string  = False
         self.full_string = ''
-        
+
         self.numEndpointsSeen    =     0
-        
+
     def add_token(self,toke):
         toke_type = toke.type
         returner = toke
@@ -238,7 +239,7 @@ class LexStateMachine():
         elif toke_type == "PRE_PROCESSOR":
             # preprocessor is treated same as single line comments:
             # ignored.
-            self.in_single_line_comment = True            
+            self.in_single_line_comment = True
         elif toke_type == "MULTI_LINE_STRING":
             self.in_multi_line_string = True
             returner.type = SKIP_TOKEN_TYPE

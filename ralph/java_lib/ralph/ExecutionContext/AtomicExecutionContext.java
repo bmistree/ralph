@@ -16,12 +16,14 @@ public class AtomicExecutionContext extends ExecutionContext
     private final AtomicActiveEvent active_event;
     private final NonAtomicExecutionContext parent_ctx;
     private int reference_counter = 0;
+    private final boolean is_replaying;
 
     public AtomicExecutionContext(
         IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
         AtomicActiveEvent active_event, NonAtomicExecutionContext parent_ctx,
-        RalphGlobals ralph_globals, IEndpointMap endpt_map)
+        RalphGlobals ralph_globals, IEndpointMap endpt_map,
+        boolean is_replaying)
     {
         super(
             active_event.uuid,message_sender,uuid_gen,
@@ -29,6 +31,7 @@ public class AtomicExecutionContext extends ExecutionContext
         this.active_event = active_event;
         this.parent_ctx = parent_ctx;
         active_event.init_execution_context(this);
+        this.is_replaying = is_replaying;
     }
 
     @Override
@@ -61,5 +64,10 @@ public class AtomicExecutionContext extends ExecutionContext
         if (reference_counter == 0)
             return true;
         return false;
+    }
+
+    @Override
+    public boolean is_replaying() {
+        return is_replaying;
     }
 }

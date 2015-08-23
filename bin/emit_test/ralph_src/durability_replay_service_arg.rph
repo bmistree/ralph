@@ -1,0 +1,25 @@
+
+alias Service SomeService as 'DurabilityReplayServiceArgJava.SomeService';
+
+Service SomeService {
+
+    TVar Number some_num = 0;
+    TVar Service SomeService other = null;
+
+    assign_service(Service SomeService some_service) {
+        atomically {
+            other = some_service;
+        }
+    }
+
+    test_method(Number tmp) {
+    }
+
+    get_num() returns Number {
+        return some_num;
+    }
+
+    get_remote_num() returns Number {
+        return other.get_num();
+    }
+}

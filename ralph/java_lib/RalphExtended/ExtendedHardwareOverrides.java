@@ -35,7 +35,7 @@ import static ralph.FutureAlwaysValue.ALWAYS_FALSE_FUTURE;
        after hardware_first_phase_commit_hook.
 
      hardware_backout_hook
-     
+
        Backout changes that may have been made to a hardware element.
        Only return after barrier response that changes have completely
        been removed from hardware.  Note: this may be called even when
@@ -76,7 +76,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     private ActiveEvent last_event = null;
     private ActiveEvent last_backout_event = null;
     private ICancellableFuture last_future = null;
-    
+
     public ExtendedHardwareOverrides(
         IHardwareChangeApplier<HardwareChangeApplierType> _hardware_applier,
         IHardwareStateSupplier<HardwareChangeApplierType> _hardware_state_supplier,
@@ -101,7 +101,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         state_controller.move_state_clean();
         state_controller.release_lock();
     }
-    
+
     /**
        Must be called before can continue.
      */
@@ -109,7 +109,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
     {
         controlling_object = _controlling_object;
     }
-    
+
     /**
        @see documentation in SpeculativeAtomicObject for purpose/use
        of this method.
@@ -127,12 +127,12 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             // any operations on it until it gets cleaned up
             if (current_state == ExtendedObjectStateController.State.FAILED)
                 return ALWAYS_FALSE_FUTURE;
-            
+
             // handles case of duplicate requests
             if (last_event == active_event)
                 return last_future;
-        
-            
+
+
             //// DEBUG
             if (current_state != ExtendedObjectStateController.State.CLEAN)
             {
@@ -143,7 +143,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             //// END DEBUG
 
             last_event = active_event;
-            
+
             if (should_speculate)
                 speculate_listener.speculate(active_event);
 
@@ -218,14 +218,14 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
         boolean write_lock_holder_being_preempted =
             controlling_object.is_write_lock_holder(active_event);
 
-        
+
         if (write_lock_holder_being_preempted)
         {
             // handles case of duplicate calls
             if (active_event == last_backout_event)
                 return;
             last_backout_event = active_event;
-            
+
             ExtendedObjectStateController.State current_state =
                 state_controller.get_state_hold_lock();
 
@@ -241,7 +241,6 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 return;
             }
 
-            
             // Get backout requests even when runtime has not
             // requested changes to be staged on hardware (eg., if
             // event has been preempted on object).  In these cases,
@@ -251,7 +250,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                 state_controller.release_lock();
                 return;
             }
-            
+
             //// DEBUG
             if (current_state == ExtendedObjectStateController.State.REMOVING_CHANGES)
             {
@@ -261,8 +260,7 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
             }
             //// END DEBUG
 
-            if (current_state == ExtendedObjectStateController.State.PUSHING_CHANGES)
-            {
+            if (current_state == ExtendedObjectStateController.State.PUSHING_CHANGES) {
                 current_state =
                     state_controller.wait_staged_or_failed_state_while_holding_lock_returns_holding_lock();
             }
@@ -283,7 +281,6 @@ public class ExtendedHardwareOverrides <HardwareChangeApplierType>
                     state_controller.get_dirty_on_hardware(),
                     true,state_controller,hardware_applier,
                     active_event.commit_metadata);
-
 
             ralph_globals.thread_pool.add_service_action(to_undo_wrapper);
 

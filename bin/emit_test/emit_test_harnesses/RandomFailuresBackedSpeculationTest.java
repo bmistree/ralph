@@ -26,13 +26,13 @@ public class RandomFailuresBackedSpeculationTest
     private final static AtomicBoolean had_exception = new AtomicBoolean(false);
     private final static boolean ENABLE_SPECULATION = true;
 
-    
+
     public enum WhichSwitch
     {
         SWITCH_ONE,
         SWITCH_TWO
     }
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -49,15 +49,15 @@ public class RandomFailuresBackedSpeculationTest
             RalphGlobals ralph_globals = new RalphGlobals();
             BackedSpeculation endpt =
                 BackedSpeculation.create_single_sided(ralph_globals);
-            
+
             RandomFailuresOnHardware hardware_change_applier_switch1 =
                 new RandomFailuresOnHardware(
                     endpt, ralph_globals,WhichSwitch.SWITCH_ONE);
             RandomFailuresOnHardware hardware_change_applier_switch2 =
                 new RandomFailuresOnHardware(
                     endpt, ralph_globals,WhichSwitch.SWITCH_TWO);
-                    
-            
+
+
             _InternalSwitch switch1 =
                 create_switch(
                     ralph_globals,ENABLE_SPECULATION,
@@ -99,13 +99,13 @@ public class RandomFailuresBackedSpeculationTest
        Just ensures that the change always gets applied to hardware.
      */
     public static class RandomFailuresOnHardware extends ServiceAction
-        implements IHardwareChangeApplier<Double> 
+        implements IHardwareChangeApplier<Double>
     {
         private final BackedSpeculation endpt;
         private final RalphGlobals ralph_globals;
         private final WhichSwitch which_switch;
         private boolean has_failed = false;
-        
+
         public RandomFailuresOnHardware(
             BackedSpeculation _endpt, RalphGlobals _ralph_globals,
             WhichSwitch _which_switch)
@@ -125,7 +125,7 @@ public class RandomFailuresBackedSpeculationTest
                 ex.printStackTrace();
                 had_exception.set(true);
             }
-            
+
             return check_application(to_apply);
         }
         @Override
@@ -137,8 +137,13 @@ public class RandomFailuresBackedSpeculationTest
                 ex.printStackTrace();
                 had_exception.set(true);
             }
-            
+
             return check_application(to_undo);
+        }
+
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
         }
 
         /** ServiceAction interface */
@@ -149,7 +154,7 @@ public class RandomFailuresBackedSpeculationTest
             RandomFailuresOnHardware new_change_applier =
                 new RandomFailuresOnHardware(
                     endpt,ralph_globals,which_switch);
-            
+
             _InternalSwitch new_internal_switch =
                 create_switch(
                     ralph_globals,ENABLE_SPECULATION,new_change_applier,
@@ -168,7 +173,7 @@ public class RandomFailuresBackedSpeculationTest
                 had_exception.set(true);
             }
         }
-        
+
         /**
            @param to_apply --- ==1.0 if failed in the middle of
            removing from dummy flow table.  ==0.0 if failed in the

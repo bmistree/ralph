@@ -23,7 +23,7 @@ public class SimplifiedTimedSpeculationTest
         new AtomicBoolean(false);
     private final static int NUM_OPS_TO_RUN_PER_THREAD = 5;
     private final static RalphGlobals ralph_globals = new RalphGlobals();
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -48,7 +48,7 @@ public class SimplifiedTimedSpeculationTest
         // re-orderings, etc.)
         if ((time_no_speculation*.65) < time_speculation)
             return false;
-        
+
         return true;
     }
 
@@ -64,11 +64,11 @@ public class SimplifiedTimedSpeculationTest
                     ralph_globals,
                     should_speculate,endpt.get_internal_delay().intValue());
             endpt.set_wrapped_lock(wrapped_lock);
-            
-            
+
+
             EventThread event_1 = new EventThread(endpt);
             EventThread event_2 = new EventThread(endpt);
-            
+
             long start = System.nanoTime();
             event_1.start();
             event_2.start();
@@ -135,7 +135,7 @@ public class SimplifiedTimedSpeculationTest
             locked_list = _locked_list;
             internal_lock_number = _internal_lock_number;
         }
-        
+
         /** Override ISpeculateListener */
         public void speculate(ActiveEvent active_event)
         {
@@ -146,7 +146,7 @@ public class SimplifiedTimedSpeculationTest
             internal_list.speculate(active_event);
         }
     }
-    
+
     /**
        The TVar Number lock in each Struct WrappedLock.
      */
@@ -161,7 +161,7 @@ public class SimplifiedTimedSpeculationTest
         private final AtomicListVariable<Double,Double> locked_list;
 
         private final SpeculateListener spec_listener;
-        
+
         public InternalLockNumber(
             RalphGlobals ralph_globals, boolean _should_speculate,
             int _time_to_delay_on_apply,
@@ -174,7 +174,7 @@ public class SimplifiedTimedSpeculationTest
                     this,this,spec_listener,
                     _should_speculate, ralph_globals);
             extended_hardware_overrides.set_controlling_object(this);
-            
+
             should_speculate = _should_speculate;
             time_to_delay_on_apply = _time_to_delay_on_apply;
             locked_list = _locked_list;
@@ -207,6 +207,10 @@ public class SimplifiedTimedSpeculationTest
         {
             return true;
         }
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
+        }
 
         /** Overriding AtomicNumberVariable internal methods */
         @Override
@@ -222,7 +226,7 @@ public class SimplifiedTimedSpeculationTest
         {
             extended_hardware_overrides.hardware_complete_commit_hook(
                 active_event);
-        }            
+        }
 
         @Override
         protected void hardware_backout_hook(ActiveEvent active_event)

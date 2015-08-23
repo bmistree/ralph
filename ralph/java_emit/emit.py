@@ -504,8 +504,20 @@ def convert_args_text_for_dispatch(method_declaration_node):
             # endpoint to null.
             endpoint_alias = method_declaration_arg_node.type.alias_name
             single_arg_string = ('''
-%s %s = null; /** WARN: cannot receive partner request with endpoint arg.*/'''
-                                 % (endpoint_alias,arg_name))
+%(endpt_alias)s %(arg_name)s;
+if (exec_ctx.is_replaying()) {
+    %(arg_name)s = (%(arg_vec_to_read_from)s == null) ?
+                       null :
+                       (%(endpt_alias)s) (((RalphObject)%(arg_vec_to_read_from)s).get_val(null));
+} else {
+    /** WARN: cannot receive partner request with endpoint arg.*/
+    %(arg_name)s = null;
+}
+''' % {
+          'endpt_alias': endpoint_alias,
+          'arg_name': arg_name,
+          'arg_vec_to_read_from': arg_vec_to_read_from
+      })
 
         elif isinstance(method_declaration_arg_node.type, ServiceReferenceType):
             single_arg_string = (
@@ -1797,6 +1809,14 @@ def emit_statement(emit_ctx,statement_node):
         print_arg_statement = emit_statement(emit_ctx,statement_node.print_arg_node)
         return 'System.out.print(%s)' % print_arg_statement
 
+    elif statement_node.label == ast_labels.INITIALIZER_CALL:
+        java_class = statement_node.variable_type_node.alias_name
+        initializer_identifier_statement = emit_statement(
+            emit_ctx, statement_node.initializer_identifier_node)
+
+        return ('ralph_globals.register_initializer( %s.class, %s)' %
+                (java_class, initializer_identifier_statement))
+
     elif statement_node.label == ast_labels.LOCAL_UUID_CALL:
         return 'ralph_globals.host_uuid'
 
@@ -1808,7 +1828,6 @@ def emit_statement(emit_ctx,statement_node):
             emit_ctx, statement_node.remote_uuid_node)
         service_factory_node_statement = emit_statement(
             emit_ctx, statement_node.service_factory_node)
-
         return (
             'ralph_globals.install_remote(' + remote_uuid_statement +
             ',' + service_factory_node_statement + ')')
@@ -3228,7 +3247,7 @@ exec_ctx.message_sender().hide_partner_call(
     // may be null if replaying
     (%(service_reference)s == null) ? null :
                                       %(service_reference)s.remote_host_uuid,
-    // may be null if replaying 
+    // may be null if replaying
     (%(service_reference)s == null) ? null :
                                       %(service_reference)s.service_uuid,
     exec_ctx,"%(func_name)s", true, //whether or not first method call

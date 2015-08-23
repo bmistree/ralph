@@ -52,10 +52,10 @@ public class RPCDeserializationHelper
                     "for rpc.");
             }
             //// END DEBUG
-            
+
             to_return.add(ro);
         }
-        
+
         return to_return;
     }
 
@@ -65,7 +65,7 @@ public class RPCDeserializationHelper
     {
         if (returned_objs_proto == null)
             return null;
-        
+
         // FIXME: only need a single element, not an entire list
         // of returned objects.  Using this call instead so that
         // can repurpose deserialization code

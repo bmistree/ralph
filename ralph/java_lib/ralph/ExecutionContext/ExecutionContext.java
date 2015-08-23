@@ -27,7 +27,7 @@ public abstract class ExecutionContext implements IDurabilityContext
     public final String uuid;
     public final RalphGlobals ralph_globals;
     protected final IEndpointMap endpt_map;
-    
+
     public ExecutionContext(
         String uuid, IMessageSender message_sender,
         IUUIDGenerator uuid_gen, IDurabilityContext durability_context,
@@ -46,7 +46,7 @@ public abstract class ExecutionContext implements IDurabilityContext
     {
         return endpt_map.get_endpoint_if_exists(endpt_uuid);
     }
-    
+
     @Override
     public IDurabilityContext clone(String new_event_uuid)
     {
@@ -89,7 +89,7 @@ public abstract class ExecutionContext implements IDurabilityContext
             return null;
         return durability_context.complete_proto_buf(succeeded);
     }
-    
+
     public IMessageSender message_sender()
     {
         return message_sender;
@@ -98,7 +98,7 @@ public abstract class ExecutionContext implements IDurabilityContext
     {
         return uuid_gen;
     }
-    
+
     public abstract ActiveEvent curr_act_evt();
     public abstract ExecutionContext clone_atomic_exec_ctx();
     public abstract ExecutionContext pop_exec_ctx();
@@ -110,4 +110,6 @@ public abstract class ExecutionContext implements IDurabilityContext
        atomically blocks.
      */
     public abstract boolean should_try_commit_act_evt();
+
+    public abstract boolean is_replaying();
 }

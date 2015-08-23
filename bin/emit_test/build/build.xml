@@ -89,6 +89,13 @@
     </antcall>
   </target>
 
+  <target name="initialization_register" depends="init" description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="initialization_register.rph"/>
+      <param name="class_name" value="InitializationRegisterJava"/>
+    </antcall>
+  </target>
+
   <target name="durability_many_services" depends="init"
           description="Durability replay over many services">
     <antcall target="compile_ralph">
@@ -206,6 +213,14 @@
     <antcall target="compile_ralph">
       <param name="rph_filename" value="replay_partner_number_change.rph"/>
       <param name="class_name" value="ReplayPartnerNumberChangeJava"/>
+    </antcall>
+  </target>
+
+  <target name="replay_service_arg" depends="init"
+          description="translate ralph files">
+    <antcall target="compile_ralph">
+      <param name="rph_filename" value="durability_replay_service_arg.rph"/>
+      <param name="class_name" value="DurabilityReplayServiceArgJava"/>
     </antcall>
   </target>
 
@@ -803,6 +818,7 @@
         jar_VersionedStructList,jar_VersionedStructMap,
         jar_DiskVersionedStructList,jar_DiskVersionedStructMap,
         jar_VersionedEnum,jar_VersionedIFace,jar_ReplayPartnerNumberChange,
+        jar_ReplayServiceArg,
         jar_ReplayPartnerStructElement,jar_DiskDurabilitySetterGetter,
         jar_DirectStructWrappedEndpoint,jar_DiskDurabilityConstructorCheck,
         jar_DurabilitySingleSideReplayer,jar_RecursivePartnerAddition,
@@ -876,6 +892,11 @@
   </target>
 
   <target
+      name="ralph_ReplayServiceArg"
+      depends="replay_service_arg">
+  </target>
+
+  <target
       name="ralph_VersionedEnum"
       depends="replay_enum">
   </target>
@@ -928,6 +949,11 @@
   <target
       name="ralph_BasicSameHostPartner"
       depends="basic_same_host_partner, basic_partner">
+  </target>
+
+  <target
+      name="ralph_InitializationRegister"
+      depends="initialization_register">
   </target>
 
   <target
@@ -1335,6 +1361,13 @@
     </antcall>
   </target>
 
+  <target name="harness_InitializationRegister">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list"
+             value="InitializationRegisterTest.java"/>
+    </antcall>
+  </target>
+
   <target name="harness_ConnUuid">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list"
@@ -1417,6 +1450,12 @@
   <target name="harness_ReplayPartnerNumberChange">
     <antcall target="compile_harness">
       <param name="arg_harness_file_list" value="ReplayPartnerNumber.java"/>
+    </antcall>
+  </target>
+
+  <target name="harness_ReplayServiceArg">
+    <antcall target="compile_harness">
+      <param name="arg_harness_file_list" value="DurabilityReplayServiceArgTest.java"/>
     </antcall>
   </target>
 
@@ -2024,6 +2063,19 @@
   </target>
 
   <property
+      name="replay_service_arg_jar"
+      value="replay_service_arg.jar"/>
+  <target
+      name="jar_ReplayServiceArg"
+      depends="ralph_ReplayServiceArg,ralph_to_byte_code,harness_ReplayServiceArg">
+    <antcall target="make_jar">
+      <param name="main_class" value="DurabilityReplayServiceArgTest"/>
+      <param name="dest_jar" value="${replay_service_arg_jar}"/>
+      <param name="config_properties" value="${disk_durability_config}"/>
+    </antcall>
+  </target>
+  
+  <property
       name="replay_partner_struct_element_jar"
       value="replay_partner_struct_element.jar"/>
   <target
@@ -2191,6 +2243,19 @@
     <antcall target="make_jar">
       <param name="main_class" value="BasicSameHostPartnerTest"/>
       <param name="dest_jar" value="${basic_same_host_partner_jar}"/>
+      <param name="config_properties" value="${no_log_config}"/>
+    </antcall>
+  </target>
+
+  <property
+      name="initialization_register_jar"
+      value="initialization_register.jar"/>
+  <target
+      name="jar_InitializationRegister"
+      depends="ralph_InitializationRegister, ralph_to_byte_code, harness_InitializationRegister">
+    <antcall target="make_jar">
+      <param name="main_class" value="InitializationRegisterTest"/>
+      <param name="dest_jar" value="${initialization_register_jar}"/>
       <param name="config_properties" value="${no_log_config}"/>
     </antcall>
   </target>

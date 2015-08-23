@@ -10,7 +10,7 @@ from ralph.lex.ralph_lex import PLUS_EQUAL_TOKEN,MINUS_EQUAL_TOKEN
 from ralph.lex.ralph_lex import MULTIPLY_EQUAL_TOKEN, DIVIDE_EQUAL_TOKEN
 from ralph.lex.ralph_lex import ENUM_TOKEN, LOCAL_UUID_TOKEN
 from ralph.lex.ralph_lex import CONNECTED_UUIDS_TOKEN, INSTALL_TOKEN
-from ralph.lex.ralph_lex import REMOTE_TOKEN
+from ralph.lex.ralph_lex import REMOTE_TOKEN, REGISTER_INITIALIZER_TOKEN
 
 import deps.ply.yacc as yacc
 from ralph.parse.ast_node import *
@@ -38,7 +38,7 @@ def p_RootStatement(p):
     p[0] = RootStatementNode(
         global_parsing_filename,alias_list_node,enum_list_node,
         struct_list_node,endpoint_list_node)
-    
+
 def p_AliasList(p):
     '''
     AliasList : AliasList AliasStatement
@@ -50,7 +50,7 @@ def p_AliasList(p):
         alias_list_node = p[1]
         alias_statement_node = p[2]
         alias_list_node.add_alias_node(alias_statement_node)
-        
+
     p[0] = alias_list_node
 
 def p_AliasStatement(p):
@@ -71,11 +71,11 @@ def p_AliasStatement(p):
         alias_type = AliasStatementNode.FOR_STRUCT
     if endpoint_or_enum_or_struct_token == ENUM_TOKEN:
         alias_type = AliasStatementNode.FOR_ENUM
-        
+
     p[0] = AliasStatementNode(
         global_parsing_filename,alias_type,identifier_node,
         to_alias_to_string_node,line_number)
-    
+
 def p_EnumList(p):
     '''
     EnumList : EnumList EnumDefinition
@@ -118,9 +118,9 @@ def p_EnumBody(p):
             enum_body_node = EnumBodyNode(
                 global_parsing_filename,identifier_node.line_number)
             enum_body_node.add_enum_field(identifier_node)
-        
+
     p[0] = enum_body_node
-    
+
 def p_StructList(p):
     '''
     StructList : StructList StructDefinition
@@ -145,7 +145,7 @@ def p_StructDefinition(p):
     p[0] = StructDefinitionNode(
         global_parsing_filename,struct_name_node,struct_body_node,line_number)
 
-    
+
 def p_StructBody(p):
     '''
     StructBody : StructBody DeclarationStatement SEMI_COLON
@@ -159,7 +159,7 @@ def p_StructBody(p):
         struct_body_node.add_struct_field(declaration_statement_node)
     p[0] = struct_body_node
 
-    
+
 def p_EndpointList(p):
     '''
     EndpointList : EndpointList EndpointDefinition
@@ -192,7 +192,7 @@ def p_EndpointList(p):
             interface_definition_node = p[2]
             endpoint_list_node.append_interface_definition(
                 interface_definition_node)
-        
+
     p[0] = endpoint_list_node
 
 def p_InterfaceDefinition(p):
@@ -222,7 +222,7 @@ def p_InterfaceBody(p):
         interface_body_node = InterfaceBodyNode(global_parsing_filename)
 
     p[0] = interface_body_node
-    
+
 def p_InterfaceMethodDeclaration(p):
     '''
     InterfaceMethodDeclaration : MethodSignature SEMI_COLON
@@ -230,8 +230,8 @@ def p_InterfaceMethodDeclaration(p):
     method_signature_node = p[1]
     p[0] = InterfaceMethodDeclarationNode(
         global_parsing_filename,method_signature_node)
-    
-    
+
+
 def p_EndpointDefinition(p):
     '''
     EndpointDefinition : ENDPOINT Identifier OptionalImplementsList CURLY_LEFT EndpointBody CURLY_RIGHT
@@ -241,7 +241,7 @@ def p_EndpointDefinition(p):
     endpoint_name_identifier_node = p[2]
     optional_implements_list_node = p[3]
     endpoint_body_node = p[5]
-   
+
     p[0] = EndpointDefinitionNode(
         global_parsing_filename,endpoint_name_identifier_node,
         optional_implements_list_node,endpoint_body_node,line_number)
@@ -305,7 +305,7 @@ def p_DeclarationStatement(p):
                          | VariableType Identifier EQUALS Expression
     '''
     initializer_node = None
-    
+
     if len(p) == 5:
         initializer_node = p[4]
 
@@ -315,7 +315,7 @@ def p_DeclarationStatement(p):
         global_parsing_filename,identifier_node,variable_type_node,
         initializer_node)
 
-    
+
 def p_MethodDeclaration(p):
     '''
     MethodDeclaration : MethodSignature CURLY_LEFT ScopeBody CURLY_RIGHT
@@ -328,11 +328,11 @@ def p_MethodDeclaration(p):
             global_parsing_filename,method_signature_node.line_number)
     if len(p) == 5:
         method_body_node = p[3]
-    
+
     p[0] = MethodDeclarationNode(
         global_parsing_filename,method_signature_node,method_body_node)
 
-    
+
 def p_ScopeBody(p):
     '''
     ScopeBody : ScopeBody Statement
@@ -348,8 +348,8 @@ def p_ScopeBody(p):
 
     scope_body_node.append_statement_node(statement_node)
     p[0] = scope_body_node
-    
-    
+
+
 def p_MethodSignature(p):
     '''
     MethodSignature : Identifier LEFT_PAREN MethodDeclarationArgs RIGHT_PAREN
@@ -365,7 +365,7 @@ def p_MethodSignature(p):
         global_parsing_filename,method_name_identifier_node,
         method_declaration_args_node, returns_variable_type_node)
 
-    
+
 def p_MethodDeclarationArgs(p):
     '''
     MethodDeclarationArgs : MethodDeclarationArg
@@ -385,8 +385,8 @@ def p_MethodDeclarationArgs(p):
             method_declaration_arg)
 
     p[0] = method_declaration_args
-        
-    
+
+
 def p_MethodDeclarationArg(p):
     '''
     MethodDeclarationArg : VariableType Identifier
@@ -395,7 +395,7 @@ def p_MethodDeclarationArg(p):
     identifier_node = p[2]
     p[0] = MethodDeclarationArgNode(
         global_parsing_filename,variable_type_node,identifier_node)
-    
+
 
 def p_MethodCall(p):
     '''
@@ -410,12 +410,19 @@ def p_MethodCall(p):
                | LOCAL_UUID LEFT_PAREN RIGHT_PAREN
                | CONNECTED_UUIDS LEFT_PAREN RIGHT_PAREN
                | INSTALL LEFT_PAREN MethodCallArgs RIGHT_PAREN
+               | REGISTER_INITIALIZER LEFT_PAREN VariableType COMMA Identifier RIGHT_PAREN
     '''
     if p[1] == PRINT_TYPE_TOKEN:
         line_number = p.lineno(1)
         method_args_node = p[3]
         p[0] = PrintCallNode(
             global_parsing_filename,method_args_node,line_number)
+    elif p[1] == REGISTER_INITIALIZER_TOKEN:
+        line_number = p.lineno(1)
+        variable_type_node = p[3]
+        initializer_identifier_node = p[5]
+        p[0] = InitializerCallNode(global_parsing_filename, variable_type_node,
+                                   initializer_identifier_node, line_number)
     elif p[1] == VERBATIM_TOKEN:
         line_number = p.lineno(1)
         method_args_node = p[3]
@@ -452,7 +459,7 @@ def p_MethodCall(p):
         p[0] = InstallCallNode(
             global_parsing_filename, install_args_node, line_number)
 
-        
+
     elif len(p) == 8:
         # dynamic cast
         line_number = p.lineno(1)
@@ -461,7 +468,7 @@ def p_MethodCall(p):
         p[0] = DynamicCastNode(
             global_parsing_filename,to_variable_type_node,method_call_args_node,
             line_number)
-        
+
     else:
         method_name_node = p[1]
         method_args_node = p[3]
@@ -499,9 +506,9 @@ def p_MethodCallArgs(p):
             method_call_args_node = MethodCallArgsNode(
                 global_parsing_filename,expression_node.line_number)
             method_call_args_node.append_arg(expression_node)
-        
+
     p[0] = method_call_args_node
-        
+
 def p_Statement(p):
     '''
     Statement : Expression SEMI_COLON
@@ -513,16 +520,16 @@ def p_Statement(p):
               | ScopeStatement
               | AtomicallyStatement
     '''
+
     p[0] = p[1]
 
-    
 def p_AtomicallyStatement(p):
     '''
     AtomicallyStatement : ATOMICALLY ScopeStatement
     '''
     scope_node = p[2]
     p[0] = AtomicallyNode(global_parsing_filename,scope_node)
-    
+
 
 def p_LenExpression(p):
     '''
@@ -531,7 +538,7 @@ def p_LenExpression(p):
     len_argument_node = p[3]
     p[0] = LenNode(global_parsing_filename,len_argument_node)
 
-    
+
 def p_RangeExpression(p):
     '''
     RangeExpression : RANGE LEFT_PAREN Expression COMMA Expression COMMA Expression RIGHT_PAREN
@@ -551,8 +558,8 @@ def p_RangeExpression(p):
         end_expression_node,line_number)
 
     p[0] = range_expression_node
-    
-    
+
+
 def p_ConditionStatement(p):
     '''
     ConditionStatement : IfStatement ElseIfStatements ElseStatement
@@ -560,12 +567,12 @@ def p_ConditionStatement(p):
     if_node = p[1]
     elifs_node = p[2]
     else_node = p[3]
-    
+
     condition_statement = ConditionNode(
         global_parsing_filename,if_node,elifs_node,else_node)
     p[0] = condition_statement
-    
-    
+
+
 def p_IfStatement(p):
     '''
     IfStatement : IF LEFT_PAREN Expression RIGHT_PAREN Statement
@@ -589,7 +596,7 @@ def p_ElseIfStatements(p):
         else_if_nodes.append_else_if(else_if_statement)
     p[0] = else_if_nodes
 
-    
+
 def p_ElseIfStatement(p):
     '''
     ElseIfStatement : ELSE_IF LEFT_PAREN Expression RIGHT_PAREN Statement
@@ -615,8 +622,8 @@ def p_ElseStatement(p):
         else_node = ElseNode(global_parsing_filename,line_number)
         else_node.add_else_body_node(body_node)
     p[0] = else_node
-    
-    
+
+
 def p_ForStatement(p):
     '''
     ForStatement : FOR LEFT_PAREN VariableType Identifier IN Expression RIGHT_PAREN Statement
@@ -642,8 +649,8 @@ def p_ScopeStatement(p):
     else:
         scope_body_node = p[2]
     p[0] = ScopeNode(global_parsing_filename,scope_body_node)
-        
-    
+
+
 def p_AssignmentStatement(p):
     '''
     AssignmentStatement : Variable EQUALS Expression
@@ -652,7 +659,7 @@ def p_AssignmentStatement(p):
     rhs_node = p[3]
     p[0] = AssignmentNode(global_parsing_filename,lhs_node,rhs_node)
 
-    
+
 def p_Variable(p):
     '''
     Variable : Identifier
@@ -667,18 +674,18 @@ def p_Variable(p):
 
     elif len(p) == 5:
         # bracket expression
-        
+
         # variable_node is either an identifier node, bracket node, or
-        # dot node        
+        # dot node
         variable_node = p[1]
         inner_bracket_node = p[3]
         bracket_node = BracketNode(
             global_parsing_filename,variable_node,inner_bracket_node)
         p[0] = bracket_node
-        
+
     elif len(p) == 4:
         # dot expression
-        
+
         # variable_node is either an identifier node, bracket node, or
         # dot node
         variable_node = p[1]
@@ -692,7 +699,7 @@ def p_Variable(p):
             global_parsing_filename,p.lineno(0),
             'Incorrect number of tokens in variable')
     #### END DEBUG
-    
+
 def p_ReturnStatement(p):
     '''
     ReturnStatement : RETURN_OPERATOR
@@ -705,7 +712,7 @@ def p_ReturnStatement(p):
         return_node.add_return_expression_node(what_to_return_node)
     p[0] = return_node
 
-    
+
 def p_Expression(p):
     '''
     Expression : OperationPlusAssignment
@@ -746,12 +753,12 @@ def p_OperationPlusAssignment(p):
             raise InternalParseException(
                 global_parsing_filename,line_number,
                 'Unknown operation plus assignment token.')
-        
+
         p[0] = AssignmentNode(global_parsing_filename,lhs_node,new_rhs_node)
     else:
         # was an OrExpression
         p[0] = p[1]
-    
+
 def p_OrExpression(p):
     '''
     OrExpression : OrExpression OR AndExpression
@@ -787,8 +794,8 @@ def p_InNotInExpression (p):
 
         p[0] = create_binary_expression_node(
             operator,lhs_expression_node,rhs_expression_node)
-        
-    
+
+
 def p_EqualsNotEqualsExpression(p):
     '''
     EqualsNotEqualsExpression : EqualsNotEqualsExpression BOOL_EQUALS GreaterThanLessThanExpression
@@ -796,7 +803,7 @@ def p_EqualsNotEqualsExpression(p):
                               | GreaterThanLessThanExpression
     '''
     production_rule_for_binary_operator(p)
-    
+
 def p_GreaterThanLessThanExpression(p):
     '''
     GreaterThanLessThanExpression : GreaterThanLessThanExpression GREATER_THAN PlusMinusExpression
@@ -806,7 +813,7 @@ def p_GreaterThanLessThanExpression(p):
                                   | PlusMinusExpression
     '''
     production_rule_for_binary_operator(p)
-    
+
 def p_PlusMinusExpression(p):
     '''
     PlusMinusExpression : PlusMinusExpression PLUS MultDivExpression
@@ -815,7 +822,7 @@ def p_PlusMinusExpression(p):
     '''
     production_rule_for_binary_operator(p)
 
-    
+
 def p_MultDivExpression(p):
     '''
     MultDivExpression : MultDivExpression MULTIPLY NotExpression
@@ -823,7 +830,7 @@ def p_MultDivExpression(p):
                       | NotExpression
     '''
     production_rule_for_binary_operator(p)
-    
+
 def production_rule_for_binary_operator(p):
     '''
     Generally has the form
@@ -841,7 +848,7 @@ def production_rule_for_binary_operator(p):
         p[0] = create_binary_expression_node(
             operator,lhs_expression_node,rhs_expression_node)
 
-    
+
 def p_NotExpression(p):
     '''
     NotExpression : NOT Term
@@ -852,7 +859,7 @@ def p_NotExpression(p):
         term_node = p[2]
         not_node = NotNode(global_parsing_filename,term_node)
         p[0] = not_node
-        
+
 def p_Term(p):
     '''
     Term : Variable
@@ -888,15 +895,15 @@ def p_Continue(p):
     '''
     line_number = p.lineno(1)
     p[0] = ContinueNode(global_parsing_filename,line_number)
-    
-    
+
+
 def p_Self(p):
     '''
     Self : SELF
     '''
     line_number = p.lineno(1)
     p[0] = SelfNode(global_parsing_filename,line_number)
-    
+
 def p_Number(p):
     '''
     Number : NUMBER
@@ -909,7 +916,7 @@ def p_Number(p):
     line_number = p.lineno(1)
     p[0] = NumberLiteralNode(
         global_parsing_filename,number_literal,line_number)
-    
+
 def p_String(p):
     '''
     String : SINGLE_LINE_STRING
@@ -918,7 +925,7 @@ def p_String(p):
     text_literal = p[1]
     line_number = p.lineno(1)
     p[0] = TextLiteralNode(global_parsing_filename,text_literal,line_number)
-    
+
 def p_Boolean(p):
     '''
     Boolean : TRUE
@@ -935,8 +942,8 @@ def p_Null(p):
     '''
     line_number = p.lineno(1)
     p[0] = NullLiteralNode(global_parsing_filename,line_number)
-    
-    
+
+
 def p_VariableType(p):
     '''
     VariableType : BOOL_TYPE
@@ -952,7 +959,7 @@ def p_VariableType(p):
 
                  | LIST_TYPE LEFT_PAREN ELEMENT COLON VariableType RIGHT_PAREN
                  | TVAR LIST_TYPE LEFT_PAREN ELEMENT COLON VariableType RIGHT_PAREN
-                 
+
                  | STRUCT_TYPE Identifier
                  | TVAR STRUCT_TYPE Identifier
 
@@ -967,7 +974,7 @@ def p_VariableType(p):
 
                  | INTERFACE Identifier
                  | TVAR INTERFACE Identifier
-                 
+
                  | SERVICE_FACTORY
                  | TVAR SERVICE_FACTORY
 
@@ -1027,7 +1034,7 @@ def p_VariableType(p):
 
     elif (((p[1] == ENDPOINT_TOKEN) or
            ((len(p) >= 3) and (p[2] == ENDPOINT_TOKEN)))
-          or 
+          or
           ((p[1] == SERVICE_TOKEN) or
            ((len(p) >= 3) and (p[2] == SERVICE_TOKEN)))
           or
@@ -1073,7 +1080,7 @@ def p_VariableType(p):
         enum_name_node = p[enum_name_node_index]
         p[0] = EnumVariableTypeNode(
             global_parsing_filename,enum_name_node,is_tvar,line_number)
-        
+
     elif (
         (p[1] == SERVICE_FACTORY_TOKEN) or
         ((len(p) >= 3) and (p[2] == SERVICE_FACTORY_TOKEN))):
@@ -1085,7 +1092,7 @@ def p_VariableType(p):
         line_number = p.lineno(1)
         p[0] = ServiceFactoryVariableTypeNode(
             global_parsing_filename,is_tvar,line_number)
-        
+
     elif (
         (p[1] == SERVICE_REFERENCE_TOKEN) or
         ((len(p) >= 3) and (p[2] == SERVICE_REFERENCE_TOKEN))):
@@ -1097,7 +1104,7 @@ def p_VariableType(p):
         line_number = p.lineno(1)
         p[0] = ServiceReferenceVariableTypeNode(
             global_parsing_filename,is_tvar,line_number)
-        
+
     else:
         # basic type or tvar type
         basic_type_index = 1
@@ -1119,14 +1126,14 @@ def p_Identifier(p):
     line_number = p.lineno(1)
     value = p[1]
     p[0] = IdentifierNode(global_parsing_filename,value,line_number)
-    
-    
+
+
 def p_error(p):
     raise ParseException(
         global_parsing_filename, p.lineno,
         'Error parsing token "%s".' % p.value)
 
-    
+
 def p_Empty(p):
     '''
     Empty :
@@ -1145,10 +1152,11 @@ def construct_parser(suppress_warnings,parsing_filename):
 
     global global_parsing_filename
     global_parsing_filename = parsing_filename
-    
+
     if suppress_warnings:
         returner = yacc.yacc(errorlog=yacc.NullLogger())
     else:
         returner = yacc.yacc()
 
-    return returner;
+
+    return returner

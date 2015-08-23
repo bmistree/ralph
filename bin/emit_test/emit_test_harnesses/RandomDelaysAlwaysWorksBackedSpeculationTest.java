@@ -10,7 +10,7 @@ import RalphExtended.IHardwareStateSupplier;
 public class RandomDelaysAlwaysWorksBackedSpeculationTest
 {
     private static Random rand = new Random();
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -44,7 +44,7 @@ public class RandomDelaysAlwaysWorksBackedSpeculationTest
         // track of number of commits to hardwaer.
         private final AtomicInteger num_ops_set_on_hardware =
             AlwaysWorksBackedSpeculationTest.num_ops_set_on_hardware;
-        
+
         @Override
         public boolean apply(Double to_apply)
         {
@@ -61,6 +61,11 @@ public class RandomDelaysAlwaysWorksBackedSpeculationTest
             num_ops_set_on_hardware.getAndDecrement();
             random_sleep();
             return true;
+        }
+
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
         }
     }
 

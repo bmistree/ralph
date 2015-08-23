@@ -106,13 +106,13 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                 String method_to_run =
                     DurabilityReplayContext.get_method_call_associated_with_paired_rpc(
                         entry_call);
+
                 PartnerRequestSequenceBlock req_seq_block =
                     entry_call.getRpcArgs();
 
                 DurabilityReplayMessageSender msg_sender =
                     new DurabilityReplayMessageSender(
                         durability_replay_context);
-
 
                 ReplayNonAtomicExecutionContext exec_ctx =
                     to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(

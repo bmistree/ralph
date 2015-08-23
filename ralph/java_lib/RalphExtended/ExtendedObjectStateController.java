@@ -14,10 +14,8 @@ import ralph.Util;
      hardwrae_first_phase_commit_hook. State means that we are in the
      midst of pushing first phase commits to hardware and/or waiting
      on barrier that they have completed.  If barrier times out or get
-     an error, transition into failed state.  Note: 1) If just got
-     errors on operations, could retry those operations with barriers.
-     Currently, do not and just go to failed.  2) Need to deal with
-     failed state, creating super priority that removes state.
+     an error, try to undo changes (going back to clean). If that fails,
+     go to failed state.
 
      STAGED_CHANGES --- Dirty state is on hardware and hardware has
      acknowledged this with a barrier response and no intervening
@@ -36,7 +34,7 @@ import ralph.Util;
    +--------------+        +---------------+
    |              |        |               |
    |              |        | PUSHING       |
-   |    CLEAN     | -----> |   CHANGES     |---------
+   |    CLEAN     | <----> |   CHANGES     |---------
    |              |        |               |         |
    +--------------+        +---------------+         |
         ^     ^                        |             |
@@ -60,7 +58,7 @@ import ralph.Util;
  */
 public class ExtendedObjectStateController <T>
 {
-    
+
     /**
        See comments and state diagram above.
      */
@@ -76,7 +74,7 @@ public class ExtendedObjectStateController <T>
     private final ReentrantLock rlock = new ReentrantLock();
     private final Condition cond = rlock.newCondition();
     private T dirty_on_hardware = null;
-    
+
     public State get_state()
     {
         State to_return = null;
@@ -104,7 +102,7 @@ public class ExtendedObjectStateController <T>
     {
         return dirty_on_hardware;
     }
-    
+
 
     public void move_state_pushing_changes(T new_dirty_on_hardware)
     {
@@ -116,7 +114,7 @@ public class ExtendedObjectStateController <T>
                 "have outstanding changes on hardware.");
         }
         //// END DEBUG
-        
+
         dirty_on_hardware = new_dirty_on_hardware;
 
 
@@ -127,7 +125,7 @@ public class ExtendedObjectStateController <T>
                 "Can only update state to pushing changes from clean");
         }
         //// END DEBUG
-        
+
         // not providing a wait_pushing method, therefore, do not have
         // to signal.
         extended_object_state = State.PUSHING_CHANGES;
@@ -142,7 +140,7 @@ public class ExtendedObjectStateController <T>
                 "pushing changes");
         }
         //// END DEBUG
-        
+
         extended_object_state = State.STAGED_CHANGES;
         cond.signalAll();
     }
@@ -158,7 +156,7 @@ public class ExtendedObjectStateController <T>
         }
         //// END DEBUG
 
-        
+
         // not providing a wait_removing_changes method, therefore, do
         // not have to signal.
         extended_object_state = State.REMOVING_CHANGES;
@@ -176,11 +174,11 @@ public class ExtendedObjectStateController <T>
         }
         //// END DEBUG
 
-        
+
         extended_object_state = State.FAILED;
         cond.signalAll();
     }
-    
+
     /**
        @see wait_on_states_while_holding_lock_returns_holding_lock for
        state STAGED_CHANGES and state FAILED.
@@ -190,11 +188,11 @@ public class ExtendedObjectStateController <T>
         return wait_on_states_while_holding_lock_returns_holding_lock(
             State.STAGED_CHANGES,State.FAILED);
     }
-    
+
 
     /**
        Called while holding lock on state.
-       
+
        Returns after extended_object_state transitions to one of two
        states.  When returns, still holding lock on state, and caller
        must unlock.
@@ -216,9 +214,9 @@ public class ExtendedObjectStateController <T>
                     "Interrupts not allowed in wait_on_states ");
             }
         }
-        return extended_object_state;        
+        return extended_object_state;
     }
-        
+
     public State get_state_hold_lock()
     {
         rlock.lock();

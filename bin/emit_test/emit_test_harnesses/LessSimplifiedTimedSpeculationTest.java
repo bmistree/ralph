@@ -23,7 +23,7 @@ public class LessSimplifiedTimedSpeculationTest
         new AtomicBoolean(false);
     private final static int NUM_OPS_TO_RUN_PER_THREAD = 5;
     private final static RalphGlobals ralph_globals = new RalphGlobals();
-    
+
     public static void main(String[] args)
     {
         if (run_test())
@@ -48,7 +48,7 @@ public class LessSimplifiedTimedSpeculationTest
         // re-orderings, etc.)
         if ((time_no_speculation*.65) < time_speculation)
             return false;
-        
+
         return true;
     }
 
@@ -60,20 +60,20 @@ public class LessSimplifiedTimedSpeculationTest
                 LessSimplifiedBackedSpeculation.create_single_sided(
                     ralph_globals);
 
-            _InternalSwitch internal_switch1 = 
+            _InternalSwitch internal_switch1 =
                 create_internal_switch(
                     ralph_globals,
                     should_speculate,endpt.get_internal_delay().intValue());
 
-            _InternalSwitch internal_switch2 = 
+            _InternalSwitch internal_switch2 =
                 create_internal_switch(
                     ralph_globals,
-                    should_speculate,endpt.get_internal_delay().intValue());            
+                    should_speculate,endpt.get_internal_delay().intValue());
             endpt.set_switches(internal_switch1,internal_switch2);
-            
+
             EventThread event_1 = new EventThread(endpt,true);
             EventThread event_2 = new EventThread(endpt,false);
-            
+
             long start = System.nanoTime();
             event_1.start();
             event_2.start();
@@ -145,7 +145,7 @@ public class LessSimplifiedTimedSpeculationTest
             locked_list = _locked_list;
             internal_lock_number = _internal_lock_number;
         }
-        
+
         /** Override ISpeculateListener */
         public void speculate(ActiveEvent active_event)
         {
@@ -157,7 +157,7 @@ public class LessSimplifiedTimedSpeculationTest
         }
     }
 
-    
+
     /**
        The TVar Number lock in each Struct Switch
      */
@@ -171,7 +171,7 @@ public class LessSimplifiedTimedSpeculationTest
         private boolean should_speculate;
         private final AtomicListVariable<Double,Double> locked_list;
         private final SpeculateListener spec_listener;
-        
+
         public InternalSwitchGuard(
             RalphGlobals ralph_globals, boolean _should_speculate,
             int _time_to_delay_on_apply,
@@ -218,6 +218,10 @@ public class LessSimplifiedTimedSpeculationTest
             return true;
         }
 
+        @Override
+        public boolean partial_undo(Double to_undo) {
+            return false;
+        }
 
         /** Overriding AtomicNumberVariable internal methods */
         @Override
@@ -232,7 +236,7 @@ public class LessSimplifiedTimedSpeculationTest
         protected void hardware_complete_commit_hook(ActiveEvent active_event)
         {
             extended_hardware_overrides.hardware_complete_commit_hook(active_event);
-        }            
+        }
 
         @Override
         protected void hardware_backout_hook(ActiveEvent active_event)

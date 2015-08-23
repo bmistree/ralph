@@ -1,6 +1,7 @@
 package ralph;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
@@ -405,9 +406,8 @@ public abstract class ActiveEvent
                 "instruction for what to do next.");
         }
         //#### END DEBUG
-
         // grab all arguments from message
-        List <RalphObject> args = null;
+        List <RalphObject> args = new ArrayList<RalphObject>();
         if (msg.hasArguments())
         {
             args =
@@ -415,11 +415,11 @@ public abstract class ActiveEvent
                     event_parent.ralph_globals,msg.getArguments(),exec_ctx);
         }
 
-
         // convert array list of args to optional array of arg objects.
         Object [] rpc_call_arg_array = new Object[args.size()];
-        for (int i = 0; i < args.size(); ++i)
+        for (int i = 0; i < args.size(); ++i) {
             rpc_call_arg_array[i] = args.get(i);
+        }
 
         boolean takes_args = args.size() != 0;
 

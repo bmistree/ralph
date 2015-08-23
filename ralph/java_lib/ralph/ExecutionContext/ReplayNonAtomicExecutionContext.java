@@ -13,7 +13,7 @@ import ralph.DurabilityInfo;
 import ralph.IEndpointMap;
 
 public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
-{    
+{
     public ReplayNonAtomicExecutionContext(
         RalphGlobals ralph_globals, NonAtomicActiveEvent act_evt,
         ExecutionContextMap exec_ctx_map,
@@ -22,7 +22,7 @@ public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
     {
         super(
             msg_sender, ralph_globals, null, act_evt, exec_ctx_map,
-            ralph_globals,endpt_map);
+            ralph_globals,endpt_map, true);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ReplayNonAtomicExecutionContext extends NonAtomicExecutionContext
     {
         return null;
     }
-    
+
     @Override
     public Durability complete_proto_buf(boolean succeeded)
     {
