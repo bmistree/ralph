@@ -1228,7 +1228,7 @@
 
   <target
       name="ralph_SerializeNumberNumberMap"
-      depends="serialize_num_map">
+      depends="serialize_num_map, ralph_RemoteInstaller">
   </target>
 
   <target

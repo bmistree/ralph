@@ -1,5 +1,24 @@
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint MapSerializer as 'SerializeNumMapJava.MapSerializer';
+
+
 Endpoint MapSerializer
 {
+    Remote MapSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for MapSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
+    
     /** NonAtomc Number Maps */
     sum_numbers(Number max_number) returns TrueFalse
     {
@@ -14,9 +33,9 @@ Endpoint MapSerializer
             to_serialize.set(index,value);
             expected_result = expected_result + index + value;
         }
-        
+
         Number sum;
-        sum = @partner.partner_sum_keys_and_values(to_serialize);
+        sum = remote_endpt.partner_sum_keys_and_values(to_serialize);
 
         if ((sum - expected_result) == 0)
             return True;
@@ -50,9 +69,9 @@ Endpoint MapSerializer
             to_serialize.set(index,value);
             expected_result = expected_result + index + value;
         }
-        
+
         Number sum;
-        sum = @partner.atom_partner_sum_keys_and_values(to_serialize);
+        sum = remote_endpt.atom_partner_sum_keys_and_values(to_serialize);
 
         if ((sum - expected_result) == 0)
             return True;
