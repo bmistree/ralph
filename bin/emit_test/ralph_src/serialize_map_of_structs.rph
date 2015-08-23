@@ -1,4 +1,5 @@
-
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint MapSerializer as 'SerializeNumMapJava.MapSerializer';
 
 Struct NumHolder
 {
@@ -8,6 +9,20 @@ Struct NumHolder
 
 Service MapSerializer
 {
+    Remote MapSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for MapSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+    
     /** Maps */
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
@@ -22,9 +37,9 @@ Service MapSerializer
         Map(from: Text, to: Struct NumHolder) struct_map;
         struct_map.set('a',s1);
         struct_map.set('b',s2);
-        
+
         Number to_return;
-        to_return = @partner.partner_map_sum(struct_map);
+        to_return = remote_endpt.partner_map_sum(struct_map);
         return to_return;
     }
 
@@ -57,9 +72,9 @@ Service MapSerializer
         TVar Map(from: Text, to: Struct NumHolder) struct_map;
         struct_map.set('a',s1);
         struct_map.set('b',s2);
-        
+
         Number to_return;
-        to_return = @partner.atom_partner_map_sum(struct_map);
+        to_return = remote_endpt.atom_partner_map_sum(struct_map);
         return to_return;
     }
 
