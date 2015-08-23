@@ -1,8 +1,7 @@
 alias Endpoint Receiver as 'ReferenceServiceFactoryJava.Receiver';
 alias Endpoint Sender as 'ReferenceServiceFactoryJava.Sender';
 alias Endpoint ReceiverCreated as 'ReferenceServiceFactoryJava.ReceiverCreated';
-alias Endpoint SenderCreated as 'ReferenceServiceFactoryJava.SenderCreated';
-
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
 
 Endpoint Receiver
 {
@@ -20,18 +19,32 @@ Endpoint Receiver
 
 Endpoint Sender
 {
-   instantiate_remote(ServiceFactory remote_sf, ServiceFactory local_sf)
+    Remote Receiver remote_endpt = null;
+
+   /**
+      {@code factory} should be factory for Receiver
+    */
+   install_partner(ServiceFactory factory)
+   {
+       ServiceReference service_reference = null;
+       Service RemoteInstaller remote_installer;
+       service_reference = remote_installer.install_remote_service_factory(factory);
+       remote_endpt =
+           factory.construct_remote_from_reference(service_reference);
+   }
+
+   instantiate_remote(ServiceFactory remote_sf)
        returns Number
    {
        ServiceReference sr = null;
-       sr = @partner.receive_and_instantiate(remote_sf);
+       sr = remote_endpt.receive_and_instantiate(remote_sf);
 
-       Endpoint SenderCreated sender_created_endpoint =
-           dynamic_cast<Endpoint SenderCreated>(
-               local_sf.construct_from_reference(sr));
+       Endpoint ReceiverCreated receiver_created_endpoint =
+           dynamic_cast<Endpoint ReceiverCreated>(
+               remote_sf.construct_from_reference(sr));
 
        Number returned_number;
-       returned_number = sender_created_endpoint.call_partner();
+       returned_number = receiver_created_endpoint.some_method();
        return returned_number;
    }
 }
@@ -41,15 +54,5 @@ Endpoint ReceiverCreated
     some_method() returns Number
     {
         return 1.0;
-    }
-}
-
-Endpoint SenderCreated
-{
-    call_partner() returns Number
-    {
-        Number to_return;
-        to_return = @partner.some_method();
-        return to_return;
     }
 }
