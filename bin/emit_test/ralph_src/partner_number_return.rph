@@ -1,9 +1,39 @@
+alias Endpoint PassReturnArg as 'PartnerNumberReturnJava.PassReturnArg';
+
 Endpoint PassReturnArg
 {
+    Remote PassReturnArg remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for PassReturnArg.
+     */
+    install_remote_pass_return_arg(ServiceFactory factory)
+    {
+        List(element: Text) conn_uuids = null;
+        conn_uuids = connected_uuids();
+        Text loc_uuid = local_uuid();
+
+        Text to_install_on = loc_uuid;
+        for (Number i in range(0, conn_uuids.size()))
+        {
+            Text potential_uuid = conn_uuids.get(i);
+            if (potential_uuid != loc_uuid)
+            {
+                to_install_on = potential_uuid;
+                break;
+            }
+        }
+
+        ServiceReference service_reference = null;
+        service_reference = install(to_install_on, factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     pass_sum_return(Number a, Number b) returns Number
     {
         Number to_return;
-        to_return = @partner.partner_receive_and_return(a,b);
+        to_return = remote_endpt.partner_receive_and_return(a,b);
         return to_return;
     }
 
