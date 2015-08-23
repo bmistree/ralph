@@ -8,16 +8,20 @@ import ralph_emitted.DurabilityReplayRPCJava.NumHolder;
 
 import RalphDurability.DurabilityReplayer;
 import ralph.RalphGlobals;
+import ralph.VersioningInfo;
 import ralph.DurabilityInfo;
 import ralph.InternalServiceFactory;
 import ralph.Ralph;
+
+import RalphVersions.VersionUtil;
+import RalphVersions.IReconstructionContext;
+import RalphVersions.ReconstructionContext;
 
 public class DurabilityReplayRPC
 {
     public final static int MAX_NUM_RPCS_PER_TRANSACTION = 20;
     public final static int TCP_CONNECTION_PORT_A = 35855;
     public final static int TCP_CONNECTION_PORT_B = 35856;
-
     public static void main(String[] args)
     {
         if (run_test())
@@ -61,13 +65,11 @@ public class DurabilityReplayRPC
             // Now, try to replay from durability file
             DurabilityReplayer replayer =
                 (DurabilityReplayer)DurabilityInfo.instance.durability_replayer;
-
+            
             while(replayer.step(globals_a)){}
 
-            // check that final internal value of endpoint is correct.
             NumHolder replayed_calling_on =
-                (NumHolder)replayer.get_endpoint_if_exists(
-                    original_calling_on.uuid());
+                (NumHolder) replayer.get_endpoint_if_exists(original_calling_on.uuid());
 
             Double replayed_internal =
                 replayed_calling_on.get_internal_num();

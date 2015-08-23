@@ -35,7 +35,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
         new HashMap<String,EndpointConstructorObj>();
     private final Map<String, Endpoint> endpt_map =
         new HashMap<String,Endpoint>();
-    
+
     public DurabilityReplayer(ISerializedDurabilityReader durability_reader)
     {
         this.durability_reader = durability_reader;
@@ -44,7 +44,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
     /**
        @param constructor_name --- The canonical name of the endpoint
        constructor object that's being used.
-       
+
        @return --- Could be null if constructor name doesn't exist.
      */
     public synchronized EndpointConstructorObj get_constructor_obj(
@@ -96,9 +96,10 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
             while (next_index != -1)
             {
                 // get entry rpc message.
-                PairedPartnerRequestSequenceEndpointUUID entry_call = 
+                PairedPartnerRequestSequenceEndpointUUID entry_call =
                     prepare_msg.getRpcArgs(next_index);
                 String evt_uuid = prepare_msg.getEventUuid().getData();
+
                 Endpoint to_run_on =
                     DurabilityReplayContext.get_endpt_associated_with_paired_rpc(
                         entry_call,this);
@@ -111,6 +112,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
                 DurabilityReplayMessageSender msg_sender =
                     new DurabilityReplayMessageSender(
                         durability_replay_context);
+
 
                 ReplayNonAtomicExecutionContext exec_ctx =
                     to_run_on.exec_ctx_map.replay_create_root_non_atomic_exec_ctx(
@@ -136,16 +138,22 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
             DurabilityEvent.DurabilityEventType.SERVICE_FACTORY)
         {
             ServiceFactoryDelta delta = event.service_factory_msg;
-            EndpointConstructorObj constructor = 
+            EndpointConstructorObj constructor =
                 InternalServiceFactory.deserialize_endpt_constructor(
                     delta.getSerializedFactory());
-            
+
             String constructor_name = constructor.get_canonical_name();
             constructor_map.put(constructor_name,constructor);
         }
         else if (event.event_type ==
                  DurabilityEvent.DurabilityEventType.COMPLETED)
         {
+            // For debugging, we occasionally have multiple hosts all
+            // log their content to a common file. When we replay, we only
+            // want to replay a single host, however.
+            if (!event.prepare_msg.getHostUuid().getData().equals(ralph_globals.host_uuid)) {
+                return true;
+            }
             handle_prepare_completed(event.prepare_msg, ralph_globals);
         }
         else if (event.event_type ==
@@ -163,7 +171,7 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
         //// END DEBUG
         return true;
     }
-    
+
     @Override
     public synchronized long last_committed_local_lamport_timestamp()
     {
@@ -178,13 +186,13 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
     {
         endpt_map.put(endpoint._uuid, endpoint);
     }
-    
+
     @Override
     public synchronized void remove_endpoint_if_exists(Endpoint endpoint)
     {
         endpt_map.remove(endpoint._uuid);
     }
-    
+
     /**
        @returns null if no endpoint available.
      */
@@ -193,5 +201,5 @@ public class DurabilityReplayer implements IDurabilityReplayer, IEndpointMap
     {
         return endpt_map.get(uuid);
     }
-    
+
 }
