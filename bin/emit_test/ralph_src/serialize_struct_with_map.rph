@@ -2,7 +2,6 @@ alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStruct
 alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
 alias Endpoint MapSerializer as 'SerializeStructWithMapJava.MapSerializer';
 
-
 Struct MapHolder
 {
     Map(from: Number, to: Number) map_holder;
