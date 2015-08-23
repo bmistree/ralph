@@ -119,6 +119,11 @@ public class MessageManager extends ConnectionListenerManager
 
      @param {array} children_event_host_uuids ---
 
+     @param on_behalf_of Hosts can forward other hosts' first phase
+     commit messages to the root of the spanning tree for them. This
+     is the uuid of the host that sent the initial message.
+
+
      Partner endpoint is subscriber of event on this endpoint with
      uuid event_uuid.  Send to partner a message that the first
      phase of the commit was successful for the endpoint with uuid
@@ -129,7 +134,7 @@ public class MessageManager extends ConnectionListenerManager
     */
     public void send_first_phase_commit_successful(
         String remote_host_uuid, String event_uuid,
-        Set<String> children_event_host_uuids)
+        Set<String> children_event_host_uuids, String on_behalf_of)
     {
         GeneralMessage.Builder general_message = base_general_msg();
 
@@ -143,7 +148,7 @@ public class MessageManager extends ConnectionListenerManager
 
         UtilProto.UUID.Builder sending_host_uuid_msg =
             UtilProto.UUID.newBuilder();
-        sending_host_uuid_msg.setData(ralph_globals.host_uuid);
+        sending_host_uuid_msg.setData(on_behalf_of);
 
         first_phase_result_msg.setSuccessful(true);
         first_phase_result_msg.setEventUuid(event_uuid_msg);

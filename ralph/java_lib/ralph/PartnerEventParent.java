@@ -17,14 +17,21 @@ public class PartnerEventParent extends EventParent
             _uuid,_priority,_ralph_globals,false,local_endpoint,
             _event_entry_point_name, spanning_tree_parent_uuid);
     }
-    
+
+    /**
+     * Messages the spanning tree parent that the commit was successful.
+     */
     @Override
     public void first_phase_transition_success(
         Set<String> remote_hosts_contacted_uuid, ActiveEvent event,
         long root_timestamp, String root_host_uuid, String application_uuid,
         String event_name)
-    {}
-    
+    {
+        ralph_globals.message_manager.send_first_phase_commit_successful(
+            spanning_tree_parent_uuid, event.uuid, remote_hosts_contacted_uuid,
+            ralph_globals.host_uuid);
+    }
+
     @Override
     public void second_phase_transition_success()
     {}
@@ -41,12 +48,12 @@ public class PartnerEventParent extends EventParent
         Map<String, MVar<MessageCallResultObject>> message_listening_mvars_map)
     {}
 
-    
+
     /**
      */
     @Override
     public void receive_successful_first_phase_commit_msg(
         ActiveEvent evt, String msg_originator_host_uuid,
-        Set<String> children_event_host_uuids) 
+        Set<String> children_event_host_uuids)
     {}
 }
