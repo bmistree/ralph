@@ -13,7 +13,7 @@ Endpoint StructSerializer
     Remote StructSerializer remote_endpt = null;
 
     /**
-       {@code factory} should be factory for ListSerializer
+       {@code factory} should be factory for StructSerializer
      */
     install_partner(ServiceFactory factory)
     {
