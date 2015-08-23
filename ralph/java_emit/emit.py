@@ -3224,7 +3224,13 @@ def emit_method_call(method_call_node, emit_ctx):
 
         remote_call_text = '''
 exec_ctx.message_sender().hide_partner_call(
-    %(service_reference)s.remote_host_uuid, %(service_reference)s.service_uuid,
+
+    // may be null if replaying
+    (%(service_reference)s == null) ? null :
+                                      %(service_reference)s.remote_host_uuid,
+    // may be null if replaying 
+    (%(service_reference)s == null) ? null :
+                                      %(service_reference)s.service_uuid,
     exec_ctx,"%(func_name)s", true, //whether or not first method call
     %(rpc_args_list)s, null)''' %  {
             'service_reference': service_reference_text,
