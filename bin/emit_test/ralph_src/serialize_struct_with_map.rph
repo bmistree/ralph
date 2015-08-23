@@ -1,4 +1,7 @@
 alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint MapSerializer as 'SerializeStructWithMapJava.MapSerializer';
+
 
 Struct MapHolder
 {
@@ -7,6 +10,20 @@ Struct MapHolder
 
 Service MapSerializer implements Interface ISerializeStructSum
 {
+    Remote MapSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for MapSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     /** Maps */
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
@@ -16,9 +33,9 @@ Service MapSerializer implements Interface ISerializeStructSum
         s1.map_holder.set(2,b);
         s1.map_holder.set(3,c);
         s1.map_holder.set(4,d);
-        
+
         Number to_return;
-        to_return = @partner.partner_map_sum(s1);
+        to_return = remote_endpt.partner_map_sum(s1);
         return to_return;
     }
 
