@@ -1203,7 +1203,7 @@
 
   <target
       name="ralph_SerializeTextList"
-      depends="serialize_text_list">
+      depends="serialize_text_list, ralph_RemoteInstaller">
   </target>
 
   <target

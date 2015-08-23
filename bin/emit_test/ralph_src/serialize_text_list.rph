@@ -1,5 +1,22 @@
+alias Endpoint ListSerializer as 'SerializeTextListJava.ListSerializer';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+
 Endpoint ListSerializer
 {
+    Remote ListSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for ListSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     /** NonAtomic Text lists */
     concatenate_strings(Text string_a, Text string_b, Text string_c)
         returns Text
@@ -10,7 +27,7 @@ Endpoint ListSerializer
         list_to_concat.append(string_c);
         Text concatenated;
         concatenated =
-            @partner.partner_concatenate_strings_in_list(list_to_concat);
+            remote_endpt.partner_concatenate_strings_in_list(list_to_concat);
         return concatenated;
     }
 
@@ -35,7 +52,7 @@ Endpoint ListSerializer
         list_to_concat.append(string_c);
         Text concatenated;
         concatenated =
-            @partner.atom_partner_concatenate_strings_in_list(list_to_concat);
+            remote_endpt.atom_partner_concatenate_strings_in_list(list_to_concat);
         return concatenated;
     }
 
@@ -50,5 +67,5 @@ Endpoint ListSerializer
     }
 
 
-    
+
 }
