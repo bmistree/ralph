@@ -1263,7 +1263,7 @@
 
   <target
       name="ralph_SerializeStructWithList"
-      depends="serialize_struct_with_list,iserialize_struct_sum">
+      depends="serialize_struct_with_list, iserialize_struct_sum, ralph_RemoteInstaller">
   </target>
 
   <target
