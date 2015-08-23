@@ -1,4 +1,6 @@
 alias Interface ISerializeStructSum as 'ISerializeStructSumJava.ISerializeStructSum';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint StructSerializer as 'SerializeStructWithStructJava.StructSerializer';
 
 Struct InnerStruct
 {
@@ -13,6 +15,21 @@ Struct OuterStruct
 
 Service StructSerializer implements Interface ISerializeStructSum
 {
+    Remote StructSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for ListSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
+
     //@Override
     sum_numbers(
         Number a, Number b, Number c, Number d) returns Number
@@ -24,7 +41,7 @@ Service StructSerializer implements Interface ISerializeStructSum
         to_pass.inner_struct.inner_map.set('d',d);
 
         Number to_return;
-        to_return = @partner.partner_sum(to_pass);
+        to_return = remote_endpt.partner_sum(to_pass);
         return to_return;
     }
 

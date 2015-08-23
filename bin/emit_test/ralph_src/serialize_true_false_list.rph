@@ -1,5 +1,22 @@
+alias Endpoint ListSerializer as 'SerializeTrueFalseListJava.ListSerializer';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+
 Endpoint ListSerializer
 {
+    Remote ListSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for ListSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
     /** NonAtomic tf lists */
     merge_true_falses(TrueFalse a, TrueFalse b, TrueFalse c, TrueFalse d)
         returns Text
@@ -11,7 +28,7 @@ Endpoint ListSerializer
         list_to_merge.append(d);
         Text concatenated;
         concatenated =
-            @partner.partner_merge_tfs_in_list(list_to_merge);
+            remote_endpt.partner_merge_tfs_in_list(list_to_merge);
         return concatenated;
     }
 
@@ -41,7 +58,7 @@ Endpoint ListSerializer
         list_to_merge.append(d);
         Text concatenated;
         concatenated =
-            @partner.atom_partner_merge_tfs_in_list(list_to_merge);
+            remote_endpt.atom_partner_merge_tfs_in_list(list_to_merge);
         return concatenated;
     }
 
