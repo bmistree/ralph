@@ -1,10 +1,43 @@
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+alias Endpoint RecursiveAdder as 'RecursivePartnerAdditionJava.RecursiveAdder';
+
 Endpoint RecursiveAdder
 {
     TVar Number internal_num;
-    
+    Remote RecursiveAdder remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for RecursiveAdder
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference =
+            remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+
+        // tortured way of getting own rpc reference.
+        Service RecursiveAdder myself = null;
+        myself = self;
+        ServiceReference service_reference = null;
+        service_reference = myself.rpc_reference();
+        remote_endpt.set_partner(factory, service_reference);
+    }
+
     set_internal_num(Number to_set_to)
     {
         internal_num = to_set_to;
+    }
+
+    set_remote_internal_num(Number to_set_to) {
+        remote_endpt.set_internal_num(to_set_to);
+    }
+
+    set_partner(ServiceFactory factory, ServiceReference service_reference) {
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
     }
 
     partner_recursive_add_to_number(Number remaining_iters) returns Number
@@ -18,8 +51,8 @@ Endpoint RecursiveAdder
             {
                 remaining_iters -= 1;
                 Number recursive_result;
-                recursive_result = 
-                    @partner.partner_recursive_add_to_number(remaining_iters);
+                recursive_result =
+                    remote_endpt.partner_recursive_add_to_number(remaining_iters);
                 to_return = internal_num + recursive_result;
             }
         }

@@ -831,7 +831,7 @@
 
   <target
       name="ralph_RecursivePartnerAddition"
-      depends="recursive_partner_addition_ralph">
+      depends="recursive_partner_addition_ralph, ralph_RemoteInstaller">
   </target>
 
   <target
