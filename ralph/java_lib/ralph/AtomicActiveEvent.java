@@ -1092,6 +1092,10 @@ public class AtomicActiveEvent extends ActiveEvent
     }
 
 
+    /**
+     * @param remote_host_uuid Can be {@code null} if this is a
+     * sequence completed response.
+     */
     @Override
     public boolean note_issue_rpc(
         String remote_host_uuid, String other_side_reply_with_uuid,
@@ -1103,10 +1107,11 @@ public class AtomicActiveEvent extends ActiveEvent
         if (state == State.STATE_RUNNING)
         {
             partner_call_requested = true;
-            _others_contacted_lock();
-            remote_hosts_contacted.add(remote_host_uuid);
-            _others_contacted_unlock();
-
+            if (remote_host_uuid != null) {
+                _others_contacted_lock();
+                remote_hosts_contacted.add(remote_host_uuid);
+                _others_contacted_unlock();
+            }
 
             // code is listening on result_mvar.  when we
             // receive a response, put it inside of the mvar.

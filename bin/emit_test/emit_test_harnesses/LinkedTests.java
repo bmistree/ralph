@@ -71,8 +71,8 @@ public class LinkedTests
             // generate a list of remote names
             NonAtomicInternalList<String,String> remote_names =
                 a.get_empty_text_list();
-            remote_uuids = a.append_text_to_text_list("B", remote_names);
-            remote_uuids = a.append_text_to_text_list("C", remote_names);
+            remote_names = a.append_text_to_text_list("B", remote_names);
+            remote_names = a.append_text_to_text_list("C", remote_names);
 
             // do chained install
             a.chain_add_children(

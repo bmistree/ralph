@@ -45,7 +45,7 @@ public class LiveMessageSender implements IMessageSender
             this.remote_host_uuid = remote_host_uuid;
         }
     }
-    
+
     /**
        We can be listening to more than one open threadsafe message
        queue.  If endpoint A waits on its partner, and, while
@@ -131,7 +131,7 @@ public class LiveMessageSender implements IMessageSender
             null, // send no arguments back to other side
             result);
     }
-    
+
     /**
        @param remote_host_uuid --- Can be null (eg., if this is a
        reply to an rpc).
@@ -154,7 +154,7 @@ public class LiveMessageSender implements IMessageSender
         // this uuid.
         String other_side_reply_with_uuid =
             exec_ctx.ralph_globals.generate_local_uuid();
-        
+
         ActiveEvent act_evt = exec_ctx.curr_act_evt();
         boolean can_issue_rpc = act_evt.note_issue_rpc(
             remote_host_uuid, other_side_reply_with_uuid, result_mvar);
@@ -183,12 +183,12 @@ public class LiveMessageSender implements IMessageSender
         exec_ctx.ralph_globals.message_manager.send_sequence_block_request_msg(
             remote_host_uuid, request_sequence_block);
 
-        
+
         // do not wait on result of call if it was the final return of
         // the call.
     	if (func_name == null)
             return null;
-        
+
         // wait on result of call
     	MessageCallResultObject mvar_elem = result_mvar.blocking_take();
     	if (mvar_elem.result_type ==
@@ -210,7 +210,7 @@ public class LiveMessageSender implements IMessageSender
     	//means that it must be a sequence message call result
         push_message_reply_stack(
             mvar_elem.reply_with_msg_field, mvar_elem.remote_host_uuid);
-        
+
         //# send more messages
         String to_exec_next = mvar_elem.to_exec_next_name_msg_field;
         String next_target_endpt_uuid = mvar_elem.target_endpt_uuid;

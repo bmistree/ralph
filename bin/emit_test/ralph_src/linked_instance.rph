@@ -46,7 +46,7 @@ Endpoint LinkedInstanceEndpoint
 
         Remote LinkedInstanceEndpoint next = null;
         next = add_child(remote_uuid, factory);
-        next.chain_add_children(remote_uuids, factory);
+        next.chain_add_children(remote_uuids, names, factory);
         next.set_name(next_name);
     }
 
@@ -79,7 +79,7 @@ Endpoint LinkedInstanceEndpoint
             {
                 Remote LinkedInstanceEndpoint endpt = null;
                 endpt = wrapper.child;
-                endpt.request_increment_from_instance();
+                endpt.increment_and_request_others_to_increment();
             }
         }
     }
