@@ -16,7 +16,6 @@ Service SetterGetter implements Interface ISetterGetter
         internal_number = new_number;
     }
 
-    
     get_text() returns Text
     {
         return internal_text;
