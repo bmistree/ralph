@@ -1213,7 +1213,7 @@
 
   <target
       name="ralph_SerializeStructTest"
-      depends="struct_serialization">
+      depends="struct_serialization, ralph_RemoteInstaller">
   </target>
 
   <target
