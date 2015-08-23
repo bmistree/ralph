@@ -1,12 +1,30 @@
+alias Endpoint ListSerializer as 'SerializeNumberListJava.ListSerializer';
+alias Endpoint RemoteInstaller as 'RemoteInstallerJava.RemoteInstaller';
+
 Endpoint ListSerializer
 {
+    Remote ListSerializer remote_endpt = null;
+
+    /**
+       {@code factory} should be factory for ListSerializer
+     */
+    install_partner(ServiceFactory factory)
+    {
+        ServiceReference service_reference = null;
+        Service RemoteInstaller remote_installer;
+        service_reference = remote_installer.install_remote_service_factory(factory);
+        remote_endpt =
+            factory.construct_remote_from_reference(service_reference);
+    }
+
+
     /** NonAtomc Number lists */
     sum_numbers(Number max_number) returns Number
     {
         List(element: Number) list_to_sum;
         list_to_sum = range(0,max_number);
         Number sum;
-        sum = @partner.partner_sum_numbers_in_list(list_to_sum);
+        sum = remote_endpt.partner_sum_numbers_in_list(list_to_sum);
         return sum;
     }
 
@@ -26,10 +44,10 @@ Endpoint ListSerializer
         for (Number num in range(0,max_number))
             list_to_sum.append(num);
         Number sum;
-        sum = @partner.partner_sum_numbers_in_atom_list(list_to_sum);
+        sum = remote_endpt.partner_sum_numbers_in_atom_list(list_to_sum);
         return sum;
     }
-    
+
     partner_sum_numbers_in_atom_list(TVar List(element:Number) to_sum)
         returns Number
     {
@@ -37,6 +55,6 @@ Endpoint ListSerializer
         for (Number num in to_sum)
             to_return = to_return + num;
         return to_return;
-    }    
-    
+    }
+
 }
